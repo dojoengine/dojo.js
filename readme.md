@@ -1,1 +1,5 @@
 # Packages
+
+```
+bun install
+```
