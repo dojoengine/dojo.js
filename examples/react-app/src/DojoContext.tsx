@@ -32,7 +32,7 @@ export const useDojo = () => {
     const privateKey = import.meta.env.VITE_PUBLIC_MASTER_PRIVATE_KEY!;
     const masterAccount = useMemo(() => new Account(provider, masterAddress, privateKey), [provider, masterAddress, privateKey]);
 
-    const { create, list, get, account, select, isDeploying } = useBurner(
+    const { create, list, get, account, select, isDeploying, clear } = useBurner(
         {
             masterAccount: masterAccount,
             accountClassHash: import.meta.env.VITE_PUBLIC_ACCOUNT_CLASS_HASH!
@@ -41,6 +41,6 @@ export const useDojo = () => {
 
     return {
         setup: value,
-        account: { create, list, get, select, account: account ? account : masterAccount, isDeploying }
+        account: { create, list, get, select, clear, account: account ? account : masterAccount, isDeploying }
     };
 };

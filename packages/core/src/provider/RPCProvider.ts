@@ -91,7 +91,7 @@ export class RPCProvider extends Provider {
 
             return await account?.execute(
                 {
-                    contractAddress: this.getWorldAddress() || "",
+                    contractAddress: this.getWorldAddress()!,
                     entrypoint: WorldEntryPoints.execute,
                     calldata: [shortString.encodeShortString(system), call_data.length, ...call_data]
                 },

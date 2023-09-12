@@ -14,7 +14,7 @@ function App() {
       components: { Moves, Position },
       network: { graphSdk, call }
     },
-    account: { create, list, select, account, isDeploying }
+    account: { create, list, select, account, isDeploying, clear }
   } = useDojo();
 
   // entity id - this example uses the account address as the entity id
@@ -32,8 +32,8 @@ function App() {
       const { data } = await graphSdk.getEntities();
 
       if (data) {
-        let remaining = getFirstComponentByType(data.entities?.edges, 'Moves') as Moves;
-        let position = getFirstComponentByType(data.entities?.edges, 'Position') as Position;
+        const remaining = getFirstComponentByType(data.entities?.edges, 'Moves') as Moves;
+        const position = getFirstComponentByType(data.entities?.edges, 'Position') as Position;
 
         setComponent(Moves, parseInt(entityId.toString()) as EntityIndex, { remaining: remaining.remaining })
         setComponent(Position, parseInt(entityId.toString()) as EntityIndex, { x: position.x, y: position.y })
@@ -53,6 +53,9 @@ function App() {
             return <option value={account.address} key={index}>{account.address}</option>
           })}
         </select>
+        <div>
+          <button onClick={() => clear()}>Clear burners</button>
+        </div>
       </div>
       <div className="card">
         <button onClick={() => spawn(account)}>Spawn</button>

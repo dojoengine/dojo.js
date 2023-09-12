@@ -39,6 +39,10 @@ export const useBurner = (options: UseBurnerOptions) => {
     // State to manage the current active account.
     const [account, setAccount] = useState<Account | null>(null);
 
+    const [burnerUpdate, setBurnerUpdate] = useState(0);
+
+    const [isDeploying, setIsDeploying] = useState(false);
+
     // On mount, initialize the burner manager and set the active account.
     useEffect(() => {
         burnerManager.init();
@@ -52,7 +56,7 @@ export const useBurner = (options: UseBurnerOptions) => {
      */
     const list = useCallback((): Burner[] => {
         return burnerManager.list();
-    }, [options]);
+    }, [options, burnerManager.list(), burnerUpdate]);
 
     /**
      * Selects and sets a burner as the active account.
@@ -75,11 +79,23 @@ export const useBurner = (options: UseBurnerOptions) => {
     }, [options]);
 
     /**
+     * Clears a burner account based on its address.
+     * 
+     * @param address - The address of the burner account to retrieve.
+     * @returns The Burner account corresponding to the provided address.
+     */
+    const clear = useCallback(() => {
+        burnerManager.clear();
+        setBurnerUpdate(prev => prev + 1);
+    }, [options]);
+
+    /**
      * Creates a new burner account and sets it as the active account.
      * 
      * @returns A promise that resolves to the newly created Burner account.
      */
     const create = useCallback(async (): Promise<Account> => {
+        burnerManager.setIsDeployingCallback(setIsDeploying);
         const newAccount = await burnerManager.create();
         setAccount(newAccount);
         return newAccount;
@@ -111,7 +127,8 @@ export const useBurner = (options: UseBurnerOptions) => {
         select,
         create,
         listConnectors,
+        clear,
         account,
-        isDeploying: burnerManager.isDeploying,
+        isDeploying,
     };
 };

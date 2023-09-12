@@ -12,12 +12,25 @@ export class BurnerManager {
     public isDeploying: boolean = false;
     public burnerAccounts: Burner[] = [];
 
+    private setIsDeploying?: (isDeploying: boolean) => void;
+
     constructor(options: BurnerManagerOptions) {
         this.masterAccount = options.masterAccount;
         this.accountClassHash = options.accountClassHash;
         this.provider = new RpcProvider({
             nodeUrl: options.nodeUrl || "http://localhost:5050",
         });;
+    }
+
+    public setIsDeployingCallback(callback: (isDeploying: boolean) => void): void {
+        this.setIsDeploying = callback;
+    }
+
+    private updateIsDeploying(status: boolean) {
+        this.isDeploying = status;
+        if (this.setIsDeploying) {
+            this.setIsDeploying(status);
+        }
     }
 
     private getBurnerStorage(): BurnerStorage {
@@ -54,6 +67,8 @@ export class BurnerManager {
         }
     }
 
+
+
     public list(): Burner[] {
         const storage = this.getBurnerStorage();
         return Object.keys(storage).map((address) => {
@@ -88,6 +103,10 @@ export class BurnerManager {
         return new Account(this.provider, address, storage[address].privateKey);
     }
 
+    clear(): void {
+        Storage.clear();
+    }
+
     getActiveAccount(): Account | null {
         const storage = this.getBurnerStorage();
         for (let address in storage) {
@@ -103,7 +122,7 @@ export class BurnerManager {
     }
 
     public async create(): Promise<Account> {
-        this.isDeploying = true;
+        this.updateIsDeploying(true);
 
         const privateKey = stark.randomAddress();
         const publicKey = ec.starkCurve.getStarkKey(privateKey);
@@ -153,7 +172,7 @@ export class BurnerManager {
         };
 
         this.account = burner;
-        this.isDeploying = false;
+        this.updateIsDeploying(false);
         Storage.set("burners", storage);
 
         return burner;

@@ -14,7 +14,6 @@ export function createSystemCalls(
 ) {
 
     const spawn = async (signer: Account) => {
-
         const entityId = parseInt(signer.address) as EntityIndex;
 
         const positionId = uuid();
@@ -33,7 +32,7 @@ export function createSystemCalls(
             const tx = await execute(signer, "spawn", []);
 
             console.log(tx)
-            const receipt = await signer.waitForTransaction(tx.transaction_hash)
+            const receipt = await signer.waitForTransaction(tx.transaction_hash, { retryInterval: 100 })
             setComponentsFromEvents(contractComponents, getEvents(receipt));
 
         } catch (e) {
