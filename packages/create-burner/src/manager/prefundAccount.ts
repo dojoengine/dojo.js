@@ -1,4 +1,4 @@
-import { AccountInterface, CallData, TransactionStatus } from "starknet";
+import { AccountInterface, CallData, TransactionFinalityStatus, TransactionStatus } from "starknet";
 import { KATANA_ETH_CONTRACT_ADDRESS, PREFUND_AMOUNT } from "..";
 
 /**
@@ -41,7 +41,7 @@ export const prefundAccount = async (
         // Wait for the transaction to complete and check its status
         const result = await account.waitForTransaction(transaction_hash, {
             retryInterval: 1000,
-            successStates: [TransactionStatus.ACCEPTED_ON_L2],
+            successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
         });
 
         if (!result) {
