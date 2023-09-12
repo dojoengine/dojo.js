@@ -1,4 +1,4 @@
-import { AccountInterface, CallData, TransactionFinalityStatus, TransactionStatus } from "starknet";
+import { AccountInterface, CallData, TransactionFinalityStatus } from "starknet";
 import { KATANA_ETH_CONTRACT_ADDRESS, PREFUND_AMOUNT } from "..";
 
 /**
