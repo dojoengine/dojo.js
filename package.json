@@ -2,6 +2,9 @@
   "name": "dojo-packages",
   "version": "1.0.0",
   "workspaces": [
-    "packages/*"
+    "packages/create-burner",
+    "packages/core",
+    "packages/react",
+    "packages/utils"
   ]
 }

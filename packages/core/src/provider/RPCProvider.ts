@@ -1,7 +1,6 @@
-import { RpcProvider, Account, num, Call, InvokeFunctionResponse, Contract, Result } from "starknet";
+import { RpcProvider, Account, num, InvokeFunctionResponse, Contract, Result, shortString } from "starknet";
 import { Provider } from "./provider";
 import { Query, WorldEntryPoints } from "../types";
-import { strTofelt252Felt } from '../utils'
 import { LOCAL_KATANA } from '../constants';
 import abi from '../constants/abi.json';
 
@@ -36,21 +35,14 @@ export class RPCProvider extends Provider {
      * @returns {Promise<Array<bigint>>} - A promise that resolves to an array of bigints representing the entity's details.
      */
     public async entity(component: string, query: Query, offset: number = 0, length: number = 0): Promise<Array<bigint>> {
-        const call: Call = {
-            entrypoint: WorldEntryPoints.get,
-            contractAddress: this.getWorldAddress(),
-            calldata: [
-                strTofelt252Felt(component),
+        try {
+            return await this.contract.call(WorldEntryPoints.get, [
+                shortString.encodeShortString(component),
                 query.keys.length,
                 ...query.keys as any,
                 offset,
                 length
-            ]
-        }
-
-        try {
-            const response = await this.provider.callContract(call);
-            return response.result as unknown as Array<bigint>;
+            ]) as unknown as Array<bigint>;
         } catch (error) {
             throw error;
         }
@@ -64,15 +56,8 @@ export class RPCProvider extends Provider {
      * @returns {Promise<Array<bigint>>} - A promise that resolves to an array of bigints representing the entities' details.
      */
     public async entities(component: string, length: number): Promise<Array<bigint>> {
-        const call: Call = {
-            entrypoint: WorldEntryPoints.entities,
-            contractAddress: this.getWorldAddress(),
-            calldata: [strTofelt252Felt(component), length]
-        }
-
         try {
-            const response = await this.provider.callContract(call);
-            return response.result as unknown as Array<bigint>;
+            return await this.contract.call(WorldEntryPoints.entities, [shortString.encodeShortString(component), length]) as unknown as Array<bigint>;
         } catch (error) {
             throw error;
         }
@@ -85,15 +70,8 @@ export class RPCProvider extends Provider {
      * @returns {Promise<bigint>} - A promise that resolves to a bigint representing the component's details.
      */
     public async component(name: string): Promise<bigint> {
-        const call: Call = {
-            entrypoint: WorldEntryPoints.component,
-            contractAddress: this.getWorldAddress(),
-            calldata: [strTofelt252Felt(name)]
-        }
-
         try {
-            const response = await this.provider.callContract(call);
-            return response.result as unknown as bigint;
+            return await this.contract.call(WorldEntryPoints.component, [shortString.encodeShortString(name)]) as unknown as bigint;
         } catch (error) {
             throw error;
         }
@@ -110,11 +88,12 @@ export class RPCProvider extends Provider {
     public async execute(account: Account, system: string, call_data: num.BigNumberish[]): Promise<InvokeFunctionResponse> {
         try {
             const nonce = await account?.getNonce()
-            const call = await account?.execute(
+
+            return await account?.execute(
                 {
                     contractAddress: this.getWorldAddress() || "",
                     entrypoint: WorldEntryPoints.execute,
-                    calldata: [strTofelt252Felt(system), call_data.length, ...call_data]
+                    calldata: [shortString.encodeShortString(system), call_data.length, ...call_data]
                 },
                 undefined,
                 {
@@ -122,7 +101,6 @@ export class RPCProvider extends Provider {
                     maxFee: 0 // TODO: Update this value as needed.
                 }
             );
-            return call;
         } catch (error) {
             throw error;
         }
@@ -144,7 +122,7 @@ export class RPCProvider extends Provider {
      */
     public async call(selector: string, call_data: num.BigNumberish[]): Promise<Result> {
         try {
-            return await this.contract.call('execute', [strTofelt252Felt(selector), call_data]);
+            return await this.contract.call(WorldEntryPoints.execute, [shortString.encodeShortString(selector), call_data]);
         } catch (error) {
             throw error;
         }

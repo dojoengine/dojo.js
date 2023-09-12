@@ -1,0 +1,3 @@
+[submodule "dojo-starter"]
+	path = dojo-starter
+	url = https://github.com/dojoengine/dojo-starter
