@@ -94,7 +94,7 @@ export class RPCProvider extends Provider {
                 {
                     contractAddress: contract,
                     entrypoint: call,
-                    calldata: call_data.length > 0 ? [this.getWorldAddress()!, call_data.length, ...call_data] : [this.getWorldAddress()!]
+                    calldata: call_data.length > 0 ? [this.getWorldAddress()!, ...call_data] : [this.getWorldAddress()!]
                 },
                 undefined,
                 {
