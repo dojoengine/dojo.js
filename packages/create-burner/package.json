@@ -1,11 +1,11 @@
 {
   "name": "@dojoengine/create-burner",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Useful hooks and functions to create a Starknet burner wallet",
   "source": "src/index.ts",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Loaf",
