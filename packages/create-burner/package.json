@@ -1,6 +1,6 @@
 {
   "name": "@dojoengine/create-burner",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Useful hooks and functions to create a Starknet burner wallet",
   "source": "src/index.ts",
   "main": "dist/index.js",
@@ -25,10 +25,12 @@
     "bun-types": "^1.0.1",
     "jest": "^29.5.0",
     "ts-jest": "^29.1.0",
+    "tsup": "^7.2.0",
     "typescript": "^5.0.3"
   },
   "dependencies": {
     "@starknet-react/core": "^1.0.3",
+    "encoding": "^0.1.13",
     "get-starknet-core": "^3.2.0",
     "js-cookie": "^3.0.5",
     "starknet": "^5.14.1"
