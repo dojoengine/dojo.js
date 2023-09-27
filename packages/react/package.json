@@ -1,6 +1,6 @@
 {
   "name": "@dojoengine/react",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Dojo React",
   "source": "src/index.ts",
   "main": "dist/index.js",
@@ -8,11 +8,10 @@
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "pondering democritus",
+  "author": "loaf",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^17.0 || ^18.0",
-    "starknet": "next"
+    "react": "^17.0 || ^18.0"
   },
   "devDependencies": {
     "@types/events": "^3.0.0",
