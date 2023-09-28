@@ -1,0 +1,53 @@
+name: Build and NPM Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        package: ['packages/core', 'packages/create-burner', 'packages/utils']
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Install dependencies
+      run: |
+        cd ${{ matrix.package }}
+        npm ci
+
+    - name: Bump version
+      run: |
+        cd ${{ matrix.package }}
+        npm version patch -m "Bump version to %s"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build
+      run: |
+        cd ${{ matrix.package }}
+        npm run build
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        directory: ${{ matrix.package }}
+        force: true
+
+    - name: NPM Publish
+      run: |
+        cd ${{ matrix.package }}
+        npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
