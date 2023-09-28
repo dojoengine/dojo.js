@@ -1,17 +1,21 @@
 {
   "name": "@dojoengine/create-burner",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "Useful hooks and functions to create a Starknet burner wallet",
   "source": "src/index.ts",
   "main": "dist/index.js",
+  "type": "module",
   "scripts": {
-    "build": "tsup",
+    "build": "tsup --dts-resolve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Loaf",
   "license": "MIT",
   "peerDependencies": {
     "react": "^17.0 || ^18.0"
+  },
+  "exports": {
+    ".": "./dist/index.js"
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",
