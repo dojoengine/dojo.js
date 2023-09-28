@@ -1,9 +1,10 @@
 {
   "name": "@dojoengine/utils",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Helpful Dojo Utils",
+  "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "test": "jest"
   },
   "author": "Loaf",
@@ -11,17 +12,22 @@
   "main": "dist/index.js",
   "devDependencies": {
     "@latticexyz/recs": "^1.43.0",
+    "@latticexyz/utils": "^1.43.0",
     "@types/elliptic": "^6.4.14",
     "@types/jest": "^29.5.0",
     "@types/mocha": "^10.0.1",
     "bun-types": "^1.0.1",
     "fetch-mock": "^9.11.0",
     "jest": "^29.5.0",
+    "mobx": "^6.10.2",
+    "proxy-deep": "^3.1.1",
+    "rxjs": "^7.8.1",
     "starknet": "^5.19.5",
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.3"
   },
   "dependencies": {
+    "ethers": "5.7.2",
     "micro-starknet": "^0.2.3"
   }
 }
