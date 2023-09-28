@@ -1,16 +1,17 @@
 {
   "name": "@dojoengine/core",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "Dojo engine core providers and types",
   "type": "module",
+  "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "postbuild": "cp -R bin/ dist/",
     "test": "jest"
   },
   "author": "Loaf",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "devDependencies": {
     "@types/elliptic": "^6.4.14",
     "@types/jest": "^29.5.0",
