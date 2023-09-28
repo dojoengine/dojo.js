@@ -4,7 +4,7 @@
   "description": "Dojo engine core providers and types",
   "scripts": {
     "build": "tsc",
-    "postbuild": "cp -R bin/ dist/",
+    "postbuild": "cp -R bin dist/ && chmod a+x dist/bin/*",
     "test": "jest"
   },
   "author": "Loaf",
