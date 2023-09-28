@@ -2,6 +2,7 @@
   "name": "@dojoengine/core",
   "version": "0.0.20",
   "description": "Dojo engine core providers and types",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "postbuild": "cp -R bin/ dist/",
