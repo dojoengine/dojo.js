@@ -15,7 +15,10 @@
     "react": "^17.0 || ^18.0"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",
