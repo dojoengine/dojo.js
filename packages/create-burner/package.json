@@ -1,6 +1,6 @@
 {
   "name": "@dojoengine/create-burner",
-  "version": "0.0.29",
+  "version": "0.1.0",
   "description": "Useful hooks and functions to create a Starknet burner wallet",
   "source": "src/index.ts",
   "main": "dist/index.js",

@@ -27,24 +27,10 @@ jobs:
         cd ${{ matrix.package }}
         bun install
 
-    - name: Bump version
-      run: |
-        cd ${{ matrix.package }}
-        yarn version --patch
-      env:
-        GH_TOKEN: ${{ secrets.GIT_TOKEN }}
-
     - name: Build
       run: |
         cd ${{ matrix.package }}
         bun run build
-
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GIT_TOKEN }}
-        directory: ${{ matrix.package }}
-        force: true
 
     - name: NPM Publish
       run: |
