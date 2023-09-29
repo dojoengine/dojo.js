@@ -4,8 +4,8 @@
   "description": "Dojo engine core providers and types",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "postbuild": "cp -R bin dist/ && chmod a+x dist/bin/*",
+    "build": "tsup",
+    "postbuild": "cp -R bin/ dist/",
     "test": "jest"
   },
   "exports": {
@@ -32,6 +32,6 @@
     "typescript": "^5.0.3"
   },
   "bin": {
-    "create-components": "./dist/bin/generateComponents.cjs"
+    "create-components": "./bin/generateComponents.cjs"
   }
 }
