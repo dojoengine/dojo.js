@@ -4,6 +4,8 @@
         "module": "ESNext",
         "moduleResolution": "node",
         "esModuleInterop": true,
+        "isolatedModules": true,
+        "forceConsistentCasingInFileNames": true,
         "jsx": "react-jsx",
         "lib": [
             "esnext",
@@ -18,7 +20,7 @@
         "skipLibCheck": true,
         "strict": true,
         "strictNullChecks": true,
-        "target": "es2021",
+        "target": "esnext",
         "types": [
             "jest",
             "node",

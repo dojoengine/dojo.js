@@ -1,6 +1,6 @@
 import './App.css';
 import { useDojo } from './DojoContext';
-import { useComponentValue } from "@dojoengine/react";
+import { useComponentValue } from "@latticexyz/react";
 import { Direction, } from './dojo/createSystemCalls'
 import { EntityIndex, setComponent } from '@latticexyz/recs';
 import { useEffect } from 'react';

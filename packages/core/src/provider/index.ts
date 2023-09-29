@@ -1,1 +1,1 @@
-export { RPCProvider } from "./RPCProvider";
+export * from "./RPCProvider";
