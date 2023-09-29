@@ -2,6 +2,9 @@
 
 Monorepo for the [dojo engine](https://www.dojoengine.org/en/) npm packages.
 
+- [core](./packages/core)
+- [burner](./packages/create-burner)
+- [utils](./packages/utils)
 
 
 ### Enviroment setup
