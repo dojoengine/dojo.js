@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ESNext",
     "module": "ESNext",
     "declaration": true,
     "outDir": "./dist",
     "sourceMap": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     // "noUnusedParameters": true,
     // "resolveJsonModule": true,
     "skipLibCheck": true,

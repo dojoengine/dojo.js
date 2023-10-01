@@ -1,5 +1,5 @@
 import { Event } from "starknet";
-import { Entity, setComponent, Components, Type as RecsType, } from "@latticexyz/recs";
+import { Entity, setComponent, Components, ComponentValue, Type as RecsType, } from "@latticexyz/recs";
 import { poseidonHashMany } from "micro-starknet";
 
 /**
@@ -54,7 +54,7 @@ export function setComponentFromEvent(components: Components, eventData: string[
   const values = eventData.slice(index, index + numberOfValues);
 
   // create component object from values with schema
-  const componentValues = Object.keys(component.schema).reduce((acc: any, key, index) => {
+  const componentValues = Object.keys(component.schema).reduce((acc: ComponentValue, key, index) => {
     const value = values[index];
     const parsedValue = parseComponentValue(value, component.schema[key])
     acc[key] = parsedValue
