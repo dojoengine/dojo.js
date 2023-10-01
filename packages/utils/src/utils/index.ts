@@ -1,5 +1,5 @@
 import { Event } from "starknet";
-import { EntityIndex, setComponent, Components, Schema } from "@latticexyz/recs";
+import { Entity, setComponent, Components, Type as RecsType, } from "@latticexyz/recs";
 import { poseidonHashMany } from "micro-starknet";
 
 /**
@@ -54,9 +54,10 @@ export function setComponentFromEvent(components: Components, eventData: string[
   const values = eventData.slice(index, index + numberOfValues);
 
   // create component object from values with schema
-  const componentValues = Object.keys(component.schema).reduce((acc: Schema, key, index) => {
+  const componentValues = Object.keys(component.schema).reduce((acc: any, key, index) => {
     const value = values[index];
-    acc[key] = Number(value);
+    const parsedValue = parseComponentValue(value, component.schema[key])
+    acc[key] = parsedValue
     return acc;
   }, {});
 
@@ -65,6 +66,25 @@ export function setComponentFromEvent(components: Components, eventData: string[
   // set component
   setComponent(component, entityIndex, componentValues);
 
+}
+
+/**
+ * Parse component value into typescript typed value
+ *
+ * @param {string} value - The value to parse
+ * @param {RecsType} type - The target type
+ */
+export function parseComponentValue(value: string, type: RecsType) {
+  switch (type) {
+    case RecsType.Boolean:
+      return value === "0x0" ? false : true;
+    case RecsType.Number:
+      return Number(value);
+    case RecsType.BigInt:
+      return BigInt(value);
+    default:
+      return value
+  }
 }
 
 /**
@@ -87,13 +107,13 @@ export function hexToAscii(hex: string) {
  * it's directly used as the entity ID. Otherwise, a poseidon hash of the keys is calculated.
  *
  * @param {bigint[]} keys - An array of big integer keys.
- * @returns {EntityIndex} The determined entity ID.
+ * @returns {Entity} The determined entity ID.
  */
-export function getEntityIdFromKeys(keys: bigint[]): EntityIndex {
+export function getEntityIdFromKeys(keys: bigint[]): Entity {
   if (keys.length === 1) {
-    return parseInt(keys[0].toString()) as EntityIndex;
+    return "0x" + keys[0].toString(16) as Entity;
   }
   // calculate the poseidon hash of the keys
   let poseidon = poseidonHashMany([BigInt(keys.length), ...keys]);
-  return parseInt(poseidon.toString()) as EntityIndex;
+  return "0x" + poseidon.toString(16) as Entity;
 }
