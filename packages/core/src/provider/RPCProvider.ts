@@ -89,7 +89,7 @@ export class RPCProvider extends Provider {
      */
     public async execute(
         account: Account,
-        contract: string, 
+        contract: string,
         call: string,
         calldata: num.BigNumberish[],
         transactionDetails?: InvocationsDetails | undefined
