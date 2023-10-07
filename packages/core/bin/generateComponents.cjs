@@ -45,15 +45,15 @@ fs.readFile(jsonFilePath, "utf8", (err, jsonString) => {
     fileContent += `import { defineComponent, Type as RecsType, World } from "@latticexyz/recs";\n\n`;
     fileContent += `export function defineContractComponents(world: World) {\n  return {\n`;
 
-    data.components.forEach((component) => {
+    data.models.forEach((model) => {
       let types = []
 
-      const tableName = component.name;
+      const tableName = model.name;
       fileContent += `    ${tableName}: (() => {\n`;
       fileContent += `      const name = "${tableName}";\n`;
       fileContent += `      return defineComponent(\n        world,\n        {\n`;
 
-      component.members.filter(m => !m.key).forEach((member) => {
+      model.members.filter(m => !m.key).forEach((member) => {
         let memberType = cairoToRecsType[member.type] ?? "RecsType.Number";  // Default type set to Number
         fileContent += `          ${member.name}: ${memberType},\n`;
         types.push(member.type);
