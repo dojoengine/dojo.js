@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "codegen": "graphql-codegen",
     "create-components": "npx @dojoengine/core src/manifest.json src/dojo/contractComponents.ts"
-	},
+  },
   "dependencies": {
     "@dojoengine/core": "link:dojo-packages/packages/core",
     "@dojoengine/create-burner": "link:dojo-packages/packages/create-burner",
