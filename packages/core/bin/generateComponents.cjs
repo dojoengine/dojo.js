@@ -18,6 +18,8 @@ const { dependencies } = require(path.resolve("./package.json"));
 const recsVersion = dependencies?.["@latticexyz/recs"] ?? "";
 const isRecsVersion2 = /^[\^\~]?2./g.exec(recsVersion) != null;
 console.log(`...generating for @latticexyz/recs version ${isRecsVersion2 ? '2 (bigint support, Entity as string)' : '1 (no bigint, EntityIndex as number)'}`)
+console.log('---------------------------')
+console.log('WARNING: Currently does not generate custom types. You will have to manually add this.')
 
 const cairoToRecsType = {
   "bool": "RecsType.Boolean",
