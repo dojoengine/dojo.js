@@ -9,7 +9,7 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "codegen": "graphql-codegen",
-    "create-components": "npx @dojoengine/core src/manifest.json src/dojo/contractComponents.ts"
+    "create-components": "npx @dojoengine/core src/dojo/manifest.json src/dojo/contractComponents.ts"
   },
   "dependencies": {
     "@dojoengine/core": "link:dojo-packages/packages/core",
