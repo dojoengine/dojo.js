@@ -11,6 +11,14 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./pkg": {
+      "import": "./pkg/torii_client_wasm.js",
+      "types": "./pkg/torii_client_wasm.d.ts"
+    },
+    "./wasm": {
+      "import": "./pkg/torii_client_wasm_bg.wasm",
+      "types": "./pkg/torii_client_wasm_bg.wasm.d.ts"
     }
   },
   "author": "Loaf",
@@ -24,7 +32,13 @@
     "fetch-mock": "^9.11.0",
     "jest": "^29.5.0",
     "ts-jest": "^29.1.0",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.3",
+    "@wasm-tool/wasm-pack-plugin": "1.5.0",
+    "text-encoding": "^0.7.0",
+    "html-webpack-plugin": "^5.3.2",
+    "webpack": "^5.49.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "starknet": "^5.19.5"

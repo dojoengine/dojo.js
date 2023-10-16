@@ -6,6 +6,8 @@ import { GraphQLClient } from 'graphql-request';
 import { getSdk } from '../generated/graphql';
 import manifest from "./manifest.json";
 
+import { setup } from './worker'
+
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 const getContractByName = (name: string) => {
@@ -21,6 +23,8 @@ export async function setupNetwork() {
 
     // Utility function to get the SDK.
     const createGraphSdk = () => getSdk(new GraphQLClient(VITE_PUBLIC_TORII));
+
+    setup()
 
     // Return the setup object.
     return {
