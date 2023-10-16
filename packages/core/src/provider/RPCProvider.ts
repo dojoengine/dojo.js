@@ -1,4 +1,4 @@
-import { RpcProvider, Account, num, InvokeFunctionResponse, Contract, Result, shortString, InvocationsDetails } from "starknet";
+import { RpcProvider, Account, num, InvokeFunctionResponse, Contract, Result, shortString, InvocationsDetails, AllowArray, Call } from "starknet";
 import { Provider } from "./provider";
 import { Query, WorldEntryPoints } from "../types";
 import { LOCAL_KATANA } from '../constants';
@@ -81,28 +81,20 @@ export class RPCProvider extends Provider {
      * Executes a function with the given parameters.
      * 
      * @param {Account} account - The account to use.
-     * @param {string} contract - The contract to execute.
-     * @param {string} call - The function to call.
-     * @param {num.BigNumberish[]} call_data - The call data for the function.
+     * @param {AllowArray<Call>} calls - The calls to execute.
      * @param {InvocationsDetails | undefined} transactionDetails - The transactionDetails allow to override maxFee & version
      * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
      */
     public async execute(
         account: Account,
-        contract: string,
-        call: string,
-        calldata: num.BigNumberish[],
+        calls: AllowArray<Call>,
         transactionDetails?: InvocationsDetails | undefined
     ): Promise<InvokeFunctionResponse> {
         try {
             const nonce = await account?.getNonce()
 
             return await account?.execute(
-                {
-                    contractAddress: contract,
-                    entrypoint: call,
-                    calldata: calldata
-                },
+                calls,
                 undefined,
                 {
                     maxFee: 0, // TODO: Update this value as needed.
