@@ -1,4 +1,4 @@
-import wasm from "@dojoengine/torii/wasm";
+import wasm from "/Users/os/Documents/code/dojo/packages/packages/torii/pkg/torii_client_wasm_bg.wasm?url";
 // import client from "@dojoengine/torii/pkg";
 
 // importScripts("./pkg/torii_client_wasm.js");
@@ -8,7 +8,6 @@ import wasm from "@dojoengine/torii/wasm";
 export async function setup() {
 	console.log("Initializing torii client worker 🚧");
 
-	console.log(wasm)
 
 	// console.log(client)
 
