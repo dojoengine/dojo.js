@@ -6,6 +6,7 @@ import { ClientComponents } from "./createClientComponents";
 import { updatePositionWithDirection } from "../utils";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 
+
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(

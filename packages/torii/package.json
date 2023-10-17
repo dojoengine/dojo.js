@@ -17,7 +17,7 @@
       "types": "./pkg/torii_client_wasm.d.ts"
     },
     "./wasm": {
-      "import": "./pkg/torii_client_wasm_bg.wasm",
+      "import": "./pkg/torii_client_wasm_bg.wasm?init",
       "types": "./pkg/torii_client_wasm_bg.wasm.d.ts"
     }
   },
