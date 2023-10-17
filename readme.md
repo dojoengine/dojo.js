@@ -25,59 +25,77 @@
 
 **Dojo is a community driven open-source, Provable Game Engine, providing a comprehensive toolkit for building verifiable games and autonomous worlds.**
 
-### Packages
+Here's a more refined and structured version:
 
-Monorepo for the [dojo engine](https://www.dojoengine.org/en/) npm packages.
+---
 
-- [core](./packages/core)
-- [burner](./packages/create-burner)
-- [utils](./packages/utils)
+## Dojo Engine Packages Monorepo
 
+This is a monorepo for the [dojo engine](https://www.dojoengine.org/en/) npm packages. 
 
-### Enviroment setup
+### Available Packages:
+- [**Core**](./packages/core)
+- [**Burner**](./packages/create-burner)
+- [**Utils**](./packages/utils)
 
-We are using [bun](https://bun.sh/) in this repo install it by:
+---
 
-```console
-curl -fsSL https://bun.sh/install | bash
-```
+### Environment Setup
+
+1. **Bun Installation**: We use [bun](https://bun.sh/) in this repository. To install it, run:
+    ```console
+    curl -fsSL https://bun.sh/install | bash
+    ```
+
+---
 
 ### Development
 
-From the root to install all the packages deps
-```
+#### Package Dependencies Installation:
+
+From the repository root, run the following to install all the necessary package dependencies:
+```console
 bun install
-``` 
-
-### Building packages
-
-Navigate to a package and run the following. This will launch bun and watch for local changes, automatically compiling and updating.
-
 ```
+
+#### Package Linking:
+
+To link the packages to the examples or your own project, from the root directory, run:
+```console
+bun link
+```
+
+#### Building Packages:
+
+**Note**: Before running the examples, you must build each package.
+
+To do so, navigate to a specific package directory and run the command below. This will initiate bun in watch mode, which will automatically compile and update based on local changes:
+```console
 bun run build --watch
 ```
 
+---
+
 ### Examples
 
-To run the example which has the linked packages:
+To run the examples that have the linked packages, follow the steps below:
 
-**Terminal 1**
-```
+**Terminal 1**: Start the React app.
+```console
 cd examples/react-app
-
 bun install 
-
 bun dev
 ```
 
-**Terminal 2**
-```
+**Terminal 2**: Set up the dojo starter with specific configurations.
+```console
 cd examples/dojo-starter
-
 katana --disable-fee --block-time 1000
 ```
 
-**Terminal 3**
-```
-cd examples/dojo-starter && sozo build && sozo migrate
+**Terminal 3**: Build and migrate the dojo starter.
+```console
+cd examples/dojo-starter
+sozo build
+sozo migrate
 ```
