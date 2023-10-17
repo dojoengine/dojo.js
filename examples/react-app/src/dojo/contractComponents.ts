@@ -10,10 +10,12 @@ export function defineContractComponents(world: World) {
         world,
         {
           remaining: RecsType.Number,
+          last_direction: RecsType.Number,
         },
         {
           metadata: {
             name: name,
+            types: ["u8","Direction"],
           },
         }
       );
@@ -24,39 +26,12 @@ export function defineContractComponents(world: World) {
         world,
         {
           x: RecsType.Number,
-          y: RecsType.Number,
+          y: RecsType.Number
         },
         {
           metadata: {
             name: name,
-          },
-        }
-      );
-    })(),
-    AuthStatus: (() => {
-      const name = "AuthStatus";
-      return defineComponent(
-        world,
-        {
-          is_authorized: RecsType.Boolean,
-        },
-        {
-          metadata: {
-            name: name,
-          },
-        }
-      );
-    })(),
-    AuthRole: (() => {
-      const name = "AuthRole";
-      return defineComponent(
-        world,
-        {
-          id: RecsType.Number,
-        },
-        {
-          metadata: {
-            name: name,
+            types: ["Vec2"],
           },
         }
       );
