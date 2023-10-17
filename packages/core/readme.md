@@ -25,26 +25,21 @@ This is an example from [Dojo React App](https://github.com/dojoengine/dojo-star
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { RPCProvider, Query, } from "@dojoengine/core";
-import { Account, TypedContract, num } from "starknet";
+import { Account, num } from "starknet";
 import { GraphQLClient } from 'graphql-request';
 import { getSdk } from '../generated/graphql';
-import manifest from "./manifest.json";
+
+// Import the manifest from your project 
+import manifest from "../../../dojo-starter/target/dev/manifest.json";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
-
-const getContractByName = (name: string) => {
-    return manifest.contracts.find((contract) => contract.name === name);
-}
 
 export async function setupNetwork() {
     // Extract environment variables for better readability.
     const { VITE_PUBLIC_WORLD_ADDRESS, VITE_PUBLIC_NODE_URL, VITE_PUBLIC_TORII } = import.meta.env;
 
     // Create a new RPCProvider instance.
-    const provider = new RPCProvider(VITE_PUBLIC_WORLD_ADDRESS, VITE_PUBLIC_NODE_URL);
-
-    // Utility function to get the SDK.
-    const createGraphSdk = () => getSdk(new GraphQLClient(VITE_PUBLIC_TORII));
+    const provider = new RPCProvider(VITE_PUBLIC_WORLD_ADDRESS, manifest, VITE_PUBLIC_NODE_URL);
 
     // Return the setup object.
     return {
@@ -55,11 +50,11 @@ export async function setupNetwork() {
         contractComponents: defineContractComponents(world),
 
         // Define the graph SDK instance.
-        graphSdk: createGraphSdk(),
+        graphSdk: () => getSdk(new GraphQLClient(VITE_PUBLIC_TORII)),
 
         // Execute function.
         execute: async (signer: Account, contract: string, system: string, call_data: num.BigNumberish[]) => {
-            return provider.execute(signer, getContractByName(contract)?.address || "", system, call_data);
+            return provider.execute(signer, contract, system, call_data);
         },
 
         // Entity query function.
@@ -70,12 +65,7 @@ export async function setupNetwork() {
         // Entities query function.
         entities: async (component: string, partition: number) => {
             return provider.entities(component, partition);
-        },
-
-        // Call function.
-        call: async (selector: string, call_data: num.BigNumberish[]) => {
-            return provider.call(selector, call_data);
-        },
+        }
     };
 }
 ```
@@ -95,7 +85,7 @@ You must point the script to your games manifest file and the output file. The o
 
 ### Extending the Core
 
-We all want worlds that allow easy extensibility. The core class `RPCProvider` exposes the world api. If you are building a world and want developers to easily build on top of it you can extend the `RPCProvider` class and expose your own methods.
+We all aspire to create environments that prioritize easy extensibility. The foundational class, `RPCProvider`, unveils the API for these worlds. If you're designing a world and wish for developers to seamlessly expand upon it, simply extend the `RPCProvider` class and introduce your unique methods.
 
 ```javascript
 import { RPCProvider } from "@dojoengine/core";

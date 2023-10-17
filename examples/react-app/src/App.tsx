@@ -2,46 +2,23 @@ import './App.css';
 import { useDojo } from './DojoContext';
 import { useComponentValue } from "@latticexyz/react";
 import { Direction, } from './dojo/createSystemCalls'
-import { EntityIndex, setComponent } from '@latticexyz/recs';
-import { useEffect } from 'react';
-import { getFirstComponentByType } from './utils';
-import { Moves, Position } from './generated/graphql';
+import { EntityIndex } from '@latticexyz/recs';
 
 function App() {
   const {
     setup: {
       systemCalls: { spawn, move },
-      components: { Moves, Position },
-      network: { graphSdk, call }
+      components: { Moves, Position }
     },
     account: { create, list, select, account, isDeploying, clear }
   } = useDojo();
 
   // entity id - this example uses the account address as the entity id
-  const entityId = account.address;
+  const entityId = account.address.toString();
 
   // get current component values
-  const position = useComponentValue(Position, parseInt(entityId.toString()) as EntityIndex);
-  const moves = useComponentValue(Moves, parseInt(entityId.toString()) as EntityIndex);
-
-  useEffect(() => {
-
-    if (!entityId) return;
-
-    const fetchData = async () => {
-      const { data } = await graphSdk.getEntities();
-
-      if (data) {
-        const remaining = getFirstComponentByType(data.entities?.edges, 'Moves') as Moves;
-        const position = getFirstComponentByType(data.entities?.edges, 'Position') as Position;
-
-        setComponent(Moves, parseInt(entityId.toString()) as EntityIndex, { remaining: remaining.remaining })
-        setComponent(Position, parseInt(entityId.toString()) as EntityIndex, { x: position.x, y: position.y })
-      }
-    }
-    fetchData();
-  }, [account.address]);
-
+  const position = useComponentValue(Position, entityId as EntityIndex);
+  const moves = useComponentValue(Moves, entityId as EntityIndex);
 
   return (
     <>
@@ -68,7 +45,6 @@ function App() {
         <button onClick={() => move(account, Direction.Right)}>Move Right</button> <br />
         <button onClick={() => move(account, Direction.Down)}>Move Down</button>
       </div>
-
     </>
   );
 }

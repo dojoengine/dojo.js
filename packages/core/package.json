@@ -18,7 +18,8 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "dependencies": {
-    "starknet": "^5.19.5"
+    "starknet": "^5.19.5",
+    "@dojoengine/utils": "link:dojo-packages/packages/utils"
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.14",
