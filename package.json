@@ -4,7 +4,6 @@
   "workspaces": [
     "packages/create-burner",
     "packages/core",
-    "packages/utils",
-    "packages/torii"
+    "packages/utils"
   ]
 }
