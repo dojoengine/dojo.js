@@ -9,11 +9,11 @@ import {
   Call,
   num,
 } from "starknet";
-import { getContractByName } from "@dojoengine/utils";
 import { Provider } from "./provider";
 import { Query, WorldEntryPoints } from "../types";
 import { LOCAL_KATANA } from "../constants";
 import abi from "../constants/abi.json";
+import { getContractByName } from "../utils";
 
 /**
  * RPCProvider class: Extends the generic Provider to handle RPC interactions.

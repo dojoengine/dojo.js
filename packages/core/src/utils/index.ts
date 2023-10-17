@@ -39,3 +39,15 @@ export function getAllSystemNames(manifest: any): any {
 export function getAllSystemNamesAsFelt(manifest: any): any {
   return manifest.systems.map((system: any) => shortString.encodeShortString(system.name));
 }
+
+/**
+ * Gets a contract from a manifest by name.
+ * 
+ * @param {any} manifest - The manifest object.
+ * @param {string} name - The name of the contract.
+ * @returns {any} The contract object.
+ * 
+ */
+export const getContractByName = (manifest: any, name: string) => {
+  return manifest.contracts.find((contract: any) => contract.name === name)?.address || "";
+}
