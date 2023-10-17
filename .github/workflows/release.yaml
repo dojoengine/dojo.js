@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: ['packages/core', 'packages/create-burner', 'packages/utils']
+        package: ['packages/create-burner', 'packages/utils', 'packages/core']
 
     steps:
     - name: Checkout code
