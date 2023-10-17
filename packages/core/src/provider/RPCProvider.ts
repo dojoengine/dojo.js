@@ -7,7 +7,9 @@ import {
   InvocationsDetails,
   AllowArray,
   Call,
+  num,
 } from "starknet";
+import { getContractByName } from "@dojoengine/utils";
 import { Provider } from "./provider";
 import { Query, WorldEntryPoints } from "../types";
 import { LOCAL_KATANA } from "../constants";
@@ -19,6 +21,7 @@ import abi from "../constants/abi.json";
 export class RPCProvider extends Provider {
   public provider: RpcProvider;
   public contract: Contract;
+  public manifest: any;
 
   /**
    * Constructor: Initializes the RPCProvider with the given world address and URL.
@@ -26,12 +29,13 @@ export class RPCProvider extends Provider {
    * @param {string} world_address - Address of the world.
    * @param {string} [url=LOCAL_KATANA] - RPC URL (defaults to LOCAL_KATANA).
    */
-  constructor(world_address: string, url: string = LOCAL_KATANA) {
+  constructor(world_address: string, manifest: any, url: string = LOCAL_KATANA) {
     super(world_address);
     this.provider = new RpcProvider({
       nodeUrl: url,
     });
     this.contract = new Contract(abi, this.getWorldAddress(), this.provider);
+    this.manifest = manifest;
   }
 
   /**
@@ -98,6 +102,43 @@ export class RPCProvider extends Provider {
       throw error;
     }
   }
+  /**
+   * Executes a function with the given parameters.
+   * 
+   * @param {Account} account - The account to use.
+   * @param {string} contract - The contract to execute.
+   * @param {string} call - The function to call.
+   * @param {num.BigNumberish[]} call_data - The call data for the function.
+   * @param {InvocationsDetails | undefined} transactionDetails - The transactionDetails allow to override maxFee & version
+   * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
+   */
+  public async execute(
+    account: Account,
+    contract_name: string,
+    call: string,
+    calldata: num.BigNumberish[],
+    transactionDetails?: InvocationsDetails | undefined
+  ): Promise<InvokeFunctionResponse> {
+    try {
+      const nonce = await account?.getNonce()
+
+      return await account?.execute(
+        {
+          contractAddress: getContractByName(this.manifest, contract_name),
+          entrypoint: call,
+          calldata: calldata
+        },
+        undefined,
+        {
+          maxFee: 0, // TODO: Update this value as needed.
+          ...transactionDetails,
+          nonce,
+        }
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
 
   /**
    * Executes a function with the given parameters.
@@ -107,7 +148,7 @@ export class RPCProvider extends Provider {
    * @param {InvocationsDetails | undefined} transactionDetails - The transactionDetails allow to override maxFee & version
    * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
    */
-  public async execute(
+  public async executeMulti(
     account: Account,
     calls: AllowArray<Call>,
     transactionDetails?: InvocationsDetails | undefined
