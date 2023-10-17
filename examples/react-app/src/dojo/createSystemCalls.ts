@@ -16,7 +16,7 @@ export function createSystemCalls(
 
     const spawn = async (signer: Account) => {
 
-        const entityId = parseInt(signer.address) as EntityIndex;
+        const entityId = signer.address.toString() as EntityIndex;
 
         const positionId = uuid();
         Position.addOverride(positionId, {
@@ -31,7 +31,7 @@ export function createSystemCalls(
         });
 
         try {
-            const tx = await execute(signer, "player_actions", 'spawn', []);
+            const tx = await execute(signer, "actions", 'spawn', []);
 
             console.log(tx)
             const receipt = await signer.waitForTransaction(tx.transaction_hash, { retryInterval: 100 })
@@ -49,7 +49,7 @@ export function createSystemCalls(
 
     const move = async (signer: Account, direction: Direction) => {
 
-        const entityId = parseInt(signer.address) as EntityIndex;
+        const entityId = signer.address.toString() as EntityIndex;
 
         const positionId = uuid();
         Position.addOverride(positionId, {
@@ -64,7 +64,7 @@ export function createSystemCalls(
         });
 
         try {
-            const tx = await execute(signer, "player_actions", "move", [direction]);
+            const tx = await execute(signer, "actions", "move", [direction]);
 
             console.log(tx)
             const receipt = await signer.waitForTransaction(tx.transaction_hash, { retryInterval: 100 })
@@ -88,8 +88,8 @@ export function createSystemCalls(
 }
 
 export enum Direction {
-    Left = 0,
-    Right = 1,
-    Up = 2,
-    Down = 3,
+    Left = 1,
+    Right = 2,
+    Up = 3,
+    Down = 4,
 }
