@@ -74,6 +74,13 @@ To do so, navigate to a specific package directory and run the command below. Th
 bun run build --watch
 ```
 
+#### Dojo starter:
+
+To install dojo-starter submodule, run:
+```console
+git submodule update --init --recursive
+```
+
 ---
 
 ### Examples

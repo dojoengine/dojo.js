@@ -48,18 +48,14 @@ export function setComponentFromEvent(components: Components, eventData: string[
   const entityIndex = getEntityIdFromKeys(keys);
 
   // get values
-  let numberOfValues = parseInt(eventData[index++]);
+  const numberOfValues = parseInt(eventData[index++]);
 
   // get values
   const values = eventData.slice(index, index + numberOfValues);
 
   // create component object from values with schema
-  const componentValues = Object.keys(component.schema).reduce((acc: ComponentValue, key, index) => {
-    const value = values[index];
-    const parsedValue = parseComponentValue(value, component.schema[key])
-    acc[key] = parsedValue
-    return acc;
-  }, {});
+  const valuesIndex = 0;
+  const componentValues = decodeComponent(component.schema, values, valuesIndex);
 
   console.log(componentName, entityIndex, componentValues)
 
@@ -85,6 +81,32 @@ export function parseComponentValue(value: string, type: RecsType) {
     default:
       return value
   }
+}
+
+/**
+ * Decodes a component based on the provided schema.
+ *
+ * @param {Object} schema - The schema that describes the structure of the component to decode.
+ * @param {string[]} values - An array of string values used to populate the decoded component.
+ * @param {number} valuesIndex - The current index in the values array to read from.
+ * @returns {Object} The decoded component object.
+ */
+export function decodeComponent(schema: any, values: string[], valuesIndex: number): any {
+  // Iterate through the keys of the schema and reduce them to build the decoded component.
+  return Object.keys(schema).reduce((acc: any, key) => {
+    // If the current schema key points to an object and doesn't have a 'type' property,
+    // it means it's a nested component. Therefore, we recursively decode it.
+    if (typeof schema[key] === 'object' && !schema[key].type) {
+      acc[key] = decodeComponent(schema[key], values, valuesIndex);
+    } else {
+      // If the schema key points directly to a type or is not an object,
+      // we parse its value using the provided parseComponentValue function
+      // and move to the next index in the values array.
+      acc[key] = parseComponentValue(values[valuesIndex], schema[key]);
+      valuesIndex++;
+    }
+    return acc;
+  }, {});
 }
 
 /**
@@ -118,3 +140,80 @@ export function getEntityIdFromKeys(keys: bigint[]): Entity {
   return "0x" + poseidon.toString(16) as Entity;
 }
 
+/**
+ * Iterate through GraphQL entities and set components based on them.
+ *
+ * @param {Components} components - The target components structure where the parsed data will be set.
+ * @param {any[]} entities - The array of GraphQL entities to parse and set in the components.
+ */
+export function setComponentsFromGraphQLEntities(components: Components, entities: any) {
+  entities.forEach((entity: any) => {
+    setComponentFromGraphQLEntity(components, entity);
+  });
+}
+
+/**
+ * Set a component from a single GraphQL entity.
+ *
+ * @param {Components} components - The target components structure where the parsed data will be set.
+ * @param {any} entityEdge - The GraphQL entity containing node information to parse and set in the components.
+ */
+export function setComponentFromGraphQLEntity(components: Components, entityEdge: any) {
+  const keys = entityEdge.node.keys.map((key: string) => BigInt(key));
+  const entityIndex = getEntityIdFromKeys(keys);
+
+  entityEdge.node.models.forEach((model: any) => {
+    const componentName = model.__typename;
+    const component = components[componentName];
+
+    if (!component) {
+      console.error(`Component ${componentName} not found`);
+      return;
+    }
+
+    const componentValues = Object.keys(component.schema).reduce((acc: ComponentValue, key) => {
+      const value = model[key];
+      const parsedValue = parseComponentValueFromGraphQLEntity(value, component.schema[key]);
+      acc[key] = parsedValue;
+      return acc;
+    }, {});
+
+    console.log(componentValues)
+    setComponent(component, entityIndex, componentValues);
+  });
+}
+
+/**
+ * Parse a component's value from a GraphQL entity based on its type or schema.
+ *
+ * @param {any} value - The raw value from the GraphQL entity.
+ * @param {RecsType | object} type - The expected type or schema for the value.
+ * @returns {any} The parsed value.
+ */
+export function parseComponentValueFromGraphQLEntity(value: any, type: RecsType | object): any {
+  if (value === undefined || value === null) return value;
+
+  // Check if type is an object (i.e., a nested schema)
+  if (typeof type === 'object' && type !== null) {
+    const parsedObject: any = {};
+    for (const key in type) {
+      parsedObject[key] = parseComponentValueFromGraphQLEntity(value[key], (type as any)[key]);
+    }
+    return parsedObject;
+  }
+
+  // For primitive types
+  switch (type) {
+    case RecsType.Boolean:
+      return !!value;
+    case RecsType.Number:
+      if (typeof value === "string") {
+        return 0;
+      }
+      return !isNaN(Number(value)) ? Number(value) : value;
+    case RecsType.BigInt:
+      return BigInt(value);
+    default:
+      return value;
+  }
+}
