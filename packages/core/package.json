@@ -1,6 +1,6 @@
 {
   "name": "@dojoengine/core",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "description": "Dojo engine core providers and types",
   "type": "module",
   "scripts": {
@@ -18,8 +18,7 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "dependencies": {
-    "starknet": "^5.19.5",
-    "@dojoengine/utils": "workspace:*"
+    "starknet": "^5.19.5"
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.14",
