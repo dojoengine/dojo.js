@@ -32,6 +32,6 @@
     "typescript": "^5.0.3"
   },
   "bin": {
-    "create-components": "./bin/generateComponents.cjs"
+    "create-components": "./dist/bin/generateComponents.cjs"
   }
 }
