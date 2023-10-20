@@ -21,13 +21,7 @@ export async function setupNetwork() {
 		VITE_PUBLIC_NODE_URL
 	);
 
-	console.log("ohayo");
-
-	// // @ts-ignore
-	const client = await torii.spawn_client(
-		"http://0.0.0.0:8080/grpc",
-		"http://0.0.0.0:5050",
-		"0x1af130f7b9027f3748c1e3b10ca4a82ac836a30ac4f2f84025e83a99a922a0c",
+	const client = await torii.createClient(
 		[
 			{
 				model: "Position",
@@ -35,19 +29,27 @@ export async function setupNetwork() {
 					"0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973",
 				],
 			},
-		]
+		],
+		{
+			rpcUrl: "http://0.0.0.0:5050",
+			toriiUrl: "http://0.0.0.0:8080/grpc",
+			worldAddress:
+				"0x1af130f7b9027f3748c1e3b10ca4a82ac836a30ac4f2f84025e83a99a922a0c",
+		}
 	);
 
-	setInterval(() => {
-		console.log(
-			"position",
-			client.getModelValue("Position", [
+	client.onEntityChange(
+		{
+			model: "Position",
+			keys: ["0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973"],
+		},
+		() => {
+			const values = client.getModelValue("Position", [
 				"0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973",
-			])
-		);
-	}, 2000);
-
-	// torii.greet();
+			]);
+			console.log("Position changed", values);
+		}
+	);
 
 	// Return the setup object.
 	return {
