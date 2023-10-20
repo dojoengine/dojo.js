@@ -1,6 +1,6 @@
 {
   "name": "@dojoengine/core",
-  "version": "0.1.26",
+  "version": "0.1.29",
   "description": "Dojo engine core providers and types",
   "type": "module",
   "scripts": {
@@ -32,6 +32,6 @@
     "typescript": "^5.0.3"
   },
   "bin": {
-    "create-components": "./bin/generateComponents.cjs"
+    "create-components": "./dist/bin/generateComponents.cjs"
   }
 }

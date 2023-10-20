@@ -20,7 +20,8 @@
     "esModuleInterop": true
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "bin/generateComponents.cjs"
   ],
   "skipLibCheck": true,
   "exclude": [

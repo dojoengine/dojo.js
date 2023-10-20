@@ -3,14 +3,17 @@ query getEntities {
     edges {
       node {
         keys
-        components {
+        models {
           __typename
           ... on Moves {
             remaining
+            last_direction
           }
           ... on Position {
-            x
-            y
+            vec {
+              x
+              y
+            }
           }
         }
       }

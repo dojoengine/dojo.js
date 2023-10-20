@@ -15,7 +15,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u8","Direction"],
+            types: ["u8", "Direction"],
           },
         }
       );
