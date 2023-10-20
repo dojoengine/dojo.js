@@ -25,8 +25,7 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          x: RecsType.Number,
-          y: RecsType.Number
+          vec: RecsType.Number,
         },
         {
           metadata: {
