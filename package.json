@@ -6,5 +6,11 @@
 		"packages/core",
 		"packages/utils",
 		"packages/torii"
-	]
+	],
+	"scripts": {
+		"build-core": "bun run --cwd packages/core build",
+		"build-create-burner": "bun run --cwd packages/create-burner build",
+		"build-utils": "bun run --cwd packages/utils build",
+		"build": "bun run build-core && bun run build-create-burner && bun run build-utils"
+	}
 }
