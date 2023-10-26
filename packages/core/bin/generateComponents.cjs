@@ -19,7 +19,6 @@ const worldAddress = process.argv[5];
 // check that `sozo` command exist
 try {
 	execSync(`command -v sozo 2>/dev/null`);
-	``;
 } catch (e) {
 	console.error("unable to find `sozo` command. Please install using `dojoup`.");
 	process.exit(0);
