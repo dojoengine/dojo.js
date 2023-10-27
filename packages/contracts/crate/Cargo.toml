@@ -1,0 +1,35 @@
+[package]
+edition = "2021"
+name = "dojo-contracts-wasm"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = [ "cdylib", "rlib" ]
+
+
+[dependencies]
+dojo-world = { git = "https://github.com/dojoengine/dojo", branch = "main", features = [ "contracts" ] }
+
+# WASM
+js-sys = "0.3.64"
+serde-wasm-bindgen = "0.6.0"
+starknet = "0.6.0"
+wasm-bindgen = "0.2.87"
+wasm-bindgen-futures = "0.4.37"
+web-sys = { version = "0.3.4", features = [ 'MessageEvent', 'Window', 'Worker', 'WorkerGlobalScope', 'console' ] }
+
+console_error_panic_hook = { version = "0.1.7", optional = true }
+
+# Compiler optimization when running test to prevent ‘locals exceed maximum’ error, 
+# where a function is using more that the maximum allowed local variables.
+[profile.dev]
+incremental = true
+opt-level = 1
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.0"
+
+[features]
+console-error-panic = [ "dep:console_error_panic_hook" ]
