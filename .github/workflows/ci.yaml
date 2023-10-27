@@ -11,11 +11,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - name: Install Node.js
-              uses: actions/setup-node@v2
-              with:
-                  node-version: "16"
+            - uses: oven-sh/setup-bun@v1
             - name: Install dependencies
-              run: npm install
+              run: bun install
             - name: Run Prettier
-              run: npx prettier --check .
+              run: bun x prettier --check .

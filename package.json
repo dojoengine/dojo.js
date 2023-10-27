@@ -6,5 +6,8 @@
         "packages/core",
         "packages/utils",
         "packages/torii-client"
-    ]
+    ],
+    "devDependencies": {
+        "prettier": "^3.0.3"
+    }
 }
