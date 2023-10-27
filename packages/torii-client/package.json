@@ -6,7 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"build-wasm": "cd rust && ./build.sh",
-		"build": "tsc && npm run build-wasm"
+		"build": "npm run build-wasm && tsc"
 	},
 	"exports": {
 		".": {
