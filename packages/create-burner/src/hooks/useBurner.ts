@@ -5,11 +5,10 @@ import { BurnerContext } from "../context";
 import { BurnerManager } from "../manager/burnerManager";
 import { Burner } from "../types";
 
-
 /**
  * A React hook to manage Burner accounts.
  * Provides utility methods like get, list, select, and create.
- * 
+ *
  * @returns An object with utility methods and properties.
  */
 export const useBurner = () => {
@@ -18,9 +17,12 @@ export const useBurner = () => {
     if (!initParams) {
         throw new Error("useBurner must be used within a BurnerProvider");
     }
-    
+
     // Initialize the BurnerManager with the provided options.
-    const burnerManager = useMemo(() => new BurnerManager(initParams), [initParams]);
+    const burnerManager = useMemo(
+        () => new BurnerManager(initParams),
+        [initParams]
+    );
 
     // State to manage the current active account.
     const [account, setAccount] = useState<Account | null>(null);
@@ -37,7 +39,7 @@ export const useBurner = () => {
 
     /**
      * Lists all the burners available in the storage.
-     * 
+     *
      * @returns An array of Burner accounts.
      */
     const list = useCallback((): Burner[] => {
@@ -46,38 +48,44 @@ export const useBurner = () => {
 
     /**
      * Selects and sets a burner as the active account.
-     * 
+     *
      * @param address - The address of the burner account to set as active.
      */
-    const select = useCallback((address: string): void => {
-        burnerManager.select(address);
-        setAccount(burnerManager.getActiveAccount());
-    }, [burnerManager]);
+    const select = useCallback(
+        (address: string): void => {
+            burnerManager.select(address);
+            setAccount(burnerManager.getActiveAccount());
+        },
+        [burnerManager]
+    );
 
     /**
      * Retrieves a burner account based on its address.
-     * 
+     *
      * @param address - The address of the burner account to retrieve.
      * @returns The Burner account corresponding to the provided address.
      */
-    const get = useCallback((address: string): Account => {
-        return burnerManager.get(address);
-    }, [burnerManager]);
+    const get = useCallback(
+        (address: string): Account => {
+            return burnerManager.get(address);
+        },
+        [burnerManager]
+    );
 
     /**
      * Clears a burner account based on its address.
-     * 
+     *
      * @param address - The address of the burner account to retrieve.
      * @returns The Burner account corresponding to the provided address.
      */
     const clear = useCallback(() => {
         burnerManager.clear();
-        setBurnerUpdate(prev => prev + 1);
+        setBurnerUpdate((prev) => prev + 1);
     }, [burnerManager]);
 
     /**
      * Creates a new burner account and sets it as the active account.
-     * 
+     *
      * @returns A promise that resolves to the newly created Burner account.
      */
     const create = useCallback(async (): Promise<Account> => {
@@ -97,12 +105,15 @@ export const useBurner = () => {
         const burners = list();
 
         // Map each burner to its respective BurnerConnector instance.
-        return burners.map(burner => {
-            return new BurnerConnector({
-                options: {
-                    id: burner.address,
-                }
-            }, get(burner.address));
+        return burners.map((burner) => {
+            return new BurnerConnector(
+                {
+                    options: {
+                        id: burner.address,
+                    },
+                },
+                get(burner.address)
+            );
         });
     }, [burnerManager.isDeploying]);
 

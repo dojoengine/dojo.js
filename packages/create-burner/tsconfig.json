@@ -7,10 +7,7 @@
         "isolatedModules": true,
         "forceConsistentCasingInFileNames": true,
         "jsx": "react-jsx",
-        "lib": [
-            "esnext",
-            "DOM"
-        ],
+        "lib": ["esnext", "DOM"],
         "sourceMap": true,
         "declaration": true,
         "noImplicitAny": true,
@@ -21,26 +18,13 @@
         "strict": true,
         "strictNullChecks": true,
         "target": "esnext",
-        "types": [
-            "jest",
-            "node",
-            "bun-types",
-            "web"
-        ],
+        "types": ["jest", "node", "bun-types", "web"],
         "baseUrl": ".",
         "rootDir": "src",
         "paths": {
-            "~/*": [
-                "src/*"
-            ]
+            "~/*": ["src/*"]
         }
     },
-    "include": [
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "**/*.test.ts"
-    ]
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }

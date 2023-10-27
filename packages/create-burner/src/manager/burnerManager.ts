@@ -1,4 +1,12 @@
-import { Account, AccountInterface, CallData, ec, hash, RpcProvider, stark } from "starknet";
+import {
+    Account,
+    AccountInterface,
+    CallData,
+    ec,
+    hash,
+    RpcProvider,
+    stark,
+} from "starknet";
 import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
@@ -14,13 +22,19 @@ export class BurnerManager {
 
     private setIsDeploying?: (isDeploying: boolean) => void;
 
-    constructor({masterAccount, accountClassHash, rpcProvider}: BurnerManagerOptions) {
+    constructor({
+        masterAccount,
+        accountClassHash,
+        rpcProvider,
+    }: BurnerManagerOptions) {
         this.masterAccount = masterAccount;
         this.accountClassHash = accountClassHash;
         this.provider = rpcProvider;
     }
 
-    public setIsDeployingCallback(callback: (isDeploying: boolean) => void): void {
+    public setIsDeployingCallback(
+        callback: (isDeploying: boolean) => void
+    ): void {
         this.setIsDeploying = callback;
     }
 
@@ -38,7 +52,11 @@ export class BurnerManager {
     private setActiveBurnerAccount(storage: BurnerStorage): void {
         for (let address in storage) {
             if (storage[address].active) {
-                this.account = new Account(this.provider, address, storage[address].privateKey);
+                this.account = new Account(
+                    this.provider,
+                    address,
+                    storage[address].privateKey
+                );
                 return;
             }
         }
@@ -49,12 +67,15 @@ export class BurnerManager {
 
         if (Object.keys(storage).length > 0) {
             const firstAddr = Object.keys(storage)[0];
-            this.masterAccount?.getTransactionReceipt(storage[firstAddr].deployTx)
-                .then(response => {
+            this.masterAccount
+                ?.getTransactionReceipt(storage[firstAddr].deployTx)
+                .then((response) => {
                     if (!response) {
                         this.account = null;
                         Storage.remove("burners");
-                        throw new Error("Burners not deployed, chain may have restarted");
+                        throw new Error(
+                            "Burners not deployed, chain may have restarted"
+                        );
                     }
                 })
                 .catch(() => {
@@ -64,8 +85,6 @@ export class BurnerManager {
             this.setActiveBurnerAccount(storage);
         }
     }
-
-
 
     public list(): Burner[] {
         const storage = this.getBurnerStorage();
@@ -89,7 +108,11 @@ export class BurnerManager {
         storage[address].active = true;
 
         Storage.set("burners", storage);
-        this.account = new Account(this.provider, address, storage[address].privateKey);
+        this.account = new Account(
+            this.provider,
+            address,
+            storage[address].privateKey
+        );
     }
 
     public get(address: string): Account {
@@ -128,7 +151,7 @@ export class BurnerManager {
             publicKey,
             this.accountClassHash,
             CallData.compile({ publicKey }),
-            0,
+            0
         );
 
         if (!this.masterAccount) {
@@ -145,17 +168,20 @@ export class BurnerManager {
             classHash: this.accountClassHash,
             constructorCalldata: CallData.compile({ publicKey }),
             addressSalt: publicKey,
-        }
+        };
 
         // deploy burner
         const burner = new Account(this.provider, address, privateKey);
 
         const nonce = await this.account?.getNonce();
 
-        const { transaction_hash: deployTx } = await burner.deployAccount(accountOptions, {
-            nonce,
-            maxFee: 0 // TODO: update
-        });
+        const { transaction_hash: deployTx } = await burner.deployAccount(
+            accountOptions,
+            {
+                nonce,
+                maxFee: 0, // TODO: update
+            }
+        );
 
         const storage = this.getBurnerStorage();
         for (let address in storage) {

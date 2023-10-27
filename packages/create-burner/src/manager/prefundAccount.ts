@@ -1,16 +1,20 @@
-import { AccountInterface, CallData, TransactionFinalityStatus } from "starknet";
+import {
+    AccountInterface,
+    CallData,
+    TransactionFinalityStatus,
+} from "starknet";
 import { KATANA_ETH_CONTRACT_ADDRESS, PREFUND_AMOUNT } from "..";
 
 /**
  * Pre-funds a given account by initiating a transfer transaction.
- * 
+ *
  * @param address - The destination address to which funds are to be transferred.
  * @param account - The source account from which funds will be deducted.
  * @param ethContractAddress - The Ethereum contract address responsible for the transfer.
  *                             If not provided, defaults to KATANA_ETH_CONTRACT_ADDRESS.
- * 
+ *
  * @returns - Returns the result of the transfer transaction, typically including transaction details.
- * 
+ *
  * @throws - Throws an error if the transaction does not complete successfully.
  */
 export const prefundAccount = async (
@@ -30,11 +34,12 @@ export const prefundAccount = async (
         const nonce = await account.getNonce();
 
         // Initiate the transaction
-        const { transaction_hash } = await account.execute(transferOptions,
+        const { transaction_hash } = await account.execute(
+            transferOptions,
             undefined,
             {
                 nonce,
-                maxFee: 0 // This is set to 0 for now, consider adjusting it based on network conditions or requirements.
+                maxFee: 0, // This is set to 0 for now, consider adjusting it based on network conditions or requirements.
             }
         );
 

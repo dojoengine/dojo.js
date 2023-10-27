@@ -1,10 +1,13 @@
 {
-	"name": "dojo-packages",
-	"version": "1.0.0",
-	"workspaces": [
-		"packages/create-burner",
-		"packages/core",
-		"packages/utils",
-		"packages/torii-client"
-	]
+    "name": "dojo-packages",
+    "version": "1.0.0",
+    "workspaces": [
+        "packages/create-burner",
+        "packages/core",
+        "packages/utils",
+        "packages/torii-client"
+    ],
+    "devDependencies": {
+        "prettier": "^3.0.3"
+    }
 }

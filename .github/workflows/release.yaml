@@ -1,75 +1,80 @@
 name: Build and NPM Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+    push:
+        tags:
+            - "v*"
 
 jobs:
-  build-and-publish:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package: ['packages/create-burner', 'packages/utils', 'packages/core']
+    build-and-publish:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                package:
+                    [
+                        "packages/create-burner",
+                        "packages/utils",
+                        "packages/core",
+                    ]
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-    - name: Extract version from tag
-      id: tag-version
-      run: |
-        echo "::set-output name=version::${GITHUB_REF#refs/tags/v}"
+            - name: Extract version from tag
+              id: tag-version
+              run: |
+                  echo "::set-output name=version::${GITHUB_REF#refs/tags/v}"
 
-    - uses: oven-sh/setup-bun@v1
+            - uses: oven-sh/setup-bun@v1
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        registry-url: 'https://registry.npmjs.org'
-        scope: '@dojoengine'
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "18"
+                  registry-url: "https://registry.npmjs.org"
+                  scope: "@dojoengine"
 
-    - name: Install dependencies
-      run: |
-        cd ${{ matrix.package }}
-        bun install
+            - name: Install dependencies
+              run: |
+                  cd ${{ matrix.package }}
+                  bun install
 
-    - name: Build
-      run: |
-        cd ${{ matrix.package }}
-        bun run build
+            - name: Build
+              run: |
+                  cd ${{ matrix.package }}
+                  bun run build
 
-    - name: NPM Publish
-      run: |
-        cd ${{ matrix.package }}
-        yarn publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            - name: NPM Publish
+              run: |
+                  cd ${{ matrix.package }}
+                  yarn publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  create-release:
-    needs: build-and-publish
-    runs-on: ubuntu-latest
+    create-release:
+        needs: build-and-publish
+        runs-on: ubuntu-latest
 
-    steps:
-    - name: Extract version from tag
-      id: tag-version
-      run: |
-        echo "::set-output name=version::${GITHUB_REF#refs/tags/v}"
+        steps:
+            - name: Extract version from tag
+              id: tag-version
+              run: |
+                  echo "::set-output name=version::${GITHUB_REF#refs/tags/v}"
 
-    - name: Create GitHub Release
-      run: |
-        curl -s \
-          -X POST \
-          -H "Authorization: token $GIT_TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/releases \
-          -d '{
-            "tag_name": "v${{ steps.tag-version.outputs.version }}",
-            "name": "Release v${{ steps.tag-version.outputs.version }}",
-            "body": "Release of version ${{ steps.tag-version.outputs.version }}",
-            "draft": false,
-            "prerelease": false
-          }'
-      env:
-        GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+            - name: Create GitHub Release
+              run: |
+                  curl -s \
+                    -X POST \
+                    -H "Authorization: token $GIT_TOKEN" \
+                    -H "Accept: application/vnd.github.v3+json" \
+                    https://api.github.com/repos/${{ github.repository }}/releases \
+                    -d '{
+                      "tag_name": "v${{ steps.tag-version.outputs.version }}",
+                      "name": "Release v${{ steps.tag-version.outputs.version }}",
+                      "body": "Release of version ${{ steps.tag-version.outputs.version }}",
+                      "draft": false,
+                      "prerelease": false
+                    }'
+              env:
+                  GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
