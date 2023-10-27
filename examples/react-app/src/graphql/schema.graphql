@@ -1,22 +1,22 @@
 query getEntities {
-  entities(keys: ["%"]) {
-    edges {
-      node {
-        keys
-        models {
-          __typename
-          ... on Moves {
-            remaining
-            last_direction
-          }
-          ... on Position {
-            vec {
-              x
-              y
+    entities(keys: ["%"]) {
+        edges {
+            node {
+                keys
+                models {
+                    __typename
+                    ... on Moves {
+                        remaining
+                        last_direction
+                    }
+                    ... on Position {
+                        vec {
+                            x
+                            y
+                        }
+                    }
+                }
             }
-          }
         }
-      }
     }
-  }
 }

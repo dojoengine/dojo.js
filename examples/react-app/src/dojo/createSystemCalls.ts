@@ -6,16 +6,13 @@ import { ClientComponents } from "./createClientComponents";
 import { updatePositionWithDirection } from "../utils";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 
-
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
     { execute, contractComponents }: SetupNetworkResult,
     { Position, Moves }: ClientComponents
 ) {
-
     const spawn = async (signer: Account) => {
-
         const entityId = signer.address.toString() as EntityIndex;
 
         const positionId = uuid();
@@ -31,14 +28,16 @@ export function createSystemCalls(
         });
 
         try {
-            const tx = await execute(signer, "actions", 'spawn', []);
+            const tx = await execute(signer, "actions", "spawn", []);
 
-            console.log(tx)
-            const receipt = await signer.waitForTransaction(tx.transaction_hash, { retryInterval: 100 })
+            console.log(tx);
+            const receipt = await signer.waitForTransaction(
+                tx.transaction_hash,
+                { retryInterval: 100 }
+            );
             setComponentsFromEvents(contractComponents, getEvents(receipt));
-
         } catch (e) {
-            console.log(e)
+            console.log(e);
             Position.removeOverride(positionId);
             Moves.removeOverride(movesId);
         } finally {
@@ -48,42 +47,48 @@ export function createSystemCalls(
     };
 
     const move = async (signer: Account, direction: Direction) => {
-
         const entityId = signer.address.toString() as EntityIndex;
 
         const positionId = uuid();
         Position.addOverride(positionId, {
             entity: entityId,
-            value: updatePositionWithDirection(direction, getComponentValue(Position, entityId) as any),
+            value: updatePositionWithDirection(
+                direction,
+                getComponentValue(Position, entityId) as any
+            ),
         });
 
         const movesId = uuid();
         Moves.addOverride(movesId, {
             entity: entityId,
-            value: { remaining: (getComponentValue(Moves, entityId)?.remaining || 0) - 1 },
+            value: {
+                remaining:
+                    (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
+            },
         });
 
         try {
             const tx = await execute(signer, "actions", "move", [direction]);
 
-            console.log(tx)
-            const receipt = await signer.waitForTransaction(tx.transaction_hash, { retryInterval: 100 })
+            console.log(tx);
+            const receipt = await signer.waitForTransaction(
+                tx.transaction_hash,
+                { retryInterval: 100 }
+            );
             setComponentsFromEvents(contractComponents, getEvents(receipt));
-
         } catch (e) {
-            console.log(e)
+            console.log(e);
             Position.removeOverride(positionId);
             Moves.removeOverride(movesId);
         } finally {
             Position.removeOverride(positionId);
             Moves.removeOverride(movesId);
         }
-
     };
 
     return {
         spawn,
-        move
+        move,
     };
 }
 
