@@ -1,5 +1,5 @@
-import { AccountInterface, Account } from 'starknet'
-import { Connector } from '@starknet-react/core'
+import { AccountInterface, Account } from "starknet";
+import { Connector } from "@starknet-react/core";
 
 /*  
     This is a custom connector to use within Starknet React.
@@ -7,12 +7,12 @@ import { Connector } from '@starknet-react/core'
 
 export class BurnerConnector extends Connector {
     private _account: AccountInterface | Account | null;
-    public _name: string = 'Burner Connector';
+    public _name: string = "Burner Connector";
 
     // Use the "options" type as per your need. Here, I am assuming it to be an object.
     constructor(options: object, account: AccountInterface | Account | null) {
-        super({ options })
-        this._account = account
+        super({ options });
+        this._account = account;
     }
 
     available(): boolean {
@@ -49,7 +49,7 @@ export class BurnerConnector extends Connector {
     }
 
     get id(): string {
-        return this._account?.address.toString() || 'Burner Account';
+        return this._account?.address.toString() || "Burner Account";
     }
 
     get name(): string {
@@ -57,6 +57,6 @@ export class BurnerConnector extends Connector {
     }
 
     get icon(): string {
-        return 'my-icon-url';
+        return "my-icon-url";
     }
 }

@@ -1,15 +1,15 @@
 ## @dojoengine/core
 
-- [Getting Started](#getting-started)
-- [Example Class Usage](#example-class-usage)
-- [Generating Components](#generating-components)
-- [Extending the Core](#extending-the-core)
+-   [Getting Started](#getting-started)
+-   [Example Class Usage](#example-class-usage)
+-   [Generating Components](#generating-components)
+-   [Extending the Core](#extending-the-core)
 
 This library abstracts away the world interface and provides a set of helper functions to interact with the world. It is preferred to use this library over interacting with the world directly.
 
-- World explorers
-- Games
-- Analytics
+-   World explorers
+-   Games
+-   Analytics
 
 ### Getting Started
 
@@ -29,7 +29,7 @@ import { Account, num } from "starknet";
 import { GraphQLClient } from 'graphql-request';
 import { getSdk } from '../generated/graphql';
 
-// Import the manifest from your project 
+// Import the manifest from your project
 import manifest from "../../../dojo-starter/target/dev/manifest.json";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
@@ -69,6 +69,7 @@ export async function setupNetwork() {
     };
 }
 ```
+
 ### Generating Components
 
 The core package comes bundled with a component generation script that you can use to streamline development. It is exposed via a binary and in your package.json you can include a script.

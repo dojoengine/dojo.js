@@ -1,1 +1,1 @@
-export * from "./burner"
+export * from "./burner";

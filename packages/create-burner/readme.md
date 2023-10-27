@@ -33,20 +33,20 @@ Easily manage, create, and interact with burner accounts on Starknets using this
 
 ## Features:
 
-- Initialize and manage burner accounts.
-- Abstracts away intricacies related to creating, fetching, and setting active burner accounts.
-- Easily integrate with React apps using the provided hook.
-- Vanilla JS support.
+-   Initialize and manage burner accounts.
+-   Abstracts away intricacies related to creating, fetching, and setting active burner accounts.
+-   Easily integrate with React apps using the provided hook.
+-   Vanilla JS support.
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-    - [With React](#with-react)
-    - [Vanilla JavaScript](#vanilla-javascript)
-- [API](#api)
-- [Contribute](#contribute)
-- [License](#license)
+-   [Installation](#installation)
+-   [Usage](#usage)
+    -   [With React](#with-react)
+    -   [Vanilla JavaScript](#vanilla-javascript)
+-   [API](#api)
+-   [Contribute](#contribute)
+-   [License](#license)
 
 ## Installation
 
@@ -58,7 +58,7 @@ yarn add @dojoengine/create-burner starknet
 
 ### In the wild:
 
-- [dojo-starter-react-app](https://github.com/dojoengine/dojo-starter-react-app)
+-   [dojo-starter-react-app](https://github.com/dojoengine/dojo-starter-react-app)
 
 ## Usage
 
@@ -67,13 +67,13 @@ yarn add @dojoengine/create-burner starknet
 After installation, you can easily integrate it into your React app:
 
 ```tsx
-import { useBurner } from '@dojoengine/create-burner';
+import { useBurner } from "@dojoengine/create-burner";
 
 const YourComponent = () => {
     const { get, list, select, create, account } = useBurner(options);
 
     // Rest of your component
-}
+};
 ```
 
 ### Vanilla JavaScript
@@ -81,7 +81,7 @@ const YourComponent = () => {
 For non-React apps, initialize and manage burners using the `BurnerManager` class:
 
 ```typescript
-import { BurnerManager } from '@dojoengine/create-burner';
+import { BurnerManager } from "@dojoengine/create-burner";
 
 const manager = new BurnerManager(options);
 manager.init();
@@ -90,24 +90,25 @@ const activeAccount = manager.getActiveAccount();
 
 ## API
 
-- **useBurner**: A React hook that provides functionalities like creating burners, selecting them, and more.
-    - `get(address: string)`: Get a burner account based on its address.
-    - `list()`: List all burners.
-    - `select(address: string)`: Set a burner as the active account.
-    - `create()`: Create a new burner.
-    - `account`: The active burner account.
-    - `isDeploying`: A boolean that indicates whether a burner is being deployed.
-    - `listConnectors()`: List all available connectors that can be used with Starknet React.
+-   **useBurner**: A React hook that provides functionalities like creating burners, selecting them, and more.
 
-- **BurnerManager**: A class for vanilla JS that offers methods to manage burner accounts.
-    - `init()`: Initializes the manager.
-    - `getActiveAccount()`: Retrieves the active burner account.
-    - `get(address: string)`: Get a burner account based on its address.
-    - `list()`: List all burners.
-    - `select(address: string)`: Set a burner as the active account.
-    - `create()`: Create a new burner.
-    - `account`: The active burner account.
-    - `isDeploying`: A boolean that indicates whether a burner is being deployed.
+    -   `get(address: string)`: Get a burner account based on its address.
+    -   `list()`: List all burners.
+    -   `select(address: string)`: Set a burner as the active account.
+    -   `create()`: Create a new burner.
+    -   `account`: The active burner account.
+    -   `isDeploying`: A boolean that indicates whether a burner is being deployed.
+    -   `listConnectors()`: List all available connectors that can be used with Starknet React.
+
+-   **BurnerManager**: A class for vanilla JS that offers methods to manage burner accounts.
+    -   `init()`: Initializes the manager.
+    -   `getActiveAccount()`: Retrieves the active burner account.
+    -   `get(address: string)`: Get a burner account based on its address.
+    -   `list()`: List all burners.
+    -   `select(address: string)`: Set a burner as the active account.
+    -   `create()`: Create a new burner.
+    -   `account`: The active burner account.
+    -   `isDeploying`: A boolean that indicates whether a burner is being deployed.
 
 ## Contribute
 

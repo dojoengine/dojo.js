@@ -4,7 +4,7 @@ Dive into this straightforward example to understand how to meld React with Dojo
 
 This integration taps into the powerful libraries designed by [Lattice](https://lattice.xyz/):
 
-- [recs](https://github.com/latticexyz/mud/tree/main/packages/recs)
+-   [recs](https://github.com/latticexyz/mud/tree/main/packages/recs)
 
 ### Initial Setup
 
@@ -19,7 +19,7 @@ curl -L https://install.dojoengine.org | bash
 Followed by:
 
 ```console
-dojoup    
+dojoup
 ```
 
 For an in-depth setup guide, consult the [Dojo book](https://book.dojoengine.org/getting-started/quick-start.html).
