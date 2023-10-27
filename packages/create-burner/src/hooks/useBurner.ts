@@ -1,41 +1,27 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { BurnerManager } from "../manager/burnerManager";
-import { Account, AccountInterface } from "starknet";
-import { Burner } from "../types";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { Account } from "starknet";
 import { BurnerConnector } from "..";
+import { BurnerContext } from "../context";
+import { BurnerManager } from "../manager/burnerManager";
+import { Burner } from "../types";
 
-/**
- * Interface for the options required by the useBurner hook.
- */
-export interface UseBurnerOptions {
-    /** 
-     * The Master account is what prefunds the Burner. 
-     * Optional. Pass in an account that has funds if available.
-     */
-    masterAccount?: AccountInterface | Account;
-
-    /** 
-     * The class hash of the account you want to deploy.
-     * This has to be predeployed on the chain you are deploying to.
-     */
-    accountClassHash: string;
-
-    /** 
-     * Node url
-     */
-    nodeUrl?: string;
-}
 
 /**
  * A React hook to manage Burner accounts.
  * Provides utility methods like get, list, select, and create.
  * 
- * @param options - Configuration options required for Burner operations.
  * @returns An object with utility methods and properties.
  */
-export const useBurner = (options: UseBurnerOptions) => {
+export const useBurner = () => {
+    const initParams = useContext(BurnerContext);
+
+    if (!initParams) {
+        throw new Error("useBurner must be used within a BurnerProvider");
+    }
+    
     // Initialize the BurnerManager with the provided options.
-    const burnerManager = useMemo(() => new BurnerManager(options), [options]);
+    const burnerManager = useMemo(() => new BurnerManager(initParams), [initParams]);
+
     // State to manage the current active account.
     const [account, setAccount] = useState<Account | null>(null);
 
@@ -56,7 +42,7 @@ export const useBurner = (options: UseBurnerOptions) => {
      */
     const list = useCallback((): Burner[] => {
         return burnerManager.list();
-    }, [options, burnerManager.list(), burnerUpdate]);
+    }, [burnerManager.list(), burnerUpdate]);
 
     /**
      * Selects and sets a burner as the active account.
@@ -66,7 +52,7 @@ export const useBurner = (options: UseBurnerOptions) => {
     const select = useCallback((address: string): void => {
         burnerManager.select(address);
         setAccount(burnerManager.getActiveAccount());
-    }, [burnerManager, options]);
+    }, [burnerManager]);
 
     /**
      * Retrieves a burner account based on its address.
@@ -76,7 +62,7 @@ export const useBurner = (options: UseBurnerOptions) => {
      */
     const get = useCallback((address: string): Account => {
         return burnerManager.get(address);
-    }, [options]);
+    }, [burnerManager]);
 
     /**
      * Clears a burner account based on its address.
@@ -87,7 +73,7 @@ export const useBurner = (options: UseBurnerOptions) => {
     const clear = useCallback(() => {
         burnerManager.clear();
         setBurnerUpdate(prev => prev + 1);
-    }, [options]);
+    }, [burnerManager]);
 
     /**
      * Creates a new burner account and sets it as the active account.
@@ -99,7 +85,7 @@ export const useBurner = (options: UseBurnerOptions) => {
         const newAccount = await burnerManager.create();
         setAccount(newAccount);
         return newAccount;
-    }, [burnerManager, options]);
+    }, [burnerManager]);
 
     /**
      * Generates a list of BurnerConnector instances for each burner account. These can be added to Starknet React.
@@ -118,7 +104,7 @@ export const useBurner = (options: UseBurnerOptions) => {
                 }
             }, get(burner.address));
         });
-    }, [options, burnerManager.isDeploying]);
+    }, [burnerManager.isDeploying]);
 
     // Expose methods and properties for the consumers of this hook.
     return {

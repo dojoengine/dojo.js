@@ -1,6 +1,6 @@
 import { Account, AccountInterface, CallData, ec, hash, RpcProvider, stark } from "starknet";
-import Storage from "../utils/storage";
 import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
+import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
 
 export class BurnerManager {
@@ -14,12 +14,10 @@ export class BurnerManager {
 
     private setIsDeploying?: (isDeploying: boolean) => void;
 
-    constructor(options: BurnerManagerOptions) {
-        this.masterAccount = options.masterAccount;
-        this.accountClassHash = options.accountClassHash;
-        this.provider = new RpcProvider({
-            nodeUrl: options.nodeUrl || "http://localhost:5050",
-        });;
+    constructor({masterAccount, accountClassHash, rpcProvider}: BurnerManagerOptions) {
+        this.masterAccount = masterAccount;
+        this.accountClassHash = accountClassHash;
+        this.provider = rpcProvider;
     }
 
     public setIsDeployingCallback(callback: (isDeploying: boolean) => void): void {

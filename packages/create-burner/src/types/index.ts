@@ -1,4 +1,4 @@
-import { Account, AccountInterface } from "starknet";
+import { Account, AccountInterface, RpcProvider } from "starknet";
 
 export type BurnerStorage = {
     [address: string]: {
@@ -17,5 +17,5 @@ export type Burner = {
 export interface BurnerManagerOptions {
     masterAccount?: AccountInterface | Account;
     accountClassHash: string;
-    nodeUrl?: string;
+    rpcProvider: RpcProvider;
 }
