@@ -27,7 +27,7 @@
         "@types/jest": "^29.5.0",
         "@types/js-cookie": "^3.0.3",
         "@types/node": "^18.15.11",
-        "@types/react": "^18.0.33",
+        "@types/react": "^18.2.33",
         "@types/react-dom": "^18.0.11",
         "@types/web": "^0.0.114",
         "bun-types": "^1.0.1",
