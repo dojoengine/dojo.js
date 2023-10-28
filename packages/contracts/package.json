@@ -18,7 +18,8 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "starknet": "^5.19.5",
         "typescript": "^5.0.3",
-        "torii-client-wasm": "link:dojo-packages/packages/contracts/pkg"
+        "dojo-contracts-wasm": "link:dojo-packages/packages/contracts/pkg"
     }
 }
