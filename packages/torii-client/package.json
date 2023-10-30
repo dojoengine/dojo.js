@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
-        "build-wasm": "cd rust && ./build.sh",
+        "build-wasm": "cd crate && ./build.sh",
         "build": "npm run build-wasm && tsc"
     },
     "exports": {
@@ -18,7 +18,17 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "typescript": "^5.0.3",
-        "torii-client-wasm": "link:dojo-packages/packages/torii-client/wasm"
+        "starknet": "^5.19.5",
+        "torii-client-wasm": "link:dojo-packages/packages/torii-client/pkg",
+        "typescript": "^5.0.3"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.0",
+        "@types/mocha": "^10.0.1",
+        "bun-types": "^1.0.1",
+        "fetch-mock": "^9.11.0",
+        "jest": "^29.5.0",
+        "ts-jest": "^29.1.0",
+        "tsup": "^7.2.0"
     }
 }
