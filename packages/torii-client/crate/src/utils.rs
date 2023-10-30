@@ -2,32 +2,28 @@ use dojo_types::primitive::Primitive;
 use dojo_types::schema::Ty;
 use serde_json::Value;
 
-pub fn parse_ty_as_json_str(ty: &Ty) -> String {
-    fn parse_ty_as_json_str_impl(ty: &Ty) -> Value {
-        match ty {
-            Ty::Primitive(primitive) => primitive_value_json(*primitive),
+pub fn parse_ty_as_json_str(ty: &Ty) -> Value {
+    match ty {
+        Ty::Primitive(primitive) => primitive_value_json(*primitive),
 
-            Ty::Struct(struct_ty) => struct_ty
-                .children
-                .iter()
-                .map(|child| (child.name.to_owned(), parse_ty_as_json_str_impl(&child.ty)))
-                .collect::<serde_json::Map<String, Value>>()
-                .into(),
+        Ty::Struct(struct_ty) => struct_ty
+            .children
+            .iter()
+            .map(|child| (child.name.to_owned(), parse_ty_as_json_str(&child.ty)))
+            .collect::<serde_json::Map<String, Value>>()
+            .into(),
 
-            Ty::Enum(enum_ty) => {
-                if let Some(option) = enum_ty.option {
-                    let option = &enum_ty.options[option as usize];
-                    Value::String(option.name.to_owned())
-                } else {
-                    Value::Null
-                }
+        Ty::Enum(enum_ty) => {
+            if let Some(option) = enum_ty.option {
+                let option = &enum_ty.options[option as usize];
+                Value::String(option.name.to_owned())
+            } else {
+                Value::Null
             }
-
-            Ty::Tuple(_) => unimplemented!("tuple not supported"),
         }
-    }
 
-    parse_ty_as_json_str_impl(ty).to_string()
+        Ty::Tuple(_) => unimplemented!("tuple not supported"),
+    }
 }
 
 fn primitive_value_json(primitive: Primitive) -> Value {
@@ -84,8 +80,14 @@ mod test {
                         name: "PlayerKind".into(),
                         option: Some(1),
                         options: vec![
-                            EnumOption { name: "Good".into(), ty: Ty::Tuple(vec![]) },
-                            EnumOption { name: "Bad".into(), ty: Ty::Tuple(vec![]) },
+                            EnumOption {
+                                name: "Good".into(),
+                                ty: Ty::Tuple(vec![]),
+                            },
+                            EnumOption {
+                                name: "Bad".into(),
+                                ty: Ty::Tuple(vec![]),
+                            },
                         ],
                     }),
                 },
@@ -148,8 +150,14 @@ mod test {
                         name: "PlayerKind".into(),
                         option: Some(1),
                         options: vec![
-                            EnumOption { name: "Good".into(), ty: Ty::Tuple(vec![]) },
-                            EnumOption { name: "Bad".into(), ty: Ty::Tuple(vec![]) },
+                            EnumOption {
+                                name: "Good".into(),
+                                ty: Ty::Tuple(vec![]),
+                            },
+                            EnumOption {
+                                name: "Bad".into(),
+                                ty: Ty::Tuple(vec![]),
+                            },
                         ],
                     }),
                 },
