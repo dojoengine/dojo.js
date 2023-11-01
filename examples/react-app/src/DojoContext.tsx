@@ -66,8 +66,17 @@ export const useDojo = () => {
             "The `useDojo` hook must be used within a `DojoProvider`"
         );
 
-    const { create, list, get, account, select, isDeploying, clear } =
-        useBurner();
+    const {
+        create,
+        list,
+        get,
+        account,
+        select,
+        isDeploying,
+        clear,
+        copyToClipboard,
+        applyFromClipboard,
+    } = useBurner();
 
     return {
         setup: contextValue,
@@ -79,6 +88,8 @@ export const useDojo = () => {
             clear,
             account: account ?? contextValue.masterAccount,
             isDeploying,
+            copyToClipboard,
+            applyFromClipboard,
         },
     };
 };

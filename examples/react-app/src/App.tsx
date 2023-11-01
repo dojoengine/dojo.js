@@ -1,8 +1,9 @@
+import { useComponentValue } from "@latticexyz/react";
+import { EntityIndex } from "@latticexyz/recs";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./DojoContext";
-import { useComponentValue } from "@latticexyz/react";
 import { Direction } from "./dojo/createSystemCalls";
-import { EntityIndex } from "@latticexyz/recs";
 
 function App() {
     const {
@@ -10,8 +11,22 @@ function App() {
             systemCalls: { spawn, move },
             components: { Moves, Position },
         },
-        account: { create, list, select, account, isDeploying, clear },
+        account: {
+            create,
+            list,
+            select,
+            account,
+            isDeploying,
+            clear,
+            copyToClipboard,
+            applyFromClipboard,
+        },
     } = useDojo();
+
+    const [clipboardStatus, setClipboardStatus] = useState({
+        message: "",
+        isError: false,
+    });
 
     // entity id - this example uses the account address as the entity id
     const entityId = account.address.toString();
@@ -20,14 +35,57 @@ function App() {
     const position = useComponentValue(Position, entityId as EntityIndex);
     const moves = useComponentValue(Moves, entityId as EntityIndex);
 
+    const handleRestoreBurners = async () => {
+        try {
+            await applyFromClipboard();
+            setClipboardStatus({
+                message: "Burners restored successfully!",
+                isError: false,
+            });
+        } catch (error) {
+            setClipboardStatus({
+                message: `Failed to restore burners from clipboard`,
+                isError: true,
+            });
+        }
+    };
+
+    useEffect(() => {
+        // Clear message after 3 seconds
+        if (clipboardStatus.message) {
+            const timer = setTimeout(() => {
+                setClipboardStatus({ message: "", isError: false });
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [clipboardStatus.message]);
+
     return (
         <>
             <button onClick={create}>
                 {isDeploying ? "deploying burner" : "create burner"}
             </button>
+            {list().length > 0 && (
+                <button onClick={async () => await copyToClipboard()}>
+                    Save Burners to Clipboard
+                </button>
+            )}
+            <button onClick={handleRestoreBurners}>
+                Restore Burners from Clipboard
+            </button>
+            {clipboardStatus.message && (
+                <div className={clipboardStatus.isError ? "error" : "success"}>
+                    {clipboardStatus.message}
+                </div>
+            )}
+
             <div className="card">
                 select signer:{" "}
-                <select onChange={(e) => select(e.target.value)}>
+                <select
+                    value={account ? account.address : ""}
+                    onChange={(e) => select(e.target.value)}
+                >
                     {list().map((account, index) => {
                         return (
                             <option value={account.address} key={index}>

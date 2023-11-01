@@ -117,6 +117,22 @@ export const useBurner = () => {
         });
     }, [burnerManager.isDeploying]);
 
+    /**
+     * Copy burners to clipboard
+     */
+    const copyToClipboard = useCallback(async () => {
+        await burnerManager.copyBurnersToClipboard();
+    }, [burnerManager]);
+
+    /**
+     * Set burners from clipboard
+     */
+    const applyFromClipboard = useCallback(async () => {
+        await burnerManager.setBurnersFromClipboard();
+        setAccount(burnerManager.getActiveAccount()); // set the active account
+        setBurnerUpdate((prev) => prev + 1); // re-fetch of the list
+    }, [burnerManager]);
+
     // Expose methods and properties for the consumers of this hook.
     return {
         get,
@@ -127,5 +143,7 @@ export const useBurner = () => {
         clear,
         account,
         isDeploying,
+        copyToClipboard,
+        applyFromClipboard,
     };
 };

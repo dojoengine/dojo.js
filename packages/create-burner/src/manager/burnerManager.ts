@@ -201,4 +201,40 @@ export class BurnerManager {
 
         return burner;
     }
+
+    public async copyBurnersToClipboard(): Promise<void> {
+        const burners = this.getBurnerStorage();
+        try {
+            await navigator.clipboard.writeText(JSON.stringify(burners));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async setBurnersFromClipboard(): Promise<void> {
+        try {
+            const text = await navigator.clipboard.readText();
+            const burners: BurnerStorage = JSON.parse(text);
+
+            // Assume no burner is active
+            let activeAddress = null;
+
+            // Iterate over the pasted burners to find the active one
+            for (const [address, burner] of Object.entries(burners)) {
+                if (burner.active) {
+                    activeAddress = address;
+                    break;
+                }
+            }
+
+            Storage.set("burners", burners);
+
+            // If there's an active burner, select it
+            if (activeAddress) {
+                this.select(activeAddress);
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
 }
