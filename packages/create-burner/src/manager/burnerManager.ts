@@ -7,8 +7,8 @@ import {
     RpcProvider,
     stark,
 } from "starknet";
-import Storage from "../utils/storage";
 import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
+import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
 
 export class BurnerManager {
@@ -22,12 +22,14 @@ export class BurnerManager {
 
     private setIsDeploying?: (isDeploying: boolean) => void;
 
-    constructor(options: BurnerManagerOptions) {
-        this.masterAccount = options.masterAccount;
-        this.accountClassHash = options.accountClassHash;
-        this.provider = new RpcProvider({
-            nodeUrl: options.nodeUrl || "http://localhost:5050",
-        });
+    constructor({
+        masterAccount,
+        accountClassHash,
+        rpcProvider,
+    }: BurnerManagerOptions) {
+        this.masterAccount = masterAccount;
+        this.accountClassHash = accountClassHash;
+        this.provider = rpcProvider;
     }
 
     public setIsDeployingCallback(
@@ -198,5 +200,41 @@ export class BurnerManager {
         Storage.set("burners", storage);
 
         return burner;
+    }
+
+    public async copyBurnersToClipboard(): Promise<void> {
+        const burners = this.getBurnerStorage();
+        try {
+            await navigator.clipboard.writeText(JSON.stringify(burners));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async setBurnersFromClipboard(): Promise<void> {
+        try {
+            const text = await navigator.clipboard.readText();
+            const burners: BurnerStorage = JSON.parse(text);
+
+            // Assume no burner is active
+            let activeAddress = null;
+
+            // Iterate over the pasted burners to find the active one
+            for (const [address, burner] of Object.entries(burners)) {
+                if (burner.active) {
+                    activeAddress = address;
+                    break;
+                }
+            }
+
+            Storage.set("burners", burners);
+
+            // If there's an active burner, select it
+            if (activeAddress) {
+                this.select(activeAddress);
+            }
+        } catch (error) {
+            throw error;
+        }
     }
 }
