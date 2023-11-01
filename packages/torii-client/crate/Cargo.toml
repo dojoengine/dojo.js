@@ -25,7 +25,6 @@ url = "2.4.0"
 # Dojo
 dojo-types = { git = "https://github.com/dojoengine/dojo", branch = "main" }
 torii-client = { git = "https://github.com/dojoengine/dojo", branch = "main" }
-torii-grpc = { git = "https://github.com/dojoengine/dojo", branch = "main", features = [ "client" ] }
 
 # WASM
 js-sys = "0.3.64"

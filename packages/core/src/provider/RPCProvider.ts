@@ -8,11 +8,11 @@ import {
     AllowArray,
     Call,
     num,
+    CallContractResponse,
 } from "starknet";
 import { Provider } from "./provider";
 import { Query, WorldEntryPoints } from "../types";
 import { LOCAL_KATANA } from "../constants";
-import abi from "../constants/abi.json";
 import { getContractByName } from "../utils";
 
 /**
@@ -38,8 +38,9 @@ export class RPCProvider extends Provider {
         this.provider = new RpcProvider({
             nodeUrl: url,
         });
+
         this.contract = new Contract(
-            abi,
+            manifest.world.abi,
             this.getWorldAddress(),
             this.provider
         );
@@ -49,21 +50,21 @@ export class RPCProvider extends Provider {
     /**
      * Retrieves a single entity's details.
      *
-     * @param {string} component - The component to query.
+     * @param {string} model - The component to query.
      * @param {Query} query - The query details.
      * @param {number} [offset=0] - Starting offset (defaults to 0).
      * @param {number} [length=0] - Length to retrieve (defaults to 0).
      * @returns {Promise<Array<bigint>>} - A promise that resolves to an array of bigints representing the entity's details.
      */
     public async entity(
-        component: string,
+        model: string,
         query: Query,
         offset: number = 0,
         length: number = 0
     ): Promise<Array<bigint>> {
         try {
             return (await this.contract.call(WorldEntryPoints.get, [
-                shortString.encodeShortString(component),
+                shortString.encodeShortString(model),
                 query.keys.length,
                 ...(query.keys as any),
                 offset,
@@ -82,12 +83,12 @@ export class RPCProvider extends Provider {
      * @returns {Promise<Array<bigint>>} - A promise that resolves to an array of bigints representing the entities' details.
      */
     public async entities(
-        component: string,
+        model: string,
         length: number
     ): Promise<Array<bigint>> {
         try {
             return (await this.contract.call(WorldEntryPoints.entities, [
-                shortString.encodeShortString(component),
+                shortString.encodeShortString(model),
                 length,
             ])) as unknown as Array<bigint>;
         } catch (error) {
@@ -202,6 +203,31 @@ export class RPCProvider extends Provider {
             throw new Error("Contract did not return expected uuid");
         } catch (error) {
             throw new Error(`Failed to fetch uuid: ${error}`);
+        }
+    }
+    /**
+     * Calls a function with the given parameters.
+     *
+     * @param {string} contract - The contract to call.
+     * @param {string} call - The function to call.
+     * @returns {Promise<CallContractResponse>} - A promise that resolves to the response of the function call.
+     */
+    public async call(
+        contract_name: string,
+        call: string,
+        calldata?: num.BigNumberish[]
+    ): Promise<CallContractResponse> {
+        try {
+            return await this.provider.callContract({
+                contractAddress: getContractByName(
+                    this.manifest,
+                    contract_name
+                ),
+                entrypoint: call,
+                calldata,
+            });
+        } catch (error) {
+            throw new Error(`Failed to call: ${error}`);
         }
     }
 }
