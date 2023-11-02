@@ -16,10 +16,10 @@ export function createSystemCalls(
         const entityId = signer.address.toString() as Entity;
 
         const positionId = uuid();
-        // Position.addOverride(positionId, {
-        //     entity: entityId,
-        //     value: { player: num.toHexString(entityId), vec: { x: 10, y: 10 } },
-        // });
+        Position.addOverride(positionId, {
+            entity: entityId,
+            value: { player: num.toHexString(entityId), vec: { x: 10, y: 10 } },
+        });
 
         const movesId = uuid();
         Moves.addOverride(movesId, {
@@ -67,11 +67,18 @@ export function createSystemCalls(
             entity: entityId,
             value: {
                 player: entityId,
-                vec: updatePositionWithDirection(
-                    direction,
-                    // currently recs does not support nested values so we use any here
-                    getComponentValue(Position, entityId) as any
-                ).vec,
+                vec: {
+                    x: updatePositionWithDirection(
+                        direction,
+                        // currently recs does not support nested values so we use any here
+                        getComponentValue(Position, entityId) as any
+                    )["x"],
+                    y: updatePositionWithDirection(
+                        direction,
+                        // currently recs does not support nested values so we use any here
+                        getComponentValue(Position, entityId) as any
+                    )["y"],
+                },
             },
         });
 
