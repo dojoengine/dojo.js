@@ -9,5 +9,11 @@
     ],
     "devDependencies": {
         "prettier": "^3.0.3"
-    }
+    },
+    "scripts": {
+		"build-core": "bun run --cwd packages/core build",
+		"build-create-burner": "bun run --cwd packages/create-burner build",
+		"build-utils": "bun run --cwd packages/utils build",
+		"build": "bun run build-core && bun run build-create-burner && bun run build-utils"
+	}
 }

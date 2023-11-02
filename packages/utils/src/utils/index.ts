@@ -65,6 +65,8 @@ export function setComponentFromEvent(
     // get values
     const numberOfValues = parseInt(eventData[index++]);
 
+    const string_keys = keys.map((key) => key.toString());
+
     // get values
     const values = eventData.slice(index, index + numberOfValues);
 
@@ -72,7 +74,7 @@ export function setComponentFromEvent(
     const valuesIndex = 0;
     const componentValues = decodeComponent(
         component.schema,
-        values,
+        [...string_keys, ...values],
         valuesIndex
     );
 

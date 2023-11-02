@@ -1,9 +1,9 @@
 import { useComponentValue } from "@latticexyz/react";
-import { EntityIndex } from "@latticexyz/recs";
+import { Entity } from "@latticexyz/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./DojoContext";
-import { Direction } from "./dojo/createSystemCalls";
+import { Direction } from "./utils";
 
 function App() {
     const {
@@ -32,8 +32,8 @@ function App() {
     const entityId = account.address.toString();
 
     // get current component values
-    const position = useComponentValue(Position, entityId as EntityIndex);
-    const moves = useComponentValue(Moves, entityId as EntityIndex);
+    const position = useComponentValue(Position, entityId as Entity);
+    const moves = useComponentValue(Moves, entityId as Entity);
 
     const handleRestoreBurners = async () => {
         try {
@@ -107,7 +107,7 @@ function App() {
                 <div>
                     Position:{" "}
                     {position
-                        ? `${position["x"]}, ${position["y"]}`
+                        ? `${position.vec["x"]}, ${position.vec["y"]}`
                         : "Need to Spawn"}
                 </div>
             </div>

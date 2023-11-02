@@ -2,6 +2,10 @@
 
 import { defineComponent, Type as RecsType, World } from "@latticexyz/recs";
 
+type DynamicType = { x: RecsType.Number; y: RecsType.Number };
+
+type ExtendedType = RecsType | DynamicType;
+
 export function defineContractComponents(world: World) {
     return {
         Moves: (() => {
@@ -25,7 +29,8 @@ export function defineContractComponents(world: World) {
                 world,
                 {
                     player: RecsType.String,
-                    vec: { x: RecsType.Number, y: RecsType.Number },
+                    x: RecsType.Number,
+                    y: RecsType.Number,
                 },
                 {
                     metadata: {
