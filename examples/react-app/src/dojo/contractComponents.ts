@@ -29,8 +29,10 @@ export function defineContractComponents(world: World) {
                 world,
                 {
                     player: RecsType.String,
-                    x: RecsType.Number,
-                    y: RecsType.Number,
+                    vec: {
+                        x: RecsType.Number,
+                        y: RecsType.Number,
+                    },
                 },
                 {
                     metadata: {
