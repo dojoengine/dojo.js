@@ -19,7 +19,6 @@
     "license": "MIT",
     "dependencies": {
         "starknet": "^5.19.5",
-        "torii-client-wasm": "link:dojo-packages/packages/torii-client/pkg",
         "typescript": "^5.0.3"
     },
     "devDependencies": {
