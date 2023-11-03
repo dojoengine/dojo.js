@@ -157,11 +157,10 @@ pub async fn create_client(
     let world_address = FieldElement::from_str(&world_address)
         .map_err(|err| JsValue::from(format!("failed to parse world address: {err}")))?;
 
-    let client = torii_client::client::ClientBuilder::new()
-        .set_entities_to_sync(entities)
-        .build(torii_url, rpc_url, world_address)
-        .await
-        .map_err(|err| JsValue::from(format!("failed to build client: {err}")))?;
+    let client =
+        torii_client::client::Client::new(torii_url, rpc_url, world_address, Some(entities))
+            .await
+            .map_err(|err| JsValue::from(format!("failed to build client: {err}")))?;
 
     wasm_bindgen_futures::spawn_local(client.start_subscription().await.map_err(|err| {
         JsValue::from(format!(
