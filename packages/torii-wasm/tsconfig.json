@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "declaration": true,
+        "outDir": "./dist",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "types": ["jest", "bun-types"],
+        "esModuleInterop": true
+    },
+    "skipLibCheck": true,
+    "exclude": ["node_modules", "dist", "**/*.test.ts"]
+}

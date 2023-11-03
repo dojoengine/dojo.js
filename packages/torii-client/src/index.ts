@@ -1,1 +1,1 @@
-export { createClient, Client, ClientConfig } from "torii-client-wasm";
+export { createClient, Client, ClientConfig } from "@dojoengine/torii-wasm";

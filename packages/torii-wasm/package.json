@@ -1,5 +1,5 @@
 {
-    "name": "@dojoengine/torii-client",
+    "name": "@dojoengine/torii-wasm",
     "version": "0.1.33",
     "description": "",
     "main": "dist/index.js",
@@ -8,18 +8,23 @@
         "build-wasm": "cd crate && ./build.sh",
         "build": "npm run build-wasm && tsc"
     },
-    "exports": {
-        ".": {
-            "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
-        }
-    },
+    "files": [
+        "./pkg/torii_client_wasm_bg.wasm",
+        "./pkg/torii_client_wasm.js",
+        "./pkg/torii_client_wasm_bg.js",
+        "./pkg/torii_client_wasm.d.ts"
+    ],
+    "module": "./pkg/torii_client_wasm.js",
+    "types": "./pkg/torii_client_wasm.d.ts",
+    "sideEffects": [
+        "./pkg/torii_client_wasm.js",
+        "./pkg/snippets/*"
+    ],
     "keywords": [],
     "author": "",
     "license": "MIT",
     "dependencies": {
         "starknet": "^5.19.5",
-        "@dojoengine/torii-wasm": "../../packages/torii-wasm",
         "typescript": "^5.0.3"
     },
     "devDependencies": {

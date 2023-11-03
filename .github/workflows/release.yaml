@@ -12,10 +12,10 @@ jobs:
             matrix:
                 package:
                     [
+                        "packages/torii-client",
                         "packages/create-burner",
                         "packages/utils",
                         "packages/core",
-                        "packages/torii-client",
                     ]
 
         steps:

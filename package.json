@@ -5,7 +5,8 @@
         "packages/create-burner",
         "packages/core",
         "packages/utils",
-        "packages/torii-client"
+        "packages/torii-client",
+        "packages/torii-wasm"
     ],
     "devDependencies": {
         "prettier": "^3.0.3"
@@ -14,6 +15,8 @@
 		"build-core": "bun run --cwd packages/core build",
 		"build-create-burner": "bun run --cwd packages/create-burner build",
 		"build-utils": "bun run --cwd packages/utils build",
-		"build": "bun run build-core && bun run build-create-burner && bun run build-utils"
+        "build-torii-client": "bun run --cwd packages/torii-client build",
+        "build-torii-wasm": "bun run --cwd packages/torii-wasm build",
+		"build": "bun run build-core && bun run build-create-burner && bun run build-utils && bun run build-torii-client && bun run build-torii-wasm"
 	}
 }
