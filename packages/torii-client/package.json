@@ -19,7 +19,7 @@
     "license": "MIT",
     "dependencies": {
         "starknet": "^5.19.5",
-        "torii-client-wasm": "../pkg",
+        "torii-client-wasm": "file:../pkg",
         "typescript": "^5.0.3"
     },
     "devDependencies": {

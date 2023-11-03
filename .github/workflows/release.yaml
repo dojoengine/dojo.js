@@ -51,12 +51,6 @@ jobs:
                   cd ${{ matrix.package }}
                   bun install
 
-            - name: Build WASM
-              if: matrix.package == 'packages/torii-client'
-              run: |
-                  cd ${{ matrix.package }}
-                  bun run build-wasm
-
             - name: Build
               run: |
                   cd ${{ matrix.package }}
