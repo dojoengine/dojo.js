@@ -19,7 +19,7 @@
     "license": "MIT",
     "dependencies": {
         "starknet": "^5.19.5",
-        "@dojoengine/torii-wasm": "../../packages/torii-wasm",
+        "@dojoengine/torii-wasm": "workspace:packages/torii-wasm",
         "typescript": "^5.0.3"
     },
     "devDependencies": {
