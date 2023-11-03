@@ -15,6 +15,7 @@ jobs:
                         "packages/create-burner",
                         "packages/utils",
                         "packages/core",
+                        "packages/torii-client",
                     ]
 
         steps:
@@ -25,6 +26,16 @@ jobs:
               id: tag-version
               run: |
                   echo "::set-output name=version::${GITHUB_REF#refs/tags/v}"
+
+            - name: Setup Rust
+              uses: actions-rs/toolchain@v1
+              with:
+                  toolchain: stable
+                  override: true
+
+            - uses: jetli/wasm-pack-action@v0.4.0
+              with:
+                  version: "latest"
 
             - uses: oven-sh/setup-bun@v1
 
