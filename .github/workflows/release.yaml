@@ -9,6 +9,7 @@ jobs:
     build-and-publish:
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix:
                 package:
                     [
