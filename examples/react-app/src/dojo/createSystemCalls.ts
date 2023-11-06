@@ -18,33 +18,31 @@ export function createSystemCalls(
         const positionId = uuid();
         Position.addOverride(positionId, {
             entity: entityId,
-            value: { player: num.toHexString(entityId), vec: { x: 10, y: 10 } },
+            value: { player: BigInt(entityId), vec: { x: 10, y: 10 } },
         });
 
         const movesId = uuid();
         Moves.addOverride(movesId, {
             entity: entityId,
             value: {
-                player: num.toHexString(entityId),
+                player: BigInt(entityId),
                 remaining: 10,
                 last_direction: 0,
             },
         });
 
         try {
-            const tx = await execute(signer, "actions", "spawn", []);
+            const { transaction_hash } = await execute(
+                signer,
+                "actions",
+                "spawn",
+                []
+            );
 
-            const even = await signer.waitForTransaction(tx.transaction_hash, {
-                retryInterval: 100,
-            });
-
-            console.log(even);
-
-            console.log(tx);
             setComponentsFromEvents(
                 contractComponents,
                 getEvents(
-                    await signer.waitForTransaction(tx.transaction_hash, {
+                    await signer.waitForTransaction(transaction_hash, {
                         retryInterval: 100,
                     })
                 )
@@ -66,19 +64,12 @@ export function createSystemCalls(
         Position.addOverride(positionId, {
             entity: entityId,
             value: {
-                player: entityId,
-                vec: {
-                    x: updatePositionWithDirection(
-                        direction,
-                        // currently recs does not support nested values so we use any here
-                        getComponentValue(Position, entityId) as any
-                    )["x"],
-                    y: updatePositionWithDirection(
-                        direction,
-                        // currently recs does not support nested values so we use any here
-                        getComponentValue(Position, entityId) as any
-                    )["y"],
-                },
+                player: BigInt(entityId),
+                vec: updatePositionWithDirection(
+                    direction,
+                    // currently recs does not support nested values so we use any here
+                    getComponentValue(Position, entityId) as any
+                ).vec,
             },
         });
 
@@ -86,17 +77,23 @@ export function createSystemCalls(
         Moves.addOverride(movesId, {
             entity: entityId,
             value: {
+                player: BigInt(entityId),
                 remaining:
                     (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
             },
         });
 
         try {
-            const tx = await execute(signer, "actions", "move", [direction]);
+            const { transaction_hash } = await execute(
+                signer,
+                "actions",
+                "move",
+                [direction]
+            );
             setComponentsFromEvents(
                 contractComponents,
                 getEvents(
-                    await signer.waitForTransaction(tx.transaction_hash, {
+                    await signer.waitForTransaction(transaction_hash, {
                         retryInterval: 100,
                     })
                 )

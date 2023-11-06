@@ -4,12 +4,17 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./DojoContext";
 import { Direction } from "./utils";
+import { useSync } from "@dojoengine/react";
 
 function App() {
     const {
         setup: {
             systemCalls: { spawn, move },
             components: { Moves, Position },
+            network: {
+                contractComponents: { Moves: MovesContract },
+                torii_client,
+            },
         },
         account: {
             create,
@@ -29,11 +34,15 @@ function App() {
     });
 
     // entity id - this example uses the account address as the entity id
-    const entityId = account.address.toString();
+    const entityId = account.address;
 
     // get current component values
     const position = useComponentValue(Position, entityId as Entity);
     const moves = useComponentValue(Moves, entityId as Entity);
+
+    console.log("moves", moves);
+
+    useSync(torii_client, MovesContract, [account.address]);
 
     const handleRestoreBurners = async () => {
         try {

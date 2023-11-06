@@ -8,7 +8,7 @@ export function defineContractComponents(world: World) {
             return defineComponent(
                 world,
                 {
-                    player: RecsType.String,
+                    player: RecsType.BigInt,
                     remaining: RecsType.Number,
                     last_direction: RecsType.Number,
                 },
@@ -24,7 +24,7 @@ export function defineContractComponents(world: World) {
             return defineComponent(
                 world,
                 {
-                    player: RecsType.String,
+                    player: RecsType.BigInt,
                     vec: { x: RecsType.Number, y: RecsType.Number },
                 },
                 {
