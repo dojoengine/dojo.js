@@ -1,9 +1,9 @@
-import "./App.css";
 import { useEffect } from "react";
 import { useNetworkLayer } from "./hooks/useNetworkLayer";
 import { PhaserLayer } from "./phaser/phaserLayer";
 import { store } from "./store/store";
 import { UI } from "./ui";
+import { DojoProvider } from "./DojoContext";
 
 function App() {
     const networkLayer = useNetworkLayer();
@@ -20,7 +20,9 @@ function App() {
         <div>
             <PhaserLayer networkLayer={networkLayer} />
 
-            <UI />
+            <DojoProvider>
+                <UI />
+            </DojoProvider>
         </div>
     );
 }

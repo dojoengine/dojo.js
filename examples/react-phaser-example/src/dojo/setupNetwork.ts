@@ -2,8 +2,6 @@ import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { RPCProvider } from "@dojoengine/core";
 import { Account, num } from "starknet";
-import { GraphQLClient } from "graphql-request";
-import { getSdk } from "../generated/graphql";
 import manifest from "../../../dojo-starter/target/dev/manifest.json";
 import * as torii from "@dojoengine/torii-client";
 
@@ -24,9 +22,6 @@ export async function setupNetwork() {
         VITE_PUBLIC_NODE_URL
     );
 
-    const createGraphSdk = () =>
-        getSdk(new GraphQLClient(VITE_PUBLIC_TORII + "/graphql"));
-
     const torii_client = await torii.createClient([], {
         rpcUrl: VITE_PUBLIC_NODE_URL,
         toriiUrl: VITE_PUBLIC_TORII + "/grpc",
@@ -41,9 +36,6 @@ export async function setupNetwork() {
 
         // Define contract components for the world.
         contractComponents: defineContractComponents(world),
-
-        // Define the graph SDK instance.
-        graphSdk: createGraphSdk,
 
         // Execute function.
         execute: async (
