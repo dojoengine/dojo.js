@@ -39,7 +39,9 @@ This is a monorepo for the [dojo engine](https://www.dojoengine.org/en/) npm pac
 -   [**Core**](./packages/core)
 -   [**Burner**](./packages/create-burner)
 -   [**Utils**](./packages/utils)
-
+-   [**React**](./packages/react)
+-   [**Torii Client**](./packages/torii-client)
+-   [**Torii Wasm**](./packages/torii-wasm)
 ---
 
 ### Environment Setup
@@ -96,7 +98,7 @@ To run the examples that have the linked packages, follow the steps below:
 **Terminal 1**: Start the React app.
 
 ```console
-cd examples/react-app
+cd examples/<package>
 bun install
 bun dev
 ```
