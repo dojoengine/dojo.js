@@ -51,6 +51,14 @@ jobs:
                   registry-url: "https://registry.npmjs.org"
                   scope: "@dojoengine"
 
+            - name: Bun Install
+              run: |
+                  bun install
+
+            - name: Bun Install
+              run: |
+                  bun run build
+
             - name: Install dependencies
               run: |
                   cd ${{ matrix.package }}

@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react-jsx",
+        "lib": ["esnext", "DOM"],
+        "sourceMap": true,
+        "declaration": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        // "noUnusedParameters": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "target": "esnext",
+        "types": ["jest", "node", "bun-types", "web"],
+        "baseUrl": ".",
+        "rootDir": "src",
+        "paths": {
+            "~/*": ["src/*"]
+        }
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "dist", "**/*.test.ts"]
+}

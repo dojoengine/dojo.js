@@ -5,7 +5,6 @@
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
-        "build-wasm": "cd crate && ./build.sh",
         "build": "tsc"
     },
     "exports": {
