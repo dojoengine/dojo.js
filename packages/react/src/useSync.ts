@@ -6,7 +6,7 @@ import {
     Schema,
     Type,
     setComponent,
-} from "@latticexyz/recs";
+} from "@dojoengine/recs";
 import { useEffect, useMemo } from "react";
 import { Client } from "@dojoengine/torii-client";
 // import { parseComponent } from "./utils";
@@ -17,6 +17,7 @@ export function useSync<S extends Schema>(
     keys: any[]
 ) {
     const entityIndex = useMemo(() => {
+        if (keys.length === 1) return keys[0].toString();
         return getEntityIdFromKeys(keys);
     }, [keys]);
 
@@ -39,25 +40,17 @@ export function useSync<S extends Schema>(
                 keys_to_strings
             );
 
-            console.log("values", values);
             try {
-                const componentValues = Object.keys(component.schema).reduce(
-                    (acc: any, key) => {
-                        acc[key] =
-                            component.schema[key] === Type.BigInt
-                                ? BigInt(values[key])
-                                : Number(values[key]);
-                        return acc;
-                    },
-                    {}
-                );
-
                 if (isMounted) {
-                    console.log(componentValues);
+                    console.log(
+                        "convertValues",
+                        convertValues(component.schema, values)
+                    );
+
                     setComponent(
                         component,
                         entityIndex as Entity,
-                        componentValues as any
+                        convertValues(component.schema, values) as any
                     );
                 }
             } catch (error) {
@@ -86,4 +79,28 @@ export function useSync<S extends Schema>(
             });
         };
     }, [client]);
+}
+
+export function convertValues(schema: any, values: any) {
+    return Object.keys(schema).reduce((acc, key) => {
+        const schemaType = schema[key];
+        const value = values[key];
+
+        // If the schema type is an object, and the corresponding value is also an object,
+        // recursively call convertValues
+        if (
+            typeof schemaType === "object" &&
+            value &&
+            typeof value === "object"
+        ) {
+            // @ts-ignore
+            acc[key] = convertValues(schemaType, value);
+        } else {
+            // Otherwise, convert the value based on the schema type
+            // @ts-ignore
+            acc[key] =
+                schemaType === Type.BigInt ? BigInt(value) : Number(value);
+        }
+        return acc;
+    }, {});
 }

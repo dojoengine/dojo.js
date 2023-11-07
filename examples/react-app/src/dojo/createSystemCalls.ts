@@ -1,6 +1,6 @@
 import { SetupNetworkResult } from "./setupNetwork";
 import { Account, num } from "starknet";
-import { Entity, getComponentValue } from "@latticexyz/recs";
+import { Entity, getComponentValue } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { Direction, updatePositionWithDirection } from "../utils";
@@ -90,6 +90,7 @@ export function createSystemCalls(
                 "move",
                 [direction]
             );
+
             setComponentsFromEvents(
                 contractComponents,
                 getEvents(

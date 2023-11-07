@@ -1,10 +1,9 @@
-import { useComponentValue } from "@latticexyz/react";
-import { Entity } from "@latticexyz/recs";
+import { useComponentValue, useSync } from "@dojoengine/react";
+import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./DojoContext";
 import { Direction } from "./utils";
-import { useSync } from "@dojoengine/react";
 
 function App() {
     const {
@@ -12,7 +11,10 @@ function App() {
             systemCalls: { spawn, move },
             components: { Moves, Position },
             network: {
-                contractComponents: { Moves: MovesContract },
+                contractComponents: {
+                    Moves: MovesContract,
+                    Position: PositionContract,
+                },
                 torii_client,
             },
         },
@@ -34,15 +36,15 @@ function App() {
     });
 
     // entity id - this example uses the account address as the entity id
-    const entityId = account.address;
+    const entityId = account.address.toString() as Entity;
 
     // get current component values
-    const position = useComponentValue(Position, entityId as Entity);
-    const moves = useComponentValue(Moves, entityId as Entity);
+    const position = useComponentValue(Position, entityId);
+    const moves = useComponentValue(Moves, entityId);
 
-    console.log("moves", moves);
+    useSync(torii_client, MovesContract, [account.address.toString()]);
 
-    useSync(torii_client, MovesContract, [account.address]);
+    useSync(torii_client, PositionContract, [account.address.toString()]);
 
     const handleRestoreBurners = async () => {
         try {
@@ -107,34 +109,39 @@ function App() {
                     <button onClick={() => clear()}>Clear burners</button>
                 </div>
             </div>
+
             <div className="card">
                 <button onClick={() => spawn(account)}>Spawn</button>
                 <div>
-                    Moves Left:{" "}
-                    {moves ? `${moves["remaining"]}` : "Need to Spawn"}
+                    Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
                 </div>
                 <div>
                     Position:{" "}
                     {position
-                        ? `${position.vec["x"]}, ${position.vec["y"]}`
+                        ? `${position.vec.x}, ${position.vec.y}`
                         : "Need to Spawn"}
                 </div>
             </div>
+
             <div className="card">
-                <button onClick={() => move(account, Direction.Up)}>
-                    Move Up
-                </button>{" "}
-                <br />
-                <button onClick={() => move(account, Direction.Left)}>
-                    Move Left
-                </button>
-                <button onClick={() => move(account, Direction.Right)}>
-                    Move Right
-                </button>{" "}
-                <br />
-                <button onClick={() => move(account, Direction.Down)}>
-                    Move Down
-                </button>
+                <div className="movement-buttons">
+                    <button onClick={() => move(account, Direction.Up)}>
+                        Move Up
+                    </button>
+                </div>
+                <div className="movement-buttons">
+                    <button onClick={() => move(account, Direction.Left)}>
+                        Move Left
+                    </button>
+                    <button onClick={() => move(account, Direction.Right)}>
+                        Move Right
+                    </button>
+                </div>
+                <div className="movement-buttons">
+                    <button onClick={() => move(account, Direction.Down)}>
+                        Move Down
+                    </button>
+                </div>
             </div>
         </>
     );

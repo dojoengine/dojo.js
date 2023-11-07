@@ -5,7 +5,7 @@ import {
     Components,
     ComponentValue,
     Type as RecsType,
-} from "@latticexyz/recs";
+} from "@dojoengine/recs";
 import { poseidonHashMany } from "micro-starknet";
 
 /**

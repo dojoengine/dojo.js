@@ -1,4 +1,4 @@
-import { Type as RecsType, Schema } from "@latticexyz/recs";
+import { Type as RecsType, Schema } from "@dojoengine/recs";
 
 export const parseComponent = ({
     component,
