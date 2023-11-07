@@ -35,16 +35,16 @@ function App() {
         isError: false,
     });
 
-    // entity id - this example uses the account address as the entity id
+    // entity id we are syncing
     const entityId = account.address.toString() as Entity;
 
     // get current component values
     const position = useComponentValue(Position, entityId);
     const moves = useComponentValue(Moves, entityId);
 
-    useSync(torii_client, MovesContract, [account.address.toString()]);
-
-    useSync(torii_client, PositionContract, [account.address.toString()]);
+    // sync from remote torii
+    useSync(torii_client, MovesContract, [entityId]);
+    useSync(torii_client, PositionContract, [entityId]);
 
     const handleRestoreBurners = async () => {
         try {

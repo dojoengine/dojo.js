@@ -1,6 +1,7 @@
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import {
     Component,
+    ComponentValue,
     Entity,
     Metadata,
     Schema,
@@ -8,7 +9,7 @@ import {
 } from "@dojoengine/recs";
 import { useEffect, useMemo } from "react";
 import { Client } from "@dojoengine/torii-client";
-import { parseComponent } from "./utils";
+import { convertValues } from "./utils";
 
 export function useSubscribeEntityModel<S extends Schema>(
     client: Client,
@@ -16,6 +17,7 @@ export function useSubscribeEntityModel<S extends Schema>(
     keys: any[]
 ) {
     const entityIndex = useMemo(() => {
+        if (keys.length === 1) return keys[0].toString();
         return getEntityIdFromKeys(keys);
     }, [keys]);
 
@@ -34,12 +36,13 @@ export function useSubscribeEntityModel<S extends Schema>(
             setComponent(
                 component,
                 entityIndex as Entity,
-                parseComponent(
+                convertValues(
+                    component.schema,
                     await client.getModelValue(
                         componentName as string,
                         keys_to_strings
                     )
-                ) as any
+                ) as ComponentValue
             );
         } catch (error) {
             console.error("Failed to fetch or set model value:", error);
@@ -47,7 +50,6 @@ export function useSubscribeEntityModel<S extends Schema>(
     };
 
     useEffect(() => {
-        console.log("sync", componentName, keys_to_strings);
         client.onSyncEntityChange(
             { model: componentName as string, keys: keys_to_strings },
             setModelValue
