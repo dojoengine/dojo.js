@@ -1,27 +1,28 @@
-import { useAccount } from "../DojoContext";
-import { useDojo } from "../hooks/useDojo";
+import { store } from "../store/store";
 import { ClickWrapper } from "./clickWrapper";
 
 export const SpawnBtn = () => {
-    const {
-        networkLayer: {
-            systemCalls: { spawn },
-        },
-    } = useDojo();
+    const networkLayer = store.getState().networkLayer;
 
-    const {
-        account: { account, list, select, create, isDeploying },
-    } = useAccount();
+    const account = networkLayer?.account;
+
+    const calls = networkLayer?.systemCalls;
+
+    const deployAccount = () => {
+        account?.create();
+    };
 
     return (
         <ClickWrapper>
-            <button onClick={create}>
-                {isDeploying ? "deploying burner" : "create burner"}
+            <button onClick={deployAccount}>
+                {networkLayer?.account.isDeploying
+                    ? "deploying burner"
+                    : "create burner"}
             </button>
             <div className="card">
                 select signer:{" "}
-                <select onChange={(e) => select(e.target.value)}>
-                    {list().map((account, index) => {
+                <select onChange={(e) => account?.select(e.target.value)}>
+                    {account?.list().map((account, index) => {
                         return (
                             <option value={account.address} key={index}>
                                 {account.address}
@@ -32,7 +33,7 @@ export const SpawnBtn = () => {
             </div>
             <button
                 onClick={() => {
-                    spawn(account);
+                    calls?.spawn(account?.getActiveAccount());
                 }}
             >
                 Spawn

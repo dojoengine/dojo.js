@@ -2,41 +2,41 @@ import { PhaserLayer } from "..";
 import { Direction } from "../../utils";
 
 export const controls = (layer: PhaserLayer) => {
-
     const {
         scenes: {
             Main: { input },
         },
         networkLayer: {
             systemCalls: { move },
-            account
+            account,
         },
     } = layer;
 
     input.onKeyPress(
-        keys => keys.has("W"),
+        (keys) => keys.has("W"),
         () => {
-            move(account, Direction.Up);
-        });
-
-    input.onKeyPress(
-        keys => keys.has("A"),
-        () => {
-            move(account, Direction.Left);
+            move(account.getActiveAccount()!, Direction.Up);
         }
     );
 
     input.onKeyPress(
-        keys => keys.has("S"),
+        (keys) => keys.has("A"),
         () => {
-            move(account, Direction.Down);
+            move(account.getActiveAccount()!, Direction.Left);
         }
     );
 
     input.onKeyPress(
-        keys => keys.has("D"),
+        (keys) => keys.has("S"),
         () => {
-            move(account, Direction.Right);
+            move(account.getActiveAccount()!, Direction.Down);
+        }
+    );
+
+    input.onKeyPress(
+        (keys) => keys.has("D"),
+        () => {
+            move(account.getActiveAccount()!, Direction.Right);
         }
     );
 };

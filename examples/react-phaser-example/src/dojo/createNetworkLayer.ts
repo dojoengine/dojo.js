@@ -27,13 +27,15 @@ export const createNetworkLayer = async () => {
         rpcProvider,
     });
 
-    const account = burnerManager.account || masterAccount;
+    burnerManager.init();
+
+    // const account = burnerManager.account || masterAccount;
 
     return {
         world,
         components,
         systemCalls,
         network,
-        account,
+        account: burnerManager,
     };
 };

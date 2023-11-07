@@ -16,7 +16,7 @@ export const spawn = (layer: PhaserLayer) => {
     input.onKeyPress(
         (keys) => keys.has("SPACE"),
         () => {
-            spawn(account);
+            spawn(account.getActiveAccount()!);
         }
     );
 };
