@@ -1,0 +1,19 @@
+query getEntities {
+  entities(keys: ["%"]) {
+    edges {
+      node {
+        keys
+        components {
+          __typename
+          ... on Moves {
+            remaining
+          }
+          ... on Position {
+            x
+            y
+          }
+        }
+      }
+    }
+  }
+}
