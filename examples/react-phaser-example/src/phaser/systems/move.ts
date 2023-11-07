@@ -1,7 +1,7 @@
 import { Entity, Has, defineEnterSystem, defineSystem, getComponentValueStrict } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { Animations, POSITION_OFFSET, TILE_HEIGHT, TILE_WIDTH } from "../constants";
+import { Animations, TILE_HEIGHT, TILE_WIDTH } from "../constants";
 
 export const move = (layer: PhaserLayer) => {
 
