@@ -28,6 +28,10 @@ export const createNetworkLayer = async () => {
     // TODO: Currently if you change wallets in the UI, phaser will not update.
     burnerManager.init();
 
+    // emoji
+    // position + type + owner + energy
+    // emoji id = position + type + energy
+
     if (burnerManager.account) {
         // sync manager to active address
         new SyncManager(network.torii_client, [
