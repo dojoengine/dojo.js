@@ -8,7 +8,7 @@ export class BurnerManager {
     public accountClassHash: string;
     public provider: RpcProvider;
 
-    public account: Account;
+    public account: Account | null = null;
     public isDeploying: boolean = false;
     public burnerAccounts: Burner[] = [];
 
@@ -22,7 +22,6 @@ export class BurnerManager {
         this.masterAccount = masterAccount;
         this.accountClassHash = accountClassHash;
         this.provider = rpcProvider;
-        this.account = masterAccount;
     }
 
     public setIsDeployingCallback(
@@ -64,7 +63,7 @@ export class BurnerManager {
                 ?.getTransactionReceipt(storage[firstAddr].deployTx)
                 .then((response) => {
                     if (!response) {
-                        // this.account = this.masterAccount;
+                        this.account = null;
                         Storage.remove("burners");
                         throw new Error(
                             "Burners not deployed, chain may have restarted"

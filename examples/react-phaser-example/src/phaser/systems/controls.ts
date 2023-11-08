@@ -8,7 +8,7 @@ export const controls = (layer: PhaserLayer) => {
         },
         networkLayer: {
             systemCalls: { move },
-            account: { account },
+            account,
         },
     } = layer;
 

@@ -22,6 +22,8 @@ export function createSystemCalls(
 ) {
     const spawn = async (props: SystemSigner) => {
         const signer = props.signer;
+
+        console.log("spawn", signer.address);
         const entityId = signer.address.toString() as Entity;
 
         const positionId = uuid();
@@ -35,7 +37,7 @@ export function createSystemCalls(
             entity: entityId,
             value: {
                 player: BigInt(entityId),
-                remaining: 10,
+                remaining: 100,
                 last_direction: 0,
             },
         });

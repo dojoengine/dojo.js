@@ -24,15 +24,15 @@ export const createNetworkLayer = async () => {
         rpcProvider,
     });
 
+    // TODO: Currently if you change wallets in the UI, phaser will not update.
     burnerManager.init();
-
-    // const account = burnerManager.account || masterAccount;
 
     return {
         world,
         components,
         systemCalls,
         network,
-        account: burnerManager,
+        account: burnerManager.account as Account,
+        burnerManager,
     };
 };

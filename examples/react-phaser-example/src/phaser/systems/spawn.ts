@@ -7,7 +7,7 @@ export const spawn = (layer: PhaserLayer) => {
         },
         networkLayer: {
             systemCalls: { spawn },
-            account: { account },
+            account,
         },
     } = layer;
 

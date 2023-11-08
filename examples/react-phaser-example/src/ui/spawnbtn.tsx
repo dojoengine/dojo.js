@@ -6,6 +6,7 @@ export const SpawnBtn = () => {
         account: { account, create, isDeploying, select, list, clear },
         systemCalls: { spawn },
     } = useDojo();
+
     return (
         <ClickWrapper>
             <div className="flex space-x-3 justify-between">
