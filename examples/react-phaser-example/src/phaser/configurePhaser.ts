@@ -7,7 +7,15 @@ import {
 } from "@latticexyz/phaserx";
 import worldTileset from "../assets/tilesets/world.png";
 import { TileAnimations, Tileset } from "../artTypes/world";
-import { Sprites, Assets, Maps, Scenes, TILE_HEIGHT, TILE_WIDTH, Animations } from "./constants";
+import {
+    Sprites,
+    Assets,
+    Maps,
+    Scenes,
+    TILE_HEIGHT,
+    TILE_WIDTH,
+    Animations,
+} from "./constants";
 
 const ANIMATION_INTERVAL = 200;
 
@@ -30,7 +38,6 @@ const mainMap = defineMapConfig({
 export const phaserConfig = {
     sceneConfig: {
         [Scenes.Main]: defineSceneConfig({
-
             assets: {
                 [Assets.Tileset]: {
                     type: AssetType.Image,

@@ -23,7 +23,7 @@ export enum Direction {
     Up,
     Down,
     Left,
-    Right
+    Right,
 }
 
 export const TILE_HEIGHT = 32;

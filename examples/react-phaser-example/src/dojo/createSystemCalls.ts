@@ -1,5 +1,5 @@
 import { SetupNetworkResult } from "./setupNetwork";
-import { Account } from "starknet";
+import { Account, AccountInterface } from "starknet";
 import { Entity, getComponentValue } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
@@ -8,11 +8,22 @@ import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
+export interface SystemSigner {
+    signer: Account;
+}
+
+export interface MoveSystemProps extends SystemSigner {
+    direction: Direction;
+}
+
 export function createSystemCalls(
     { execute, contractComponents }: SetupNetworkResult,
     { Position, Moves }: ClientComponents
 ) {
-    const spawn = async (signer: Account) => {
+    const spawn = async (props: SystemSigner) => {
+        const signer = props.signer;
+
+        console.log("spawn", signer.address);
         const entityId = signer.address.toString() as Entity;
 
         const positionId = uuid();
@@ -26,7 +37,7 @@ export function createSystemCalls(
             entity: entityId,
             value: {
                 player: BigInt(entityId),
-                remaining: 10,
+                remaining: 100,
                 last_direction: 0,
             },
         });
@@ -57,7 +68,9 @@ export function createSystemCalls(
         }
     };
 
-    const move = async (signer: Account, direction: Direction) => {
+    const move = async (props: MoveSystemProps) => {
+        const { signer, direction } = props;
+
         const entityId = signer.address.toString() as Entity;
 
         const positionId = uuid();

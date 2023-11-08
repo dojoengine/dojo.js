@@ -15,21 +15,9 @@ export const UI = () => {
 
     return (
         <Wrapper>
-            <HeaderContainer>
+            <div className="fixed top-0 w-full bg-black text-white p-8">
                 <SpawnBtn />
-
-            </HeaderContainer>
+            </div>
         </Wrapper>
     );
 };
-
-const HeaderContainer = styled.div`
-    position: absolute;
-    top: 5%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    display: flex;
-    flex-direaction: row;
-    gap: 20px;
-`;

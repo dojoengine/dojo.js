@@ -1,4 +1,3 @@
-import "./App.css";
 import { useEffect } from "react";
 import { useNetworkLayer } from "./hooks/useNetworkLayer";
 import { PhaserLayer } from "./phaser/phaserLayer";

@@ -1,18 +1,10 @@
-import {
-    Account,
-    AccountInterface,
-    CallData,
-    ec,
-    hash,
-    RpcProvider,
-    stark,
-} from "starknet";
+import { Account, CallData, ec, hash, RpcProvider, stark } from "starknet";
 import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
 
 export class BurnerManager {
-    public masterAccount?: AccountInterface | Account;
+    public masterAccount: Account;
     public accountClassHash: string;
     public provider: RpcProvider;
 
