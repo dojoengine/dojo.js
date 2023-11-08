@@ -2,6 +2,7 @@ import { world } from "./world";
 import { setup } from "./setup";
 import { Account, RpcProvider } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
+import { SyncManager } from "@dojoengine/react";
 
 export type NetworkLayer = Awaited<ReturnType<typeof createNetworkLayer>>;
 
@@ -26,6 +27,20 @@ export const createNetworkLayer = async () => {
 
     // TODO: Currently if you change wallets in the UI, phaser will not update.
     burnerManager.init();
+
+    if (burnerManager.account) {
+        // sync manager to active address
+        new SyncManager(network.torii_client, [
+            {
+                model: network.contractComponents.Position,
+                keys: [burnerManager.account?.address],
+            },
+            {
+                model: network.contractComponents.Moves as any,
+                keys: [burnerManager.account?.address],
+            },
+        ]);
+    }
 
     return {
         world,

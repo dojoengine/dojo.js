@@ -18,8 +18,6 @@ export const useDojo = () => {
             burnerManager: networkLayer.burnerManager,
         });
 
-    console.log("account", account);
-
     return {
         networkLayer: networkLayer as NetworkLayer,
         phaserLayer: phaserLayer as PhaserLayer,
@@ -33,5 +31,7 @@ export const useDojo = () => {
             isDeploying,
         },
         systemCalls: networkLayer.systemCalls,
+        toriiClient: networkLayer.network.torii_client,
+        contractComponents: networkLayer.network.contractComponents,
     };
 };
