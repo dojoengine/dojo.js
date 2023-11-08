@@ -11,14 +11,13 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                package:
-                    [
+                package: [
                         # "packages/torii-wasm",
                         # "packages/torii-client",
                         "packages/create-burner",
                         "packages/utils",
                         "packages/core",
-                        "packages/react"
+                        "packages/react",
                     ]
 
         steps:
@@ -44,6 +43,10 @@ jobs:
                   version: "latest"
 
             - uses: oven-sh/setup-bun@v1
+
+            - name: Bun Link
+              run: |
+                  bun install && bun link
 
             - name: Use Node.js
               uses: actions/setup-node@v3
