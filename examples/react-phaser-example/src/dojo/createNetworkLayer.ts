@@ -38,11 +38,11 @@ export const createNetworkLayer = async () => {
             new SyncManager(network.torii_client, [
                 {
                     model: network.contractComponents.Position,
-                    keys: [i],
+                    keys: [burnerManager.account.address],
                 },
                 {
                     model: network.contractComponents.Moves as any,
-                    keys: [i],
+                    keys: [burnerManager.account.address],
                 },
             ]);
         }
