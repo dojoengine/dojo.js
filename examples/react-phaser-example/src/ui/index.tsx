@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { store } from "../store/store";
 import { Wrapper } from "./wrapper";
 import { SpawnBtn } from "./spawnbtn";

@@ -5,8 +5,9 @@ import {
     defineMapConfig,
     defineCameraConfig,
 } from "@latticexyz/phaserx";
-import worldTileset from "../assets/tilesets/world.png";
-import { TileAnimations, Tileset } from "../artTypes/world";
+import worldTileset from "../../assets/tilesets/world.png";
+import landTileset from "../../assets/tilesets/land.png";
+import { TileAnimations, Tileset } from "../../assets/world";
 import {
     Sprites,
     Assets,
@@ -42,7 +43,7 @@ export const phaserConfig = {
                 [Assets.Tileset]: {
                     type: AssetType.Image,
                     key: Assets.Tileset,
-                    path: worldTileset,
+                    path: landTileset,
                 },
                 [Assets.MainAtlas]: {
                     type: AssetType.MultiAtlas,

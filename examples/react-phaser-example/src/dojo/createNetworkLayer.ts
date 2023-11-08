@@ -46,6 +46,11 @@ export const createNetworkLayer = async () => {
         ]);
     }
 
+    console.log(
+        "burnerManager.getActiveAccount()",
+        burnerManager.getActiveAccount()
+    );
+
     return {
         world,
         components,

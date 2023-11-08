@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPhaserLayer } from "../phaser";
 import { NetworkLayer } from "../dojo/createNetworkLayer";
-import { phaserConfig } from "../phaser/configurePhaser";
+import { phaserConfig } from "../phaser/config/configurePhaser";
 import { usePromiseValue } from "./usePromiseValue";
 
 type Props = {
@@ -16,7 +16,6 @@ const createContainer = () => {
     container.style.overflow = "hidden";
     return container;
 };
-
 
 export const usePhaserLayer = ({ networkLayer }: Props) => {
     const parentRef = useRef<HTMLElement | null>(null);
@@ -49,7 +48,9 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
 
     useEffect(() => {
         return () => {
-            phaserLayerPromise?.then((phaserLayer) => phaserLayer.world.dispose());
+            phaserLayerPromise?.then((phaserLayer) =>
+                phaserLayer.world.dispose()
+            );
             container?.remove();
         };
     }, [container, phaserLayerPromise]);
@@ -71,4 +72,4 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
     );
 
     return useMemo(() => ({ ref, phaserLayer }), [ref, phaserLayer]);
-}
+};
