@@ -34,16 +34,18 @@ export const createNetworkLayer = async () => {
 
     if (burnerManager.account) {
         // sync manager to active address
-        new SyncManager(network.torii_client, [
-            {
-                model: network.contractComponents.Position,
-                keys: [burnerManager.account?.address],
-            },
-            {
-                model: network.contractComponents.Moves as any,
-                keys: [burnerManager.account?.address],
-            },
-        ]);
+        for (let i = 1; i <= 100; i++) {
+            new SyncManager(network.torii_client, [
+                {
+                    model: network.contractComponents.Position,
+                    keys: [i],
+                },
+                {
+                    model: network.contractComponents.Moves as any,
+                    keys: [i],
+                },
+            ]);
+        }
     }
 
     console.log(

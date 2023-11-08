@@ -42,8 +42,6 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
                 },
             }),
         };
-
-        // We don't want width/height to recreate phaser layer, so we ignore linter
     }, [networkLayer]);
 
     useEffect(() => {
