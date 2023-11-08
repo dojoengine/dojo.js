@@ -8,35 +8,35 @@ export const controls = (layer: PhaserLayer) => {
         },
         networkLayer: {
             systemCalls: { move },
-            account,
+            account: { account },
         },
     } = layer;
 
     input.onKeyPress(
         (keys) => keys.has("W"),
         () => {
-            move(account.getActiveAccount()!, Direction.Up);
+            move({ signer: account, direction: Direction.Up });
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("A"),
         () => {
-            move(account.getActiveAccount()!, Direction.Left);
+            move({ signer: account, direction: Direction.Left });
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("S"),
         () => {
-            move(account.getActiveAccount()!, Direction.Down);
+            move({ signer: account, direction: Direction.Down });
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("D"),
         () => {
-            move(account.getActiveAccount()!, Direction.Right);
+            move({ signer: account, direction: Direction.Right });
         }
     );
 };

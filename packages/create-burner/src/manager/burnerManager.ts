@@ -1,22 +1,14 @@
-import {
-    Account,
-    AccountInterface,
-    CallData,
-    ec,
-    hash,
-    RpcProvider,
-    stark,
-} from "starknet";
+import { Account, CallData, ec, hash, RpcProvider, stark } from "starknet";
 import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
 
 export class BurnerManager {
-    public masterAccount?: AccountInterface | Account;
+    public masterAccount: Account;
     public accountClassHash: string;
     public provider: RpcProvider;
 
-    public account: Account | null = null;
+    public account: Account;
     public isDeploying: boolean = false;
     public burnerAccounts: Burner[] = [];
 
@@ -30,6 +22,7 @@ export class BurnerManager {
         this.masterAccount = masterAccount;
         this.accountClassHash = accountClassHash;
         this.provider = rpcProvider;
+        this.account = masterAccount;
     }
 
     public setIsDeployingCallback(
@@ -71,7 +64,7 @@ export class BurnerManager {
                 ?.getTransactionReceipt(storage[firstAddr].deployTx)
                 .then((response) => {
                     if (!response) {
-                        this.account = null;
+                        // this.account = this.masterAccount;
                         Storage.remove("burners");
                         throw new Error(
                             "Burners not deployed, chain may have restarted"

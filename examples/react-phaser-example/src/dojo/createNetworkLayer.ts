@@ -12,9 +12,6 @@ export const createNetworkLayer = async () => {
         nodeUrl: import.meta.env.VITE_PUBLIC_NODE_URL!,
     });
 
-    const accountClassHash = import.meta.env.VITE_PUBLIC_ACCOUNT_CLASS_HASH!;
-
-    // TODO: Make Burner System
     const masterAccount = new Account(
         rpcProvider,
         import.meta.env.VITE_PUBLIC_MASTER_ADDRESS!,
@@ -23,7 +20,7 @@ export const createNetworkLayer = async () => {
 
     const burnerManager = new BurnerManager({
         masterAccount,
-        accountClassHash,
+        accountClassHash: import.meta.env.VITE_PUBLIC_ACCOUNT_CLASS_HASH!,
         rpcProvider,
     });
 

@@ -7,16 +7,14 @@ export const spawn = (layer: PhaserLayer) => {
         },
         networkLayer: {
             systemCalls: { spawn },
-            account,
+            account: { account },
         },
     } = layer;
-
-    console.log(account);
 
     input.onKeyPress(
         (keys) => keys.has("SPACE"),
         () => {
-            spawn(account.getActiveAccount()!);
+            spawn({ signer: account });
         }
     );
 };
