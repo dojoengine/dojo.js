@@ -8,5 +8,6 @@ export function createClientComponents({
 }: SetupNetworkResult) {
     return {
         ...contractComponents,
+        Position: overridableComponent(contractComponents.Position),
     };
 }

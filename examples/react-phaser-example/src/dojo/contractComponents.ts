@@ -4,6 +4,18 @@ import { defineComponent, Type as RecsType, World } from "@dojoengine/recs";
 
 export function defineContractComponents(world: World) {
     return {
+        Energy: (() => {
+            return defineComponent(
+                world,
+                { id: RecsType.Number, amt: RecsType.Number },
+                {
+                    metadata: {
+                        name: "Energy",
+                        types: [],
+                    },
+                }
+            );
+        })(),
         GameData: (() => {
             return defineComponent(
                 world,
@@ -16,23 +28,6 @@ export function defineContractComponents(world: World) {
                     metadata: {
                         name: "GameData",
                         types: [],
-                    },
-                }
-            );
-        })(),
-        MovesQueue: (() => {
-            return defineComponent(
-                world,
-                {
-                    player: RecsType.String,
-                    m1: RecsType.Number,
-                    m2: RecsType.Number,
-                    m3: RecsType.Number,
-                },
-                {
-                    metadata: {
-                        name: "MovesQueue",
-                        types: ["Direction", "Direction", "Direction"],
                     },
                 }
             );
