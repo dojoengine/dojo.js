@@ -18,7 +18,6 @@ function App() {
     return (
         <div>
             <PhaserLayer networkLayer={networkLayer} />
-
             <UI />
         </div>
     );

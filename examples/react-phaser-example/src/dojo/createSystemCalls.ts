@@ -1,5 +1,5 @@
 import { SetupNetworkResult } from "./setupNetwork";
-import { Account, AccountInterface } from "starknet";
+import { Account } from "starknet";
 import { Entity, getComponentValue } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
@@ -23,7 +23,7 @@ export function createSystemCalls(
     const spawn = async (props: SystemSigner) => {
         const signer = props.signer;
 
-        console.log("spawn", signer.address);
+        console.log("spawn", signer);
         const entityId = signer.address.toString() as Entity;
 
         const positionId = uuid();
@@ -70,6 +70,8 @@ export function createSystemCalls(
 
     const move = async (props: MoveSystemProps) => {
         const { signer, direction } = props;
+
+        console.log("spawn", signer);
 
         const entityId = signer.address.toString() as Entity;
 

@@ -1,7 +1,7 @@
 import { useDojo } from "../hooks/useDojo";
-import { ClickWrapper } from "./clickWrapper";
+import { ClickWrapper } from "./ClickWrapper";
 
-export const SpawnBtn = () => {
+export const WalletConnect = () => {
     const {
         account: { account, create, isDeploying, select, list, clear },
         systemCalls: { spawn },
@@ -9,7 +9,7 @@ export const SpawnBtn = () => {
 
     return (
         <ClickWrapper>
-            <div className="flex space-x-3 justify-between">
+            <div className="flex space-x-3 justify-between bg-gray-800">
                 <div className="flex flex-col">
                     <button
                         onClick={create}
@@ -24,7 +24,6 @@ export const SpawnBtn = () => {
 
                 <div className="card text-black">
                     <div className="text-white">signer: </div>
-
                     <select onChange={(e) => select(e.target.value)}>
                         {list().map((account, index) => {
                             return (

@@ -3,6 +3,7 @@ import { NetworkLayer } from "../dojo/createNetworkLayer";
 import { PhaserLayer } from "../phaser";
 import { store } from "../store/store";
 import { useBurnerManager } from "@dojoengine/create-burner";
+import { useMemo } from "react";
 
 export type UIStore = ReturnType<typeof useDojo>;
 
@@ -17,6 +18,10 @@ export const useDojo = () => {
         useBurnerManager({
             burnerManager: networkLayer.burnerManager,
         });
+
+    useMemo(() => {
+        networkLayer.burnerManager.init();
+    }, []);
 
     return {
         networkLayer: networkLayer as NetworkLayer,
