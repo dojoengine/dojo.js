@@ -2,11 +2,11 @@ use starknet::ContractAddress;
 
 #[derive(Serde, Copy, Drop, Introspect)]
 enum Direction {
-    None: (),
-    Left: (),
-    Right: (),
-    Up: (),
-    Down: (),
+    None,
+    Left,
+    Right,
+    Up,
+    Down,
 }
 
 impl DirectionIntoFelt252 of Into<Direction, felt252> {
@@ -44,6 +44,16 @@ struct PlayerID {
     #[key]
     player: ContractAddress,
     id: u8,
+}
+
+// Three moves for the player
+#[derive(Model, Copy, Drop, Serde)]
+struct MovesQueue {
+    #[key]
+    player: ContractAddress,
+    m1: Direction,
+    m2: Direction,
+    m3: Direction,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
