@@ -1,14 +1,12 @@
-// position + type + owner + energy
-
 use starknet::ContractAddress;
 
 #[derive(Serde, Copy, Drop, Introspect)]
 enum Direction {
-    None: (),
-    Left: (),
-    Right: (),
-    Up: (),
-    Down: (),
+    None,
+    Left,
+    Right,
+    Up,
+    Down,
 }
 
 impl DirectionIntoFelt252 of Into<Direction, felt252> {
@@ -23,6 +21,8 @@ impl DirectionIntoFelt252 of Into<Direction, felt252> {
     }
 }
 
+const GAME_DATA_KEY: felt252 = 'game';
+
 #[derive(Copy, Drop, Serde, Introspect)]
 struct Vec2 {
     x: u32,
@@ -30,31 +30,36 @@ struct Vec2 {
 }
 
 #[derive(Model, Copy, Drop, Serde)]
-struct Position {
+struct Player {
     #[key]
-    entity_id: u32,
-    vec: Vec2,
+    id: u8,
+    player: ContractAddress,
+    position: Vec2,
+    energy: u8,
+    rps: u8, // one character
 }
 
 #[derive(Model, Copy, Drop, Serde)]
-struct Type {
+struct PlayerID {
     #[key]
-    entity_id: u32,
-    emoji_type: u8,
+    player: ContractAddress,
+    id: u8,
 }
 
-// owner of
+// Three moves for the player
 #[derive(Model, Copy, Drop, Serde)]
-struct Owner {
+struct MovesQueue {
     #[key]
-    entity_id: u32,
-    owner: ContractAddress,
+    player: ContractAddress,
+    m1: Direction,
+    m2: Direction,
+    m3: Direction,
 }
 
-// Energy Levels deplete every move and recharge over time
 #[derive(Model, Copy, Drop, Serde)]
-struct Energy {
+struct GameData {
     #[key]
-    entity_id: u32,
-    emoji_type: u8,
+    game: felt252, // Always 'game'
+    number_of_players: u8,
+    available_ids: u256, // Packed u8s?
 }
