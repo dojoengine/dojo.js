@@ -2,7 +2,7 @@ import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { RPCProvider } from "@dojoengine/core";
 import { Account, num } from "starknet";
-import manifest from "../../../dojo-starter/target/dev/manifest.json";
+import manifest from "../../../emojiman/contracts/target/dev/manifest.json";
 import * as torii from "@dojoengine/torii-client";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;

@@ -32,21 +32,21 @@ export const createNetworkLayer = async () => {
     // position + type + owner + energy
     // emoji id = position + type + energy
 
-    if (burnerManager.account) {
-        // sync manager to active address
-        for (let i = 1; i <= 100; i++) {
-            new SyncManager(network.torii_client, [
-                {
-                    model: network.contractComponents.Position,
-                    keys: [burnerManager.account.address],
-                },
-                {
-                    model: network.contractComponents.Moves as any,
-                    keys: [burnerManager.account.address],
-                },
-            ]);
-        }
-    }
+    // if (burnerManager.account) {
+    //     // sync manager to active address
+    //     for (let i = 1; i <= 100; i++) {
+    //         new SyncManager(network.torii_client, [
+    //             {
+    //                 model: network.contractComponents.Position,
+    //                 keys: [burnerManager.account.address],
+    //             },
+    //             {
+    //                 model: network.contractComponents.Moves as any,
+    //                 keys: [burnerManager.account.address],
+    //             },
+    //         ]);
+    //     }
+    // }
 
     console.log(
         "burnerManager.getActiveAccount()",

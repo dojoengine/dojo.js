@@ -4,33 +4,65 @@ import { defineComponent, Type as RecsType, World } from "@dojoengine/recs";
 
 export function defineContractComponents(world: World) {
     return {
-        Moves: (() => {
+        GameData: (() => {
             return defineComponent(
                 world,
                 {
-                    player: RecsType.BigInt,
-                    remaining: RecsType.Number,
-                    last_direction: RecsType.Number,
+                    game: RecsType.Number,
+                    number_of_players: RecsType.Number,
+                    available_ids: RecsType.NumberArray,
                 },
                 {
                     metadata: {
-                        name: "Moves",
-                        types: ["Direction"],
+                        name: "GameData",
+                        types: [],
                     },
                 }
             );
         })(),
-        Position: (() => {
+        MovesQueue: (() => {
             return defineComponent(
                 world,
                 {
-                    player: RecsType.BigInt,
-                    vec: { x: RecsType.Number, y: RecsType.Number },
+                    player: RecsType.String,
+                    m1: RecsType.Number,
+                    m2: RecsType.Number,
+                    m3: RecsType.Number,
                 },
                 {
                     metadata: {
-                        name: "Position",
+                        name: "MovesQueue",
+                        types: ["Direction", "Direction", "Direction"],
+                    },
+                }
+            );
+        })(),
+        Player: (() => {
+            return defineComponent(
+                world,
+                {
+                    id: RecsType.Number,
+                    player: RecsType.String,
+                    position: { x: RecsType.Number, y: RecsType.Number },
+                    energy: RecsType.Number,
+                    rps: RecsType.Number,
+                },
+                {
+                    metadata: {
+                        name: "Player",
                         types: ["Vec2"],
+                    },
+                }
+            );
+        })(),
+        PlayerID: (() => {
+            return defineComponent(
+                world,
+                { player: RecsType.String, id: RecsType.Number },
+                {
+                    metadata: {
+                        name: "PlayerID",
+                        types: [],
                     },
                 }
             );
