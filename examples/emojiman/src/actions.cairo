@@ -12,27 +12,38 @@ trait IActions<TContractState> {
 mod actions {
     use starknet::{ContractAddress, get_caller_address};
     use debug::PrintTrait;
-    use dojo_examples::models::{GAME_DATA_KEY, GameData, Direction, MovesQueue, Vec2, Player};
+    use dojo_examples::models::{
+        GAME_DATA_KEY, GameData, Direction, MovesQueue, Vec2, Position, RPSType, PlayerID,
+    };
     use super::IActions;
+
+    fn assign_player_id(world: IWorldDispatcher, id: u8, mut player: ContractAddress) {
+        set!(world, (PlayerID { player, id }));
+    }
 
     // impl: implement functions specified in trait
     #[external(v0)]
     impl ActionsImpl of IActions<ContractState> {
-        // ContractState is defined by system decorator expansion
+        // Spawns the player on to the map
         fn spawn(self: @ContractState, rps: u8) -> u8 {
             let world = self.world_dispatcher.read();
             let player = get_caller_address();
-            let position = Vec2 { x: 10, y: 10 };
 
             let mut game_data = get!(world, GAME_DATA_KEY, (GameData));
             game_data.number_of_players += 1;
             let id = game_data.number_of_players; // id starts at 1
             set!(world, (game_data));
 
-            set!(world, (Player { id, player, position, energy: 100, rps }));
+            let x = 10; // Pick randomly
+            let y = 10; // Pick randomly
 
+            set!(world, (Position { id, x, y }, RPSType { id, rps }));
+
+            assign_player_id(world, id, player);
             id
         }
+
+        // Queues move for player to be processed later
         fn queue_moves(self: @ContractState, m1: Direction, m2: Direction, m3: Direction) {
             let world = self.world_dispatcher.read();
             let player = get_caller_address();
@@ -54,8 +65,8 @@ mod tests {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
 
     // import models
-    use dojo_examples::models::{player};
-    use dojo_examples::models::{Player, Direction, MovesQueue, Vec2};
+    use dojo_examples::models::{position, rps_type, moves_queue, player_id};
+    use dojo_examples::models::{Position, RPSType, Direction, PlayerID, MovesQueue, Vec2};
 
     // import actions
     use super::{actions, IActionsDispatcher, IActionsDispatcherTrait};
@@ -68,7 +79,12 @@ mod tests {
         // This sets caller for called contract functions.
         starknet::testing::set_contract_address(caller);
         // models
-        let mut models = array![];
+        let mut models = array![
+            position::TEST_CLASS_HASH,
+            rps_type::TEST_CLASS_HASH,
+            moves_queue::TEST_CLASS_HASH,
+            player_id::TEST_CLASS_HASH
+        ];
 
         // deploy world with models
         let world = spawn_test_world(models);
@@ -87,13 +103,15 @@ mod tests {
 
         actions.spawn('r');
 
-        let player = get!(world, 1, (Player));
-        assert(1 == player.id, 'incorrect id');
-        assert(caller == player.player, 'incorrect player');
-        assert(10 == player.position.x, 'incorrect position.x');
-        assert(10 == player.position.y, 'incorrect position.y');
-        assert(100 == player.energy, 'incorrect energy');
-        assert('r' == player.rps, 'incorrect rps');
+        // Get player ID
+        let player_id = get!(world, caller, (PlayerID)).id;
+        assert(1 == player_id, 'incorrect id');
+
+        // Get player from id
+        let (position, rps_type) = get!(world, player_id, (Position, RPSType));
+        assert(0 < position.x, 'incorrect position.x');
+        assert(0 < position.y, 'incorrect position.y');
+        assert('r' == rps_type.rps, 'incorrect rps');
     }
 
     #[test]
@@ -108,8 +126,8 @@ mod tests {
         let dir_up: felt252 = Direction::Up.into();
         let dir_left: felt252 = Direction::Left.into();
 
-        assert(dir_up == moves.m1.into(), 'incorrect position.x');
-        assert(dir_left == moves.m2.into(), 'incorrect position.y');
-        assert(dir_up == moves.m3.into(), 'incorrect energy');
+        assert(dir_up == moves.m1.into(), 'incorrect move m1');
+        assert(dir_left == moves.m2.into(), 'incorrect move m2');
+        assert(dir_up == moves.m3.into(), 'incorrect move m3');
     }
 }

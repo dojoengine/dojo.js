@@ -30,12 +30,17 @@ struct Vec2 {
 }
 
 #[derive(Model, Copy, Drop, Serde)]
-struct Player {
+struct Position {
     #[key]
     id: u8,
-    player: ContractAddress,
-    position: Vec2,
-    energy: u8,
+    x: u32,
+    y: u32
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct RPSType {
+    #[key]
+    id: u8,
     rps: u8, // one character
 }
 
