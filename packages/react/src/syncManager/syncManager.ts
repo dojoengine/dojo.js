@@ -45,7 +45,9 @@ export class SyncManager<S extends Schema> {
                     keysToStrings
                 );
                 // TODO:
-                if (modelValue !== undefined) return;
+
+                console.log("modelValue", modelValue);
+
                 const convertedValue = convertValues(model.schema, modelValue);
                 setComponent(model, entityIndex, convertedValue as any);
             }

@@ -37,24 +37,6 @@ export function defineContractComponents(world: World) {
                 }
             );
         })(),
-        Player: (() => {
-            return defineComponent(
-                world,
-                {
-                    id: RecsType.Number,
-                    player: RecsType.String,
-                    position: { x: RecsType.Number, y: RecsType.Number },
-                    energy: RecsType.Number,
-                    rps: RecsType.Number,
-                },
-                {
-                    metadata: {
-                        name: "Player",
-                        types: ["Vec2"],
-                    },
-                }
-            );
-        })(),
         PlayerID: (() => {
             return defineComponent(
                 world,
@@ -62,6 +44,30 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "PlayerID",
+                        types: [],
+                    },
+                }
+            );
+        })(),
+        Position: (() => {
+            return defineComponent(
+                world,
+                { id: RecsType.Number, x: RecsType.Number, y: RecsType.Number },
+                {
+                    metadata: {
+                        name: "Position",
+                        types: [],
+                    },
+                }
+            );
+        })(),
+        RPSType: (() => {
+            return defineComponent(
+                world,
+                { id: RecsType.Number, rps: RecsType.Number },
+                {
+                    metadata: {
+                        name: "RPSType",
                         types: [],
                     },
                 }

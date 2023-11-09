@@ -7,10 +7,19 @@ export enum Maps {
 }
 
 export enum Animations {
-    SwordsmanIdle = "SwordsmanIdle",
+    RockIdle = "RockIdle",
+    PaperIdle = "PaperIdle",
+    ScissorsIdle = "ScissorsIdle",
 }
+
 export enum Sprites {
     Soldier,
+}
+
+export enum RPSSprites {
+    Rock,
+    Paper,
+    Scissors,
 }
 
 export enum Assets {

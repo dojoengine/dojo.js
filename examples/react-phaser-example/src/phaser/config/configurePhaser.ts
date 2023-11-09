@@ -5,7 +5,6 @@ import {
     defineMapConfig,
     defineCameraConfig,
 } from "@latticexyz/phaserx";
-import worldTileset from "../../assets/tilesets/world.png";
 import landTileset from "../../assets/tilesets/land.png";
 import { TileAnimations, Tileset } from "../../assets/world";
 import {
@@ -24,7 +23,7 @@ const mainMap = defineMapConfig({
     chunkSize: TILE_WIDTH * 64, // tile size * tile amount
     tileWidth: TILE_WIDTH,
     tileHeight: TILE_HEIGHT,
-    backgroundTile: [Tileset.Grass],
+    backgroundTile: [Tileset.Land],
     animationInterval: ANIMATION_INTERVAL,
     tileAnimations: TileAnimations,
     layers: {
@@ -66,13 +65,33 @@ export const phaserConfig = {
             },
             animations: [
                 {
-                    key: Animations.SwordsmanIdle,
+                    key: Animations.RockIdle,
                     assetKey: Assets.MainAtlas,
                     startFrame: 0,
-                    endFrame: 3,
+                    endFrame: 0,
                     frameRate: 6,
                     repeat: -1,
-                    prefix: "sprites/soldier/idle/",
+                    prefix: "sprites/rock/",
+                    suffix: ".png",
+                },
+                {
+                    key: Animations.ScissorsIdle,
+                    assetKey: Assets.MainAtlas,
+                    startFrame: 0,
+                    endFrame: 0,
+                    frameRate: 6,
+                    repeat: -1,
+                    prefix: "sprites/scissors/",
+                    suffix: ".png",
+                },
+                {
+                    key: Animations.PaperIdle,
+                    assetKey: Assets.MainAtlas,
+                    startFrame: 0,
+                    endFrame: 0,
+                    frameRate: 6,
+                    repeat: -1,
+                    prefix: "sprites/paper/",
                     suffix: ".png",
                 },
             ],

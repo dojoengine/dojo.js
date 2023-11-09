@@ -10,11 +10,9 @@ import {
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { convertValues } from "../utils";
 
-type KeyType = any; // Replace 'any' with your specific type for keys
-
 type ModelEntry<S extends Schema> = {
-    component: Component<S, Metadata, undefined>;
-    keys: KeyType[];
+    model: Component<S, Metadata, undefined>;
+    keys: any[];
 };
 
 export class SubscribeManager<S extends Schema> {
@@ -28,8 +26,8 @@ export class SubscribeManager<S extends Schema> {
     }
 
     private async setModelValue(modelEntry: ModelEntry<S>): Promise<void> {
-        const { component, keys } = modelEntry;
-        const componentName = component.metadata?.name;
+        const { model, keys } = modelEntry;
+        const componentName = model.metadata?.name;
         const keysToStrings = keys.map((key) => key.toString());
         const entityIndex: Entity | string =
             keys.length === 1 ? keys[0].toString() : getEntityIdFromKeys(keys);
@@ -40,9 +38,9 @@ export class SubscribeManager<S extends Schema> {
                 keysToStrings
             );
             setComponent(
-                component,
+                model,
                 entityIndex as Entity,
-                convertValues(component.schema, modelValue) as ComponentValue<S>
+                convertValues(model.schema, modelValue) as ComponentValue<S>
             );
         } catch (error) {
             console.error("Failed to fetch or set model value:", error);
@@ -52,7 +50,7 @@ export class SubscribeManager<S extends Schema> {
     private subscribeToModel(modelEntry: ModelEntry<S>): void {
         this.client.onSyncEntityChange(
             {
-                model: modelEntry.component.metadata?.name! as string,
+                model: modelEntry.model.metadata?.name! as string,
                 keys: modelEntry.keys.map((k) => k.toString()),
             },
             () => this.setModelValue(modelEntry)

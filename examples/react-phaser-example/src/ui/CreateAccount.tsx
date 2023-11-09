@@ -14,19 +14,14 @@ export const CreateAccount = () => {
             }`}
         >
             <div className="self-center">
-                <h3>emojiman</h3>
+                <h3>RPS</h3>
                 <h5>Eat to survive</h5>
                 <div>
                     <WalletConnect />
                 </div>
                 <div>
                     <ClickWrapper>
-                        <button
-                            onClick={() => setLoggedIn()}
-                            className="border-"
-                        >
-                            enter
-                        </button>
+                        <button onClick={() => setLoggedIn()}>enter</button>
                     </ClickWrapper>
                 </div>
             </div>

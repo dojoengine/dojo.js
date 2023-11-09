@@ -4,10 +4,16 @@ import {
     defineEnterSystem,
     defineSystem,
     getComponentValueStrict,
+    getComponentValue,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { Animations, TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
+import {
+    Animations,
+    RPSSprites,
+    TILE_HEIGHT,
+    TILE_WIDTH,
+} from "../config/constants";
 
 export const move = (layer: PhaserLayer) => {
     const {
@@ -16,33 +22,46 @@ export const move = (layer: PhaserLayer) => {
             Main: { objectPool, camera },
         },
         networkLayer: {
-            components: { Player },
+            components: { Position, RPSType },
         },
     } = layer;
 
-    defineEnterSystem(world, [Has(Player)], ({ entity }: any) => {
+    defineEnterSystem(world, [Has(Position)], ({ entity }: any) => {
         const playerObj = objectPool.get(entity.toString(), "Sprite");
 
-        console.log(playerObj);
+        const type = getComponentValue(RPSType, entity.toString() as Entity);
 
-        playerObj.setComponent({
-            id: "animation",
-            once: (sprite: any) => {
-                console.log(sprite);
-                sprite.play(Animations.SwordsmanIdle);
-            },
-        });
+        if (type?.rps !== 0) {
+            let animation = Animations.RockIdle;
+
+            switch (type?.rps) {
+                case RPSSprites.Rock:
+                    animation = Animations.RockIdle;
+                    break;
+                case RPSSprites.Paper:
+                    animation = Animations.PaperIdle;
+                    break;
+                case RPSSprites.Scissors:
+                    animation = Animations.ScissorsIdle;
+                    break;
+            }
+
+            playerObj.setComponent({
+                id: "animation",
+                once: (sprite: any) => {
+                    sprite.play(animation);
+                },
+            });
+        }
     });
 
-    defineSystem(world, [Has(Player)], ({ entity }: any) => {
-        console.log(entity);
-
-        const player = getComponentValueStrict(
-            Player,
+    defineSystem(world, [Has(Position)], ({ entity }: any) => {
+        const position = getComponentValueStrict(
+            Position,
             entity.toString() as Entity
         );
 
-        const offsetPosition = { x: player?.position.x, y: player?.position.y };
+        const offsetPosition = { x: position?.x, y: position?.y };
 
         const pixelPosition = tileCoordToPixelCoord(
             offsetPosition,
