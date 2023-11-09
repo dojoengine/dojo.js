@@ -18,13 +18,24 @@ mod actions {
     use starknet::{ContractAddress, get_caller_address};
     use debug::PrintTrait;
     use dojo_examples::models::{
-        GAME_DATA_KEY, GameData, Direction, Vec2, Position, RPSType, Energy, PlayerID,
+        GAME_DATA_KEY, GameData, Direction, Vec2, Position, PlayerAtPosition, RPSType, Energy,
+        PlayerID,
     };
     use dojo_examples::utils::next_position;
     use super::{INITIAL_ENERGY, RENEWED_ENERGY, MOVE_ENERGY_COST, IActions};
 
     fn assign_player_id(world: IWorldDispatcher, id: u8, mut player: ContractAddress) {
         set!(world, (PlayerID { player, id }));
+    }
+
+    fn clear_player_position(world: IWorldDispatcher, pos: Position) {
+        let Position{id, x, y } = pos;
+        // Set no player at position
+        set!(world, (PlayerAtPosition { x, y, id: 0 }));
+    }
+
+    fn player_at_position(world: IWorldDispatcher, x: u8, y: u8) -> u8 {
+        get!(world, (x, y), (PlayerAtPosition)).id
     }
 
     // impl: implement functions specified in trait
@@ -45,7 +56,12 @@ mod actions {
 
             set!(
                 world,
-                (Position { id, x, y }, RPSType { id, rps }, Energy { id, amt: INITIAL_ENERGY },)
+                (
+                    Position { id, x, y },
+                    PlayerAtPosition { id, x, y },
+                    RPSType { id, rps },
+                    Energy { id, amt: INITIAL_ENERGY },
+                )
             );
 
             assign_player_id(world, id, player);
@@ -64,9 +80,18 @@ mod actions {
 
             assert(energy.amt > MOVE_ENERGY_COST, 'Not enough energy');
 
-            let pos = next_position(pos, dir);
+            clear_player_position(world, pos);
 
-            set!(world, (pos, Energy { id, amt: energy.amt - MOVE_ENERGY_COST },));
+            let Position{id, x, y } = next_position(pos, dir);
+
+            set!(
+                world,
+                (
+                    Position { id, x, y },
+                    PlayerAtPosition { id, x, y },
+                    Energy { id, amt: energy.amt - MOVE_ENERGY_COST },
+                )
+            );
         }
 
         // Process player move queues
@@ -90,8 +115,10 @@ mod tests {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
 
     // import models
-    use dojo_examples::models::{position, rps_type, player_id, energy};
-    use dojo_examples::models::{Position, RPSType, Energy, Direction, PlayerID, Vec2};
+    use dojo_examples::models::{position, player_at_position, rps_type, player_id, energy};
+    use dojo_examples::models::{
+        Position, RPSType, Energy, Direction, PlayerID, Vec2, PlayerAtPosition
+    };
 
     // import actions
     use super::{actions, IActionsDispatcher, IActionsDispatcherTrait};
@@ -105,8 +132,9 @@ mod tests {
         starknet::testing::set_contract_address(caller);
         // models
         let mut models = array![
-            energy::TEST_CLASS_HASH,
+            player_at_position::TEST_CLASS_HASH,
             position::TEST_CLASS_HASH,
+            energy::TEST_CLASS_HASH,
             rps_type::TEST_CLASS_HASH,
             player_id::TEST_CLASS_HASH
         ];
@@ -123,7 +151,7 @@ mod tests {
 
     #[test]
     #[available_gas(30000000)]
-    fn spawn() {
+    fn spawn_test() {
         let (caller, world, actions) = init();
 
         actions.spawn('r');
@@ -142,7 +170,7 @@ mod tests {
 
     #[test]
     #[available_gas(30000000)]
-    fn moves() {
+    fn moves_test() {
         let (caller, world, actions) = init();
 
         actions.spawn('r');
@@ -157,12 +185,37 @@ mod tests {
         // Get player from id
         let (pos, energy) = get!(world, player_id, (Position, Energy));
 
-        energy.amt.print();
-        MOVE_ENERGY_COST.print();
-        spawn_energy.amt.print();
-
         assert(energy.amt == spawn_energy.amt - MOVE_ENERGY_COST, 'incorrect energy');
         assert(spawn_pos.x == pos.x, 'incorrect position.x');
         assert(spawn_pos.y - 1 == pos.y, 'incorrect position.y');
+    }
+
+    #[test]
+    #[available_gas(30000000)]
+    fn player_at_position_test() {
+        let (caller, world, actions_) = init();
+
+        actions_.spawn('r');
+
+        // Get player ID
+        let player_id = get!(world, caller, (PlayerID)).id;
+
+        // Get player position
+        let Position{x, y, id } = get!(world, player_id, Position);
+
+        // Player should be at position
+        assert(actions::player_at_position(world, x, y) == player_id, 'player should be at pos');
+
+        // Player moves
+        actions_.move(Direction::Up);
+
+        // Player shouldn't be at old position
+        assert(actions::player_at_position(world, x, y) == 0, 'player should not be at pos');
+
+        // Get new player position
+        let Position{x, y, id } = get!(world, player_id, Position);
+
+        // Player should be at new position
+        assert(actions::player_at_position(world, x, y) == player_id, 'player should be at pos');
     }
 }

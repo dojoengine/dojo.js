@@ -30,11 +30,20 @@ struct Vec2 {
 }
 
 #[derive(Model, Copy, Drop, Serde)]
+struct PlayerAtPosition {
+    #[key]
+    x: u8,
+    #[key]
+    y: u8,
+    id: u8,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
 struct Position {
     #[key]
     id: u8,
-    x: u32,
-    y: u32
+    x: u8,
+    y: u8
 }
 
 #[derive(Model, Copy, Drop, Serde)]
