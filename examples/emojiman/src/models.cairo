@@ -45,20 +45,17 @@ struct RPSType {
 }
 
 #[derive(Model, Copy, Drop, Serde)]
+struct Energy {
+    #[key]
+    id: u8,
+    amt: u8,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
 struct PlayerID {
     #[key]
     player: ContractAddress,
     id: u8,
-}
-
-// Three moves for the player
-#[derive(Model, Copy, Drop, Serde)]
-struct MovesQueue {
-    #[key]
-    player: ContractAddress,
-    m1: Direction,
-    m2: Direction,
-    m3: Direction,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
