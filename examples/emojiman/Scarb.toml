@@ -1,13 +1,13 @@
 [package]
 cairo-version = "2.2.0"
-name = "emojiman"
-version = "0.3.5"
+name = "dojo_examples"
+version = "0.3.7"
 
 [cairo]
 sierra-replace-ids = true
 
 [dependencies]
-dojo = { git = "https://github.com/dojoengine/dojo", version = "0.3.5" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v0.3.4" }
 
 [[target.dojo]]
 
