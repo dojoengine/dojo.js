@@ -2,13 +2,12 @@ import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { RPCProvider } from "@dojoengine/core";
 import { Account, num } from "starknet";
-import manifest from "../../../emojiman/contracts/target/dev/manifest.json";
+import manifest from "../../../emojiman/target/dev/manifest.json";
 import * as torii from "@dojoengine/torii-client";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 export async function setupNetwork() {
-    // Extract environment variables for better readability.
     const {
         VITE_PUBLIC_WORLD_ADDRESS,
         VITE_PUBLIC_NODE_URL,
