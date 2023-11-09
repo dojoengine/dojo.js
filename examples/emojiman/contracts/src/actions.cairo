@@ -4,6 +4,7 @@ use dojo_examples::models::{Direction};
 #[starknet::interface]
 trait IActions<TContractState> {
     fn spawn(self: @TContractState, rps: u8) -> u8;
+    fn queue_moves(self: @TContractState, m1: Direction, m2: Direction, m3: Direction);
 }
 
 // dojo decorator
@@ -11,7 +12,7 @@ trait IActions<TContractState> {
 mod actions {
     use starknet::{ContractAddress, get_caller_address};
     use debug::PrintTrait;
-    use dojo_examples::models::{GAME_DATA_KEY, GameData, Direction, Vec2, Player};
+    use dojo_examples::models::{GAME_DATA_KEY, GameData, Direction, MovesQueue, Vec2, Player};
     use super::IActions;
 
     // impl: implement functions specified in trait
@@ -21,7 +22,6 @@ mod actions {
         fn spawn(self: @ContractState, rps: u8) -> u8 {
             let world = self.world_dispatcher.read();
             let player = get_caller_address();
-            player.print();
             let position = Vec2 { x: 10, y: 10 };
 
             let mut game_data = get!(world, GAME_DATA_KEY, (GameData));
@@ -33,12 +33,18 @@ mod actions {
 
             id
         }
+        fn queue_moves(self: @ContractState, m1: Direction, m2: Direction, m3: Direction) {
+            let world = self.world_dispatcher.read();
+            let player = get_caller_address();
+            set!(world, (MovesQueue { player, m1, m2, m3 }));
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
     use starknet::class_hash::Felt252TryIntoClassHash;
+    use starknet::ContractAddress;
     use debug::PrintTrait;
 
     // import world dispatcher
@@ -49,18 +55,16 @@ mod tests {
 
     // import models
     use dojo_examples::models::{player};
-    use dojo_examples::models::{Player, Direction, Vec2};
+    use dojo_examples::models::{Player, Direction, MovesQueue, Vec2};
 
     // import actions
     use super::{actions, IActionsDispatcher, IActionsDispatcherTrait};
 
-    #[test]
-    #[available_gas(30000000)]
-    fn test() {
-        // caller
+
+    fn init() -> (ContractAddress, IWorldDispatcher, IActionsDispatcher) {
         let caller = starknet::contract_address_const::<'jon'>();
         // This sets caller for current function, but not passed to called contract functions
-        // starknet::testing::set_caller_address(caller);
+        starknet::testing::set_caller_address(caller);
         // This sets caller for called contract functions.
         starknet::testing::set_contract_address(caller);
         // models
@@ -72,17 +76,40 @@ mod tests {
         // deploy systems contract
         let contract_address = world
             .deploy_contract('actions', actions::TEST_CLASS_HASH.try_into().unwrap());
-        let actions_system = IActionsDispatcher { contract_address };
+        let actions = IActionsDispatcher { contract_address };
+        (caller, world, actions)
+    }
 
-        actions_system.spawn('r');
+    #[test]
+    #[available_gas(30000000)]
+    fn spawn() {
+        let (caller, world, actions) = init();
 
-        let p = get!(world, 1, (Player));
+        actions.spawn('r');
 
-        assert(1 == p.id, 'incorrect id');
-        assert(caller == p.player, 'incorrect player');
-        assert(10 == p.position.x, 'incorrect position.x');
-        assert(10 == p.position.y, 'incorrect position.y');
-        assert(100 == p.energy, 'incorrect energy');
-        assert('r' == p.rps, 'incorrect rps');
+        let player = get!(world, 1, (Player));
+        assert(1 == player.id, 'incorrect id');
+        assert(caller == player.player, 'incorrect player');
+        assert(10 == player.position.x, 'incorrect position.x');
+        assert(10 == player.position.y, 'incorrect position.y');
+        assert(100 == player.energy, 'incorrect energy');
+        assert('r' == player.rps, 'incorrect rps');
+    }
+
+    #[test]
+    #[available_gas(30000000)]
+    fn moves() {
+        let (caller, world, actions) = init();
+
+        actions.queue_moves(Direction::Up, Direction::Left, Direction::Up);
+
+        let moves = get!(world, caller, (MovesQueue));
+
+        let dir_up: felt252 = Direction::Up.into();
+        let dir_left: felt252 = Direction::Left.into();
+
+        assert(dir_up == moves.m1.into(), 'incorrect position.x');
+        assert(dir_left == moves.m2.into(), 'incorrect position.y');
+        assert(dir_up == moves.m3.into(), 'incorrect energy');
     }
 }
