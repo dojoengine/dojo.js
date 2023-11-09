@@ -1,10 +1,15 @@
 use dojo_examples::models::{Direction};
 
+const INITIAL_ENERGY: u8 = 3;
+const RENEWED_ENERGY: u8 = 3;
+const MOVE_ENERGY_COST: u8 = 1;
+
 // define the interface
 #[starknet::interface]
 trait IActions<TContractState> {
     fn spawn(self: @TContractState, rps: u8) -> u8;
-    fn queue_moves(self: @TContractState, m1: Direction, m2: Direction, m3: Direction);
+    fn move(self: @TContractState, dir: Direction);
+    fn tick(self: @TContractState);
 }
 
 // dojo decorator
@@ -13,9 +18,10 @@ mod actions {
     use starknet::{ContractAddress, get_caller_address};
     use debug::PrintTrait;
     use dojo_examples::models::{
-        GAME_DATA_KEY, GameData, Direction, MovesQueue, Vec2, Position, RPSType, PlayerID,
+        GAME_DATA_KEY, GameData, Direction, Vec2, Position, RPSType, Energy, PlayerID,
     };
-    use super::IActions;
+    use dojo_examples::utils::next_position;
+    use super::{INITIAL_ENERGY, RENEWED_ENERGY, MOVE_ENERGY_COST, IActions};
 
     fn assign_player_id(world: IWorldDispatcher, id: u8, mut player: ContractAddress) {
         set!(world, (PlayerID { player, id }));
@@ -37,18 +43,37 @@ mod actions {
             let x = 10; // Pick randomly
             let y = 10; // Pick randomly
 
-            set!(world, (Position { id, x, y }, RPSType { id, rps }));
+            set!(
+                world,
+                (Position { id, x, y }, RPSType { id, rps }, Energy { id, amt: INITIAL_ENERGY },)
+            );
 
             assign_player_id(world, id, player);
             id
         }
 
         // Queues move for player to be processed later
-        fn queue_moves(self: @ContractState, m1: Direction, m2: Direction, m3: Direction) {
+        fn move(self: @ContractState, dir: Direction) {
             let world = self.world_dispatcher.read();
             let player = get_caller_address();
-            set!(world, (MovesQueue { player, m1, m2, m3 }));
+
+            // player id
+            let id = get!(world, player, (PlayerID)).id;
+
+            let (pos, energy) = get!(world, id, (Position, Energy));
+
+            assert(energy.amt > MOVE_ENERGY_COST, 'Not enough energy');
+
+            let pos = next_position(pos, dir);
+
+            set!(world, (pos, Energy { id, amt: energy.amt - MOVE_ENERGY_COST },));
         }
+
+        // Process player move queues
+        // @TODO do the killing
+        // @TODO update player entities
+        // @TODO keep score
+        fn tick(self: @ContractState) {}
     }
 }
 
@@ -65,12 +90,12 @@ mod tests {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
 
     // import models
-    use dojo_examples::models::{position, rps_type, moves_queue, player_id};
-    use dojo_examples::models::{Position, RPSType, Direction, PlayerID, MovesQueue, Vec2};
+    use dojo_examples::models::{position, rps_type, player_id, energy};
+    use dojo_examples::models::{Position, RPSType, Energy, Direction, PlayerID, Vec2};
 
     // import actions
     use super::{actions, IActionsDispatcher, IActionsDispatcherTrait};
-
+    use super::{INITIAL_ENERGY, RENEWED_ENERGY, MOVE_ENERGY_COST};
 
     fn init() -> (ContractAddress, IWorldDispatcher, IActionsDispatcher) {
         let caller = starknet::contract_address_const::<'jon'>();
@@ -80,9 +105,9 @@ mod tests {
         starknet::testing::set_contract_address(caller);
         // models
         let mut models = array![
+            energy::TEST_CLASS_HASH,
             position::TEST_CLASS_HASH,
             rps_type::TEST_CLASS_HASH,
-            moves_queue::TEST_CLASS_HASH,
             player_id::TEST_CLASS_HASH
         ];
 
@@ -108,10 +133,11 @@ mod tests {
         assert(1 == player_id, 'incorrect id');
 
         // Get player from id
-        let (position, rps_type) = get!(world, player_id, (Position, RPSType));
+        let (position, rps_type, energy) = get!(world, player_id, (Position, RPSType, Energy));
         assert(0 < position.x, 'incorrect position.x');
         assert(0 < position.y, 'incorrect position.y');
         assert('r' == rps_type.rps, 'incorrect rps');
+        assert(INITIAL_ENERGY == energy.amt, 'incorrect energy');
     }
 
     #[test]
@@ -119,15 +145,24 @@ mod tests {
     fn moves() {
         let (caller, world, actions) = init();
 
-        actions.queue_moves(Direction::Up, Direction::Left, Direction::Up);
+        actions.spawn('r');
 
-        let moves = get!(world, caller, (MovesQueue));
+        // Get player ID
+        let player_id = get!(world, caller, (PlayerID)).id;
+        assert(1 == player_id, 'incorrect id');
 
-        let dir_up: felt252 = Direction::Up.into();
-        let dir_left: felt252 = Direction::Left.into();
+        let (spawn_pos, spawn_energy) = get!(world, player_id, (Position, Energy));
 
-        assert(dir_up == moves.m1.into(), 'incorrect move m1');
-        assert(dir_left == moves.m2.into(), 'incorrect move m2');
-        assert(dir_up == moves.m3.into(), 'incorrect move m3');
+        actions.move(Direction::Up);
+        // Get player from id
+        let (pos, energy) = get!(world, player_id, (Position, Energy));
+
+        energy.amt.print();
+        MOVE_ENERGY_COST.print();
+        spawn_energy.amt.print();
+
+        assert(energy.amt == spawn_energy.amt - MOVE_ENERGY_COST, 'incorrect energy');
+        assert(spawn_pos.x == pos.x, 'incorrect position.x');
+        assert(spawn_pos.y - 1 == pos.y, 'incorrect position.y');
     }
 }
