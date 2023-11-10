@@ -2,16 +2,16 @@
 
 use std::str::FromStr;
 
-use dojo_types::schema::EntityModel;
+use dojo_types::schema::{Clause, EntityQuery, KeysClause};
 use futures::StreamExt;
 use starknet::core::types::FieldElement;
 use starknet::core::utils::cairo_short_string_to_felt;
-use types::{ClientConfig, IEntityModel};
 use wasm_bindgen::prelude::*;
 
 mod types;
 mod utils;
 
+use types::{ClientConfig, EntityModel, IEntityModel};
 use utils::parse_ty_as_json_str;
 
 type JsFieldElement = JsValue;
@@ -50,9 +50,9 @@ impl Client {
 
         match self
             .inner
-            .entity(&EntityModel {
-                keys,
+            .entity(&EntityQuery {
                 model: model.to_string(),
+                clause: Clause::Keys(KeysClause { keys }),
             })
             .await
         {
@@ -73,7 +73,7 @@ impl Client {
 
         let entities = entities
             .into_iter()
-            .map(|e| serde_wasm_bindgen::from_value(e.into()))
+            .map(|e| TryInto::<EntityQuery>::try_into(e))
             .collect::<Result<Vec<_>, _>>()?;
 
         self.inner
@@ -95,7 +95,7 @@ impl Client {
 
         let entities = entities
             .into_iter()
-            .map(|e| serde_wasm_bindgen::from_value(e.into()))
+            .map(|e| TryInto::<EntityQuery>::try_into(e))
             .collect::<Result<Vec<_>, _>>()?;
 
         self.inner
@@ -114,8 +114,7 @@ impl Client {
         #[cfg(feature = "console-error-panic")]
         console_error_panic_hook::set_once();
 
-        let entity =
-            serde_wasm_bindgen::from_value::<dojo_types::schema::EntityModel>(entity.into())?;
+        let entity = serde_wasm_bindgen::from_value::<EntityModel>(entity.into())?;
         let model = cairo_short_string_to_felt(&entity.model).expect("invalid model name");
         let mut rcv = self
             .inner
@@ -151,7 +150,7 @@ pub async fn create_client(
 
     let entities = initialEntitiesToSync
         .into_iter()
-        .map(|e| serde_wasm_bindgen::from_value(e.into()))
+        .map(|e| TryInto::<EntityQuery>::try_into(e))
         .collect::<Result<Vec<_>, _>>()?;
 
     let world_address = FieldElement::from_str(&world_address)
