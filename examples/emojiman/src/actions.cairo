@@ -3,8 +3,10 @@ use dojo_examples::models::{Direction, RPS};
 const INITIAL_ENERGY: u8 = 255;
 const RENEWED_ENERGY: u8 = 3;
 const MOVE_ENERGY_COST: u8 = 1;
-const X_RANGE: u128 = 50;
-const Y_RANGE: u128 = 50;
+const X_RANGE: u128 = 50; // These need to be u128
+const Y_RANGE: u128 = 50; // These need to be u128
+const X_ORIGIN: u8 = 100; // These can be same as position
+const Y_ORIGIN: u8 = 100; // These can be same as position
 
 // define the interface
 #[starknet::interface]
@@ -24,7 +26,10 @@ mod actions {
         RPSType, Energy, PlayerID, PlayerAddress
     };
     use dojo_examples::utils::next_position;
-    use super::{INITIAL_ENERGY, RENEWED_ENERGY, MOVE_ENERGY_COST, X_RANGE, Y_RANGE, IActions};
+    use super::{
+        INITIAL_ENERGY, RENEWED_ENERGY, MOVE_ENERGY_COST, X_RANGE, Y_RANGE, X_ORIGIN, Y_ORIGIN,
+        IActions
+    };
     use integer::{u128s_from_felt252, U128sFromFelt252Result, u128_safe_divmod};
 
     // region player id assignment
@@ -33,19 +38,10 @@ mod actions {
         set!(world, (PlayerID { player, id }, PlayerAddress { player, id }));
         return id;
     }
-
-    fn clear_player_id(world: IWorldDispatcher, id: u8, mut player: ContractAddress) {
-        let empty_player = starknet::contract_address_const::<0>();
-        // Empty player id
-        set!(world, (PlayerID { player, id: 0 }));
-        // Empty player address for id
-        set!(world, (PlayerAddress { player: empty_player, id }));
-    }
     // endregion player id assignment
 
     // region player position
-    fn clear_player_at_position(world: IWorldDispatcher, pos: Position) {
-        let Position{id, x, y } = pos;
+    fn clear_player_at_position(world: IWorldDispatcher, x: u8, y: u8) {
         // Set no player at position
         set!(world, (PlayerAtPosition { x, y, id: 0 }));
     }
@@ -60,12 +56,16 @@ mod actions {
         set!(world, (PlayerAtPosition { x, y, id }, Position { x, y, id }, Energy { id, amt },));
     }
 
-    fn player_died(world: IWorldDispatcher, id: u8) {
+    fn player_dead(world: IWorldDispatcher, id: u8) {
         let pos = get!(world, id, (Position));
-        clear_player_at_position(world, pos);
-        let Position{id, x, y } = pos;
+        let empty_player = starknet::contract_address_const::<0>();
 
-        set!(world, (Position { id, x: 0, y: 0 }, Energy { id, amt: 0 },));
+        let player = get!(world, id, (PlayerAddress)).player;
+        // Remove player address and ID mappings
+        set!(world, (PlayerID { player, id: 0 }));
+
+        // Empty player address for id
+        player_position_and_energy(world, id, 0, 0, 0);
     }
 
     // panics if players are of same type (move cancelled)
@@ -73,8 +73,16 @@ mod actions {
     // if the player kills the other player returns true
     fn encounter(world: IWorldDispatcher, player: u8, adversary: u8) -> bool {
         let adv_type = get!(world, adversary, (RPSType)).rps;
-        let ply_type = get!(world, player, (RPSType)).rps;
-        encounter_type(ply_type, adv_type)
+        let ply_type = get!(world, adversary, (RPSType)).rps;
+        if encounter_type(ply_type, adv_type) {
+            // adversary dies
+            player_dead(world, adversary);
+            true
+        } else {
+            // player dies
+            player_dead(world, player);
+            false
+        }
     }
 
     fn encounter_type(ply_type: RPS, adv_type: RPS) -> bool {
@@ -101,8 +109,8 @@ mod actions {
             let x_: felt252 = x_.into();
             let y_: felt252 = y_.into();
 
-            x = x_.try_into().unwrap();
-            y = y_.try_into().unwrap();
+            x = X_ORIGIN + x_.try_into().unwrap();
+            y = Y_ORIGIN + y_.try_into().unwrap();
             let occupied = player_at_position(world, x, y);
             if occupied == 0 {
                 break;
@@ -148,7 +156,7 @@ mod actions {
             assert(energy.amt >= MOVE_ENERGY_COST, 'Not enough energy');
 
             // Clear old position
-            clear_player_at_position(world, pos);
+            clear_player_at_position(world, pos.x, pos.y);
 
             let Position{id, x, y } = next_position(pos, dir);
 
@@ -240,6 +248,23 @@ mod tests {
         assert(0 < position.y, 'incorrect position.y');
         assert(RPS::Rock == rps_type.rps, 'incorrect rps');
         assert(INITIAL_ENERGY == energy.amt, 'incorrect energy');
+    }
+
+    #[test]
+    #[available_gas(30000000)]
+    fn dead_test() {
+        let (caller, world, actions_) = init();
+
+        actions_.spawn(RPS::Rock);
+        // Get player ID
+        let player_id = get!(world, caller, (PlayerID)).id;
+        actions::player_dead(world, player_id);
+
+        // Get player from id
+        let (position, rps_type, energy) = get!(world, player_id, (Position, RPSType, Energy));
+        assert(0 == position.x, 'incorrect position.x');
+        assert(0 == position.y, 'incorrect position.y');
+        assert(0 == energy.amt, 'incorrect energy');
     }
 
     #[test]
