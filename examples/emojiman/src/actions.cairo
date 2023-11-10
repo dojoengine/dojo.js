@@ -117,7 +117,7 @@ mod actions {
 
             let (pos, energy) = get!(world, id, (Position, Energy));
 
-            assert(energy.amt > MOVE_ENERGY_COST, 'Not enough energy');
+            assert(energy.amt >= MOVE_ENERGY_COST, 'Not enough energy');
 
             // Clear old position
             clear_player_at_position(world, pos);
