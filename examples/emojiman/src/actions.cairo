@@ -1,6 +1,6 @@
 use dojo_examples::models::{Direction, RPS};
 
-const INITIAL_ENERGY: u8 = 3;
+const INITIAL_ENERGY: u8 = 999;
 const RENEWED_ENERGY: u8 = 3;
 const MOVE_ENERGY_COST: u8 = 1;
 
@@ -117,7 +117,7 @@ mod actions {
 
             let (pos, energy) = get!(world, id, (Position, Energy));
 
-            assert(energy.amt > MOVE_ENERGY_COST, 'Not enough energy');
+            assert(energy.amt >= MOVE_ENERGY_COST, 'Not enough energy');
 
             // Clear old position
             clear_player_at_position(world, pos);
