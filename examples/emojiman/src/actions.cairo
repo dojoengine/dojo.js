@@ -7,7 +7,7 @@ const MOVE_ENERGY_COST: u8 = 1;
 // define the interface
 #[starknet::interface]
 trait IActions<TContractState> {
-    fn spawn(self: @TContractState, rps: u8) -> u8;
+    fn spawn(self: @TContractState, rps: u8);
     fn move(self: @TContractState, dir: Direction);
     fn tick(self: @TContractState);
 }
@@ -19,16 +19,32 @@ mod actions {
     use debug::PrintTrait;
     use dojo_examples::models::{
         GAME_DATA_KEY, GameData, Direction, Vec2, Position, PlayerAtPosition, RPSType, Energy,
-        PlayerID,
+        PlayerID, PlayerAddress
     };
     use dojo_examples::utils::next_position;
     use super::{INITIAL_ENERGY, RENEWED_ENERGY, MOVE_ENERGY_COST, IActions};
 
+    // region player id assignment
     fn assign_player_id(world: IWorldDispatcher, id: u8, mut player: ContractAddress) {
-        set!(world, (PlayerID { player, id }));
+        set!(world, (PlayerID { player, id }, PlayerAddress { player, id }));
     }
 
-    fn clear_player_position(world: IWorldDispatcher, pos: Position) {
+    fn clear_player_id(world: IWorldDispatcher, id: u8, mut player: ContractAddress) {
+        let empty_player = starknet::contract_address_const::<0>();
+        // Empty player id
+        set!(world, (PlayerID { player, id: 0 }));
+        // Empty player address for id
+        set!(world, (PlayerAddress { player: empty_player, id }));
+    }
+    // endregion player id assignment
+
+    // region player position
+    fn assign_player_position(world: IWorldDispatcher, id: u8, x: u8, y: u8) {
+        // Set no player at position
+        set!(world, (PlayerAtPosition { x, y, id }, Position { x, y, id }));
+    }
+
+    fn clear_player_at_position(world: IWorldDispatcher, pos: Position) {
         let Position{id, x, y } = pos;
         // Set no player at position
         set!(world, (PlayerAtPosition { x, y, id: 0 }));
@@ -37,12 +53,18 @@ mod actions {
     fn player_at_position(world: IWorldDispatcher, x: u8, y: u8) -> u8 {
         get!(world, (x, y), (PlayerAtPosition)).id
     }
+    // endregion player position
+
+    fn assign_player_components(world: IWorldDispatcher, id: u8, x: u8, y: u8, rps: u8, amt: u8) {
+        assign_player_position(world, id, x, y);
+        set!(world, (RPSType { id, rps }, Energy { id, amt: INITIAL_ENERGY },));
+    }
 
     // impl: implement functions specified in trait
     #[external(v0)]
     impl ActionsImpl of IActions<ContractState> {
         // Spawns the player on to the map
-        fn spawn(self: @ContractState, rps: u8) -> u8 {
+        fn spawn(self: @ContractState, rps: u8) {
             let world = self.world_dispatcher.read();
             let player = get_caller_address();
 
@@ -54,18 +76,8 @@ mod actions {
             let x = 10; // Pick randomly
             let y = 10; // Pick randomly
 
-            set!(
-                world,
-                (
-                    Position { id, x, y },
-                    PlayerAtPosition { id, x, y },
-                    RPSType { id, rps },
-                    Energy { id, amt: INITIAL_ENERGY },
-                )
-            );
-
             assign_player_id(world, id, player);
-            id
+            assign_player_components(world, id, x, y, rps, INITIAL_ENERGY);
         }
 
         // Queues move for player to be processed later
@@ -80,18 +92,12 @@ mod actions {
 
             assert(energy.amt > MOVE_ENERGY_COST, 'Not enough energy');
 
-            clear_player_position(world, pos);
+            // Clear old position
+            clear_player_at_position(world, pos);
 
             let Position{id, x, y } = next_position(pos, dir);
-
-            set!(
-                world,
-                (
-                    Position { id, x, y },
-                    PlayerAtPosition { id, x, y },
-                    Energy { id, amt: energy.amt - MOVE_ENERGY_COST },
-                )
-            );
+            assign_player_position(world, id, x, y);
+            set!(world, (Energy { id, amt: energy.amt - MOVE_ENERGY_COST },));
         }
 
         // Process player move queues
@@ -115,9 +121,11 @@ mod tests {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
 
     // import models
-    use dojo_examples::models::{position, player_at_position, rps_type, player_id, energy};
     use dojo_examples::models::{
-        Position, RPSType, Energy, Direction, PlayerID, Vec2, PlayerAtPosition
+        position, player_at_position, rps_type, energy, player_id, player_address,
+    };
+    use dojo_examples::models::{
+        Position, RPSType, Energy, Direction, Vec2, PlayerAtPosition, PlayerID, PlayerAddress,
     };
 
     // import actions
@@ -136,7 +144,8 @@ mod tests {
             position::TEST_CLASS_HASH,
             energy::TEST_CLASS_HASH,
             rps_type::TEST_CLASS_HASH,
-            player_id::TEST_CLASS_HASH
+            player_id::TEST_CLASS_HASH,
+            player_address::TEST_CLASS_HASH,
         ];
 
         // deploy world with models
