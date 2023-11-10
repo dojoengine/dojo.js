@@ -1,4 +1,5 @@
 use starknet::ContractAddress;
+use debug::PrintTrait;
 
 #[derive(Serde, Copy, Drop, Introspect)]
 enum Direction {
@@ -17,6 +18,23 @@ impl DirectionIntoFelt252 of Into<Direction, felt252> {
             Direction::Right(()) => 2,
             Direction::Up(()) => 3,
             Direction::Down(()) => 4,
+        }
+    }
+}
+
+#[derive(Serde, Copy, Drop, PartialEq, Introspect)]
+enum RPS {
+    Rock,
+    Paper,
+    Scissors
+}
+
+impl RPSPrintImpl of PrintTrait<RPS> {
+    fn print(self: RPS) {
+        match self {
+            RPS::Rock => 'Rock'.print(),
+            RPS::Paper => 'Paper'.print(),
+            RPS::Scissors => 'Scissors'.print(),
         }
     }
 }
@@ -50,7 +68,7 @@ struct Position {
 struct RPSType {
     #[key]
     id: u8,
-    rps: u8, // one character
+    rps: RPS,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
