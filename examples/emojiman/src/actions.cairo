@@ -73,7 +73,7 @@ mod actions {
     // if the player kills the other player returns true
     fn encounter(world: IWorldDispatcher, player: u8, adversary: u8) -> bool {
         let adv_type = get!(world, adversary, (RPSType)).rps;
-        let ply_type = get!(world, adversary, (RPSType)).rps;
+        let ply_type = get!(world, player, (RPSType)).rps;
         encounter_type(ply_type, adv_type)
     }
 
