@@ -29,30 +29,7 @@ export async function setupNetwork() {
         worldAddress: VITE_PUBLIC_WORLD_ADDRESS,
     });
 
-    const contractComponents = defineContractComponents(world);
-
     const { account, burnerManager } = await createBurner();
-
-    const initial_sync = () => {
-        const models: any = [];
-
-        for (let i = 1; i <= 100; i++) {
-            models.push({
-                model: contractComponents.Position,
-                keys: [i.toString()],
-            });
-            models.push({
-                model: contractComponents.RPSType,
-                keys: [i.toString()],
-            });
-        }
-
-        return models;
-    };
-
-    const { sync, cleanup } = createSyncManager(torii_client, initial_sync());
-
-    sync();
 
     // Return the setup object.
     return {
@@ -75,6 +52,6 @@ export async function setupNetwork() {
             return provider.execute(signer, contract, system, call_data);
         },
 
-        sync,
+        // sync,
     };
 }
