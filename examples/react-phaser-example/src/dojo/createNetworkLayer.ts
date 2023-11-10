@@ -27,12 +27,16 @@ export const createNetworkLayer = async () => {
 
     burnerManager.init();
 
-    if (burnerManager.account) {
+    const sync = () => {
         // sync manager to active address
         for (let i = 1; i <= 50; i++) {
             new SyncManager(network.torii_client, [
                 {
                     model: network.contractComponents.Position,
+                    keys: [i],
+                },
+                {
+                    model: network.contractComponents.RPSType,
                     keys: [i],
                 },
             ]);
@@ -42,9 +46,13 @@ export const createNetworkLayer = async () => {
                     model: network.contractComponents.Position,
                     keys: [i],
                 },
+                {
+                    model: network.contractComponents.RPSType,
+                    keys: [i],
+                },
             ]);
         }
-    }
+    };
 
     return {
         world,
@@ -53,5 +61,6 @@ export const createNetworkLayer = async () => {
         network,
         account: burnerManager.account as Account,
         burnerManager,
+        sync,
     };
 };

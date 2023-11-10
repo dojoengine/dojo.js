@@ -1,10 +1,12 @@
 import { useDojo } from "../hooks/useDojo";
+import { RPSSprites } from "../phaser/config/constants";
 import { ClickWrapper } from "./ClickWrapper";
 
 export const WalletConnect = () => {
     const {
         account: { account, create, isDeploying, select, list, clear },
         systemCalls: { spawn },
+        networkLayer,
     } = useDojo();
 
     return (
@@ -38,7 +40,11 @@ export const WalletConnect = () => {
                     <button
                         className="border-2 border-red-500 p-1"
                         onClick={() => {
-                            spawn({ signer: account });
+                            networkLayer.sync();
+                            spawn({
+                                signer: account,
+                                rps: RPSSprites.Scissors,
+                            });
                         }}
                     >
                         Spawn

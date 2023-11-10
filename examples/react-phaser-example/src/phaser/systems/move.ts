@@ -56,6 +56,35 @@ export const move = (layer: PhaserLayer) => {
     });
 
     defineSystem(world, [Has(Position)], ({ entity }: any) => {
+        const playerObj = objectPool.get(entity.toString(), "Sprite");
+
+        const type = getComponentValue(RPSType, entity.toString() as Entity);
+
+        if (type?.rps !== 0) {
+            let animation = Animations.RockIdle;
+
+            switch (type?.rps) {
+                case RPSSprites.Rock:
+                    animation = Animations.RockIdle;
+                    break;
+                case RPSSprites.Paper:
+                    animation = Animations.PaperIdle;
+                    break;
+                case RPSSprites.Scissors:
+                    animation = Animations.ScissorsIdle;
+                    break;
+            }
+
+            playerObj.setComponent({
+                id: "animation",
+                once: (sprite: any) => {
+                    sprite.play(animation);
+                },
+            });
+        }
+    });
+
+    defineSystem(world, [Has(Position)], ({ entity }: any) => {
         const position = getComponentValueStrict(
             Position,
             entity.toString() as Entity
