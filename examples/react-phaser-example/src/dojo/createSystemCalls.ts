@@ -117,14 +117,14 @@ export function createSystemCalls(
                 })
             );
 
-            setComponentsFromEvents(
-                contractComponents,
-                getEvents(
-                    await signer.waitForTransaction(transaction_hash, {
-                        retryInterval: 100,
-                    })
-                )
-            );
+            // setComponentsFromEvents(
+            //     contractComponents,
+            //     getEvents(
+            //         await signer.waitForTransaction(transaction_hash, {
+            //             retryInterval: 100,
+            //         })
+            //     )
+            // );
         } catch (e) {
             console.log(e);
             // Position.removeOverride(positionId);
