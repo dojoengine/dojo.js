@@ -20,6 +20,14 @@ export const createNetworkLayer = async () => {
                 model: network.contractComponents.RPSType,
                 keys: [i.toString()],
             });
+            models.push({
+                model: network.contractComponents.PlayerID,
+                keys: [i.toString()],
+            });
+            models.push({
+                model: network.contractComponents.Energy,
+                keys: [i.toString()],
+            });
         }
 
         return models;

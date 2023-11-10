@@ -22,47 +22,23 @@ export const move = (layer: PhaserLayer) => {
             Main: { objectPool, camera },
         },
         networkLayer: {
-            components: { Position, RPSType },
+            components: { Position, RPSType, PlayerID },
         },
     } = layer;
 
-    // defineEnterSystem(world, [Has(Position)], ({ entity }: any) => {
-    //     const playerObj = objectPool.get(entity.toString(), "Sprite");
+    defineEnterSystem(
+        world,
+        [Has(Position), Has(RPSType)],
+        ({ entity }: any) => {
+            const playerObj = objectPool.get(entity.toString(), "Sprite");
 
-    //     const type = getComponentValue(RPSType, entity.toString() as Entity);
+            const type = getComponentValue(
+                RPSType,
+                entity.toString() as Entity
+            );
 
-    //     console.log("defineEnterSystem", type?.rps);
+            console.log("defineEnterSystem", type);
 
-    //     let animation = Animations.RockIdle;
-
-    //     switch (type?.rps) {
-    //         case RPSSprites.Rock:
-    //             animation = Animations.RockIdle;
-    //             break;
-    //         case RPSSprites.Paper:
-    //             animation = Animations.PaperIdle;
-    //             break;
-    //         case RPSSprites.Scissors:
-    //             animation = Animations.ScissorsIdle;
-    //             break;
-    //     }
-
-    //     playerObj.setComponent({
-    //         id: "animation",
-    //         once: (sprite: any) => {
-    //             sprite.play(animation);
-    //         },
-    //     });
-    // });
-
-    defineSystem(world, [Has(Position)], ({ entity }: any) => {
-        const playerObj = objectPool.get(entity.toString(), "Sprite");
-
-        const type = getComponentValue(RPSType, entity.toString() as Entity);
-
-        console.log("defineSystem", type);
-
-        if (type?.rps) {
             let animation = Animations.RockIdle;
 
             switch (type?.rps) {
@@ -84,7 +60,7 @@ export const move = (layer: PhaserLayer) => {
                 },
             });
         }
-    });
+    );
 
     defineSystem(world, [Has(Position)], ({ entity }: any) => {
         const position = getComponentValueStrict(

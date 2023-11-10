@@ -5,7 +5,6 @@ import { Account, num } from "starknet";
 import manifest from "../../../emojiman/target/dev/manifest.json";
 import * as torii from "@dojoengine/torii-client";
 import { createBurner } from "./createBurner";
-import { createSyncManager } from "@dojoengine/react";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
