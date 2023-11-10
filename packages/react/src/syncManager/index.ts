@@ -1,1 +1,1 @@
-export { SyncManager } from "./syncManager";
+export { createSyncManager } from "./createSyncManager";

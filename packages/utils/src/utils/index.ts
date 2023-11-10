@@ -258,3 +258,14 @@ export function parseComponentValueFromGraphQLEntity(
             return value;
     }
 }
+
+export function shortenHex(hexString: string, numDigits = 6) {
+    if (hexString?.length <= numDigits) {
+        return hexString;
+    }
+
+    const halfDigits = Math.floor(numDigits / 2);
+    const firstHalf = hexString.slice(0, halfDigits);
+    const secondHalf = hexString.slice(-halfDigits);
+    return `${firstHalf}...${secondHalf}`;
+}

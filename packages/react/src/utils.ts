@@ -13,7 +13,6 @@ export function convertValues(schema: Schema, values: any) {
             // @ts-ignore
             acc[key] = convertValues(schemaType, value);
         } else {
-            // Otherwise, convert the value based on the schema type
             // @ts-ignore
             acc[key] =
                 schemaType === RecsType.BigInt ? BigInt(value) : Number(value);
