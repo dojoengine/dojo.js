@@ -3,6 +3,8 @@ use dojo_examples::models::{Direction, RPS};
 const INITIAL_ENERGY: u8 = 255;
 const RENEWED_ENERGY: u8 = 3;
 const MOVE_ENERGY_COST: u8 = 1;
+const X_RANGE: u128 = 50;
+const Y_RANGE: u128 = 50;
 
 // define the interface
 #[starknet::interface]
@@ -22,7 +24,8 @@ mod actions {
         RPSType, Energy, PlayerID, PlayerAddress
     };
     use dojo_examples::utils::next_position;
-    use super::{INITIAL_ENERGY, RENEWED_ENERGY, MOVE_ENERGY_COST, IActions};
+    use super::{INITIAL_ENERGY, RENEWED_ENERGY, MOVE_ENERGY_COST, X_RANGE, Y_RANGE, IActions};
+    use integer::{u128s_from_felt252, U128sFromFelt252Result, u128_safe_divmod};
 
     // region player id assignment
     fn assign_player_id(world: IWorldDispatcher, num_players: u8, player: ContractAddress) -> u8 {
@@ -83,6 +86,32 @@ mod actions {
         }
         false
     }
+
+    fn spawn_coords(world: IWorldDispatcher, player: felt252, mut salt: felt252) -> (u8, u8) {
+        let mut x = 10;
+        let mut y = 10;
+        loop {
+            let hash = pedersen::pedersen(player, salt);
+            let rnd_seed = match u128s_from_felt252(hash) {
+                U128sFromFelt252Result::Narrow(low) => low,
+                U128sFromFelt252Result::Wide((high, low)) => low,
+            };
+            let (rnd_seed, x_) = u128_safe_divmod(rnd_seed, X_RANGE.try_into().unwrap());
+            let (rnd_seed, y_) = u128_safe_divmod(rnd_seed, Y_RANGE.try_into().unwrap());
+            let x_: felt252 = x_.into();
+            let y_: felt252 = y_.into();
+
+            x = x_.try_into().unwrap();
+            y = y_.try_into().unwrap();
+            let occupied = player_at_position(world, x, y);
+            if occupied == 0 {
+                break;
+            } else {
+                salt += 1; // Try new salt
+            }
+        };
+        (x, y)
+    }
     // endregion game ops
 
     // impl: implement functions specified in trait
@@ -102,8 +131,7 @@ mod actions {
 
             set!(world, (RPSType { id, rps }));
 
-            let x = 10; // Pick randomly
-            let y = 10; // Pick randomly
+            let (x, y) = spawn_coords(world, player.into(), id.into()); // Pick randomly
             player_position_and_energy(world, id, x, y, INITIAL_ENERGY);
         }
 
@@ -198,9 +226,9 @@ mod tests {
     #[test]
     #[available_gas(30000000)]
     fn spawn_test() {
-        let (caller, world, actions) = init();
+        let (caller, world, actions_) = init();
 
-        actions.spawn(RPS::Rock);
+        actions_.spawn(RPS::Rock);
 
         // Get player ID
         let player_id = get!(world, caller, (PlayerID)).id;
@@ -216,10 +244,46 @@ mod tests {
 
     #[test]
     #[available_gas(30000000)]
-    fn moves_test() {
-        let (caller, world, actions) = init();
+    fn random_spawn_test() {
+        let (caller, world, actions_) = init();
 
-        actions.spawn(RPS::Rock);
+        actions_.spawn(RPS::Rock);
+        // Get player ID
+        let pos_p1 = get!(world, get!(world, caller, (PlayerID)).id, (Position));
+
+        let caller = starknet::contract_address_const::<'jim'>();
+        starknet::testing::set_contract_address(caller);
+        actions_.spawn(RPS::Rock);
+        // Get player ID
+        let pos_p2 = get!(world, get!(world, caller, (PlayerID)).id, (Position));
+
+        assert(pos_p1.x != pos_p2.x, 'spawn pos.x same');
+        assert(pos_p1.y != pos_p2.y, 'spawn pos.x same');
+    }
+
+    #[test]
+    #[available_gas(30000000)]
+    fn random_duplicate_spawn_test() {
+        let (caller, world, actions_) = init();
+
+        let id = 16;
+        let (x, y) = actions::spawn_coords(world, caller.into(), id);
+
+        // Simulate player #5 on that location
+        set!(world, (PlayerAtPosition { x, y, id: 5 }));
+
+        let (x_, y_) = actions::spawn_coords(world, caller.into(), id);
+
+        assert(x != x_, 'spawn pos.x same');
+        assert(y != y_, 'spawn pos.x same');
+    }
+
+    #[test]
+    #[available_gas(30000000)]
+    fn moves_test() {
+        let (caller, world, actions_) = init();
+
+        actions_.spawn(RPS::Rock);
 
         // Get player ID
         let player_id = get!(world, caller, (PlayerID)).id;
@@ -227,7 +291,7 @@ mod tests {
 
         let (spawn_pos, spawn_energy) = get!(world, player_id, (Position, Energy));
 
-        actions.move(Direction::Up);
+        actions_.move(Direction::Up);
         // Get player from id
         let (pos, energy) = get!(world, player_id, (Position, Energy));
 
