@@ -19,7 +19,6 @@ const createContainer = () => {
 };
 
 export const usePhaserLayer = ({ networkLayer }: Props) => {
-    const loggedIn = useUIStore((state: any) => state.loggedIn);
     const parentRef = useRef<HTMLElement | null>(null);
     const [{ width, height }, setSize] = useState({ width: 0, height: 0 });
 
@@ -44,7 +43,7 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
                 },
             }),
         };
-    }, [networkLayer, loggedIn]);
+    }, [networkLayer]);
 
     useEffect(() => {
         return () => {
