@@ -42,9 +42,6 @@ export function createSyncManager<S extends Schema>(
             console.error("Failed to fetch or set model value:", error);
         }
     }
-    function test() {
-        console.log("test");
-    }
 
     function sync() {
         modelEntries.forEach((modelEntry) => {
@@ -60,7 +57,27 @@ export function createSyncManager<S extends Schema>(
                     model: modelEntry.model.metadata?.name! as string,
                     keys: modelEntry.keys.map((k) => k.toString()),
                 },
-                test
+                () => {
+                    client
+                        .getModelValue(
+                            modelEntry.model.metadata?.name! as string,
+                            modelEntry.keys.map((k) => k.toString())
+                        )
+                        .then((modelValue) => {
+                            console.log("ohayo", modelValue);
+
+                            const entityIndex: Entity =
+                                modelEntry.keys.length === 1
+                                    ? modelEntry.keys[0].toString()
+                                    : getEntityIdFromKeys(modelEntry.keys);
+
+                            setComponent(
+                                modelEntry.model,
+                                entityIndex,
+                                modelValue as any
+                            );
+                        });
+                }
             );
         });
     }
