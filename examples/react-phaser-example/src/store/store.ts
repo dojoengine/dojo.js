@@ -9,10 +9,6 @@ export type Store = {
 
 export const store = create<Store>(() => ({
     networkLayer: null,
-    phaserLayer: null,
+    phaserLayer: null
 }));
 
-export const useUIStore = create((set) => ({
-    loggedIn: false,
-    setLoggedIn: () => set(() => ({ loggedIn: true })),
-}));

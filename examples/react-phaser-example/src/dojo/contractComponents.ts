@@ -4,66 +4,18 @@ import { defineComponent, Type as RecsType, World } from "@dojoengine/recs";
 
 export function defineContractComponents(world: World) {
     return {
-        Energy: (() => {
-            return defineComponent(
-                world,
-                { id: RecsType.Number, amt: RecsType.Number },
-                {
-                    metadata: {
-                        name: "Energy",
-                        types: [],
-                    },
-                }
-            );
-        })(),
-        GameData: (() => {
+        Moves: (() => {
             return defineComponent(
                 world,
                 {
-                    game: RecsType.Number,
-                    number_of_players: RecsType.Number,
-                    available_ids: RecsType.NumberArray,
+                    player: RecsType.BigInt,
+                    remaining: RecsType.Number,
+                    last_direction: RecsType.Number,
                 },
                 {
                     metadata: {
-                        name: "GameData",
-                        types: [],
-                    },
-                }
-            );
-        })(),
-        PlayerAddress: (() => {
-            return defineComponent(
-                world,
-                { id: RecsType.Number, player: RecsType.String },
-                {
-                    metadata: {
-                        name: "PlayerAddress",
-                        types: [],
-                    },
-                }
-            );
-        })(),
-        PlayerAtPosition: (() => {
-            return defineComponent(
-                world,
-                { x: RecsType.Number, y: RecsType.Number, id: RecsType.Number },
-                {
-                    metadata: {
-                        name: "PlayerAtPosition",
-                        types: [],
-                    },
-                }
-            );
-        })(),
-        PlayerID: (() => {
-            return defineComponent(
-                world,
-                { player: RecsType.String, id: RecsType.Number },
-                {
-                    metadata: {
-                        name: "PlayerID",
-                        types: [],
+                        name: "Moves",
+                        types: ["Direction"],
                     },
                 }
             );
@@ -71,23 +23,14 @@ export function defineContractComponents(world: World) {
         Position: (() => {
             return defineComponent(
                 world,
-                { id: RecsType.Number, x: RecsType.Number, y: RecsType.Number },
+                {
+                    player: RecsType.BigInt,
+                    vec: { x: RecsType.Number, y: RecsType.Number },
+                },
                 {
                     metadata: {
                         name: "Position",
-                        types: [],
-                    },
-                }
-            );
-        })(),
-        RPSType: (() => {
-            return defineComponent(
-                world,
-                { id: RecsType.Number, rps: RecsType.Number },
-                {
-                    metadata: {
-                        name: "RPSType",
-                        types: ["Direction"],
+                        types: ["Vec2"],
                     },
                 }
             );

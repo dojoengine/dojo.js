@@ -5,8 +5,8 @@ import {
     defineMapConfig,
     defineCameraConfig,
 } from "@latticexyz/phaserx";
-import landTileset from "../../assets/tilesets/land.png";
-import { TileAnimations, Tileset } from "../../assets/world";
+import worldTileset from "../assets/tilesets/world.png";
+import { TileAnimations, Tileset } from "../artTypes/world";
 import {
     Sprites,
     Assets,
@@ -23,7 +23,7 @@ const mainMap = defineMapConfig({
     chunkSize: TILE_WIDTH * 64, // tile size * tile amount
     tileWidth: TILE_WIDTH,
     tileHeight: TILE_HEIGHT,
-    backgroundTile: [Tileset.Land],
+    backgroundTile: [Tileset.Grass],
     animationInterval: ANIMATION_INTERVAL,
     tileAnimations: TileAnimations,
     layers: {
@@ -42,7 +42,7 @@ export const phaserConfig = {
                 [Assets.Tileset]: {
                     type: AssetType.Image,
                     key: Assets.Tileset,
-                    path: landTileset,
+                    path: worldTileset,
                 },
                 [Assets.MainAtlas]: {
                     type: AssetType.MultiAtlas,
@@ -65,33 +65,13 @@ export const phaserConfig = {
             },
             animations: [
                 {
-                    key: Animations.RockIdle,
+                    key: Animations.SwordsmanIdle,
                     assetKey: Assets.MainAtlas,
                     startFrame: 0,
-                    endFrame: 0,
+                    endFrame: 3,
                     frameRate: 6,
                     repeat: -1,
-                    prefix: "sprites/rock/",
-                    suffix: ".png",
-                },
-                {
-                    key: Animations.ScissorsIdle,
-                    assetKey: Assets.MainAtlas,
-                    startFrame: 0,
-                    endFrame: 0,
-                    frameRate: 6,
-                    repeat: -1,
-                    prefix: "sprites/scissors/",
-                    suffix: ".png",
-                },
-                {
-                    key: Animations.PaperIdle,
-                    assetKey: Assets.MainAtlas,
-                    startFrame: 0,
-                    endFrame: 0,
-                    frameRate: 6,
-                    repeat: -1,
-                    prefix: "sprites/paper/",
+                    prefix: "sprites/soldier/idle/",
                     suffix: ".png",
                 },
             ],

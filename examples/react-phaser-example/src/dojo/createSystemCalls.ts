@@ -1,20 +1,15 @@
 import { SetupNetworkResult } from "./setupNetwork";
-import { Account } from "starknet";
+import { Account, AccountInterface } from "starknet";
 import { Entity, getComponentValue } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
-import { Direction, updatePositionWithDirection } from "./utils";
+import { Direction, updatePositionWithDirection } from "../utils";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
-import { RPSSprites } from "../phaser/config/constants";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export interface SystemSigner {
     signer: Account;
-}
-
-export interface SpawnSystemProps extends SystemSigner {
-    rps: RPSSprites;
 }
 
 export interface MoveSystemProps extends SystemSigner {
@@ -23,35 +18,36 @@ export interface MoveSystemProps extends SystemSigner {
 
 export function createSystemCalls(
     { execute, contractComponents }: SetupNetworkResult,
-    { Position, PlayerID }: ClientComponents
+    { Position, Moves }: ClientComponents
 ) {
-    const spawn = async (props: SpawnSystemProps) => {
-        const { signer, rps } = props;
+    const spawn = async (props: SystemSigner) => {
+        const signer = props.signer;
 
-        // const entityId = signer.address.toString() as Entity;
+        console.log("spawn", signer.address);
+        const entityId = signer.address.toString() as Entity;
 
-        // const positionId = uuid();
-        // Position.addOverride(positionId, {
-        //     entity: entityId,
-        //     value: { player: BigInt(entityId), vec: { x: 10, y: 10 } },
-        // });
+        const positionId = uuid();
+        Position.addOverride(positionId, {
+            entity: entityId,
+            value: { player: BigInt(entityId), vec: { x: 10, y: 10 } },
+        });
 
-        // const movesId = uuid();
-        // Moves.addOverride(movesId, {
-        //     entity: entityId,
-        //     value: {
-        //         player: BigInt(entityId),
-        //         remaining: 100,
-        //         last_direction: 0,
-        //     },
-        // });
+        const movesId = uuid();
+        Moves.addOverride(movesId, {
+            entity: entityId,
+            value: {
+                player: BigInt(entityId),
+                remaining: 100,
+                last_direction: 0,
+            },
+        });
 
         try {
             const { transaction_hash } = await execute(
                 signer,
                 "actions",
                 "spawn",
-                [rps]
+                []
             );
 
             setComponentsFromEvents(
@@ -64,44 +60,41 @@ export function createSystemCalls(
             );
         } catch (e) {
             console.log(e);
-            // Position.removeOverride(positionId);
-            // Moves.removeOverride(movesId);
+            Position.removeOverride(positionId);
+            Moves.removeOverride(movesId);
         } finally {
-            // Position.removeOverride(positionId);
-            // Moves.removeOverride(movesId);
+            Position.removeOverride(positionId);
+            Moves.removeOverride(movesId);
         }
     };
 
-    // NOTE: Optimistic updates only work when 1 owner enttiy exists
     const move = async (props: MoveSystemProps) => {
         const { signer, direction } = props;
 
-        console.log(signer);
+        const entityId = signer.address.toString() as Entity;
 
-        const playerId = getComponentValue(
-            PlayerID,
-            signer.address.toString() as Entity
-        );
+        const positionId = uuid();
+        Position.addOverride(positionId, {
+            entity: entityId,
+            value: {
+                player: BigInt(entityId),
+                vec: updatePositionWithDirection(
+                    direction,
+                    // currently recs does not support nested values so we use any here
+                    getComponentValue(Position, entityId) as any
+                ).vec,
+            },
+        });
 
-        // const currentPosition = getComponentValue(
-        //     Position,
-        //     playerId?.id.toString() as Entity
-        // ) || { x: 0, y: 0 };
-
-        // const newPosition = updatePositionWithDirection(direction, {
-        //     x: currentPosition["x"],
-        //     y: currentPosition["y"],
-        // });
-
-        // const positionId = uuid();
-        // Position.addOverride(positionId, {
-        //     entity: playerId?.id.toString() as Entity,
-        //     value: {
-        //         id: 1,
-        //         x: newPosition["x"],
-        //         y: newPosition["y"],
-        //     },
-        // });
+        const movesId = uuid();
+        Moves.addOverride(movesId, {
+            entity: entityId,
+            value: {
+                player: BigInt(entityId),
+                remaining:
+                    (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
+            },
+        });
 
         try {
             const { transaction_hash } = await execute(
@@ -111,27 +104,21 @@ export function createSystemCalls(
                 [direction]
             );
 
-            console.log(
-                await signer.waitForTransaction(transaction_hash, {
-                    retryInterval: 100,
-                })
+            setComponentsFromEvents(
+                contractComponents,
+                getEvents(
+                    await signer.waitForTransaction(transaction_hash, {
+                        retryInterval: 100,
+                    })
+                )
             );
-
-            // setComponentsFromEvents(
-            //     contractComponents,
-            //     getEvents(
-            //         await signer.waitForTransaction(transaction_hash, {
-            //             retryInterval: 100,
-            //         })
-            //     )
-            // );
         } catch (e) {
             console.log(e);
-            // Position.removeOverride(positionId);
-            // Moves.removeOverride(movesId);
+            Position.removeOverride(positionId);
+            Moves.removeOverride(movesId);
         } finally {
-            // Position.removeOverride(positionId);
-            // Moves.removeOverride(movesId);
+            Position.removeOverride(positionId);
+            Moves.removeOverride(movesId);
         }
     };
 

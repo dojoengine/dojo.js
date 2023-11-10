@@ -1,5 +1,5 @@
 import { PhaserLayer } from "..";
-import { Direction } from "../../dojo/utils";
+import { Direction } from "../../utils";
 
 export const controls = (layer: PhaserLayer) => {
     const {

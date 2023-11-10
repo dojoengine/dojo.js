@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { NetworkLayer } from "../dojo/createNetworkLayer";
-import { store, useUIStore } from "../store/store";
+import { store } from "../store/store";
 import { usePhaserLayer } from "../hooks/usePhaserLayer";
 
 type Props = {
     networkLayer: NetworkLayer | null;
 };
 
+// TODO: this is where we need to set the burner account from local storage.
 export const PhaserLayer = ({ networkLayer }: Props) => {
-    const loggedIn = useUIStore((state: any) => state.loggedIn);
+
     const { phaserLayer, ref } = usePhaserLayer({ networkLayer });
 
     useEffect(() => {
@@ -17,7 +18,7 @@ export const PhaserLayer = ({ networkLayer }: Props) => {
 
             console.log("Setting phaser layer");
         }
-    }, [phaserLayer, loggedIn]);
+    }, [phaserLayer]);
 
     return (
         <div

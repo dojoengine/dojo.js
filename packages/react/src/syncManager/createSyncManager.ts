@@ -32,11 +32,9 @@ export function createSyncManager<S extends Schema>(
                 componentName,
                 keysToStrings
             );
-            console.log("sync modelValue", modelValue);
 
             const convertedValue = convertValues(model.schema, modelValue);
 
-            console.log(convertedValue);
             setComponent(model, entityIndex, convertedValue as any);
         } catch (error) {
             console.error("Failed to fetch or set model value:", error);
@@ -64,8 +62,6 @@ export function createSyncManager<S extends Schema>(
                             modelEntry.keys.map((k) => k.toString())
                         )
                         .then((modelValue) => {
-                            console.log("ohayo", modelValue);
-
                             const convertedValue = convertValues(
                                 modelEntry.model.schema,
                                 modelValue

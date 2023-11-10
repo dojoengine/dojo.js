@@ -9,9 +9,7 @@ export const useNetworkLayer = () => {
 
     useEffect(() => {
         return () => {
-            networkLayerPromise.then((networkLayer) =>
-                networkLayer.world.dispose()
-            );
+            networkLayerPromise.then((networkLayer) => networkLayer.world.dispose());
         };
     }, [networkLayerPromise]);
 

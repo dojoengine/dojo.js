@@ -2,13 +2,13 @@ import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { RPCProvider } from "@dojoengine/core";
 import { Account, num } from "starknet";
-import manifest from "../../../emojiman/target/dev/manifest.json";
+import manifest from "../../../dojo-starter/target/dev/manifest.json";
 import * as torii from "@dojoengine/torii-client";
-import { createBurner } from "./createBurner";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 export async function setupNetwork() {
+    // Extract environment variables for better readability.
     const {
         VITE_PUBLIC_WORLD_ADDRESS,
         VITE_PUBLIC_NODE_URL,
@@ -28,15 +28,11 @@ export async function setupNetwork() {
         worldAddress: VITE_PUBLIC_WORLD_ADDRESS,
     });
 
-    const { account, burnerManager } = await createBurner();
-
     // Return the setup object.
     return {
         provider,
         world,
         torii_client,
-        account,
-        burnerManager,
 
         // Define contract components for the world.
         contractComponents: defineContractComponents(world),
@@ -50,7 +46,5 @@ export async function setupNetwork() {
         ) => {
             return provider.execute(signer, contract, system, call_data);
         },
-
-        // sync,
     };
 }
