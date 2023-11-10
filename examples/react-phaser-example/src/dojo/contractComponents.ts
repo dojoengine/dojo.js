@@ -87,7 +87,7 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "RPSType",
-                        types: [],
+                        types: ["Direction"],
                     },
                 }
             );

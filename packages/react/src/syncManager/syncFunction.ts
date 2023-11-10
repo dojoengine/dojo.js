@@ -35,6 +35,8 @@ export function createSyncManager<S extends Schema>(
             console.log("sync modelValue", modelValue);
 
             const convertedValue = convertValues(model.schema, modelValue);
+
+            console.log(convertedValue);
             setComponent(model, entityIndex, convertedValue as any);
         } catch (error) {
             console.error("Failed to fetch or set model value:", error);

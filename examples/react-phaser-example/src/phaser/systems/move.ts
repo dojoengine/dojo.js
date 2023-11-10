@@ -31,28 +31,28 @@ export const move = (layer: PhaserLayer) => {
 
         const type = getComponentValue(RPSType, entity.toString() as Entity);
 
-        if (type?.rps !== 0) {
-            let animation = Animations.RockIdle;
+        console.log("defineEnterSystem", type?.rps);
 
-            switch (type?.rps) {
-                case RPSSprites.Rock:
-                    animation = Animations.RockIdle;
-                    break;
-                case RPSSprites.Paper:
-                    animation = Animations.PaperIdle;
-                    break;
-                case RPSSprites.Scissors:
-                    animation = Animations.ScissorsIdle;
-                    break;
-            }
+        let animation = Animations.RockIdle;
 
-            playerObj.setComponent({
-                id: "animation",
-                once: (sprite: any) => {
-                    sprite.play(animation);
-                },
-            });
+        switch (type?.rps) {
+            case RPSSprites.Rock:
+                animation = Animations.RockIdle;
+                break;
+            case RPSSprites.Paper:
+                animation = Animations.PaperIdle;
+                break;
+            case RPSSprites.Scissors:
+                animation = Animations.ScissorsIdle;
+                break;
         }
+
+        playerObj.setComponent({
+            id: "animation",
+            once: (sprite: any) => {
+                sprite.play(animation);
+            },
+        });
     });
 
     defineSystem(world, [Has(Position)], ({ entity }: any) => {
@@ -60,7 +60,9 @@ export const move = (layer: PhaserLayer) => {
 
         const type = getComponentValue(RPSType, entity.toString() as Entity);
 
-        if (type?.rps !== 0) {
+        console.log("defineSystem", type?.rps);
+
+        if (type?.rps) {
             let animation = Animations.RockIdle;
 
             switch (type?.rps) {

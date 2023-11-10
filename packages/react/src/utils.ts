@@ -14,9 +14,26 @@ export function convertValues(schema: Schema, values: any) {
             acc[key] = convertValues(schemaType, value);
         } else {
             // Otherwise, convert the value based on the schema type
-            // @ts-ignore
-            acc[key] =
-                schemaType === RecsType.BigInt ? BigInt(value) : Number(value);
+
+            if (value == "Rock") {
+                // @ts-ignore
+                acc[key] =
+                    schemaType === RecsType.BigInt ? BigInt(0) : Number(0);
+            } else if (value == "Paper") {
+                // @ts-ignore
+                acc[key] =
+                    schemaType === RecsType.BigInt ? BigInt(1) : Number(1);
+            } else if (value == "Scissors") {
+                // @ts-ignore
+                acc[key] =
+                    schemaType === RecsType.BigInt ? BigInt(2) : Number(2);
+            } else {
+                // @ts-ignore
+                acc[key] =
+                    schemaType === RecsType.BigInt
+                        ? BigInt(value)
+                        : Number(value);
+            }
         }
         return acc;
     }, {});
