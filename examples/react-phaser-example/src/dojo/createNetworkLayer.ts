@@ -30,7 +30,6 @@ export const createNetworkLayer = async () => {
     const initial_sync = () => {
         const models: any = [];
 
-        // loop to 50 and return
         for (let i = 1; i <= 20; i++) {
             models.push({
                 model: network.contractComponents.Position,

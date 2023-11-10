@@ -4,8 +4,6 @@ import { PhaserLayer } from "../phaser";
 import { store } from "../store/store";
 import { useBurnerManager } from "@dojoengine/create-burner";
 
-// export type UIStore = ReturnType<typeof useDojo>;
-
 export const useDojo = () => {
     const { networkLayer, phaserLayer } = store();
 
