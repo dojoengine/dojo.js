@@ -32,6 +32,30 @@ export function defineContractComponents(world: World) {
                 }
             );
         })(),
+        PlayerAddress: (() => {
+            return defineComponent(
+                world,
+                { id: RecsType.Number, player: RecsType.String },
+                {
+                    metadata: {
+                        name: "PlayerAddress",
+                        types: [],
+                    },
+                }
+            );
+        })(),
+        PlayerAtPosition: (() => {
+            return defineComponent(
+                world,
+                { x: RecsType.Number, y: RecsType.Number, id: RecsType.Number },
+                {
+                    metadata: {
+                        name: "PlayerAtPosition",
+                        types: [],
+                    },
+                }
+            );
+        })(),
         PlayerID: (() => {
             return defineComponent(
                 world,

@@ -14,21 +14,11 @@ type ModelEntry<S extends Schema> = {
     keys: any[];
 };
 
-export class SyncManager<S extends Schema> {
-    private client: Client;
-    private modelEntries: ModelEntry<S>[];
-    private isMounted: boolean;
-
-    constructor(client: Client, modelEntries: ModelEntry<S>[]) {
-        this.client = client;
-        this.modelEntries = modelEntries;
-        this.isMounted = true;
-
-        console.log("init");
-        this.init();
-    }
-
-    private async fetchAndSetModelValue(
+export function createSyncManager<S extends Schema>(
+    client: Client,
+    modelEntries: ModelEntry<S>[]
+) {
+    async function fetchAndSetModelValue(
         modelEntry: ModelEntry<S>
     ): Promise<void> {
         const { model, keys } = modelEntry;
@@ -38,39 +28,44 @@ export class SyncManager<S extends Schema> {
             keys.length === 1 ? keys[0].toString() : getEntityIdFromKeys(keys);
 
         try {
-            if (this.isMounted) {
-                const modelValue = await this.client.getModelValue(
-                    componentName,
-                    keysToStrings
-                );
-                // TODO:
+            const modelValue = await client.getModelValue(
+                componentName,
+                keysToStrings
+            );
+            console.log("sync modelValue", modelValue);
 
-                console.log("modelValue", modelValue);
-
-                const convertedValue = convertValues(model.schema, modelValue);
-                setComponent(model, entityIndex, convertedValue as any);
-            }
+            const convertedValue = convertValues(model.schema, modelValue);
+            setComponent(model, entityIndex, convertedValue as any);
         } catch (error) {
             console.error("Failed to fetch or set model value:", error);
         }
     }
+    function test() {
+        console.log("test");
+    }
 
-    private init(): void {
-        this.modelEntries.forEach((modelEntry) => {
-            this.fetchAndSetModelValue(modelEntry);
-            this.client.addEntitiesToSync([
+    function sync() {
+        modelEntries.forEach((modelEntry) => {
+            fetchAndSetModelValue(modelEntry);
+            client.addEntitiesToSync([
                 {
                     model: modelEntry.model.metadata?.name as string,
                     keys: modelEntry.keys.map((k) => k.toString()),
                 },
             ]);
+            client.onSyncEntityChange(
+                {
+                    model: modelEntry.model.metadata?.name! as string,
+                    keys: modelEntry.keys.map((k) => k.toString()),
+                },
+                test
+            );
         });
     }
 
-    public cleanup(): void {
-        this.isMounted = false;
-        this.modelEntries.forEach((modelEntry) => {
-            this.client
+    function cleanup() {
+        modelEntries.forEach((modelEntry) => {
+            client
                 .removeEntitiesToSync([
                     {
                         model: modelEntry.model.metadata?.name as string,
@@ -85,4 +80,6 @@ export class SyncManager<S extends Schema> {
                 });
         });
     }
+
+    return { cleanup, sync };
 }

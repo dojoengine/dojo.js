@@ -2,7 +2,7 @@ import { world } from "./world";
 import { setup } from "./setup";
 import { Account, RpcProvider } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
-import { SubscribeManager, SyncManager } from "@dojoengine/react";
+import { createSyncManager } from "@dojoengine/react";
 
 export type NetworkLayer = Awaited<ReturnType<typeof createNetworkLayer>>;
 
@@ -27,32 +27,30 @@ export const createNetworkLayer = async () => {
 
     burnerManager.init();
 
-    const sync = () => {
-        // sync manager to active address
-        for (let i = 1; i <= 50; i++) {
-            new SyncManager(network.torii_client, [
-                {
-                    model: network.contractComponents.Position,
-                    keys: [i],
-                },
-                {
-                    model: network.contractComponents.RPSType,
-                    keys: [i],
-                },
-            ]);
+    const initial_sync = () => {
+        const models: any = [];
 
-            new SubscribeManager(network.torii_client, [
-                {
-                    model: network.contractComponents.Position,
-                    keys: [i],
-                },
-                {
-                    model: network.contractComponents.RPSType,
-                    keys: [i],
-                },
-            ]);
+        // loop to 50 and return
+        for (let i = 1; i <= 20; i++) {
+            models.push({
+                model: network.contractComponents.Position,
+                keys: [i.toString()],
+            });
+            models.push({
+                model: network.contractComponents.RPSType,
+                keys: [i.toString()],
+            });
         }
+
+        return models;
     };
+
+    const { sync, cleanup } = await createSyncManager(
+        network.torii_client,
+        initial_sync()
+    );
+
+    sync();
 
     return {
         world,
