@@ -1,6 +1,6 @@
 use dojo_examples::models::{Direction, RPS};
 
-const INITIAL_ENERGY: u8 = 3;
+const INITIAL_ENERGY: u8 = 999;
 const RENEWED_ENERGY: u8 = 3;
 const MOVE_ENERGY_COST: u8 = 1;
 
