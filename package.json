@@ -22,7 +22,7 @@
     "build-torii-wasm": "bun run --cwd packages/torii-wasm build",
     "build-react": "bun run --cwd packages/react build",
     "build-phaser": "bun run --cwd examples/react-phaser-example build",
-    "build": "bun run build-core && bun run build-create-burner && bun run build-utils && bun run build-torii-client && bun run build-torii-wasm",
+    "build": "bun run build-core && bun run build-create-burner && bun run build-utils && bun run build-torii-wasm && bun run build-torii-client",
     "clean": "rm -rf node_modules packages/create-burner/node_modules packages/core/node_modules packages/utils/node_modules packages/torii-client/node_modules packages/torii-wasm/node_modules packages/react/node_modules bun.lockb packages/create-burner/bun.lockb packages/core/bun.lockb packages/utils/bun.lockb packages/torii-client/bun.lockb packages/torii-wasm/bun.lockb packages/react/bun.lockb && rm -rf examples/react-app/node_modules examples/react-app/bun.lockb examples/react-phaser-example/node_modules examples/react-phaser-example/bun.lockb"
   }
 }
