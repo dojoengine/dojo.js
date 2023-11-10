@@ -68,6 +68,13 @@ struct PlayerID {
 }
 
 #[derive(Model, Copy, Drop, Serde)]
+struct PlayerAddress {
+    #[key]
+    id: u8,
+    player: ContractAddress,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
 struct GameData {
     #[key]
     game: felt252, // Always 'game'
