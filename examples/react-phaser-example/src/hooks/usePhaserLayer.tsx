@@ -3,7 +3,6 @@ import { createPhaserLayer } from "../phaser";
 import { NetworkLayer } from "../dojo/createNetworkLayer";
 import { phaserConfig } from "../phaser/config/configurePhaser";
 import { usePromiseValue } from "./usePromiseValue";
-import { useUIStore } from "../store/store";
 
 type Props = {
     networkLayer: NetworkLayer | null;
