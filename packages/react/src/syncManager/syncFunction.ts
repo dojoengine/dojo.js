@@ -66,6 +66,11 @@ export function createSyncManager<S extends Schema>(
                         .then((modelValue) => {
                             console.log("ohayo", modelValue);
 
+                            const convertedValue = convertValues(
+                                modelEntry.model.schema,
+                                modelValue
+                            );
+
                             const entityIndex: Entity =
                                 modelEntry.keys.length === 1
                                     ? modelEntry.keys[0].toString()
@@ -74,7 +79,7 @@ export function createSyncManager<S extends Schema>(
                             setComponent(
                                 modelEntry.model,
                                 entityIndex,
-                                modelValue as any
+                                convertedValue as any
                             );
                         });
                 }

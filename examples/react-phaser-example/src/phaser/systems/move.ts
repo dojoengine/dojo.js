@@ -26,41 +26,41 @@ export const move = (layer: PhaserLayer) => {
         },
     } = layer;
 
-    defineEnterSystem(world, [Has(Position)], ({ entity }: any) => {
-        const playerObj = objectPool.get(entity.toString(), "Sprite");
+    // defineEnterSystem(world, [Has(Position)], ({ entity }: any) => {
+    //     const playerObj = objectPool.get(entity.toString(), "Sprite");
 
-        const type = getComponentValue(RPSType, entity.toString() as Entity);
+    //     const type = getComponentValue(RPSType, entity.toString() as Entity);
 
-        console.log("defineEnterSystem", type?.rps);
+    //     console.log("defineEnterSystem", type?.rps);
 
-        let animation = Animations.RockIdle;
+    //     let animation = Animations.RockIdle;
 
-        switch (type?.rps) {
-            case RPSSprites.Rock:
-                animation = Animations.RockIdle;
-                break;
-            case RPSSprites.Paper:
-                animation = Animations.PaperIdle;
-                break;
-            case RPSSprites.Scissors:
-                animation = Animations.ScissorsIdle;
-                break;
-        }
+    //     switch (type?.rps) {
+    //         case RPSSprites.Rock:
+    //             animation = Animations.RockIdle;
+    //             break;
+    //         case RPSSprites.Paper:
+    //             animation = Animations.PaperIdle;
+    //             break;
+    //         case RPSSprites.Scissors:
+    //             animation = Animations.ScissorsIdle;
+    //             break;
+    //     }
 
-        playerObj.setComponent({
-            id: "animation",
-            once: (sprite: any) => {
-                sprite.play(animation);
-            },
-        });
-    });
+    //     playerObj.setComponent({
+    //         id: "animation",
+    //         once: (sprite: any) => {
+    //             sprite.play(animation);
+    //         },
+    //     });
+    // });
 
     defineSystem(world, [Has(Position)], ({ entity }: any) => {
         const playerObj = objectPool.get(entity.toString(), "Sprite");
 
         const type = getComponentValue(RPSType, entity.toString() as Entity);
 
-        console.log("defineSystem", type?.rps);
+        console.log("defineSystem", type);
 
         if (type?.rps) {
             let animation = Animations.RockIdle;
