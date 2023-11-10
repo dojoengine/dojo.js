@@ -76,6 +76,8 @@ export function createSystemCalls(
     const move = async (props: MoveSystemProps) => {
         const { signer, direction } = props;
 
+        console.log(signer);
+
         const playerId = getComponentValue(
             PlayerID,
             signer.address.toString() as Entity
@@ -107,6 +109,12 @@ export function createSystemCalls(
                 "actions",
                 "move",
                 [direction]
+            );
+
+            console.log(
+                await signer.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
+                })
             );
 
             setComponentsFromEvents(

@@ -13,7 +13,7 @@ export const useDojo = () => {
 
     const { account, get, create, select, list, isDeploying, clear } =
         useBurnerManager({
-            burnerManager: networkLayer.burnerManager,
+            burnerManager: networkLayer.burnerManage,
         });
 
     return {
