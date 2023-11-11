@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-wasm",
-    "version": "0.1.38",
+    "version": "0.1.39",
     "description": "",
     "main": "dist/index.js",
     "type": "module",
