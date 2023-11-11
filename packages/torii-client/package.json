@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-client",
-    "version": "0.1.40",
+    "version": "0.1.41",
     "description": "",
     "main": "dist/index.js",
     "type": "module",
