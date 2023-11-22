@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/core",
-    "version": "0.1.46",
+    "version": "0.1.47",
     "description": "Dojo engine core providers and types",
     "type": "module",
     "scripts": {
