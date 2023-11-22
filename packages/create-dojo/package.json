@@ -1,10 +1,14 @@
 {
   "name": "@dojoengine/create-dojo",
-  "version": "0.1.48",
+  "version": "0.1.49",
   "description": "Scaffold Dojo project from examples",
   "module": "index.ts",
   "type": "module",
   "license": "MIT",
+  "private": "false",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "create-dojo": "./dist/index.js"
   },
