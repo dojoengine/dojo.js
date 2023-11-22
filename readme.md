@@ -93,6 +93,12 @@ git submodule update --init --recursive
 
 ### Examples
 
+To scaffold a new project from an example: 
+
+```console
+npx @dojoengine/create-dojo
+```
+
 To run the examples that have the linked packages, follow the steps below:
 
 **Terminal 1**: Start the React app.
