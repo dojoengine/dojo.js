@@ -1,0 +1,22 @@
+{
+  "name": "create-dojo",
+  "module": "index.ts",
+  "type": "module",
+  "bin": {
+    "create-dojo": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup --dts-resolve"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^3.3.0",
+    "cross-spawn": "^7.0.3"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "^6.0.6",
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

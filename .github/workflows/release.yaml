@@ -15,6 +15,7 @@ jobs:
                         # "packages/torii-wasm",
                         # "packages/torii-client",
                         "packages/create-burner",
+                        "packages/create-dojo",
                         "packages/utils",
                         "packages/core",
                         "packages/react",
