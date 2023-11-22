@@ -17,6 +17,7 @@
     "scripts": {
         "build-core": "bun run --cwd packages/core build",
         "build-create-burner": "bun run --cwd packages/create-burner build",
+        "build-create-dojo": "bun run --cwd packages/create-dojo build",
         "build-utils": "bun run --cwd packages/utils build",
         "build-torii-client": "bun run --cwd packages/torii-client build",
         "build-torii-wasm": "bun run --cwd packages/torii-wasm build",
