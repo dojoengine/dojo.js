@@ -1,5 +1,6 @@
 {
   "name": "create-dojo",
+  "version": "0.1.44",
   "module": "index.ts",
   "type": "module",
   "bin": {
