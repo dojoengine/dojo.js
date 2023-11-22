@@ -1,6 +1,6 @@
 {
   "name": "create-dojo",
-  "version": "0.1.44",
+  "version": "0.1.45",
   "module": "index.ts",
   "type": "module",
   "bin": {
@@ -14,10 +14,9 @@
     "cross-spawn": "^7.0.3"
   },
   "devDependencies": {
+    "bun-types": "latest",
     "@types/cross-spawn": "^6.0.6",
-    "bun-types": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+    "tsup": "^7.2.0",
+    "typescript": "^5.0.3"
   }
 }
