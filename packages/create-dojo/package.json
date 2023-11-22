@@ -1,6 +1,7 @@
 {
   "name": "create-dojo",
-  "version": "0.1.45",
+  "version": "0.1.46",
+  "description": "Scaffold Dojo project from examples",
   "module": "index.ts",
   "type": "module",
   "bin": {
