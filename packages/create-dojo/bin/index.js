@@ -20,8 +20,11 @@ run();
 async function run() {
   try {
     const { template, projectName } = await prompt();
+    console.log(`Downloading ${template}...`);
     spawn.sync("npx", ["degit", `dojoengine/dojo.js/examples/${template}`, `${projectName}`]);
     await rewritePackageJson(projectName);
+    console.log(`Downloading dojo-starter...`);
+    spawn.sync("npx", ["degit", `dojoengine/dojo-starter`, `dojo-starter`]);
   } catch (e) {
     console.log(e);
   }

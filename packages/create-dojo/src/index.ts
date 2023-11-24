@@ -26,10 +26,15 @@ async function run() {
         const { template, projectName } = await prompt();
 
         // clone template using degit into projectName directory
+        console.log(`Downloading ${template}...`)
         spawn.sync("npx", ["degit", `dojoengine/dojo.js/examples/${template}`, `${projectName}`])
 
         // rewrite package.json
         await rewritePackageJson(projectName);
+
+        // clone dojo-starter
+        console.log(`Downloading dojo-starter...`)
+        spawn.sync("npx", ["degit", `dojoengine/dojo-starter`, `dojo-starter`])
 
     } catch (e: any) {
         console.log(e)
