@@ -170,3 +170,6 @@ dist
 
 # IntelliJ based IDEs
 .idea
+
+# bin dir
+bin

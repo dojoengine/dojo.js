@@ -1,6 +1,6 @@
 {
   "name": "@dojoengine/create-dojo",
-  "version": "0.1.51",
+  "version": "0.1.52",
   "description": "Scaffold Dojo project from examples",
   "module": "index.ts",
   "type": "module",
@@ -8,7 +8,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "bin": "./dist/index.js",
+  "bin": {
+    "create-dojo": "./bin/index.js"
+  },
   "scripts": {
     "build": "tsup --dts-resolve"
   },
