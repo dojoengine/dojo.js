@@ -29,7 +29,7 @@ export async function setupNetwork() {
 
     const torii_client = await torii.createClient([], {
         rpcUrl: VITE_PUBLIC_NODE_URL,
-        toriiUrl: VITE_PUBLIC_TORII + "/grpc",
+        toriiUrl: VITE_PUBLIC_TORII,
         worldAddress: VITE_PUBLIC_WORLD_ADDRESS,
     });
 
