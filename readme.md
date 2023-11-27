@@ -81,6 +81,18 @@ To do so, navigate to a specific package directory and run the command below. Th
 bun run build --watch
 ```
 
+To build all packages, from the root directory, run:
+
+```console
+bun run build
+```
+
+To watch for changes on all packages in parallel, from the root directory, run:
+
+```console
+bun run build-watch
+```
+
 #### Dojo starter:
 
 To install dojo-starter submodule, run:
