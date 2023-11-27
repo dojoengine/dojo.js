@@ -1,6 +1,6 @@
 This crate includes a basic usage for the WASM module.
 
-1. Run the build script to compile the crate to WASM make sure [wasm pack](https://rustwasm.github.io/wasm-pack/installer) is installed
+1. Run the build script to compile the crate to WASM
 
 ```sh
 ./build.sh
