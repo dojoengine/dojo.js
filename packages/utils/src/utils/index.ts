@@ -77,10 +77,9 @@ export function setComponentFromEvent(
         [...string_keys, ...values]
     );
 
-    console.log(componentName, entityIndex, componentValues);
+    // console.log(componentName, entityIndex, componentValues);
 
     // set component
-    console.log(`++++setComponent()`, component, entityIndex, componentValues)
     setComponent(component, entityIndex, componentValues);
 }
 
@@ -227,7 +226,7 @@ export function setComponentFromGraphQLEntity(
             {}
         );
 
-        console.log(componentValues);
+        // console.log(componentValues);
         setComponent(component, entityIndex, componentValues);
     });
 }
