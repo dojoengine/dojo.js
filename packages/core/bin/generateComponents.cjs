@@ -103,7 +103,7 @@ function parseModelSchemaToRecsImpl(schema, customTypes) {
     const content = schema.content;
 
     if (type === "primitive") {
-        return parseSchemaPrimitive(content);
+        return parseSchemaPrimitive(content, customTypes);
     } else if (type === "struct") {
         customTypes.push(content.name);
         return parseSchemaStruct(content, customTypes);
@@ -115,8 +115,9 @@ function parseModelSchemaToRecsImpl(schema, customTypes) {
     }
 }
 
-function parseSchemaPrimitive(content) {
+function parseSchemaPrimitive(content, customTypes) {
     const scalarType = content["scalar_type"].toLowerCase();
+    customTypes.push(scalarType);
     return cairoToRecsType[scalarType] ?? "RecsType.String"; // Default type set to String
 }
 
