@@ -1,4 +1,4 @@
-use dojo_types::schema::EntityQuery;
+use torii_grpc::types::KeysClause;
 use serde::{Deserialize, Serialize};
 use starknet::core::types::FieldElement;
 use tsify::Tsify;
@@ -11,13 +11,11 @@ pub struct EntityModel {
     pub keys: Vec<FieldElement>,
 }
 
-impl From<EntityModel> for dojo_types::schema::EntityQuery {
+impl From<EntityModel> for KeysClause {
     fn from(value: EntityModel) -> Self {
         Self {
             model: value.model,
-            clause: dojo_types::schema::Clause::Keys(dojo_types::schema::KeysClause {
-                keys: value.keys,
-            }),
+            keys: value.keys,
         }
     }
 }
@@ -36,7 +34,7 @@ extern "C" {
     pub type IEntityModel;
 }
 
-impl TryFrom<IEntityModel> for EntityQuery {
+impl TryFrom<IEntityModel> for KeysClause {
     type Error = serde_wasm_bindgen::Error;
     fn try_from(value: IEntityModel) -> Result<Self, Self::Error> {
         serde_wasm_bindgen::from_value::<EntityModel>(value.into()).map(|e| e.into())
@@ -62,20 +60,18 @@ mod test {
     use super::*;
 
     #[test]
-    fn convert_entity_model_to_query() {
+    fn convert_entity_model_to_keys_clause() {
         let entity_model = EntityModel {
             model: "Position".into(),
             keys: vec![felt!("0x1"), felt!("0x2")],
         };
 
-        let entity_query: EntityQuery = entity_model.try_into().unwrap();
+        let keys_clause: KeysClause = entity_model.try_into().unwrap();
 
-        assert_eq!(entity_query.model, "Position");
+        assert_eq!(keys_clause.model, "Position");
         assert_eq!(
-            entity_query.clause,
-            dojo_types::schema::Clause::Keys(dojo_types::schema::KeysClause {
-                keys: vec![felt!("0x1"), felt!("0x2")],
-            })
+            keys_clause.keys,
+            vec![felt!("0x1"), felt!("0x2")]
         );
     }
 }

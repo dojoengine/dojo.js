@@ -2,7 +2,7 @@
 
 use std::str::FromStr;
 
-use dojo_types::schema::{Clause, EntityQuery, KeysClause};
+use torii_grpc::types::KeysClause;
 use futures::StreamExt;
 use starknet::core::types::FieldElement;
 use starknet::core::utils::cairo_short_string_to_felt;
@@ -50,9 +50,9 @@ impl Client {
 
         match self
             .inner
-            .entity(&EntityQuery {
+            .entity(&KeysClause {
                 model: model.to_string(),
-                clause: Clause::Keys(KeysClause { keys }),
+                keys,
             })
             .await
         {
@@ -73,7 +73,7 @@ impl Client {
 
         let entities = entities
             .into_iter()
-            .map(|e| TryInto::<EntityQuery>::try_into(e))
+            .map(|e| TryInto::<KeysClause>::try_into(e))
             .collect::<Result<Vec<_>, _>>()?;
 
         self.inner
@@ -95,7 +95,7 @@ impl Client {
 
         let entities = entities
             .into_iter()
-            .map(|e| TryInto::<EntityQuery>::try_into(e))
+            .map(|e| TryInto::<KeysClause>::try_into(e))
             .collect::<Result<Vec<_>, _>>()?;
 
         self.inner
@@ -150,7 +150,7 @@ pub async fn create_client(
 
     let entities = initialEntitiesToSync
         .into_iter()
-        .map(|e| TryInto::<EntityQuery>::try_into(e))
+        .map(|e| TryInto::<KeysClause>::try_into(e))
         .collect::<Result<Vec<_>, _>>()?;
 
     let world_address = FieldElement::from_str(&world_address)
