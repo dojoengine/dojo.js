@@ -57,6 +57,11 @@ export async function setupNetwork() {
             return provider.execute(signer, contract, system, call_data);
         },
 
+        // Read-only function call.
+        call: async (contract: string, system: string, call_data: num.BigNumberish[]) => {
+            return provider.call(contract, system, call_data);
+        },
+
         // Entity query function.
         entity: async (component: string, query: Query) => {
             return provider.entity(component, query);
