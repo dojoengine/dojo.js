@@ -28,19 +28,6 @@ try {
     process.exit(0);
 }
 
-// Extract recs package version
-const { dependencies } = require(path.resolve("./package.json"));
-const recsVersion = dependencies?.["@dojoengine/recs"] ?? "";
-const isRecsVersion2 = /^[\^\~]?2./g.exec(recsVersion) != null;
-console.log(
-    `...generating for @dojoengine/recs version ${
-        isRecsVersion2
-            ? "2 (bigint support, Entity as string)"
-            : "1 (no bigint, EntityIndex as number)"
-    }`
-);
-console.log("---------------------------");
-
 const cairoToRecsType = {
     bool: "RecsType.Boolean",
     u8: "RecsType.Number",
@@ -48,10 +35,10 @@ const cairoToRecsType = {
     u32: "RecsType.Number",
     u64: "RecsType.Number",
     usize: "RecsType.Number",
-    u128: isRecsVersion2 ? "RecsType.BigInt" : "RecsType.Number",
-    u256: isRecsVersion2 ? "RecsType.BigInt" : "RecsType.NumberArray",
-    felt252: isRecsVersion2 ? "RecsType.BigInt" : "RecsType.Number",
-    ContractAddress: isRecsVersion2 ? "RecsType.BigInt" : "RecsType.Number",
+    u128: "RecsType.BigInt",
+    u256: "RecsType.BigInt",
+    felt252: "RecsType.BigInt",
+    contractaddress: "RecsType.BigInt",
 };
 
 const manifestStr = fs.readFileSync(manifestPath, "utf8");
