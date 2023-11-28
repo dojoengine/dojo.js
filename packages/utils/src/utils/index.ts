@@ -2,6 +2,7 @@ import { Event } from "starknet";
 import {
     Entity,
     setComponent,
+    Component,
     Components,
     ComponentValue,
     Type as RecsType,
@@ -71,16 +72,15 @@ export function setComponentFromEvent(
     const values = eventData.slice(index, index + numberOfValues);
 
     // create component object from values with schema
-    const valuesIndex = 0;
     const componentValues = decodeComponent(
-        component.schema,
-        [...string_keys, ...values],
-        valuesIndex
+        component,
+        [...string_keys, ...values]
     );
 
     console.log(componentName, entityIndex, componentValues);
 
     // set component
+    console.log(`++++setComponent()`, component, entityIndex, componentValues)
     setComponent(component, entityIndex, componentValues);
 }
 
@@ -106,28 +106,42 @@ export function parseComponentValue(value: string, type: RecsType) {
 /**
  * Decodes a component based on the provided schema.
  *
- * @param {Object} schema - The schema that describes the structure of the component to decode.
+ * @param {Component} component - The component description created by defineComponent(), containing the schema and metadata types.
  * @param {string[]} values - An array of string values used to populate the decoded component.
- * @param {number} valuesIndex - The current index in the values array to read from.
+ * @param {Object|undefined} indices - Internal indices control object. Should be left undefined on first call.
  * @returns {Object} The decoded component object.
  */
 export function decodeComponent(
-    schema: any,
+    component: Component,
     values: string[],
-    valuesIndex: number
+    indices?: any
 ): any {
+    const schema: any = component.schema
+    const types: string[] = component.metadata?.types as string[] ?? []
+    if (indices === undefined) {
+        indices = { types: 0, values: 0 }
+    }
+    
     // Iterate through the keys of the schema and reduce them to build the decoded component.
     return Object.keys(schema).reduce((acc: any, key) => {
         // If the current schema key points to an object and doesn't have a 'type' property,
         // it means it's a nested component. Therefore, we recursively decode it.
         if (typeof schema[key] === "object" && !schema[key].type) {
-            acc[key] = decodeComponent(schema[key], values, valuesIndex);
+            acc[key] = decodeComponent(schema[key], values, indices);
         } else {
             // If the schema key points directly to a type or is not an object,
             // we parse its value using the provided parseComponentValue function
             // and move to the next index in the values array.
-            acc[key] = parseComponentValue(values[valuesIndex], schema[key]);
-            valuesIndex++;
+            acc[key] = parseComponentValue(values[indices.values], schema[key]);
+            indices.values++;
+            // the u256 type in cairo is actually { low: u128, high: u128 }
+            // we need to consume two u128 values, shifting the second to compose u256
+            if (types[indices.types] == 'u256') {
+                const value = parseComponentValue(values[indices.values], schema[key]) as bigint;
+                acc[key] |= (value << 128n)
+                indices.values++;
+            }
+            indices.types++;
         }
         return acc;
     }, {});

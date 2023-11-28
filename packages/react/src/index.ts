@@ -4,4 +4,5 @@ export * from "./useComponentValue";
 export * from "./usePromise";
 export * from "./usePromise";
 export * from "./syncManager";
-export * from "./useEntityQuery"
+export * from "./useEntityQuery";
+export * from "./utils";
