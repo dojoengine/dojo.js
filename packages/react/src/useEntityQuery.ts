@@ -15,23 +15,33 @@ import { distinctUntilChanged, map } from "rxjs";
  * @param options.updateOnValueChange False - re-renders only on entity array changes. True (default) - also on component value changes.
  * @returns Set of entities matching the query fragments.
  */
-export function useEntityQuery(fragments: QueryFragment[], options?: { updateOnValueChange?: boolean }) {
-  const updateOnValueChange = options?.updateOnValueChange ?? true;
+export function useEntityQuery(
+    fragments: QueryFragment[],
+    options?: { updateOnValueChange?: boolean }
+) {
+    const updateOnValueChange = options?.updateOnValueChange ?? true;
 
-  const stableFragments = useDeepMemo(fragments);
-  const query = useMemo(() => defineQuery(stableFragments, { runOnInit: true }), [stableFragments]);
-  const [entities, setEntities] = useState([...query.matching]);
+    const stableFragments = useDeepMemo(fragments);
+    const query = useMemo(
+        () => defineQuery(stableFragments, { runOnInit: true }),
+        [stableFragments]
+    );
+    const [entities, setEntities] = useState([...query.matching]);
 
-  useEffect(() => {
-    setEntities([...query.matching]);
-    let observable = query.update$.pipe(map(() => [...query.matching]));
-    if (!updateOnValueChange) {
-      // re-render only on entity array changes
-      observable = observable.pipe(distinctUntilChanged((a, b) => isEqual(a, b)));
-    }
-    const subscription = observable.subscribe((entities) => setEntities(entities));
-    return () => subscription.unsubscribe();
-  }, [query, updateOnValueChange]);
+    useEffect(() => {
+        setEntities([...query.matching]);
+        let observable = query.update$.pipe(map(() => [...query.matching]));
+        if (!updateOnValueChange) {
+            // re-render only on entity array changes
+            observable = observable.pipe(
+                distinctUntilChanged((a, b) => isEqual(a, b))
+            );
+        }
+        const subscription = observable.subscribe((entities) =>
+            setEntities(entities)
+        );
+        return () => subscription.unsubscribe();
+    }, [query, updateOnValueChange]);
 
-  return entities;
+    return entities;
 }

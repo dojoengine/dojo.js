@@ -42,6 +42,7 @@ This is a monorepo for the [dojo engine](https://www.dojoengine.org/en/) npm pac
 -   [**React**](./packages/react)
 -   [**Torii Client**](./packages/torii-client)
 -   [**Torii Wasm**](./packages/torii-wasm)
+
 ---
 
 ### Environment Setup
@@ -105,7 +106,7 @@ git submodule update --init --recursive
 
 ### Examples
 
-To scaffold a new project from an example: 
+To scaffold a new project from an example:
 
 ```console
 npx @dojoengine/create-dojo

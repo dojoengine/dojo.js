@@ -1,28 +1,28 @@
 {
-  "name": "@dojoengine/create-dojo",
-  "version": "0.1.55",
-  "description": "Scaffold Dojo project from examples",
-  "module": "index.ts",
-  "main" : "./bin/index.js",
-  "type": "module",
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "bin": {
-    "create-dojo": "./bin/index.js"
-  },
-  "scripts": {
-    "build": "tsup --dts-resolve"
-  },
-  "dependencies": {
-    "@inquirer/prompts": "^3.3.0",
-    "cross-spawn": "^7.0.3"
-  },
-  "devDependencies": {
-    "bun-types": "latest",
-    "@types/cross-spawn": "^6.0.6",
-    "tsup": "^7.2.0",
-    "typescript": "^5.0.3"
-  }
+    "name": "@dojoengine/create-dojo",
+    "version": "0.1.55",
+    "description": "Scaffold Dojo project from examples",
+    "module": "index.ts",
+    "main": "./bin/index.js",
+    "type": "module",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
+    "bin": {
+        "create-dojo": "./bin/index.js"
+    },
+    "scripts": {
+        "build": "tsup --dts-resolve"
+    },
+    "dependencies": {
+        "@inquirer/prompts": "^3.3.0",
+        "cross-spawn": "^7.0.3"
+    },
+    "devDependencies": {
+        "bun-types": "latest",
+        "@types/cross-spawn": "^6.0.6",
+        "tsup": "^7.2.0",
+        "typescript": "^5.0.3"
+    }
 }

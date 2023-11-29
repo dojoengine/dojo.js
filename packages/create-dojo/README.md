@@ -5,4 +5,3 @@ Run :
 ```bash
 npx @dojoengine/create-dojo
 ```
-

@@ -12,7 +12,8 @@ export function convertValues(schema: Schema, values: any) {
         ) {
             acc[key] = convertValues(schemaType, value);
         } else {
-            acc[key] = schemaType === RecsType.BigInt ? BigInt(value) : Number(value);
+            acc[key] =
+                schemaType === RecsType.BigInt ? BigInt(value) : Number(value);
         }
         return acc;
     }, {});

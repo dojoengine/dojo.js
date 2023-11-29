@@ -72,10 +72,10 @@ export function setComponentFromEvent(
     const values = eventData.slice(index, index + numberOfValues);
 
     // create component object from values with schema
-    const componentValues = decodeComponent(
-        component,
-        [...string_keys, ...values]
-    );
+    const componentValues = decodeComponent(component, [
+        ...string_keys,
+        ...values,
+    ]);
 
     // console.log(componentName, entityIndex, componentValues);
 
@@ -115,12 +115,12 @@ export function decodeComponent(
     values: string[],
     indices?: any
 ): any {
-    const schema: any = component.schema
-    const types: string[] = component.metadata?.types as string[] ?? []
+    const schema: any = component.schema;
+    const types: string[] = (component.metadata?.types as string[]) ?? [];
     if (indices === undefined) {
-        indices = { types: 0, values: 0 }
+        indices = { types: 0, values: 0 };
     }
-    
+
     // Iterate through the keys of the schema and reduce them to build the decoded component.
     return Object.keys(schema).reduce((acc: any, key) => {
         // If the current schema key points to an object and doesn't have a 'type' property,
@@ -135,9 +135,12 @@ export function decodeComponent(
             indices.values++;
             // the u256 type in cairo is actually { low: u128, high: u128 }
             // we need to consume two u128 values, shifting the second to compose u256
-            if (types[indices.types] == 'u256') {
-                const value = parseComponentValue(values[indices.values], schema[key]) as bigint;
-                acc[key] |= (value << 128n)
+            if (types[indices.types] == "u256") {
+                const value = parseComponentValue(
+                    values[indices.values],
+                    schema[key]
+                ) as bigint;
+                acc[key] |= value << 128n;
                 indices.values++;
             }
             indices.types++;

@@ -1,4 +1,3 @@
-
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
 type Props = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;

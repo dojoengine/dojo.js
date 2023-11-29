@@ -8,5 +8,5 @@ export const registerSystems = (layer: PhaserLayer) => {
     move(layer);
     spawn(layer);
     controls(layer);
-    mapSystem(layer)
+    mapSystem(layer);
 };

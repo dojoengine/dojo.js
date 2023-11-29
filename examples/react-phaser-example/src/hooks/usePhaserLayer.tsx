@@ -17,7 +17,6 @@ const createContainer = () => {
     return container;
 };
 
-
 export const usePhaserLayer = ({ networkLayer }: Props) => {
     const parentRef = useRef<HTMLElement | null>(null);
     const [{ width, height }, setSize] = useState({ width: 0, height: 0 });
@@ -49,7 +48,9 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
 
     useEffect(() => {
         return () => {
-            phaserLayerPromise?.then((phaserLayer) => phaserLayer.world.dispose());
+            phaserLayerPromise?.then((phaserLayer) =>
+                phaserLayer.world.dispose()
+            );
             container?.remove();
         };
     }, [container, phaserLayerPromise]);
@@ -71,4 +72,4 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
     );
 
     return useMemo(() => ({ ref, phaserLayer }), [ref, phaserLayer]);
-}
+};
