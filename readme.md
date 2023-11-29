@@ -42,6 +42,7 @@ This is a monorepo for the [dojo engine](https://www.dojoengine.org/en/) npm pac
 -   [**React**](./packages/react)
 -   [**Torii Client**](./packages/torii-client)
 -   [**Torii Wasm**](./packages/torii-wasm)
+
 ---
 
 ### Environment Setup
@@ -105,7 +106,7 @@ git submodule update --init --recursive
 
 ### Examples
 
-To scaffold a new project from an example: 
+To scaffold a new project from an example:
 
 ```console
 npx @dojoengine/create-dojo
@@ -120,25 +121,25 @@ npx @dojoengine/create-dojo
 
 To run the examples that have the linked packages, follow the steps below:
 
-**Terminal 1**: Start the React app.
-
-```console
-cd examples/<package>
-bun install
-bun dev
-```
-
-**Terminal 2**: Set up the dojo starter with specific configurations.
+**Terminal 1**: Set up the dojo starter with specific configurations.
 
 ```console
 cd examples/dojo-starter
 katana --disable-fee --block-time 1000
 ```
 
-**Terminal 3**: Build and migrate the dojo starter.
+**Terminal 2**: Build and migrate the dojo starter.
 
 ```console
 cd examples/dojo-starter
 sozo build
 sozo migrate
+```
+
+**Terminal 3**: Start the React app.
+
+```console
+cd examples/<package>
+bun install
+bun dev
 ```
