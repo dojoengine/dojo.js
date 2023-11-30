@@ -26,7 +26,7 @@ export function createSystemCalls(
             entity: entityId,
             value: {
                 player: BigInt(entityId),
-                remaining: 10,
+                remaining: 100,
                 last_direction: 0,
             },
         });
