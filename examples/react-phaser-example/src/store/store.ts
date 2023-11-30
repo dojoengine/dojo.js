@@ -9,6 +9,5 @@ export type Store = {
 
 export const store = create<Store>(() => ({
     networkLayer: null,
-    phaserLayer: null
+    phaserLayer: null,
 }));
-

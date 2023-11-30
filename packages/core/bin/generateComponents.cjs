@@ -28,19 +28,6 @@ try {
     process.exit(0);
 }
 
-// Extract recs package version
-const { dependencies } = require(path.resolve("./package.json"));
-const recsVersion = dependencies?.["@dojoengine/recs"] ?? "";
-const isRecsVersion2 = /^[\^\~]?2./g.exec(recsVersion) != null;
-console.log(
-    `...generating for @dojoengine/recs version ${
-        isRecsVersion2
-            ? "2 (bigint support, Entity as string)"
-            : "1 (no bigint, EntityIndex as number)"
-    }`
-);
-console.log("---------------------------");
-
 const cairoToRecsType = {
     bool: "RecsType.Boolean",
     u8: "RecsType.Number",
@@ -48,10 +35,10 @@ const cairoToRecsType = {
     u32: "RecsType.Number",
     u64: "RecsType.Number",
     usize: "RecsType.Number",
-    u128: isRecsVersion2 ? "RecsType.BigInt" : "RecsType.Number",
-    u256: isRecsVersion2 ? "RecsType.BigInt" : "RecsType.NumberArray",
-    felt252: isRecsVersion2 ? "RecsType.BigInt" : "RecsType.Number",
-    ContractAddress: isRecsVersion2 ? "RecsType.BigInt" : "RecsType.Number",
+    u128: "RecsType.BigInt",
+    u256: "RecsType.BigInt",
+    felt252: "RecsType.BigInt",
+    contractaddress: "RecsType.BigInt",
 };
 
 const manifestStr = fs.readFileSync(manifestPath, "utf8");
@@ -116,7 +103,7 @@ function parseModelSchemaToRecsImpl(schema, customTypes) {
     const content = schema.content;
 
     if (type === "primitive") {
-        return parseSchemaPrimitive(content);
+        return parseSchemaPrimitive(content, customTypes);
     } else if (type === "struct") {
         customTypes.push(content.name);
         return parseSchemaStruct(content, customTypes);
@@ -128,8 +115,9 @@ function parseModelSchemaToRecsImpl(schema, customTypes) {
     }
 }
 
-function parseSchemaPrimitive(content) {
+function parseSchemaPrimitive(content, customTypes) {
     const scalarType = content["scalar_type"].toLowerCase();
+    customTypes.push(scalarType);
     return cairoToRecsType[scalarType] ?? "RecsType.String"; // Default type set to String
 }
 
