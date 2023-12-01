@@ -12,7 +12,7 @@ mod types;
 mod utils;
 
 use types::{ClientConfig, EntityModel, IEntityModel};
-use utils::parse_ty_as_json_str;
+use utils::{parse_ty_as_json_str, parse_entities_as_json_str};
 
 type JsFieldElement = JsValue;
 
@@ -59,7 +59,7 @@ impl Client {
         }).await;
         
         match results {
-            Ok(entities) => Ok(JsValue::NULL),
+            Ok(entities) => Ok(js_sys::JSON::parse(&parse_entities_as_json_str(entities).to_string())?),
             Err(err) => Err(JsValue::from(format!("failed to get entities: {err}"))),
         }
     }
