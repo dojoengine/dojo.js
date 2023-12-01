@@ -69,6 +69,7 @@ fn primitive_value_json(primitive: Primitive) -> Value {
 #[cfg(test)]
 mod test {
     wasm_bindgen_test::wasm_bindgen_test_configure!(run_in_browser);
+
     use dojo_types::schema::{Enum, EnumOption, Member, Struct};
     use torii_grpc::types::{Entity, Model};
     use serde_json::json;
@@ -149,7 +150,7 @@ mod test {
         });
 
         let actual_json = parse_ty_as_json_str(&expected_ty);
-        assert_eq!(expected_json.to_string(), actual_json)
+        assert_eq!(expected_json, actual_json)
     }
 
     #[wasm_bindgen_test]
@@ -218,7 +219,7 @@ mod test {
         });
 
         let actual_json = parse_ty_as_json_str(&expected_ty);
-        assert_eq!(expected_json.to_string(), actual_json)
+        assert_eq!(expected_json, actual_json)
     }
 
     #[wasm_bindgen_test]
@@ -249,14 +250,23 @@ mod test {
                             }),
                         },
                         Member {
-                            name: "x".into(),
+                            name: "vec".into(),
                             key: false,
-                            ty: Ty::Primitive(Primitive::U128(Some(10))),
-                        },
-                        Member {
-                            name: "y".into(),
-                            key: false,
-                            ty: Ty::Primitive(Primitive::U128(Some(10))),
+                            ty: Ty::Struct(Struct {
+                                name: "vec".into(),
+                                children: vec![
+                                    Member {
+                                        name: "x".into(),
+                                        key: false,
+                                        ty: Ty::Primitive(Primitive::U128(Some(10))),
+                                    },
+                                    Member {
+                                        name: "y".into(),
+                                        key: false,
+                                        ty: Ty::Primitive(Primitive::U128(Some(10))),
+                                    },
+                                ],
+                            }),
                         },
                     ]
                 },
@@ -276,7 +286,7 @@ mod test {
                         Member {
                             name: "is_dead".into(),
                             key: false,
-                            ty: Ty::Primitive(Primitive::Bool(Some(true))),
+                            ty: Ty::Primitive(Primitive::Bool(Some(false))),
                         },
                     ]
                 }
@@ -301,6 +311,6 @@ mod test {
         });
 
         let actual_json = parse_entities_as_json_str(vec![entity]);
-        assert_eq!(expected_json.to_string(), actual_json)
+        assert_eq!(expected_json, actual_json)
     }
 }
