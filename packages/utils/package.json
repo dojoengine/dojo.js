@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/utils",
-    "version": "0.1.55",
+    "version": "0.1.56",
     "description": "Helpful Dojo Utils",
     "type": "module",
     "scripts": {
