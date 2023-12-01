@@ -1183,8 +1183,8 @@ dependencies = [
 
 [[package]]
 name = "dojo-types"
-version = "0.3.13"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.3.13#a253b0c8119f5cc8b20f2f2893a20ae3ef79951a"
+version = "0.3.14"
+source = "git+https://github.com/dojoengine/dojo?rev=9d207ba5b46227e6e2544e0b8a4988abbb263345#9d207ba5b46227e6e2544e0b8a4988abbb263345"
 dependencies = [
  "crypto-bigint",
  "hex",
@@ -1199,8 +1199,8 @@ dependencies = [
 
 [[package]]
 name = "dojo-world"
-version = "0.3.13"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.3.13#a253b0c8119f5cc8b20f2f2893a20ae3ef79951a"
+version = "0.3.14"
+source = "git+https://github.com/dojoengine/dojo?rev=9d207ba5b46227e6e2544e0b8a4988abbb263345#9d207ba5b46227e6e2544e0b8a4988abbb263345"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -4102,8 +4102,8 @@ dependencies = [
 
 [[package]]
 name = "torii-client"
-version = "0.3.13"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.3.13#a253b0c8119f5cc8b20f2f2893a20ae3ef79951a"
+version = "0.3.14"
+source = "git+https://github.com/dojoengine/dojo?rev=9d207ba5b46227e6e2544e0b8a4988abbb263345#9d207ba5b46227e6e2544e0b8a4988abbb263345"
 dependencies = [
  "async-trait",
  "crypto-bigint",
@@ -4155,10 +4155,11 @@ dependencies = [
 
 [[package]]
 name = "torii-grpc"
-version = "0.3.13"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.3.13#a253b0c8119f5cc8b20f2f2893a20ae3ef79951a"
+version = "0.3.14"
+source = "git+https://github.com/dojoengine/dojo?rev=9d207ba5b46227e6e2544e0b8a4988abbb263345#9d207ba5b46227e6e2544e0b8a4988abbb263345"
 dependencies = [
  "bytes",
+ "crypto-bigint",
  "dojo-types",
  "futures",
  "futures-util",

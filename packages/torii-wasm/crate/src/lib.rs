@@ -2,7 +2,7 @@
 
 use std::str::FromStr;
 
-use torii_grpc::types::KeysClause;
+use torii_grpc::types::{KeysClause, Clause, Query};
 use futures::StreamExt;
 use starknet::core::types::FieldElement;
 use starknet::core::utils::cairo_short_string_to_felt;
@@ -12,7 +12,7 @@ mod types;
 mod utils;
 
 use types::{ClientConfig, EntityModel, IEntityModel};
-use utils::parse_ty_as_json_str;
+use utils::{parse_ty_as_json_str, parse_entities_as_json_str};
 
 type JsFieldElement = JsValue;
 
@@ -32,6 +32,38 @@ pub struct Client {
 
 #[wasm_bindgen]
 impl Client {
+    #[wasm_bindgen(js_name = getEntitiesByKeys)]
+    pub async fn get_entities_by_keys(
+        &self,
+        model: &str,
+        keys: Vec<JsFieldElement>,
+        limit: u32,
+        offset: u32
+    ) -> Result<JsValue, JsValue> {
+        #[cfg(feature = "console-error-panic")]
+        console_error_panic_hook::set_once();
+
+        let keys = keys
+            .into_iter()
+            .map(serde_wasm_bindgen::from_value::<FieldElement>)
+            .collect::<Result<Vec<FieldElement>, _>>()
+            .map_err(|err| JsValue::from(format!("failed to parse entity keys: {err}")))?;
+
+        let results = self.inner.entities(Query {
+            clause: Clause::Keys(KeysClause {
+                model: model.to_string(),
+                keys
+            }),
+            limit,
+            offset
+        }).await;
+        
+        match results {
+            Ok(entities) => Ok(js_sys::JSON::parse(&parse_entities_as_json_str(entities).to_string())?),
+            Err(err) => Err(JsValue::from(format!("failed to get entities: {err}"))),
+        }
+    }
+
     /// Retrieves the model value of an entity. Will fetch from remote if the requested entity is not one of the entities that are being synced.
     #[wasm_bindgen(js_name = getModelValue)]
     pub async fn get_model_value(

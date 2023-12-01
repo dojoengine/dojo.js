@@ -1,6 +1,29 @@
 use dojo_types::primitive::Primitive;
 use dojo_types::schema::Ty;
+use torii_grpc::types::Entity;
 use serde_json::Value;
+
+pub fn parse_entities_as_json_str(entities: Vec<Entity>) -> Value {
+    entities
+        .into_iter()
+        .map(|entity| {
+            let entity_key = format!("{:#x}", entity.key);
+            let models_map = entity
+                .models
+                .into_iter()
+                .map(|model| {
+                    let model_map = model.members
+                        .iter()
+                        .map(|member| (member.name.to_owned(), parse_ty_as_json_str(&member.ty)))
+                        .collect::<serde_json::Map<String, Value>>();
+
+                    (model.name, model_map.into())
+                }).collect::<serde_json::Map<String, Value>>();
+
+            (entity_key, models_map.into())
+        }).collect::<serde_json::Map<String, Value>>()
+        .into()
+}
 
 pub fn parse_ty_as_json_str(ty: &Ty) -> Value {
     match ty {
@@ -45,8 +68,10 @@ fn primitive_value_json(primitive: Primitive) -> Value {
 
 #[cfg(test)]
 mod test {
+    wasm_bindgen_test::wasm_bindgen_test_configure!(run_in_browser);
 
     use dojo_types::schema::{Enum, EnumOption, Member, Struct};
+    use torii_grpc::types::{Entity, Model};
     use serde_json::json;
     use starknet::macros::felt;
     use wasm_bindgen_test::*;
@@ -125,7 +150,7 @@ mod test {
         });
 
         let actual_json = parse_ty_as_json_str(&expected_ty);
-        assert_eq!(expected_json.to_string(), actual_json)
+        assert_eq!(expected_json, actual_json)
     }
 
     #[wasm_bindgen_test]
@@ -194,6 +219,98 @@ mod test {
         });
 
         let actual_json = parse_ty_as_json_str(&expected_ty);
-        assert_eq!(expected_json.to_string(), actual_json)
+        assert_eq!(expected_json, actual_json)
+    }
+
+    #[wasm_bindgen_test]
+    fn parse_entity_to_value() {
+
+        let entity = Entity {
+            key: felt!("0x123"),
+            models: vec![
+                Model {
+                    name: "position".into(),
+                    members: vec![
+                        Member {
+                            name: "kind".into(),
+                            key: false,
+                            ty: Ty::Enum(Enum {
+                                name: "PlayerKind".into(),
+                                option: Some(1),
+                                options: vec![
+                                    EnumOption {
+                                        name: "Good".into(),
+                                        ty: Ty::Tuple(vec![]),
+                                    },
+                                    EnumOption {
+                                        name: "Bad".into(),
+                                        ty: Ty::Tuple(vec![]),
+                                    },
+                                ],
+                            }),
+                        },
+                        Member {
+                            name: "vec".into(),
+                            key: false,
+                            ty: Ty::Struct(Struct {
+                                name: "vec".into(),
+                                children: vec![
+                                    Member {
+                                        name: "x".into(),
+                                        key: false,
+                                        ty: Ty::Primitive(Primitive::U128(Some(10))),
+                                    },
+                                    Member {
+                                        name: "y".into(),
+                                        key: false,
+                                        ty: Ty::Primitive(Primitive::U128(Some(10))),
+                                    },
+                                ],
+                            }),
+                        },
+                    ]
+                },
+                Model {
+                    name: "stats".into(),
+                    members: vec![
+                        Member {
+                            name: "health".into(),
+                            key: false,
+                            ty: Ty::Primitive(Primitive::U64(Some(42))),
+                        },
+                        Member {
+                            name: "mana".into(),
+                            key: false,
+                            ty: Ty::Primitive(Primitive::U64(Some(69))),
+                        },
+                        Member {
+                            name: "is_dead".into(),
+                            key: false,
+                            ty: Ty::Primitive(Primitive::Bool(Some(false))),
+                        },
+                    ]
+                }
+            ]
+        };
+
+        let expected_json = json!({
+            "0x123": {
+                "position" : {
+                    "kind": "Bad",
+                    "vec": {
+                        "x": "0xa",
+                        "y": "0xa",
+                    }
+                },
+                "stats" : {
+                    "health": 42,
+                    "mana": 69,
+                    "is_dead": false,
+                }
+            }
+        });
+
+        let actual_json = parse_entities_as_json_str(vec![entity]);
+        assert_eq!(expected_json, actual_json)
     }
 }
