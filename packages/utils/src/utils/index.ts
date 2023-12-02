@@ -110,14 +110,11 @@ export function parseComponentValue(value: string, type: RecsType) {
  * @param {string[]} values - An array of string values used to populate the decoded component.
  * @returns {Object} The decoded component object.
  */
-export function decodeComponent(
-    component: Component,
-    values: string[],
-): any {
+export function decodeComponent(component: Component, values: string[]): any {
     const schema: any = component.schema;
     const types: string[] = (component.metadata?.types as string[]) ?? [];
     const indices = { types: 0, values: 0 };
-    return decodeComponentValues(schema, types, values, indices)
+    return decodeComponentValues(schema, types, values, indices);
 }
 
 function decodeComponentValues(
@@ -128,22 +125,33 @@ function decodeComponentValues(
 ): any {
     // Iterate through the keys of the schema and reduce them to build the decoded component.
     return Object.keys(schema).reduce((acc: any, key) => {
-        const valueType = schema[key]
+        const valueType = schema[key];
         if (typeof valueType === "object") {
             // valueType is a Schema
             // it means it's a nested component. Therefore, we recursively decode it.
-            acc[key] = decodeComponentValues(valueType as Schema, types, values, indices);
+            acc[key] = decodeComponentValues(
+                valueType as Schema,
+                types,
+                values,
+                indices
+            );
         } else {
             // valueType is a RecsType
             // If the schema key points directly to a type or is not an object,
             // we parse its value using the provided parseComponentValue function
             // and move to the next index in the values array.
-            acc[key] = parseComponentValue(values[indices.values], valueType as RecsType);
+            acc[key] = parseComponentValue(
+                values[indices.values],
+                valueType as RecsType
+            );
             indices.values++;
             // the u256 type in cairo is actually { low: u128, high: u128 }
             // we need to consume two u128 values, shifting the second to compose u256
             if (types[indices.types] == "u256") {
-                const value = parseComponentValue(values[indices.values], valueType as RecsType) as bigint;
+                const value = parseComponentValue(
+                    values[indices.values],
+                    valueType as RecsType
+                ) as bigint;
                 acc[key] |= value << 128n;
                 indices.values++;
             }

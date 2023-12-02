@@ -125,22 +125,24 @@ function App() {
 
             <div className="card">
                 <div className="movement-buttons">
-                    <button 
+                    <button
                         onClick={() =>
                             position && position.vec.y > 0
-                            ? move(account, Direction.Up)
-                            : console.log("Reach the borders of the world.")
-                        }>
+                                ? move(account, Direction.Up)
+                                : console.log("Reach the borders of the world.")
+                        }
+                    >
                         Move Up
                     </button>
                 </div>
                 <div className="movement-buttons">
-                    <button 
+                    <button
                         onClick={() =>
                             position && position.vec.x > 0
-                            ? move(account, Direction.Left)
-                            : console.log("Reach the borders of the world.")
-                        }>
+                                ? move(account, Direction.Left)
+                                : console.log("Reach the borders of the world.")
+                        }
+                    >
                         Move Left
                     </button>
                     <button onClick={() => move(account, Direction.Right)}>

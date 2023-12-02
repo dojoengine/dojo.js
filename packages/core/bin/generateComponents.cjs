@@ -59,7 +59,11 @@ manifest.models.forEach((model) => {
         ).toString();
 
         const schema = JSON.parse(output);
-        const recsTypeObject = parseModelSchemaToRecs(schema, types, customTypes);
+        const recsTypeObject = parseModelSchemaToRecs(
+            schema,
+            types,
+            customTypes
+        );
 
         fileContent += `	  ${modelName}: (() => {\n`;
         fileContent += `	    return defineComponent(\n`;
@@ -69,7 +73,9 @@ manifest.models.forEach((model) => {
         fileContent += `	        metadata: {\n`;
         fileContent += `	          name: "${modelName}",\n`;
         fileContent += `	          types: ${JSON.stringify(types)},\n`;
-        fileContent += `	          customTypes: ${JSON.stringify(customTypes)},\n`;
+        fileContent += `	          customTypes: ${JSON.stringify(
+            customTypes
+        )},\n`;
         fileContent += `	        },\n`;
         fileContent += `	      }\n`;
         fileContent += `	    );\n`;
