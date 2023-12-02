@@ -17,8 +17,8 @@
     "author": "Loaf",
     "license": "MIT",
     "main": "./dist/index.js",
-    "dependencies": {
-        "starknet": "^5.19.5"
+    "peerDependencies": {
+        "starknet": "5.19.5"
     },
     "devDependencies": {
         "@types/elliptic": "^6.4.14",
