@@ -15,7 +15,8 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "Moves",
-                        types: ["Direction"],
+                        types: ["contractaddress", "u8", "enum"],
+                        customTypes: ["Direction"],
                     },
                 }
             );
@@ -30,7 +31,8 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "Position",
-                        types: ["Vec2"],
+                        types: ["contractaddress", "u32", "u32"],
+                        customTypes: ["Vec2"],
                     },
                 }
             );
