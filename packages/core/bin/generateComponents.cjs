@@ -49,6 +49,7 @@ fileContent += `import { defineComponent, Type as RecsType, World } from "@dojoe
 fileContent += `export function defineContractComponents(world: World) {\n  return {\n`;
 
 manifest.models.forEach((model) => {
+    const types = [];
     const customTypes = [];
     const modelName = model.name;
 
@@ -58,7 +59,11 @@ manifest.models.forEach((model) => {
         ).toString();
 
         const schema = JSON.parse(output);
-        const recsTypeObject = parseModelSchemaToRecs(schema, customTypes);
+        const recsTypeObject = parseModelSchemaToRecs(
+            schema,
+            types,
+            customTypes
+        );
 
         fileContent += `	  ${modelName}: (() => {\n`;
         fileContent += `	    return defineComponent(\n`;
@@ -67,7 +72,10 @@ manifest.models.forEach((model) => {
         fileContent += `	      {\n`;
         fileContent += `	        metadata: {\n`;
         fileContent += `	          name: "${modelName}",\n`;
-        fileContent += `	          types: ${JSON.stringify(customTypes)},\n`;
+        fileContent += `	          types: ${JSON.stringify(types)},\n`;
+        fileContent += `	          customTypes: ${JSON.stringify(
+            customTypes
+        )},\n`;
         fileContent += `	        },\n`;
         fileContent += `	      }\n`;
         fileContent += `	    );\n`;
@@ -86,46 +94,48 @@ fs.writeFile(jsFilePath, fileContent, (err) => {
     if (err) {
         console.error("error writing file:", err);
     } else {
-        console.log("file generated successfully");
+        console.log("Components file generated successfully:", jsFilePath);
     }
 });
 
-function parseModelSchemaToRecs(schema, customTypes = []) {
+function parseModelSchemaToRecs(schema, types, customTypes) {
     // top level type must be struct
     if (schema.type !== "struct") {
         throw new Error("unsupported root schema type");
     }
-    return parseSchemaStruct(schema.content, customTypes);
+    return parseSchemaStruct(schema.content, types, customTypes);
 }
 
-function parseModelSchemaToRecsImpl(schema, customTypes) {
+function parseModelSchemaToRecsImpl(schema, types, customTypes) {
     const type = schema.type;
     const content = schema.content;
 
     if (type === "primitive") {
-        return parseSchemaPrimitive(content, customTypes);
+        return parseSchemaPrimitive(content, types);
     } else if (type === "struct") {
         customTypes.push(content.name);
-        return parseSchemaStruct(content, customTypes);
+        return parseSchemaStruct(content, types, customTypes);
     } else if (type === "enum") {
+        types.push("enum");
         customTypes.push(content.name);
         return parseSchemaEnum(content);
     } else if (type === "tuple") {
-        return parseSchemaTuple(content, customTypes);
+        return parseSchemaTuple(content, types, customTypes);
     }
 }
 
-function parseSchemaPrimitive(content, customTypes) {
+function parseSchemaPrimitive(content, types) {
     const scalarType = content["scalar_type"].toLowerCase();
-    customTypes.push(scalarType);
+    types.push(scalarType);
     return cairoToRecsType[scalarType] ?? "RecsType.String"; // Default type set to String
 }
 
-function parseSchemaStruct(content, customTypes) {
+function parseSchemaStruct(content, types, customTypes) {
     return `{ ${content.children
         .map((member) => {
             return `${member.name}: ${parseModelSchemaToRecsImpl(
                 member.member_type,
+                types,
                 customTypes
             )}`;
         })
@@ -136,8 +146,8 @@ function parseSchemaEnum(_schema) {
     return "RecsType.Number";
 }
 
-function parseSchemaTuple(content, customTypes) {
+function parseSchemaTuple(content, types, customTypes) {
     return `[ ${content
-        .map((schema) => parseModelSchemaToRecsImpl(schema, customTypes))
+        .map((schema) => parseModelSchemaToRecsImpl(schema, types, customTypes))
         .join(", ")} ]`;
 }
