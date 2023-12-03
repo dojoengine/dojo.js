@@ -67,7 +67,6 @@ export function createSystemCalls(
                 player: BigInt(entityId),
                 vec: updatePositionWithDirection(
                     direction,
-                    // currently recs does not support nested values so we use any here
                     getComponentValue(Position, entityId) as any
                 ).vec,
             },
