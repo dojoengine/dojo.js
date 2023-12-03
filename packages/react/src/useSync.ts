@@ -26,7 +26,7 @@ export function useSync<S extends Schema>(
         [component.metadata?.name]
     );
 
-    const keys_to_strings = useMemo(
+    const keysToStrings = useMemo(
         () => keys.map((key) => key.toString()),
         [keys]
     );
@@ -44,7 +44,7 @@ export function useSync<S extends Schema>(
                             component.schema,
                             await client.getModelValue(
                                 componentName as string,
-                                keys_to_strings
+                                keysToStrings
                             )
                         ) as ComponentValue
                     );
@@ -58,21 +58,6 @@ export function useSync<S extends Schema>(
 
         return () => {
             isMounted = false;
-        };
-    }, [client]);
-
-    useEffect(() => {
-        const entity = {
-            model: componentName as string,
-            keys: keys_to_strings,
-        };
-
-        client.addEntitiesToSync([entity]);
-
-        return () => {
-            client.removeEntitiesToSync([entity]).catch((error) => {
-                console.error("Failed to remove entities on cleanup", error);
-            });
         };
     }, [client]);
 }

@@ -62,7 +62,6 @@ function App() {
     };
 
     useEffect(() => {
-        // Clear message after 3 seconds
         if (clipboardStatus.message) {
             const timer = setTimeout(() => {
                 setClipboardStatus({ message: "", isError: false });
@@ -124,7 +123,7 @@ function App() {
             </div>
 
             <div className="card">
-                <div className="movement-buttons">
+                <div>
                     <button
                         onClick={() =>
                             position && position.vec.y > 0
@@ -135,7 +134,7 @@ function App() {
                         Move Up
                     </button>
                 </div>
-                <div className="movement-buttons">
+                <div>
                     <button
                         onClick={() =>
                             position && position.vec.x > 0
@@ -149,7 +148,7 @@ function App() {
                         Move Right
                     </button>
                 </div>
-                <div className="movement-buttons">
+                <div>
                     <button onClick={() => move(account, Direction.Down)}>
                         Move Down
                     </button>
