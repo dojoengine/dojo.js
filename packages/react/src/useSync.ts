@@ -62,6 +62,12 @@ export function useSync<S extends Schema>(
     }, [client]);
 
     useEffect(() => {
+        let fetchEntities = async () => {
+            const entities = await client.getEntitiesByKeys("not-yet-used", keys_to_strings, 5, 0);
+            console.log(entities);
+        }
+        fetchEntities();
+
         const entity = {
             model: componentName as string,
             keys: keys_to_strings,
