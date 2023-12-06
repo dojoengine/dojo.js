@@ -7,7 +7,7 @@ import {
     Schema,
     setComponent,
 } from "@dojoengine/recs";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Client } from "@dojoengine/torii-client";
 import { convertValues } from "./utils";
 
@@ -16,21 +16,6 @@ export function useSync<S extends Schema>(
     component: Component<S, Metadata, undefined>,
     keys: any[]
 ) {
-    const entityIndex = useMemo(() => {
-        if (keys.length === 1) return keys[0].toString();
-        return getEntityIdFromKeys(keys);
-    }, [keys]);
-
-    const componentName = useMemo(
-        () => component.metadata?.name,
-        [component.metadata?.name]
-    );
-
-    const keysToStrings = useMemo(
-        () => keys.map((key) => key.toString()),
-        [keys]
-    );
-
     useEffect(() => {
         let isMounted = true;
 
@@ -39,12 +24,12 @@ export function useSync<S extends Schema>(
                 if (isMounted) {
                     setComponent(
                         component,
-                        entityIndex as Entity,
+                        getEntityIdFromKeys(keys) as Entity,
                         convertValues(
                             component.schema,
                             await client.getModelValue(
-                                componentName as string,
-                                keysToStrings
+                                component.metadata?.name as string,
+                                keys.map((key) => key.toString())
                             )
                         ) as ComponentValue
                     );
@@ -58,6 +43,21 @@ export function useSync<S extends Schema>(
 
         return () => {
             isMounted = false;
+        };
+    }, [client]);
+
+    useEffect(() => {
+        const entity = {
+            model: component.metadata?.name as string,
+            keys: keys.map((key) => key.toString()),
+        };
+
+        client.addEntitiesToSync([entity]);
+
+        return () => {
+            client.removeEntitiesToSync([entity]).catch((error) => {
+                console.error("Failed to remove entities on cleanup", error);
+            });
         };
     }, [client]);
 }
