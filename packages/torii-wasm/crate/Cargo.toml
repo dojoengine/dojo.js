@@ -8,31 +8,37 @@ version = "0.3.1"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-crate-type = [ "cdylib", "rlib" ]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-async-std = { version = "1.12.0", default-features = false, features = [ "std" ] }
+async-std = { version = "1.12.0", default-features = false, features = ["std"] }
 async-trait = "0.1.68"
 futures = "0.3.28"
 parking_lot = "0.12.1"
-serde = { version = "1.0.156", features = [ "derive" ] }
+serde = { version = "1.0.156", features = ["derive"] }
 serde_json = "1.0.64"
 starknet = "0.6.0"
 thiserror = "1.0.32"
-tokio = { version = "1.32.0", default-features = false, features = [ "rt" ] }
+tokio = { version = "1.32.0", default-features = false, features = ["rt"] }
 url = "2.4.0"
 
 # Dojo
-dojo-types = { git = "https://github.com/dojoengine/dojo", rev = "9d207ba5b46227e6e2544e0b8a4988abbb263345" }
-torii-client = { git = "https://github.com/dojoengine/dojo", rev = "9d207ba5b46227e6e2544e0b8a4988abbb263345" }
-torii-grpc = { git = "https://github.com/dojoengine/dojo", rev = "9d207ba5b46227e6e2544e0b8a4988abbb263345" }
+dojo-types = { git = "https://github.com/dojoengine/dojo", rev = "48d04d1ecb5e97567d4dfa70f018efa94802a45f" }
+torii-client = { git = "https://github.com/dojoengine/dojo", rev = "48d04d1ecb5e97567d4dfa70f018efa94802a45f" }
+torii-grpc = { git = "https://github.com/dojoengine/dojo", rev = "48d04d1ecb5e97567d4dfa70f018efa94802a45f" }
 
 # WASM
 js-sys = "0.3.64"
 serde-wasm-bindgen = "0.6.0"
 wasm-bindgen = "=0.2.88"
 wasm-bindgen-futures = "0.4.37"
-web-sys = { version = "0.3.4", features = [ 'MessageEvent', 'Window', 'Worker', 'WorkerGlobalScope', 'console' ] }
+web-sys = { version = "0.3.4", features = [
+    'MessageEvent',
+    'Window',
+    'Worker',
+    'WorkerGlobalScope',
+    'console',
+] }
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
@@ -51,4 +57,4 @@ opt-level = 1
 wasm-bindgen-test = "=0.3.38"
 
 [features]
-console-error-panic = [ "dep:console_error_panic_hook" ]
+console-error-panic = ["dep:console_error_panic_hook"]

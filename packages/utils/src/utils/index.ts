@@ -183,9 +183,9 @@ export function hexToAscii(hex: string) {
  * @returns {Entity} The determined entity ID.
  */
 export function getEntityIdFromKeys(keys: bigint[]): Entity {
-    if (keys.length === 1) {
-        return ("0x" + keys[0].toString(16)) as Entity;
-    }
+    // if (keys.length === 1) {
+    //     return ("0x" + keys[0].toString(16)) as Entity;
+    // }
     // calculate the poseidon hash of the keys
     let poseidon = poseidonHashMany(keys);
     return ("0x" + poseidon.toString(16)) as Entity;
