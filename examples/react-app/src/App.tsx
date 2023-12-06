@@ -1,4 +1,4 @@
-import { useComponentValue, useSync, useSyncWorld } from "@dojoengine/react";
+import { useComponentValue } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
@@ -11,7 +11,6 @@ function App() {
         setup: {
             systemCalls: { spawn, move },
             components: { Moves, Position },
-            network: { contractComponents, toriiClient },
         },
         account: {
             create,
