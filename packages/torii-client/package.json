@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-client",
-    "version": "0.1.58",
+    "version": "0.1.59",
     "description": "",
     "main": "dist/index.js",
     "type": "module",
@@ -17,7 +17,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@dojoengine/torii-wasm": "../torii-wasm",
+        "@dojoengine/torii-wasm": "^0.1.58",
         "starknet": "5.19.5",
         "typescript": "^5.0.3"
     },
