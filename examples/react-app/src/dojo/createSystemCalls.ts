@@ -4,7 +4,11 @@ import { Entity, getComponentValue } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { Direction, updatePositionWithDirection } from "../utils";
-import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
+import {
+    getEntityIdFromKeys,
+    getEvents,
+    setComponentsFromEvents,
+} from "@dojoengine/utils";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -13,7 +17,9 @@ export function createSystemCalls(
     { Position, Moves }: ClientComponents
 ) {
     const spawn = async (signer: Account) => {
-        const entityId = signer.address.toString() as Entity;
+        const entityId = getEntityIdFromKeys([
+            BigInt(signer.address),
+        ]) as Entity;
 
         const positionId = uuid();
         Position.addOverride(positionId, {
@@ -58,7 +64,9 @@ export function createSystemCalls(
     };
 
     const move = async (signer: Account, direction: Direction) => {
-        const entityId = signer.address.toString() as Entity;
+        const entityId = getEntityIdFromKeys([
+            BigInt(signer.address),
+        ]) as Entity;
 
         const positionId = uuid();
         Position.addOverride(positionId, {

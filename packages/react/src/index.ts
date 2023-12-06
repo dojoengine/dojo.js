@@ -6,3 +6,4 @@ export * from "./usePromise";
 export * from "./syncManager";
 export * from "./useEntityQuery";
 export * from "./utils";
+export * from "./useSyncWorld";

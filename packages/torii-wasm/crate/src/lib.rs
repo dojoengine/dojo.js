@@ -32,6 +32,27 @@ pub struct Client {
 
 #[wasm_bindgen]
 impl Client {
+    #[wasm_bindgen(js_name = getEntities)]
+    pub async fn get_entities(
+        &self,
+        limit: u32,
+        offset: u32
+    ) -> Result<JsValue, JsValue> {
+        #[cfg(feature = "console-error-panic")]
+        console_error_panic_hook::set_once();
+
+        let results = self.inner.entities(Query {
+            clause: None,
+            limit,
+            offset
+        }).await;
+
+        match results {
+            Ok(entities) => Ok(js_sys::JSON::parse(&parse_entities_as_json_str(entities).to_string())?),
+            Err(err) => Err(JsValue::from(format!("failed to get entities: {err}"))),
+        }
+    }
+    
     #[wasm_bindgen(js_name = getEntitiesByKeys)]
     pub async fn get_entities_by_keys(
         &self,
@@ -50,10 +71,10 @@ impl Client {
             .map_err(|err| JsValue::from(format!("failed to parse entity keys: {err}")))?;
 
         let results = self.inner.entities(Query {
-            clause: Clause::Keys(KeysClause {
+            clause: Some(Clause::Keys(KeysClause {
                 model: model.to_string(),
                 keys
-            }),
+            })),
             limit,
             offset
         }).await;

@@ -27,7 +27,7 @@ export async function setupNetwork() {
     const createGraphSdk = () =>
         getSdk(new GraphQLClient(VITE_PUBLIC_TORII + "/graphql"));
 
-    const torii_client = await torii.createClient([], {
+    const toriiClient = await torii.createClient([], {
         rpcUrl: VITE_PUBLIC_NODE_URL,
         toriiUrl: VITE_PUBLIC_TORII,
         worldAddress: VITE_PUBLIC_WORLD_ADDRESS,
@@ -37,7 +37,7 @@ export async function setupNetwork() {
     return {
         provider,
         world,
-        torii_client,
+        toriiClient,
 
         // Define contract components for the world.
         contractComponents: defineContractComponents(world),
