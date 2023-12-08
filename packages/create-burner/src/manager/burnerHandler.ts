@@ -52,7 +52,7 @@ export class BurnerHandler {
     };
     
     createBurnerAccount = async (burnerManager: string) => {
-        return newAccount;
+        return await this.burnerManager.create();;
     };
     
     clearBurner() {
