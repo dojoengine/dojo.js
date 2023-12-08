@@ -17,7 +17,7 @@ export async function setup() {
     // Create client components based on the network setup.
     const components = createClientComponents(network);
 
-    await getEntities(network.toriiClient, network.contractComponents as any);
+    // await getEntities(network.toriiClient, network.contractComponents as any);
 
     // Establish system calls using the network and components.
     const systemCalls = createSystemCalls(network, components);

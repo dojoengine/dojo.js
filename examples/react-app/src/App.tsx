@@ -1,4 +1,4 @@
-import { useComponentValue } from "@dojoengine/react";
+import { useComponentValue, useSync } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
@@ -11,6 +11,13 @@ function App() {
         setup: {
             systemCalls: { spawn, move },
             components: { Moves, Position },
+            network: {
+                contractComponents: {
+                    Moves: MovesContract,
+                    Position: PositionContract,
+                },
+                toriiClient,
+            },
         },
         account: {
             create,
@@ -36,6 +43,9 @@ function App() {
     const position = useComponentValue(Position, entityId);
     const moves = useComponentValue(Moves, entityId);
 
+    useSync(toriiClient, MovesContract, [BigInt(account.address)]);
+    useSync(toriiClient, PositionContract, [BigInt(account.address)]);
+
     const handleRestoreBurners = async () => {
         try {
             await applyFromClipboard();
@@ -60,8 +70,6 @@ function App() {
             return () => clearTimeout(timer);
         }
     }, [clipboardStatus.message]);
-
-    // useSyncWorld(toriiClient, contractComponents);
 
     return (
         <>

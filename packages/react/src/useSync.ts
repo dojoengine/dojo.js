@@ -24,7 +24,9 @@ export function useSync<S extends Schema>(
                 if (isMounted) {
                     setComponent(
                         component,
-                        getEntityIdFromKeys(keys) as Entity,
+                        getEntityIdFromKeys(
+                            keys.map((key) => BigInt(key))
+                        ) as Entity,
                         convertValues(
                             component.schema,
                             await client.getModelValue(
