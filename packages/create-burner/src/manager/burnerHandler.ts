@@ -52,8 +52,7 @@ export class BurnerHandler {
     };
     
     createBurnerAccount = async (burnerManager: string) => {
-        const newAccount = await this.burnerManager.create();
-        return newAccount;
+        return await this.burnerManager.create();;
     };
     
     clearBurner() {
