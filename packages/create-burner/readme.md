@@ -44,6 +44,7 @@ Easily manage, create, and interact with burner accounts on Starknets using this
 -   [Usage](#usage)
     -   [With React](#with-react)
     -   [Vanilla JavaScript](#vanilla-javascript)
+    -   [using BurnerHandler](#burnerhandler)
 -   [API](#api)
 -   [Contribute](#contribute)
 -   [License](#license)
@@ -86,6 +87,41 @@ import { BurnerManager } from "@dojoengine/create-burner";
 const manager = new BurnerManager(options);
 manager.init();
 const activeAccount = manager.getActiveAccount();
+```
+
+### Using BurnerHandler
+
+For simpler control and avoiding using hooks, you can use BurnerHandler:
+
+```typescript
+import { BurnerHandler } from "@dojoengine/create-burner";
+
+const config = {
+    nodeUrl: "your-node-url",
+    masterAddress: "your-master-address",
+    masterPrivateKey: "your-master-private-key",
+    accountClassHash: "your-account-class-hash",
+};
+
+const burnerHandler = new BurnerHandler(config);
+
+// Initialize the burner handler
+await burnerHandler.initialize();
+
+// List all burner accounts
+const burners = burnerHandler.listBurner();
+
+// Select a specific burner account
+const selectedAccount = burnerHandler.selectBurner("address-of-burner");
+
+// Get a specific burner account
+const burnerAccount = burnerHandler.getBurner("address-of-burner");
+
+// Create a new burner account
+const newBurnerAccount = await burnerHandler.createBurnerAccount();
+
+// Clear all burner accounts
+burnerHandler.clearBurner();
 ```
 
 ## API
