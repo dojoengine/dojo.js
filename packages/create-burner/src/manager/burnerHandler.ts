@@ -1,4 +1,3 @@
-
 import { Account, RpcProvider } from "starknet";
 import { BurnerManager } from "./burnerManager";
 
@@ -40,23 +39,29 @@ export class BurnerHandler {
 
     listBurner() {
         return this.burnerManager.list();
-    };
-    
-    selectBurner = (address : string) => {
+    }
+
+    selectBurner = (address: string) => {
+        if (!address) {
+            return this.burnerManager.getActiveAccount();
+        }
         this.burnerManager.select(address);
         return this.burnerManager.getActiveAccount();
     };
-    
+
     getBurner = (address: string) => {
         return this.burnerManager.get(address);
     };
-    
-    createBurnerAccount = async (burnerManager: string) => {
-        return await this.burnerManager.create();;
+
+    createBurnerAccount = async () => {
+        return await this.burnerManager.create();
     };
-    
+
     clearBurner() {
         this.burnerManager.clear();
+    }
+
+    getActiveAccount = () => {
+        return this.burnerManager.getActiveAccount();
     };
-    
-};
+}
