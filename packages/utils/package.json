@@ -4,7 +4,7 @@
     "description": "Helpful Dojo Utils",
     "type": "module",
     "scripts": {
-        "build": "tsup",
+        "build": "tsup --dts-resolve",
         "test": "jest"
     },
     "exports": {
@@ -24,6 +24,7 @@
         "fetch-mock": "^9.11.0",
         "jest": "^29.5.0",
         "ts-jest": "^29.1.0",
+        "tsup": "^7.2.0",
         "typescript": "^5.0.3"
     },
     "peerDependencies": {
