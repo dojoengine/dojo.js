@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/create-dojo",
-    "version": "0.1.58",
+    "version": "0.1.60",
     "description": "Scaffold Dojo project from examples",
     "module": "index.ts",
     "main": "./bin/index.js",
@@ -20,8 +20,8 @@
         "cross-spawn": "^7.0.3"
     },
     "devDependencies": {
-        "bun-types": "latest",
         "@types/cross-spawn": "^6.0.6",
+        "bun-types": "latest",
         "tsup": "^7.2.0",
         "typescript": "^5.0.3"
     }
