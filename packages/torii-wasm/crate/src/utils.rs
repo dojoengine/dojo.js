@@ -1,7 +1,7 @@
 use dojo_types::primitive::Primitive;
 use dojo_types::schema::Ty;
-use torii_grpc::types::Entity;
 use serde_json::Value;
+use torii_grpc::types::schema::Entity;
 
 pub fn parse_entities_as_json_str(entities: Vec<Entity>) -> Value {
     entities
@@ -12,16 +12,19 @@ pub fn parse_entities_as_json_str(entities: Vec<Entity>) -> Value {
                 .models
                 .into_iter()
                 .map(|model| {
-                    let model_map = model.members
+                    let model_map = model
+                        .members
                         .iter()
                         .map(|member| (member.name.to_owned(), parse_ty_as_json_str(&member.ty)))
                         .collect::<serde_json::Map<String, Value>>();
 
                     (model.name, model_map.into())
-                }).collect::<serde_json::Map<String, Value>>();
+                })
+                .collect::<serde_json::Map<String, Value>>();
 
             (entity_key, models_map.into())
-        }).collect::<serde_json::Map<String, Value>>()
+        })
+        .collect::<serde_json::Map<String, Value>>()
         .into()
 }
 
@@ -71,9 +74,9 @@ mod test {
     wasm_bindgen_test::wasm_bindgen_test_configure!(run_in_browser);
 
     use dojo_types::schema::{Enum, EnumOption, Member, Struct};
-    use torii_grpc::types::{Entity, Model};
     use serde_json::json;
     use starknet::macros::felt;
+    use torii_grpc::types::{Entity, Model};
     use wasm_bindgen_test::*;
 
     use super::*;
@@ -224,7 +227,6 @@ mod test {
 
     #[wasm_bindgen_test]
     fn parse_entity_to_value() {
-
         let entity = Entity {
             key: felt!("0x123"),
             models: vec![
@@ -268,7 +270,7 @@ mod test {
                                 ],
                             }),
                         },
-                    ]
+                    ],
                 },
                 Model {
                     name: "stats".into(),
@@ -288,9 +290,9 @@ mod test {
                             key: false,
                             ty: Ty::Primitive(Primitive::Bool(Some(false))),
                         },
-                    ]
-                }
-            ]
+                    ],
+                },
+            ],
         };
 
         let expected_json = json!({

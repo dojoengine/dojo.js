@@ -103,7 +103,7 @@ impl Client {
 
         match self
             .inner
-            .entity(&KeysClause {
+            .model(&KeysClause {
                 model: model.to_string(),
                 keys,
             })
@@ -117,67 +117,95 @@ impl Client {
     }
 
     /// Register new entities to be synced.
-    #[wasm_bindgen(js_name = addEntitiesToSync)]
-    pub async fn add_entities_to_sync(&self, entities: Vec<IEntityModel>) -> Result<(), JsValue> {
-        log("adding entities to sync...");
+    #[wasm_bindgen(js_name = addModelsToSync)]
+    pub async fn add_models_to_sync(&self, models: Vec<IEntityModel>) -> Result<(), JsValue> {
+        log("adding models to sync...");
 
         #[cfg(feature = "console-error-panic")]
         console_error_panic_hook::set_once();
 
-        let entities = entities
+        let models = models
             .into_iter()
             .map(|e| TryInto::<KeysClause>::try_into(e))
             .collect::<Result<Vec<_>, _>>()?;
 
         self.inner
-            .add_entities_to_sync(entities)
+            .add_models_to_sync(models)
             .await
             .map_err(|err| JsValue::from(err.to_string()))
     }
 
     /// Remove the entities from being synced.
-    #[wasm_bindgen(js_name = removeEntitiesToSync)]
-    pub async fn remove_entities_to_sync(
+    #[wasm_bindgen(js_name = removeModelsToSync)]
+    pub async fn remove_models_to_sync(
         &self,
-        entities: Vec<IEntityModel>,
+        models: Vec<IEntityModel>,
     ) -> Result<(), JsValue> {
-        log("removing entities to sync...");
+        log("removing models to sync...");
 
         #[cfg(feature = "console-error-panic")]
         console_error_panic_hook::set_once();
 
-        let entities = entities
+        let models = models
             .into_iter()
             .map(|e| TryInto::<KeysClause>::try_into(e))
             .collect::<Result<Vec<_>, _>>()?;
 
         self.inner
-            .remove_entities_to_sync(entities)
+            .remove_models_to_sync(models)
             .await
             .map_err(|err| JsValue::from(err.to_string()))
     }
 
     /// Register a callback to be called every time the specified synced entity's value changes.
-    #[wasm_bindgen(js_name = onSyncEntityChange)]
-    pub fn on_sync_entity_change(
+    #[wasm_bindgen(js_name = onSyncModelChange)]
+    pub fn on_sync_model_change(
         &self,
-        entity: IEntityModel,
+        model: IEntityModel,
         callback: js_sys::Function,
     ) -> Result<(), JsValue> {
         #[cfg(feature = "console-error-panic")]
         console_error_panic_hook::set_once();
 
-        let entity = serde_wasm_bindgen::from_value::<EntityModel>(entity.into())?;
-        let model = cairo_short_string_to_felt(&entity.model).expect("invalid model name");
+        let model = serde_wasm_bindgen::from_value::<EntityModel>(model.into())?;
+        let name = cairo_short_string_to_felt(&model.model).expect("invalid model name");
         let mut rcv = self
             .inner
             .storage()
-            .add_listener(model, &entity.keys)
+            .add_listener(name, &model.keys)
             .unwrap();
 
         wasm_bindgen_futures::spawn_local(async move {
             while rcv.next().await.is_some() {
                 let _ = callback.call0(&JsValue::null());
+            }
+        });
+
+        Ok(())
+    }
+
+    #[wasm_bindgen(js_name = onEntityUpdated)]
+    pub async fn on_entity_updated(
+        &self,
+        callback: js_sys::Function,
+    ) -> Result<(), JsValue> {
+        #[cfg(feature = "console-error-panic")]
+        console_error_panic_hook::set_once();
+
+        let mut stream = self
+            .inner
+            .on_entity_updated(vec![])
+            .await
+            .unwrap();
+
+        wasm_bindgen_futures::spawn_local(async move {
+            while let Some(update) = stream.next().await {
+                let entity = update.expect("no updated entity");
+                let json_str = parse_entities_as_json_str(vec![entity]).to_string();
+                let _ = callback.call1(
+                    &JsValue::null(), 
+                    &js_sys::JSON::parse(&json_str).expect("json parse failed")
+                );
             }
         });
 
@@ -189,7 +217,7 @@ impl Client {
 #[wasm_bindgen(js_name = createClient)]
 #[allow(non_snake_case)]
 pub async fn create_client(
-    initialEntitiesToSync: Vec<IEntityModel>,
+    initialModelsToSync: Vec<IEntityModel>,
     config: ClientConfig,
 ) -> Result<Client, JsValue> {
     #[cfg(feature = "console-error-panic")]
@@ -201,7 +229,7 @@ pub async fn create_client(
         world_address,
     } = config;
 
-    let entities = initialEntitiesToSync
+    let models = initialModelsToSync
         .into_iter()
         .map(|e| TryInto::<KeysClause>::try_into(e))
         .collect::<Result<Vec<_>, _>>()?;
@@ -210,7 +238,7 @@ pub async fn create_client(
         .map_err(|err| JsValue::from(format!("failed to parse world address: {err}")))?;
 
     let client =
-        torii_client::client::Client::new(torii_url, rpc_url, world_address, Some(entities))
+        torii_client::client::Client::new(torii_url, rpc_url, world_address, Some(models))
             .await
             .map_err(|err| JsValue::from(format!("failed to build client: {err}")))?;
 

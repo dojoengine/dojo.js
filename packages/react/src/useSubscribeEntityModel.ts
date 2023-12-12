@@ -50,7 +50,7 @@ export function useSubscribeEntityModel<S extends Schema>(
     };
 
     useEffect(() => {
-        client.onSyncEntityChange(
+        client.onSyncModelChange(
             { model: componentName as string, keys: keys_to_strings },
             setModelValue
         );

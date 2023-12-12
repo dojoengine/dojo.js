@@ -15,17 +15,17 @@ async-std = { version = "1.12.0", default-features = false, features = ["std"] }
 async-trait = "0.1.68"
 futures = "0.3.28"
 parking_lot = "0.12.1"
-serde = { version = "1.0.156", features = ["derive"] }
+serde = { version = "1.0.192", features = ["derive"] }
 serde_json = "1.0.64"
-starknet = "0.6.0"
+starknet = "0.7.0"
 thiserror = "1.0.32"
 tokio = { version = "1.32.0", default-features = false, features = ["rt"] }
 url = "2.4.0"
 
 # Dojo
-dojo-types = { git = "https://github.com/dojoengine/dojo", rev = "48d04d1ecb5e97567d4dfa70f018efa94802a45f" }
-torii-client = { git = "https://github.com/dojoengine/dojo", rev = "48d04d1ecb5e97567d4dfa70f018efa94802a45f" }
-torii-grpc = { git = "https://github.com/dojoengine/dojo", rev = "48d04d1ecb5e97567d4dfa70f018efa94802a45f" }
+dojo-types = { git = "https://github.com/dojoengine/dojo", rev = "5204670162fe5babb130e45e49843e11cc84b661" }
+torii-client = { git = "https://github.com/dojoengine/dojo", rev = "5204670162fe5babb130e45e49843e11cc84b661" }
+torii-grpc = { git = "https://github.com/dojoengine/dojo", rev = "5204670162fe5babb130e45e49843e11cc84b661" }
 
 # WASM
 js-sys = "0.3.64"
