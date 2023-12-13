@@ -187,14 +187,21 @@ impl Client {
     #[wasm_bindgen(js_name = onEntityUpdated)]
     pub async fn on_entity_updated(
         &self,
+        ids: Option<Vec<String>>,
         callback: js_sys::Function,
     ) -> Result<(), JsValue> {
         #[cfg(feature = "console-error-panic")]
         console_error_panic_hook::set_once();
 
+        let ids = ids
+            .unwrap_or(vec![])
+            .into_iter()
+            .map(|id| FieldElement::from_str(&id).map_err(|err| JsValue::from(format!("failed to parse entity id: {err}"))))
+            .collect::<Result<Vec<_>, _>>()?;
+
         let mut stream = self
             .inner
-            .on_entity_updated(vec![])
+            .on_entity_updated(ids)
             .await
             .unwrap();
 
