@@ -140,10 +140,10 @@ importers:
                 specifier: 0.1.35
                 version: 0.1.35(typescript@5.3.3)
             "@dojoengine/torii-client":
-                specifier: ^0.1.60
+                specifier: ^0.1.61-alpha.0
                 version: link:../torii-client
             "@dojoengine/utils":
-                specifier: ^0.1.35
+                specifier: ^0.1.61-alpha.0
                 version: link:../utils
             "@latticexyz/utils":
                 specifier: ^2.0.0-next.11
@@ -213,7 +213,7 @@ importers:
     packages/torii-client:
         dependencies:
             "@dojoengine/torii-wasm":
-                specifier: ^0.1.60
+                specifier: ^0.1.61-alpha.0
                 version: link:../torii-wasm
             starknet:
                 specifier: 5.19.5
