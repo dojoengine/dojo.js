@@ -14,12 +14,16 @@
         "jsx": "react-jsx",
         /* Linting */
         "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
+        // "noUnusedLocals": true,
+        // "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "allowSyntheticDefaultImports": true
     },
     "include": ["src"],
+    "baseUrl": ".",
+    "paths": {
+        "@/*": ["./src/*"]
+    },
     "references": [
         {
             "path": "./tsconfig.node.json"

@@ -1,5 +1,5 @@
 import { PhaserLayer } from "..";
-import { Direction } from "../../utils";
+import { Direction } from "../../dojo/utils";
 
 export const controls = (layer: PhaserLayer) => {
     const {
@@ -8,35 +8,63 @@ export const controls = (layer: PhaserLayer) => {
         },
         networkLayer: {
             systemCalls: { move },
-            account,
+            account: signer,
         },
     } = layer;
 
     input.onKeyPress(
         (keys) => keys.has("W"),
         () => {
-            move({ signer: account, direction: Direction.Up });
+            move({ signer, direction: Direction.Up });
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("A"),
         () => {
-            move({ signer: account, direction: Direction.Left });
+            move({ signer, direction: Direction.Left });
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("S"),
         () => {
-            move({ signer: account, direction: Direction.Down });
+            move({ signer, direction: Direction.Down });
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("D"),
         () => {
-            move({ signer: account, direction: Direction.Right });
+            move({ signer, direction: Direction.Right });
+        }
+    );
+
+    input.onKeyPress(
+        (keys) => keys.has("UP"),
+        () => {
+            move({ signer, direction: Direction.Up });
+        }
+    );
+
+    input.onKeyPress(
+        (keys) => keys.has("LEFT"),
+        () => {
+            move({ signer, direction: Direction.Left });
+        }
+    );
+
+    input.onKeyPress(
+        (keys) => keys.has("DOWN"),
+        () => {
+            move({ signer, direction: Direction.Down });
+        }
+    );
+
+    input.onKeyPress(
+        (keys) => keys.has("RIGHT"),
+        () => {
+            move({ signer, direction: Direction.Right });
         }
     );
 };
