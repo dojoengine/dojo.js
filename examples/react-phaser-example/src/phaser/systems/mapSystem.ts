@@ -18,7 +18,10 @@ export function mapSystem(layer: PhaserLayer) {
         for (let y = 0; y < 50; y++) {
             const coord = { x, y };
             // Get a noise value between 0 and 100
-            const seed = Math.floor(((snoise([x / MAP_AMPLITUDE, 0, y / MAP_AMPLITUDE]) + 1) / 2) * 100);
+            const seed = Math.floor(
+                ((snoise([x / MAP_AMPLITUDE, 0, y / MAP_AMPLITUDE]) + 1) / 2) *
+                    100
+            );
 
             if (seed > 70) {
                 // This would be the highest 'elevation'
