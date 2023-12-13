@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { createNetworkLayer } from "../dojo/createNetworkLayer";
+import { createNetworkLayer } from "../../dojo/createNetworkLayer";
 import { usePromiseValue } from "./usePromiseValue";
 
 export const useNetworkLayer = () => {

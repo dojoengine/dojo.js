@@ -7,20 +7,20 @@ export enum Direction {
 
 export function updatePositionWithDirection(
     direction: Direction,
-    value: { vec: { x: number; y: number } }
+    value: { x: number; y: number }
 ) {
     switch (direction) {
         case Direction.Left:
-            value.vec.x--;
+            value.x--;
             break;
         case Direction.Right:
-            value.vec.x++;
+            value.x++;
             break;
         case Direction.Up:
-            value.vec.y--;
+            value.y--;
             break;
         case Direction.Down:
-            value.vec.y++;
+            value.y++;
             break;
         default:
             throw new Error("Invalid direction provided");

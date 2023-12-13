@@ -1,4 +1,4 @@
-import { useComponentValue, useSync } from "@dojoengine/react";
+import { useComponentValue } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
@@ -11,13 +11,6 @@ function App() {
         setup: {
             systemCalls: { spawn, move },
             components: { Moves, Position },
-            network: {
-                contractComponents: {
-                    Moves: MovesContract,
-                    Position: PositionContract,
-                },
-                toriiClient,
-            },
         },
         account: {
             create,
@@ -42,9 +35,6 @@ function App() {
     // get current component values
     const position = useComponentValue(Position, entityId);
     const moves = useComponentValue(Moves, entityId);
-
-    useSync(toriiClient, MovesContract, [BigInt(account.address)]);
-    useSync(toriiClient, PositionContract, [BigInt(account.address)]);
 
     const handleRestoreBurners = async () => {
         try {

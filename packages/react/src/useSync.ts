@@ -54,10 +54,10 @@ export function useSync<S extends Schema>(
             keys: keys.map((key) => key.toString()),
         };
 
-        client.addEntitiesToSync([entity]);
+        client.addModelsToSync([entity]);
 
         return () => {
-            client.removeEntitiesToSync([entity]).catch((error) => {
+            client.removeModelsToSync([entity]).catch((error) => {
                 console.error("Failed to remove entities on cleanup", error);
             });
         };

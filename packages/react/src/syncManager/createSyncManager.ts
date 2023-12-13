@@ -38,13 +38,13 @@ export function createSyncManager<S extends Schema>(
     function sync() {
         modelEntries.forEach((modelEntry) => {
             fetchAndSetModelValue(client, modelEntry);
-            client.addEntitiesToSync([
+            client.addModelsToSync([
                 {
                     model: modelEntry.model.metadata?.name as string,
                     keys: modelEntry.keys.map((k) => k.toString()),
                 },
             ]);
-            client.onSyncEntityChange(
+            client.onSyncModelChange(
                 {
                     model: modelEntry.model.metadata?.name! as string,
                     keys: modelEntry.keys.map((k) => k.toString()),
@@ -73,7 +73,7 @@ export function createSyncManager<S extends Schema>(
     function cleanup() {
         modelEntries.forEach((modelEntry) => {
             client
-                .removeEntitiesToSync([
+                .removeModelsToSync([
                     {
                         model: modelEntry.model.metadata?.name as string,
                         keys: modelEntry.keys.map((k) => k.toString()),

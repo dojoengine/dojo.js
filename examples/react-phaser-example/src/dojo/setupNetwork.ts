@@ -2,37 +2,43 @@ import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { RPCProvider } from "@dojoengine/core";
 import { Account, num } from "starknet";
-import manifest from "../../../dojo-starter/target/dev/manifest.json";
+import dev_manifest from "../../../dojo-starter/target/dev/manifest.json";
 import * as torii from "@dojoengine/torii-client";
+import { createBurner } from "./createBurner";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 export async function setupNetwork() {
-    // Extract environment variables for better readability.
     const {
         VITE_PUBLIC_WORLD_ADDRESS,
         VITE_PUBLIC_NODE_URL,
         VITE_PUBLIC_TORII,
     } = import.meta.env;
 
-    // Create a new RPCProvider instance.
     const provider = new RPCProvider(
         VITE_PUBLIC_WORLD_ADDRESS,
-        manifest,
+        dev_manifest,
         VITE_PUBLIC_NODE_URL
     );
 
-    const torii_client = await torii.createClient([], {
+    const toriiClient = await torii.createClient([], {
         rpcUrl: VITE_PUBLIC_NODE_URL,
-        toriiUrl: VITE_PUBLIC_TORII + "/grpc",
+        toriiUrl: VITE_PUBLIC_TORII,
         worldAddress: VITE_PUBLIC_WORLD_ADDRESS,
     });
 
-    // Return the setup object.
+    const { account, burnerManager } = await createBurner();
+
     return {
+        // dojo provider from core
         provider,
+
+        // recs world
         world,
-        torii_client,
+
+        toriiClient,
+        account,
+        burnerManager,
 
         // Define contract components for the world.
         contractComponents: defineContractComponents(world),

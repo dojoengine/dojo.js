@@ -1,0 +1,83 @@
+{
+    "textures": [
+        {
+            "image": "texture.png",
+            "format": "RGBA8888",
+            "size": {
+                "w": 96,
+                "h": 32
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "paper.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "rock.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 32,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "scissors.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 64,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    }
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "3.0",
+        "smartupdate": "$TexturePacker:SmartUpdate:7dd38248733509cfafbacea47809c895:4ba9ad81aa06f2955894ea13212a26b7:88db1022cd6b660616541d2788fcd4f7$"
+    }
+}

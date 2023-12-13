@@ -1,7 +1,5 @@
-import styled from "styled-components";
-import { store } from "../store/store";
-import { Wrapper } from "./wrapper";
-import { SpawnBtn } from "./spawnbtn";
+import { store } from "../store";
+import { CreateAccount } from "./CreateAccount";
 
 export const UI = () => {
     const layers = store((state) => {
@@ -14,10 +12,8 @@ export const UI = () => {
     if (!layers.networkLayer || !layers.phaserLayer) return <></>;
 
     return (
-        <Wrapper>
-            <div className="fixed top-0 w-full bg-black text-white p-8">
-                <SpawnBtn />
-            </div>
-        </Wrapper>
+        <div className="absolute inset-0 pointer-events-none">
+            <CreateAccount />
+        </div>
     );
 };

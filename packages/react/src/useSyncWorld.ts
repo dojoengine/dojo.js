@@ -19,6 +19,14 @@ export function useSyncWorld<S extends Schema>(
     }, [client]);
 }
 
+export const getSyncEntities = async <S extends Schema>(
+    client: Client,
+    components: Component<S, Metadata, undefined>[]
+) => {
+    await getEntities(client, components);
+    syncEntities(client, components);
+};
+
 export const getEntities = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[]
@@ -29,31 +37,47 @@ export const getEntities = async <S extends Schema>(
     while (continueFetching) {
         let entities = await client.getEntities(100, cursor);
 
-        for (let key in entities) {
-            if (entities.hasOwnProperty(key)) {
-                for (let componentName in entities[key]) {
-                    if (entities[key].hasOwnProperty(componentName)) {
-                        let recsComponent = components[componentName as any];
-
-                        if (recsComponent) {
-                            setComponent(
-                                recsComponent,
-                                key as Entity,
-                                convertValues(
-                                    recsComponent.schema,
-                                    entities[key][componentName]
-                                ) as ComponentValue
-                            );
-                        }
-                    }
-                }
-            }
-        }
+        setEntities(entities, components);
 
         if (Object.keys(entities).length < 100) {
             continueFetching = false;
         } else {
             cursor += 100;
+        }
+    }
+};
+
+export const syncEntities = async <S extends Schema>(
+    client: Client,
+    components: Component<S, Metadata, undefined>[]
+) => {
+    client.onEntityUpdated([], (entities: any) =>
+        setEntities(entities, components)
+    );
+};
+
+export const setEntities = async <S extends Schema>(
+    entities: any[],
+    components: Component<S, Metadata, undefined>[]
+) => {
+    for (let key in entities) {
+        if (entities.hasOwnProperty(key)) {
+            for (let componentName in entities[key]) {
+                if (entities[key].hasOwnProperty(componentName)) {
+                    let recsComponent = components[componentName as any];
+
+                    if (recsComponent) {
+                        setComponent(
+                            recsComponent,
+                            key as Entity,
+                            convertValues(
+                                recsComponent.schema,
+                                entities[key][componentName]
+                            ) as ComponentValue
+                        );
+                    }
+                }
+            }
         }
     }
 };
