@@ -1342,7 +1342,7 @@ dependencies = [
 [[package]]
 name = "dojo-types"
 version = "0.4.0-rc1"
-source = "git+https://github.com/dojoengine/dojo?rev=a6909b27797947a325c9fa414a912d83f4afb67b#a6909b27797947a325c9fa414a912d83f4afb67b"
+source = "git+https://github.com/dojoengine/dojo?rev=df5537cf7de8575d85441605c2094f43e2b73b81#df5537cf7de8575d85441605c2094f43e2b73b81"
 dependencies = [
  "crypto-bigint",
  "hex",
@@ -1358,7 +1358,7 @@ dependencies = [
 [[package]]
 name = "dojo-world"
 version = "0.4.0-rc1"
-source = "git+https://github.com/dojoengine/dojo?rev=a6909b27797947a325c9fa414a912d83f4afb67b#a6909b27797947a325c9fa414a912d83f4afb67b"
+source = "git+https://github.com/dojoengine/dojo?rev=df5537cf7de8575d85441605c2094f43e2b73b81#df5537cf7de8575d85441605c2094f43e2b73b81"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -4568,7 +4568,7 @@ dependencies = [
 [[package]]
 name = "torii-client"
 version = "0.4.0-rc1"
-source = "git+https://github.com/dojoengine/dojo?rev=a6909b27797947a325c9fa414a912d83f4afb67b#a6909b27797947a325c9fa414a912d83f4afb67b"
+source = "git+https://github.com/dojoengine/dojo?rev=df5537cf7de8575d85441605c2094f43e2b73b81#df5537cf7de8575d85441605c2094f43e2b73b81"
 dependencies = [
  "async-trait",
  "crypto-bigint",
@@ -4621,7 +4621,7 @@ dependencies = [
 [[package]]
 name = "torii-grpc"
 version = "0.4.0-rc1"
-source = "git+https://github.com/dojoengine/dojo?rev=a6909b27797947a325c9fa414a912d83f4afb67b#a6909b27797947a325c9fa414a912d83f4afb67b"
+source = "git+https://github.com/dojoengine/dojo?rev=df5537cf7de8575d85441605c2094f43e2b73b81#df5537cf7de8575d85441605c2094f43e2b73b81"
 dependencies = [
  "bytes",
  "crypto-bigint",
