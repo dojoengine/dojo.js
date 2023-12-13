@@ -2,16 +2,12 @@ import {
     Entity,
     Has,
     defineSystem,
+    defineEnterSystem,
     getComponentValueStrict,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import {
-    Animations,
-    ORIGIN_OFFSET,
-    TILE_HEIGHT,
-    TILE_WIDTH,
-} from "../config/constants";
+import { Animations, TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
 
 export const move = (layer: PhaserLayer) => {
     const {
@@ -24,34 +20,29 @@ export const move = (layer: PhaserLayer) => {
         },
     } = layer;
 
+    defineEnterSystem(world, [Has(Position)], ({ entity }: any) => {
+        const playerObj = objectPool.get(entity.toString(), "Sprite");
+
+        console.log(playerObj);
+
+        playerObj.setComponent({
+            id: "animation",
+            once: (sprite: any) => {
+                console.log(sprite);
+                sprite.play(Animations.RockIdle);
+            },
+        });
+    });
+
     defineSystem(world, [Has(Position)], ({ entity }: any) => {
+        console.log(entity);
+
         const position = getComponentValueStrict(
             Position,
             entity.toString() as Entity
         );
 
-        const entity_uniform = (+entity).toString();
-
-        console.log(
-            entity,
-            entity_uniform,
-            "\n------- pos/type triggered -------\n",
-            position
-        );
-
-        const player = objectPool.get(entity_uniform, "Sprite");
-
-        player.setComponent({
-            id: "animation",
-            once: (sprite) => {
-                sprite.play(Animations.RockIdle);
-            },
-        });
-
-        const offsetPosition = {
-            x: position?.vec.x - ORIGIN_OFFSET || 0,
-            y: position?.vec.y - ORIGIN_OFFSET || 0,
-        };
+        const offsetPosition = { x: position?.vec.x, y: position?.vec.y };
 
         const pixelPosition = tileCoordToPixelCoord(
             offsetPosition,
@@ -59,11 +50,12 @@ export const move = (layer: PhaserLayer) => {
             TILE_HEIGHT
         );
 
+        const player = objectPool.get(entity, "Sprite");
+
         player.setComponent({
             id: "position",
-            once: (sprite) => {
+            once: (sprite: any) => {
                 sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
-
                 camera.centerOn(pixelPosition?.x, pixelPosition?.y);
             },
         });
