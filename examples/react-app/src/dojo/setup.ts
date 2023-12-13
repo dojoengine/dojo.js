@@ -1,7 +1,7 @@
 import { createClientComponents } from "./createClientComponents";
 import { createSystemCalls } from "./createSystemCalls";
 import { setupNetwork } from "./setupNetwork";
-import { getEntities } from "@dojoengine/react";
+import { getSyncEntities } from "@dojoengine/react";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -17,14 +17,15 @@ export async function setup() {
     // Create client components based on the network setup.
     const components = createClientComponents(network);
 
-    // await getEntities(network.toriiClient, network.contractComponents as any);
-
-    // Establish system calls using the network and components.
-    const systemCalls = createSystemCalls(network, components);
+    // fetch all existing entities from torii
+    await getSyncEntities(
+        network.toriiClient,
+        network.contractComponents as any
+    );
 
     return {
         network,
         components,
-        systemCalls,
+        systemCalls: createSystemCalls(network, components),
     };
 }
