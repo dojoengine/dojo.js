@@ -51,7 +51,9 @@ fileContent += `export function defineContractComponents(world: World) {\n  retu
 manifest.models.forEach((model) => {
     const types = [];
     const customTypes = [];
-    const modelName = model.name;
+
+    let result = model.name.split('::').pop();
+    let modelName = result.charAt(0).toUpperCase() + result.slice(1);
 
     try {
         const output = execSync(
