@@ -52,8 +52,10 @@ manifest.models.forEach((model) => {
     const types = [];
     const customTypes = [];
 
-    let result = model.name.split('::').pop().split('_');
-    let modelName = result.map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('');
+    let result = model.name.split("::").pop().split("_");
+    let modelName = result
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join("");
 
     try {
         const output = execSync(
