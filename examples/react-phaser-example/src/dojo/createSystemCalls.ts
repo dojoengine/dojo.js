@@ -1,10 +1,6 @@
 import { SetupNetworkResult } from "./setupNetwork";
 import { ClientComponents } from "./createClientComponents";
 import { MoveSystemProps, SystemSigner } from "./types";
-import { uuid } from "@latticexyz/utils";
-import { Entity, getComponentValue } from "@dojoengine/recs";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { updatePositionWithDirection } from "./utils";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -15,7 +11,12 @@ export function createSystemCalls(
     const spawn = async (props: SystemSigner) => {
         console.log(props.signer);
         try {
-            await execute(props.signer, "actions", "spawn", []);
+            await execute(
+                props.signer,
+                "dojo_examples::actions::actions",
+                "spawn",
+                []
+            );
         } catch (e) {
             console.error(e);
         }
@@ -25,7 +26,9 @@ export function createSystemCalls(
         const { signer, direction } = props;
 
         try {
-            await execute(signer, "actions", "move", [direction]);
+            await execute(signer, "dojo_examples::actions::actions", "move", [
+                direction,
+            ]);
         } catch (e) {
             console.log(e);
         }
