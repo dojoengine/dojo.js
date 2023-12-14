@@ -40,7 +40,7 @@ export function createSystemCalls(
         try {
             const { transaction_hash } = await execute(
                 signer,
-                "actions",
+                "dojo_examples::actions::actions",
                 "spawn",
                 []
             );
@@ -93,7 +93,7 @@ export function createSystemCalls(
         try {
             const { transaction_hash } = await execute(
                 signer,
-                "actions",
+                "dojo_examples::actions::actions",
                 "move",
                 [direction]
             );
