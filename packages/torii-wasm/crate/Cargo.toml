@@ -17,15 +17,15 @@ futures = "0.3.28"
 parking_lot = "0.12.1"
 serde = { version = "1.0.192", features = ["derive"] }
 serde_json = "1.0.64"
-starknet = "0.7.0"
+starknet = "0.8.0"
 thiserror = "1.0.32"
 tokio = { version = "1.32.0", default-features = false, features = ["rt"] }
 url = "2.4.0"
 
 # Dojo
-dojo-types = { git = "https://github.com/dojoengine/dojo", rev = "df5537cf7de8575d85441605c2094f43e2b73b81" }
-torii-client = { git = "https://github.com/dojoengine/dojo", rev = "df5537cf7de8575d85441605c2094f43e2b73b81" }
-torii-grpc = { git = "https://github.com/dojoengine/dojo", rev = "df5537cf7de8575d85441605c2094f43e2b73b81" }
+dojo-types = { git = "https://github.com/dojoengine/dojo", tag = "v0.4.0" }
+torii-client = { git = "https://github.com/dojoengine/dojo", tag = "v0.4.0" }
+torii-grpc = { git = "https://github.com/dojoengine/dojo", tag = "v0.4.0" }
 
 # WASM
 js-sys = "0.3.64"
