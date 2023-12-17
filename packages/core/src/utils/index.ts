@@ -54,7 +54,9 @@ export function getAllSystemNamesAsFelt(manifest: any): any {
  */
 export const getContractByName = (manifest: any, name: string) => {
     return (
-        manifest.contracts.find((contract: any) => contract.name === name)
-            ?.address || ""
+        manifest.contracts.find((contract: any) => {
+            const nameParts = contract.name.split("::");
+            return nameParts[nameParts.length - 1] === name;
+        })?.address || ""
     );
 };
