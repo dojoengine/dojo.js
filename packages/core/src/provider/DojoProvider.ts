@@ -11,14 +11,14 @@ import {
     CallContractResponse,
 } from "starknet";
 import { Provider } from "./provider";
-import { Query, WorldEntryPoints } from "../types";
+import { WorldEntryPoints } from "../types";
 import { LOCAL_KATANA } from "../constants";
 import { getContractByName } from "../utils";
 
 /**
- * RPCProvider class: Extends the generic Provider to handle RPC interactions.
+ * RpcProvider class: Extends the generic Provider to handle RPC interactions with Dojo World.
  */
-export class RPCProvider extends Provider {
+export class DojoProvider extends Provider {
     public provider: RpcProvider;
     public contract: Contract;
     public manifest: any;
@@ -51,24 +51,27 @@ export class RPCProvider extends Provider {
      * Retrieves a single entity's details.
      *
      * @param {string} model - The component to query.
-     * @param {Query} query - The query details.
+     * @param {Array<string>} keys - The keys to query.
      * @param {number} [offset=0] - Starting offset (defaults to 0).
      * @param {number} [length=0] - Length to retrieve (defaults to 0).
      * @returns {Promise<Array<bigint>>} - A promise that resolves to an array of bigints representing the entity's details.
      */
     public async entity(
         model: string,
-        query: Query,
+        keys: Array<string>,
         offset: number = 0,
-        length: number = 0
+        length: number = 0,
+        layout: Array<number>
     ): Promise<Array<bigint>> {
         try {
             return (await this.contract.call(WorldEntryPoints.get, [
                 shortString.encodeShortString(model),
-                query.keys.length,
-                ...(query.keys as any),
+                keys.length,
+                ...(keys as any),
                 offset,
                 length,
+                layout.length,
+                layout,
             ])) as unknown as Array<bigint>;
         } catch (error) {
             throw error;
@@ -78,39 +81,48 @@ export class RPCProvider extends Provider {
     /**
      * Retrieves multiple entities' details.
      *
-     * @param {string} component - The component to query.
-     * @param {number} length - Number of entities to retrieve.
-     * @returns {Promise<Array<bigint>>} - A promise that resolves to an array of bigints representing the entities' details.
+     * @param {string} model - The component to query.
+     * @param {number} index - The index to query.
+     * @param {Array<string>} values - The values to query.
+     * @param {number} valuesLength - The values length to query.
+     * @param {Array<number>} valuesLayout - The values layout to query.
      */
     public async entities(
         model: string,
-        length: number
-    ): Promise<Array<bigint>> {
+        index: string,
+        values: Array<string>,
+        valuesLength: number,
+        valuesLayout: Array<number>
+    ): Promise<Array<Array<bigint>>> {
         try {
             return (await this.contract.call(WorldEntryPoints.entities, [
                 shortString.encodeShortString(model),
-                length,
-            ])) as unknown as Array<bigint>;
+                index,
+                values,
+                valuesLength,
+                valuesLayout,
+            ])) as unknown as Promise<Array<Array<bigint>>>;
         } catch (error) {
             throw error;
         }
     }
 
     /**
-     * Retrieves a component's details.
+     * Retrieves a models
      *
-     * @param {string} name - Name of the component.
-     * @returns {Promise<bigint>} - A promise that resolves to a bigint representing the component's details.
+     * @param {string} name - Name of the model.
+     * @returns {Promise<bigint>} - A promise that resolves to a bigint representing the model's details.
      */
-    public async component(name: string): Promise<bigint> {
+    public async model(name: string): Promise<bigint> {
         try {
-            return (await this.contract.call(WorldEntryPoints.component, [
+            return (await this.contract.call(WorldEntryPoints.model, [
                 shortString.encodeShortString(name),
             ])) as unknown as bigint;
         } catch (error) {
             throw error;
         }
     }
+
     /**
      * Executes a function with the given parameters.
      *
@@ -194,7 +206,7 @@ export class RPCProvider extends Provider {
         try {
             const { result } = await this.provider.callContract({
                 contractAddress: this.getWorldAddress(),
-                entrypoint: "uuid",
+                entrypoint: WorldEntryPoints.uuid,
                 calldata: [],
             });
             if (result && result.length === 1) {

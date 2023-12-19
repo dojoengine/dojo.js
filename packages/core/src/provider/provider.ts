@@ -1,11 +1,11 @@
-import { ICommands, Query } from "../types";
+import { IWorld } from "../types";
 
 /**
  * Provider class: An abstract base class for all providers.
  * It implements the ICommands interface, ensuring that any class deriving from Provider
  * will have implementations for the entity and entities methods.
  */
-export abstract class Provider implements ICommands {
+export abstract class Provider implements IWorld {
     // Store the address of the world.
     private readonly worldAddress: string;
 
@@ -29,10 +29,11 @@ export abstract class Provider implements ICommands {
      * @returns {Promise<Array<bigint>>} - A promise that resolves to an array of bigints representing the entity's details.
      */
     public abstract entity(
-        component: string,
-        query: Query,
+        model: string,
+        keys: Array<string>,
         offset: number,
-        length: number
+        length: number,
+        layout: Array<number>
     ): Promise<Array<bigint>>;
 
     /**
@@ -44,9 +45,12 @@ export abstract class Provider implements ICommands {
      * @returns {Promise<Array<bigint>>} - A promise that resolves to an array of bigints representing the entities' details.
      */
     public abstract entities(
-        component: string,
-        length: number
-    ): Promise<Array<bigint>>;
+        model: string,
+        index: string | null,
+        values: Array<string>,
+        valuesLength: number,
+        valuesLayout: Array<number>
+    ): Promise<Array<Array<bigint>>>;
 
     /**
      * Retrieves the stored world address.

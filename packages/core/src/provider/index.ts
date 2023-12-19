@@ -1,1 +1,1 @@
-export * from "./RPCProvider";
+export * from "./DojoProvider";
