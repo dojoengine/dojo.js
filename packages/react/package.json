@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/react",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "description": "Useful React hooks for Starknet",
     "source": "src/index.ts",
     "main": "dist/index.js",
@@ -38,8 +38,8 @@
     },
     "dependencies": {
         "@dojoengine/recs": "0.1.35",
-        "@dojoengine/torii-client": "^0.2.7",
-        "@dojoengine/utils": "^0.2.7",
+        "@dojoengine/torii-client": "^0.2.8",
+        "@dojoengine/utils": "^0.2.8",
         "@latticexyz/utils": "^2.0.0-next.11",
         "encoding": "^0.1.13",
         "fast-deep-equal": "^3.1.3",
