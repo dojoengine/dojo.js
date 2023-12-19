@@ -1,5 +1,5 @@
 {
-    "name": "dojo-packages",
+    "name": "dojo.js",
     "version": "0.1.61",
     "workspaces": [
         "examples/react-app",
