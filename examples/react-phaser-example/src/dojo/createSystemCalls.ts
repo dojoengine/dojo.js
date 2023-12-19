@@ -11,12 +11,7 @@ export function createSystemCalls(
     const spawn = async (props: SystemSigner) => {
         console.log(props.signer);
         try {
-            await execute(
-                props.signer,
-                "dojo_examples::actions::actions",
-                "spawn",
-                []
-            );
+            await execute(props.signer, "actions", "spawn", []);
         } catch (e) {
             console.error(e);
         }
@@ -26,9 +21,7 @@ export function createSystemCalls(
         const { signer, direction } = props;
 
         try {
-            await execute(signer, "dojo_examples::actions::actions", "move", [
-                direction,
-            ]);
+            await execute(signer, "actions", "move", [direction]);
         } catch (e) {
             console.log(e);
         }
