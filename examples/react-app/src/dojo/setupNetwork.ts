@@ -1,6 +1,6 @@
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
-import { RPCProvider } from "@dojoengine/core";
+import { DojoProvider } from "@dojoengine/core";
 import { Account, num } from "starknet";
 import manifest from "../../../dojo-starter/target/dev/manifest.json";
 import * as torii from "@dojoengine/torii-client";
@@ -16,7 +16,7 @@ export async function setupNetwork() {
     } = import.meta.env;
 
     // Create a new RPCProvider instance.
-    const provider = new RPCProvider(
+    const provider = new DojoProvider(
         VITE_PUBLIC_WORLD_ADDRESS,
         manifest,
         VITE_PUBLIC_NODE_URL
