@@ -19,5 +19,8 @@ jobs:
               with:
                   node-version: "20"
 
+            - name: Install Dojo CLI
+              run: npm i @dojoengine/create-dojo -g
+
             - name: Create Dojo Project
               run: npx @dojoengine/create-dojo
