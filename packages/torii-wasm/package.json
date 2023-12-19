@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-wasm",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "description": "",
     "main": "./pkg/torii_client_wasm.js",
     "type": "module",
