@@ -18,13 +18,16 @@ jobs:
             - uses: actions/checkout@v2
             - uses: oven-sh/setup-bun@v1
 
+            - name: Install Protobuf Compiler
+              run: sudo apt-get install -y protobuf-compiler
+
             - name: Install dependencies
               run: bun link
 
             - name: Install dependencies
               run: bun install
 
-            - name: Install dependencies
+            - name: Build dependencies
               run: bun run build
 
             - name: Build docs
