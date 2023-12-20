@@ -19,6 +19,12 @@ importers:
             typedoc:
                 specifier: ^0.25.4
                 version: 0.25.4(typescript@5.3.3)
+            typedoc-material-theme:
+                specifier: ^1.0.1
+                version: 1.0.1(typedoc@0.25.4)
+            typedoc-plugin-coverage:
+                specifier: ^2.2.0
+                version: 2.2.0(typedoc@0.25.4)
 
     packages/core:
         dependencies:
@@ -159,7 +165,7 @@ importers:
                 version: 3.1.3
             get-starknet-core:
                 specifier: ^3.2.0
-                version: 3.2.0(starknet@5.19.5)
+                version: 3.2.0(starknet@5.24.3)
             js-cookie:
                 specifier: ^3.0.5
                 version: 3.0.5
@@ -170,8 +176,11 @@ importers:
                 specifier: 7.5.5
                 version: 7.5.5
             starknet:
-                specifier: ^5.19.0
-                version: 5.19.5(encoding@0.1.13)
+                specifier: ^5.24.3
+                version: 5.24.3(encoding@0.1.13)
+            type-fest:
+                specifier: ^2.14.0
+                version: 2.19.0
         devDependencies:
             "@babel/core":
                 specifier: ^7.21.4
@@ -3172,6 +3181,13 @@ packages:
             - typescript
         dev: true
 
+    /@material/material-color-utilities@0.2.7:
+        resolution:
+            {
+                integrity: sha512-0FCeqG6WvK4/Cc06F/xXMd/pv4FeisI0c1tUpBbfhA2n9Y8eZEv4Karjbmf2ZqQCPUWMrGp8A571tCjizxoTiQ==,
+            }
+        dev: true
+
     /@noble/curves@1.0.0:
         resolution:
             {
@@ -3832,72 +3848,6 @@ packages:
         dev: true
         optional: true
 
-    /@rometools/cli-darwin-arm64@12.1.3:
-        resolution:
-            {
-                integrity: sha512-AmFTUDYjBuEGQp/Wwps+2cqUr+qhR7gyXAUnkL5psCuNCz3807TrUq/ecOoct5MIavGJTH6R4aaSL6+f+VlBEg==,
-            }
-        cpu: [arm64]
-        os: [darwin]
-        requiresBuild: true
-        dev: false
-        optional: true
-
-    /@rometools/cli-darwin-x64@12.1.3:
-        resolution:
-            {
-                integrity: sha512-k8MbWna8q4LRlb005N2X+JS1UQ+s3ZLBBvwk4fP8TBxlAJXUz17jLLu/Fi+7DTTEmMhM84TWj4FDKW+rNar28g==,
-            }
-        cpu: [x64]
-        os: [darwin]
-        requiresBuild: true
-        dev: false
-        optional: true
-
-    /@rometools/cli-linux-arm64@12.1.3:
-        resolution:
-            {
-                integrity: sha512-X/uLhJ2/FNA3nu5TiyeNPqiD3OZoFfNfRvw6a3ut0jEREPvEn72NI7WPijH/gxSz55znfQ7UQ6iM4DZumUknJg==,
-            }
-        cpu: [arm64]
-        os: [linux]
-        requiresBuild: true
-        dev: false
-        optional: true
-
-    /@rometools/cli-linux-x64@12.1.3:
-        resolution:
-            {
-                integrity: sha512-csP17q1eWiUXx9z6Jr/JJPibkplyKIwiWPYNzvPCGE8pHlKhwZj3YHRuu7Dm/4EOqx0XFIuqqWZUYm9bkIC8xg==,
-            }
-        cpu: [x64]
-        os: [linux]
-        requiresBuild: true
-        dev: false
-        optional: true
-
-    /@rometools/cli-win32-arm64@12.1.3:
-        resolution:
-            {
-                integrity: sha512-RymHWeod57EBOJY4P636CgUwYA6BQdkQjh56XKk4pLEHO6X1bFyMet2XL7KlHw5qOTalzuzf5jJqUs+vf3jdXQ==,
-            }
-        cpu: [arm64]
-        os: [win32]
-        requiresBuild: true
-        dev: false
-        optional: true
-
-    /@rometools/cli-win32-x64@12.1.3:
-        resolution:
-            {
-                integrity: sha512-yHSKYidqJMV9nADqg78GYA+cZ0hS1twANAjiFibQdXj9aGzD+s/IzIFEIi/U/OBLvWYg/SCw0QVozi2vTlKFDQ==,
-            }
-        cpu: [x64]
-        os: [win32]
-        requiresBuild: true
-        dev: false
-        optional: true
-
     /@scure/base@1.1.4:
         resolution:
             {
@@ -4432,19 +4382,6 @@ packages:
                 integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==,
             }
         dev: true
-
-    /abi-wan-kanabi@1.0.3:
-        resolution:
-            {
-                integrity: sha512-Xwva0AnhXx/IVlzo3/kwkI7Oa7ZX7codtcSn+Gmoa2PmjGPF/0jeVud9puasIPtB7V50+uBdUj4Mh3iATqtBvg==,
-            }
-        hasBin: true
-        dependencies:
-            fs-extra: 10.1.0
-            rome: 12.1.3
-            typescript: 4.9.5
-            yargs: 17.7.2
-        dev: false
 
     /abitype@0.9.8(typescript@5.3.3):
         resolution:
@@ -5358,6 +5295,7 @@ packages:
             string-width: 4.2.3
             strip-ansi: 6.0.1
             wrap-ansi: 7.0.0
+        dev: true
 
     /clone-deep@4.0.1:
         resolution:
@@ -6060,6 +5998,7 @@ packages:
                 integrity: sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==,
             }
         engines: { node: ">=6" }
+        dev: true
 
     /escape-latex@1.2.0:
         resolution:
@@ -6421,18 +6360,6 @@ packages:
             }
         dev: true
 
-    /fs-extra@10.1.0:
-        resolution:
-            {
-                integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==,
-            }
-        engines: { node: ">=12" }
-        dependencies:
-            graceful-fs: 4.2.11
-            jsonfile: 6.1.0
-            universalify: 2.0.1
-        dev: false
-
     /fs-extra@11.2.0:
         resolution:
             {
@@ -6521,6 +6448,7 @@ packages:
                 integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==,
             }
         engines: { node: 6.* || 8.* || >= 10.* }
+        dev: true
 
     /get-func-name@2.0.2:
         resolution:
@@ -6558,17 +6486,6 @@ packages:
             }
         engines: { node: ">=8" }
         dev: true
-
-    /get-starknet-core@3.2.0(starknet@5.19.5):
-        resolution:
-            {
-                integrity: sha512-SZhxtLlKoPKLZ2H3l9WIU7CiNmkL3qLWGksALmvZdAXa/9PykYfLtvIB5B8A2UZMpf2ojTZlWLfuo1KhgmVobA==,
-            }
-        peerDependencies:
-            starknet: ^5.18.0
-        dependencies:
-            starknet: 5.19.5(encoding@0.1.13)
-        dev: false
 
     /get-starknet-core@3.2.0(starknet@5.24.3):
         resolution:
@@ -6798,6 +6715,7 @@ packages:
             {
                 integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==,
             }
+        dev: true
 
     /handlebars@4.7.8:
         resolution:
@@ -8121,6 +8039,7 @@ packages:
             universalify: 2.0.1
         optionalDependencies:
             graceful-fs: 4.2.11
+        dev: true
 
     /jsonparse@1.3.1:
         resolution:
@@ -10275,6 +10194,7 @@ packages:
                 integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==,
             }
         engines: { node: ">=0.10.0" }
+        dev: true
 
     /resolve-cwd@3.0.0:
         resolution:
@@ -10393,23 +10313,6 @@ packages:
             "@rollup/rollup-win32-x64-msvc": 4.8.0
             fsevents: 2.3.3
         dev: true
-
-    /rome@12.1.3:
-        resolution:
-            {
-                integrity: sha512-e+ff72hxDpe/t5/Us7YRBVw3PBET7SeczTQNn6tvrWdrCaAw3qOukQQ+tDCkyFtS4yGsnhjrJbm43ctNbz27Yg==,
-            }
-        engines: { node: ">=14.*" }
-        hasBin: true
-        requiresBuild: true
-        optionalDependencies:
-            "@rometools/cli-darwin-arm64": 12.1.3
-            "@rometools/cli-darwin-x64": 12.1.3
-            "@rometools/cli-linux-arm64": 12.1.3
-            "@rometools/cli-linux-x64": 12.1.3
-            "@rometools/cli-win32-arm64": 12.1.3
-            "@rometools/cli-win32-x64": 12.1.3
-        dev: false
 
     /run-async@2.4.1:
         resolution:
@@ -10788,23 +10691,6 @@ packages:
                 integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==,
             }
         dev: true
-
-    /starknet@5.19.5(encoding@0.1.13):
-        resolution:
-            {
-                integrity: sha512-S7V4ifyYd+ApsIwYTd7YA5U2Px+NZkCsQPnmgY/wkc5LLFKhYMNpzHQ5nIA15p70AwtSXCcsEBnHNRBOuci13Q==,
-            }
-        dependencies:
-            "@noble/curves": 1.2.0
-            "@scure/starknet": 0.3.0
-            abi-wan-kanabi: 1.0.3
-            isomorphic-fetch: 3.0.0(encoding@0.1.13)
-            lossless-json: 2.0.11
-            pako: 2.1.0
-            url-join: 4.0.1
-        transitivePeerDependencies:
-            - encoding
-        dev: false
 
     /starknet@5.24.3(encoding@0.1.13):
         resolution:
@@ -11406,6 +11292,14 @@ packages:
         engines: { node: ">=8" }
         dev: true
 
+    /type-fest@2.19.0:
+        resolution:
+            {
+                integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==,
+            }
+        engines: { node: ">=12.20" }
+        dev: false
+
     /typed-function@4.1.1:
         resolution:
             {
@@ -11419,6 +11313,31 @@ packages:
             {
                 integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==,
             }
+        dev: true
+
+    /typedoc-material-theme@1.0.1(typedoc@0.25.4):
+        resolution:
+            {
+                integrity: sha512-D+X5dS0VVx0UAr1gRDnb7Y16Y9BIBy3/OX54Iu7IXxl9dqkxC3qR8rdIXyCpGaoGKZigajQjmU1ap0uihIFDOw==,
+            }
+        engines: { node: ">=20.0.0", npm: ">=9.6.4" }
+        peerDependencies:
+            typedoc: ^0.25.3
+        dependencies:
+            "@material/material-color-utilities": 0.2.7
+            typedoc: 0.25.4(typescript@5.3.3)
+        dev: true
+
+    /typedoc-plugin-coverage@2.2.0(typedoc@0.25.4):
+        resolution:
+            {
+                integrity: sha512-/hq9nwSNBz2p7+VYfljT/zFSmaxN8tlfcIp6CCAaQN6VIxXCciYFIqR+pcckRhjmfHIeSJ5uy2OpCt5F683npA==,
+            }
+        engines: { node: ">= 16" }
+        peerDependencies:
+            typedoc: ^0.22.12 || 0.23.x || 0.24.x || 0.25.x
+        dependencies:
+            typedoc: 0.25.4(typescript@5.3.3)
         dev: true
 
     /typedoc@0.25.4(typescript@5.3.3):
@@ -11437,15 +11356,6 @@ packages:
             shiki: 0.14.7
             typescript: 5.3.3
         dev: true
-
-    /typescript@4.9.5:
-        resolution:
-            {
-                integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==,
-            }
-        engines: { node: ">=4.2.0" }
-        hasBin: true
-        dev: false
 
     /typescript@5.3.3:
         resolution:
@@ -11567,6 +11477,7 @@ packages:
                 integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==,
             }
         engines: { node: ">= 10.0.0" }
+        dev: true
 
     /upath@2.0.1:
         resolution:
@@ -11978,6 +11889,7 @@ packages:
             ansi-styles: 4.3.0
             string-width: 4.2.3
             strip-ansi: 6.0.1
+        dev: true
 
     /wrap-ansi@8.1.0:
         resolution:
@@ -12104,6 +12016,7 @@ packages:
                 integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==,
             }
         engines: { node: ">=10" }
+        dev: true
 
     /yallist@3.1.1:
         resolution:
@@ -12141,6 +12054,7 @@ packages:
                 integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==,
             }
         engines: { node: ">=12" }
+        dev: true
 
     /yargs@16.2.0:
         resolution:
@@ -12172,6 +12086,7 @@ packages:
             string-width: 4.2.3
             y18n: 5.0.8
             yargs-parser: 21.1.1
+        dev: true
 
     /yocto-queue@0.1.0:
         resolution:
