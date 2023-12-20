@@ -1,5 +1,5 @@
 {
-    "plugin": ["typedoc-material-theme"],
+    "plugin": ["typedoc-material-theme", "typedoc-plugin-coverage"],
     "themeColor": "#cb9820",
     "$schema": "https://typedoc.org/schema.json",
     "name": "dojo.js docs",

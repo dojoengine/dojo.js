@@ -17,7 +17,8 @@
         "prettier": "^3.0.3",
         "tsup": "^8.0.1",
         "typedoc": "^0.25.4",
-        "typedoc-material-theme": "^1.0.1"
+        "typedoc-material-theme": "^1.0.1",
+        "typedoc-plugin-coverage": "^2.2.0"
     },
     "scripts": {
         "build-core": "bun run --cwd packages/core build",
