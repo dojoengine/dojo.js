@@ -3,7 +3,13 @@
     "themeColor": "#cb9820",
     "$schema": "https://typedoc.org/schema.json",
     "name": "dojo.js docs",
-    "entryPoints": ["./packages/core/src/index.ts", "./packages/react/src/index.ts", "./packages/create-burner/src/index.ts", "./packages/utils/src/index.ts", "./packages/torii-client/src/index.ts"],
+    "entryPoints": [
+        "./packages/core/src/index.ts",
+        "./packages/react/src/index.ts",
+        "./packages/create-burner/src/index.ts",
+        "./packages/utils/src/index.ts",
+        "./packages/torii-client/src/index.ts"
+    ],
     "sort": ["source-order"],
     "media": "media",
     "categorizeByGroup": false,
