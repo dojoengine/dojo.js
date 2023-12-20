@@ -12,7 +12,7 @@
     ],
     "sort": ["source-order"],
     "media": "media",
-    "categorizeByGroup": false,
+    "categorizeByGroup": true,
     "searchCategoryBoosts": {
         "Component": 2,
         "Model": 1.2

@@ -16,7 +16,18 @@ import { LOCAL_KATANA } from "../constants";
 import { getContractByName } from "../utils";
 
 /**
- * RpcProvider class: Extends the generic Provider to handle RPC interactions with Dojo World.
+ * DojoProvider: The DojoProvider is an execution provider for dojo worlds. It allows you to easily interact with a dojo world via the Starknet.js library.
+ * ```ts
+ * import { DojoProvider } from "@dojoengine/core";
+ *
+ * const provider = new DojoProvider(
+ *      VITE_PUBLIC_WORLD_ADDRESS,
+ *      manifest,
+ *      VITE_PUBLIC_NODE_URL
+ * );
+ *
+ * await provider.execute(signer, contract, system, call_data);
+ * ```
  */
 export class DojoProvider extends Provider {
     public provider: RpcProvider;
@@ -24,7 +35,7 @@ export class DojoProvider extends Provider {
     public manifest: any;
 
     /**
-     * Constructor: Initializes the RPCProvider with the given world address and URL.
+     * Constructor: Initializes the DojoProvider with the given world address, manifest and URL.
      *
      * @param {string} world_address - Address of the world.
      * @param {string} [url=LOCAL_KATANA] - RPC URL (defaults to LOCAL_KATANA).
@@ -125,7 +136,11 @@ export class DojoProvider extends Provider {
 
     /**
      * Executes a function with the given parameters.
+     * This function is a wrapper around the Starknet.js Account.execute function, but is more convenient to use.
      *
+     * ```ts
+     * await provider.execute(signer, contract, system, call_data);
+     * ```
      * @param {Account} account - The account to use.
      * @param {string} contract - The contract to execute.
      * @param {string} call - The function to call.
@@ -165,8 +180,12 @@ export class DojoProvider extends Provider {
     }
 
     /**
-     * Executes a function with the given parameters.
+     * Executes a multicall.
+     * This function is a wrapper around the Starknet.js Account.execute function, but allows for executing multiple calls at once.
      *
+     * ```ts
+     * await provider.executeMulti(account, calls);
+     * ```
      * @param {Account} account - The account to use.
      * @param {AllowArray<Call>} calls - The calls to execute.
      * @param {InvocationsDetails | undefined} transactionDetails - The transactionDetails allow to override maxFee & version
@@ -191,7 +210,7 @@ export class DojoProvider extends Provider {
     }
 
     /**
-     * Retrieves current uuid from the world contract
+     * Retrieves current uuid from the world contract.
      *
      * @returns {Promise<number>} - A promise that resolves to the world uuid
      * @throws {Error} - Throws an error if the call fails.
