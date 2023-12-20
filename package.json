@@ -15,7 +15,10 @@
     "devDependencies": {
         "lerna": "^8.0.0",
         "prettier": "^3.0.3",
-        "tsup": "^8.0.1"
+        "tsup": "^8.0.1",
+        "typedoc": "^0.25.4",
+        "typedoc-material-theme": "^1.0.1",
+        "typedoc-plugin-coverage": "^2.2.0"
     },
     "scripts": {
         "build-core": "bun run --cwd packages/core build",
@@ -31,7 +34,8 @@
         "clean": "rm -rf node_modules packages/create-burner/node_modules node_modules packages/create-dojo/node_modules packages/core/node_modules packages/utils/node_modules packages/torii-client/node_modules packages/torii-wasm/node_modules packages/react/node_modules bun.lockb packages/create-burner/bun.lockb packages/core/bun.lockb packages/utils/bun.lockb packages/torii-client/bun.lockb packages/torii-wasm/bun.lockb packages/react/bun.lockb && rm -rf examples/react-app/node_modules examples/react-app/bun.lockb examples/react-phaser-example/node_modules examples/react-phaser-example/bun.lockb",
         "prettier-check": "bun x prettier --check .",
         "prettier": "bun x prettier --write .",
-        "release": "bun run build && bun run prettier && npx lerna publish --no-private --force-publish"
+        "release": "bun run build && bun run prettier && npx lerna publish --no-private --force-publish",
+        "docs": "npx typedoc --out docs"
     },
     "dependencies": {}
 }

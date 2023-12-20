@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 <div align="center">
-  <img src=".github/dojo-mark-full-dark.svg" height="128">
+  <img src="./media/dojo-mark-full-dark.svg" height="128">
 </div>
 <div align="center">
 <br />
@@ -25,8 +25,6 @@
 # Dojo: The Provable Game Engine
 
 **Dojo is a community driven open-source, Provable Game Engine, providing a comprehensive toolkit for building verifiable games and autonomous worlds.**
-
-Here's a more refined and structured version:
 
 ---
 
