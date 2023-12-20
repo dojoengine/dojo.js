@@ -1,0 +1,43 @@
+name: "typedoc"
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v2
+        - uses: oven-sh/setup-bun@v1
+
+        - name: Install dependencies
+          run: bun link
+
+        - name: Install dependencies
+          run: bun install
+
+        - name: Build docs
+          run: bun run docs
+
+        - uses: actions/upload-pages-artifact@v2
+          with:
+            path: ./docs
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: githubs
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        # https://github.com/actions/deploy-pages
+        uses: actions/deploy-pages@v2

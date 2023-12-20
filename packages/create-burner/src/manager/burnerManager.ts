@@ -209,7 +209,7 @@ export class BurnerManager {
             const burners: BurnerStorage = JSON.parse(text);
 
             // Assume no burner is active
-            let activeAddress = null;
+            let activeAddress: string | null = null;
 
             // Iterate over the pasted burners to find the active one
             for (const [address, burner] of Object.entries(burners)) {

@@ -1,0 +1,21 @@
+{
+    "plugin": ["typedoc-material-theme"],
+    "themeColor": "#cb9820",
+    "$schema": "https://typedoc.org/schema.json",
+    "name": "dojo.js docs",
+    "entryPoints": ["./packages/core/src/index.ts", "./packages/react/src/index.ts", "./packages/create-burner/src/index.ts", "./packages/utils/src/index.ts", "./packages/torii-client/src/index.ts"],
+    "sort": ["source-order"],
+    "media": "media",
+    "categorizeByGroup": false,
+    "searchCategoryBoosts": {
+        "Component": 2,
+        "Model": 1.2
+    },
+    "searchGroupBoosts": {
+        "Classes": 1.5
+    },
+    "navigationLinks": {
+        "Docs": "https://typedoc.org/guides/overview",
+        "GitHub": "https://github.com/dojoengine/dojo.js"
+    }
+}
