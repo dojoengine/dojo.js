@@ -26,35 +26,24 @@
 
 **Dojo is a community driven open-source, Provable Game Engine, providing a comprehensive toolkit for building verifiable games and autonomous worlds.**
 
----
+You can get started by simply bootstrapping dojo world like so. You will need [dojo](https://github.com/dojoengine/dojo) installed.
 
-## Dojo Engine Packages Monorepo
+```console
+npx @dojoengine/create-dojo
+```
 
-This is a monorepo for the [dojo engine](https://www.dojoengine.org/en/) npm packages.
+[![dojo init](./media/screen-grab.png)](./media/dojo-init.mov)
 
-### Available Packages:
+### Contributing to dojo.js
 
--   [**Core**](./packages/core)
--   [**Burner**](./packages/create-burner)
--   [**Utils**](./packages/utils)
--   [**React**](./packages/react)
--   [**Torii Client**](./packages/torii-client)
--   [**Torii Wasm**](./packages/torii-wasm)
+Dojo.js is MIT licensed and welcomes contributors. Setting up your environment is simple.
 
----
-
-### Environment Setup
+#### Prerequisites
 
 1. **Bun Installation**: We use [bun](https://bun.sh/) in this repository. To install it, run:
     ```console
     curl -fsSL https://bun.sh/install | bash
     ```
-
----
-
-### Development
-
-#### Package Dependencies Installation:
 
 From the repository root, run the following to install all the necessary package dependencies:
 
@@ -103,12 +92,6 @@ git submodule update --init --recursive
 ---
 
 ### Examples
-
-To scaffold a new project from an example:
-
-```console
-npx @dojoengine/create-dojo
-```
 
 If you have issues on WSL, install package first then run command :
 
