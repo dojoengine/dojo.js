@@ -13,7 +13,7 @@ import { Burner } from "../types";
 export const useBurnerManager = ({
     burnerManager,
 }: {
-    burnerManager: BurnerManager; // Accepts the BurnerManager class as an optional parameter
+    burnerManager: BurnerManager; // Accepts the BurnerManager class as an parameter
 }) => {
     if (!burnerManager.masterAccount) {
         throw new Error("BurnerManagerClass must be provided");
@@ -21,9 +21,7 @@ export const useBurnerManager = ({
 
     // State to manage the current active account.
     const [account, setAccount] = useState<Account | null>(null);
-
     const [burnerUpdate, setBurnerUpdate] = useState(0);
-
     const [isDeploying, setIsDeploying] = useState(false);
 
     // On mount, initialize the burner manager and set the active account.
@@ -124,11 +122,13 @@ export const useBurnerManager = ({
      */
     const applyFromClipboard = useCallback(async () => {
         await burnerManager.setBurnersFromClipboard();
-        setAccount(burnerManager.getActiveAccount()); // set the active account
-        setBurnerUpdate((prev) => prev + 1); // re-fetch of the list
+
+        // Update the burnerUpdate state to trigger a re-render.
+        setAccount(burnerManager.getActiveAccount());
+
+        setBurnerUpdate((prev) => prev + 1);
     }, [burnerManager]);
 
-    // Expose methods and properties for the consumers of this hook.
     return {
         get,
         list,

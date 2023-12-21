@@ -3,6 +3,49 @@ import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
 
+/**
+ * A class to manage Burner accounts.
+ * This class exposes methods and properties to manage Burner accounts.
+ * This class uses LocalStorage to store the Burner accounts.
+ * You can use this class to build your own Burner Wallet in any js framework.
+ *
+ * @example
+ *
+ * ```ts
+ * export const createBurner = async () => {
+ *     const rpcProvider = new RpcProvider({
+ *          nodeUrl: import.meta.env.VITE_PUBLIC_NODE_URL!,
+ *    });
+ *
+ *  const masterAccount = new Account(
+ *      rpcProvider,
+ *      import.meta.env.VITE_PUBLIC_MASTER_ADDRESS!,
+ *      import.meta.env.VITE_PUBLIC_MASTER_PRIVATE_KEY!
+ *   );
+ *
+ *   const burnerManager = new BurnerManager({
+ *      masterAccount,
+ *      accountClassHash: import.meta.env.VITE_PUBLIC_ACCOUNT_CLASS_HASH!,
+ *      rpcProvider,
+ *   });
+ *
+ *  try {
+ *   await burnerManager.create();
+ *   } catch (e) {
+ *    console.log(e);
+ *   }
+ *
+ *  burnerManager.init();
+ *
+ *  return {
+ *      account: burnerManager.account as Account,
+ *      burnerManager,
+ *   };
+ * };
+ *
+ *
+ */
+
 export class BurnerManager {
     public masterAccount: Account;
     public accountClassHash: string;

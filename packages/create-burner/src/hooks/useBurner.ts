@@ -7,7 +7,29 @@ import { Burner } from "../types";
 
 /**
  * A React hook to manage Burner accounts.
- * Provides utility methods like get, list, select, and create.
+ * This hook exposes methods and properties to manage Burner accounts.
+ * You need to use this within a {@link BurnerProvider} context.
+ *
+ * @example
+ * ```tsx
+ * import { useBurner } from "@dojoengine/create-burner";
+ *
+ * const MyComponent = () => {
+ *   const { list, select, create } = useBurner();
+ * const burners = list();
+ *
+ *   return (
+ *     <div>
+ *       <button onClick={() => create()}>Create Burner</button>
+ *     {burners.map((burner) => (
+ *       <button key={burner.address} onClick={() => select(burner.address)}>
+ *         Select Burner
+ *       </button>
+ *    ))}
+ *  </div>
+ *  );
+ * };
+ * ```
  *
  * @returns An object with utility methods and properties.
  */
@@ -18,17 +40,14 @@ export const useBurner = () => {
         throw new Error("useBurner must be used within a BurnerProvider");
     }
 
-    // Initialize the BurnerManager with the provided options.
+    /** Initialize the BurnerManager with the provided options. */
     const burnerManager = useMemo(
         () => new BurnerManager(initParams),
         [initParams]
     );
 
-    // State to manage the current active account.
     const [account, setAccount] = useState<Account | null>(null);
-
     const [burnerUpdate, setBurnerUpdate] = useState(0);
-
     const [isDeploying, setIsDeploying] = useState(false);
 
     // On mount, initialize the burner manager and set the active account.

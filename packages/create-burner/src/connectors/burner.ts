@@ -1,27 +1,29 @@
 import { AccountInterface, Account } from "starknet";
 import { Connector } from "@starknet-react/core";
 
-/*  
-    This is a custom connector to use within Starknet React.
-*/
-
+/**
+ *
+ * @class BurnerConnector
+ *
+ * @description Extends the Connector class and implements the AccountInterface.
+ *             This class is used to connect to the Burner Wallet.
+ *
+ *
+ */
 export class BurnerConnector extends Connector {
     private _account: AccountInterface | Account | null;
     public _name: string = "Burner Connector";
 
-    // Use the "options" type as per your need. Here, I am assuming it to be an object.
     constructor(options: object, account: AccountInterface | Account | null) {
         super({ options });
         this._account = account;
     }
 
     available(): boolean {
-        // Implement your logic here.
         return true;
     }
 
     async ready(): Promise<boolean> {
-        // Implement your logic here.
         return true;
     }
 
