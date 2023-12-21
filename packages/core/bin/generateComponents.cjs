@@ -55,7 +55,7 @@ manifest.models.forEach((model) => {
     let result = model.name.split("::").pop().split("_");
     let modelName = result
         .map((part) => {
-            return part === part.toLowerCase() && part.length > 2
+            return part === part.toLowerCase() && part.length > 1
                 ? part.charAt(0).toUpperCase() + part.slice(1)
                 : part.toUpperCase();
         })
