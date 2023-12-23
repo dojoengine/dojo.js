@@ -3,7 +3,26 @@
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
-const { parseModelName } = require("../dist/index.js");
+
+const parseModelName = (model) => {
+    return model.name
+        .split("::")
+        .pop()
+        .split("_")
+        .map((part) => {
+            // Check if the part is a number
+            if (!isNaN(parseInt(part))) {
+                return part; // Keep numbers as is
+            }
+            // Convert part to uppercase if it's a known acronym or before a number
+            if (part.length <= 3 || !isNaN(parseInt(part.charAt(0)))) {
+                return part.toUpperCase();
+            }
+            // Otherwise, capitalize the first letter and make the rest lowercase
+            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+        })
+        .join("");
+};
 
 // Check for the required arguments
 if (process.argv.length !== 6) {
@@ -53,18 +72,7 @@ manifest.models.forEach((model) => {
     const types = [];
     const customTypes = [];
 
-    let modelName = parseModelName(model.name);
-
-    console.log(modelName);
-
-    // let result = model.name.split("::").pop().split("_");
-    // let modelName = result
-    //     .map((part) => {
-    //         return part === part.toLowerCase() && part.length > 2
-    //             ? part.charAt(0).toUpperCase() + part.slice(1)
-    //             : part.toUpperCase();
-    //     })
-    //     .join("");
+    let modelName = parseModelName(model);
 
     try {
         const output = execSync(
