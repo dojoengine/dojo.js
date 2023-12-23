@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
+const { parseModelName } = require("../dist/index.js");
 
 // Check for the required arguments
 if (process.argv.length !== 6) {
@@ -52,14 +53,18 @@ manifest.models.forEach((model) => {
     const types = [];
     const customTypes = [];
 
-    let result = model.name.split("::").pop().split("_");
-    let modelName = result
-        .map((part) => {
-            return part === part.toLowerCase() && part.length > 2
-                ? part.charAt(0).toUpperCase() + part.slice(1)
-                : part.toUpperCase();
-        })
-        .join("");
+    let modelName = parseModelName(model.name);
+
+    console.log(modelName);
+
+    // let result = model.name.split("::").pop().split("_");
+    // let modelName = result
+    //     .map((part) => {
+    //         return part === part.toLowerCase() && part.length > 2
+    //             ? part.charAt(0).toUpperCase() + part.slice(1)
+    //             : part.toUpperCase();
+    //     })
+    //     .join("");
 
     try {
         const output = execSync(
