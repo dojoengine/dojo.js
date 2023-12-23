@@ -10,7 +10,11 @@ export const getContractByName = (manifest: any, name: string) => {
     return (
         manifest.contracts.find((contract: any) => {
             const nameParts = contract.name.split("::");
-            return nameParts[nameParts.length - 1] === name;
+            // Check if the last part matches or if the full name matches
+            return (
+                nameParts[nameParts.length - 1] === name ||
+                contract.name === name
+            );
         })?.address || ""
     );
 };

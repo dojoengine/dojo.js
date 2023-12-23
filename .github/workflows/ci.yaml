@@ -19,6 +19,9 @@ jobs:
             - name: Install dependencies
               run: bun install
 
+            - name: Build dependencies
+              run: bun run build
+
             - name: Run Prettier
               run: bun x prettier --check .
 
