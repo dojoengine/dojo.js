@@ -13,6 +13,10 @@ test("get address by contract name", () => {
 });
 
 test("model name parse", () => {
+    const modelThreeWords = manifest.models.find(
+        (model) => model.name === "dojo_examples::models::moves_at_remaining"
+    );
+
     const model = manifest.models.find(
         (model) => model.name === "dojo_examples::models::erc_20_allowance"
     );
@@ -30,4 +34,6 @@ test("model name parse", () => {
     expect(parseModelName(modelTwoWords)).toBe("MovesRemaining");
 
     expect(parseModelName(modelSingleWord)).toBe("Moves");
+
+    expect(parseModelName(modelThreeWords)).toBe("MovesAtRemaining");
 });

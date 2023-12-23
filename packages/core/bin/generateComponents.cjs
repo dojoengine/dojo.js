@@ -5,20 +5,23 @@ const path = require("path");
 const { execSync } = require("child_process");
 
 const parseModelName = (model) => {
+    // Define a set of known acronyms
+    const acronyms = new Set(["ERC"]);
+
     return model.name
         .split("::")
         .pop()
         .split("_")
         .map((part) => {
-            // Check if the part is a number
-            if (!isNaN(parseInt(part))) {
-                return part; // Keep numbers as is
-            }
-            // Convert part to uppercase if it's a known acronym or before a number
-            if (part.length <= 3 || !isNaN(parseInt(part.charAt(0)))) {
+            // If the part is a known acronym, keep it in uppercase
+            if (acronyms.has(part.toUpperCase())) {
                 return part.toUpperCase();
             }
-            // Otherwise, capitalize the first letter and make the rest lowercase
+            // If the part is fully numeric, keep it as is
+            if (!isNaN(parseInt(part))) {
+                return part;
+            }
+            // Capitalize the first letter and make the rest lowercase
             return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
         })
         .join("");
