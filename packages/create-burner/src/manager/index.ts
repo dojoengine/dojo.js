@@ -1,2 +1,2 @@
 export { BurnerManager } from "./burnerManager";
-export { prefundAccount } from "./prefundAccount";
+export { prefundAccount } from "./utils";

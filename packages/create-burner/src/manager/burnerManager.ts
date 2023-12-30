@@ -1,7 +1,7 @@
 import { Account, CallData, ec, hash, RpcProvider, stark } from "starknet";
 import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
 import Storage from "../utils/storage";
-import { prefundAccount } from "./prefundAccount";
+import { prefundAccount } from "./utils";
 
 /**
  * A class to manage Burner accounts.
@@ -108,13 +108,15 @@ export class BurnerManager {
                     if (!response) {
                         this.account = null;
                         Storage.remove("burners");
-                        throw new Error(
-                            "Burners not deployed, chain may have restarted"
+                        console.warn(
+                            "Warning: Burners not deployed, chain may have restarted"
                         );
                     }
                 })
                 .catch(() => {
-                    throw new Error("Error fetching transaction receipt");
+                    console.warn(
+                        "Warning: Error fetching transaction receipt. Your burner may not be deployed. Clear your local storage."
+                    );
                 });
 
             this.setActiveBurnerAccount(storage);
