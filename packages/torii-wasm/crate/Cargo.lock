@@ -570,6 +570,53 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2bd12c1caf447e69cd4528f47f94d203fd2582878ecb9e9465484c4148a8223"
 
 [[package]]
+name = "cainome"
+version = "0.1.5"
+source = "git+https://github.com/cartridge-gg/cainome?rev=950e487#950e4871b735a1b4a7ba7e7561b9a15f5a43dbed"
+dependencies = [
+ "cainome-cairo-serde",
+ "cainome-parser",
+ "cainome-rs",
+]
+
+[[package]]
+name = "cainome-cairo-serde"
+version = "0.1.0"
+source = "git+https://github.com/cartridge-gg/cainome?rev=950e487#950e4871b735a1b4a7ba7e7561b9a15f5a43dbed"
+dependencies = [
+ "starknet",
+ "thiserror",
+]
+
+[[package]]
+name = "cainome-parser"
+version = "0.1.0"
+source = "git+https://github.com/cartridge-gg/cainome?rev=950e487#950e4871b735a1b4a7ba7e7561b9a15f5a43dbed"
+dependencies = [
+ "quote",
+ "serde_json",
+ "starknet",
+ "syn 2.0.40",
+ "thiserror",
+]
+
+[[package]]
+name = "cainome-rs"
+version = "0.1.0"
+source = "git+https://github.com/cartridge-gg/cainome?rev=950e487#950e4871b735a1b4a7ba7e7561b9a15f5a43dbed"
+dependencies = [
+ "anyhow",
+ "cainome-cairo-serde",
+ "cainome-parser",
+ "proc-macro2",
+ "quote",
+ "serde_json",
+ "starknet",
+ "syn 2.0.40",
+ "thiserror",
+]
+
+[[package]]
 name = "cairo-felt"
 version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1341,8 +1388,8 @@ dependencies = [
 
 [[package]]
 name = "dojo-types"
-version = "0.4.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.4.0#17c1b42910cb751fe3986ed44ce4e3a6a16b1e51"
+version = "0.4.4"
+source = "git+https://github.com/dojoengine/dojo?rev=37f41d585f549013a73ca189034b0471f1e81731#37f41d585f549013a73ca189034b0471f1e81731"
 dependencies = [
  "crypto-bigint",
  "hex",
@@ -1357,11 +1404,12 @@ dependencies = [
 
 [[package]]
 name = "dojo-world"
-version = "0.4.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.4.0#17c1b42910cb751fe3986ed44ce4e3a6a16b1e51"
+version = "0.4.4"
+source = "git+https://github.com/dojoengine/dojo?rev=37f41d585f549013a73ca189034b0471f1e81731#37f41d585f549013a73ca189034b0471f1e81731"
 dependencies = [
  "anyhow",
  "async-trait",
+ "cainome",
  "cairo-lang-filesystem",
  "cairo-lang-project",
  "cairo-lang-starknet",
@@ -4567,8 +4615,8 @@ dependencies = [
 
 [[package]]
 name = "torii-client"
-version = "0.4.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.4.0#17c1b42910cb751fe3986ed44ce4e3a6a16b1e51"
+version = "0.4.4"
+source = "git+https://github.com/dojoengine/dojo?rev=37f41d585f549013a73ca189034b0471f1e81731#37f41d585f549013a73ca189034b0471f1e81731"
 dependencies = [
  "async-trait",
  "crypto-bigint",
@@ -4620,8 +4668,8 @@ dependencies = [
 
 [[package]]
 name = "torii-grpc"
-version = "0.4.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.4.0#17c1b42910cb751fe3986ed44ce4e3a6a16b1e51"
+version = "0.4.4"
+source = "git+https://github.com/dojoengine/dojo?rev=37f41d585f549013a73ca189034b0471f1e81731#37f41d585f549013a73ca189034b0471f1e81731"
 dependencies = [
  "bytes",
  "crypto-bigint",
@@ -4640,6 +4688,7 @@ dependencies = [
  "sqlx",
  "starknet",
  "starknet-crypto",
+ "strum",
  "strum_macros",
  "thiserror",
  "tokio",
