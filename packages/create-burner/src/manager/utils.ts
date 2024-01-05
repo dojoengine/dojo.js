@@ -59,3 +59,13 @@ export const prefundAccount = async (
         throw error;
     }
 };
+
+export const readQueryParams = () => {
+    const queryParams = new URLSearchParams(window.location.search);
+    return {
+        privateKey: queryParams.get("private_key") || "",
+        publicKey: queryParams.get("public_key") || "",
+        address: queryParams.get("address") || "",
+        deployTx: queryParams.get("deploy_tx") || "",
+    };
+};
