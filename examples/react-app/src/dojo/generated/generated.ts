@@ -1,31 +1,28 @@
 import { Account } from "starknet";
 import * as torii from "@dojoengine/torii-client";
 import { DojoProvider } from "@dojoengine/core";
-import { Direction } from "../utils";
+import { Direction } from "../../utils";
 
 interface DojoClient {
-    nodeUrl: string;
-    toriiUrl: string;
-    worldAddress: string;
     manifest: any;
+    rpcUrl: string;
+    toriiUrl: string;
 }
 
-export type CreateDojoClient = Awaited<ReturnType<typeof createDojoClient>>;
+export type CreateDojoClient = Awaited<ReturnType<typeof dojoClient>>;
 
-export async function createDojoClient(dojoClient: DojoClient) {
-    const { nodeUrl, toriiUrl, worldAddress, manifest } = dojoClient;
+export async function dojoClient(dojoClient: DojoClient) {
+    const { rpcUrl, toriiUrl, manifest } = dojoClient;
 
     const toriiClient = await torii.createClient([], {
-        rpcUrl: nodeUrl,
+        rpcUrl,
         toriiUrl,
-        worldAddress,
+        worldAddress: manifest.world.address,
     });
 
     return {
         toriiClient,
-        client: await setupWorld(
-            new DojoProvider(worldAddress, manifest, nodeUrl)
-        ),
+        client: await setupWorld(new DojoProvider(manifest, rpcUrl)),
     };
 }
 
@@ -36,6 +33,7 @@ export async function setupWorld(provider: DojoProvider) {
 
     function actions() {
         const contract_name = "actions";
+
         const spawn = async ({ account }: { account: Account }) => {
             try {
                 return await provider.execute(account, contract_name, "spawn", [

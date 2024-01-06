@@ -8,8 +8,8 @@ import {
     getEvents,
     setComponentsFromEvents,
 } from "@dojoengine/utils";
-import { CreateDojoClient } from "./generated";
-import { ContractComponents } from "./contractComponents";
+import { CreateDojoClient } from "./generated/generated";
+import { ContractComponents } from "./generated/contractComponents";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
