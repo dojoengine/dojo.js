@@ -9,16 +9,19 @@ import {
     getEvents,
     setComponentsFromEvents,
 } from "@dojoengine/utils";
+import { CreateDojoClient } from "./generated";
+import { ContractComponents } from "./contractComponents";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
-    { execute, contractComponents }: SetupNetworkResult,
+    { client }: CreateDojoClient,
+    contractComponents: ContractComponents,
     { Position, Moves }: ClientComponents
 ) {
-    const spawn = async (signer: Account) => {
+    const spawn = async (account: Account) => {
         const entityId = getEntityIdFromKeys([
-            BigInt(signer.address),
+            BigInt(account.address),
         ]) as Entity;
 
         const positionId = uuid();
@@ -38,17 +41,14 @@ export function createSystemCalls(
         });
 
         try {
-            const { transaction_hash } = await execute(
-                signer,
-                "actions",
-                "spawn",
-                []
-            );
+            const { transaction_hash } = await client.actions.spawn({
+                account,
+            });
 
             setComponentsFromEvents(
                 contractComponents,
                 getEvents(
-                    await signer.waitForTransaction(transaction_hash, {
+                    await account.waitForTransaction(transaction_hash, {
                         retryInterval: 100,
                     })
                 )
@@ -63,9 +63,9 @@ export function createSystemCalls(
         }
     };
 
-    const move = async (signer: Account, direction: Direction) => {
+    const move = async (account: Account, direction: Direction) => {
         const entityId = getEntityIdFromKeys([
-            BigInt(signer.address),
+            BigInt(account.address),
         ]) as Entity;
 
         const positionId = uuid();
@@ -91,17 +91,15 @@ export function createSystemCalls(
         });
 
         try {
-            const { transaction_hash } = await execute(
-                signer,
-                "actions",
-                "move",
-                [direction]
-            );
+            const { transaction_hash } = await client.actions.move({
+                account,
+                direction,
+            });
 
             setComponentsFromEvents(
                 contractComponents,
                 getEvents(
-                    await signer.waitForTransaction(transaction_hash, {
+                    await account.waitForTransaction(transaction_hash, {
                         retryInterval: 100,
                     })
                 )
