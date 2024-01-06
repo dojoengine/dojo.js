@@ -1,4 +1,3 @@
-import { SetupNetworkResult } from "./setupNetwork";
 import { Account } from "starknet";
 import { Entity, getComponentValue } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
