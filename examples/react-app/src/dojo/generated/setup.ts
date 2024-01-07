@@ -1,7 +1,7 @@
 import { createClientComponents } from "../createClientComponents";
 import { createSystemCalls } from "../createSystemCalls";
 import { getSyncEntities } from "@dojoengine/react";
-import { dojoClient } from "./generated";
+import { dojoClient } from "./client";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { Config } from "../../../dojoConfig";
@@ -20,16 +20,20 @@ export async function setup({ ...config }: Config) {
     const contractComponents = defineContractComponents(world);
 
     // create client components
-    const components = createClientComponents({ contractComponents });
+    const clientComponents = createClientComponents({ contractComponents });
 
     // fetch all existing entities from torii
     await getSyncEntities(client.toriiClient, contractComponents as any);
 
     return {
         client,
-        components,
+        clientComponents,
         contractComponents,
-        systemCalls: createSystemCalls(client, contractComponents, components),
+        systemCalls: createSystemCalls(
+            client,
+            contractComponents,
+            clientComponents
+        ),
         config,
     };
 }
