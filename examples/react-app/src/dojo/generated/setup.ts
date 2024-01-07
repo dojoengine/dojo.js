@@ -4,31 +4,25 @@ import { getSyncEntities } from "@dojoengine/react";
 import { dojoClient } from "./generated";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
+import { Config } from "../../../dojoConfig";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
-export async function setup({
-    rpcUrl,
-    toriiUrl,
-    manifest,
-}: {
-    rpcUrl: string;
-    toriiUrl: string;
-    manifest: any;
-}) {
+export async function setup({ ...config }: Config) {
     // Initialize the network configuration.
     const client = await dojoClient({
-        rpcUrl,
-        toriiUrl,
-        manifest,
+        rpcUrl: config.rpcUrl,
+        toriiUrl: config.toriiUrl,
+        manifest: config.manifest,
     });
 
+    // create contract components
     const contractComponents = defineContractComponents(world);
 
-    // Create client components
+    // create client components
     const components = createClientComponents({ contractComponents });
 
-    // Fetch all existing entities from torii
+    // fetch all existing entities from torii
     await getSyncEntities(client.toriiClient, contractComponents as any);
 
     return {
@@ -36,5 +30,6 @@ export async function setup({
         components,
         contractComponents,
         systemCalls: createSystemCalls(client, contractComponents, components),
+        config,
     };
 }

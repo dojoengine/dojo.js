@@ -2,26 +2,17 @@ import { useComponentValue } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
-import { useDojo } from "./DojoContext";
 import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { useDojo } from "./dojo/useDojo";
 
 function App() {
     const {
         setup: {
             systemCalls: { spawn, move },
-            components: { Moves, Position },
+            components: { Position, Moves },
         },
-        account: {
-            create,
-            list,
-            select,
-            account,
-            isDeploying,
-            clear,
-            copyToClipboard,
-            applyFromClipboard,
-        },
+        account,
     } = useDojo();
 
     const [clipboardStatus, setClipboardStatus] = useState({
@@ -30,7 +21,9 @@ function App() {
     });
 
     // entity id we are syncing
-    const entityId = getEntityIdFromKeys([BigInt(account.address)]) as Entity;
+    const entityId = getEntityIdFromKeys([
+        BigInt(account?.account.address),
+    ]) as Entity;
 
     // get current component values
     const position = useComponentValue(Position, entityId);
@@ -38,7 +31,7 @@ function App() {
 
     const handleRestoreBurners = async () => {
         try {
-            await applyFromClipboard();
+            await account?.applyFromClipboard();
             setClipboardStatus({
                 message: "Burners restored successfully!",
                 isError: false,
@@ -63,11 +56,11 @@ function App() {
 
     return (
         <>
-            <button onClick={create}>
-                {isDeploying ? "deploying burner" : "create burner"}
+            <button onClick={account?.create}>
+                {account?.isDeploying ? "deploying burner" : "create burner"}
             </button>
-            {list().length > 0 && (
-                <button onClick={async () => await copyToClipboard()}>
+            {account && account?.list().length > 0 && (
+                <button onClick={async () => await account?.copyToClipboard()}>
                     Save Burners to Clipboard
                 </button>
             )}
@@ -83,10 +76,10 @@ function App() {
             <div className="card">
                 select signer:{" "}
                 <select
-                    value={account ? account.address : ""}
-                    onChange={(e) => select(e.target.value)}
+                    value={account ? account.account.address : ""}
+                    onChange={(e) => account.select(e.target.value)}
                 >
-                    {list().map((account, index) => {
+                    {account?.list().map((account, index) => {
                         return (
                             <option value={account.address} key={index}>
                                 {account.address}
@@ -95,12 +88,14 @@ function App() {
                     })}
                 </select>
                 <div>
-                    <button onClick={() => clear()}>Clear burners</button>
+                    <button onClick={() => account.clear()}>
+                        Clear burners
+                    </button>
                 </div>
             </div>
 
             <div className="card">
-                <button onClick={() => spawn(account)}>Spawn</button>
+                <button onClick={() => spawn(account.account)}>Spawn</button>
                 <div>
                     Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
                 </div>
@@ -117,7 +112,7 @@ function App() {
                     <button
                         onClick={() =>
                             position && position.vec.y > 0
-                                ? move(account, Direction.Up)
+                                ? move(account.account, Direction.Up)
                                 : console.log("Reach the borders of the world.")
                         }
                     >
@@ -128,18 +123,22 @@ function App() {
                     <button
                         onClick={() =>
                             position && position.vec.x > 0
-                                ? move(account, Direction.Left)
+                                ? move(account.account, Direction.Left)
                                 : console.log("Reach the borders of the world.")
                         }
                     >
                         Move Left
                     </button>
-                    <button onClick={() => move(account, Direction.Right)}>
+                    <button
+                        onClick={() => move(account.account, Direction.Right)}
+                    >
                         Move Right
                     </button>
                 </div>
                 <div>
-                    <button onClick={() => move(account, Direction.Down)}>
+                    <button
+                        onClick={() => move(account.account, Direction.Down)}
+                    >
                         Move Down
                     </button>
                 </div>

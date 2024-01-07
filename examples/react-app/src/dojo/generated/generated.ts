@@ -29,16 +29,17 @@ export async function dojoClient(dojoClient: DojoClient) {
 export type SetupWorld = Awaited<ReturnType<typeof setupWorld>>;
 
 export async function setupWorld(provider: DojoProvider) {
-    const world_address = "0x0000000";
-
     function actions() {
         const contract_name = "actions";
 
         const spawn = async ({ account }: { account: Account }) => {
             try {
-                return await provider.execute(account, contract_name, "spawn", [
-                    world_address,
-                ]);
+                return await provider.execute(
+                    account,
+                    contract_name,
+                    "spawn",
+                    []
+                );
             } catch (error) {
                 console.error("Error executing spawn:", error);
                 throw error;
@@ -54,7 +55,6 @@ export async function setupWorld(provider: DojoProvider) {
         }) => {
             try {
                 return await provider.execute(account, contract_name, "move", [
-                    world_address,
                     direction,
                 ]);
             } catch (error) {

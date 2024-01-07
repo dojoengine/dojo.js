@@ -17,7 +17,7 @@
         "noFallthroughCasesInSwitch": true,
         "allowSyntheticDefaultImports": true
     },
-    "include": ["src"],
+    "include": ["src", "dojoConfig.ts"],
     "references": [
         {
             "path": "./tsconfig.node.json"
