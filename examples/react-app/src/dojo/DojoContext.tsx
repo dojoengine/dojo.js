@@ -24,22 +24,21 @@ export const DojoProvider = ({
     const currentValue = useContext(DojoContext);
     if (currentValue) throw new Error("DojoProvider can only be used once");
 
+    const {
+        config: { rpcUrl, masterAddress, masterPrivateKey, accountClassHash },
+    } = value;
+
     const rpcProvider = useMemo(
         () =>
             new RpcProvider({
-                nodeUrl: value.config.rpcUrl,
+                nodeUrl: rpcUrl,
             }),
-        [value.config.rpcUrl]
+        [rpcUrl]
     );
 
     const masterAccount = useMemo(
-        () =>
-            new Account(
-                rpcProvider,
-                value.config.masterAddress,
-                value.config.masterPrivateKey
-            ),
-        [rpcProvider, value.config.masterAddress, value.config.masterPrivateKey]
+        () => new Account(rpcProvider, masterAddress, masterPrivateKey),
+        [rpcProvider, masterAddress, masterPrivateKey]
     );
 
     const {
@@ -55,7 +54,7 @@ export const DojoProvider = ({
     } = useBurnerManager({
         burnerManager: new BurnerManager({
             masterAccount,
-            accountClassHash: value.config.accountClassHash,
+            accountClassHash,
             rpcProvider,
         }),
     });

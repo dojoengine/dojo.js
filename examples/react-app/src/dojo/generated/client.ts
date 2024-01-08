@@ -14,7 +14,7 @@ export type CreateDojoClient = Awaited<ReturnType<typeof dojoClient>>;
 export async function dojoClient<R>(
     { manifest, rpcUrl, toriiUrl }: DojoClientConfig,
     setupWorld: (provider: DojoProvider) => Promise<R>
-): Promise<{ toriiClient: typeof toriiClient; client: R }> {
+): Promise<{ toriiClient: torii.Client; client: R }> {
     const toriiClient = await torii.createClient([], {
         rpcUrl,
         toriiUrl,
