@@ -17,6 +17,7 @@
         "@dojoengine/torii-client": "link:dojo-packages/packages/torii-client",
         "@dojoengine/utils": "link:dojo-packages/packages/utils",
         "@dojoengine/react": "link:dojo-packages/packages/react",
+        "@dojoengine/state": "link:dojo-packages/packages/state",
         "@dojoengine/recs": "0.1.35",
         "@latticexyz/react": "^2.0.0-next.11",
         "@latticexyz/utils": "^2.0.0-next.11",

@@ -10,7 +10,7 @@ function App() {
     const {
         setup: {
             systemCalls: { spawn, move },
-            components: { Position, Moves },
+            clientComponents: { Position, Moves },
         },
         account,
     } = useDojo();

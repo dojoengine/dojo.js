@@ -2,9 +2,8 @@
 
 import { DojoProvider } from "@dojoengine/core";
 import * as torii from "@dojoengine/torii-client";
-import { setupWorld } from "./generated";
 
-interface DojoClient {
+interface DojoClientConfig {
     manifest: any;
     rpcUrl: string;
     toriiUrl: string;
@@ -12,7 +11,10 @@ interface DojoClient {
 
 export type CreateDojoClient = Awaited<ReturnType<typeof dojoClient>>;
 
-export async function dojoClient({ manifest, rpcUrl, toriiUrl }: DojoClient) {
+export async function dojoClient<R>(
+    { manifest, rpcUrl, toriiUrl }: DojoClientConfig,
+    setupWorld: (provider: DojoProvider) => Promise<R>
+): Promise<{ toriiClient: typeof toriiClient; client: R }> {
     const toriiClient = await torii.createClient([], {
         rpcUrl,
         toriiUrl,

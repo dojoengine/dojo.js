@@ -8,13 +8,13 @@ import {
     getEvents,
     setComponentsFromEvents,
 } from "@dojoengine/utils";
-import { CreateDojoClient } from "./generated/generated";
 import { ContractComponents } from "./generated/contractComponents";
+import { IWorld } from "./generated/generated";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
-    { client }: CreateDojoClient,
+    { client }: { client: IWorld },
     contractComponents: ContractComponents,
     { Position, Moves }: ClientComponents
 ) {

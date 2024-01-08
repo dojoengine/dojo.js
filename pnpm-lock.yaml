@@ -36,9 +36,6 @@ importers:
       '@dojoengine/torii-client':
         specifier: ^0.2.10
         version: link:../torii-client
-      '@dojoengine/torii-wasm':
-        specifier: ^0.2.10
-        version: link:../torii-wasm
       '@types/elliptic':
         specifier: ^6.4.14
         version: 6.4.18
@@ -237,12 +234,12 @@ importers:
       '@dojoengine/recs':
         specifier: 0.1.35
         version: 0.1.35(typescript@5.3.3)
+      '@dojoengine/torii-client':
+        specifier: ^0.2.10
+        version: link:../torii-client
       '@latticexyz/utils':
         specifier: ^2.0.0-next.11
         version: 2.0.0-snapshot-test-32d38619
-      micro-starknet:
-        specifier: ^0.2.3
-        version: 0.2.3
       starknet:
         specifier: ^5.24.3
         version: 5.24.3(encoding@0.1.13)

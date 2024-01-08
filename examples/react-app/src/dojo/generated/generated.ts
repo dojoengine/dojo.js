@@ -46,3 +46,16 @@ export async function setupWorld(provider: DojoProvider) {
         actions: actions(),
     };
 }
+
+export interface IWorld {
+    actions: {
+        spawn: ({ account }: { account: Account }) => Promise<any>;
+        move: ({
+            account,
+            direction,
+        }: {
+            account: Account;
+            direction: Direction;
+        }) => Promise<any>;
+    };
+}
