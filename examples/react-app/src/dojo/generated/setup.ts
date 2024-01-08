@@ -1,11 +1,12 @@
+import { getSyncEntities } from "@dojoengine/state";
 import { createClientComponents } from "../createClientComponents";
 import { createSystemCalls } from "../createSystemCalls";
-import { getSyncEntities } from "@dojoengine/state";
 import { dojoClient } from "./client";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { Config } from "../../../dojoConfig";
-import { IWorld, setupWorld } from "./generated";
+import { setupWorld } from "./generated";
+import type { IWorld } from "./generated";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -27,7 +28,7 @@ export async function setup({ ...config }: Config) {
     const clientComponents = createClientComponents({ contractComponents });
 
     // fetch all existing entities from torii
-    await getSyncEntities(toriiClient, contractComponents);
+    await getSyncEntities(toriiClient, contractComponents as any);
 
     return {
         client,

@@ -4,7 +4,7 @@ import { Account } from "starknet";
 import { DojoProvider } from "@dojoengine/core";
 import { Direction } from "../../utils";
 
-export type SetupWorld = Awaited<ReturnType<typeof setupWorld>>;
+export type IWorld = Awaited<ReturnType<typeof setupWorld>>;
 
 export async function setupWorld(provider: DojoProvider) {
     function actions() {
@@ -44,18 +44,5 @@ export async function setupWorld(provider: DojoProvider) {
     }
     return {
         actions: actions(),
-    };
-}
-
-export interface IWorld {
-    actions: {
-        spawn: ({ account }: { account: Account }) => Promise<any>;
-        move: ({
-            account,
-            direction,
-        }: {
-            account: Account;
-            direction: Direction;
-        }) => Promise<any>;
     };
 }

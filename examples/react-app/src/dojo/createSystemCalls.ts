@@ -9,7 +9,7 @@ import {
     setComponentsFromEvents,
 } from "@dojoengine/utils";
 import { ContractComponents } from "./generated/contractComponents";
-import { IWorld } from "./generated/generated";
+import type { IWorld } from "./generated/generated";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
