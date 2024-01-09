@@ -19,3 +19,15 @@ export interface BurnerManagerOptions {
     accountClassHash: string;
     rpcProvider: RpcProvider;
 }
+
+export interface BurnerAccount {
+    create: () => void;
+    list: () => Burner[];
+    get: (address: string) => void;
+    account: Account;
+    select: (address: string) => void;
+    isDeploying: boolean;
+    clear: () => void;
+    copyToClipboard: () => Promise<void>;
+    applyFromClipboard: () => Promise<void>;
+}

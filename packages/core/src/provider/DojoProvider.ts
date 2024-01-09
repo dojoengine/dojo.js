@@ -40,12 +40,8 @@ export class DojoProvider extends Provider {
      * @param {string} world_address - Address of the world.
      * @param {string} [url=LOCAL_KATANA] - RPC URL (defaults to LOCAL_KATANA).
      */
-    constructor(
-        world_address: string,
-        manifest?: any,
-        url: string = LOCAL_KATANA
-    ) {
-        super(world_address);
+    constructor(manifest?: any, url: string = LOCAL_KATANA) {
+        super(manifest.world.address);
         this.provider = new RpcProvider({
             nodeUrl: url,
         });
