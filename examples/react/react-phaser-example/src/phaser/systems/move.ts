@@ -16,7 +16,7 @@ export const move = (layer: PhaserLayer) => {
             Main: { objectPool, camera },
         },
         networkLayer: {
-            components: { Position },
+            contractComponents: { Position },
         },
     } = layer;
 

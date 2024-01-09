@@ -16,7 +16,7 @@ export const useDojo = () => {
 
     const { networkLayer, phaserLayer } = layers;
 
-    const { get, create, select, list, isDeploying, clear } = useBurnerManager({
+    const burner = useBurnerManager({
         burnerManager: layers.networkLayer.burnerManager,
     });
 
@@ -24,15 +24,10 @@ export const useDojo = () => {
         networkLayer,
         phaserLayer,
         account: {
+            ...burner,
             account: networkLayer.burnerManager.account as Account,
-            get,
-            create,
-            select,
-            list,
-            clear,
-            isDeploying,
         },
         systemCalls: networkLayer.systemCalls,
-        contractComponents: networkLayer.network.contractComponents,
+        contractComponents: networkLayer.contractComponents,
     };
 };

@@ -1,20 +1,24 @@
 import { BurnerManager } from "@dojoengine/create-burner";
 import { Account, RpcProvider } from "starknet";
 
-export const createBurner = async () => {
+import { Config } from "../../dojoConfig";
+
+export type CreateBurner = Awaited<ReturnType<typeof createBurner>>;
+
+export const createBurner = async ({ ...config }: Config) => {
     const rpcProvider = new RpcProvider({
-        nodeUrl: import.meta.env.VITE_PUBLIC_NODE_URL!,
+        nodeUrl: config.rpcUrl,
     });
 
     const masterAccount = new Account(
         rpcProvider,
-        import.meta.env.VITE_PUBLIC_MASTER_ADDRESS!,
-        import.meta.env.VITE_PUBLIC_MASTER_PRIVATE_KEY!
+        config.masterAddress,
+        config.masterPrivateKey
     );
 
     const burnerManager = new BurnerManager({
         masterAccount,
-        accountClassHash: import.meta.env.VITE_PUBLIC_ACCOUNT_CLASS_HASH!,
+        accountClassHash: config.accountClassHash,
         rpcProvider,
     });
 
