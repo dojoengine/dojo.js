@@ -32,31 +32,14 @@ You can get started by simply bootstrapping dojo world like so. You will need [d
 npx @dojoengine/create-dojo
 ```
 
-[![dojo init](./media/screen-grab.png)](./media/dojo-init.mov)
-
 ### Contributing to dojo.js
 
 Dojo.js is MIT licensed and welcomes contributors. Setting up your environment is simple.
 
-#### Prerequisites
-
-1. **Bun Installation**: We use [bun](https://bun.sh/) in this repository. To install it, run:
-    ```console
-    curl -fsSL https://bun.sh/install | bash
-    ```
-
 From the repository root, run the following to install all the necessary package dependencies:
 
 ```console
-bun install
-```
-
-#### Package Linking:
-
-To link the packages to the examples or your own project, from the root directory, run:
-
-```console
-bun link
+pnpm install
 ```
 
 #### Building Packages:
@@ -66,24 +49,24 @@ bun link
 To do so, navigate to a specific package directory and run the command below. This will initiate bun in watch mode, which will automatically compile and update based on local changes:
 
 ```console
-bun run build --watch
+pnpm run build --watch
 ```
 
 To build all packages, from the root directory, run:
 
 ```console
-bun run build
+pnpm run build
 ```
 
 To watch for changes on all packages in parallel, from the root directory, run:
 
 ```console
-bun run build-watch
+pnpm run build-watch
 ```
 
 #### Dojo starter:
 
-To install dojo-starter submodule, run:
+To install dojo-starter submodule (which allows interactions with the examples), run:
 
 ```console
 git submodule update --init --recursive
