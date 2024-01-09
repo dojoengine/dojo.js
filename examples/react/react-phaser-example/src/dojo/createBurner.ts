@@ -10,14 +10,12 @@ export const createBurner = async ({ ...config }: Config) => {
         nodeUrl: config.rpcUrl,
     });
 
-    const masterAccount = new Account(
-        rpcProvider,
-        config.masterAddress,
-        config.masterPrivateKey
-    );
-
     const burnerManager = new BurnerManager({
-        masterAccount,
+        masterAccount: new Account(
+            rpcProvider,
+            config.masterAddress,
+            config.masterPrivateKey
+        ),
         accountClassHash: config.accountClassHash,
         rpcProvider,
     });
@@ -31,7 +29,6 @@ export const createBurner = async ({ ...config }: Config) => {
     burnerManager.init();
 
     return {
-        account: burnerManager.account as Account,
         burnerManager,
     };
 };

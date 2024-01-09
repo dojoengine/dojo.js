@@ -1,23 +1,22 @@
-import { world } from "./world";
+import { world as recsWorld } from "./world";
 import { setup } from "./generated/setup";
 import { dojoConfig } from "../../dojoConfig";
 import { createBurner } from "./createBurner";
+import { Account } from "starknet";
 
 export type NetworkLayer = Awaited<ReturnType<typeof createNetworkLayer>>;
 
 export const createNetworkLayer = async () => {
-    const { clientComponents, systemCalls, contractComponents } =
-        await setup(dojoConfig());
+    // setup world
+    const setupWorld = await setup(dojoConfig());
 
-    // create burner
-    const { account, burnerManager } = await createBurner(dojoConfig());
+    // create burner and init
+    const { burnerManager } = await createBurner(dojoConfig());
 
     return {
-        world,
-        clientComponents,
-        contractComponents,
-        systemCalls,
+        ...setupWorld,
+        recsWorld,
         burnerManager,
-        account,
+        account: burnerManager.account as Account,
     };
 };
