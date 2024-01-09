@@ -2,3 +2,5 @@
 **/*/dist
 packages/torii-client/wasm
 packages/torii-client/pkg
+
+examples/dojo-starter
