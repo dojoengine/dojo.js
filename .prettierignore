@@ -4,3 +4,4 @@ packages/torii-client/wasm
 packages/torii-client/pkg
 
 examples/dojo-starter
+packages/create-dojo
