@@ -2,6 +2,9 @@
     "name": "@dojoengine/state",
     "version": "0.2.10",
     "description": "State sync for dojo",
+    "author": "Loaf",
+    "license": "MIT",
+    "main": "dist/index.js",
     "type": "module",
     "scripts": {
         "build": "tsup --dts-resolve",
@@ -13,9 +16,6 @@
             "types": "./dist/index.d.ts"
         }
     },
-    "author": "Loaf",
-    "license": "MIT",
-    "main": "dist/index.js",
     "devDependencies": {
         "bun-types": "^1.0.1",
         "tsup": "^8.0.1",

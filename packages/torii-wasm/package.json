@@ -1,7 +1,9 @@
 {
     "name": "@dojoengine/torii-wasm",
     "version": "0.2.10",
-    "description": "",
+    "description": "Torii wasm bindings for Dojo onchain game engine",
+    "author": "",
+    "license": "MIT",
     "main": "./pkg/torii_client_wasm.js",
     "type": "module",
     "scripts": {
@@ -20,9 +22,6 @@
         "./pkg/torii_client_wasm.js",
         "./pkg/snippets/*"
     ],
-    "keywords": [],
-    "author": "",
-    "license": "MIT",
     "devDependencies": {
         "bun-types": "^1.0.1",
         "tsup": "^8.0.1",

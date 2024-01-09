@@ -1,6 +1,6 @@
 {
     "name": "dojo.js",
-    "version": "0.1.61",
+    "version": "0.2.10",
     "workspaces": [
         "examples/react/*",
         "packages/create-burner",
@@ -37,6 +37,5 @@
         "prettier": "bun x prettier --write .",
         "release": "bun run build && bun run prettier && npx lerna publish --no-private --force-publish",
         "docs": "npx typedoc --out docs"
-    },
-    "dependencies": {}
+    }
 }
