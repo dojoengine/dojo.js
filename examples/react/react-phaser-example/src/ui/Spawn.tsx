@@ -29,9 +29,7 @@ export const Spawn = () => {
             <Button
                 variant={"default"}
                 onClick={async () => {
-                    await spawn({
-                        signer: account,
-                    });
+                    await spawn(account);
 
                     setLoggedIn();
                 }}
