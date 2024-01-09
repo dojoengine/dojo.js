@@ -1,5 +1,4 @@
-use dojo_types::primitive::Primitive;
-use dojo_types::schema::Ty;
+use dojo_types::{primitive::Primitive, schema::Ty};
 use serde_json::Value;
 use torii_grpc::types::schema::Entity;
 
