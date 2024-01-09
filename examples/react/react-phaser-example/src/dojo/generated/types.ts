@@ -1,5 +1,5 @@
 import { Account } from "starknet";
-import { Direction } from "./utils";
+import { Direction } from "../utils";
 
 export interface SystemSigner {
     signer: Account;
