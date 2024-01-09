@@ -7,7 +7,7 @@ pub fn parse_entities_as_json_str(entities: Vec<Entity>) -> Value {
     entities
         .into_iter()
         .map(|entity| {
-            let entity_key = format!("{:#x}", entity.key);
+            let entity_key = format!("{:#x}", entity.hashed_keys);
             let models_map = entity
                 .models
                 .into_iter()
