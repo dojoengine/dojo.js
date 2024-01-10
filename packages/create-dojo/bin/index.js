@@ -23,7 +23,7 @@ async function run() {
     console.log(`Downloading ${template}...`);
     spawn.sync("npx", [
       "degit",
-      `dojoengine/dojo.js/examples/${template}`,
+      `dojoengine/dojo.js/examples/react/${template}`,
       `${projectName}`
     ]);
     await rewritePackageJson(projectName);
