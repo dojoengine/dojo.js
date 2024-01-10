@@ -30,25 +30,25 @@ importers:
         dependencies:
             "@dojoengine/core":
                 specifier: ^0.2.10
-                version: link:../../../packages/core
+                version: 0.2.10(starknet@5.24.3)
             "@dojoengine/create-burner":
                 specifier: ^0.2.10
-                version: link:../../../packages/create-burner
+                version: 0.2.10(react-dom@18.2.0)(react@18.2.0)(starknet@5.24.3)
             "@dojoengine/react":
                 specifier: ^0.2.10
-                version: link:../../../packages/react
+                version: 0.2.10(react@18.2.0)(starknet@5.24.3)(type-fest@2.19.0)(typescript@5.3.3)(zod@3.22.4)
             "@dojoengine/recs":
                 specifier: 0.1.35
                 version: 0.1.35(typescript@5.3.3)(zod@3.22.4)
             "@dojoengine/state":
-                specifier: ^0.2.10
+                specifier: ^0.3.0
                 version: link:../../../packages/state
             "@dojoengine/torii-client":
                 specifier: ^0.2.10
-                version: link:../../../packages/torii-client
+                version: 0.2.10
             "@dojoengine/utils":
                 specifier: ^0.2.10
-                version: link:../../../packages/utils
+                version: 0.2.10(starknet@5.24.3)(typescript@5.3.3)(zod@3.22.4)
             "@latticexyz/react":
                 specifier: ^2.0.0-next.11
                 version: 2.0.0-snapshot-test-32d38619(typescript@5.3.3)(zod@3.22.4)
@@ -139,28 +139,28 @@ importers:
         dependencies:
             "@dojoengine/core":
                 specifier: ^0.2.10
-                version: link:../../../packages/core
+                version: 0.2.10(starknet@5.24.3)
             "@dojoengine/create-burner":
                 specifier: ^0.2.10
-                version: link:../../../packages/create-burner
+                version: 0.2.10(react-dom@18.2.0)(react@18.2.0)(starknet@5.24.3)
             "@dojoengine/react":
                 specifier: ^0.2.10
-                version: link:../../../packages/react
+                version: 0.2.10(react@18.2.0)(starknet@5.24.3)(type-fest@2.19.0)(typescript@5.3.3)(zod@3.22.4)
             "@dojoengine/recs":
                 specifier: 0.1.35
                 version: 0.1.35(typescript@5.3.3)(zod@3.22.4)
             "@dojoengine/state":
-                specifier: ^0.2.10
+                specifier: ^0.3.0
                 version: link:../../../packages/state
             "@dojoengine/torii-client":
                 specifier: ^0.2.10
-                version: link:../../../packages/torii-client
+                version: 0.2.10
             "@dojoengine/torii-wasm":
                 specifier: ^0.2.10
-                version: link:../../../packages/torii-wasm
+                version: 0.2.10
             "@dojoengine/utils":
                 specifier: ^0.2.10
-                version: link:../../../packages/utils
+                version: 0.2.10(starknet@5.24.3)(typescript@5.3.3)(zod@3.22.4)
             "@latticexyz/phaserx":
                 specifier: ^2.0.0-next.14
                 version: 2.0.0-snapshot-test-32d38619
@@ -200,166 +200,6 @@ importers:
             phaser:
                 specifier: 3.60.0-beta.14
                 version: 3.60.0-beta.14
-            proxy-deep:
-                specifier: ^3.1.1
-                version: 3.1.1
-            react:
-                specifier: ^18.2.0
-                version: 18.2.0
-            react-dom:
-                specifier: ^18.2.0
-                version: 18.2.0(react@18.2.0)
-            rxjs:
-                specifier: ^7.8.1
-                version: 7.8.1
-            simplex-noise:
-                specifier: ^4.0.1
-                version: 4.0.1
-            starknet:
-                specifier: 5.24.3
-                version: 5.24.3(encoding@0.1.13)
-            styled-components:
-                specifier: ^6.0.7
-                version: 6.1.8(react-dom@18.2.0)(react@18.2.0)
-            tailwind-merge:
-                specifier: ^2.0.0
-                version: 2.2.0
-            tailwindcss-animate:
-                specifier: ^1.0.7
-                version: 1.0.7(tailwindcss@3.4.1)
-            vite-plugin-top-level-await:
-                specifier: ^1.3.1
-                version: 1.4.1(vite@4.5.1)
-            vite-plugin-wasm:
-                specifier: ^3.2.2
-                version: 3.3.0(vite@4.5.1)
-            zustand:
-                specifier: ^4.4.1
-                version: 4.4.7(@types/react@18.2.43)(react@18.2.0)
-        devDependencies:
-            "@graphql-codegen/cli":
-                specifier: ^5.0.0
-                version: 5.0.0(@types/node@20.10.4)(graphql@16.8.1)(typescript@5.3.3)
-            "@graphql-codegen/typescript":
-                specifier: ^4.0.1
-                version: 4.0.1(graphql@16.8.1)
-            "@graphql-codegen/typescript-graphql-request":
-                specifier: ^5.0.0
-                version: 5.0.0(graphql-request@6.1.0)(graphql-tag@2.12.6)(graphql@16.8.1)
-            "@graphql-codegen/typescript-operations":
-                specifier: ^4.0.1
-                version: 4.0.1(graphql@16.8.1)
-            "@types/node":
-                specifier: ^20.9.0
-                version: 20.10.4
-            "@types/react":
-                specifier: ^18.0.37
-                version: 18.2.43
-            "@types/react-dom":
-                specifier: ^18.0.11
-                version: 18.2.17
-            "@typescript-eslint/eslint-plugin":
-                specifier: ^5.59.0
-                version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.56.0)(typescript@5.3.3)
-            "@typescript-eslint/parser":
-                specifier: ^5.59.0
-                version: 5.62.0(eslint@8.56.0)(typescript@5.3.3)
-            "@vitejs/plugin-react":
-                specifier: ^4.0.0
-                version: 4.2.1(vite@4.5.1)
-            autoprefixer:
-                specifier: ^10.4.16
-                version: 10.4.16(postcss@8.4.32)
-            eslint:
-                specifier: ^8.38.0
-                version: 8.56.0
-            eslint-plugin-react-hooks:
-                specifier: ^4.6.0
-                version: 4.6.0(eslint@8.56.0)
-            eslint-plugin-react-refresh:
-                specifier: ^0.3.4
-                version: 0.3.5(eslint@8.56.0)
-            postcss:
-                specifier: ^8.4.31
-                version: 8.4.32
-            tailwindcss:
-                specifier: ^3.3.5
-                version: 3.4.1
-            typescript:
-                specifier: ^5.2.2
-                version: 5.3.3
-            vite:
-                specifier: ^4.3.9
-                version: 4.5.1(@types/node@20.10.4)
-
-    examples/react/react-phaser-example-hex:
-        dependencies:
-            "@dojoengine/core":
-                specifier: ^0.2.10
-                version: link:../../../packages/core
-            "@dojoengine/create-burner":
-                specifier: ^0.2.10
-                version: link:../../../packages/create-burner
-            "@dojoengine/react":
-                specifier: ^0.2.10
-                version: link:../../../packages/react
-            "@dojoengine/recs":
-                specifier: 0.1.35
-                version: 0.1.35(typescript@5.3.3)(zod@3.22.4)
-            "@dojoengine/state":
-                specifier: ^0.2.10
-                version: link:../../../packages/state
-            "@dojoengine/torii-client":
-                specifier: ^0.2.10
-                version: link:../../../packages/torii-client
-            "@dojoengine/torii-wasm":
-                specifier: ^0.2.10
-                version: link:../../../packages/torii-wasm
-            "@dojoengine/utils":
-                specifier: ^0.2.10
-                version: link:../../../packages/utils
-            "@latticexyz/phaserx":
-                specifier: ^2.0.0-next.14
-                version: 2.0.0-snapshot-test-32d38619
-            "@latticexyz/utils":
-                specifier: ^2.0.0-next.14
-                version: 2.0.0-snapshot-test-32d38619
-            "@radix-ui/react-slot":
-                specifier: ^1.0.2
-                version: 1.0.2(@types/react@18.2.43)(react@18.2.0)
-            alea:
-                specifier: ^1.0.1
-                version: 1.0.1
-            class-variance-authority:
-                specifier: ^0.7.0
-                version: 0.7.0
-            clsx:
-                specifier: ^2.0.0
-                version: 2.1.0
-            ethers:
-                specifier: ^5.7.2
-                version: 5.7.2
-            events:
-                specifier: ^3.3.0
-                version: 3.3.0
-            graphql:
-                specifier: ^16.7.1
-                version: 16.8.1
-            graphql-request:
-                specifier: ^6.1.0
-                version: 6.1.0(graphql@16.8.1)
-            lucide-react:
-                specifier: ^0.292.0
-                version: 0.292.0(react@18.2.0)
-            mobx:
-                specifier: ^6.9.0
-                version: 6.12.0
-            phaser:
-                specifier: 3.60.0-beta.14
-                version: 3.60.0-beta.14
-            phaser3-rex-plugins:
-                specifier: ^1.60.9
-                version: 1.60.9
             proxy-deep:
                 specifier: ^3.1.1
                 version: 3.1.1
@@ -459,7 +299,7 @@ importers:
                 version: 5.24.3(encoding@0.1.13)
         devDependencies:
             "@dojoengine/torii-client":
-                specifier: ^0.2.10
+                specifier: ^0.3.2
                 version: link:../torii-client
             "@types/elliptic":
                 specifier: ^6.4.14
@@ -481,7 +321,7 @@ importers:
         dependencies:
             "@starknet-react/core":
                 specifier: ^1.0.3
-                version: 1.0.4(get-starknet-core@3.2.0)(react@18.2.0)(starknet@5.24.3)
+                version: 1.0.4(get-starknet-core@3.2.0)(react-dom@18.2.0)(react@18.2.0)(starknet@5.24.3)
             encoding:
                 specifier: ^0.1.13
                 version: 0.1.13
@@ -557,13 +397,13 @@ importers:
                 specifier: 0.1.35
                 version: 0.1.35(typescript@5.3.3)(zod@3.22.4)
             "@dojoengine/state":
-                specifier: ^0.2.10
+                specifier: ^0.3.2
                 version: link:../state
             "@dojoengine/torii-client":
-                specifier: ^0.2.10
+                specifier: ^0.3.2
                 version: link:../torii-client
             "@dojoengine/utils":
-                specifier: ^0.2.10
+                specifier: ^0.3.2
                 version: link:../utils
             "@latticexyz/utils":
                 specifier: ^2.0.0-next.11
@@ -630,7 +470,7 @@ importers:
                 specifier: 0.1.35
                 version: 0.1.35(typescript@5.3.3)(zod@3.22.4)
             "@dojoengine/torii-client":
-                specifier: ^0.2.10
+                specifier: ^0.3.2
                 version: link:../torii-client
             "@latticexyz/utils":
                 specifier: ^2.0.0-next.11
@@ -652,7 +492,7 @@ importers:
     packages/torii-client:
         dependencies:
             "@dojoengine/torii-wasm":
-                specifier: ^0.2.10
+                specifier: ^0.3.2
                 version: link:../torii-wasm
             typescript:
                 specifier: ^5.0.3
@@ -2411,6 +2251,67 @@ packages:
             to-fast-properties: 2.0.0
         dev: true
 
+    /@dojoengine/core@0.2.10(starknet@5.24.3):
+        resolution:
+            {
+                integrity: sha512-QlzMX1jvE1fwXZylfDtCIgJk3AeujjMjwjlV5sQq/9nbTlfU/+jlZCsABBMgx7G3G1LWzte/4o99c5q5Y7nmtg==,
+            }
+        hasBin: true
+        peerDependencies:
+            starknet: 5.24.3
+        dependencies:
+            starknet: 5.24.3(encoding@0.1.13)
+        dev: false
+
+    /@dojoengine/create-burner@0.2.10(react-dom@18.2.0)(react@18.2.0)(starknet@5.24.3):
+        resolution:
+            {
+                integrity: sha512-7KVT714xJU6do+uEaL0DvuGqJP/dOfwr9YaswfGvXj0PtWfkeERUvYfngqXTMLXnDOgkKkpX40BPxwNkbQHn3w==,
+            }
+        peerDependencies:
+            react: ^18.2.0
+            starknet: 5.24.3
+        dependencies:
+            "@starknet-react/core": 1.0.4(get-starknet-core@3.2.0)(react-dom@18.2.0)(react@18.2.0)(starknet@5.24.3)
+            encoding: 0.1.13
+            get-starknet-core: 3.2.0(starknet@5.24.3)
+            js-cookie: 3.0.5
+            react: 18.2.0
+            starknet: 5.24.3(encoding@0.1.13)
+        transitivePeerDependencies:
+            - react-dom
+            - react-native
+        dev: false
+
+    /@dojoengine/react@0.2.10(react@18.2.0)(starknet@5.24.3)(type-fest@2.19.0)(typescript@5.3.3)(zod@3.22.4):
+        resolution:
+            {
+                integrity: sha512-ymdqS/ifUVnajELDL2aMxhaGuOL78V1GHilY1/9Y9ZdFSh4VJh2dllNaPSLfAqu6VdCetjWPCPwXnDcSPZxneQ==,
+            }
+        peerDependencies:
+            react: ^18.2.0
+            starknet: ^5.24.3
+            type-fest: ^2.14.0
+        dependencies:
+            "@dojoengine/recs": 0.1.35(typescript@5.3.3)(zod@3.22.4)
+            "@dojoengine/torii-client": 0.2.10
+            "@dojoengine/utils": 0.2.10(starknet@5.24.3)(typescript@5.3.3)(zod@3.22.4)
+            "@latticexyz/utils": 2.0.0-snapshot-test-32d38619
+            encoding: 0.1.13
+            fast-deep-equal: 3.1.3
+            get-starknet-core: 3.2.0(starknet@5.24.3)
+            js-cookie: 3.0.5
+            react: 18.2.0
+            rxjs: 7.5.5
+            starknet: 5.24.3(encoding@0.1.13)
+            type-fest: 2.19.0
+        transitivePeerDependencies:
+            - bufferutil
+            - typescript
+            - utf-8-validate
+            - zod
+        dev: false
+
     /@dojoengine/recs@0.1.35(typescript@5.3.3)(zod@3.22.4):
         resolution:
             {
@@ -2421,6 +2322,43 @@ packages:
             "@latticexyz/utils": 2.0.0-next.12
             mobx: 6.12.0
             rxjs: 7.5.5
+        transitivePeerDependencies:
+            - bufferutil
+            - typescript
+            - utf-8-validate
+            - zod
+        dev: false
+
+    /@dojoengine/torii-client@0.2.10:
+        resolution:
+            {
+                integrity: sha512-BZuYzxV/Y1dGoPmgU9ue+wzxGwW+wIXk2zHDp7M7/fWpsUsGivsr5vA3jAabB6GzcKBFDKJf/4hY/2iewwfOlA==,
+            }
+        dependencies:
+            "@dojoengine/torii-wasm": 0.2.10
+            typescript: 5.3.3
+        dev: false
+
+    /@dojoengine/torii-wasm@0.2.10:
+        resolution:
+            {
+                integrity: sha512-YPLsddXBie+RK1f/EJlV5a9SR4oo4+7irtc2hmlUf7vHorh6JToQKRbbVhieJhhiNtzdntxeL0hIbABS06vjmw==,
+            }
+        dev: false
+
+    /@dojoengine/utils@0.2.10(starknet@5.24.3)(typescript@5.3.3)(zod@3.22.4):
+        resolution:
+            {
+                integrity: sha512-8jo5BgzAz9gi1fwCv+uSgQnzpxTDP81iFOazIr5fHX9qTbtsHN2lNFGbkRpDqJYaOEQCmTlbouLIXOUCayiksg==,
+            }
+        peerDependencies:
+            starknet: ^5.24.3
+        dependencies:
+            "@dojoengine/recs": 0.1.35(typescript@5.3.3)(zod@3.22.4)
+            "@latticexyz/utils": 2.0.0-snapshot-test-32d38619
+            mathjs: 12.2.0
+            micro-starknet: 0.2.3
+            starknet: 5.24.3(encoding@0.1.13)
         transitivePeerDependencies:
             - bufferutil
             - typescript
@@ -5847,7 +5785,7 @@ packages:
             }
         dev: false
 
-    /@starknet-react/core@1.0.4(get-starknet-core@3.2.0)(react@18.2.0)(starknet@5.24.3):
+    /@starknet-react/core@1.0.4(get-starknet-core@3.2.0)(react-dom@18.2.0)(react@18.2.0)(starknet@5.24.3):
         resolution:
             {
                 integrity: sha512-TQiRnb0moqim6+HqioGGzd3FgjPVJFMdMH8Q5AQlJ7oEUNprKkFyHlVGJJlcwvdRaCPD5BQuD2WUL2rQfgMRuw==,
@@ -5857,7 +5795,7 @@ packages:
             react: ^17.0 || ^18.0
             starknet: ^5.0.0
         dependencies:
-            "@tanstack/react-query": 4.36.1(react@18.2.0)
+            "@tanstack/react-query": 4.36.1(react-dom@18.2.0)(react@18.2.0)
             get-starknet-core: 3.2.0(starknet@5.24.3)
             immutable: 4.3.4
             react: 18.2.0
@@ -6037,7 +5975,7 @@ packages:
             }
         dev: false
 
-    /@tanstack/react-query@4.36.1(react@18.2.0):
+    /@tanstack/react-query@4.36.1(react-dom@18.2.0)(react@18.2.0):
         resolution:
             {
                 integrity: sha512-y7ySVHFyyQblPl3J3eQBWpXZkliroki3ARnBKsdJchlgt7yJLRDUcf4B8soufgiYt3pEQIkBWBx1N9/ZPIeUWw==,
@@ -6054,6 +5992,7 @@ packages:
         dependencies:
             "@tanstack/query-core": 4.36.1
             react: 18.2.0
+            react-dom: 18.2.0(react@18.2.0)
             use-sync-external-store: 1.2.0(react@18.2.0)
         dev: false
 
@@ -6953,6 +6892,7 @@ packages:
             {
                 integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==,
             }
+        dev: true
 
     /array-differ@3.0.0:
         resolution:
@@ -8126,17 +8066,6 @@ packages:
         transitivePeerDependencies:
             - encoding
 
-    /cross-fetch@4.0.0:
-        resolution:
-            {
-                integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==,
-            }
-        dependencies:
-            node-fetch: 2.7.0(encoding@0.1.13)
-        transitivePeerDependencies:
-            - encoding
-        dev: false
-
     /cross-inspect@1.0.0:
         resolution:
             {
@@ -8905,13 +8834,6 @@ packages:
         transitivePeerDependencies:
             - bufferutil
             - utf-8-validate
-        dev: false
-
-    /eventemitter3@3.1.2:
-        resolution:
-            {
-                integrity: sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==,
-            }
         dev: false
 
     /eventemitter3@4.0.7:
@@ -9992,26 +9914,6 @@ packages:
             ms: 2.1.2
         dev: true
 
-    /i18next-http-backend@2.4.2:
-        resolution:
-            {
-                integrity: sha512-wKrgGcaFQ4EPjfzBTjzMU0rbFTYpa0S5gv9N/d8WBmWS64+IgJb7cHddMvV+tUkse7vUfco3eVs2lB+nJhPo3w==,
-            }
-        dependencies:
-            cross-fetch: 4.0.0
-        transitivePeerDependencies:
-            - encoding
-        dev: false
-
-    /i18next@22.5.1:
-        resolution:
-            {
-                integrity: sha512-8TGPgM3pAD+VRsMtUMNknRz3kzqwp/gPALrWMsDnmC1mKqJwpWyooQRLMcbTwq8z8YwSmuj+ZYvc+xCuEpkssA==,
-            }
-        dependencies:
-            "@babel/runtime": 7.23.6
-        dev: false
-
     /iconv-lite@0.4.24:
         resolution:
             {
@@ -10648,6 +10550,7 @@ packages:
         hasBin: true
         dependencies:
             argparse: 2.0.1
+        dev: true
 
     /jsesc@0.5.0:
         resolution:
@@ -11738,14 +11641,6 @@ packages:
             minimatch: 3.1.2
         dev: true
 
-    /mustache@4.2.0:
-        resolution:
-            {
-                integrity: sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==,
-            }
-        hasBin: true
-        dev: false
-
     /mute-stream@0.0.8:
         resolution:
             {
@@ -12523,13 +12418,6 @@ packages:
             }
         dev: false
 
-    /papaparse@5.4.1:
-        resolution:
-            {
-                integrity: sha512-HipMsgJkZu8br23pW15uvo6sib6wne/4woLZPlFf3rpDyMe9ywEXUsuD7+6K9PRkJlVT51j/sCOYDKGGS3ZJrw==,
-            }
-        dev: false
-
     /param-case@3.0.4:
         resolution:
             {
@@ -12735,23 +12623,6 @@ packages:
                 integrity: sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==,
             }
         dev: true
-
-    /phaser3-rex-plugins@1.60.9:
-        resolution:
-            {
-                integrity: sha512-3tH98Fo3boDIFwwehlGhFdpaHAK0/gLugTyaXipfVS4dyWbT7BO5LOLhcgSuGoCTgooWN020x5juMMOtttxbSw==,
-            }
-        dependencies:
-            eventemitter3: 3.1.2
-            i18next: 22.5.1
-            i18next-http-backend: 2.4.2
-            js-yaml: 4.1.0
-            mustache: 4.2.0
-            papaparse: 5.4.1
-            webfontloader: 1.6.28
-        transitivePeerDependencies:
-            - encoding
-        dev: false
 
     /phaser@3.60.0-beta.14:
         resolution:
@@ -15355,13 +15226,6 @@ packages:
             pvtsutils: 1.3.5
             tslib: 2.6.2
         dev: true
-
-    /webfontloader@1.6.28:
-        resolution:
-            {
-                integrity: sha512-Egb0oFEga6f+nSgasH3E0M405Pzn6y3/9tOVanv/DLfa1YBIgcv90L18YyWnvXkRbIM17v5Kv6IT2N6g1x5tvQ==,
-            }
-        dev: false
 
     /webidl-conversions@3.0.1:
         resolution:
