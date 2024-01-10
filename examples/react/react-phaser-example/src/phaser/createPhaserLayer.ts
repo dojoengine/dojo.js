@@ -11,7 +11,7 @@ export const createPhaserLayer = async (
     networkLayer: NetworkLayer,
     phaserConfig: PhaserEngineConfig
 ) => {
-    const world = namespaceWorld(networkLayer.world, "phaser");
+    const world = namespaceWorld(networkLayer.recsWorld, "phaser");
     const {
         game,
         scenes,

@@ -74,14 +74,16 @@ git submodule update --init --recursive
 
 ---
 
-### Examples
+### Debugging
 
-If you have issues on WSL, install package first then run command :
+If you have issues on WSL, install package first then run command:
 
 ```console
 npm i @dojoengine/create-dojo -g
 npx @dojoengine/create-dojo
 ```
+
+### Examples
 
 To run the examples that have the linked packages, follow the steps below:
 
@@ -104,6 +106,6 @@ sozo migrate
 
 ```console
 cd examples/<package>
-bun install
-bun dev
+pnpm install
+pnpm run dev
 ```

@@ -1,4 +1,4 @@
-import { PhaserLayer } from "..";
+import { PhaserLayer } from "../createPhaserLayer";
 import { move } from "./move";
 import { controls } from "./controls";
 import { mapSystem } from "./mapSystem";

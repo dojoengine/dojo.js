@@ -1,5 +1,5 @@
 import { Tileset } from "../../assets/world";
-import { PhaserLayer } from "..";
+import { PhaserLayer } from "../createPhaserLayer";
 import { snoise } from "@dojoengine/utils";
 import { MAP_AMPLITUDE } from "../config/constants";
 

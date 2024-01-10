@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { createPhaserLayer } from "../../phaser";
+import { createPhaserLayer } from "../../phaser/createPhaserLayer";
 import { NetworkLayer } from "../../dojo/createNetworkLayer";
 import { phaserConfig } from "../../phaser/config/configurePhaser";
 import { usePromiseValue } from "./usePromiseValue";

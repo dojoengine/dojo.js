@@ -5,7 +5,7 @@ import {
     defineEnterSystem,
     getComponentValueStrict,
 } from "@dojoengine/recs";
-import { PhaserLayer } from "..";
+import { PhaserLayer } from "../createPhaserLayer";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { Animations, TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
 

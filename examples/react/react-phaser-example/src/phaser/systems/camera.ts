@@ -1,4 +1,4 @@
-import { PhaserLayer } from "..";
+import { PhaserLayer } from "../createPhaserLayer";
 
 export const camera = (layer: PhaserLayer) => {
     const {

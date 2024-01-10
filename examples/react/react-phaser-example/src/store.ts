@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { NetworkLayer } from "./dojo/createNetworkLayer";
-import { PhaserLayer } from "./phaser";
+import { PhaserLayer } from "./phaser/createPhaserLayer";
 
 export type Store = {
     networkLayer: NetworkLayer | null;
