@@ -1,1 +1,1 @@
-# Fork of Lattice React to work with Starknet
+## Fork of Lattice Mud React
