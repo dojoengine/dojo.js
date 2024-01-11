@@ -21,9 +21,7 @@ import { getContractByName } from "../utils";
  * import { DojoProvider } from "@dojoengine/core";
  *
  * const provider = new DojoProvider(
- *      VITE_PUBLIC_WORLD_ADDRESS,
- *      manifest,
- *      VITE_PUBLIC_NODE_URL
+ *      manifest
  * );
  *
  * await provider.execute(signer, contract, system, call_data);
