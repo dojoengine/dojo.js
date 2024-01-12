@@ -1,7 +1,5 @@
-extern crate wasm_bindgen;
-use utils_wasm::floor;
-
 extern crate utils_wasm;
+extern crate wasm_bindgen;
 use utils_wasm::helpers::multiply_logic;
 use utils_wasm::types::ScalarOrVec;
 
@@ -39,7 +37,7 @@ fn test_multiply_logic_vector_vector() {
 fn test_floor() {
     let input = vec![0.1, 1.999, 4.5, 7.0];
     let expected = vec![0.0, 1.0, 4.0, 7.0];
-    let actual = floor(input);
+    let actual = utils_wasm::floor(input);
     assert_eq!(expected, actual);
 }
 
@@ -51,4 +49,20 @@ fn test_step() {
     let expected = vec![1, 1, 0, 0, 1];
     let actual = utils_wasm::step(a, b);
     assert_eq!(expected, actual);
+}
+
+/* Test mod289 */
+#[test]
+fn test_mod289() {
+    let input = vec![290.0, 578.0, 867.0];
+    let expected = vec![1.0, 0.0, 0.0];
+    assert_eq!(utils_wasm::mod289(input), expected);
+}
+
+/* Test permute */
+#[test]
+fn test_permute() {
+    let input = vec![1.0, 2.0, 3.0];
+    let expected = vec![35.0, 138.0, 20.0];
+    assert_eq!(utils_wasm::permute(input), expected);
 }

@@ -30,3 +30,19 @@ pub fn step(a: Vec<f64>, b: Vec<f64>) -> Vec<i32> {
         .map(|(a_elem, b_elem)| if b_elem <= a_elem { 0 } else { 1 })
         .collect()
 }
+
+#[wasm_bindgen]
+pub fn mod289(values: Vec<f64>) -> Vec<f64> {
+    values
+        .into_iter()
+        .map(|v| v - (v * (1.0 / 289.0)).floor() * 289.0)
+        .collect()
+}
+
+#[wasm_bindgen]
+pub fn permute(x: Vec<f64>) -> Vec<f64> {
+    let transformed_x: Vec<f64> = x.into_iter()
+                                    .map(|v| (v * 34.0 + 1.0) * v)
+                                    .collect();
+    mod289(transformed_x)
+}
