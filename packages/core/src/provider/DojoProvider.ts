@@ -21,9 +21,7 @@ import { getContractByName } from "../utils";
  * import { DojoProvider } from "@dojoengine/core";
  *
  * const provider = new DojoProvider(
- *      VITE_PUBLIC_WORLD_ADDRESS,
- *      manifest,
- *      VITE_PUBLIC_NODE_URL
+ *      manifest
  * );
  *
  * await provider.execute(signer, contract, system, call_data);
@@ -40,12 +38,8 @@ export class DojoProvider extends Provider {
      * @param {string} world_address - Address of the world.
      * @param {string} [url=LOCAL_KATANA] - RPC URL (defaults to LOCAL_KATANA).
      */
-    constructor(
-        world_address: string,
-        manifest?: any,
-        url: string = LOCAL_KATANA
-    ) {
-        super(world_address);
+    constructor(manifest?: any, url: string = LOCAL_KATANA) {
+        super(manifest.world.address);
         this.provider = new RpcProvider({
             nodeUrl: url,
         });

@@ -1,7 +1,10 @@
 {
     "name": "@dojoengine/torii-client",
-    "version": "0.2.10",
-    "description": "",
+    "version": "0.3.2",
+    "description": "Torii client for the dojo onchain game engine",
+    "keywords": [],
+    "author": "Dojo",
+    "license": "MIT",
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
@@ -13,11 +16,8 @@
             "types": "./dist/index.d.ts"
         }
     },
-    "keywords": [],
-    "author": "",
-    "license": "MIT",
     "dependencies": {
-        "@dojoengine/torii-wasm": "^0.2.10",
+        "@dojoengine/torii-wasm": "^0.3.2",
         "typescript": "^5.0.3"
     },
     "devDependencies": {
