@@ -1,8 +1,9 @@
 extern crate wasm_bindgen;
 use utils_wasm::floor;
-use utils_wasm::multiply_logic;
-use utils_wasm::ScalarOrVec;
 
+extern crate utils_wasm;
+use utils_wasm::helpers::multiply_logic;
+use utils_wasm::types::ScalarOrVec;
 
 /* Test multiply_logic */
 #[test]
