@@ -22,3 +22,11 @@ pub fn multiply(a: JsValue, b: JsValue) -> JsValue {
 pub fn floor(values: Vec<f64>) -> Vec<f64> {
     values.into_iter().map(|v| v.floor()).collect()
 }
+
+#[wasm_bindgen]
+pub fn step(a: Vec<f64>, b: Vec<f64>) -> Vec<i32> {
+    a.into_iter()
+        .zip(b.into_iter())
+        .map(|(a_elem, b_elem)| if b_elem <= a_elem { 0 } else { 1 })
+        .collect()
+}

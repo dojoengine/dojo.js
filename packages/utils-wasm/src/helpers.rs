@@ -13,9 +13,9 @@ pub fn multiply_logic(a: ScalarOrVec, b: ScalarOrVec) -> ScalarOrVec {
                 panic!("Vectors must be of the same length");
             }
             Vec(vec_a
-                .iter()
-                .zip(vec_b.iter())
-                .map(|(&x, &y)| x * y)
+                .into_iter()
+                .zip(vec_b.into_iter())
+                .map(|(x, y)| x * y)
                 .collect())
         }
     }

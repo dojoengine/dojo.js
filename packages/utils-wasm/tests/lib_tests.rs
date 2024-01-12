@@ -42,3 +42,13 @@ fn test_floor() {
     let actual = floor(input);
     assert_eq!(expected, actual);
 }
+
+/* Test step */
+#[test]
+fn test_step() {
+    let a = vec![0.0, 3.0, 8.0, 2.0, 1.0];
+    let b = vec![1.0, 4.0, 2.0, 2.0, 5.0];
+    let expected = vec![1, 1, 0, 0, 1];
+    let actual = utils_wasm::step(a, b);
+    assert_eq!(expected, actual);
+}
