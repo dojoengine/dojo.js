@@ -29,7 +29,7 @@
         "build-torii-wasm": "bun run --cwd packages/torii-wasm build",
         "build-react": "bun run --cwd packages/react build",
         "build-state": "bun run --cwd packages/state build",
-        "build-phaser": "bun run --cwd examples/react-phaser-example build",
+        "build-phaser": "bun run --cwd examples/react/react-phaser-example build",
         "build-watch": "bun run build-core --watch & bun run build-create-burner --watch & bun run build-create-dojo --watch & bun run build-utils --watch & bun run build-react --watch & bun run build-torii-wasm --watch & bun run build-torii-client --watch & bun run build-state --watch",
         "build": "bun run build-torii-wasm && bun run build-torii-client && bun run build-state && bun run build-core && bun run build-create-burner && bun run build-create-dojo && bun run build-utils &&  bun run build-react",
         "clean": "rm -rf node_modules packages/create-burner/node_modules node_modules packages/create-dojo/node_modules packages/core/node_modules packages/utils/node_modules packages/torii-client/node_modules packages/torii-wasm/node_modules packages/react/node_modules bun.lockb packages/create-burner/bun.lockb packages/core/bun.lockb packages/utils/bun.lockb packages/torii-client/bun.lockb packages/torii-wasm/bun.lockb packages/react/bun.lockb && rm -rf examples/react/react-app/node_modules examples/react/react-app/bun.lockb examples/react/react-phaser-example/node_modules examples/react/react-phaser-example/bun.lockb",
