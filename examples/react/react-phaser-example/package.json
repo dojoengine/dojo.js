@@ -12,12 +12,12 @@
         "components": "npx @dojoengine/core ../../dojo-starter/target/dev/manifest.json src/dojo/contractComponents.ts http://localhost:5050 0x33ac2f528bb97cc7b79148fd1756dc368be0e95d391d8c6d6473ecb60b4560e"
     },
     "dependencies": {
-        "@dojoengine/core": "^0.2.10",
-        "@dojoengine/create-burner": "^0.2.10",
-        "@dojoengine/torii-client": "^0.2.10",
-        "@dojoengine/torii-wasm": "^0.2.10",
-        "@dojoengine/utils": "^0.2.10",
-        "@dojoengine/react": "^0.2.10",
+        "@dojoengine/core": "^0.3.0",
+        "@dojoengine/create-burner": "^0.3.0",
+        "@dojoengine/torii-client": "^0.3.0",
+        "@dojoengine/torii-wasm": "^0.3.0",
+        "@dojoengine/utils": "^0.3.0",
+        "@dojoengine/react": "^0.3.0",
         "@dojoengine/state": "^0.3.0",
         "@dojoengine/recs": "0.1.35",
         "@latticexyz/phaserx": "^2.0.0-next.14",
