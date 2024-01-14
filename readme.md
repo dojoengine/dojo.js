@@ -46,7 +46,7 @@ pnpm install
 
 **Note**: Before running the examples, you must build each package.
 
-To do so, navigate to a specific package directory and run the command below. This will initiate bun in watch mode, which will automatically compile and update based on local changes:
+To do so, navigate to a specific package directory and run the command below. This will initiate pnpm in watch mode, which will automatically compile and update based on local changes:
 
 ```console
 pnpm run build --watch

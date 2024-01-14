@@ -57,7 +57,7 @@ export function useSync<S extends Schema>(
         client.addModelsToSync([entity]);
 
         return () => {
-            client.removeModelsToSync([entity]).catch((error) => {
+            client.removeModelsToSync([entity]).catch((error: any) => {
                 console.error("Failed to remove entities on cleanup", error);
             });
         };
