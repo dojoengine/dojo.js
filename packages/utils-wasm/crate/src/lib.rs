@@ -39,7 +39,9 @@ pub fn taylor_inv_sqrt(r: Vec<f64>) -> Vec<f64> {
 }
 
 #[wasm_bindgen]
-pub fn snoise(v: Vec<f64>) -> f64 {
+pub fn snoise(v: &[f64]) -> f64 {
+
+    let v = v.to_vec();
     let c: [f64; 2] = [1.0 / 6.0, 1.0 / 3.0];
     let d: [f64; 4] = [0.0, 0.5, 1.0, 2.0];
 
