@@ -1,25 +1,25 @@
 {
-    "name": "@dojoengine/torii-wasm",
+    "name": "@dojoengine/utils-wasm",
     "version": "0.3.3",
-    "description": "Torii wasm bindings for Dojo onchain game engine",
+    "description": "snoise wasm bindings for Dojo onchain game engine",
     "author": "",
     "license": "MIT",
-    "main": "./pkg/torii_client_wasm.js",
+    "main": "./pkg/utils_wasm.js",
     "type": "module",
     "scripts": {
         "build-wasm": "cd crate && ./build.sh",
         "build": "npm run build-wasm && tsc"
     },
     "files": [
-        "./pkg/torii_client_wasm_bg.wasm",
-        "./pkg/torii_client_wasm.js",
-        "./pkg/torii_client_wasm_bg.js",
-        "./pkg/torii_client_wasm.d.ts"
+        "./pkg/utils_wasm_bg.wasm",
+        "./pkg/utils_wasm.js",
+        "./pkg/utils_wasm_bg.js",
+        "./pkg/utils_wasm.d.ts"
     ],
-    "module": "./pkg/torii_client_wasm.js",
-    "types": "./pkg/torii_client_wasm.d.ts",
+    "module": "./pkg/utils_wasm.js",
+    "types": "./pkg/utils_wasm.d.ts",
     "sideEffects": [
-        "./pkg/torii_client_wasm.js",
+        "./pkg/utils_wasm.js",
         "./pkg/snippets/*"
     ],
     "devDependencies": {
