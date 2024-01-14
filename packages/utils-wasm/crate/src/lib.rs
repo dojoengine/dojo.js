@@ -1,6 +1,5 @@
 // JS bindings for simplex
 pub mod helpers;
-pub mod types;
 
 extern crate wasm_bindgen;
 use crate::helpers::{
@@ -40,7 +39,6 @@ pub fn taylor_inv_sqrt(r: Vec<f64>) -> Vec<f64> {
 
 #[wasm_bindgen]
 pub fn snoise(v: &[f64]) -> f64 {
-
     let v = v.to_vec();
     let c: [f64; 2] = [1.0 / 6.0, 1.0 / 3.0];
     let d: [f64; 4] = [0.0, 0.5, 1.0, 2.0];
@@ -189,4 +187,21 @@ pub fn snoise(v: &[f64]) -> f64 {
     let noise = 105.0 * dot_m;
 
     noise
+}
+
+#[wasm_bindgen]
+pub fn recursive_s_noise(p: Vec<f64>, pers: f64, octaves: i32) -> f64 {
+    let mut total = 0.0;
+    let mut frequency = 1.0;
+    let mut amplitude = 1.0;
+    let mut max_value = 0.0;
+
+    for _i in 0..octaves {
+        total += snoise(&multiply_scalar_vec(frequency, &p)) * amplitude;
+        max_value += amplitude;
+        amplitude *= pers;
+        frequency *= 2.0;
+    }
+
+    total / max_value
 }
