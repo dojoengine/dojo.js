@@ -18,7 +18,8 @@
         "tsup": "^8.0.1",
         "typedoc": "^0.25.4",
         "typedoc-material-theme": "^1.0.1",
-        "typedoc-plugin-coverage": "^2.2.0"
+        "typedoc-plugin-coverage": "^2.2.0",
+        "husky": "^8.0.0"
     },
     "scripts": {
         "build-core": "bun run --cwd packages/core build",
@@ -30,12 +31,15 @@
         "build-react": "bun run --cwd packages/react build",
         "build-state": "bun run --cwd packages/state build",
         "build-phaser": "bun run --cwd examples/react/react-phaser-example build",
+        "build-react-app": "bun run --cwd examples/react/react-app build",
         "build-watch": "bun run build-core --watch & bun run build-create-burner --watch & bun run build-create-dojo --watch & bun run build-utils --watch & bun run build-react --watch & bun run build-torii-wasm --watch & bun run build-torii-client --watch & bun run build-state --watch",
         "build": "bun run build-torii-wasm && bun run build-torii-client && bun run build-state && bun run build-core && bun run build-create-burner && bun run build-create-dojo && bun run build-utils &&  bun run build-react",
+        "build-examples": "bun run build-phaser && bun run build-react-app",
         "clean": "rm -rf node_modules packages/create-burner/node_modules node_modules packages/create-dojo/node_modules packages/core/node_modules packages/utils/node_modules packages/torii-client/node_modules packages/torii-wasm/node_modules packages/react/node_modules bun.lockb packages/create-burner/bun.lockb packages/core/bun.lockb packages/utils/bun.lockb packages/torii-client/bun.lockb packages/torii-wasm/bun.lockb packages/react/bun.lockb && rm -rf examples/react/react-app/node_modules examples/react/react-app/bun.lockb examples/react/react-phaser-example/node_modules examples/react/react-phaser-example/bun.lockb",
         "prettier-check": "bun x prettier --check .",
         "prettier": "bun x prettier --write .",
         "release": "bun run build && bun run prettier && npx lerna publish --no-private --force-publish",
-        "docs": "npx typedoc --out docs"
+        "docs": "npx typedoc --out docs",
+        "prepare": "husky install"
     }
 }

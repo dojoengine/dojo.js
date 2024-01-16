@@ -10,7 +10,7 @@ export const useNetworkLayer = () => {
     useEffect(() => {
         return () => {
             networkLayerPromise.then((networkLayer) =>
-                networkLayer.world.dispose()
+                networkLayer.recsWorld.dispose()
             );
         };
     }, [networkLayerPromise]);
