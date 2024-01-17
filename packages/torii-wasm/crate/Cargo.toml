@@ -55,6 +55,7 @@ opt-level = 1
 
 [dev-dependencies]
 wasm-bindgen-test = "=0.3.38"
+crypto-bigint = { version = "0.5.3", features = [ "serde" ] }
 
 [features]
 console-error-panic = ["dep:console_error_panic_hook"]
