@@ -48,9 +48,109 @@ fn test_taylor_inv_sqrt() {
     }
 }
 
-/* Test snoise */
+/* Test snoise comparing with cairo values of cubit */
 #[test]
-fn test_snoise() {
+fn test_snoise_cubit_1() {
+    let expected = -0.43587;
+
+    let input = vec![0.0, 0.0, 0.0];
+    let result = utils_wasm::snoise(&input);
+
+    assert!((result - expected).abs() < 1e-5);
+}
+
+#[test]
+fn test_snoise_cubit_2() {
+    let expected = 0.72507;
+
+    let input = vec![0.5, -1.23, 1.63];
+    let result = utils_wasm::snoise(&input);
+
+    assert!((result - expected).abs() < 1e-5);
+}
+
+#[test]
+fn test_snoise_cubit_3() {
+    let expected = 0.15408;
+
+    let input = vec![-1.94, -1.25, -1.63];
+    let result = utils_wasm::snoise(&input);
+
+    assert!((result - expected).abs() < 1e-5);
+}
+
+#[test]
+fn test_snoise_cubit_4() {
+    let expected = -0.79204;
+
+    let input = vec![-9.99, 8.25, 6.98];
+    let result = utils_wasm::snoise(&input);
+
+    assert!((result - expected).abs() < 1e-5);
+}
+
+#[test]
+fn test_snoise_cubit_5() {
+    let expected = -0.40012;
+
+    let input = vec![-0.005, 12.578, -2.87];
+    let result = utils_wasm::snoise(&input);
+
+    assert!((result - expected).abs() < 1e-5);
+}
+
+#[test]
+fn test_recursive_s_noise_cubit_1() {
+    let expected = -0.4359;
+
+    let input = vec![0.0, 0.0, 0.0];
+    let result = utils_wasm::recursive_s_noise(input, 0.5, 2);
+
+    assert!((result - expected).abs() < 1e-4);
+}
+
+#[test]
+fn test_recursive_s_noise_cubit_2() {
+    let expected = 0.3282;
+    let input = vec![0.5, -1.23, 1.63];
+    let result = utils_wasm::recursive_s_noise(input, 0.5, 3);
+
+    assert!((result - expected).abs() < 1e-4);
+}
+
+#[test]
+fn test_recursive_s_noise_cubit_3() {
+    let expected = 0.1354;
+
+    let input = vec![-1.94, -1.25, -1.63];
+    let result = utils_wasm::recursive_s_noise(input, 0.5, 4);
+
+    assert!((result - expected).abs() < 1e-4);
+}
+
+#[test]
+fn test_recursive_s_noise_cubit_4() {
+    let expected = -0.3678;
+
+    let input = vec![-9.99, 8.25, 6.98];
+    let result = utils_wasm::recursive_s_noise(input, 0.5, 5);
+
+    assert!((result - expected).abs() < 1e-4);
+}
+
+#[test]
+fn test_recursive_s_noise_cubit_5() {
+    let expected = -0.1822;
+
+    let input = vec![-0.005, 12.578, -2.87];
+    let result = utils_wasm::recursive_s_noise(input, 0.5, 6);
+
+    assert!((result - expected).abs() < 1e-4);
+}
+
+/* Test snoise comparing with ts values */
+#[test]
+fn test_snoise_ts() {
     let mut results = Vec::new();
     for x in 0..=9 {
         for y in 0..=9 {
@@ -65,9 +165,9 @@ fn test_snoise() {
     }
 }
 
-/* Test recursive_s_noise */
+/* Test recursive_s_noise comparing with ts values */
 #[test]
-fn test_recursive_snoise() {
+fn test_recursive_snoise_ts() {
     let mut results = Vec::new();
     let pers_values = [0.5, 0.7];
     let octave_counts = [1, 2, 3];
