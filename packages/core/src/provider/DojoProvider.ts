@@ -153,14 +153,16 @@ export class DojoProvider extends Provider {
             const nonce = await account?.getNonce();
 
             return await account?.execute(
-                {
-                    contractAddress: getContractByName(
-                        this.manifest,
-                        contract_name
-                    ),
-                    entrypoint: call,
-                    calldata: calldata,
-                },
+                [
+                    {
+                        contractAddress: getContractByName(
+                            this.manifest,
+                            contract_name
+                        ),
+                        entrypoint: call,
+                        calldata: calldata,
+                    },
+                ],
                 undefined,
                 {
                     maxFee: 0, // TODO: Update this value as needed.

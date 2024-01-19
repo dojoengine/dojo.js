@@ -32,10 +32,9 @@ export const prefundAccount = async (
 
         // Retrieve the nonce for the account to avoid transaction collisions
         const nonce = await account.getNonce();
-
         // Initiate the transaction
         const { transaction_hash } = await account.execute(
-            transferOptions,
+            [transferOptions],
             undefined,
             {
                 nonce,
