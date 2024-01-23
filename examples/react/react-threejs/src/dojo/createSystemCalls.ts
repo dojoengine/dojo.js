@@ -7,24 +7,20 @@ import { Direction } from "@/utils";
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
-  { client }: { client: IWorld },
-  contractComponents: ContractComponents,
-  {
-    Moves,
-    Position,
-  }: ClientComponents
+    { client }: { client: IWorld },
+    contractComponents: ContractComponents,
+    { Moves, Position }: ClientComponents
 ) {
+    const spawn = async (account: Account) => {
+        await client.actions.spawn({ account });
+    };
 
-  const spawn = async (account: Account) => {
-    await client.actions.spawn({ account })
-  }
+    const move = async (account: Account, direction: Direction) => {
+        await client.actions.move({ account, direction });
+    };
 
-  const move = async (account: Account, direction: Direction) => {
-    await client.actions.move({ account, direction })
-  }
-
-  return {
-    spawn,
-    move,
-  };
+    return {
+        spawn,
+        move,
+    };
 }

@@ -1,9 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 
-import {
-  Stage,
-  OrbitControls,
-} from "@react-three/drei";
+import { Stage, OrbitControls } from "@react-three/drei";
 import { TileGrid } from "./TileGrid";
 
 export const ThreeGrid = () => {
