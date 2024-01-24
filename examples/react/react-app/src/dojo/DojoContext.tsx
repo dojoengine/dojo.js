@@ -37,7 +37,7 @@ export const DojoProvider = ({
     );
 
     const masterAccount = useMemo(
-        () => new Account(rpcProvider, masterAddress, masterPrivateKey),
+        () => new Account(rpcProvider, masterAddress, masterPrivateKey, "1"),
         [rpcProvider, masterAddress, masterPrivateKey]
     );
 
