@@ -1,5 +1,4 @@
 import { ThreeGrid } from "./gameComponents/Three";
-import { Players } from "./gameComponents/Players";
 import "./App.css";
 import { UIContainer } from "./gameComponents/UIContainer";
 
