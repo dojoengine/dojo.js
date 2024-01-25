@@ -4,13 +4,13 @@ import { ContractComponents } from "./generated/contractComponents";
 export type ClientComponents = ReturnType<typeof createClientComponents>;
 
 export function createClientComponents({
-  contractComponents,
+    contractComponents,
 }: {
-  contractComponents: ContractComponents;
+    contractComponents: ContractComponents;
 }) {
-  return {
-    ...contractComponents,
-    Position: overridableComponent(contractComponents.Position),
-    Moves: overridableComponent(contractComponents.Moves),
-  };
+    return {
+        ...contractComponents,
+        Position: overridableComponent(contractComponents.Position),
+        Moves: overridableComponent(contractComponents.Moves),
+    };
 }
