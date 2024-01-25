@@ -41,5 +41,6 @@ export async function setup({ ...config }: Config) {
             clientComponents
         ),
         config,
+        world,
     };
 }

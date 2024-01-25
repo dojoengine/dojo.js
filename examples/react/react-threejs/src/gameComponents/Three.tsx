@@ -2,14 +2,15 @@ import { Canvas } from "@react-three/fiber";
 
 import { Stage, OrbitControls } from "@react-three/drei";
 import { TileGrid } from "./TileGrid";
+import { Players } from "./Players";
+
+const SQUARE_SIZE = 3
 
 export const ThreeGrid = () => {
   return (
     <Canvas shadows>
       <Stage shadows="contact">
-        <OrbitControls
-          makeDefault
-        />
+        <OrbitControls makeDefault />
         <ambientLight />
         <directionalLight
           castShadow
@@ -23,7 +24,8 @@ export const ThreeGrid = () => {
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
         />
-        <TileGrid rows={30} cols={30} squareSize={3} />
+        <TileGrid rows={30} cols={30} squareSize={SQUARE_SIZE} />
+        <Players squareSize={SQUARE_SIZE} />
       </Stage>
     </Canvas>
   );
