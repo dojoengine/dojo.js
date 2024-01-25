@@ -1,13 +1,7 @@
-import { ThreeGrid } from "./ui/components/Three";
+import { ThreeGrid } from "./gameComponents/Three";
+import { Players } from "./gameComponents/Players";
 import "./App.css";
-import { useMemo } from "react";
-import { KeyboardControlsEntry, KeyboardControls } from "@react-three/drei";
-import { UIContainer } from "./ui/components/UIContainer";
-
-export enum Controls {
-  clockwise = "clockwise",
-  counterClockwise = "counterClockwise",
-}
+import { UIContainer } from "./gameComponents/UIContainer";
 
 function App() {
   return (
