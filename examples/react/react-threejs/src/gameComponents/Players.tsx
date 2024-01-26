@@ -2,6 +2,7 @@ import { useDojo } from "@/dojo/useDojo";
 import { Has, defineSystem } from "@dojoengine/recs";
 import { Player } from "./Player";
 import { useEffect, useState } from "react";
+import { store, useElementStore } from "@/store";
 
 export const Players = (props: any) => {
     const {
@@ -31,17 +32,18 @@ export const Players = (props: any) => {
         });
     }, []);
 
+    // When the list is updated, save it in the store to access it from anywhere in the project
+    const store = useElementStore((state) => state);
+    useEffect(() => {
+        store.set_players(players)
+    }, [players])
+
     return (
         <>
             {
                 // Get all players
                 Object.values(players).map((player: any) => {
-                    return (
-                        <Player
-                            key={player.player}
-                            player={player}
-                        />
-                    );
+                    return <Player key={player.player} player={player} />;
                 })
             }
         </>

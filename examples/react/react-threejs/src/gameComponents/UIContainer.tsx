@@ -13,12 +13,6 @@ export const UIContainer = () => {
     },
   } = useDojo();
 
-  const handleClick = () => {
-    actions.spawn({
-      account,
-    });
-  };
-
   const player = useComponentValue(
     Moves,
     getEntityIdFromKeys([BigInt(account.address)]) as Entity
@@ -26,12 +20,12 @@ export const UIContainer = () => {
 
   return (
     <div className="flex space-x-3 justify-between p-2 flex-wrap">
-      <Button variant={"default"} onClick={handleClick}>
+      <Button variant={"default"} onClick={() => actions.spawn({ account })}>
         Spawn
       </Button>
       <div className="h-12 w-48 bg-white flex justify-center items-center border-2">
         {player?.remaining}
       </div>
-    </div>
+    </div >
   );
 };
