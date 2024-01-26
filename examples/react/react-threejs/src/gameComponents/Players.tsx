@@ -40,7 +40,6 @@ export const Players = (props: any) => {
                         <Player
                             key={player.player}
                             player={player}
-                            size={props.squareSize}
                         />
                     );
                 })
