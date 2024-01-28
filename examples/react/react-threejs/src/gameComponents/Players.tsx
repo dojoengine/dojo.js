@@ -35,8 +35,8 @@ export const Players = (props: any) => {
     // When the list is updated, save it in the store to access it from anywhere in the project
     const store = useElementStore((state) => state);
     useEffect(() => {
-        store.set_players(players)
-    }, [players])
+        store.set_players(players);
+    }, [players]);
 
     return (
         <>
