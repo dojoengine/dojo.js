@@ -22,7 +22,7 @@ export function dojoConfig() {
             "0x1800000000300000180000000000030000000000003006001800006600",
         accountClassHash:
             VITE_PUBLIC_ACCOUNT_CLASS_HASH ||
-            "0x33ac2f528bb97cc7b79148fd1756dc368be0e95d391d8c6d6473ecb60b4560e",
+            "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
         manifest,
     };
 }
