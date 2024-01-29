@@ -1,0 +1,25 @@
+query getMoves {
+    movesModels(limit: 300) {
+        edges {
+            node {
+                player
+                remaining
+                last_direction
+            }
+        }
+    }
+}
+
+query getTransations {
+    transactions {
+        edges {
+            node {
+                id
+                transactionHash
+                senderAddress
+                calldata
+            }
+        }
+        totalCount
+    }
+}
