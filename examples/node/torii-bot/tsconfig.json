@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "lib": ["ESNext"],
+        "module": "esnext",
+        "target": "esnext",
+        "moduleResolution": "bundler",
+        "moduleDetection": "force",
+        "noEmit": false,
+        "composite": true,
+        "strict": true,
+        "downlevelIteration": true,
+        "skipLibCheck": true,
+        "jsx": "preserve",
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "rootDir": "/Users/os/Documents/code/dojo.js/examples",
+        "allowJs": true,
+        "outDir": "dist",
+        "types": ["bun-types"]
+    },
+    "include": [
+        "./src/**/*",
+        "dojoConfig.ts",
+        "../../dojo-starter/target/dev/manifest.json"
+    ],
+    "exclude": ["examples/dojo-starter/target/dev/manifest.json"]
+}
