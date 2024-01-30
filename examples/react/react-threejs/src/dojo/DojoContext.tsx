@@ -41,6 +41,19 @@ export const DojoProvider = ({
         [rpcProvider, masterAddress, masterPrivateKey]
     );
 
+    const burnerManager = new BurnerManager({
+        masterAccount,
+        accountClassHash,
+        rpcProvider,
+    })
+    try {
+        burnerManager.create().then(() => {
+            burnerManager.init()
+        })
+    } catch (e) {
+        console.error(e);
+    }
+
     const {
         create,
         list,
@@ -52,11 +65,7 @@ export const DojoProvider = ({
         copyToClipboard,
         applyFromClipboard,
     } = useBurnerManager({
-        burnerManager: new BurnerManager({
-            masterAccount,
-            accountClassHash,
-            rpcProvider,
-        }),
+        burnerManager,
     });
 
     return (
