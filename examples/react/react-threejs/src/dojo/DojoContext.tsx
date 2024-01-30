@@ -45,11 +45,11 @@ export const DojoProvider = ({
         masterAccount,
         accountClassHash,
         rpcProvider,
-    })
+    });
     try {
         burnerManager.create().then(() => {
-            burnerManager.init()
-        })
+            burnerManager.init();
+        });
     } catch (e) {
         console.error(e);
     }
