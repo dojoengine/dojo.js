@@ -24,5 +24,4 @@
         "../../dojo-starter/target/dev/manifest.json"
     ],
     "exclude": ["examples/dojo-starter/target/dev/manifest.json"]
-    // "exclude": ["./src/generated/graphql.ts"]
 }
