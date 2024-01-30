@@ -1,5 +1,5 @@
-query getMoves {
-    movesModels(limit: 300) {
+query getMoves($player: ContractAddress!) {
+    movesModels(where: { player: $player }) {
         edges {
             node {
                 player

@@ -1,4 +1,4 @@
-import manifest from "../../../dojo-starter/target/dev/manifest.json";
+import manifest from "../../dojo-starter/target/dev/manifest.json" assert { type: "json" };
 
 const {
     NODE_URL,

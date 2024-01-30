@@ -15,10 +15,10 @@ const config: CodegenConfig = {
             },
         },
     },
-    // hooks: {
-    //     afterAllFileWrite: [
-    //         `sed -i '' "s/import { GraphQLClientRequestHeaders } from 'graphql-request\\/build\\/cjs\\/types';/export type GraphQLClientRequestHeaders = Headers | string\\[\\]\\[\\] | Record<string, string>/" ./src/generated/graphql.ts`,
-    //     ],
-    // },
+    hooks: {
+        afterAllFileWrite: [
+            `sed -i '' "s/import { GraphQLClientRequestHeaders } from 'graphql-request\\/build\\/cjs\\/types';/export type GraphQLClientRequestHeaders = Headers | string\\[\\]\\[\\] | Record<string, string>/" ./src/generated/graphql.ts`,
+        ],
+    },
 };
 export default config;

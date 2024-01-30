@@ -1,7 +1,7 @@
 import { SapphireClient } from "@sapphire/framework";
 import { GatewayIntentBits } from "discord.js";
-import { POLL_INTERVAL } from "./config";
-import { getMoves } from "./queries/getMoves";
+import { POLL_INTERVAL } from "./config.js";
+import { getTransations } from "./queries/getMoves.js";
 
 export const client = new SapphireClient({
     intents: [
@@ -16,4 +16,4 @@ console.log("Logging in.....");
 
 await client.login(process.env.DISCORD_TOKEN);
 
-setInterval(getMoves, POLL_INTERVAL * 3);
+setInterval(getTransations, POLL_INTERVAL * 3);

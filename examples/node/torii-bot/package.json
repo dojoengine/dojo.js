@@ -29,7 +29,7 @@
     },
     "scripts": {
         "build": "tsc",
-        "serve": "node dist/src/index.js",
+        "serve": "tsc && node dist/node/torii-bot/src/index.js",
         "codegen": "graphql-codegen"
     }
 }

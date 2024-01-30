@@ -1,6 +1,6 @@
-## Squire V2
+## Torii Bot
 
-Squire is designed to be a template to build bots for the onchain gaming ecosystem.
+A bot to interact with your Dojo world via torii
 
 ```
 bun install
@@ -31,5 +31,3 @@ Then run
 ```
 bun run codegen
 ```
-
-NOTE: There is a ts bug in the schema gen right now, so you will have to remove the errors in the schema by changing them to any.
