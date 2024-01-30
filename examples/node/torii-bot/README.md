@@ -81,3 +81,21 @@ const { data } = await sdk.getMoves({ player });
 
 > Step 7: Navigate to the URL generated in the previous step and add the bot to your server.
 > ![Step 7](./images/Step%207.png)
+
+### Deploying
+
+Deploying these apps onto [Railway](https://railway.app/) is the easiest.
+
+1. Create Account
+2. Create a new project and deploy via git
+3. In your project settings
+
+Update the project settings:
+
+**Build Command:**
+`bun run build`
+
+**Run Commands:**
+`bun run serve`
+
+OHAYO
