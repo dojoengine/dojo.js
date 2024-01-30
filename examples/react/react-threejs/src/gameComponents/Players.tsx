@@ -2,7 +2,7 @@ import { useDojo } from "@/dojo/useDojo";
 import { Has, defineSystem } from "@dojoengine/recs";
 import { Player } from "./Player";
 import { useEffect, useState } from "react";
-import { store, useElementStore } from "@/store";
+import { useElementStore } from "@/store";
 
 export const Players = (props: any) => {
     const {
@@ -17,6 +17,12 @@ export const Players = (props: any) => {
     useEffect(() => {
         defineSystem(world, [Has(Position)], ({ value: [newValue] }) => {
             setPlayers((prevPlayers: any) => {
+                // Check if both position are the same (can happen with addOverride)
+                if (prevPlayers[newValue?.player] &&
+                    prevPlayers[newValue?.player].vec.x === newValue?.vec.x &&
+                    prevPlayers[newValue?.player].vec.y === newValue?.vec.y) {
+                    return prevPlayers
+                }
                 // To lerp, get current position and save it to player.prevVec
                 const prevVec = prevPlayers[newValue?.player]
                     ? prevPlayers[newValue?.player].vec

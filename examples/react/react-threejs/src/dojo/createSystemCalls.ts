@@ -26,14 +26,14 @@ export function createSystemCalls(
         const positionId = uuid();
         Position.addOverride(positionId, {
             entity: entityId,
-            value: { player: BigInt(entityId), vec: { x: 10, y: 10 } },
+            value: { player: BigInt(account.address), vec: { x: 10, y: 10 } },
         });
 
         const movesId = uuid();
         Moves.addOverride(movesId, {
             entity: entityId,
             value: {
-                player: BigInt(entityId),
+                player: BigInt(account.address),
                 remaining: 100,
                 last_direction: 0,
             },
@@ -57,8 +57,11 @@ export function createSystemCalls(
             Position.removeOverride(positionId);
             Moves.removeOverride(movesId);
         } finally {
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
+            // If override is removed too soon, defineSystem is called twice
+            setTimeout(() => {
+                Position.removeOverride(positionId);
+                Moves.removeOverride(movesId);
+            }, 1000)
         }
     };
 
@@ -71,7 +74,7 @@ export function createSystemCalls(
         Position.addOverride(positionId, {
             entity: entityId,
             value: {
-                player: BigInt(entityId),
+                player: BigInt(account.address),
                 vec: updatePositionWithDirection(
                     direction,
                     getComponentValue(Position, entityId) as any
@@ -83,7 +86,7 @@ export function createSystemCalls(
         Moves.addOverride(movesId, {
             entity: entityId,
             value: {
-                player: BigInt(entityId),
+                player: BigInt(account.address),
                 remaining:
                     (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
             },
@@ -108,8 +111,11 @@ export function createSystemCalls(
             Position.removeOverride(positionId);
             Moves.removeOverride(movesId);
         } finally {
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
+            // If override is removed too soon, defineSystem is called twice
+            setTimeout(() => {
+                Position.removeOverride(positionId);
+                Moves.removeOverride(movesId);
+            }, 1000)
         }
     };
 
