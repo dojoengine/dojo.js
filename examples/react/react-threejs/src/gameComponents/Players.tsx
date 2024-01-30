@@ -18,10 +18,12 @@ export const Players = (props: any) => {
         defineSystem(world, [Has(Position)], ({ value: [newValue] }) => {
             setPlayers((prevPlayers: any) => {
                 // Check if both position are the same (can happen with addOverride)
-                if (prevPlayers[newValue?.player] &&
+                if (
+                    prevPlayers[newValue?.player] &&
                     prevPlayers[newValue?.player].vec.x === newValue?.vec.x &&
-                    prevPlayers[newValue?.player].vec.y === newValue?.vec.y) {
-                    return prevPlayers
+                    prevPlayers[newValue?.player].vec.y === newValue?.vec.y
+                ) {
+                    return prevPlayers;
                 }
                 // To lerp, get current position and save it to player.prevVec
                 const prevVec = prevPlayers[newValue?.player]

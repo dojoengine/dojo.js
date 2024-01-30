@@ -61,7 +61,7 @@ export function createSystemCalls(
             setTimeout(() => {
                 Position.removeOverride(positionId);
                 Moves.removeOverride(movesId);
-            }, 1000)
+            }, 1000);
         }
     };
 
@@ -115,7 +115,7 @@ export function createSystemCalls(
             setTimeout(() => {
                 Position.removeOverride(positionId);
                 Moves.removeOverride(movesId);
-            }, 1000)
+            }, 1000);
         }
     };
 
