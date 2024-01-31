@@ -1,6 +1,5 @@
 import {
     BurnerAccount,
-    BurnerManager,
     useBurnerManager,
 } from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext, useMemo } from "react";
@@ -25,7 +24,8 @@ export const DojoProvider = ({
     if (currentValue) throw new Error("DojoProvider can only be used once");
 
     const {
-        config: { rpcUrl, masterAddress, masterPrivateKey, accountClassHash },
+        config: { rpcUrl, masterAddress, masterPrivateKey },
+        burnerManager
     } = value;
 
     const rpcProvider = useMemo(
@@ -40,19 +40,6 @@ export const DojoProvider = ({
         () => new Account(rpcProvider, masterAddress, masterPrivateKey),
         [rpcProvider, masterAddress, masterPrivateKey]
     );
-
-    const burnerManager = new BurnerManager({
-        masterAccount,
-        accountClassHash,
-        rpcProvider,
-    });
-    try {
-        burnerManager.create().then(() => {
-            burnerManager.init();
-        });
-    } catch (e) {
-        console.error(e);
-    }
 
     const {
         create,
