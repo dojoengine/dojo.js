@@ -1,6 +1,6 @@
 import { Tileset } from "../../assets/world";
 import { PhaserLayer } from "../createPhaserLayer";
-import { snoise } from "@dojoengine/utils";
+import { snoise } from "@dojoengine/utils-wasm";
 import { MAP_AMPLITUDE } from "../config/constants";
 
 export function mapSystem(layer: PhaserLayer) {
@@ -17,11 +17,13 @@ export function mapSystem(layer: PhaserLayer) {
     for (let x = 0; x < 50; x++) {
         for (let y = 0; y < 50; y++) {
             const coord = { x, y };
+            const noiseInput = new Float64Array([
+                x / MAP_AMPLITUDE,
+                0,
+                y / MAP_AMPLITUDE,
+            ]);
             // Get a noise value between 0 and 100
-            const seed = Math.floor(
-                ((snoise([x / MAP_AMPLITUDE, 0, y / MAP_AMPLITUDE]) + 1) / 2) *
-                    100
-            );
+            const seed = Math.floor(((snoise(noiseInput) + 1) / 2) * 100);
 
             if (seed > 70) {
                 // This would be the highest 'elevation'
