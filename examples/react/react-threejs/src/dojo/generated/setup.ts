@@ -35,9 +35,13 @@ export async function setup({ ...config }: Config) {
 
     const rpcProvider = new RpcProvider({
         nodeUrl: config.rpcUrl,
-    })
+    });
 
-    const masterAccount = new Account(rpcProvider, config.masterAddress, config.masterPrivateKey)
+    const masterAccount = new Account(
+        rpcProvider,
+        config.masterAddress,
+        config.masterPrivateKey
+    );
 
     const burnerManager = new BurnerManager({
         masterAccount,
@@ -46,7 +50,7 @@ export async function setup({ ...config }: Config) {
     });
 
     try {
-        await burnerManager.create()
+        await burnerManager.create();
     } catch (e) {
         console.error(e);
     }

@@ -1,7 +1,4 @@
-import {
-    BurnerAccount,
-    useBurnerManager,
-} from "@dojoengine/create-burner";
+import { BurnerAccount, useBurnerManager } from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext, useMemo } from "react";
 import { Account, RpcProvider } from "starknet";
 import { SetupResult } from "./generated/setup";
@@ -25,7 +22,7 @@ export const DojoProvider = ({
 
     const {
         config: { rpcUrl, masterAddress, masterPrivateKey },
-        burnerManager
+        burnerManager,
     } = value;
 
     const rpcProvider = useMemo(
