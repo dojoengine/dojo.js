@@ -15,7 +15,7 @@ export async function setup({ ...config }: Config) {
     const toriiClient = await torii.createClient([], {
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
-        worldAddress: config.manifest.world.address,
+        worldAddress: config.manifest.world.address || "",
     });
 
     // create contract components

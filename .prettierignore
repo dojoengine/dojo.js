@@ -5,3 +5,6 @@ packages/torii-client/pkg
 
 examples/dojo-starter
 packages/create-dojo
+
+# ignore lock files
+**/*-lock.yaml

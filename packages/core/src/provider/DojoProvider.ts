@@ -8,6 +8,7 @@ import {
     AllowArray,
     Call,
     num,
+    Result,
     CallContractResponse,
 } from "starknet";
 import { Provider } from "./provider";
@@ -153,14 +154,16 @@ export class DojoProvider extends Provider {
             const nonce = await account?.getNonce();
 
             return await account?.execute(
-                {
-                    contractAddress: getContractByName(
-                        this.manifest,
-                        contract_name
-                    ),
-                    entrypoint: call,
-                    calldata: calldata,
-                },
+                [
+                    {
+                        contractAddress: getContractByName(
+                            this.manifest,
+                            contract_name
+                        )?.address,
+                        entrypoint: call,
+                        calldata: calldata,
+                    },
+                ],
                 undefined,
                 {
                     maxFee: 0, // TODO: Update this value as needed.
@@ -233,7 +236,7 @@ export class DojoProvider extends Provider {
     /**
      * Calls a function with the given parameters.
      *
-     * @param {string} contract - The contract to call.
+     * @param {string} contract_name - The contract to call.
      * @param {string} call - The function to call.
      * @returns {Promise<CallContractResponse>} - A promise that resolves to the response of the function call.
      */
@@ -244,15 +247,40 @@ export class DojoProvider extends Provider {
     ): Promise<CallContractResponse> {
         try {
             return await this.provider.callContract({
-                contractAddress: getContractByName(
-                    this.manifest,
-                    contract_name
-                ),
+                contractAddress: getContractByName(this.manifest, contract_name)
+                    ?.address,
                 entrypoint: call,
                 calldata,
             });
         } catch (error) {
             throw new Error(`Failed to call: ${error}`);
+        }
+    }
+    /**
+     * Calls a function with the given parameters and return parsed results.
+     *
+     * @param {string} contract_name - The contract to call.
+     * @param {string} call - The function to call.
+     * @returns {Promise<Result>} - A promise that resolves to the response of the function call.
+     */
+    public async callContract(
+        contract_name: string,
+        call: string,
+        calldata?: num.BigNumberish[]
+    ): Promise<Result> {
+        try {
+            const contractInfos = getContractByName(
+                this.manifest,
+                contract_name
+            );
+            const contract = new Contract(
+                contractInfos.abi,
+                contractInfos.address,
+                this.provider
+            );
+            return await contract.call(call, calldata);
+        } catch (error) {
+            throw new Error(`Failed to callContract: ${error}`);
         }
     }
 }

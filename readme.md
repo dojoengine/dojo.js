@@ -26,13 +26,25 @@
 
 **Dojo is a community driven open-source, Provable Game Engine, providing a comprehensive toolkit for building verifiable games and autonomous worlds.**
 
-You can get started by simply bootstrapping dojo world like so. You will need [dojo](https://github.com/dojoengine/dojo) installed.
+Dojo.js is the official JavaScript SDK for interacting with Dojo worlds. It is currently a work in progress (WIP), and we are actively seeking contributors.
+
+[Read the full dojo documentation](https://book.dojoengine.org)
+
+---
+
+Bootstrap a dojo world like so. You will need [dojo](https://github.com/dojoengine/dojo) installed.
 
 ```console
 npx @dojoengine/create-dojo
 ```
 
-### Contributing to dojo.js
+### Dojo.js Examples
+
+-   [React-app](./examples/react/react-app) - A vite react app example using Dojo
+-   [React-phaser](./examples/react/react-phaser-example) - A vite phaser react app using Dojo
+-   [Torii-bot](./examples/node/torii-bot) - A small discord bot for interacting with Torii
+
+## Contributing to dojo.js
 
 Dojo.js is MIT licensed and welcomes contributors. Setting up your environment is simple.
 
@@ -45,12 +57,6 @@ pnpm install
 #### Building Packages:
 
 **Note**: Before running the examples, you must build each package.
-
-To do so, navigate to a specific package directory and run the command below. This will initiate bun in watch mode, which will automatically compile and update based on local changes:
-
-```console
-pnpm run build --watch
-```
 
 To build all packages, from the root directory, run:
 

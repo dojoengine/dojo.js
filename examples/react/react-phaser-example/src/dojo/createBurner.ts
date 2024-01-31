@@ -14,7 +14,8 @@ export const createBurner = async ({ ...config }: Config) => {
         masterAccount: new Account(
             rpcProvider,
             config.masterAddress,
-            config.masterPrivateKey
+            config.masterPrivateKey,
+            "1"
         ),
         accountClassHash: config.accountClassHash,
         rpcProvider,

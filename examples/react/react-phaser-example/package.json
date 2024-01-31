@@ -1,6 +1,6 @@
 {
     "name": "react-phaser-example",
-    "private": true,
+    "private": false,
     "version": "0.1.0",
     "type": "module",
     "scripts": {
@@ -9,16 +9,16 @@
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
         "codegen": "graphql-codegen",
-        "components": "npx @dojoengine/core ../dojo-starter/target/dev/manifest.json src/dojo/contractComponents.ts http://localhost:5050 0x33ac2f528bb97cc7b79148fd1756dc368be0e95d391d8c6d6473ecb60b4560e"
+        "components": "npx @dojoengine/core ../../dojo-starter/target/dev/manifest.json src/dojo/generated/contractComponents.ts http://localhost:5050 0x28f5999ae62fec17c09c52a800e244961dba05251f5aaf923afabd9c9804d1a"
     },
     "dependencies": {
-        "@dojoengine/core": "^0.2.10",
-        "@dojoengine/create-burner": "^0.2.10",
-        "@dojoengine/torii-client": "^0.2.10",
-        "@dojoengine/torii-wasm": "^0.2.10",
-        "@dojoengine/utils": "^0.2.10",
-        "@dojoengine/react": "^0.2.10",
-        "@dojoengine/state": "^0.3.0",
+        "@dojoengine/core": "^0.5.0",
+        "@dojoengine/create-burner": "^0.5.0",
+        "@dojoengine/torii-client": "^0.5.0",
+        "@dojoengine/torii-wasm": "^0.5.0",
+        "@dojoengine/utils": "^0.5.0",
+        "@dojoengine/react": "^0.5.0",
+        "@dojoengine/state": "^0.5.0",
         "@dojoengine/recs": "0.1.35",
         "@latticexyz/phaserx": "^2.0.0-next.14",
         "@latticexyz/utils": "^2.0.0-next.14",
@@ -28,8 +28,6 @@
         "clsx": "^2.0.0",
         "ethers": "^5.7.2",
         "events": "^3.3.0",
-        "graphql": "^16.7.1",
-        "graphql-request": "^6.1.0",
         "lucide-react": "^0.292.0",
         "mobx": "^6.9.0",
         "phaser": "3.60.0-beta.14",
@@ -47,10 +45,6 @@
         "zustand": "^4.4.1"
     },
     "devDependencies": {
-        "@graphql-codegen/cli": "^5.0.0",
-        "@graphql-codegen/typescript": "^4.0.1",
-        "@graphql-codegen/typescript-graphql-request": "^5.0.0",
-        "@graphql-codegen/typescript-operations": "^4.0.1",
         "@types/node": "^20.9.0",
         "@types/react": "^18.0.37",
         "@types/react-dom": "^18.0.11",
