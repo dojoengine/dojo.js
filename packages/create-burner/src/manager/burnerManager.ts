@@ -111,12 +111,19 @@ export class BurnerManager {
                         this.account = null;
                         Storage.remove("burners");
                         throw new Error(
-                            "Burners not deployed, chain may have restarted"
+                            "Burners not deployed, chain may have restarted."
                         );
                     }
                 })
                 .catch(() => {
-                    throw new Error("Error fetching transaction receipt");
+                    console.warn(
+                        "------- DOJO ----------\n" +
+                            `WARNING: Error fetching transaction receipt for address ${firstAddr} with transaction ID ${storage[firstAddr].deployTx}.\n` +
+                            "Your burners might not be associated with this network. " +
+                            "Please check the network connection and the transaction status. " +
+                            "Try deleting your burners from your local storage and try again.\n" +
+                            "------- DOJO ----------"
+                    );
                 });
 
             this.setActiveBurnerAccount(storage);
