@@ -172,6 +172,9 @@ importers:
       '@dojoengine/utils':
         specifier: ^0.5.0
         version: link:../../../packages/utils
+      '@dojoengine/utils-wasm':
+        specifier: ^0.3.3
+        version: link:../../../packages/utils-wasm
       '@latticexyz/phaserx':
         specifier: ^2.0.0-next.14
         version: 2.0.0-snapshot-test-32d38619
@@ -543,6 +546,21 @@ importers:
       typescript:
         specifier: ^5.0.3
         version: 5.3.3
+
+  packages/utils-wasm:
+    devDependencies:
+      bun-types:
+        specifier: ^1.0.1
+        version: 1.0.25
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(typescript@5.3.3)
+      typescript:
+        specifier: ^5.0.3
+        version: 5.3.3
+      wasm-pack:
+        specifier: ^0.12.1
+        version: 0.12.1
 
 packages:
 
@@ -5778,6 +5796,14 @@ packages:
     resolution: {integrity: sha512-Ugagjf+XZUXDvxDRa3EnhLeMzm2g8ZYFleBF55Ac3GZSzPqdMLAdK9kvZB6M1H4nAFvrEHdV2PHqkzIoNs+3wQ==}
     dependencies:
       '@types/node': 20.10.4
+      '@types/ws': 8.5.10
+      undici-types: 5.26.5
+    dev: true
+
+  /bun-types@1.0.25:
+    resolution: {integrity: sha512-9lxeUR/OJsvlZH4GOWteiAdx7ikrSxCUX7Rr0JJux+DrR3LejouVLxIZnTeQ3UPAZovvSgKivWeHPJ2wlo7/Kg==}
+    dependencies:
+      '@types/node': 20.11.10
       '@types/ws': 8.5.10
       undici-types: 5.26.5
     dev: true
