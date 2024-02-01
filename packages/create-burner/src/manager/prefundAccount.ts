@@ -3,7 +3,9 @@ import {
     CallData,
     TransactionFinalityStatus,
 } from "starknet";
-import { KATANA_ETH_CONTRACT_ADDRESS, PREFUND_AMOUNT } from "..";
+import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
+
+export const PREFUND_AMOUNT = "0x2386f26fc10000";
 
 /**
  * Pre-funds a given account by initiating a transfer transaction.
