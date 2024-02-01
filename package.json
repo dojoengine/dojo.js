@@ -40,11 +40,15 @@
         "prettier-check": "bun x prettier --check .",
         "prettier": "bun x prettier --write .",
         "release": "bun run build && bun run prettier && npx lerna publish --no-private --force-publish",
-        "docs": "npx typedoc --out docs",
-        "prepare": "husky install"
+        "docs": "npx typedoc --out typed-docs",
+        "prepare": "husky install",
+        "docs:dev": "vocs dev",
+        "docs:build": "vocs build",
+        "docs:preview": "vocs preview"
     },
     "dependencies": {
         "@commitlint/cli": "^18.4.4",
-        "@commitlint/config-conventional": "^18.4.4"
+        "@commitlint/config-conventional": "^18.4.4",
+        "vocs": "1.0.0-alpha.30"
     }
 }
