@@ -1,11 +1,10 @@
+import { DojoConfig } from "@dojoengine/core";
 import { BurnerManager } from "@dojoengine/create-burner";
 import { Account, RpcProvider } from "starknet";
 
-import { Config } from "../../dojoConfig";
-
 export type CreateBurner = Awaited<ReturnType<typeof createBurner>>;
 
-export const createBurner = async ({ ...config }: Config) => {
+export const createBurner = async ({ ...config }: DojoConfig) => {
     const rpcProvider = new RpcProvider({
         nodeUrl: config.rpcUrl,
     });

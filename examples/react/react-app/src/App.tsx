@@ -91,6 +91,10 @@ function App() {
                     <button onClick={() => account.clear()}>
                         Clear burners
                     </button>
+                    <p>
+                        You will need to Authorise the contracts before you can
+                        use a burner. See readme.
+                    </p>
                 </div>
             </div>
 
