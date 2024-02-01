@@ -1,6 +1,6 @@
 import { Tileset } from "../../assets/world";
 import { PhaserLayer } from "../createPhaserLayer";
-import { snoise } from "@dojoengine/utils-wasm";
+import { snoise } from "@dojoengine/utils";
 import { MAP_AMPLITUDE } from "../config/constants";
 
 export function mapSystem(layer: PhaserLayer) {
