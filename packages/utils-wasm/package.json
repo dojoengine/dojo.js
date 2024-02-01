@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/utils-wasm",
-    "version": "0.5.0",
+    "version": "0.5.4",
     "description": "snoise wasm bindings for Dojo onchain game engine",
     "author": "",
     "license": "MIT",
