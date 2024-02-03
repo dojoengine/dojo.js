@@ -23,13 +23,13 @@
         "skipLibCheck": true /* Skip type checking all .d.ts files. */,
         "resolveJsonModule": true,
         "allowImportingTsExtensions": true,
-        "noImplicitAny": false
+        "noImplicitAny": false,
     },
     "include": ["./packages"],
     "exclude": [
         "node_modules",
         "./node_modules",
         "./node_modules/*",
-        "./node_modules/@types/node/index.d.ts"
-    ]
+        "./node_modules/@types/node/index.d.ts",
+    ],
 }
