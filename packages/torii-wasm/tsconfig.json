@@ -12,8 +12,8 @@
         "strict": true,
         "strictNullChecks": true,
         "types": ["bun-types"],
-        "esModuleInterop": true
+        "esModuleInterop": true,
     },
     "skipLibCheck": true,
-    "exclude": ["node_modules", "dist", "**/*.test.ts"]
+    "exclude": ["node_modules", "dist", "**/*.test.ts"],
 }
