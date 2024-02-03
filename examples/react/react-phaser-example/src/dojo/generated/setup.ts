@@ -4,13 +4,12 @@ import { createClientComponents } from "../createClientComponents";
 import { createSystemCalls } from "../createSystemCalls";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
-import { Config } from "../../../dojoConfig";
 import { setupWorld } from "./generated";
-import { DojoProvider } from "@dojoengine/core";
+import { DojoConfig, DojoProvider } from "@dojoengine/core";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
-export async function setup({ ...config }: Config) {
+export async function setup({ ...config }: DojoConfig) {
     // torii client
     const toriiClient = await torii.createClient([], {
         rpcUrl: config.rpcUrl,
