@@ -30,5 +30,5 @@ export interface BurnerAccount {
     clear: () => void;
     copyToClipboard: () => Promise<void>;
     applyFromClipboard: () => Promise<void>;
-    getActiveAccount: () => Account | null;
+    getActiveAccount?: () => Account | null;
 }
