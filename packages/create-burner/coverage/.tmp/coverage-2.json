@@ -1,0 +1,745 @@
+{
+    "result": [
+        {
+            "scriptId": "674",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/test/manager/burnerManager.test.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 4965, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 4965, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 469, "endOffset": 1859, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 600, "endOffset": 643, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 700, "endOffset": 834, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 893, "endOffset": 984, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 1045, "endOffset": 1165, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 1092, "endOffset": 1126, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 1223, "endOffset": 1340, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 1270, "endOffset": 1301, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 1401, "endOffset": 1499, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 1562, "endOffset": 1676, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 1740, "endOffset": 1855, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                }
+            ]
+        },
+        {
+            "scriptId": "676",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/test/mocks/mocks.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 4265, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 4265, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "getBurnerManager",
+                    "ranges": [
+                        { "startOffset": 579, "endOffset": 1151, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 1257, "endOffset": 1289, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "getBurnerConnector",
+                    "ranges": [
+                        { "startOffset": 1320, "endOffset": 1708, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 1816, "endOffset": 1850, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                }
+            ]
+        },
+        {
+            "scriptId": "677",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/manager/burnerManager.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 21334, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 21334, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "<instance_members_initializer>",
+                    "ranges": [
+                        { "startOffset": 561, "endOffset": 5648, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "BurnerManager",
+                    "ranges": [
+                        { "startOffset": 716, "endOffset": 916, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "setIsDeployingCallback",
+                    "ranges": [
+                        { "startOffset": 919, "endOffset": 993, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "updateIsDeploying",
+                    "ranges": [
+                        { "startOffset": 996, "endOffset": 1130, "count": 2 },
+                        { "startOffset": 1084, "endOffset": 1126, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "getBurnerStorage",
+                    "ranges": [
+                        { "startOffset": 1133, "endOffset": 1220, "count": 5 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "setActiveBurnerAccount",
+                    "ranges": [
+                        { "startOffset": 1223, "endOffset": 1513, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "init",
+                    "ranges": [
+                        { "startOffset": 1516, "endOffset": 2135, "count": 1 },
+                        { "startOffset": 1611, "endOffset": 2131, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 1744, "endOffset": 1993, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 2001, "endOffset": 2079, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "list",
+                    "ranges": [
+                        { "startOffset": 2138, "endOffset": 2335, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 2228, "endOffset": 2329, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "select",
+                    "ranges": [
+                        { "startOffset": 2338, "endOffset": 2782, "count": 1 },
+                        { "startOffset": 2478, "endOffset": 2781, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 2785, "endOffset": 3025, "count": 1 },
+                        { "startOffset": 2922, "endOffset": 3024, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "clear",
+                    "ranges": [
+                        { "startOffset": 3028, "endOffset": 3084, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "getActiveAccount",
+                    "ranges": [
+                        { "startOffset": 3087, "endOffset": 3402, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "create",
+                    "ranges": [
+                        { "startOffset": 3405, "endOffset": 4915, "count": 1 },
+                        { "startOffset": 3839, "endOffset": 3897, "count": 0 },
+                        { "startOffset": 3986, "endOffset": 3993, "count": 0 },
+                        { "startOffset": 4356, "endOffset": 4366, "count": 0 },
+                        { "startOffset": 4542, "endOffset": 4914, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "copyBurnersToClipboard",
+                    "ranges": [
+                        { "startOffset": 4918, "endOffset": 5124, "count": 1 },
+                        { "startOffset": 5073, "endOffset": 5080, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "setBurnersFromClipboard",
+                    "ranges": [
+                        { "startOffset": 5127, "endOffset": 5646, "count": 1 },
+                        { "startOffset": 5227, "endOffset": 5595, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 5750, "endOffset": 5779, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                }
+            ]
+        },
+        {
+            "scriptId": "757",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/utils/storage.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 6466, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 6466, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "hasLocalStorageSupport",
+                    "ranges": [
+                        { "startOffset": 318, "endOffset": 587, "count": 1 },
+                        { "startOffset": 405, "endOffset": 531, "count": 0 },
+                        { "startOffset": 536, "endOffset": 569, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "safeParse",
+                    "ranges": [
+                        { "startOffset": 656, "endOffset": 848, "count": 5 },
+                        { "startOffset": 715, "endOffset": 846, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "keys",
+                    "ranges": [
+                        { "startOffset": 876, "endOffset": 1027, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 1036, "endOffset": 1214, "count": 5 },
+                        { "startOffset": 1071, "endOffset": 1142, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "set",
+                    "ranges": [
+                        { "startOffset": 1223, "endOffset": 1487, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "remove",
+                    "ranges": [
+                        { "startOffset": 1499, "endOffset": 1650, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "clear",
+                    "ranges": [
+                        { "startOffset": 1661, "endOffset": 1899, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                }
+            ]
+        },
+        {
+            "scriptId": "759",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/manager/prefundAccount.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 5631, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 5631, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "prefundAccount",
+                    "ranges": [
+                        { "startOffset": 481, "endOffset": 1482, "count": 1 },
+                        { "startOffset": 855, "endOffset": 1418, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 1586, "endOffset": 1616, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                }
+            ]
+        },
+        {
+            "scriptId": "760",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/index.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 1504, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 1504, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                }
+            ]
+        },
+        {
+            "scriptId": "761",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/connectors/index.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 625, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 625, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                }
+            ]
+        },
+        {
+            "scriptId": "762",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/connectors/burner.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 4702, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 4702, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "<instance_members_initializer>",
+                    "ranges": [
+                        { "startOffset": 351, "endOffset": 1184, "count": 0 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 1288, "endOffset": 1319, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                }
+            ]
+        },
+        {
+            "scriptId": "906",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/constants/index.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 2600, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 2600, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 382, "endOffset": 425, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 574, "endOffset": 604, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 828, "endOffset": 871, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 1092, "endOffset": 1133, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                }
+            ]
+        },
+        {
+            "scriptId": "907",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/context/index.tsx",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 639, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 639, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                }
+            ]
+        },
+        {
+            "scriptId": "908",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/context/burnerProvider.tsx",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 3204, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 3204, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 568, "endOffset": 597, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "BurnerProvider",
+                    "ranges": [
+                        { "startOffset": 624, "endOffset": 947, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 1051, "endOffset": 1081, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                }
+            ]
+        },
+        {
+            "scriptId": "913",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/hooks/index.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 821, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 821, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                }
+            ]
+        },
+        {
+            "scriptId": "914",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/hooks/useBurner.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 12752, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 12752, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "useBurner",
+                    "ranges": [
+                        { "startOffset": 714, "endOffset": 3177, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 3276, "endOffset": 3301, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                }
+            ]
+        },
+        {
+            "scriptId": "915",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/hooks/useBurnerManager.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 11214, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 11214, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "useBurnerManager",
+                    "ranges": [
+                        { "startOffset": 449, "endOffset": 2705, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 2811, "endOffset": 2843, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                }
+            ]
+        },
+        {
+            "scriptId": "916",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/manager/index.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 1175, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 1175, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 414, "endOffset": 465, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                },
+                {
+                    "functionName": "get",
+                    "ranges": [
+                        { "startOffset": 700, "endOffset": 752, "count": 0 }
+                    ],
+                    "isBlockCoverage": false
+                }
+            ]
+        },
+        {
+            "scriptId": "917",
+            "url": "file:///Users/phoenix/Documents/dojo.js/packages/create-burner/src/types/index.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 1433, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 1433, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                }
+            ]
+        }
+    ]
+}

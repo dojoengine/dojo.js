@@ -9,7 +9,8 @@
     "type": "module",
     "scripts": {
         "build": "tsup --dts-resolve",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "vitest",
+        "coverage": "vitest run --coverage"
     },
     "peerDependencies": {
         "react": "^18.2.0",
@@ -31,7 +32,11 @@
         "@types/web": "^0.0.114",
         "bun-types": "^1.0.1",
         "tsup": "^8.0.1",
-        "typescript": "^5.0.3"
+        "typescript": "^5.0.3",
+        "vitest": "^1.2.1",
+        "jsdom": "^24.0.0",
+        "@testing-library/react": "^14.1.2",
+        "@testing-library/react-hooks": "^8.0.1"
     },
     "dependencies": {
         "@starknet-react/core": "^1.0.3",
