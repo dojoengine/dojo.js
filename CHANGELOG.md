@@ -2,6 +2,16 @@
 
 All notable changes to Dojo.js will be documented in this file.
 
+## 0.5.4 -0 1.02.2024
+
+### Added
+
+### Changed
+
+### Removed
+
+### Fixed
+
 ## 0.3.0 - 10.01.2024
 
 ### Added

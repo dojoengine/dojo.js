@@ -20,7 +20,8 @@ import { prefundAccount } from "./prefundAccount";
  *  const masterAccount = new Account(
  *      rpcProvider,
  *      import.meta.env.VITE_PUBLIC_MASTER_ADDRESS!,
- *      import.meta.env.VITE_PUBLIC_MASTER_PRIVATE_KEY!
+ *      import.meta.env.VITE_PUBLIC_MASTER_PRIVATE_KEY!,
+ *      "1"
  *   );
  *
  *   const burnerManager = new BurnerManager({
@@ -90,7 +91,8 @@ export class BurnerManager {
                 this.account = new Account(
                     this.provider,
                     address,
-                    storage[address].privateKey
+                    storage[address].privateKey,
+                    "1"
                 );
                 return;
             }
@@ -109,12 +111,19 @@ export class BurnerManager {
                         this.account = null;
                         Storage.remove("burners");
                         throw new Error(
-                            "Burners not deployed, chain may have restarted"
+                            "Burners not deployed, chain may have restarted."
                         );
                     }
                 })
                 .catch(() => {
-                    throw new Error("Error fetching transaction receipt");
+                    console.warn(
+                        "------- DOJO ----------\n" +
+                            `WARNING: Error fetching transaction receipt for address ${firstAddr} with transaction ID ${storage[firstAddr].deployTx}.\n` +
+                            "Your burners might not be associated with this network. " +
+                            "Please check the network connection and the transaction status. " +
+                            "Try deleting your burners from your local storage and try again.\n" +
+                            "------- DOJO ----------"
+                    );
                 });
 
             this.setActiveBurnerAccount(storage);
@@ -146,7 +155,8 @@ export class BurnerManager {
         this.account = new Account(
             this.provider,
             address,
-            storage[address].privateKey
+            storage[address].privateKey,
+            "1"
         );
     }
 
@@ -156,7 +166,12 @@ export class BurnerManager {
             throw new Error("burner not found");
         }
 
-        return new Account(this.provider, address, storage[address].privateKey);
+        return new Account(
+            this.provider,
+            address,
+            storage[address].privateKey,
+            "1"
+        );
     }
 
     clear(): void {
@@ -170,7 +185,8 @@ export class BurnerManager {
                 return new Account(
                     this.provider,
                     address,
-                    storage[address].privateKey
+                    storage[address].privateKey,
+                    "1"
                 );
             }
         }
@@ -192,7 +208,6 @@ export class BurnerManager {
         if (!this.masterAccount) {
             throw new Error("wallet account not found");
         }
-
         try {
             await prefundAccount(address, this.masterAccount);
         } catch (e) {
@@ -206,7 +221,7 @@ export class BurnerManager {
         };
 
         // deploy burner
-        const burner = new Account(this.provider, address, privateKey);
+        const burner = new Account(this.provider, address, privateKey, "1");
 
         const nonce = await this.account?.getNonce();
 

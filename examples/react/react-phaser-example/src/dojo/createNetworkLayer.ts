@@ -8,10 +8,10 @@ export type NetworkLayer = Awaited<ReturnType<typeof createNetworkLayer>>;
 
 export const createNetworkLayer = async () => {
     // setup world
-    const setupWorld = await setup(dojoConfig());
+    const setupWorld = await setup(dojoConfig);
 
     // create burner and init
-    const { burnerManager } = await createBurner(dojoConfig());
+    const { burnerManager } = await createBurner(dojoConfig);
 
     return {
         ...setupWorld,

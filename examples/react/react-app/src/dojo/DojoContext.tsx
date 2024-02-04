@@ -1,10 +1,6 @@
-import {
-    BurnerAccount,
-    BurnerManager,
-    useBurnerManager,
-} from "@dojoengine/create-burner";
+import { BurnerAccount, useBurnerManager } from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext, useMemo } from "react";
-import { Account, RpcProvider } from "starknet";
+import { Account } from "starknet";
 import { SetupResult } from "./generated/setup";
 
 interface DojoContextType extends SetupResult {
@@ -25,20 +21,20 @@ export const DojoProvider = ({
     if (currentValue) throw new Error("DojoProvider can only be used once");
 
     const {
-        config: { rpcUrl, masterAddress, masterPrivateKey, accountClassHash },
+        config: { masterAddress, masterPrivateKey },
+        burnerManager,
+        dojoProvider,
     } = value;
 
-    const rpcProvider = useMemo(
-        () =>
-            new RpcProvider({
-                nodeUrl: rpcUrl,
-            }),
-        [rpcUrl]
-    );
-
     const masterAccount = useMemo(
-        () => new Account(rpcProvider, masterAddress, masterPrivateKey),
-        [rpcProvider, masterAddress, masterPrivateKey]
+        () =>
+            new Account(
+                dojoProvider.provider,
+                masterAddress,
+                masterPrivateKey,
+                "1"
+            ),
+        [masterAddress, masterPrivateKey, dojoProvider.provider]
     );
 
     const {
@@ -52,11 +48,7 @@ export const DojoProvider = ({
         copyToClipboard,
         applyFromClipboard,
     } = useBurnerManager({
-        burnerManager: new BurnerManager({
-            masterAccount,
-            accountClassHash,
-            rpcProvider,
-        }),
+        burnerManager,
     });
 
     return (
