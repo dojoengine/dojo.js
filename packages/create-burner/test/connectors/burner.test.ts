@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { BurnerConnector } from "../../src/connectors/burner";
 import { getBurnerConnector } from "../mocks/mocks";
+import { KATANA_PREFUNDED_ADDRESS } from "@dojoengine/core";
 
 describe("BurnerConnector", () => {
     const burnerObj = new BurnerConnector({}, null);
@@ -55,10 +56,8 @@ describe("BurnerConnector2", () => {
             expect(await burnerObj.account()).not.toBeNull();
         }),
         it("should test id method", async () => {
-            const publicKey =
-                "0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973";
             console.log(burnerObj.id);
-            expect(burnerObj.id).toEqual(publicKey);
+            expect(burnerObj.id).toEqual(KATANA_PREFUNDED_ADDRESS);
         }),
         it("should test name method", async () => {
             expect(burnerObj.name).toBe("Burner Connector");

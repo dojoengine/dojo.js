@@ -16,12 +16,12 @@
         "rootDir": "/Users/os/Documents/code/dojo.js/examples",
         "allowJs": true,
         "outDir": "dist",
-        "types": ["bun-types"],
+        "types": ["bun-types"]
     },
     "include": [
         "./src/**/*",
         "dojoConfig.ts",
-        "../../dojo-starter/target/dev/manifest.json",
+        "../../dojo-starter/target/dev/manifest.json"
     ],
-    "exclude": ["examples/dojo-starter/target/dev/manifest.json"],
+    "exclude": ["examples/dojo-starter/target/dev/manifest.json"]
 }

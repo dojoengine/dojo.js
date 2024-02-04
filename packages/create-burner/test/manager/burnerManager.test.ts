@@ -7,7 +7,7 @@ describe("BurnerManager", () => {
     it("should init burner account", async () => {
         burnerManager.init();
     }),
-        it("should update SsDeploying", async () => {
+        it("should update isDeploying", async () => {
             burnerManager.updateIsDeploying(false);
             expect(burnerManager.isDeploying).toBeFalsy();
         }),

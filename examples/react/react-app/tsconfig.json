@@ -15,12 +15,12 @@
         // "noUnusedLocals": true,
         // "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
-        "allowSyntheticDefaultImports": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": ["src", "dojoConfig.ts"],
     "references": [
         {
-            "path": "./tsconfig.node.json",
-        },
-    ],
+            "path": "./tsconfig.node.json"
+        }
+    ]
 }

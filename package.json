@@ -13,7 +13,6 @@
         "packages/state"
     ],
     "devDependencies": {
-        "@vitest/coverage-v8": "^1.2.1",
         "husky": "^8.0.0",
         "lerna": "^8.0.0",
         "prettier": "^3.0.3",
