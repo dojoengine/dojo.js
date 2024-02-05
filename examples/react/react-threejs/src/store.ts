@@ -2,10 +2,18 @@ import { create } from "zustand";
 
 export type Store = {
     players: any; // { [id]: { player, vec }, [id2]: { player, vec } }
-    set_players: (newPlayers: any) => void;
+    update_player: (player: any) => void;
 };
 
 export const useElementStore = create<Store>((set) => ({
     players: {},
-    set_players: (newPlayers: any) => set(() => ({ players: newPlayers })),
+    update_player: (player: any) =>
+        set((state) => {
+            return {
+                players: {
+                    ...state.players,
+                    [player.player]: player,
+                },
+            };
+        }),
 }));

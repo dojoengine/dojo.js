@@ -18,14 +18,14 @@
         "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"],
-        },
+            "@/*": ["./src/*"]
+        }
     },
 
     "include": ["src", "dojoConfig.ts"],
     "references": [
         {
-            "path": "./tsconfig.node.json",
-        },
-    ],
+            "path": "./tsconfig.node.json"
+        }
+    ]
 }
