@@ -12,39 +12,14 @@ export const Players = (props: any) => {
         },
     } = useDojo();
 
-    const [players, setPlayers] = useState<any>({});
+    const players = useElementStore((state) => state.players);
+    const update_player = useElementStore((state) => state.update_player);
 
     useEffect(() => {
         defineSystem(world, [Has(Position)], ({ value: [newValue] }) => {
-            setPlayers((prevPlayers: any) => {
-                // Check if both position are the same (can happen with addOverride)
-                if (
-                    prevPlayers[newValue?.player] &&
-                    prevPlayers[newValue?.player].vec.x === newValue?.vec.x &&
-                    prevPlayers[newValue?.player].vec.y === newValue?.vec.y
-                ) {
-                    return prevPlayers;
-                }
-                // To lerp, get current position and save it to player.prevVec
-                const prevVec = prevPlayers[newValue?.player]
-                    ? prevPlayers[newValue?.player].vec
-                    : undefined;
-                return {
-                    ...prevPlayers,
-                    [newValue?.player]: {
-                        ...newValue,
-                        prevVec,
-                    },
-                };
-            });
+            update_player(newValue);
         });
     }, []);
-
-    // When the list is updated, save it in the store to access it from anywhere in the project
-    const store = useElementStore((state) => state);
-    useEffect(() => {
-        store.set_players(players);
-    }, [players]);
 
     return (
         <>
