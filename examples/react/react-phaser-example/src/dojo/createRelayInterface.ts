@@ -10,9 +10,12 @@ type Callback = (
 
 export function createRelayInterface(client: Client) {
     return {
-        publish: client.publishMessage,
-        subscribe: client.subscribeTopic,
-        unsubscribe: client.unsubscribeTopic,
-        onMessage: client.onMessage as (callback: Callback) => Promise<void>,
+        publish: async (topic: string, message: Uint8Array) =>
+            await client.publishMessage(topic, message),
+        subscribe: async (topic: string) => await client.subscribeTopic(topic),
+        unsubscribe: async (topic: string) =>
+            await client.unsubscribeTopic(topic),
+        onMessage: async (callback: Callback) =>
+            await client.onMessage(callback),
     };
 }

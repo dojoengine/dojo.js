@@ -6,14 +6,52 @@ import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
 
+interface Message {
+    propagationSource: string;
+    source: string;
+    messageId: string;
+    topic: string;
+    data: any;
+}
+
 function App() {
     const {
         setup: {
             systemCalls: { spawn, move },
             clientComponents: { Position, Moves },
+            relay,
         },
         account,
     } = useDojo();
+
+    const messageEncoder = new TextEncoder();
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [messageInput, setMessageInput] = useState("");
+
+    const sendMessage = async (message: string) => {
+        await relay.publish("chat", messageEncoder.encode(message));
+    };
+
+    const setupRelay = async () => {
+        // subscribe to chat topic
+        await relay.subscribe("chat");
+
+        // listen for messages
+        await relay.onMessage(
+            (propagationSource, source, messageId, topic, data) => {
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        propagationSource,
+                        source,
+                        messageId,
+                        topic,
+                        data,
+                    },
+                ]);
+            }
+        );
+    };
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
@@ -110,7 +148,40 @@ function App() {
                         : "Need to Spawn"}
                 </div>
             </div>
+            <div className="card">
+                <h3>Relay</h3>
+                <button onClick={setupRelay}>Setup Relay</button>
+                <br />
+                {
+                    // display latest message
+                    messages.length > 0 && (
+                        <div>
+                            <h3>Latest Message</h3>
+                            <pre>
+                                {JSON.stringify(
+                                    messages[messages.length - 1],
+                                    null,
+                                    2
+                                )}
+                            </pre>
+                        </div>
+                    )
+                }
 
+                <input
+                    type="text"
+                    value={messageInput}
+                    onChange={(e) => setMessageInput(e.target.value)}
+                />
+                <button
+                    onClick={async () => {
+                        await sendMessage(messageInput);
+                        setMessageInput("");
+                    }}
+                >
+                    Send
+                </button>
+            </div>
             <div className="card">
                 <div>
                     <button
