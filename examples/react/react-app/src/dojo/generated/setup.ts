@@ -8,6 +8,7 @@ import { world } from "./world";
 import { setupWorld } from "./generated";
 import { Account } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
+import { createRelayInterface } from "../createRelayInterface";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -60,6 +61,7 @@ export async function setup({ ...config }: DojoConfig) {
         client,
         clientComponents,
         contractComponents,
+        relay: createRelayInterface(toriiClient),
         systemCalls: createSystemCalls(
             { client },
             contractComponents,
