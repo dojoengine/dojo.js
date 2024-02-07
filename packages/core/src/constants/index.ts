@@ -1,5 +1,6 @@
 export const LOCAL_KATANA = "http://localhost:5050";
 export const LOCAL_TORII = "http://localhost:8080";
+export const LOCAL_RELAY = "";
 export const KATANA_PREFUNDED_ADDRESS =
     "0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb46e03";
 export const KATANA_PREFUNDED_PRIVATE_KEY =

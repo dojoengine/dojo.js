@@ -48,6 +48,8 @@ pub struct ClientConfig {
     pub rpc_url: String,
     #[serde(rename = "toriiUrl")]
     pub torii_url: String,
+    #[serde(rename = "relayUrl")]
+    pub relay_url: String,
     #[serde(rename = "worldAddress")]
     pub world_address: String,
 }

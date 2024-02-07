@@ -6,6 +6,7 @@ import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { setupWorld } from "./generated";
 import { DojoConfig, DojoProvider } from "@dojoengine/core";
+import { createRelayInterface } from "../createRelayInterface";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -14,6 +15,7 @@ export async function setup({ ...config }: DojoConfig) {
     const toriiClient = await torii.createClient([], {
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
+        relayUrl: config.relayUrl || "",
         worldAddress: config.manifest.world.address || "",
     });
 
@@ -34,6 +36,7 @@ export async function setup({ ...config }: DojoConfig) {
         client,
         clientComponents,
         contractComponents,
+        relay: createRelayInterface(toriiClient),
         systemCalls: createSystemCalls(
             { client },
             contractComponents,
