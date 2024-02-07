@@ -23,9 +23,7 @@ export const Player = (props: any) => {
     const [startPosition, setStartPosition] = useState<
         THREE.Vector3 | undefined
     >();
-    const [targetPosition, setTargetPosition] = useState<
-        THREE.Vector3 | undefined
-    >();
+    let targetPosition = useRef<THREE.Vector3 | undefined>();
 
     // Retrieve player info
     const { player } = props;
@@ -42,7 +40,7 @@ export const Player = (props: any) => {
 
     const isLocalPlayer = localPlayer?.player == player.player;
 
-    const { vec, prevVec } = player;
+    const { vec } = player;
     const color = isLocalPlayer ? "green" : "red";
 
     // Blue cell around player
@@ -85,52 +83,55 @@ export const Player = (props: any) => {
             ),
         },
     ];
+
     // Progress ref
     const lerpProgress = useRef(0);
     const coneRef: any = useRef();
 
     // Lerp
     useFrame((_, delta) => {
-        if (!startPosition || !targetPosition) return;
+        if (!startPosition || !targetPosition.current) return;
         if (lerpProgress.current < 1) {
             lerpProgress.current += delta * 4; // Adjust this value for speed
 
             if (coneRef.current) {
                 coneRef.current.position.lerpVectors(
                     startPosition,
-                    targetPosition,
+                    targetPosition.current,
                     lerpProgress.current
                 );
             }
         } else if (lerpProgress.current >= 1) {
-            coneRef.current.position.copy(targetPosition);
+            coneRef.current.position.copy(targetPosition.current);
         }
     });
 
     // When a new position is set, start lerp
     useEffect(() => {
-        if (!coneRef.current || !coneRef.current.position) return;
+        // if (!coneRef.current || !coneRef.current.position) return;
         const newTargetPosition = new THREE.Vector3(
             vec.y * MAP_SCALE,
             0,
             vec.x * MAP_SCALE
         );
-        if (player.prevVec === undefined) {
-            // First time syncing the player, no prevVec registered
-            coneRef.current.position.copy(newTargetPosition);
-            return;
+
+        // Check if there is an existing target position
+        if (targetPosition.current) {
+            // Set the start position to the current target position for the lerp
+            setStartPosition(targetPosition.current);
+        } else {
+            // If it's the first time, just set the cone's position directly
+            if (coneRef.current) {
+                coneRef.current.position.copy(newTargetPosition);
+            }
         }
 
-        // Start lerp between start and target position
-        setStartPosition(
-            new THREE.Vector3(prevVec.y * MAP_SCALE, 0, prevVec.x * MAP_SCALE)
-        );
-        setTargetPosition(newTargetPosition);
+        targetPosition.current = newTargetPosition;
         lerpProgress.current = 0;
 
         // Reset Hovered Tile
         setHoveredTile(undefined);
-    }, [coneRef, player]);
+    }, [coneRef, player, vec.x, vec.y]);
 
     useEffect(() => {
         // Change cursor style if hovering a tile
@@ -143,7 +144,7 @@ export const Player = (props: any) => {
                 castShadow
                 key="player"
                 ref={coneRef}
-                scale={[1, MAP_SCALE, 1]}
+                scale={[MAP_SCALE / 3, MAP_SCALE, MAP_SCALE / 3]}
                 material={new THREE.MeshPhongMaterial({ color })}
             />
             {
