@@ -1,6 +1,6 @@
 import { useComponentValue } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
@@ -24,6 +24,7 @@ function App() {
         account,
     } = useDojo();
 
+    const initialized = useRef(false);
     const messageEncoder = new TextEncoder();
     const [messages, setMessages] = useState<Message[]>([]);
     const [messageInput, setMessageInput] = useState("");
@@ -91,6 +92,13 @@ function App() {
             return () => clearTimeout(timer);
         }
     }, [clipboardStatus.message]);
+
+    useEffect(() => {
+        if (initialized.current) return;
+
+        setupRelay();
+        initialized.current = true;
+    }, []);
 
     return (
         <>
