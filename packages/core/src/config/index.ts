@@ -26,7 +26,7 @@ export function createDojoConfig({ manifest, ...config }: DojoConfigParams) {
         toriiUrl: config.toriiUrl ?? LOCAL_TORII,
         masterAddress: config.masterAddress ?? KATANA_PREFUNDED_ADDRESS,
         masterPrivateKey:
-             config.masterPrivateKey ?? KATANA_PREFUNDED_PRIVATE_KEY,
+            config.masterPrivateKey ?? KATANA_PREFUNDED_PRIVATE_KEY,
         accountClassHash: config.accountClassHash ?? KATANA_CLASS_HASH,
         manifest,
     };
