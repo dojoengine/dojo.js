@@ -21,7 +21,6 @@
             "@/*": ["./src/*"]
         }
     },
-
     "include": ["src", "dojoConfig.ts"],
     "references": [
         {
