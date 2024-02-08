@@ -22,12 +22,12 @@ interface DojoConfigParams {
  */
 export function createDojoConfig({ manifest, ...config }: DojoConfigParams) {
     return {
-        rpcUrl: LOCAL_KATANA || config.rpcUrl,
-        toriiUrl: LOCAL_TORII || config.toriiUrl,
-        masterAddress: KATANA_PREFUNDED_ADDRESS || config.masterAddress,
+        rpcUrl: config.rpcUrl ?? LOCAL_KATANA,
+        toriiUrl: config.toriiUrl ?? LOCAL_TORII,
+        masterAddress: config.masterAddress ?? KATANA_PREFUNDED_ADDRESS,
         masterPrivateKey:
-            KATANA_PREFUNDED_PRIVATE_KEY || config.masterPrivateKey,
-        accountClassHash: KATANA_CLASS_HASH || config.accountClassHash,
+             config.masterPrivateKey ?? KATANA_PREFUNDED_PRIVATE_KEY,
+        accountClassHash: config.accountClassHash ?? KATANA_CLASS_HASH,
         manifest,
     };
 }
