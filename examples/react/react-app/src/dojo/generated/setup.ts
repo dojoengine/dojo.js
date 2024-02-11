@@ -53,7 +53,7 @@ export async function setup({ ...config }: DojoConfig) {
         }
     }
 
-    burnerManager.init();
+    await burnerManager.init();
 
     return {
         client,

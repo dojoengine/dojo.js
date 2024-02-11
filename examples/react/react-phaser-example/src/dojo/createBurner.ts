@@ -26,7 +26,7 @@ export const createBurner = async ({ ...config }: DojoConfig) => {
         console.log(e);
     }
 
-    burnerManager.init();
+    await burnerManager.init();
 
     return {
         burnerManager,

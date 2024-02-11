@@ -1,11 +1,11 @@
-import { describe, it, afterEach, expect, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getBurnerManager } from "../mocks/mocks";
 
 describe("BurnerManager", () => {
     const burnerManager = getBurnerManager();
 
     it("should init burner account", async () => {
-        burnerManager.init();
+        await burnerManager.init();
     }),
         it("should update isDeploying", async () => {
             burnerManager.updateIsDeploying(false);

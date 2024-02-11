@@ -54,7 +54,7 @@ export async function setup({ ...config }: Config) {
     } catch (e) {
         console.error(e);
     }
-    burnerManager.init();
+    await burnerManager.init();
 
     return {
         client,
