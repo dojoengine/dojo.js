@@ -104,10 +104,6 @@ export class BurnerManager {
                 await this.masterAccount.getTransactionReceipt(deployTx);
             return receipt !== null;
         } catch (error) {
-            console.error(
-                `Error fetching transaction receipt for deploy tx ${deployTx}: `,
-                error
-            );
             return false; // Assume not deployed if there's an error fetching the receipt
         }
     }
@@ -137,7 +133,6 @@ export class BurnerManager {
             Storage.set("burners", storage);
             this.setActiveBurnerAccount(storage); // Re-select the active burner account
         } else {
-            console.log("No valid burners found. Clearing storage.");
             Storage.clear();
         }
     }
