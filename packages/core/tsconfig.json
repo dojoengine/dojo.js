@@ -16,7 +16,11 @@
         "types": ["bun-types"],
         "esModuleInterop": true
     },
-    "include": ["src/**/*.ts", "bin/generateComponents.cjs"],
+    "include": [
+        "src/**/*.ts",
+        "bin/generateComponents.cjs",
+        "test/**/*.test.ts"
+    ],
     "skipLibCheck": true,
     "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
