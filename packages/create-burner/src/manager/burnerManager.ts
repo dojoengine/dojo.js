@@ -104,7 +104,7 @@ export class BurnerManager {
                 await this.masterAccount.getTransactionReceipt(deployTx);
             return receipt !== null;
         } catch (error) {
-            return false; // Assume not deployed if there's an error fetching the receipt
+            return false;
         }
     }
 
@@ -116,14 +116,13 @@ export class BurnerManager {
             const isDeployed = await this.isBurnerDeployed(
                 storage[address].deployTx
             );
-            return isDeployed ? null : address; // Keep address if not deployed, otherwise null
+            return isDeployed ? null : address;
         });
 
         const toRemove = (await Promise.all(checks)).filter(
             (address): address is string => address !== null
         );
 
-        // Remove the burners that are not deployed
         toRemove.forEach((address) => {
             console.log(`Removing non-deployed burner at address ${address}.`);
             delete storage[address];
