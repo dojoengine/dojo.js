@@ -26,8 +26,10 @@ export const useBurnerManager = ({
 
     // On mount, initialize the burner manager and set the active account.
     useEffect(() => {
-        burnerManager.init();
-        setAccount(burnerManager.getActiveAccount());
+        (async () => {
+            await burnerManager.init();
+            setAccount(burnerManager.getActiveAccount());
+        })();
     }, []);
 
     /**

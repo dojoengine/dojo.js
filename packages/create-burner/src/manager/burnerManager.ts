@@ -36,7 +36,7 @@ import { prefundAccount } from "./prefundAccount";
  *    console.log(e);
  *   }
  *
- *  burnerManager.init();
+ *  await burnerManager.init();
  *
  *  return {
  *      account: burnerManager.account as Account,
@@ -54,7 +54,6 @@ export class BurnerManager {
 
     public account: Account | null = null;
     public isDeploying: boolean = false;
-    public burnerAccounts: Burner[] = [];
 
     private setIsDeploying?: (isDeploying: boolean) => void;
 
@@ -99,34 +98,41 @@ export class BurnerManager {
         }
     }
 
-    public init(): void {
+    private async isBurnerDeployed(deployTx: string): Promise<boolean> {
+        try {
+            const receipt =
+                await this.masterAccount.getTransactionReceipt(deployTx);
+            return receipt !== null;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    public async init(): Promise<void> {
         const storage = this.getBurnerStorage();
+        const addresses = Object.keys(storage);
 
-        if (Object.keys(storage).length > 0) {
-            const firstAddr = Object.keys(storage)[0];
-            this.masterAccount
-                ?.getTransactionReceipt(storage[firstAddr].deployTx)
-                .then((response) => {
-                    if (!response) {
-                        this.account = null;
-                        Storage.remove("burners");
-                        throw new Error(
-                            "Burners not deployed, chain may have restarted."
-                        );
-                    }
-                })
-                .catch(() => {
-                    console.warn(
-                        "------- DOJO ----------\n" +
-                            `WARNING: Error fetching transaction receipt for address ${firstAddr} with transaction ID ${storage[firstAddr].deployTx}.\n` +
-                            "Your burners might not be associated with this network. " +
-                            "Please check the network connection and the transaction status. " +
-                            "Try deleting your burners from your local storage and try again.\n" +
-                            "------- DOJO ----------"
-                    );
-                });
+        const checks = addresses.map(async (address) => {
+            const isDeployed = await this.isBurnerDeployed(
+                storage[address].deployTx
+            );
+            return isDeployed ? null : address;
+        });
 
-            this.setActiveBurnerAccount(storage);
+        const toRemove = (await Promise.all(checks)).filter(
+            (address): address is string => address !== null
+        );
+
+        toRemove.forEach((address) => {
+            console.log(`Removing non-deployed burner at address ${address}.`);
+            delete storage[address];
+        });
+
+        if (Object.keys(storage).length) {
+            Storage.set("burners", storage);
+            this.setActiveBurnerAccount(storage); // Re-select the active burner account
+        } else {
+            Storage.clear();
         }
     }
 
