@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/create-dojo",
-    "version": "0.5.8",
+    "version": "0.5.9",
     "description": "Scaffold Dojo project from examples",
     "module": "index.ts",
     "main": "./bin/index.js",

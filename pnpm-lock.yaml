@@ -491,7 +491,7 @@ importers:
         version: 5.24.3(encoding@0.1.13)
     devDependencies:
       '@dojoengine/torii-client':
-        specifier: ^0.5.8
+        specifier: ^0.5.9
         version: link:../torii-client
       '@types/elliptic':
         specifier: ^6.4.14
@@ -512,7 +512,7 @@ importers:
   packages/create-burner:
     dependencies:
       '@dojoengine/core':
-        specifier: ^0.5.8
+        specifier: ^0.5.9
         version: link:../core
       '@starknet-react/core':
         specifier: ^1.0.3
@@ -604,13 +604,13 @@ importers:
         specifier: 0.1.35
         version: 0.1.35(typescript@5.3.3)(zod@3.22.4)
       '@dojoengine/state':
-        specifier: ^0.5.8
+        specifier: ^0.5.9
         version: link:../state
       '@dojoengine/torii-client':
-        specifier: ^0.5.8
+        specifier: ^0.5.9
         version: link:../torii-client
       '@dojoengine/utils':
-        specifier: ^0.5.8
+        specifier: ^0.5.9
         version: link:../utils
       '@latticexyz/utils':
         specifier: ^2.0.0-next.11
@@ -677,7 +677,7 @@ importers:
         specifier: 0.1.35
         version: 0.1.35(typescript@5.3.3)(zod@3.22.4)
       '@dojoengine/torii-client':
-        specifier: ^0.5.8
+        specifier: ^0.5.9
         version: link:../torii-client
       '@latticexyz/utils':
         specifier: ^2.0.0-next.11
@@ -699,7 +699,7 @@ importers:
   packages/torii-client:
     dependencies:
       '@dojoengine/torii-wasm':
-        specifier: ^0.5.8
+        specifier: ^0.5.9
         version: link:../torii-wasm
       typescript:
         specifier: ^5.0.3
