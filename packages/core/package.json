@@ -18,7 +18,7 @@
         }
     },
     "peerDependencies": {
-        "starknet": "^5.24.3"
+        "starknet": "^5.25.0"
     },
     "devDependencies": {
         "@dojoengine/torii-client": "^0.5.9",

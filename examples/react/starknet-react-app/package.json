@@ -8,7 +8,6 @@
         "build": "tsc && vite build",
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
-        "codegen": "graphql-codegen",
         "create-components": "npx @dojoengine/core ../../dojo-starter/target/dev/manifest.json src/dojo/generated/contractComponents.ts http://localhost:5050 0x28f5999ae62fec17c09c52a800e244961dba05251f5aaf923afabd9c9804d1a"
     },
     "dependencies": {
@@ -25,8 +24,6 @@
         "@starknet-react/core": "^2.2.5",
         "ethers": "^5.7.2",
         "get-starknet-core": "^3.2.0",
-        "graphql": "^16.7.1",
-        "graphql-request": "^6.1.0",
         "mobx": "^6.9.0",
         "proxy-deep": "^3.1.1",
         "react": "^18.2.0",
@@ -37,10 +34,6 @@
         "vite-plugin-wasm": "^3.2.2"
     },
     "devDependencies": {
-        "@graphql-codegen/cli": "^5.0.0",
-        "@graphql-codegen/typescript": "^4.0.1",
-        "@graphql-codegen/typescript-graphql-request": "^5.0.0",
-        "@graphql-codegen/typescript-operations": "^4.0.1",
         "@types/node": "^20.4.8",
         "@types/react": "^18.2.33",
         "@types/react-dom": "^18.0.11",

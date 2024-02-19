@@ -36,7 +36,7 @@
         "build-starknet-react-app": "bun run --cwd examples/react/react-app build",
         "build-watch": "bun run build-core --watch & bun run build-create-burner --watch & bun run build-create-dojo --watch & bun run build-utils --watch & bun run build-react --watch & bun run build-torii-wasm --watch & bun run build-torii-client --watch & bun run build-state --watch",
         "build": "bun run build-torii-wasm && bun run build-utils-wasm && bun run build-torii-client && bun run build-state && bun run build-core && bun run build-create-burner && bun run build-create-dojo && bun run build-utils && bun run build-react",
-        "build-examples": "bun run build-phaser && bun run build-react-app",
+        "build-examples": "bun run build-phaser && bun run build-react-app && bun run build-starknet-react-app",
         "test-create-burner": "bun --cwd packages/create-burner vitest",
         "test-core": "bun --cwd packages/core vitest",
         "clean": "bash ./scripts/clean.sh",

@@ -1,11 +1,11 @@
 import { BurnerAccount, useBurnerManager } from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext } from "react";
-import { Account } from "starknet";
+import { Account, AccountInterface } from "starknet";
 import { SetupResult } from "./generated/setup";
 import { useAccount } from "@starknet-react/core";
 
 interface DojoContextType extends SetupResult {
-    masterAccount: Account;
+    masterAccount: AccountInterface | undefined;
     account: BurnerAccount;
 }
 
@@ -21,7 +21,7 @@ export const DojoProvider = ({
     const currentValue = useContext(DojoContext);
     if (currentValue) throw new Error("DojoProvider can only be used once");
 
-    let masterAccount: Account;
+    let masterAccount: AccountInterface | undefined = undefined;
 
     const { account: walletAccount } = useAccount();
 
