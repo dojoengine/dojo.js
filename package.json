@@ -39,7 +39,7 @@
         "build-examples": "bun run build-phaser && bun run build-react-app",
         "test-create-burner": "bun --cwd packages/create-burner vitest",
         "test-core": "bun --cwd packages/core vitest",
-        "clean": "rm -rf node_modules packages/create-burner/node_modules node_modules packages/create-dojo/node_modules packages/core/node_modules packages/utils/node_modules packages/torii-client/node_modules packages/torii-wasm/node_modules packages/react/node_modules bun.lockb packages/create-burner/bun.lockb packages/core/bun.lockb packages/utils/bun.lockb packages/torii-client/bun.lockb packages/torii-wasm/bun.lockb packages/react/bun.lockb && rm -rf examples/react/react-app/node_modules examples/react/react-app/bun.lockb examples/react/react-phaser-example/node_modules examples/react/react-phaser-example/bun.lockb",
+        "clean": "bash ./scripts/clean.sh",
         "prettier-check": "bun x prettier --check .",
         "prettier": "bun x prettier --write .",
         "release": "bun run build && bun run prettier && npx lerna publish --no-private --force-publish",
