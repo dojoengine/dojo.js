@@ -13,7 +13,7 @@
     },
     "peerDependencies": {
         "react": "^18.2.0",
-        "starknet": "^5.24.3"
+        "starknet": "5.25.0"
     },
     "exports": {
         ".": {

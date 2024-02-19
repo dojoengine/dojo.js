@@ -6,6 +6,11 @@ import { Direction } from "../../utils";
 
 export type IWorld = Awaited<ReturnType<typeof setupWorld>>;
 
+export interface MoveProps {
+    account: Account;
+    direction: Direction;
+}
+
 export async function setupWorld(provider: DojoProvider) {
     function actions() {
         const contract_name = "actions";
@@ -24,13 +29,7 @@ export async function setupWorld(provider: DojoProvider) {
             }
         };
 
-        const move = async ({
-            account,
-            direction,
-        }: {
-            account: Account;
-            direction: Direction;
-        }) => {
+        const move = async ({ account, direction }: MoveProps) => {
             try {
                 return await provider.execute(account, contract_name, "move", [
                     direction,
