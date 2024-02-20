@@ -1,4 +1,4 @@
-import { Account } from "starknet";
+import { AccountInterface } from "starknet";
 import { ClientComponents } from "./createClientComponents";
 import { Direction } from "./utils";
 import { ContractComponents } from "./generated/contractComponents";
@@ -11,7 +11,7 @@ export function createSystemCalls(
     contractComponents: ContractComponents,
     { Position, Moves }: ClientComponents
 ) {
-    const spawn = async (account: Account) => {
+    const spawn = async (account: AccountInterface) => {
         try {
             await client.actions.spawn({
                 account,
@@ -21,7 +21,7 @@ export function createSystemCalls(
         }
     };
 
-    const move = async (account: Account, direction: Direction) => {
+    const move = async (account: AccountInterface, direction: Direction) => {
         try {
             await client.actions.move({
                 account,

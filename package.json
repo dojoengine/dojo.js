@@ -1,26 +1,5 @@
 {
     "name": "dojo.js",
-    "version": "0.2.10",
-    "workspaces": [
-        "examples/react/*",
-        "packages/create-burner",
-        "packages/create-dojo",
-        "packages/core",
-        "packages/utils",
-        "packages/torii-client",
-        "packages/torii-wasm",
-        "packages/react",
-        "packages/state"
-    ],
-    "devDependencies": {
-        "husky": "^8.0.0",
-        "lerna": "^8.0.0",
-        "prettier": "^3.0.3",
-        "tsup": "^8.0.1",
-        "typedoc": "^0.25.4",
-        "typedoc-material-theme": "^1.0.1",
-        "typedoc-plugin-coverage": "^2.2.0"
-    },
     "scripts": {
         "build-core": "bun run --cwd packages/core build",
         "build-create-burner": "bun run --cwd packages/create-burner build",
@@ -34,11 +13,13 @@
         "build-phaser": "bun run --cwd examples/react/react-phaser-example build",
         "build-react-app": "bun run --cwd examples/react/starknet-react-app build",
         "build-starknet-react-app": "bun run --cwd examples/react/react-app build",
+        "build-threejs": "bun run --cwd examples/react/react-threejs build",
         "build-watch": "bun run build-core --watch & bun run build-create-burner --watch & bun run build-create-dojo --watch & bun run build-utils --watch & bun run build-react --watch & bun run build-torii-wasm --watch & bun run build-torii-client --watch & bun run build-state --watch",
         "build": "bun run build-torii-wasm && bun run build-utils-wasm && bun run build-torii-client && bun run build-state && bun run build-core && bun run build-create-burner && bun run build-create-dojo && bun run build-utils && bun run build-react",
-        "build-examples": "bun run build-phaser && bun run build-react-app && bun run build-starknet-react-app",
+        "build-examples": "bun run build-phaser && bun run build-react-app && bun run build-starknet-react-app && bun run build-threejs",
         "test-create-burner": "bun --cwd packages/create-burner vitest",
         "test-core": "bun --cwd packages/core vitest",
+        "test": "bun run test-core && bun run test-create-burner",
         "clean": "bash ./scripts/clean.sh",
         "prettier-check": "bun x prettier --check .",
         "prettier": "bun x prettier --write .",
@@ -46,8 +27,18 @@
         "docs": "npx typedoc --out docs",
         "prepare": "husky install"
     },
+    "devDependencies": {
+        "husky": "^8.0.0",
+        "lerna": "^8.0.0",
+        "prettier": "^3.0.3",
+        "tsup": "^8.0.1",
+        "typedoc": "^0.25.4",
+        "typedoc-material-theme": "^1.0.1",
+        "typedoc-plugin-coverage": "^2.2.0"
+    },
     "dependencies": {
         "@commitlint/cli": "^18.4.4",
-        "@commitlint/config-conventional": "^18.4.4"
+        "@commitlint/config-conventional": "^18.4.4",
+        "react": "^18.2.0"
     }
 }

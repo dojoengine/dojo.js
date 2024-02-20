@@ -15,7 +15,7 @@ export async function setupWorld(provider: DojoProvider) {
     function actions() {
         const contract_name = "actions";
 
-        const spawn = async ({ account }: { account: Account }) => {
+        const spawn = async ({ account }: { account: AccountInterface }) => {
             try {
                 return await provider.execute(
                     account,
