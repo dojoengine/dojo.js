@@ -1,5 +1,8 @@
 import { RpcProvider, Account, Call } from "starknet";
 
+// Script to send funds to an Argent/Braavos wallet
+// Change the first argument of the Call object to the contract address of the Argent/Braavos wallet
+
 // initialize provider
 const provider = new RpcProvider({ nodeUrl: "http://0.0.0.0:5050" });
 // initialize existing pre-deployed account 0 of Devnet

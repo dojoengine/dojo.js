@@ -34,26 +34,26 @@ export async function setup({ ...config }: DojoConfig) {
     // setup world
     const client = await setupWorld(dojoProvider);
 
-    // create burner manager
-    const burnerManager = new BurnerManager({
-        masterAccount: new Account(
-            dojoProvider.provider,
-            config.masterAddress,
-            config.masterPrivateKey
-        ),
-        accountClassHash: config.accountClassHash,
-        rpcProvider: dojoProvider.provider,
-    });
+    // // create burner manager
+    // const burnerManager = new BurnerManager({
+    //     masterAccount: new Account(
+    //         dojoProvider.provider,
+    //         config.masterAddress,
+    //         config.masterPrivateKey
+    //     ),
+    //     accountClassHash: config.accountClassHash,
+    //     rpcProvider: dojoProvider.provider,
+    // });
 
-    if (burnerManager.list().length === 0) {
-        try {
-            await burnerManager.create();
-        } catch (e) {
-            console.error(e);
-        }
-    }
+    // if (burnerManager.list().length === 0) {
+    //     try {
+    //         await burnerManager.create();
+    //     } catch (e) {
+    //         console.error(e);
+    //     }
+    // }
 
-    await burnerManager.init();
+    // await burnerManager.init();
 
     return {
         client,
@@ -66,6 +66,6 @@ export async function setup({ ...config }: DojoConfig) {
         ),
         config,
         dojoProvider,
-        burnerManager,
+        // burnerManager,
     };
 }

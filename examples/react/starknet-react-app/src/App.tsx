@@ -6,6 +6,7 @@ import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
 import MasterAccountConnect from "./components/MasterWallet";
+import { Deploy } from "./components/Deploy";
 
 function App() {
     const {
@@ -59,6 +60,7 @@ function App() {
 
     return (
         <>
+            <Deploy />
             <MasterAccountConnect />
             <button onClick={account?.create}>
                 {account?.isDeploying ? "deploying burner" : "create burner"}

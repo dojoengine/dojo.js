@@ -15,7 +15,7 @@ export type Burner = {
 };
 
 export interface BurnerManagerOptions {
-    masterAccount: Account;
+    masterAccount: AccountInterface;
     accountClassHash: string;
     rpcProvider: RpcProvider;
 }

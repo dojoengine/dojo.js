@@ -1,8 +1,13 @@
-import { BurnerAccount, useBurnerManager } from "@dojoengine/create-burner";
+import {
+    BurnerAccount,
+    BurnerManager,
+    useBurnerManager,
+} from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext } from "react";
 import { Account, AccountInterface } from "starknet";
 import { SetupResult } from "./generated/setup";
 import { useAccount } from "@starknet-react/core";
+import { dojoConfig } from "../../dojoConfig";
 
 interface DojoContextType extends SetupResult {
     masterAccount: AccountInterface | undefined;
@@ -41,9 +46,13 @@ export const DojoProvider = ({
         );
     }
 
-    const { burnerManager } = value;
+    console.log(value.dojoProvider.provider);
 
-    console.log(masterAccount);
+    const burnerManager = new BurnerManager({
+        masterAccount: masterAccount,
+        accountClassHash: dojoConfig.accountClassHash,
+        rpcProvider: value.dojoProvider.provider,
+    });
 
     const {
         create,
