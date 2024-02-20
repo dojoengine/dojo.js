@@ -23,7 +23,6 @@
     "devDependencies": {
         "@dojoengine/torii-client": "^0.5.9",
         "@types/elliptic": "^6.4.14",
-        "bun-types": "^1.0.1",
         "tsup": "^8.0.1",
         "typescript": "^5.0.3",
         "vitest": "^1.1.0"

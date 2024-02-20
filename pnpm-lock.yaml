@@ -599,9 +599,6 @@ importers:
       '@types/elliptic':
         specifier: ^6.4.14
         version: 6.4.18
-      bun-types:
-        specifier: ^1.0.1
-        version: 1.0.28
       tsup:
         specifier: ^8.0.1
         version: 8.0.2(typescript@5.3.3)
@@ -663,9 +660,6 @@ importers:
       '@types/web':
         specifier: ^0.0.114
         version: 0.0.114
-      bun-types:
-        specifier: ^1.0.1
-        version: 1.0.28
       jsdom:
         specifier: ^24.0.0
         version: 24.0.0
@@ -691,9 +685,6 @@ importers:
       '@types/cross-spawn':
         specifier: ^6.0.6
         version: 6.0.6
-      bun-types:
-        specifier: latest
-        version: 1.0.28
       tsup:
         specifier: ^8.0.1
         version: 8.0.2(typescript@5.3.3)
@@ -764,9 +755,6 @@ importers:
       '@types/web':
         specifier: ^0.0.114
         version: 0.0.114
-      bun-types:
-        specifier: ^1.0.1
-        version: 1.0.28
       tsup:
         specifier: ^8.0.1
         version: 8.0.2(typescript@5.3.3)
@@ -789,9 +777,6 @@ importers:
         specifier: 5.25.0
         version: 5.25.0(encoding@0.1.13)
     devDependencies:
-      bun-types:
-        specifier: ^1.0.1
-        version: 1.0.28
       tsup:
         specifier: ^8.0.1
         version: 8.0.2(typescript@5.3.3)
@@ -808,18 +793,12 @@ importers:
         specifier: ^5.0.3
         version: 5.3.3
     devDependencies:
-      bun-types:
-        specifier: ^1.0.1
-        version: 1.0.28
       tsup:
         specifier: ^8.0.1
         version: 8.0.2(typescript@5.3.3)
 
   packages/torii-wasm:
     devDependencies:
-      bun-types:
-        specifier: ^1.0.1
-        version: 1.0.28
       tsup:
         specifier: ^8.0.1
         version: 8.0.2(typescript@5.3.3)
@@ -851,9 +830,6 @@ importers:
       '@types/elliptic':
         specifier: ^6.4.14
         version: 6.4.18
-      bun-types:
-        specifier: ^1.0.1
-        version: 1.0.28
       tsup:
         specifier: ^8.0.1
         version: 8.0.2(typescript@5.3.3)
@@ -863,9 +839,6 @@ importers:
 
   packages/utils-wasm:
     devDependencies:
-      bun-types:
-        specifier: ^1.0.1
-        version: 1.0.28
       tsup:
         specifier: ^8.0.1
         version: 8.0.2(typescript@5.3.3)
@@ -8648,13 +8621,6 @@ packages:
     resolution: {integrity: sha512-qwVpFEHNfhYJIzNRBvd2C1kyo6jz3ZSMPyyuR47OPdiKWlbYnZNyDWuyR175qDnAJLiCo5fBBqPb3RiXgWlkOQ==}
     dependencies:
       semver: 7.6.0
-    dev: true
-
-  /bun-types@1.0.28:
-    resolution: {integrity: sha512-wQqbLYRM0YnsXZMFujbCr/9YxlEl51jshMXcJ2Y9wEuU7k6TKcX2KDh032k9oHfB1wH8/SleXboIsULMtFaAaA==}
-    dependencies:
-      '@types/node': 20.11.19
-      '@types/ws': 8.5.10
     dev: true
 
   /bundle-require@4.0.2(esbuild@0.19.12):
