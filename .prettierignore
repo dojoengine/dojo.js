@@ -10,3 +10,5 @@ packages/create-dojo
 
 # ignore lock files
 **/*-lock.yaml
+
+dev-dist
