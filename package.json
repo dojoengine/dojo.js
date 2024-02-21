@@ -13,6 +13,7 @@
         "packages/state"
     ],
     "devDependencies": {
+        "@vite-pwa/assets-generator": "^0.2.4",
         "husky": "^8.0.0",
         "lerna": "^8.0.0",
         "prettier": "^3.0.3",
