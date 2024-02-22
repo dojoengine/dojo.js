@@ -11,7 +11,7 @@ Once deployed, This PWA game can be installed on user's device and will work sim
 ### How to generate icon assets
 
 1. To generate image icon assets, first replace `public/logo.svg` with your own logo image. You can also change `pwa-assets.config.ts` to use logo with different name or path.
-2. Then run `npm run generate-pwa-assets` to generate the assets
+2. Then run `pnpm run generate-pwa-assets` to generate the assets
 
 ## Known issues
 
