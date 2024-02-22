@@ -29,6 +29,9 @@
         "vitest": "^1.1.0"
     },
     "bin": {
-        "create-components": "./dist/bin/generateComponents.cjs"
+        "create-components": "./dist/bin/generateComponents.cjs",
+        "create-account": "./dist/scripts/accountDetails.js",
+        "deploy-account": "./dist/scripts/deployAccount.js",
+        "check-balance": "./dist/scripts/checkBalance.js"
     }
 }
