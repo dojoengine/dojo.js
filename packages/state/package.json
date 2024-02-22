@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/state",
-    "version": "0.5.9",
+    "version": "0.5.10-alpha.0",
     "description": "State sync for dojo",
     "author": "Loaf",
     "license": "MIT",
@@ -26,7 +26,7 @@
     },
     "dependencies": {
         "@dojoengine/recs": "0.1.35",
-        "@dojoengine/torii-client": "^0.5.9",
+        "@dojoengine/torii-client": "^0.5.10-alpha.0",
         "@latticexyz/utils": "^2.0.0-next.11"
     }
 }
