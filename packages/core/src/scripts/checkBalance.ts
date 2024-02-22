@@ -1,4 +1,4 @@
-#!/bin/env node
+#!/usr/bin/env node
 
 import { Account, Call, RpcProvider } from "starknet";
 
