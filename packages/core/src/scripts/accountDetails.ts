@@ -4,6 +4,10 @@ import { CallData, stark, hash, ec } from "starknet";
 import fs from "fs/promises";
 
 async function createAccountDetails() {
+    if (process.env.ACCOUNT_CLASS_HASH === undefined) {
+        throw new Error("Please set ACCOUNT_CLASS_HASH in .env file.");
+    }
+
     const privateKey = stark.randomAddress();
     const starkKeyPub = ec.starkCurve.getStarkKey(privateKey);
 
@@ -13,7 +17,7 @@ async function createAccountDetails() {
 
     const OZcontractAddress = hash.calculateContractAddressFromHash(
         starkKeyPub,
-        "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
+        process.env.ACCOUNT_CLASS_HASH,
         OZaccountConstructorCallData,
         0
     );
