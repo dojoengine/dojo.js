@@ -100,7 +100,9 @@ manifest.models.forEach((model) => {
         fileContent += `          metadata: {\n`;
         fileContent += `            name: "${modelName}",\n`;
         fileContent += `            types: ${JSON.stringify(types)},\n`;
-        fileContent += `            customTypes: ${JSON.stringify(customTypes)},\n`;
+        fileContent += `            customTypes: ${JSON.stringify(
+            customTypes
+        )},\n`;
         fileContent += `          },\n`;
         fileContent += `        }\n`;
         fileContent += `      );\n`;
