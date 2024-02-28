@@ -45,6 +45,7 @@ export async function setup({ ...config }: DojoConfig) {
         rpcProvider: dojoProvider.provider,
     });
 
+    await burnerManager.init();
     if (burnerManager.list().length === 0) {
         try {
             await burnerManager.create();
@@ -52,8 +53,6 @@ export async function setup({ ...config }: DojoConfig) {
             console.error(e);
         }
     }
-
-    await burnerManager.init();
 
     return {
         client,

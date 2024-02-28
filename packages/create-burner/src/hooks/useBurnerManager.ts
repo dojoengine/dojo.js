@@ -24,10 +24,10 @@ export const useBurnerManager = ({
     const [count, setCount] = useState(0);
     const [isDeploying, setIsDeploying] = useState(false);
 
-    // On mount, initialize the burner manager and set the active account.
+    // On mount, set the active account and count the number of burners.
+    // burnerManager has to be initialized before the component mounts
     useEffect(() => {
         (async () => {
-            await burnerManager.init();
             setAccount(burnerManager.getActiveAccount());
             setCount(burnerManager.list().length);
         })();

@@ -30,13 +30,15 @@ import { prefundAccount } from "./prefundAccount";
  *      rpcProvider,
  *   });
  *
- *  try {
- *   await burnerManager.create();
- *   } catch (e) {
- *    console.log(e);
- *   }
- *
  *  await burnerManager.init();
+ *
+ *  if (burnerManager.list().length === 0) {
+ *      try {
+ *          await burnerManager.create();
+ *       } catch (e) {
+ *           console.log(e);
+ *       }
+ *   }
  *
  *  return {
  *      account: burnerManager.account as Account,
