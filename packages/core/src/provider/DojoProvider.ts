@@ -12,6 +12,7 @@ import {
     CallContractResponse,
 } from "starknet";
 import { Provider } from "./provider";
+import { ConsoleLogger, LogLevel } from "../logger/logger";
 import { WorldEntryPoints } from "../types";
 import { LOCAL_KATANA } from "../constants";
 import { getContractByName } from "../utils";
@@ -32,6 +33,7 @@ export class DojoProvider extends Provider {
     public provider: RpcProvider;
     public contract: Contract;
     public manifest: any;
+    public logger: ConsoleLogger;
 
     /**
      * Constructor: Initializes the DojoProvider with the given world address, manifest and URL.
@@ -39,7 +41,11 @@ export class DojoProvider extends Provider {
      * @param {string} world_address - Address of the world.
      * @param {string} [url=LOCAL_KATANA] - RPC URL (defaults to LOCAL_KATANA).
      */
-    constructor(manifest?: any, url: string = LOCAL_KATANA) {
+    constructor(
+        manifest?: any,
+        url: string = LOCAL_KATANA,
+        logLevel: LogLevel = "none"
+    ) {
         super(manifest.world.address);
         this.provider = new RpcProvider({
             nodeUrl: url,
@@ -51,6 +57,7 @@ export class DojoProvider extends Provider {
             this.provider
         );
         this.manifest = manifest;
+        this.logger = new ConsoleLogger({ level: logLevel });
     }
 
     /**
@@ -80,6 +87,7 @@ export class DojoProvider extends Provider {
                 layout,
             ])) as unknown as Array<bigint>;
         } catch (error) {
+            this.logger.error("Error occured: ", error);
             throw error;
         }
     }
@@ -109,6 +117,7 @@ export class DojoProvider extends Provider {
                 valuesLayout,
             ])) as unknown as Promise<Array<Array<bigint>>>;
         } catch (error) {
+            this.logger.error("Error occured: ", error);
             throw error;
         }
     }
@@ -125,6 +134,7 @@ export class DojoProvider extends Provider {
                 shortString.encodeShortString(name),
             ])) as unknown as bigint;
         } catch (error) {
+            this.logger.error("Error occured: ", error);
             throw error;
         }
     }
@@ -172,6 +182,7 @@ export class DojoProvider extends Provider {
                 }
             );
         } catch (error) {
+            this.logger.error("Error occured: ", error);
             throw error;
         }
     }
@@ -202,6 +213,7 @@ export class DojoProvider extends Provider {
                 nonce,
             });
         } catch (error) {
+            this.logger.error("Error occured: ", error);
             throw error;
         }
     }
@@ -230,6 +242,7 @@ export class DojoProvider extends Provider {
             }
             throw new Error("Contract did not return expected uuid");
         } catch (error) {
+            this.logger.error(`Failed to fetch uuid: ${error}`);
             throw new Error(`Failed to fetch uuid: ${error}`);
         }
     }
@@ -253,6 +266,7 @@ export class DojoProvider extends Provider {
                 calldata,
             });
         } catch (error) {
+            this.logger.error(`Failed to call: ${error}`);
             throw new Error(`Failed to call: ${error}`);
         }
     }
@@ -280,6 +294,7 @@ export class DojoProvider extends Provider {
             );
             return await contract.call(call, calldata);
         } catch (error) {
+            this.logger.error(`Failed to callContract: ${error}`);
             throw new Error(`Failed to callContract: ${error}`);
         }
     }
