@@ -28,6 +28,7 @@ export interface BurnerAccount {
     select: (address: string) => void;
     isDeploying: boolean;
     clear: () => void;
+    count: number;
     copyToClipboard: () => Promise<void>;
     applyFromClipboard: () => Promise<void>;
     getActiveAccount?: () => Account | null;

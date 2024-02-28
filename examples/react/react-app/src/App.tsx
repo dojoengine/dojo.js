@@ -74,19 +74,22 @@ function App() {
             )}
 
             <div className="card">
-                select signer:{" "}
-                <select
-                    value={account ? account.account.address : ""}
-                    onChange={(e) => account.select(e.target.value)}
-                >
-                    {account?.list().map((account, index) => {
-                        return (
-                            <option value={account.address} key={index}>
-                                {account.address}
-                            </option>
-                        );
-                    })}
-                </select>
+                <div>{`burner deployed: ${account.count}`}</div>
+                <div>
+                    select signer:{" "}
+                    <select
+                        value={account ? account.account.address : ""}
+                        onChange={(e) => account.select(e.target.value)}
+                    >
+                        {account?.list().map((account, index) => {
+                            return (
+                                <option value={account.address} key={index}>
+                                    {account.address}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </div>
                 <div>
                     <button onClick={() => account.clear()}>
                         Clear burners
