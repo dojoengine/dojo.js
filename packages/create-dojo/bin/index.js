@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 // src/index.ts
-import https from "https";
 import spawn from "cross-spawn";
-import path from "path";
 import * as fs from "fs";
+import https from "https";
+import path from "path";
 import { input, select } from "@inquirer/prompts";
 var templates = [
   {
@@ -14,6 +14,14 @@ var templates = [
   {
     value: "react-phaser-example",
     description: "React/Phaser app using Dojo"
+  },
+  {
+    value: "react-pwa-app",
+    description: "React Progressive Web Apps using Dojo"
+  },
+  {
+    value: "react-threejs",
+    description: "React Threejs using Dojo"
   }
 ];
 run();
