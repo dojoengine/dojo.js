@@ -74,7 +74,7 @@ function App() {
             )}
 
             <div className="card">
-                <div>{`burner deployed: ${account.count}`}</div>
+                <div>{`burners deployed: ${account.count}`}</div>
                 <div>
                     select signer:{" "}
                     <select
