@@ -10,6 +10,7 @@ import {
     num,
     Result,
     CallContractResponse,
+    AccountInterface,
 } from "starknet";
 import { Provider } from "./provider";
 import { ConsoleLogger, LogLevel } from "../logger/logger";
@@ -154,7 +155,7 @@ export class DojoProvider extends Provider {
      * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
      */
     public async execute(
-        account: Account,
+        account: Account | AccountInterface,
         contract_name: string,
         call: string,
         calldata: num.BigNumberish[],
@@ -200,7 +201,7 @@ export class DojoProvider extends Provider {
      * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
      */
     public async executeMulti(
-        account: Account,
+        account: Account | AccountInterface,
         calls: AllowArray<Call>,
         transactionDetails?: InvocationsDetails | undefined
     ): Promise<InvokeFunctionResponse> {

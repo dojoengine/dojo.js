@@ -18,7 +18,7 @@
         "strict": true,
         "strictNullChecks": true,
         "target": "esnext",
-        "types": ["node", "bun-types", "web"],
+        "types": ["node", "web"],
         "baseUrl": ".",
         "rootDir": "src",
         "paths": {

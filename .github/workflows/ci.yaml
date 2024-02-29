@@ -12,12 +12,15 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - uses: oven-sh/setup-bun@v1
+            - uses: pnpm/action-setup@v3
+              with:
+                  version: 8
 
             - name: Update Submodules
               run: git submodule update --init --recursive
 
             - run: curl -L https://install.dojoengine.org | bash
-            - run: /home/runner/.config/.dojo/bin/dojoup -v v0.5.0
+            - run: /home/runner/.config/.dojo/bin/dojoup -v v0.5.1
             - run: |
                   cd examples/dojo-starter
                   /home/runner/.config/.dojo/bin/sozo build
@@ -26,22 +29,19 @@ jobs:
             - name: Install Protobuf Compiler
               run: sudo apt-get install -y protobuf-compiler
 
-            - name: Link dependencies
-              run: bun link
-
             - name: Install dependencies
-              run: bun install
+              run: pnpm i
 
             - name: Run Prettier
-              run: bun x prettier --check .
+              run: pnpm run prettier --check .
 
             - name: Build dependencies
-              run: bun run build && bun run build-examples
+              run: pnpm run build && pnpm run build-examples
 
             - name: Run tests
-              run: bun vitest
+              run: pnpm run test
 
-            # - name: Upload coverage reports to Codecov
-            #   uses: codecov/codecov-action@v3
-            #   env:
-            #       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+            - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v3
+              env:
+                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

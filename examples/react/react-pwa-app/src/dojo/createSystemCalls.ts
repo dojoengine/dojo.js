@@ -1,4 +1,4 @@
-import { Account } from "starknet";
+import { Account, AccountInterface } from "starknet";
 import { Entity, getComponentValue } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
@@ -18,7 +18,7 @@ export function createSystemCalls(
     contractComponents: ContractComponents,
     { Position, Moves }: ClientComponents
 ) {
-    const spawn = async (account: Account) => {
+    const spawn = async (account: AccountInterface) => {
         const entityId = getEntityIdFromKeys([
             BigInt(account.address),
         ]) as Entity;
@@ -62,7 +62,7 @@ export function createSystemCalls(
         }
     };
 
-    const move = async (account: Account, direction: Direction) => {
+    const move = async (account: AccountInterface, direction: Direction) => {
         const entityId = getEntityIdFromKeys([
             BigInt(account.address),
         ]) as Entity;
