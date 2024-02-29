@@ -18,6 +18,9 @@ export const useBurnerManager = ({
     if (!burnerManager.masterAccount) {
         throw new Error("BurnerManagerClass must be provided");
     }
+    if (!burnerManager.isInitialized) {
+        throw new Error("BurnerManagerClass must be intialized");
+    }
 
     // State to manage the current active account.
     const [account, setAccount] = useState<Account | null>(null);

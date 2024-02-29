@@ -20,14 +20,13 @@ export const createBurner = async ({ ...config }: DojoConfig) => {
         rpcProvider,
     });
 
-    await burnerManager.init();
-
-    if (burnerManager.list().length === 0) {
-        try {
+    try {
+        await burnerManager.init();
+        if (burnerManager.list().length === 0) {
             await burnerManager.create();
-        } catch (e) {
-            console.log(e);
         }
+    } catch (e) {
+        console.error(e);
     }
 
     return {
