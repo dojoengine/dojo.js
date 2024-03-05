@@ -1,4 +1,4 @@
-import { Account } from "starknet";
+import { AccountInterface } from "starknet";
 import { Entity, getComponentValue } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
@@ -18,7 +18,7 @@ export function createSystemCalls(
     contractComponents: ContractComponents,
     { Position, Moves }: ClientComponents
 ) {
-    const spawn = async (account: Account) => {
+    const spawn = async (account: AccountInterface) => {
         const entityId = getEntityIdFromKeys([
             BigInt(account.address),
         ]) as Entity;
@@ -26,14 +26,14 @@ export function createSystemCalls(
         const positionId = uuid();
         Position.addOverride(positionId, {
             entity: entityId,
-            value: { player: BigInt(account.address), vec: { x: 10, y: 10 } },
+            value: { player: BigInt(entityId), vec: { x: 10, y: 10 } },
         });
 
         const movesId = uuid();
         Moves.addOverride(movesId, {
             entity: entityId,
             value: {
-                player: BigInt(account.address),
+                player: BigInt(entityId),
                 remaining: 100,
                 last_direction: 0,
             },
@@ -57,15 +57,12 @@ export function createSystemCalls(
             Position.removeOverride(positionId);
             Moves.removeOverride(movesId);
         } finally {
-            // If override is removed too soon, defineSystem is called twice
-            setTimeout(() => {
-                Position.removeOverride(positionId);
-                Moves.removeOverride(movesId);
-            }, 1000);
+            Position.removeOverride(positionId);
+            Moves.removeOverride(movesId);
         }
     };
 
-    const move = async (account: Account, direction: Direction) => {
+    const move = async (account: AccountInterface, direction: Direction) => {
         const entityId = getEntityIdFromKeys([
             BigInt(account.address),
         ]) as Entity;
@@ -74,7 +71,7 @@ export function createSystemCalls(
         Position.addOverride(positionId, {
             entity: entityId,
             value: {
-                player: BigInt(account.address),
+                player: BigInt(entityId),
                 vec: updatePositionWithDirection(
                     direction,
                     getComponentValue(Position, entityId) as any
@@ -86,7 +83,7 @@ export function createSystemCalls(
         Moves.addOverride(movesId, {
             entity: entityId,
             value: {
-                player: BigInt(account.address),
+                player: BigInt(entityId),
                 remaining:
                     (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
             },
@@ -111,11 +108,8 @@ export function createSystemCalls(
             Position.removeOverride(positionId);
             Moves.removeOverride(movesId);
         } finally {
-            // If override is removed too soon, defineSystem is called twice
-            setTimeout(() => {
-                Position.removeOverride(positionId);
-                Moves.removeOverride(movesId);
-            }, 1000);
+            Position.removeOverride(positionId);
+            Moves.removeOverride(movesId);
         }
     };
 

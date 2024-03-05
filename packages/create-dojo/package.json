@@ -21,7 +21,6 @@
     },
     "devDependencies": {
         "@types/cross-spawn": "^6.0.6",
-        "bun-types": "latest",
         "tsup": "^8.0.1",
         "typescript": "^5.0.3"
     }

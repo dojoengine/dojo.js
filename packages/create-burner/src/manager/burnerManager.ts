@@ -1,4 +1,12 @@
-import { Account, CallData, ec, hash, RpcProvider, stark } from "starknet";
+import {
+    Account,
+    AccountInterface,
+    CallData,
+    ec,
+    hash,
+    RpcProvider,
+    stark,
+} from "starknet";
 import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
@@ -50,7 +58,7 @@ import { prefundAccount } from "./prefundAccount";
  */
 
 export class BurnerManager {
-    public masterAccount: Account;
+    public masterAccount: AccountInterface;
     public accountClassHash: string;
     public provider: RpcProvider;
 

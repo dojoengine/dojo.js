@@ -56,7 +56,7 @@ const cairoToRecsType = {
     u8: "RecsType.Number",
     u16: "RecsType.Number",
     u32: "RecsType.Number",
-    u64: "RecsType.Number",
+    u64: "RecsType.BigInt",
     usize: "RecsType.Number",
     u128: "RecsType.BigInt",
     u256: "RecsType.BigInt",

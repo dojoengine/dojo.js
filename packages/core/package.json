@@ -9,7 +9,7 @@
     "scripts": {
         "build": "tsup",
         "postbuild": "cp -R bin dist/",
-        "test": "vitest"
+        "test": "vitest run --coverage"
     },
     "exports": {
         ".": {
@@ -18,12 +18,12 @@
         }
     },
     "peerDependencies": {
-        "starknet": "^5.24.3"
+        "starknet": "^5.25.0"
     },
     "devDependencies": {
         "@dojoengine/torii-client": "^0.5.9",
         "@types/elliptic": "^6.4.14",
-        "bun-types": "^1.0.1",
+        "@vitest/coverage-v8": "^1.3.0",
         "tsup": "^8.0.1",
         "typescript": "^5.0.3",
         "vitest": "^1.1.0"
