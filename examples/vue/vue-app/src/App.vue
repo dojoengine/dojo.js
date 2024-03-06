@@ -12,7 +12,6 @@ const dojoContext = reactive<any>({
 });
 const position = ref<any>(null);
 const moves = ref<any>(null);
-const entity = ref<any>(null);
 const isDeploying = ref(false);
 
 const create = async () => {

@@ -123,7 +123,7 @@ export function useComponentValue<S extends Schema>(
   entity: Entity | undefined,
   defaultValue?: ComponentValue<S>
 ) {
-  const value = ref(
+  const value = ref<any>(
     entity != null ? getComponentValue(component, entity) : undefined
   )
 
