@@ -41,7 +41,9 @@ export class Dojo_Starter {
         this.actions = new ActionsCalls();
     }
 
-    findEntities<T extends object[]>(query: CommonProps<T>): T[number][] {
+    findEntities<T extends [object, object, ...object[]]>(
+        query: CommonProps<T>
+    ): T[number][] {
         // Construct the return type dynamically based on the generic type parameter T
         const test: T[number][] = [];
 
