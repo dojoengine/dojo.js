@@ -1,4 +1,3 @@
-import { Event } from "starknet";
 import {
     Entity,
     setComponent,
@@ -32,10 +31,7 @@ export function getEvents(receipt: any): any[] {
  * @param {Components} components - The components to be updated.
  * @param {Event[]} events - An array of events containing component data.
  */
-export function setComponentsFromEvents(
-    components: Components,
-    events: Event[]
-) {
+export function setComponentsFromEvents(components: Components, events: any[]) {
     events.forEach((event) => setComponentFromEvent(components, event.data));
 }
 
