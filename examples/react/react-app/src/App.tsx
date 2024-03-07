@@ -1,33 +1,47 @@
-import { useComponentValue } from "@dojoengine/react";
-import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Direction } from "./utils";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
+import {
+    Dojo_Starter,
+    Direction,
+    MovesEntity,
+    PositionEntity,
+    isPositionEntity,
+    isMovesEntity,
+} from "./dojo/dojo_starter";
 
 function App() {
-    const {
-        setup: {
-            systemCalls: { spawn, move },
-            clientComponents: { Position, Moves },
-        },
-        account,
-    } = useDojo();
+    const dojo_starter = new Dojo_Starter({
+        rpcUrl: "http://localhost:8545",
+        toriiUrl: "http://localhost:5000",
+    });
+
+    const { account } = useDojo();
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
         isError: false,
     });
 
-    // entity id we are syncing
-    const entityId = getEntityIdFromKeys([
-        BigInt(account?.account.address),
-    ]) as Entity;
-
     // get current component values
-    const position = useComponentValue(Position, entityId);
-    const moves = useComponentValue(Moves, entityId);
+    const position = dojo_starter.position.find({
+        player: account?.account.address,
+    });
+    const moves = dojo_starter.moves.find({ player: account?.account.address });
+
+    // Or we could combine both the above queries into one
+    //
+    // const entitiesForAddress = dojo_starter.findEntities<
+    //     [MovesEntity, PositionEntity]
+    // >({
+    //     player: account?.account.address,
+    // });
+    // const [position, moves] = (() => {
+    //     const position = entitiesForAddress.find(isPositionEntity);
+    //     const moves = entitiesForAddress.find(isMovesEntity);
+    //
+    //     return [position, moves];
+    // })();
 
     const handleRestoreBurners = async () => {
         try {
@@ -99,7 +113,15 @@ function App() {
             </div>
 
             <div className="card">
-                <button onClick={() => spawn(account.account)}>Spawn</button>
+                <button
+                    onClick={() =>
+                        dojo_starter.actions.spawn({
+                            account: account.account.address,
+                        })
+                    }
+                >
+                    Spawn
+                </button>
                 <div>
                     Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
                 </div>
@@ -116,7 +138,10 @@ function App() {
                     <button
                         onClick={() =>
                             position && position.vec.y > 0
-                                ? move(account.account, Direction.Up)
+                                ? dojo_starter.actions.move({
+                                      account: account.account.address,
+                                      args: [Direction.Up],
+                                  })
                                 : console.log("Reach the borders of the world.")
                         }
                     >
@@ -127,21 +152,34 @@ function App() {
                     <button
                         onClick={() =>
                             position && position.vec.x > 0
-                                ? move(account.account, Direction.Left)
+                                ? dojo_starter.actions.move({
+                                      account: account.account.address,
+                                      args: [Direction.Left],
+                                  })
                                 : console.log("Reach the borders of the world.")
                         }
                     >
                         Move Left
                     </button>
                     <button
-                        onClick={() => move(account.account, Direction.Right)}
+                        onClick={() =>
+                            dojo_starter.actions.move({
+                                account: account.account.address,
+                                args: [Direction.Right],
+                            })
+                        }
                     >
                         Move Right
                     </button>
                 </div>
                 <div>
                     <button
-                        onClick={() => move(account.account, Direction.Down)}
+                        onClick={() =>
+                            dojo_starter.actions.move({
+                                account: account.account.address,
+                                args: [Direction.Down],
+                            })
+                        }
                     >
                         Move Down
                     </button>
