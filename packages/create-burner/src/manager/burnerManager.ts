@@ -10,6 +10,7 @@ import {
 import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
+import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
 
 /**
  * A class to manage Burner accounts.
@@ -58,6 +59,7 @@ import { prefundAccount } from "./prefundAccount";
 export class BurnerManager {
     public masterAccount: AccountInterface;
     public accountClassHash: string;
+    public feeTokenAddress: string;
     public provider: RpcProvider;
 
     public account: Account | null = null;
@@ -68,10 +70,12 @@ export class BurnerManager {
     constructor({
         masterAccount,
         accountClassHash,
+        feeTokenAddress = KATANA_ETH_CONTRACT_ADDRESS,
         rpcProvider,
     }: BurnerManagerOptions) {
         this.masterAccount = masterAccount;
         this.accountClassHash = accountClassHash;
+        this.feeTokenAddress = feeTokenAddress;
         this.provider = rpcProvider;
     }
 
@@ -223,7 +227,11 @@ export class BurnerManager {
             throw new Error("wallet account not found");
         }
         try {
-            await prefundAccount(address, this.masterAccount);
+            await prefundAccount(
+                address,
+                this.masterAccount,
+                this.feeTokenAddress
+            );
         } catch (e) {
             this.isDeploying = false;
         }

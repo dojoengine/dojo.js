@@ -4,6 +4,7 @@ import {
     KATANA_PREFUNDED_PRIVATE_KEY,
     LOCAL_KATANA,
     LOCAL_TORII,
+    KATANA_ETH_CONTRACT_ADDRESS,
 } from "../constants";
 
 export type DojoConfig = ReturnType<typeof createDojoConfig>;
@@ -14,6 +15,7 @@ interface DojoConfigParams {
     masterAddress?: string;
     masterPrivateKey?: string;
     accountClassHash?: string;
+    feeTokenAddress?: string;
     manifest: any;
 }
 
@@ -28,6 +30,7 @@ export function createDojoConfig({ manifest, ...config }: DojoConfigParams) {
         masterPrivateKey:
             config.masterPrivateKey ?? KATANA_PREFUNDED_PRIVATE_KEY,
         accountClassHash: config.accountClassHash ?? KATANA_CLASS_HASH,
+        feeTokenAddress: config.feeTokenAddress ?? KATANA_ETH_CONTRACT_ADDRESS,
         manifest,
     };
 }
