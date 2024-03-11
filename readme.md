@@ -43,6 +43,7 @@ npx @dojoengine/create-dojo
 -   [React-app](./examples/react/react-app) - A vite react app example using Dojo
 -   [React-phaser](./examples/react/react-phaser-example) - A vite phaser react app using Dojo
 -   [Torii-bot](./examples/node/torii-bot) - A small discord bot for interacting with Torii
+-   [vue-app](./examples/vue/vue-app) - A vite vue app example using Dojo
 
 ## Contributing to dojo.js
 
