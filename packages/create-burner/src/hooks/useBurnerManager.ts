@@ -110,12 +110,12 @@ export const useBurnerManager = ({
                 {
                     id: burner.address,
                     name: "Dojo Burner",
+                    chainId: burnerManager.chainId,
                 },
-                get(burner.address),
-                burnerManager.provider
+                get(burner.address)
             );
         });
-    }, [burnerManager.isDeploying]);
+    }, [burnerManager.isDeploying, burnerUpdate]);
 
     /**
      * Copy burners to clipboard

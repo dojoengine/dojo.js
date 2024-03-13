@@ -1,6 +1,18 @@
-import { Connector, InjectedConnectorOptions } from "@starknet-react/core";
-import { Account, AccountInterface, RpcProvider } from "starknet";
+import { Connector } from "@starknet-react/core";
+import { Account, AccountInterface, shortString } from "starknet";
 import { katanaIcon } from "./icons";
+
+/** Burner connector options. */
+interface BurnerConnectorOptions {
+    /** The wallet id. */
+    id: string;
+    /** The chain id. */
+    chainId: string;
+    /** Wallet human readable name. */
+    name?: string;
+    /** Wallet icons. */
+    icon?: ConnectorIcons;
+}
 
 /** Non exported types from @starknet-react/core*/
 
@@ -29,20 +41,20 @@ type ConnectorData = {
  *
  */
 export class BurnerConnector extends Connector {
-    private _options: InjectedConnectorOptions;
+    private _options: BurnerConnectorOptions;
     private _account: AccountInterface | Account;
-    private _provider: RpcProvider;
+    // private _provider: RpcProvider;
 
     constructor(
-        options: InjectedConnectorOptions,
-        account: AccountInterface | Account,
-        provider: RpcProvider
+        options: BurnerConnectorOptions,
+        account: AccountInterface | Account
+        // provider: RpcProvider
     ) {
         super();
 
         this._options = options;
         this._account = account;
-        this._provider = provider;
+        // this._provider = provider;
     }
 
     available(): boolean {
@@ -75,9 +87,9 @@ export class BurnerConnector extends Connector {
     }
 
     async chainId(): Promise<bigint> {
-        const chainId =
-            (await this._provider.getChainId()) as unknown as string;
-        return Promise.resolve(BigInt(chainId));
+        return Promise.resolve(
+            BigInt(shortString.encodeShortString(this._options.chainId))
+        );
     }
 
     get id(): string {

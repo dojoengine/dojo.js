@@ -1,7 +1,8 @@
-import { Account, RpcProvider, AccountInterface } from "starknet";
+import { Account, AccountInterface, RpcProvider } from "starknet";
 
 export type BurnerStorage = {
     [address: string]: {
+        chainId: string;
         privateKey: string;
         publicKey: string;
         deployTx: string;
