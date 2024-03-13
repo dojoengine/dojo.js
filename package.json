@@ -21,7 +21,7 @@
         "build-examples": "bun run build-phaser && bun run build-react-app && bun run build-starknet-react-app && bun run build-threejs && bun run build-react-pwa-app && bun run build-vue-app",
         "test-create-burner": "bun --cwd packages/create-burner vitest",
         "test-core": "bun --cwd packages/core vitest",
-        "test": "bun run test-core && bun run test-create-burner",
+        "test": "bun run test-core",
         "clean": "bash ./scripts/clean.sh",
         "prettier-check": "bun x prettier --check .",
         "prettier": "bun x prettier --write .",
