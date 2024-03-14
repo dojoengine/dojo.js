@@ -20,13 +20,14 @@ type ConvertNumberToFilter<T> = {
     [K in keyof T]: T[K] extends number ? NumberFilter | number : T[K];
 };
 
-type ComponentQuery<T> = {
-    OR?: ComponentQuery<T>[];
-    AND?: ComponentQuery<T>[];
+type ModelClause<T> = {
+    OR?: ModelClause<T>[];
+    AND?: ModelClause<T>[];
 } & Partial<ConvertNumberToFilter<T>>;
 
-type ComponentQueryAtIndex<T extends any[]> = {
-    [K in keyof T]: ComponentQuery<T[K]>;
+type Query<T extends string, U extends object> = {
+    model: T;
+    query?: ModelClause<U>;
 };
 
 //
@@ -55,18 +56,20 @@ export class Dojo_Starter {
         this.actions = new ActionsCalls(this.account);
     }
 
-    findEntities<T extends object[]>(
-        components: ComponentQueryAtIndex<T>,
-        limit = 100,
-        offset = 0
-    ): T[] {
-        // Perform fetching logic here, for now returning an empty array
-        return [[{}, {}]] as T[];
+    findEntities<T extends readonly ModelQuery[]>(
+        queries: T
+    ): MapQueryToResult<T>[] {
+        console.log(queries);
+
+        return [] as MapQueryToResult<T>[];
     }
 
-    findEntity<T extends object[]>(components: ComponentQueryAtIndex<T>): T {
-        // Perform fetching logic here, for now returning an empty array
-        return [{}] as T;
+    findEntity<T extends readonly ModelQuery[]>(
+        queries: T
+    ): MapQueryToResult<T> {
+        console.log(queries);
+
+        return [] as MapQueryToResult<T>;
     }
 }
 
@@ -91,6 +94,8 @@ export interface MovesModel {
     last_direction: Direction;
 }
 
+type MovesQuery = Query<"Moves", MovesModel>;
+
 // Type definition for `dojo_starter::models::position::Vec2` struct
 export interface Vec2 {
     x: number;
@@ -102,6 +107,20 @@ export interface PositionModel {
     player: string;
     vec: Vec2;
 }
+
+type PositionQuery = Query<"Position", PositionModel>;
+
+type ModelQuery = MovesQuery | PositionQuery;
+
+type QueryToModel<T> = T extends MovesQuery
+    ? MovesModel
+    : T extends PositionQuery
+      ? PositionModel
+      : never;
+
+type MapQueryToResult<T extends readonly ModelQuery[]> = {
+    [K in keyof T]: QueryToModel<T[K]>;
+};
 
 //
 //

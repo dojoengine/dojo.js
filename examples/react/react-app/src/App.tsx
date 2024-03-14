@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./dojo/useDojo";
-import {
-    Dojo_Starter,
-    Direction,
-    MovesModel,
-    PositionModel,
-} from "./dojo/dojo_starter";
+import { Dojo_Starter, Direction } from "./dojo/dojo_starter";
 
 function App() {
     const dojo_starter = new Dojo_Starter({
@@ -24,35 +19,40 @@ function App() {
 
     // Get current player entity
     // This will return a player with the models that you specified
-    // {
-    //     player: string;
-    //     remaining: number;
-    //     last_direction: Direction;
-    //     vec: Vec2;
-    // }
-    const [moves, position] = dojo_starter.findEntity<
-        [MovesModel, PositionModel]
-    >([{ player: account.account.address }, {}]);
+    //
+    // [{ last_direction: Direction; player: string; remaining: number; }, { player: string; vec: Vec2; }]
+    //
+    // The as const is important to keep the types correct
+    // Without it the types will be inferred as a union of the types, so it would see the return type as
+    // (MovesModel | PositionModel)[] instead of [MovesModel, PositionModel]
+    const [moves, position] = dojo_starter.findEntity([
+        { model: "Moves", query: { remaining: 5 } },
+        { model: "Position" },
+    ] as const);
 
     // If you're only interested in the position, specifiying only that
     // will also only return you the requested values.
-    // {
-    //     player: string;
-    //     vec: Vec2;
-    // }
-    // const player = dojo_starter.findEntity<[PositionModel]>([
-    //     { player: account.account.address },
-    // ]);
+    //
+    // [{ player: string; vec: Vec2; }]
+    // const [position] = dojo_starter.findEntity([
+    //     { model: "Position", query: { player: account.account.address } },
+    // ] as const);
 
     // We could even do some more complicated queries
     // all fully typed
-    // const player = dojo_starter.findEntity<[MovesModel, PositionModel]>([
+    // const player = dojo_starter.findEntity([
     //     {
-    //         player: account.account.address,
-    //         OR: [{ remaining: { gt: 50 } }, { last_direction: Direction.Down }],
+    //         model: "Moves",
+    //         query: {
+    //             player: account.account.address,
+    //             OR: [
+    //                 { remaining: { gt: 50 } },
+    //                 { last_direction: Direction.Down },
+    //             ],
+    //         },
     //     },
-    //     {},
-    // ]);
+    //     { model: "Position" },
+    // ] as const);
 
     const handleRestoreBurners = async () => {
         try {
