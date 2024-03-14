@@ -21,11 +21,38 @@ function App() {
         isError: false,
     });
 
-    // get current player entity
+    // Get current player entity
+    // This will return a player with the models that you specified
+    // {
+    //     player: string;
+    //     remaining: number;
+    //     last_direction: Direction;
+    //     vec: Vec2;
+    // }
     const player = dojo_starter.findEntity<[MovesModel, PositionModel]>([
         { player: account.account.address },
         {},
     ]);
+
+    // If you're only interested in the position, specifiying only that
+    // will also only return you the requested values.
+    // {
+    //     player: string;
+    //     vec: Vec2;
+    // }
+    // const player = dojo_starter.findEntity<[PositionModel]>([
+    //     { player: account.account.address },
+    // ]);
+
+    // We could even do some more complicated queries
+    // all fully typed
+    // const player = dojo_starter.findEntity<[MovesModel, PositionModel]>([
+    //     {
+    //         player: account.account.address,
+    //         OR: [{ remaining: { gt: 50 } }, { last_direction: Direction.Down }],
+    //     },
+    //     {},
+    // ]);
 
     const handleRestoreBurners = async () => {
         try {

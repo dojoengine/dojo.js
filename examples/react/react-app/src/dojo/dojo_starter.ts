@@ -16,10 +16,14 @@ interface NumberFilter {
     lte?: number;
 }
 
+type ConvertNumberToFilter<T> = {
+    [K in keyof T]: T[K] extends number ? NumberFilter | number : T[K];
+};
+
 type ComponentQuery<T> = {
     OR?: ComponentQuery<T>[];
     AND?: ComponentQuery<T>[];
-} & Partial<T>;
+} & Partial<ConvertNumberToFilter<T>>;
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
     k: infer I
