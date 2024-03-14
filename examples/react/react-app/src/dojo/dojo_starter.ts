@@ -62,14 +62,16 @@ export class Dojo_Starter {
     }
 
     findEntities<T extends object[]>(
-        ...components: ComponentQueryAtIndex<T>[]
+        components: ComponentQueryAtIndex<T>,
+        limit = 100,
+        offset = 0
     ): UnionToIntersection<T[number]>[] {
         // Perform fetching logic here, for now returning an empty array
         return [];
     }
 
     findEntity<T extends object[]>(
-        ...components: ComponentQueryAtIndex<T>[]
+        components: ComponentQueryAtIndex<T>
     ): UnionToIntersection<T[number]> | undefined {
         // Perform fetching logic here, for now returning an empty array
         return {} as UnionToIntersection<T[number]>;
