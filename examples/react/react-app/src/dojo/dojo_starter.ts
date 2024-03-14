@@ -25,12 +25,6 @@ type ComponentQuery<T> = {
     AND?: ComponentQuery<T>[];
 } & Partial<ConvertNumberToFilter<T>>;
 
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
-    k: infer I
-) => void
-    ? I
-    : never;
-
 type ComponentQueryAtIndex<T extends any[]> = {
     [K in keyof T]: ComponentQuery<T[K]>;
 };
