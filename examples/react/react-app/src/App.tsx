@@ -12,6 +12,7 @@ function App() {
     const dojo_starter = new Dojo_Starter({
         rpcUrl: "http://localhost:8545",
         toriiUrl: "http://localhost:5000",
+        account: "0x0",
     });
 
     const { account } = useDojo();
@@ -124,13 +125,7 @@ function App() {
             </div>
 
             <div className="card">
-                <button
-                    onClick={() =>
-                        dojo_starter.actions.spawn({
-                            account: account.account.address,
-                        })
-                    }
-                >
+                <button onClick={() => dojo_starter.actions.spawn()}>
                     Spawn
                 </button>
                 <div>
@@ -150,10 +145,7 @@ function App() {
                     <button
                         onClick={() =>
                             player && player.vec.y > 0
-                                ? dojo_starter.actions.move({
-                                      account: account.account.address,
-                                      args: [Direction.Up],
-                                  })
+                                ? dojo_starter.actions.move(Direction.Up)
                                 : console.log("Reach the borders of the world.")
                         }
                     >
@@ -164,10 +156,7 @@ function App() {
                     <button
                         onClick={() =>
                             player && player.vec.x > 0
-                                ? dojo_starter.actions.move({
-                                      account: account.account.address,
-                                      args: [Direction.Left],
-                                  })
+                                ? dojo_starter.actions.move(Direction.Left)
                                 : console.log("Reach the borders of the world.")
                         }
                     >
@@ -175,10 +164,7 @@ function App() {
                     </button>
                     <button
                         onClick={() =>
-                            dojo_starter.actions.move({
-                                account: account.account.address,
-                                args: [Direction.Right],
-                            })
+                            dojo_starter.actions.move(Direction.Right)
                         }
                     >
                         Move Right
@@ -187,10 +173,7 @@ function App() {
                 <div>
                     <button
                         onClick={() =>
-                            dojo_starter.actions.move({
-                                account: account.account.address,
-                                args: [Direction.Down],
-                            })
+                            dojo_starter.actions.move(Direction.Down)
                         }
                     >
                         Move Down

@@ -44,18 +44,21 @@ type ComponentQueryAtIndex<T extends any[]> = {
 interface InitialParams {
     rpcUrl: string;
     toriiUrl: string;
+    account: string;
 }
 
 // Auto-generated name from the Scarb.toml
 export class Dojo_Starter {
     rpcUrl: string;
     toriiUrl: string;
+    account: string;
     actions: ActionsCalls;
 
     constructor(params: InitialParams) {
         this.rpcUrl = params.rpcUrl;
         this.toriiUrl = params.toriiUrl;
-        this.actions = new ActionsCalls();
+        this.account = params.account;
+        this.actions = new ActionsCalls(this.account);
     }
 
     findEntities<T extends object[]>(
@@ -112,38 +115,30 @@ export interface PositionModel {
 //
 //
 
-interface AccountDetails {
-    account: string;
-}
-
-interface CallParams extends AccountDetails {
-    account: string;
-    contractName: string;
-    call: string;
-    callData?: any[];
-}
-
 class BaseCallClass {
-    protected callContract(params: CallParams) {
+    account: string;
+
+    constructor(account: string) {
+        this.account = account;
+    }
+
+    protected callContract(
+        contractName: string,
+        call: string,
+        ...callData: any[]
+    ) {
         // Call the contract using the provided action and arguments
     }
 }
 
+type MoveArgs = [Direction];
+
 class ActionsCalls extends BaseCallClass {
-    spawn(params: AccountDetails) {
-        this.callContract({
-            ...params,
-            contractName: "actions",
-            call: "spawn",
-        });
+    spawn() {
+        this.callContract("actions", "spawn");
     }
 
-    move(params: AccountDetails & { args: [Direction] }) {
-        this.callContract({
-            ...params,
-            contractName: "actions",
-            call: "move",
-            callData: params.args,
-        });
+    move(...args: MoveArgs) {
+        this.callContract("actions", "move", ...args);
     }
 }
