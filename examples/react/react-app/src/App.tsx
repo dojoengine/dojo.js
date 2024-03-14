@@ -4,10 +4,8 @@ import { useDojo } from "./dojo/useDojo";
 import {
     Dojo_Starter,
     Direction,
-    MovesEntity,
-    PositionEntity,
-    isPositionEntity,
-    isMovesEntity,
+    MovesModel,
+    PositionModel,
 } from "./dojo/dojo_starter";
 
 function App() {
@@ -23,25 +21,11 @@ function App() {
         isError: false,
     });
 
-    // get current component values
-    const position = dojo_starter.position.find({
-        player: account?.account.address,
-    });
-    const moves = dojo_starter.moves.find({ player: account?.account.address });
-
-    // Or we could combine both the above queries into one
-    //
-    // const entitiesForAddress = dojo_starter.findEntities<
-    //     [MovesEntity, PositionEntity]
-    // >({
-    //     player: account?.account.address,
-    // });
-    // const [position, moves] = (() => {
-    //     const position = entitiesForAddress.find(isPositionEntity);
-    //     const moves = entitiesForAddress.find(isMovesEntity);
-    //
-    //     return [position, moves];
-    // })();
+    // get current player entity
+    const player = dojo_starter.findEntity<[MovesModel, PositionModel]>([
+        { player: account.account.address },
+        {},
+    ]);
 
     const handleRestoreBurners = async () => {
         try {
@@ -123,12 +107,13 @@ function App() {
                     Spawn
                 </button>
                 <div>
-                    Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
+                    Moves Left:{" "}
+                    {player ? `${player.remaining}` : "Need to Spawn"}
                 </div>
                 <div>
                     Position:{" "}
-                    {position
-                        ? `${position.vec.x}, ${position.vec.y}`
+                    {player
+                        ? `${player.vec.x}, ${player.vec.y}`
                         : "Need to Spawn"}
                 </div>
             </div>
@@ -137,7 +122,7 @@ function App() {
                 <div>
                     <button
                         onClick={() =>
-                            position && position.vec.y > 0
+                            player && player.vec.y > 0
                                 ? dojo_starter.actions.move({
                                       account: account.account.address,
                                       args: [Direction.Up],
@@ -151,7 +136,7 @@ function App() {
                 <div>
                     <button
                         onClick={() =>
-                            position && position.vec.x > 0
+                            player && player.vec.x > 0
                                 ? dojo_starter.actions.move({
                                       account: account.account.address,
                                       args: [Direction.Left],

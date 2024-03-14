@@ -1,18 +1,35 @@
 // This is an example of a generated TS file that exposes the types and methods for the Dojo starter contract.
 // Currently hard-coded to serve as a reference.
 
-// Utility type to extract common properties from a list of objects
-// This is used for the parameters of the `findEntities` method
-type CommonProps<T extends object[]> = T extends [infer First, ...infer Rest]
-    ? Partial<
-          {
-              [K in keyof First &
-                  keyof Rest[number]]: First[K] extends Rest[number][K]
-                  ? { [P in K]: First[K] }
-                  : never;
-          }[keyof First & keyof Rest[number]]
-      >
+//
+//
+// Utility types
+//
+//
+
+interface NumberFilter {
+    eq?: number;
+    neq?: number;
+    gt?: number;
+    gte?: number;
+    lt?: number;
+    lte?: number;
+}
+
+type ComponentQuery<T> = {
+    OR?: ComponentQuery<T>[];
+    AND?: ComponentQuery<T>[];
+} & Partial<T>;
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+    k: infer I
+) => void
+    ? I
     : never;
+
+type ComponentQueryAtIndex<T extends any[]> = {
+    [K in keyof T]: ComponentQuery<T[K]>;
+};
 
 //
 //
@@ -29,25 +46,26 @@ interface InitialParams {
 export class Dojo_Starter {
     rpcUrl: string;
     toriiUrl: string;
-    moves: MovesQueries;
-    position: PositionQueries;
     actions: ActionsCalls;
 
     constructor(params: InitialParams) {
         this.rpcUrl = params.rpcUrl;
         this.toriiUrl = params.toriiUrl;
-        this.moves = new MovesQueries();
-        this.position = new PositionQueries();
         this.actions = new ActionsCalls();
     }
 
-    findEntities<T extends [object, object, ...object[]]>(
-        query: CommonProps<T>
-    ): T[number][] {
-        // Construct the return type dynamically based on the generic type parameter T
-        const test: T[number][] = [];
+    findEntities<T extends object[]>(
+        ...components: ComponentQueryAtIndex<T>[]
+    ): UnionToIntersection<T[number]>[] {
+        // Perform fetching logic here, for now returning an empty array
+        return [];
+    }
 
-        return test;
+    findEntity<T extends object[]>(
+        ...components: ComponentQueryAtIndex<T>[]
+    ): UnionToIntersection<T[number]> | undefined {
+        // Perform fetching logic here, for now returning an empty array
+        return {} as UnionToIntersection<T[number]>;
     }
 }
 
@@ -56,22 +74,6 @@ export class Dojo_Starter {
 // Entity types generated from the models
 //
 //
-
-interface BaseEntity {
-    __modelName: string;
-}
-
-class BaseModelQueries<T extends object> {
-    find(query: Partial<T>): T {
-        // fetch the entity
-        return {} as T;
-    }
-
-    findMany(query: Partial<T>): T[] {
-        // fetch the entities
-        return [];
-    }
-}
 
 export enum Direction {
     None,
@@ -82,17 +84,11 @@ export enum Direction {
 }
 
 // Type definition for `dojo_starter::models::moves::Moves` model
-export interface MovesEntity extends BaseEntity {
-    __modelName: "moves";
+export interface MovesModel {
     player: string;
     remaining: number;
     last_direction: Direction;
 }
-
-export const isMovesEntity = (entity: BaseEntity): entity is MovesEntity =>
-    entity.__modelName === "moves";
-
-class MovesQueries extends BaseModelQueries<MovesEntity> {}
 
 // Type definition for `dojo_starter::models::position::Vec2` struct
 export interface Vec2 {
@@ -101,17 +97,10 @@ export interface Vec2 {
 }
 
 // Type definition for `dojo_starter::models::position::Position` model
-export interface PositionEntity extends BaseEntity {
-    __modelName: "position";
+export interface PositionModel {
     player: string;
     vec: Vec2;
 }
-
-export const isPositionEntity = (
-    entity: BaseEntity
-): entity is PositionEntity => entity.__modelName === "position";
-
-class PositionQueries extends BaseModelQueries<PositionEntity> {}
 
 //
 //
