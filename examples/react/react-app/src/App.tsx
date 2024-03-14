@@ -30,10 +30,9 @@ function App() {
     //     last_direction: Direction;
     //     vec: Vec2;
     // }
-    const player = dojo_starter.findEntity<[MovesModel, PositionModel]>([
-        { player: account.account.address },
-        {},
-    ]);
+    const [moves, position] = dojo_starter.findEntity<
+        [MovesModel, PositionModel]
+    >([{ player: account.account.address }, {}]);
 
     // If you're only interested in the position, specifiying only that
     // will also only return you the requested values.
@@ -129,13 +128,12 @@ function App() {
                     Spawn
                 </button>
                 <div>
-                    Moves Left:{" "}
-                    {player ? `${player.remaining}` : "Need to Spawn"}
+                    Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
                 </div>
                 <div>
                     Position:{" "}
-                    {player
-                        ? `${player.vec.x}, ${player.vec.y}`
+                    {position
+                        ? `${position.vec.x}, ${position.vec.y}`
                         : "Need to Spawn"}
                 </div>
             </div>
@@ -144,7 +142,7 @@ function App() {
                 <div>
                     <button
                         onClick={() =>
-                            player && player.vec.y > 0
+                            position && position.vec.y > 0
                                 ? dojo_starter.actions.move(Direction.Up)
                                 : console.log("Reach the borders of the world.")
                         }
@@ -155,7 +153,7 @@ function App() {
                 <div>
                     <button
                         onClick={() =>
-                            player && player.vec.x > 0
+                            position && position.vec.x > 0
                                 ? dojo_starter.actions.move(Direction.Left)
                                 : console.log("Reach the borders of the world.")
                         }
