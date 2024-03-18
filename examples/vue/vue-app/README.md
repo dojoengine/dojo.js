@@ -6,14 +6,18 @@ Dojo.js Vue Template Library is a Vue.js component library for quickly building 
 
 ### Installation
 
-Make sure you have a ../../dojo-starter folder.
+Make sure you have a `../../dojo-starter` folder.
 
 Install the dependencies in the project root directory by running the following command:
 
-```pnpm i```
+```shell
+pnpm i
+```
 
 ### Start the project
 
 Start the project by running the following command:
 
-```pnpm dev```
+```shell
+pnpm dev
+```
