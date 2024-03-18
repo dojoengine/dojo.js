@@ -233,7 +233,7 @@ export class DojoProvider extends Provider {
      */
     public async uuid(): Promise<number> {
         try {
-            const { result } = await this.provider.callContract({
+            const result = await this.provider.callContract({
                 contractAddress: this.getWorldAddress(),
                 entrypoint: WorldEntryPoints.uuid,
                 calldata: [],

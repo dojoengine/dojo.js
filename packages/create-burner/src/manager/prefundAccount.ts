@@ -3,7 +3,6 @@ import {
     CallData,
     TransactionFinalityStatus,
 } from "starknet";
-import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
 
 export const PREFUND_AMOUNT = "0x2386f26fc10000";
 
@@ -12,7 +11,7 @@ export const PREFUND_AMOUNT = "0x2386f26fc10000";
  *
  * @param address - The destination address to which funds are to be transferred.
  * @param account - The source account from which funds will be deducted.
- * @param ethContractAddress - The Ethereum contract address responsible for the transfer.
+ * @param feeTokenAddress - The Ethereum contract address responsible for the transfer.
  *                             If not provided, defaults to KATANA_ETH_CONTRACT_ADDRESS.
  *
  * @returns - Returns the result of the transfer transaction, typically including transaction details.
@@ -22,12 +21,12 @@ export const PREFUND_AMOUNT = "0x2386f26fc10000";
 export const prefundAccount = async (
     address: string,
     account: AccountInterface,
-    ethContractAddress: string = KATANA_ETH_CONTRACT_ADDRESS
+    feeTokenAddress: string
 ): Promise<any> => {
     try {
         // Configure the options for the transfer transaction
         const transferOptions = {
-            contractAddress: ethContractAddress,
+            contractAddress: feeTokenAddress,
             entrypoint: "transfer",
             calldata: CallData.compile([address, PREFUND_AMOUNT, "0x0"]),
         };
