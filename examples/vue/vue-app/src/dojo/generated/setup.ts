@@ -42,6 +42,6 @@ export async function setup({ ...config }: DojoConfig) {
             clientComponents
         ),
         config,
-        dojoProvider
+        dojoProvider,
     };
 }
