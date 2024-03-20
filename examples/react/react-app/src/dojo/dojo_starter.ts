@@ -1,7 +1,13 @@
 // This is an example of a generated TS file that exposes the types and methods for the Dojo starter contract.
 // Currently hard-coded to serve as a reference.
 import { DojoProvider } from "@dojoengine/core";
-import { Account, Contract, RpcProvider, TypedContractV2 } from "starknet";
+import {
+    Account,
+    CairoCustomEnum,
+    Contract,
+    RpcProvider,
+    TypedContractV2,
+} from "starknet";
 import manifest from "./manifest";
 
 //
@@ -93,19 +99,19 @@ export class Dojo_Starter {
 //
 //
 
-export enum Direction {
-    None,
-    Left,
-    Right,
-    Up,
-    Down,
-}
+export const Direction = {
+    None: new CairoCustomEnum({ None: {} }),
+    Left: new CairoCustomEnum({ Left: {} }),
+    Right: new CairoCustomEnum({ Right: {} }),
+    Up: new CairoCustomEnum({ Up: {} }),
+    Down: new CairoCustomEnum({ Down: {} }),
+};
 
 // Type definition for `dojo_starter::models::moves::Moves` model
 export interface MovesModel {
     player: string;
     remaining: number;
-    last_direction: Direction;
+    last_direction: (typeof Direction)[keyof typeof Direction];
 }
 
 type MovesQuery = Query<"Moves", MovesModel>;
