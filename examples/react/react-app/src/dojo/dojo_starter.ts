@@ -1,5 +1,8 @@
 // This is an example of a generated TS file that exposes the types and methods for the Dojo starter contract.
 // Currently hard-coded to serve as a reference.
+import { DojoProvider } from "@dojoengine/core";
+import { Account, Contract, RpcProvider, TypedContractV2 } from "starknet";
+import manifest from "./manifest";
 
 //
 //
@@ -39,21 +42,32 @@ type Query<T extends string, U extends object> = {
 interface InitialParams {
     rpcUrl: string;
     toriiUrl: string;
-    account: string;
+    account: Account;
 }
+
+const actionsAbi = manifest.contracts[0].abi;
 
 // Auto-generated name from the Scarb.toml
 export class Dojo_Starter {
+    public provider: RpcProvider;
     rpcUrl: string;
     toriiUrl: string;
-    account: string;
-    actions: ActionsCalls;
+    account: Account;
+    actions: TypedContractV2<typeof actionsAbi>;
 
     constructor(params: InitialParams) {
         this.rpcUrl = params.rpcUrl;
         this.toriiUrl = params.toriiUrl;
         this.account = params.account;
-        this.actions = new ActionsCalls(this.account);
+
+        const untypedActionsContract = new Contract(
+            actionsAbi,
+            "0x0",
+            this.account
+        );
+        this.actions = untypedActionsContract.typedv2(actionsAbi);
+
+        this.provider = new RpcProvider({ nodeUrl: this.rpcUrl });
     }
 
     findEntities<T extends readonly ModelQuery[]>(
@@ -121,37 +135,3 @@ type QueryToModel<T> = T extends MovesQuery
 type MapQueryToResult<T extends readonly ModelQuery[]> = {
     [K in keyof T]: QueryToModel<T[K]>;
 };
-
-//
-//
-// System calls
-//
-//
-
-class BaseCallClass {
-    account: string;
-
-    constructor(account: string) {
-        this.account = account;
-    }
-
-    protected callContract(
-        contractName: string,
-        call: string,
-        ...callData: any[]
-    ) {
-        // Call the contract using the provided action and arguments
-    }
-}
-
-type MoveArgs = [Direction];
-
-class ActionsCalls extends BaseCallClass {
-    spawn() {
-        this.callContract("actions", "spawn");
-    }
-
-    move(...args: MoveArgs) {
-        this.callContract("actions", "move", ...args);
-    }
-}
