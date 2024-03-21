@@ -1,0 +1,30 @@
+{
+    "name": "vue-app",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "create-components": "npx @dojoengine/core ../../dojo-starter/target/dev/manifest.json src/dojo/generated/contractComponents.ts http://localhost:5050 0x28f5999ae62fec17c09c52a800e244961dba05251f5aaf923afabd9c9804d1a"
+    },
+    "dependencies": {
+        "@dojoengine/core": "0.5.9",
+        "@dojoengine/recs": "0.1.35",
+        "@dojoengine/state": "0.5.9",
+        "@dojoengine/torii-client": "0.5.9",
+        "@dojoengine/utils": "0.5.9",
+        "@latticexyz/utils": "^1.43.0",
+        "starknet": "^5.24.3",
+        "vite-plugin-top-level-await": "^1.4.1",
+        "vite-plugin-wasm": "^3.3.0",
+        "vue": "^3.4.19"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^5.0.4",
+        "typescript": "^5.2.2",
+        "vite": "^5.1.4",
+        "vue-tsc": "^2.0.4"
+    }
+}

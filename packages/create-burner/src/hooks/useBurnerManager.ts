@@ -18,17 +18,21 @@ export const useBurnerManager = ({
     if (!burnerManager.masterAccount) {
         throw new Error("BurnerManagerClass must be provided");
     }
+    if (!burnerManager.isInitialized) {
+        throw new Error("BurnerManagerClass must be intialized");
+    }
 
     // State to manage the current active account.
     const [account, setAccount] = useState<Account | null>(null);
-    const [burnerUpdate, setBurnerUpdate] = useState(0);
+    const [count, setCount] = useState(0);
     const [isDeploying, setIsDeploying] = useState(false);
 
-    // On mount, initialize the burner manager and set the active account.
+    // On mount, set the active account and count the number of burners.
+    // burnerManager has to be initialized before the component mounts
     useEffect(() => {
         (async () => {
-            await burnerManager.init();
             setAccount(burnerManager.getActiveAccount());
+            setCount(burnerManager.list().length);
         })();
     }, []);
 
@@ -39,7 +43,7 @@ export const useBurnerManager = ({
      */
     const list = useCallback((): Burner[] => {
         return burnerManager.list();
-    }, [burnerManager.list(), burnerUpdate]);
+    }, [count]);
 
     /**
      * Selects and sets a burner as the active account.
@@ -75,7 +79,7 @@ export const useBurnerManager = ({
      */
     const clear = useCallback(() => {
         burnerManager.clear();
-        setBurnerUpdate((prev) => prev + 1);
+        setCount(0);
     }, [burnerManager]);
 
     /**
@@ -87,6 +91,7 @@ export const useBurnerManager = ({
         burnerManager.setIsDeployingCallback(setIsDeploying);
         const newAccount = await burnerManager.create();
         setAccount(newAccount);
+        setCount((prev) => prev + 1);
         return newAccount;
     }, [burnerManager]);
 
@@ -124,11 +129,8 @@ export const useBurnerManager = ({
      */
     const applyFromClipboard = useCallback(async () => {
         await burnerManager.setBurnersFromClipboard();
-
-        // Update the burnerUpdate state to trigger a re-render.
         setAccount(burnerManager.getActiveAccount());
-
-        setBurnerUpdate((prev) => prev + 1);
+        setCount(burnerManager.list().length);
     }, [burnerManager]);
 
     return {
@@ -140,6 +142,7 @@ export const useBurnerManager = ({
         clear,
         account,
         isDeploying,
+        count,
         copyToClipboard,
         applyFromClipboard,
     };

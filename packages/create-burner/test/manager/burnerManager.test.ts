@@ -95,7 +95,7 @@ describe("BurnerManager - init method", () => {
         });
 
         const burnerManager = getBurnerManager();
-        console.log("aaaaa", burnerManager);
+
         // Mock getTransactionReceipt to return null, simulating an undeployed account
         burnerManager.masterAccount.getTransactionReceipt.mockResolvedValue(
             null
