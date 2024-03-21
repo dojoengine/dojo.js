@@ -2,15 +2,23 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./dojo/useDojo";
 import { Dojo_Starter, Direction } from "./dojo/dojo_starter";
+import { Account, Provider } from "starknet";
+import { LOCAL_KATANA } from "@dojoengine/core";
 
 function App() {
-    const dojo_starter = new Dojo_Starter({
-        rpcUrl: "http://localhost:8545",
-        toriiUrl: "http://localhost:5000",
-        account: "0x0",
-    });
-
     const { account } = useDojo();
+
+    const provider = new Provider({ nodeUrl: LOCAL_KATANA });
+    const masterAccount = new Account(
+        provider,
+        "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca",
+        "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
+    );
+
+    const dojo_starter = new Dojo_Starter({
+        toriiUrl: "http://localhost:5000",
+        account: masterAccount,
+    });
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
@@ -30,7 +38,7 @@ function App() {
         { model: "Position" },
     ] as const);
 
-    // If you're only interested in the position, specifiying only that
+    // If you're only interested in the position, specifying only that
     // will also only return you the requested values.
     //
     // [{ player: string; vec: Vec2; }]

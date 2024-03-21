@@ -1,14 +1,6 @@
 // This is an example of a generated TS file that exposes the types and methods for the Dojo starter contract.
 // Currently hard-coded to serve as a reference.
-import { DojoProvider } from "@dojoengine/core";
-import {
-    Account,
-    CairoCustomEnum,
-    Contract,
-    RpcProvider,
-    TypedContractV2,
-} from "starknet";
-import manifest from "./manifest";
+import { Account } from "starknet";
 
 //
 //
@@ -46,34 +38,23 @@ type Query<T extends string, U extends object> = {
 //
 
 interface InitialParams {
-    rpcUrl: string;
     toriiUrl: string;
     account: Account;
 }
 
-const actionsAbi = manifest.contracts[0].abi;
-
 // Auto-generated name from the Scarb.toml
 export class Dojo_Starter {
-    public provider: RpcProvider;
-    rpcUrl: string;
     toriiUrl: string;
     account: Account;
-    actions: TypedContractV2<typeof actionsAbi>;
+    actions: ActionsCalls;
 
     constructor(params: InitialParams) {
-        this.rpcUrl = params.rpcUrl;
         this.toriiUrl = params.toriiUrl;
         this.account = params.account;
-
-        const untypedActionsContract = new Contract(
-            actionsAbi,
-            "0x0",
+        this.actions = new ActionsCalls(
+            "0x297bde19ca499fd8a39dd9bedbcd881a47f7b8f66c19478ce97d7de89e6112e",
             this.account
         );
-        this.actions = untypedActionsContract.typedv2(actionsAbi);
-
-        this.provider = new RpcProvider({ nodeUrl: this.rpcUrl });
     }
 
     findEntities<T extends readonly ModelQuery[]>(
@@ -99,13 +80,13 @@ export class Dojo_Starter {
 //
 //
 
-export const Direction = {
-    None: new CairoCustomEnum({ None: {} }),
-    Left: new CairoCustomEnum({ Left: {} }),
-    Right: new CairoCustomEnum({ Right: {} }),
-    Up: new CairoCustomEnum({ Up: {} }),
-    Down: new CairoCustomEnum({ Down: {} }),
-};
+export enum Direction {
+    None,
+    Left,
+    Right,
+    Up,
+    Down,
+}
 
 // Type definition for `dojo_starter::models::moves::Moves` model
 export interface MovesModel {
@@ -141,3 +122,41 @@ type QueryToModel<T> = T extends MovesQuery
 type MapQueryToResult<T extends readonly ModelQuery[]> = {
     [K in keyof T]: QueryToModel<T[K]>;
 };
+
+class BaseCalls {
+    contractAddress: string;
+    account: Account;
+
+    constructor(contractAddress: string, account: Account) {
+        this.account = account;
+        this.contractAddress = contractAddress;
+    }
+
+    async execute(entrypoint: string, calldata: any[] = []): Promise<void> {
+        await this.account.execute(
+            {
+                contractAddress: this.contractAddress,
+                entrypoint,
+                calldata,
+            },
+            undefined,
+            {
+                maxFee: 0,
+            }
+        );
+    }
+}
+
+class ActionsCalls extends BaseCalls {
+    constructor(contractAddress: string, account: Account) {
+        super(contractAddress, account);
+    }
+
+    async spawn(): Promise<void> {
+        await this.execute("spawn");
+    }
+
+    async move(direction: Direction): Promise<void> {
+        await this.execute("move", [direction]);
+    }
+}
