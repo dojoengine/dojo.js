@@ -26,14 +26,95 @@ type ModelClause<T> = {
     AND?: ModelClause<T>[];
 } & Partial<ConvertNumberToFilter<T>>;
 
-type Query<T extends string, U extends object> = {
-    model: T;
-    query?: ModelClause<U>;
+//
+//
+// Entity types generated from the models
+//
+//
+
+export enum Direction {
+    None,
+    Left,
+    Right,
+    Up,
+    Down,
+}
+
+// Type definition for `dojo_starter::models::moves::Moves` model
+export interface MovesModel {
+    player: string;
+    remaining: number;
+    last_direction: (typeof Direction)[keyof typeof Direction];
+}
+
+// Type definition for `dojo_starter::models::position::Vec2` struct
+export interface Vec2 {
+    x: number;
+    y: number;
+}
+
+// Type definition for `dojo_starter::models::position::Position` model
+export interface PositionModel {
+    player: string;
+    vec: Vec2;
+}
+
+type ModelsMap = {
+    Moves: MovesModel;
+    Position: PositionModel;
+};
+
+type MapQueryToResult<T extends (keyof ModelsMap)[]> = {
+    [K in keyof T]: ModelsMap[T[K]];
 };
 
 //
 //
-// The base class for the Dojo codebase
+// Contract calls
+//
+//
+
+class BaseCalls {
+    contractAddress: string;
+    account: Account;
+
+    constructor(contractAddress: string, account: Account) {
+        this.account = account;
+        this.contractAddress = contractAddress;
+    }
+
+    async execute(entrypoint: string, calldata: any[] = []): Promise<void> {
+        await this.account.execute(
+            {
+                contractAddress: this.contractAddress,
+                entrypoint,
+                calldata,
+            },
+            undefined,
+            {
+                maxFee: 0,
+            }
+        );
+    }
+}
+
+class ActionsCalls extends BaseCalls {
+    constructor(contractAddress: string, account: Account) {
+        super(contractAddress, account);
+    }
+
+    async spawn(): Promise<void> {
+        await this.execute("spawn");
+    }
+
+    async move(direction: Direction): Promise<void> {
+        await this.execute("move", [direction]);
+    }
+}
+
+//
+//
+// The base class for the Dojo codebase, tying everything together
 //
 //
 
@@ -77,85 +158,5 @@ export class Dojo_Starter {
         console.log(queries);
 
         return [] as MapQueryToResult<T>;
-    }
-}
-
-//
-//
-// Entity types generated from the models
-//
-//
-
-export enum Direction {
-    None,
-    Left,
-    Right,
-    Up,
-    Down,
-}
-
-// Type definition for `dojo_starter::models::moves::Moves` model
-export interface MovesModel {
-    player: string;
-    remaining: number;
-    last_direction: (typeof Direction)[keyof typeof Direction];
-}
-
-// Type definition for `dojo_starter::models::position::Vec2` struct
-export interface Vec2 {
-    x: number;
-    y: number;
-}
-
-// Type definition for `dojo_starter::models::position::Position` model
-export interface PositionModel {
-    player: string;
-    vec: Vec2;
-}
-
-type ModelsMap = {
-    Moves: MovesModel;
-    Position: PositionModel;
-};
-
-type MapQueryToResult<T extends (keyof ModelsMap)[]> = {
-    [K in keyof T]: ModelsMap[T[K]];
-};
-
-class BaseCalls {
-    contractAddress: string;
-    account: Account;
-
-    constructor(contractAddress: string, account: Account) {
-        this.account = account;
-        this.contractAddress = contractAddress;
-    }
-
-    async execute(entrypoint: string, calldata: any[] = []): Promise<void> {
-        await this.account.execute(
-            {
-                contractAddress: this.contractAddress,
-                entrypoint,
-                calldata,
-            },
-            undefined,
-            {
-                maxFee: 0,
-            }
-        );
-    }
-}
-
-class ActionsCalls extends BaseCalls {
-    constructor(contractAddress: string, account: Account) {
-        super(contractAddress, account);
-    }
-
-    async spawn(): Promise<void> {
-        await this.execute("spawn");
-    }
-
-    async move(direction: Direction): Promise<void> {
-        await this.execute("move", [direction]);
     }
 }
