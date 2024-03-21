@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./dojo/useDojo";
 import { Dojo_Starter, Direction } from "./dojo/dojo_starter";
-import { Account, Provider } from "starknet";
+import { Account, RpcProvider } from "starknet";
 import { LOCAL_KATANA } from "@dojoengine/core";
 
 function App() {
     const { account } = useDojo();
 
-    const provider = new Provider({ nodeUrl: LOCAL_KATANA });
+    const provider = new RpcProvider({ nodeUrl: LOCAL_KATANA });
     const masterAccount = new Account(
         provider,
         "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca",
@@ -30,13 +30,20 @@ function App() {
     //
     // [{ last_direction: Direction; player: string; remaining: number; }, { player: string; vec: Vec2; }]
     //
-    // The as const is important to keep the types correct
-    // Without it the types will be inferred as a union of the types, so it would see the return type as
-    // (MovesModel | PositionModel)[] instead of [MovesModel, PositionModel]
     const [moves, position] = dojo_starter.findEntity([
-        { model: "Moves", query: { remaining: 5 } },
-        { model: "Position" },
-    ] as const);
+        {
+            model: "Moves",
+            query: {
+                remaining: 17,
+            },
+        },
+        {
+            model: "Position",
+            query: {
+                player: "hi",
+            },
+        },
+    ]);
 
     // If you're only interested in the position, specifying only that
     // will also only return you the requested values.
@@ -44,7 +51,7 @@ function App() {
     // [{ player: string; vec: Vec2; }]
     // const [position] = dojo_starter.findEntity([
     //     { model: "Position", query: { player: account.account.address } },
-    // ] as const);
+    // ]);
 
     // We could even do some more complicated queries
     // all fully typed
@@ -60,7 +67,7 @@ function App() {
     //         },
     //     },
     //     { model: "Position" },
-    // ] as const);
+    // ]);
 
     const handleRestoreBurners = async () => {
         try {
@@ -107,7 +114,7 @@ function App() {
             )}
 
             <div className="card">
-                <div>{`burners deployed: ${account.count}`}</div>
+                <div>{`burners deployed: ${account.list().length}`}</div>
                 <div>
                     select signer:{" "}
                     <select

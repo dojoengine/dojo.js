@@ -57,17 +57,23 @@ export class Dojo_Starter {
         );
     }
 
-    findEntities<T extends readonly ModelQuery[]>(
-        queries: T
-    ): MapQueryToResult<T>[] {
+    findEntities<T extends (keyof ModelsMap)[]>(queries: {
+        [K in keyof T]: {
+            model: T[K];
+            query?: ModelClause<ModelsMap[T[K]]>;
+        };
+    }) {
         console.log(queries);
 
         return [] as MapQueryToResult<T>[];
     }
 
-    findEntity<T extends readonly ModelQuery[]>(
-        queries: T
-    ): MapQueryToResult<T> {
+    findEntity<T extends (keyof ModelsMap)[]>(queries: {
+        [K in keyof T]: {
+            model: T[K];
+            query?: ModelClause<ModelsMap[T[K]]>;
+        };
+    }) {
         console.log(queries);
 
         return [] as MapQueryToResult<T>;
@@ -95,8 +101,6 @@ export interface MovesModel {
     last_direction: (typeof Direction)[keyof typeof Direction];
 }
 
-type MovesQuery = Query<"Moves", MovesModel>;
-
 // Type definition for `dojo_starter::models::position::Vec2` struct
 export interface Vec2 {
     x: number;
@@ -109,18 +113,13 @@ export interface PositionModel {
     vec: Vec2;
 }
 
-type PositionQuery = Query<"Position", PositionModel>;
+type ModelsMap = {
+    Moves: MovesModel;
+    Position: PositionModel;
+};
 
-type ModelQuery = MovesQuery | PositionQuery;
-
-type QueryToModel<T> = T extends MovesQuery
-    ? MovesModel
-    : T extends PositionQuery
-      ? PositionModel
-      : never;
-
-type MapQueryToResult<T extends readonly ModelQuery[]> = {
-    [K in keyof T]: QueryToModel<T[K]>;
+type MapQueryToResult<T extends (keyof ModelsMap)[]> = {
+    [K in keyof T]: ModelsMap[T[K]];
 };
 
 class BaseCalls {

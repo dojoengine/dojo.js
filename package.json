@@ -36,7 +36,8 @@
         "tsup": "^8.0.1",
         "typedoc": "^0.25.4",
         "typedoc-material-theme": "^1.0.1",
-        "typedoc-plugin-coverage": "^2.2.0"
+        "typedoc-plugin-coverage": "^2.2.0",
+        "typescript": "^5.4.3"
     },
     "dependencies": {
         "@commitlint/cli": "^18.4.4",
