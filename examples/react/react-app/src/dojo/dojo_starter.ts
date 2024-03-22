@@ -1,10 +1,15 @@
 // This is an example of a generated TS file that exposes the types and methods for the Dojo starter contract.
 // Currently hard-coded to serve as a reference.
 import { Account } from "starknet";
+import {
+    Clause,
+    ComparisonOperator,
+    ValueType,
+} from "@dojoengine/torii-client";
 
 //
 //
-// Utility types
+// Utility types and functions
 //
 //
 
@@ -17,6 +22,15 @@ interface NumberFilter {
     lte?: number;
 }
 
+const filterMapping: Record<keyof NumberFilter, ComparisonOperator> = {
+    eq: "Eq",
+    neq: "Neq",
+    gt: "Gt",
+    gte: "Gte",
+    lt: "Lt",
+    lte: "Lte",
+};
+
 type ConvertNumberToFilter<T> = {
     [K in keyof T]: T[K] extends number ? NumberFilter | number : T[K];
 };
@@ -25,6 +39,82 @@ type ModelClause<T> = {
     OR?: ModelClause<T>[];
     AND?: ModelClause<T>[];
 } & Partial<ConvertNumberToFilter<T>>;
+
+function valueToValueType(value: any): ValueType {
+    if (typeof value === "number") {
+        return { Int: value };
+    }
+    if (typeof value === "string") {
+        return { String: value };
+    }
+    if (typeof value === "boolean") {
+        return { VBool: value };
+    }
+    if (Array.isArray(value) && value.every((v) => typeof v === "number")) {
+        return { Bytes: value };
+    }
+
+    throw new Error("Unsupported value type");
+}
+
+function valueToToriiValueAndOperator(value: any): {
+    operator: ComparisonOperator;
+    value: {
+        primitive_type: { Felt252: "" };
+        value_type: ValueType;
+    };
+} {
+    if (typeof value === "object") {
+        const key = Object.keys(value)[0];
+        const operator = filterMapping[key as keyof NumberFilter];
+        const val = value[key];
+        const valueType = valueToValueType(val);
+        return {
+            operator,
+            value: {
+                primitive_type: { Felt252: "" },
+                value_type: valueType,
+            },
+        };
+    }
+
+    const valueType = valueToValueType(value);
+    return {
+        operator: "Eq",
+        value: {
+            primitive_type: { Felt252: "" },
+            value_type: valueType,
+        },
+    };
+}
+
+function convertQueryToToriiClause<T extends (keyof ModelsMap)[]>(
+    queries: QueryParameter<T>
+): Clause | null {
+    // Only supports a single model for now, since torii doesn't support multiple models
+    const query = queries[0];
+
+    if (!query.query) {
+        return null;
+    }
+
+    const clauses = Object.entries(query.query).map(([key, value]) => {
+        return {
+            Member: {
+                model: query.model,
+                member: key,
+                ...valueToToriiValueAndOperator(value),
+            },
+        } satisfies Clause;
+    });
+    return {
+        Composite: {
+            model: query.model,
+            operator: "And",
+            clauses,
+        },
+    };
+}
 
 //
 //
@@ -123,6 +213,13 @@ interface InitialParams {
     account: Account;
 }
 
+type QueryParameter<T extends (keyof ModelsMap)[]> = {
+    [K in keyof T]: {
+        model: T[K];
+        query?: ModelClause<ModelsMap[T[K]]>;
+    };
+};
+
 // Auto-generated name from the Scarb.toml
 export class Dojo_Starter {
     toriiUrl: string;
@@ -138,23 +235,18 @@ export class Dojo_Starter {
         );
     }
 
-    findEntities<T extends (keyof ModelsMap)[]>(queries: {
-        [K in keyof T]: {
-            model: T[K];
-            query?: ModelClause<ModelsMap[T[K]]>;
-        };
-    }) {
-        console.log(queries);
+    findEntities<T extends (keyof ModelsMap)[]>(queries: QueryParameter<T>) {
+        const query = convertQueryToToriiClause(queries);
+
+        console.log(
+            "🚀 ~ file: dojo_starter.ts:184 ~ Dojo_Starter ~ findEntities<Textends ~ query:",
+            query
+        );
 
         return [] as MapQueryToResult<T>[];
     }
 
-    findEntity<T extends (keyof ModelsMap)[]>(queries: {
-        [K in keyof T]: {
-            model: T[K];
-            query?: ModelClause<ModelsMap[T[K]]>;
-        };
-    }) {
+    findEntity<T extends (keyof ModelsMap)[]>(queries: QueryParameter<T>) {
         console.log(queries);
 
         return [] as MapQueryToResult<T>;
