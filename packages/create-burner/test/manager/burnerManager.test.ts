@@ -1,6 +1,7 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
-import { getBurnerManager } from "../mocks/mocks"; // Adjust the path as necessary
+import { shortString } from "starknet";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import Storage from "../../src/utils/storage";
+import { getBurnerManager } from "../mocks/mocks"; // Adjust the path as necessary
 
 // Explicitly mock the 'starknet' module
 vi.mock("starknet", async () => {
@@ -11,10 +12,18 @@ vi.mock("starknet", async () => {
         getTransactionReceipt = vi.fn().mockResolvedValue({ status: "mocked" });
     }
 
+    // Extend the actual Provider class and override methods as needed
+    class MockRpcProvider extends actual.RpcProvider {
+        getChainId = vi
+            .fn()
+            .mockResolvedValue(shortString.encodeShortString("katana_test"));
+    }
+
     // Return the modified module with the MockAccount
     return {
         ...actual,
         Account: MockAccount,
+        RpcProvider: MockRpcProvider,
     };
 });
 
@@ -41,14 +50,14 @@ describe("BurnerManager - init method", () => {
         await burnerManager.init();
 
         // Verify Storage.get was called to attempt loading accounts
-        expect(Storage.get).toHaveBeenCalledWith("burners");
+        expect(Storage.get).toHaveBeenCalledWith("burners_katana_test");
         expect(burnerManager.getActiveAccount()).toBeNull();
     });
 
     it("loads and activates an existing burner account", async () => {
         // Setup Storage.get to return a mock burner account
         Storage.get.mockImplementation((key: string) => {
-            if (key === "burners") {
+            if (key === "burners_katana_test") {
                 return {
                     account1: {
                         privateKey: "0x00aa",
@@ -70,7 +79,7 @@ describe("BurnerManager - init method", () => {
 
         await burnerManager.init();
 
-        expect(Storage.get).toHaveBeenCalledWith("burners");
+        expect(Storage.get).toHaveBeenCalledWith("burners_katana_test");
 
         // Verify that an account is set as active - this assumes you have a way to check the active account
         // The specifics of this assertion might change based on how you track the active account
@@ -95,7 +104,6 @@ describe("BurnerManager - init method", () => {
         });
 
         const burnerManager = getBurnerManager();
-
         // Mock getTransactionReceipt to return null, simulating an undeployed account
         burnerManager.masterAccount.getTransactionReceipt.mockResolvedValue(
             null

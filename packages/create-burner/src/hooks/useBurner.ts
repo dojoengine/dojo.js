@@ -133,7 +133,6 @@ export const useBurner = () => {
                 {
                     id: burner.address,
                     name: "Dojo Burner",
-                    chainId: burnerManager.chainId,
                 },
                 get(burner.address)
             );

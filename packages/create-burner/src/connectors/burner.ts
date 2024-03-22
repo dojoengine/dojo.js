@@ -4,13 +4,11 @@ import { katanaIcon } from "./icons";
 
 /** Burner connector options. */
 interface BurnerConnectorOptions {
-    /** The wallet id. */
+    /** The connector id. */
     id: string;
-    /** The chain id. */
-    chainId: string;
-    /** Wallet human readable name. */
+    /** Connector human readable name. */
     name?: string;
-    /** Wallet icons. */
+    /** Connector icons. */
     icon?: ConnectorIcons;
 }
 
@@ -43,18 +41,15 @@ type ConnectorData = {
 export class BurnerConnector extends Connector {
     private _options: BurnerConnectorOptions;
     private _account: AccountInterface | Account;
-    // private _provider: RpcProvider;
 
     constructor(
         options: BurnerConnectorOptions,
         account: AccountInterface | Account
-        // provider: RpcProvider
     ) {
         super();
 
         this._options = options;
         this._account = account;
-        // this._provider = provider;
     }
 
     available(): boolean {
@@ -87,9 +82,9 @@ export class BurnerConnector extends Connector {
     }
 
     async chainId(): Promise<bigint> {
-        return Promise.resolve(
-            BigInt(shortString.encodeShortString(this._options.chainId))
-        );
+        const chainId = await this._account.getChainId();
+
+        return Promise.resolve(BigInt(shortString.encodeShortString(chainId)));
     }
 
     get id(): string {
