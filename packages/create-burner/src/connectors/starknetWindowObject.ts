@@ -40,6 +40,10 @@ export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject {
     ///@ts-ignore
     async enable({ starknetVersion = "v5" } = {}) {
         //console.log("enable");
+        if (!this.burnerManager) {
+            // try to wait
+            await new Promise((r) => setTimeout(r, 1500));
+        }
 
         // retrieve active account
         const activeAccount = this.burnerManager?.getActiveAccount();
@@ -71,59 +75,4 @@ export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject {
     off = (event: any, handleEvent: any) => {
         //console.log("off", event);
     };
-
-    ///////////////////
-
-    static new() {
-        return new DojoBurnerStarknetWindowObject();
-    }
-
-    static initializeInPage() {
-        attachHandler();
-
-        window.addEventListener("load", () => attachHandler());
-        document.addEventListener("DOMContentLoaded", () => attachHandler());
-        document.addEventListener("readystatechange", () => attachHandler());
-    }
-
-    static cleanInPage() {
-        window.removeEventListener("load", () => attachHandler());
-        document.removeEventListener("DOMContentLoaded", () => attachHandler());
-        document.removeEventListener("readystatechange", () => attachHandler());
-    }
 }
-
-// https://github.com/argentlabs/argent-x/blob/9e4907dc2630ea5c452d7e40a55739b5797544b6/packages/extension/src/inpage/index.ts#L30
-
-const attach = () => {
-    const starknetWindowObjectKey = "starknet_dojoburner";
-    const starknetWindowObject = DojoBurnerStarknetWindowObject.new();
-    // we need 2 different try catch blocks because we want to execute both even if one of them fails
-    try {
-        delete (window as any)[starknetWindowObjectKey];
-    } catch (e) {
-        /* ignore */
-    }
-    try {
-        // set read only property to window
-        Object.defineProperty(window, starknetWindowObjectKey, {
-            value: starknetWindowObject,
-            writable: true,
-            //writable: false,
-        });
-    } catch {
-        /* ignore*/
-    }
-    try {
-        (window as any)[starknetWindowObjectKey] = starknetWindowObject;
-    } catch {
-        /* ignore*/
-    }
-};
-
-const attachHandler = () => {
-    attach();
-    setTimeout(() => {
-        attach();
-    }, 100);
-};
