@@ -269,9 +269,29 @@ export class Dojo_Starter {
         return result as MapQueryToResult<T>[];
     }
 
-    findEntity<T extends (keyof ModelsMap)[]>(queries: QueryParameter<T>) {
-        console.log(queries);
+    async findEntity<T extends (keyof ModelsMap)[]>(
+        queries: QueryParameter<T>
+    ) {
+        const torii = await this.toriiPromise;
 
-        return [] as MapQueryToResult<T>;
+        const clause = convertQueryToToriiClause(queries);
+
+        const toriiResult = await torii.getEntities({
+            limit: 1,
+            offset: 0,
+            clause,
+        });
+
+        const result = Object.values(toriiResult).map((entity: any) => {
+            return queries.map(
+                (query) => entity[query.model] as ModelsMap[typeof query.model]
+            );
+        });
+
+        if (result.length === 0) {
+            return undefined;
+        }
+
+        return result[0] as MapQueryToResult<T>;
     }
 }

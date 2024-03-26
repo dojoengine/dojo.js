@@ -11,7 +11,7 @@ function App() {
 
     useEffect(() => {
         const getPlayer = async () => {
-            const [first] = await dojo_starter.findEntities([
+            const player = await dojo_starter.findEntity([
                 {
                     model: "Moves",
                     query: {
@@ -23,10 +23,12 @@ function App() {
                 },
             ]);
 
-            const [moves, position] = first;
+            if (player) {
+                const [moves, position] = player;
 
-            setMoves(moves);
-            setPosition(position);
+                setMoves(moves);
+                setPosition(position);
+            }
 
             // If you're only interested in the position, specifying only that
             // will also only return you the requested values.
