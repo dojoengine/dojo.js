@@ -16,11 +16,13 @@ export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject {
     isConnected = false;
     version = VERSION;
     //
-    burnerManager: BurnerManager | null = null;
+    burnerManager: BurnerManager;
 
-    constructor() {}
+    constructor(burnerManager: BurnerManager) {
+        if (!burnerManager.isInitialized) {
+            throw new Error("burnerManager should be initialized");
+        }
 
-    setBurnerManager(burnerManager: BurnerManager) {
         this.burnerManager = burnerManager;
 
         this.chainId = this.burnerManager.chainId;

@@ -18,11 +18,9 @@ export class DojoPredeployedStarknetWindowObject
     isConnected = false;
     version = VERSION;
     //
-    predeployedManager: PredeployedManager | null = null;
+    predeployedManager: PredeployedManager;
 
-    constructor() {}
-
-    setPredeployedManager(predeployedManager: PredeployedManager) {
+    constructor(predeployedManager: PredeployedManager) {
         this.predeployedManager = predeployedManager;
 
         this.chainId = this.predeployedManager.chainId;

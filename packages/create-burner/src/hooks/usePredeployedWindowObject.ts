@@ -1,14 +1,33 @@
 import { StarknetWindowObject } from "get-starknet-core";
-import { useEffect } from "react";
-import { DojoPredeployedStarknetWindowObject } from "..";
+import { useEffect, useState } from "react";
+import { DojoPredeployedStarknetWindowObject, PredeployedManager } from "..";
 
-export const usePredeployedWindowObject = () => {
+export const usePredeployedWindowObject = (
+    predeployedManager?: PredeployedManager
+) => {
+    const [isInitialized, setIsInitialized] = useState(false);
+
     useEffect(() => {
-        const starknet_dojopredeployed =
-            new DojoPredeployedStarknetWindowObject();
-        window.starknet_dojopredeployed =
-            starknet_dojopredeployed as StarknetWindowObject;
-    }, []);
+        const initAsync = async () => {
+            if (!predeployedManager) {
+                setIsInitialized(true);
+                return;
+            }
 
-    return {};
+            await predeployedManager.init();
+
+            const starknetWindowObject =
+                new DojoPredeployedStarknetWindowObject(predeployedManager);
+            const key = `starknet_${starknetWindowObject.id}`;
+
+            (window as any)[key as string] =
+                starknetWindowObject as StarknetWindowObject;
+
+            setIsInitialized(true);
+        };
+
+        initAsync();
+    }, [predeployedManager]);
+
+    return { isInitialized };
 };

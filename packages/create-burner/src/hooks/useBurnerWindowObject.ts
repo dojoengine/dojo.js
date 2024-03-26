@@ -1,13 +1,31 @@
 import { StarknetWindowObject } from "get-starknet-core";
-import { useEffect } from "react";
-import { DojoBurnerStarknetWindowObject } from "..";
+import { useEffect, useState } from "react";
+import { BurnerManager, DojoBurnerStarknetWindowObject } from "..";
 
-export const useBurnerWindowObject = () => {
+export const useBurnerWindowObject = (burnerManager?: BurnerManager) => {
+    const [isInitialized, setIsInitialized] = useState(false);
+
     useEffect(() => {
-        const starknet_dojoburner = new DojoBurnerStarknetWindowObject();
-        window.starknet_dojoburner =
-            starknet_dojoburner as StarknetWindowObject;
-    }, []);
+        const initAsync = async () => {
+            if (!burnerManager) {
+                setIsInitialized(true);
+                return;
+            }
 
-    return {};
+            await burnerManager.init();
+
+            const starknetWindowObject = new DojoBurnerStarknetWindowObject(
+                burnerManager
+            );
+            const key = `starknet_${starknetWindowObject.id}`;
+
+            (window as any)[key] = starknetWindowObject as StarknetWindowObject;
+
+            setIsInitialized(true);
+        };
+
+        initAsync();
+    }, [burnerManager]);
+
+    return { isInitialized };
 };
