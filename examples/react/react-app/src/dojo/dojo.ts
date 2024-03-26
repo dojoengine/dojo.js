@@ -10,6 +10,9 @@ const masterAccount = new Account(
 );
 
 export const dojo_starter = new Dojo_Starter({
+    rpcUrl: LOCAL_KATANA,
     toriiUrl: "http://localhost:8080",
     account: masterAccount,
+    worldAddress:
+        "0x28f5999ae62fec17c09c52a800e244961dba05251f5aaf923afabd9c9804d1a",
 });

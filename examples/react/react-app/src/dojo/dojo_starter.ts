@@ -210,7 +210,9 @@ class ActionsCalls extends BaseCalls {
 //
 
 interface InitialParams {
+    rpcUrl: string;
     toriiUrl: string;
+    worldAddress: string;
     account: Account;
 }
 
@@ -223,13 +225,17 @@ type QueryParameter<T extends (keyof ModelsMap)[]> = {
 
 // Auto-generated name from the Scarb.toml
 export class Dojo_Starter {
+    rpcUrl: string;
     toriiUrl: string;
     toriiPromise: Promise<Client>;
+    worldAddress: string;
     account: Account;
     actions: ActionsCalls;
 
     constructor(params: InitialParams) {
+        this.rpcUrl = params.rpcUrl;
         this.toriiUrl = params.toriiUrl;
+        this.worldAddress = params.worldAddress;
         this.account = params.account;
         this.actions = new ActionsCalls(
             "0x297bde19ca499fd8a39dd9bedbcd881a47f7b8f66c19478ce97d7de89e6112e",
@@ -237,10 +243,10 @@ export class Dojo_Starter {
         );
 
         this.toriiPromise = createClient([], {
-            rpcUrl: LOCAL_KATANA,
+            rpcUrl: this.rpcUrl,
             toriiUrl: this.toriiUrl,
-            worldAddress:
-                "0x28f5999ae62fec17c09c52a800e244961dba05251f5aaf923afabd9c9804d1a",
+            worldAddress: this.worldAddress,
+            // hardcoded this for now until true support is added
             relayUrl: "/ip4/127.0.0.1/tcp/9090",
         });
     }
