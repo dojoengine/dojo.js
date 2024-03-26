@@ -33,6 +33,7 @@ vi.mock("../../src/utils/storage", () => ({
         get: vi.fn(),
         set: vi.fn(),
         clear: vi.fn(),
+        remove: vi.fn(),
     },
 }));
 
