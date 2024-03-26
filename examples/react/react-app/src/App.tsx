@@ -1,73 +1,65 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./dojo/useDojo";
-import { Dojo_Starter, Direction } from "./dojo/dojo_starter";
-import { Account, RpcProvider } from "starknet";
-import { LOCAL_KATANA } from "@dojoengine/core";
+import { Direction, MovesModel, PositionModel } from "./dojo/dojo_starter";
+import { dojo_starter } from "./dojo/dojo";
 
 function App() {
+    const [moves, setMoves] = useState<MovesModel>();
+    const [position, setPosition] = useState<PositionModel>();
     const { account } = useDojo();
 
-    const provider = new RpcProvider({ nodeUrl: LOCAL_KATANA });
-    const masterAccount = new Account(
-        provider,
-        "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca",
-        "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
-    );
+    useEffect(() => {
+        const getPlayer = async () => {
+            const [first] = await dojo_starter.findEntities([
+                {
+                    model: "Moves",
+                    query: {
+                        player: "0x00b3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca",
+                    },
+                },
+                {
+                    model: "Position",
+                },
+            ]);
 
-    const dojo_starter = new Dojo_Starter({
-        toriiUrl: "http://localhost:5000",
-        account: masterAccount,
-    });
+            const [moves, position] = first;
+
+            setMoves(moves);
+            setPosition(position);
+
+            // If you're only interested in the position, specifying only that
+            // will also only return you the requested values.
+            //
+            // [{ player: string; vec: Vec2; }]
+            // const [position] = dojo_starter.findEntity([
+            //     { model: "Position", query: { player: account.account.address } },
+            // ]);
+
+            // We could even do some more complicated queries
+            // all fully typed
+            // const player = dojo_starter.findEntity([
+            //     {
+            //         model: "Moves",
+            //         query: {
+            //             player: account.account.address,
+            //             OR: [
+            //                 { remaining: { gt: 50 } },
+            //                 { last_direction: Direction.Down },
+            //             ],
+            //         },
+            //     },
+            //     { model: "Position" },
+            // ]);
+        };
+
+        getPlayer();
+    }, []);
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
         isError: false,
     });
-
-    // Get current player entity
-    // This will return a player with the models that you specified
-    //
-    // [{ last_direction: Direction; player: string; remaining: number; }, { player: string; vec: Vec2; }]
-    //
-    const [moves, position] = dojo_starter.findEntity([
-        {
-            model: "Moves",
-            query: {
-                remaining: 17,
-            },
-        },
-        {
-            model: "Position",
-            query: {
-                player: "hi",
-            },
-        },
-    ]);
-
-    // If you're only interested in the position, specifying only that
-    // will also only return you the requested values.
-    //
-    // [{ player: string; vec: Vec2; }]
-    // const [position] = dojo_starter.findEntity([
-    //     { model: "Position", query: { player: account.account.address } },
-    // ]);
-
-    // We could even do some more complicated queries
-    // all fully typed
-    // const player = dojo_starter.findEntity([
-    //     {
-    //         model: "Moves",
-    //         query: {
-    //             player: account.account.address,
-    //             OR: [
-    //                 { remaining: { gt: 50 } },
-    //                 { last_direction: Direction.Down },
-    //             ],
-    //         },
-    //     },
-    //     { model: "Position" },
-    // ]);
 
     const handleRestoreBurners = async () => {
         try {
@@ -96,6 +88,7 @@ function App() {
 
     return (
         <>
+            {/* <Test /> */}
             <button onClick={account?.create}>
                 {account?.isDeploying ? "deploying burner" : "create burner"}
             </button>
