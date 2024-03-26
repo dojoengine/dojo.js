@@ -33,3 +33,8 @@ export interface BurnerAccount {
     applyFromClipboard: () => Promise<void>;
     getActiveAccount?: () => Account | null;
 }
+
+export interface BurnerKeyPair {
+    pubKey: string;
+    getPrivateKey: () => string;
+}
