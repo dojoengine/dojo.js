@@ -3,9 +3,12 @@
 import { Account } from "starknet";
 import {
     Clause,
+    Client,
     ComparisonOperator,
     ValueType,
+    createClient,
 } from "@dojoengine/torii-client";
+import { LOCAL_KATANA } from "@dojoengine/core";
 
 //
 //
@@ -88,32 +91,30 @@ function valueToToriiValueAndOperator(value: any): {
     };
 }
 
+// Only supports a single model for now, since torii doesn't support multiple models
+// And inside that single model, there's only support for a single query.
 function convertQueryToToriiClause<T extends (keyof ModelsMap)[]>(
     queries: QueryParameter<T>
-): Clause | null {
-    // Only supports a single model for now, since torii doesn't support multiple models
+): Clause | undefined {
     const query = queries[0];
 
     if (!query.query) {
-        return null;
+        return undefined;
     }
 
-    const clauses = Object.entries(query.query).map(([key, value]) => {
-        return {
-            Member: {
-                model: query.model,
-                member: key,
-                ...valueToToriiValueAndOperator(value),
-            },
-        } satisfies Clause;
-    });
-    return {
-        Composite: {
-            model: query.model,
-            operator: "And",
-            clauses,
-        },
-    };
+    const clauses: Clause[] = Object.entries(query.query).map(
+        ([key, value]) => {
+            return {
+                Member: {
+                    model: query.model,
+                    member: key,
+                    ...valueToToriiValueAndOperator(value),
+                },
+            } satisfies Clause;
+        }
+    );
+
+    return clauses[0];
 }
 
 //
@@ -223,6 +224,7 @@ type QueryParameter<T extends (keyof ModelsMap)[]> = {
 // Auto-generated name from the Scarb.toml
 export class Dojo_Starter {
     toriiUrl: string;
+    toriiPromise: Promise<Client>;
     account: Account;
     actions: ActionsCalls;
 
@@ -233,17 +235,38 @@ export class Dojo_Starter {
             "0x297bde19ca499fd8a39dd9bedbcd881a47f7b8f66c19478ce97d7de89e6112e",
             this.account
         );
+
+        this.toriiPromise = createClient([], {
+            rpcUrl: LOCAL_KATANA,
+            toriiUrl: this.toriiUrl,
+            worldAddress:
+                "0x28f5999ae62fec17c09c52a800e244961dba05251f5aaf923afabd9c9804d1a",
+            relayUrl: "/ip4/127.0.0.1/tcp/9090",
+        });
     }
 
-    findEntities<T extends (keyof ModelsMap)[]>(queries: QueryParameter<T>) {
-        const query = convertQueryToToriiClause(queries);
+    async findEntities<T extends (keyof ModelsMap)[]>(
+        queries: QueryParameter<T>,
+        limit = 10,
+        offset = 0
+    ) {
+        const torii = await this.toriiPromise;
 
-        console.log(
-            "🚀 ~ file: dojo_starter.ts:184 ~ Dojo_Starter ~ findEntities<Textends ~ query:",
-            query
-        );
+        const clause = convertQueryToToriiClause(queries);
 
-        return [] as MapQueryToResult<T>[];
+        const toriiResult = await torii.getEntities({
+            limit,
+            offset,
+            clause,
+        });
+
+        const result = Object.values(toriiResult).map((entity: any) => {
+            return queries.map(
+                (query) => entity[query.model] as ModelsMap[typeof query.model]
+            );
+        });
+
+        return result as MapQueryToResult<T>[];
     }
 
     findEntity<T extends (keyof ModelsMap)[]>(queries: QueryParameter<T>) {
