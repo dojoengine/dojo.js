@@ -34,3 +34,21 @@ export interface BurnerAccount {
     applyFromClipboard: () => Promise<void>;
     getActiveAccount?: () => Account | null;
 }
+
+export type Predeployed = Burner & { name?: string };
+
+export type PredeployedStorage = {
+    [address: string]: PredeployedAccount;
+};
+
+export interface PredeployedManagerOptions {
+    rpcProvider: RpcProvider;
+    predeployedAccounts: PredeployedAccount[];
+}
+
+export type PredeployedAccount = {
+    name?: string;
+    address: string;
+    privateKey: string;
+    active: boolean;
+};

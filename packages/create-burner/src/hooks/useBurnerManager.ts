@@ -114,7 +114,7 @@ export const useBurnerManager = ({
                 get(burner.address)
             );
         });
-    }, [burnerManager.isDeploying, burnerUpdate]);
+    }, [burnerManager.isDeploying]);
 
     /**
      * Copy burners to clipboard
