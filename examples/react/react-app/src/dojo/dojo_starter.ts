@@ -167,14 +167,18 @@ type MapQueryToResult<T extends (keyof ModelsMap)[]> = {
 
 class BaseCalls {
     contractAddress: string;
-    account: Account;
+    account?: Account;
 
-    constructor(contractAddress: string, account: Account) {
+    constructor(contractAddress: string, account?: Account) {
         this.account = account;
         this.contractAddress = contractAddress;
     }
 
     async execute(entrypoint: string, calldata: any[] = []): Promise<void> {
+        if (!this.account) {
+            throw new Error("No account set to interact with dojo_starter");
+        }
+
         await this.account.execute(
             {
                 contractAddress: this.contractAddress,
@@ -190,7 +194,7 @@ class BaseCalls {
 }
 
 class ActionsCalls extends BaseCalls {
-    constructor(contractAddress: string, account: Account) {
+    constructor(contractAddress: string, account?: Account) {
         super(contractAddress, account);
     }
 
@@ -213,7 +217,7 @@ interface InitialParams {
     rpcUrl: string;
     toriiUrl: string;
     worldAddress: string;
-    account: Account;
+    account?: Account;
 }
 
 type QueryParameter<T extends (keyof ModelsMap)[]> = {
@@ -229,17 +233,17 @@ export class Dojo_Starter {
     toriiUrl: string;
     toriiPromise: Promise<Client>;
     worldAddress: string;
-    account: Account;
+    private _account?: Account;
     actions: ActionsCalls;
 
     constructor(params: InitialParams) {
         this.rpcUrl = params.rpcUrl;
         this.toriiUrl = params.toriiUrl;
         this.worldAddress = params.worldAddress;
-        this.account = params.account;
+        this._account = params.account;
         this.actions = new ActionsCalls(
             "0x297bde19ca499fd8a39dd9bedbcd881a47f7b8f66c19478ce97d7de89e6112e",
-            this.account
+            this._account
         );
 
         this.toriiPromise = createClient([], {
@@ -249,6 +253,18 @@ export class Dojo_Starter {
             // hardcoded this for now until true support is added
             relayUrl: "/ip4/127.0.0.1/tcp/9090",
         });
+    }
+
+    get account(): Account | undefined {
+        return this._account;
+    }
+
+    set account(account: Account) {
+        this._account = account;
+        this.actions = new ActionsCalls(
+            "0x297bde19ca499fd8a39dd9bedbcd881a47f7b8f66c19478ce97d7de89e6112e",
+            this._account
+        );
     }
 
     async findEntities<T extends (keyof ModelsMap)[]>(
