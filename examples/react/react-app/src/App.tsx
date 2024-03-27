@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./dojo/useDojo";
 import { Direction, MovesModel, PositionModel } from "./dojo/dojo_starter";
+import { encode } from "starknet";
 import { dojo_starter } from "./dojo/dojo";
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
                 {
                     model: "Moves",
                     query: {
-                        player: "0x00b3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca",
+                        player: encode.sanitizeHex(account.account.address),
                     },
                 },
                 {
@@ -55,8 +56,14 @@ function App() {
             // ]);
         };
 
+        setMoves(undefined);
+        setPosition(undefined);
         getPlayer();
-    }, []);
+    }, [account.account]);
+
+    useEffect(() => {
+        dojo_starter.account = account.account;
+    }, [account.account]);
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
@@ -151,46 +158,52 @@ function App() {
                 </div>
             </div>
 
-            <div className="card">
-                <div>
-                    <button
-                        onClick={() =>
-                            position && position.vec.y > 0
-                                ? dojo_starter.actions.move(Direction.Up)
-                                : console.log("Reach the borders of the world.")
-                        }
-                    >
-                        Move Up
-                    </button>
+            {account.account && (
+                <div className="card">
+                    <div>
+                        <button
+                            onClick={() =>
+                                position && position.vec.y > 0
+                                    ? dojo_starter.actions.move(Direction.Up)
+                                    : console.log(
+                                          "Reach the borders of the world."
+                                      )
+                            }
+                        >
+                            Move Up
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            onClick={() =>
+                                position && position.vec.x > 0
+                                    ? dojo_starter.actions.move(Direction.Left)
+                                    : console.log(
+                                          "Reach the borders of the world."
+                                      )
+                            }
+                        >
+                            Move Left
+                        </button>
+                        <button
+                            onClick={() =>
+                                dojo_starter.actions.move(Direction.Right)
+                            }
+                        >
+                            Move Right
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            onClick={() =>
+                                dojo_starter.actions.move(Direction.Down)
+                            }
+                        >
+                            Move Down
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <button
-                        onClick={() =>
-                            position && position.vec.x > 0
-                                ? dojo_starter.actions.move(Direction.Left)
-                                : console.log("Reach the borders of the world.")
-                        }
-                    >
-                        Move Left
-                    </button>
-                    <button
-                        onClick={() =>
-                            dojo_starter.actions.move(Direction.Right)
-                        }
-                    >
-                        Move Right
-                    </button>
-                </div>
-                <div>
-                    <button
-                        onClick={() =>
-                            dojo_starter.actions.move(Direction.Down)
-                        }
-                    >
-                        Move Down
-                    </button>
-                </div>
-            </div>
+            )}
         </>
     );
 }
