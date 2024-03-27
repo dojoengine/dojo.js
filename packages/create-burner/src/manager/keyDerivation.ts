@@ -1,7 +1,6 @@
 import { hexToBytes } from "@noble/curves/abstract/utils";
 import { ec, encode } from "starknet";
 import { HDKey } from "@scure/bip32";
-import { BurnerKeyPair } from "../types";
 
 //
 // inspired by:
@@ -19,28 +18,23 @@ function getPathForIndex(index: number): string {
 
 /**
  * @description derive an account KeyPair from a secret hash and index, allowing deterministic account creation
- * @param {bigint} secret a secret hash, like the signature of a message signed on the client, never stored!
+ * @param {string} secret a secret hash, like the signature of a message signed on the client, never stored!
  * @param {number} index sequential number identifying the account
  * @returns {KeyPair} the account address (pubKey) and private key (getPrivateKey)
  **/
-export function deriveKeyPairFromSeed(
-    secret: bigint,
+export function derivePrivateKeyFromSeed(
+    secret: string,
     index: number
-): BurnerKeyPair {
+): string {
     if (!secret) {
         throw "seed is undefined";
     }
-    const hex = encode.sanitizeBytes(secret.toString(16), 2);
+    const hex = encode.sanitizeBytes(encode.removeHexPrefix(secret));
     const masterNode = HDKey.fromMasterSeed(hexToBytes(hex));
     const childNode = masterNode.derive(getPathForIndex(index));
     if (!childNode.privateKey) {
         throw "childNode.privateKey is undefined";
     }
-    const groundKey = encode.addHexPrefix(
-        ec.starkCurve.grindKey(childNode.privateKey)
-    );
-    return {
-        pubKey: encode.sanitizeHex(ec.starkCurve.getStarkKey(groundKey)),
-        getPrivateKey: () => encode.sanitizeHex(groundKey),
-    };
+    const groundKey = ec.starkCurve.grindKey(childNode.privateKey);
+    return encode.addHexPrefix(groundKey);
 }

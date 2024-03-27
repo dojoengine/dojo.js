@@ -7,9 +7,16 @@ import {
     RpcProvider,
     stark,
 } from "starknet";
-import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
+import {
+    Burner,
+    BurnerCreateOptions,
+    BurnerManagerOptions,
+    BurnerStorage,
+    BurnerKeys,
+} from "../types";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
+import { derivePrivateKeyFromSeed } from "./keyDerivation";
 
 /**
  * A class to manage Burner accounts.
@@ -216,21 +223,32 @@ export class BurnerManager {
         return null;
     }
 
-    public async create(): Promise<Account> {
+    public createKeysAndAddress(options?: BurnerCreateOptions): BurnerKeys {
+        const privateKey = options?.secret
+            ? derivePrivateKeyFromSeed(options.secret, options.index)
+            : stark.randomAddress();
+        const publicKey = ec.starkCurve.getStarkKey(privateKey);
+        return {
+            privateKey,
+            publicKey,
+            address: hash.calculateContractAddressFromHash(
+                publicKey,
+                this.accountClassHash,
+                CallData.compile({ publicKey }),
+                0
+            ),
+        };
+    }
+
+    public async create(options?: BurnerCreateOptions): Promise<Account> {
         if (!this.isInitialized) {
             throw new Error("BurnerManager is not initialized");
         }
 
         this.updateIsDeploying(true);
 
-        const privateKey = stark.randomAddress();
-        const publicKey = ec.starkCurve.getStarkKey(privateKey);
-        const address = hash.calculateContractAddressFromHash(
-            publicKey,
-            this.accountClassHash,
-            CallData.compile({ publicKey }),
-            0
-        );
+        const { privateKey, publicKey, address } =
+            this.createKeysAndAddress(options);
 
         if (!this.masterAccount) {
             throw new Error("wallet account not found");
@@ -260,6 +278,10 @@ export class BurnerManager {
             }
         );
 
+        // shouldn't we wait to make sure it was accepted?
+        // const response = await burner.waitForTransaction(deployTx)
+        // console.log(response)
+
         const storage = this.getBurnerStorage();
         for (let address in storage) {
             storage[address].active = false;
@@ -271,6 +293,13 @@ export class BurnerManager {
             deployTx,
             active: true,
         };
+
+        if (options?.secret) {
+            storage[address].accountIndex = options.index;
+        }
+        if (options?.metadata) {
+            storage[address].metadata = options.metadata;
+        }
 
         this.account = burner;
         this.updateIsDeploying(false);

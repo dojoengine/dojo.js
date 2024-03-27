@@ -1,12 +1,16 @@
 import { Account, RpcProvider, AccountInterface } from "starknet";
 
 export type BurnerStorage = {
-    [address: string]: {
-        privateKey: string;
-        publicKey: string;
-        deployTx: string;
-        active: boolean;
-    };
+    [address: string]: BurnerRecord;
+};
+
+export type BurnerRecord = {
+    privateKey: string;
+    publicKey: string;
+    deployTx: string;
+    active: boolean;
+    accountIndex?: number;
+    metadata?: any;
 };
 
 export type Burner = {
@@ -34,7 +38,14 @@ export interface BurnerAccount {
     getActiveAccount?: () => Account | null;
 }
 
-export interface BurnerKeyPair {
-    pubKey: string;
-    getPrivateKey: () => string;
+export interface BurnerCreateOptions {
+    secret: string;
+    index: number;
+    metadata?: any;
+}
+
+export interface BurnerKeys {
+    privateKey: string;
+    publicKey: string;
+    address: string;
 }
