@@ -99,7 +99,6 @@ function App() {
 
     return (
         <>
-            {/* <Test /> */}
             <button onClick={account?.create}>
                 {account?.isDeploying ? "deploying burner" : "create burner"}
             </button>
