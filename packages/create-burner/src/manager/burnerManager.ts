@@ -223,7 +223,7 @@ export class BurnerManager {
         return null;
     }
 
-    public createKeysAndAddress(options?: BurnerCreateOptions): BurnerKeys {
+    public generateKeysAndAddress(options?: BurnerCreateOptions): BurnerKeys {
         const privateKey = options?.secret
             ? derivePrivateKeyFromSeed(options.secret, options.index)
             : stark.randomAddress();
@@ -248,7 +248,7 @@ export class BurnerManager {
         this.updateIsDeploying(true);
 
         const { privateKey, publicKey, address } =
-            this.createKeysAndAddress(options);
+            this.generateKeysAndAddress(options);
 
         if (!this.masterAccount) {
             throw new Error("wallet account not found");

@@ -3,7 +3,7 @@ import { Account } from "starknet";
 import { BurnerConnector } from "..";
 import { BurnerContext } from "../context";
 import { BurnerManager } from "../manager/burnerManager";
-import { Burner } from "../types";
+import { Burner, BurnerCreateOptions } from "../types";
 
 /**
  * A React hook to manage Burner accounts.
@@ -97,7 +97,6 @@ export const useBurner = () => {
     /**
      * Clears a burner account based on its address.
      *
-     * @param address - The address of the burner account to retrieve.
      * @returns The Burner account corresponding to the provided address.
      */
     const clear = useCallback(() => {
@@ -108,15 +107,19 @@ export const useBurner = () => {
     /**
      * Creates a new burner account and sets it as the active account.
      *
+     * @param options - (optional) secret seed and index for deterministic accounts.
      * @returns A promise that resolves to the newly created Burner account.
      */
-    const create = useCallback(async (): Promise<Account> => {
-        burnerManager.setIsDeployingCallback(setIsDeploying);
-        const newAccount = await burnerManager.create();
-        setAccount(newAccount);
-        setCount((prev) => prev + 1);
-        return newAccount;
-    }, [burnerManager]);
+    const create = useCallback(
+        async (options?: BurnerCreateOptions): Promise<Account> => {
+            burnerManager.setIsDeployingCallback(setIsDeploying);
+            const newAccount = await burnerManager.create(options);
+            setAccount(newAccount);
+            setCount((prev) => prev + 1);
+            return newAccount;
+        },
+        [burnerManager]
+    );
 
     /**
      * Generates a list of BurnerConnector instances for each burner account. These can be added to Starknet React.
@@ -156,6 +159,20 @@ export const useBurner = () => {
         setCount(burnerManager.list().length);
     }, [burnerManager]);
 
+    /**
+     * Returns a deterministic account addresses based on a seed and index.
+     *
+     * @param options - (optional) account secret seed and index
+     * @returns A deterministic Burner address
+     */
+    const generateAddressFromSeed = useCallback(
+        (options?: BurnerCreateOptions): string => {
+            const { address } = burnerManager.generateKeysAndAddress(options);
+            return address;
+        },
+        [burnerManager]
+    );
+
     // Expose methods and properties for the consumers of this hook.
     return {
         get,
@@ -169,5 +186,6 @@ export const useBurner = () => {
         count,
         copyToClipboard,
         applyFromClipboard,
+        generateAddressFromSeed,
     };
 };

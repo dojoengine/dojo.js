@@ -25,7 +25,7 @@ export interface BurnerManagerOptions {
 }
 
 export interface BurnerAccount {
-    create: () => void;
+    create: (options?: BurnerCreateOptions) => void;
     list: () => Burner[];
     get: (address: string) => AccountInterface;
     account: AccountInterface;
@@ -36,6 +36,7 @@ export interface BurnerAccount {
     copyToClipboard: () => Promise<void>;
     applyFromClipboard: () => Promise<void>;
     getActiveAccount?: () => Account | null;
+    generateAddressFromSeed: (options?: BurnerCreateOptions) => string;
 }
 
 export interface BurnerCreateOptions {
