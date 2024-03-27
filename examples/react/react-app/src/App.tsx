@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { useDojo } from "./dojo/useDojo";
 import { Direction, MovesModel, PositionModel } from "./dojo/dojo_starter";
-import { encode } from "starknet";
+import { validateAndParseAddress } from "starknet";
 import { dojo_starter } from "./dojo/dojo";
 
 function App() {
@@ -16,7 +16,9 @@ function App() {
                 {
                     model: "Moves",
                     query: {
-                        player: encode.sanitizeHex(account.account.address),
+                        player: validateAndParseAddress(
+                            account.account.address
+                        ),
                     },
                 },
                 {
