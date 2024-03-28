@@ -1,96 +1,20 @@
 // This is an example of a generated TS file that exposes the types and methods for the Dojo starter contract.
-// Currently hard-coded to serve as a reference.
 import { Account } from "starknet";
 import {
     Clause,
     Client,
-    ComparisonOperator,
-    ValueType,
+    ModelClause,
     createClient,
+    extractQueryFromResult,
+    valueToToriiValueAndOperator,
 } from "@dojoengine/torii-client";
+import { LOCAL_KATANA, createManifestFromJson } from "@dojoengine/core";
 
 //
 //
 // Utility types and functions
 //
 //
-
-interface NumberFilter {
-    eq?: number;
-    neq?: number;
-    gt?: number;
-    gte?: number;
-    lt?: number;
-    lte?: number;
-}
-
-const filterMapping: Record<keyof NumberFilter, ComparisonOperator> = {
-    eq: "Eq",
-    neq: "Neq",
-    gt: "Gt",
-    gte: "Gte",
-    lt: "Lt",
-    lte: "Lte",
-};
-
-type ConvertNumberToFilter<T> = {
-    [K in keyof T]: T[K] extends number ? NumberFilter | number : T[K];
-};
-
-type ModelClause<T> = {
-    OR?: ModelClause<T>[];
-    AND?: ModelClause<T>[];
-} & Partial<ConvertNumberToFilter<T>>;
-
-function valueToValueType(value: any): ValueType {
-    if (typeof value === "number") {
-        return { Int: value };
-    }
-    if (typeof value === "string") {
-        return { String: value };
-    }
-    if (typeof value === "boolean") {
-        return { VBool: value };
-    }
-    if (Array.isArray(value) && value.every((v) => typeof v === "number")) {
-        return { Bytes: value };
-    }
-
-    throw new Error("Unsupported value type");
-}
-
-function valueToToriiValueAndOperator(
-    value: NumberFilter | number | bigint | string | boolean
-): {
-    operator: ComparisonOperator;
-    value: {
-        primitive_type: { Felt252: "" };
-        value_type: ValueType;
-    };
-} {
-    if (typeof value === "object") {
-        const key = Object.keys(value)[0] as keyof NumberFilter;
-        const operator = filterMapping[key];
-        const val = value[key];
-        const valueType = valueToValueType(val);
-        return {
-            operator,
-            value: {
-                primitive_type: { Felt252: "" },
-                value_type: valueType,
-            },
-        };
-    }
-
-    const valueType = valueToValueType(value);
-    return {
-        operator: "Eq",
-        value: {
-            primitive_type: { Felt252: "" },
-            value_type: valueType,
-        },
-    };
-}
 
 // Only supports a single model for now, since torii doesn't support multiple models
 // And inside that single model, there's only support for a single query.
@@ -112,26 +36,6 @@ function convertQueryToToriiClause(query: Query): Clause | undefined {
     });
 
     return clauses[0];
-}
-
-function extractQueryFromResult(
-    query: Query,
-    result: { [key: string]: any }
-): { [key: string]: any } {
-    return Object.keys(query).reduce(
-        (acc, key) => {
-            const resultKey = Object.keys(result).find(
-                (k) => k.toLowerCase() === key.toLowerCase()
-            );
-
-            if (resultKey) {
-                acc[key] = result[resultKey];
-            }
-
-            return acc;
-        },
-        {} as { [key: string]: any }
-    );
 }
 
 //
@@ -240,26 +144,44 @@ class ActionsCalls extends BaseCalls {
 //
 //
 
-interface InitialParams {
-    rpcUrl: string;
+type GeneralParams = {
     toriiUrl: string;
-    worldAddress: string;
+    relayUrl: string;
     account?: Account;
-}
+};
+
+type InitialParams = GeneralParams &
+    (
+        | {
+              rpcUrl: string;
+              worldAddress: string;
+          }
+        | {
+              manifest: any;
+          }
+    );
 
 // Auto-generated name from the Scarb.toml
 export class Dojo_Starter {
     rpcUrl: string;
     toriiUrl: string;
     toriiPromise: Promise<Client>;
+    relayUrl: string;
     worldAddress: string;
     private _account?: Account;
     actions: ActionsCalls;
 
     constructor(params: InitialParams) {
-        this.rpcUrl = params.rpcUrl;
+        this.rpcUrl = LOCAL_KATANA;
+        if ("manifest" in params) {
+            const config = createManifestFromJson(params.manifest);
+            this.worldAddress = config.world.address;
+        } else {
+            this.rpcUrl = params.rpcUrl;
+            this.worldAddress = params.worldAddress;
+        }
         this.toriiUrl = params.toriiUrl;
-        this.worldAddress = params.worldAddress;
+        this.relayUrl = params.relayUrl;
         this._account = params.account;
         this.actions = new ActionsCalls(
             "0x297bde19ca499fd8a39dd9bedbcd881a47f7b8f66c19478ce97d7de89e6112e",
@@ -270,8 +192,7 @@ export class Dojo_Starter {
             rpcUrl: this.rpcUrl,
             toriiUrl: this.toriiUrl,
             worldAddress: this.worldAddress,
-            // hardcoded this for now until true support is added
-            relayUrl: "/ip4/127.0.0.1/tcp/9090",
+            relayUrl: this.relayUrl,
         });
     }
 
@@ -299,7 +220,10 @@ export class Dojo_Starter {
         });
 
         const result = Object.values(toriiResult).map((entity: any) => {
-            return extractQueryFromResult(query, entity) as QueryResult<T>;
+            return extractQueryFromResult<Query>(
+                query,
+                entity
+            ) as QueryResult<T>;
         });
 
         return result as QueryResult<T>[];
