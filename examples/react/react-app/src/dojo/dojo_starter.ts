@@ -8,7 +8,6 @@ import {
     ValueType,
     createClient,
 } from "@dojoengine/torii-client";
-import { LOCAL_KATANA } from "@dojoengine/core";
 
 //
 //
@@ -60,7 +59,9 @@ function valueToValueType(value: any): ValueType {
     throw new Error("Unsupported value type");
 }
 
-function valueToToriiValueAndOperator(value: any): {
+function valueToToriiValueAndOperator(
+    value: NumberFilter | number | bigint | string | boolean
+): {
     operator: ComparisonOperator;
     value: {
         primitive_type: { Felt252: "" };
@@ -68,8 +69,8 @@ function valueToToriiValueAndOperator(value: any): {
     };
 } {
     if (typeof value === "object") {
-        const key = Object.keys(value)[0];
-        const operator = filterMapping[key as keyof NumberFilter];
+        const key = Object.keys(value)[0] as keyof NumberFilter;
+        const operator = filterMapping[key];
         const val = value[key];
         const valueType = valueToValueType(val);
         return {
@@ -135,7 +136,7 @@ export enum Direction {
 export interface MovesModel {
     player: string;
     remaining: number;
-    last_direction: (typeof Direction)[keyof typeof Direction];
+    last_direction: Direction;
 }
 
 // Type definition for `dojo_starter::models::position::Vec2` struct
