@@ -17,6 +17,7 @@ export async function setup({ ...config }: DojoConfig) {
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
         worldAddress: config.manifest.world.address || "",
+        relayUrl: "/ip4/127.0.0.1/tcp/9090",
     });
 
     // create contract components

@@ -25,7 +25,7 @@ export interface BurnerAccount {
     create: () => void;
     list: () => Burner[];
     get: (address: string) => AccountInterface;
-    account: AccountInterface;
+    account: Account;
     select: (address: string) => void;
     isDeploying: boolean;
     clear: () => void;

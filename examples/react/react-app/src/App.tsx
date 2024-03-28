@@ -1,33 +1,67 @@
-import { useComponentValue } from "@dojoengine/react";
-import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Direction } from "./utils";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
+import { Direction, MovesModel, PositionModel } from "./dojo/dojo_starter";
+import { validateAndParseAddress } from "starknet";
+import { dojo_starter } from "./dojo/dojo";
 
 function App() {
-    const {
-        setup: {
-            systemCalls: { spawn, move },
-            clientComponents: { Position, Moves },
-        },
-        account,
-    } = useDojo();
+    const [moves, setMoves] = useState<MovesModel>();
+    const [position, setPosition] = useState<PositionModel>();
+    const { account } = useDojo();
+
+    useEffect(() => {
+        const getPlayer = async () => {
+            const player = await dojo_starter.findEntity({
+                moves: {
+                    player: validateAndParseAddress(account.account.address),
+                },
+                position: {},
+            });
+
+            if (player) {
+                setMoves(player.moves);
+                setPosition(player.position);
+            }
+
+            // If you're only interested in the position, specifying only that
+            // will also only return you the requested values.
+            //
+            // [{ player: string; vec: Vec2; }]
+            // const [position] = dojo_starter.findEntity([
+            //     { model: "Position", query: { player: account.account.address } },
+            // ]);
+
+            // We could even do some more complicated queries
+            // all fully typed
+            // const player = dojo_starter.findEntity([
+            //     {
+            //         model: "Moves",
+            //         query: {
+            //             player: account.account.address,
+            //             OR: [
+            //                 { remaining: { gt: 50 } },
+            //                 { last_direction: Direction.Down },
+            //             ],
+            //         },
+            //     },
+            //     { model: "Position" },
+            // ]);
+        };
+
+        setMoves(undefined);
+        setPosition(undefined);
+        getPlayer();
+    }, [account.account]);
+
+    useEffect(() => {
+        dojo_starter.account = account.account;
+    }, [account.account]);
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
         isError: false,
     });
-
-    // entity id we are syncing
-    const entityId = getEntityIdFromKeys([
-        BigInt(account?.account.address),
-    ]) as Entity;
-
-    // get current component values
-    const position = useComponentValue(Position, entityId);
-    const moves = useComponentValue(Moves, entityId);
 
     const handleRestoreBurners = async () => {
         try {
@@ -74,7 +108,7 @@ function App() {
             )}
 
             <div className="card">
-                <div>{`burners deployed: ${account.count}`}</div>
+                <div>{`burners deployed: ${account.list().length}`}</div>
                 <div>
                     select signer:{" "}
                     <select
@@ -102,7 +136,9 @@ function App() {
             </div>
 
             <div className="card">
-                <button onClick={() => spawn(account.account)}>Spawn</button>
+                <button onClick={() => dojo_starter.actions.spawn()}>
+                    Spawn
+                </button>
                 <div>
                     Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
                 </div>
@@ -114,42 +150,52 @@ function App() {
                 </div>
             </div>
 
-            <div className="card">
-                <div>
-                    <button
-                        onClick={() =>
-                            position && position.vec.y > 0
-                                ? move(account.account, Direction.Up)
-                                : console.log("Reach the borders of the world.")
-                        }
-                    >
-                        Move Up
-                    </button>
+            {account.account && (
+                <div className="card">
+                    <div>
+                        <button
+                            onClick={() =>
+                                position && position.vec.y > 0
+                                    ? dojo_starter.actions.move(Direction.Up)
+                                    : console.log(
+                                          "Reach the borders of the world."
+                                      )
+                            }
+                        >
+                            Move Up
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            onClick={() =>
+                                position && position.vec.x > 0
+                                    ? dojo_starter.actions.move(Direction.Left)
+                                    : console.log(
+                                          "Reach the borders of the world."
+                                      )
+                            }
+                        >
+                            Move Left
+                        </button>
+                        <button
+                            onClick={() =>
+                                dojo_starter.actions.move(Direction.Right)
+                            }
+                        >
+                            Move Right
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            onClick={() =>
+                                dojo_starter.actions.move(Direction.Down)
+                            }
+                        >
+                            Move Down
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <button
-                        onClick={() =>
-                            position && position.vec.x > 0
-                                ? move(account.account, Direction.Left)
-                                : console.log("Reach the borders of the world.")
-                        }
-                    >
-                        Move Left
-                    </button>
-                    <button
-                        onClick={() => move(account.account, Direction.Right)}
-                    >
-                        Move Right
-                    </button>
-                </div>
-                <div>
-                    <button
-                        onClick={() => move(account.account, Direction.Down)}
-                    >
-                        Move Down
-                    </button>
-                </div>
-            </div>
+            )}
         </>
     );
 }

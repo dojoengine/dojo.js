@@ -23,14 +23,16 @@ tokio = { version = "1.32.0", default-features = false, features = ["rt"] }
 url = "2.4.0"
 
 # Dojo
-dojo-types = { git = "https://github.com/dojoengine/dojo", rev = "37f41d585f549013a73ca189034b0471f1e81731" }
-torii-client = { git = "https://github.com/dojoengine/dojo", rev = "37f41d585f549013a73ca189034b0471f1e81731" }
-torii-grpc = { git = "https://github.com/dojoengine/dojo", rev = "37f41d585f549013a73ca189034b0471f1e81731" }
+dojo-types = { git = "https://github.com/dojoengine/dojo", tag = "v0.6.0-alpha.8" }
+torii-client = { git = "https://github.com/dojoengine/dojo", tag = "v0.6.0-alpha.8" }
+torii-grpc = { git = "https://github.com/dojoengine/dojo", tag = "v0.6.0-alpha.8", features = [
+    "client",
+] }
 
 # WASM
 js-sys = "0.3.64"
 serde-wasm-bindgen = "0.6.0"
-wasm-bindgen = "=0.2.88"
+wasm-bindgen = "0.2.92"
 wasm-bindgen-futures = "0.4.37"
 web-sys = { version = "0.3.4", features = [
     'MessageEvent',
@@ -46,6 +48,8 @@ web-sys = { version = "0.3.4", features = [
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.7", optional = true }
 tsify = "0.4.5"
+crypto-bigint = "0.5.5"
+ahash = "0.8.7"
 
 # Compiler optimization when running test to prevent ‘locals exceed maximum’ error, 
 # where a function is using more that the maximum allowed local variables.
@@ -54,7 +58,7 @@ incremental = true
 opt-level = 1
 
 [dev-dependencies]
-wasm-bindgen-test = "=0.3.38"
+wasm-bindgen-test = "0.3.38"
 crypto-bigint = { version = "0.5.3", features = [ "serde" ] }
 
 [features]
