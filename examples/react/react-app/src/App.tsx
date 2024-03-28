@@ -12,25 +12,16 @@ function App() {
 
     useEffect(() => {
         const getPlayer = async () => {
-            const player = await dojo_starter.findEntity([
-                {
-                    model: "Moves",
-                    query: {
-                        player: validateAndParseAddress(
-                            account.account.address
-                        ),
-                    },
+            const player = await dojo_starter.findEntity({
+                moves: {
+                    player: validateAndParseAddress(account.account.address),
                 },
-                {
-                    model: "Position",
-                },
-            ]);
+                position: {},
+            });
 
             if (player) {
-                const [moves, position] = player;
-
-                setMoves(moves);
-                setPosition(position);
+                setMoves(player.moves);
+                setPosition(player.position);
             }
 
             // If you're only interested in the position, specifying only that

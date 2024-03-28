@@ -94,28 +94,44 @@ function valueToToriiValueAndOperator(
 
 // Only supports a single model for now, since torii doesn't support multiple models
 // And inside that single model, there's only support for a single query.
-function convertQueryToToriiClause<T extends (keyof ModelsMap)[]>(
-    queries: QueryParameter<T>
-): Clause | undefined {
-    const query = queries[0];
+function convertQueryToToriiClause(query: Query): Clause | undefined {
+    const [model, clause] = Object.entries(query)[0];
 
-    if (!query.query) {
+    if (Object.keys(clause).length === 0) {
         return undefined;
     }
 
-    const clauses: Clause[] = Object.entries(query.query).map(
-        ([key, value]) => {
-            return {
-                Member: {
-                    model: query.model,
-                    member: key,
-                    ...valueToToriiValueAndOperator(value),
-                },
-            } satisfies Clause;
-        }
-    );
+    const clauses: Clause[] = Object.entries(clause).map(([key, value]) => {
+        return {
+            Member: {
+                model: nameMap[model as keyof typeof nameMap],
+                member: key,
+                ...valueToToriiValueAndOperator(value),
+            },
+        } satisfies Clause;
+    });
 
     return clauses[0];
+}
+
+function extractQueryFromResult(
+    query: Query,
+    result: { [key: string]: any }
+): { [key: string]: any } {
+    return Object.keys(query).reduce(
+        (acc, key) => {
+            const resultKey = Object.keys(result).find(
+                (k) => k.toLowerCase() === key.toLowerCase()
+            );
+
+            if (resultKey) {
+                acc[key] = result[resultKey];
+            }
+
+            return acc;
+        },
+        {} as { [key: string]: any }
+    );
 }
 
 //
@@ -151,13 +167,23 @@ export interface PositionModel {
     vec: Vec2;
 }
 
-type ModelsMap = {
-    Moves: MovesModel;
-    Position: PositionModel;
+type Query = Partial<{
+    moves: ModelClause<MovesModel>;
+    position: ModelClause<PositionModel>;
+}>;
+
+type ResultMapping = {
+    moves: MovesModel;
+    position: PositionModel;
 };
 
-type MapQueryToResult<T extends (keyof ModelsMap)[]> = {
-    [K in keyof T]: ModelsMap[T[K]];
+const nameMap = {
+    moves: "Moves",
+    position: "Position",
+};
+
+type QueryResult<T extends Query> = {
+    [K in keyof T]: K extends keyof ResultMapping ? ResultMapping[K] : never;
 };
 
 //
@@ -221,13 +247,6 @@ interface InitialParams {
     account?: Account;
 }
 
-type QueryParameter<T extends (keyof ModelsMap)[]> = {
-    [K in keyof T]: {
-        model: T[K];
-        query?: ModelClause<ModelsMap[T[K]]>;
-    };
-};
-
 // Auto-generated name from the Scarb.toml
 export class Dojo_Starter {
     rpcUrl: string;
@@ -268,14 +287,10 @@ export class Dojo_Starter {
         );
     }
 
-    async findEntities<T extends (keyof ModelsMap)[]>(
-        queries: QueryParameter<T>,
-        limit = 10,
-        offset = 0
-    ) {
+    async findEntities<T extends Query>(query: T, limit = 10, offset = 0) {
         const torii = await this.toriiPromise;
 
-        const clause = convertQueryToToriiClause(queries);
+        const clause = convertQueryToToriiClause(query);
 
         const toriiResult = await torii.getEntities({
             limit,
@@ -284,37 +299,19 @@ export class Dojo_Starter {
         });
 
         const result = Object.values(toriiResult).map((entity: any) => {
-            return queries.map(
-                (query) => entity[query.model] as ModelsMap[typeof query.model]
-            );
+            return extractQueryFromResult(query, entity) as QueryResult<T>;
         });
 
-        return result as MapQueryToResult<T>[];
+        return result as QueryResult<T>[];
     }
 
-    async findEntity<T extends (keyof ModelsMap)[]>(
-        queries: QueryParameter<T>
-    ) {
-        const torii = await this.toriiPromise;
-
-        const clause = convertQueryToToriiClause(queries);
-
-        const toriiResult = await torii.getEntities({
-            limit: 1,
-            offset: 0,
-            clause,
-        });
-
-        const result = Object.values(toriiResult).map((entity: any) => {
-            return queries.map(
-                (query) => entity[query.model] as ModelsMap[typeof query.model]
-            );
-        });
+    async findEntity<T extends Query>(query: T) {
+        const result = await this.findEntities(query, 1);
 
         if (result.length === 0) {
             return undefined;
         }
 
-        return result[0] as MapQueryToResult<T>;
+        return result[0] as QueryResult<T>;
     }
 }
