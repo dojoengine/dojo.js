@@ -12,34 +12,6 @@ import { LOCAL_KATANA, createManifestFromJson } from "@dojoengine/core";
 
 //
 //
-// Utility types and functions
-//
-//
-
-// Only supports a single model for now, since torii doesn't support multiple models
-// And inside that single model, there's only support for a single query.
-function convertQueryToToriiClause(query: Query): Clause | undefined {
-    const [model, clause] = Object.entries(query)[0];
-
-    if (Object.keys(clause).length === 0) {
-        return undefined;
-    }
-
-    const clauses: Clause[] = Object.entries(clause).map(([key, value]) => {
-        return {
-            Member: {
-                model: nameMap[model as keyof typeof nameMap],
-                member: key,
-                ...valueToToriiValueAndOperator(value),
-            },
-        } satisfies Clause;
-    });
-
-    return clauses[0];
-}
-
-//
-//
 // Entity types generated from the models
 //
 //
@@ -70,25 +42,6 @@ export interface PositionModel {
     player: string;
     vec: Vec2;
 }
-
-type Query = Partial<{
-    moves: ModelClause<MovesModel>;
-    position: ModelClause<PositionModel>;
-}>;
-
-type ResultMapping = {
-    moves: MovesModel;
-    position: PositionModel;
-};
-
-const nameMap = {
-    moves: "Moves",
-    position: "Position",
-};
-
-type QueryResult<T extends Query> = {
-    [K in keyof T]: K extends keyof ResultMapping ? ResultMapping[K] : never;
-};
 
 //
 //
@@ -136,6 +89,53 @@ class ActionsCalls extends BaseCalls {
     async move(direction: Direction): Promise<void> {
         await this.execute("move", [direction]);
     }
+}
+
+//
+//
+// Query types and functions
+//
+//
+
+type Query = Partial<{
+    moves: ModelClause<MovesModel>;
+    position: ModelClause<PositionModel>;
+}>;
+
+type ResultMapping = {
+    moves: MovesModel;
+    position: PositionModel;
+};
+
+const nameMap = {
+    moves: "Moves",
+    position: "Position",
+};
+
+type QueryResult<T extends Query> = {
+    [K in keyof T]: K extends keyof ResultMapping ? ResultMapping[K] : never;
+};
+
+// Only supports a single model for now, since torii doesn't support multiple models
+// And inside that single model, there's only support for a single query.
+function convertQueryToToriiClause(query: Query): Clause | undefined {
+    const [model, clause] = Object.entries(query)[0];
+
+    if (Object.keys(clause).length === 0) {
+        return undefined;
+    }
+
+    const clauses: Clause[] = Object.entries(clause).map(([key, value]) => {
+        return {
+            Member: {
+                model: nameMap[model as keyof typeof nameMap],
+                member: key,
+                ...valueToToriiValueAndOperator(value),
+            },
+        } satisfies Clause;
+    });
+
+    return clauses[0];
 }
 
 //
