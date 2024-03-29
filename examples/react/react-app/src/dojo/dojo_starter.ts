@@ -155,6 +155,7 @@ type InitialParams = GeneralParams &
         | {
               rpcUrl: string;
               worldAddress: string;
+              actionsAddress: string;
           }
         | {
               manifest: any;
@@ -170,23 +171,33 @@ export class Dojo_Starter {
     worldAddress: string;
     private _account?: Account;
     actions: ActionsCalls;
+    actionsAddress: string;
 
     constructor(params: InitialParams) {
         this.rpcUrl = LOCAL_KATANA;
         if ("manifest" in params) {
             const config = createManifestFromJson(params.manifest);
             this.worldAddress = config.world.address;
+
+            const actionsAddress = config.contracts.find(
+                (contract) =>
+                    contract.name === "dojo_starter::systems::actions::actions"
+            )?.address;
+
+            if (!actionsAddress) {
+                throw new Error("No actions contract found in the manifest");
+            }
+
+            this.actionsAddress = actionsAddress;
         } else {
             this.rpcUrl = params.rpcUrl;
             this.worldAddress = params.worldAddress;
+            this.actionsAddress = params.actionsAddress;
         }
         this.toriiUrl = params.toriiUrl;
         this.relayUrl = params.relayUrl;
         this._account = params.account;
-        this.actions = new ActionsCalls(
-            "0x297bde19ca499fd8a39dd9bedbcd881a47f7b8f66c19478ce97d7de89e6112e",
-            this._account
-        );
+        this.actions = new ActionsCalls(this.actionsAddress, this._account);
 
         this.toriiPromise = createClient([], {
             rpcUrl: this.rpcUrl,
@@ -202,10 +213,7 @@ export class Dojo_Starter {
 
     set account(account: Account) {
         this._account = account;
-        this.actions = new ActionsCalls(
-            "0x297bde19ca499fd8a39dd9bedbcd881a47f7b8f66c19478ce97d7de89e6112e",
-            this._account
-        );
+        this.actions = new ActionsCalls(this.actionsAddress, this._account);
     }
 
     async findEntities<T extends Query>(query: T, limit = 10, offset = 0) {
