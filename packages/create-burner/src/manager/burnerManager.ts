@@ -126,7 +126,7 @@ export class BurnerManager {
         }
     }
 
-    public async init(): Promise<void> {
+    public async init(keepNonDeployed = false): Promise<void> {
         if (this.isInitialized) {
             throw new Error("BurnerManager is already initialized");
         }
@@ -146,8 +146,12 @@ export class BurnerManager {
         );
 
         toRemove.forEach((address) => {
-            console.log(`Removing non-deployed burner at address ${address}.`);
-            delete storage[address];
+            if (!keepNonDeployed) {
+                console.log(
+                    `Removing non-deployed burner at address ${address}.`
+                );
+                delete storage[address];
+            }
         });
 
         if (Object.keys(storage).length) {
