@@ -8,6 +8,7 @@ export type BurnerRecord = {
     privateKey: string;
     publicKey: string;
     deployTx: string;
+    masterAccount: string;
     active: boolean;
     accountIndex?: number;
     metadata?: any;

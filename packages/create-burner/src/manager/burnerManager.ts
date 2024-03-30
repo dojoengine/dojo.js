@@ -291,6 +291,7 @@ export class BurnerManager {
             privateKey,
             publicKey,
             deployTx,
+            masterAccount: this.masterAccount.address,
             active: true,
         };
 
