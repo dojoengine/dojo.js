@@ -17,6 +17,8 @@ export type BurnerRecord = {
 export type Burner = {
     address: string;
     active: boolean;
+    masterAccount: string;
+    accountIndex?: number;
 };
 
 export interface BurnerManagerOptions {

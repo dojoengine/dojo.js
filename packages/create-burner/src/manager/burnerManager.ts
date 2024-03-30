@@ -166,6 +166,8 @@ export class BurnerManager {
             return {
                 address,
                 active: storage[address].active,
+                masterAccount: storage[address].masterAccount,
+                accountIndex: storage[address].accountIndex,
             };
         });
     }
