@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/utils",
-    "version": "0.6.0-alpha.3",
+    "version": "0.6.0-alpha.4",
     "description": "Helpful Dojo onchain game engine utils",
     "author": "Loaf",
     "license": "MIT",
@@ -29,5 +29,6 @@
         "@latticexyz/utils": "^2.0.0-next.11",
         "mathjs": "^12.0.0",
         "micro-starknet": "^0.2.3"
-    }
+    },
+    "gitHead": "b20e58a6fa3c60d823c41ccc7459ccdfdffe3783"
 }

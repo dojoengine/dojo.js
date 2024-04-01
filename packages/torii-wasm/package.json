@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-wasm",
-    "version": "0.6.0-alpha.3",
+    "version": "0.6.0-alpha.4",
     "description": "Torii wasm bindings for Dojo onchain game engine",
     "author": "",
     "license": "MIT",
@@ -26,5 +26,6 @@
         "tsup": "^8.0.1",
         "typescript": "^5.0.3",
         "wasm-pack": "^0.12.1"
-    }
+    },
+    "gitHead": "b20e58a6fa3c60d823c41ccc7459ccdfdffe3783"
 }
