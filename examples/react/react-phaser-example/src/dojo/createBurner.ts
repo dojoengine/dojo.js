@@ -21,12 +21,13 @@ export const createBurner = async ({ ...config }: DojoConfig) => {
     });
 
     try {
-        await burnerManager.create();
+        await burnerManager.init();
+        if (burnerManager.list().length === 0) {
+            await burnerManager.create();
+        }
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
-
-    await burnerManager.init();
 
     return {
         burnerManager,

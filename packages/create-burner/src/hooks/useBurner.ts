@@ -47,7 +47,7 @@ export const useBurner = () => {
     );
 
     const [account, setAccount] = useState<Account | null>(null);
-    const [burnerUpdate, setBurnerUpdate] = useState(0);
+    const [count, setCount] = useState(0);
     const [isDeploying, setIsDeploying] = useState(false);
 
     // On mount, initialize the burner manager and set the active account.
@@ -55,6 +55,7 @@ export const useBurner = () => {
         (async () => {
             await burnerManager.init();
             setAccount(burnerManager.getActiveAccount());
+            setCount(burnerManager.list().length);
         })();
     }, []);
 
@@ -65,7 +66,7 @@ export const useBurner = () => {
      */
     const list = useCallback((): Burner[] => {
         return burnerManager.list();
-    }, [burnerManager.list(), burnerUpdate]);
+    }, [count]);
 
     /**
      * Selects and sets a burner as the active account.
@@ -101,7 +102,7 @@ export const useBurner = () => {
      */
     const clear = useCallback(() => {
         burnerManager.clear();
-        setBurnerUpdate((prev) => prev + 1);
+        setCount(0);
     }, [burnerManager]);
 
     /**
@@ -113,6 +114,7 @@ export const useBurner = () => {
         burnerManager.setIsDeployingCallback(setIsDeploying);
         const newAccount = await burnerManager.create();
         setAccount(newAccount);
+        setCount((prev) => prev + 1);
         return newAccount;
     }, [burnerManager]);
 
@@ -129,9 +131,8 @@ export const useBurner = () => {
         return burners.map((burner) => {
             return new BurnerConnector(
                 {
-                    options: {
-                        id: burner.address,
-                    },
+                    id: burner.address,
+                    name: "Dojo Burner",
                 },
                 get(burner.address)
             );
@@ -150,8 +151,8 @@ export const useBurner = () => {
      */
     const applyFromClipboard = useCallback(async () => {
         await burnerManager.setBurnersFromClipboard();
-        setAccount(burnerManager.getActiveAccount()); // set the active account
-        setBurnerUpdate((prev) => prev + 1); // re-fetch of the list
+        setAccount(burnerManager.getActiveAccount());
+        setCount(burnerManager.list().length);
     }, [burnerManager]);
 
     // Expose methods and properties for the consumers of this hook.
@@ -164,6 +165,7 @@ export const useBurner = () => {
         clear,
         account,
         isDeploying,
+        count,
         copyToClipboard,
         applyFromClipboard,
     };
