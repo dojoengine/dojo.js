@@ -54,18 +54,28 @@ const abiItem = z.union([
     }),
 ]);
 
-const fullContract = z.object({
-    name: z.string(),
-    address: z.string(),
+const generalFields = z.object({
+    kind: z.string(),
     class_hash: z.string(),
+    name: z.string(),
     abi: z.array(abiItem),
+});
+
+const world = generalFields.extend({
+    address: z.string(),
+    transaction_hash: z.string(),
+    block_number: z.number(),
+    seed: z.string(),
+});
+
+const contract = generalFields.extend({
+    address: z.string(),
     reads: z.array(z.unknown()),
     writes: z.array(z.unknown()),
     computed: z.array(z.unknown()),
 });
 
-const model = z.object({
-    name: z.string(),
+const model = generalFields.extend({
     members: z.array(
         z.object({
             name: z.string(),
@@ -73,15 +83,12 @@ const model = z.object({
             key: z.boolean(),
         })
     ),
-    class_hash: z.string(),
-    abi: z.array(abiItem),
 });
 
 const manifestSchema = z.object({
-    world: fullContract,
-    executor: fullContract.extend({ address: z.string().nullable() }),
-    base: fullContract.pick({ name: true, class_hash: true, abi: true }),
-    contracts: z.array(fullContract),
+    world: world,
+    base: generalFields,
+    contracts: z.array(contract),
     models: z.array(model),
 });
 
