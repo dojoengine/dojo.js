@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/core",
-    "version": "0.6.0-alpha.5",
+    "version": "0.6.1-alpha.1",
     "description": "Dojo onchain game engine core",
     "author": "Loaf",
     "license": "MIT",
@@ -21,7 +21,7 @@
         "starknet": "^6.1.5"
     },
     "devDependencies": {
-        "@dojoengine/torii-client": "^0.6.0-alpha.5",
+        "@dojoengine/torii-client": "^0.6.1-alpha.1",
         "@types/elliptic": "^6.4.14",
         "@vitest/coverage-v8": "^1.3.0",
         "tsup": "^8.0.1",
