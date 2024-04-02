@@ -58,6 +58,15 @@ pub enum Clause {
     Member(MemberClause),
 }
 
+impl From<&Clause> for torii_grpc::types::Clause {
+    fn from(value: &Clause) -> Self {
+        match value {
+            Clause::Keys(keys) => Self::Keys(keys.into()),
+            Clause::Member(member) => Self::Member(member.into()),
+        }
+    }
+}
+
 #[derive(Tsify, Serialize, Deserialize, Debug)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct KeysClauses(pub Vec<KeysClause>);
@@ -82,6 +91,15 @@ impl From<&KeysClause> for torii_grpc::types::KeysClause {
     }
 }
 
+#[derive(Tsify, Serialize, Deserialize, Debug)]
+#[tsify(into_wasm_abi, from_wasm_abi)]
+pub struct MemberClause {
+    pub model: String,
+    pub member: String,
+    pub operator: ComparisonOperator,
+    pub value: Value,
+}
+
 impl From<&MemberClause> for torii_grpc::types::MemberClause {
     fn from(value: &MemberClause) -> Self {
         Self {
@@ -89,15 +107,6 @@ impl From<&MemberClause> for torii_grpc::types::MemberClause {
             member: value.member.to_string(),
             operator: (&value.operator).into(),
             value: (&value.value).into(),
-        }
-    }
-}
-
-impl From<&Clause> for torii_grpc::types::Clause {
-    fn from(value: &Clause) -> Self {
-        match value {
-            Clause::Keys(keys) => Self::Keys(keys.into()),
-            Clause::Member(member) => Self::Member(member.into()),
         }
     }
 }
@@ -118,6 +127,17 @@ impl From<&LogicalOperator> for torii_grpc::types::LogicalOperator {
     }
 }
 
+#[derive(Tsify, Serialize, Deserialize, Debug)]
+#[tsify(into_wasm_abi, from_wasm_abi)]
+pub enum ComparisonOperator {
+    Eq,
+    Neq,
+    Gt,
+    Gte,
+    Lt,
+    Lte,
+}
+
 impl From<&ComparisonOperator> for torii_grpc::types::ComparisonOperator {
     fn from(value: &ComparisonOperator) -> Self {
         match value {
@@ -129,26 +149,6 @@ impl From<&ComparisonOperator> for torii_grpc::types::ComparisonOperator {
             ComparisonOperator::Lte => Self::Lte,
         }
     }
-}
-
-#[derive(Tsify, Serialize, Deserialize, Debug)]
-#[tsify(into_wasm_abi, from_wasm_abi)]
-pub struct MemberClause {
-    pub model: String,
-    pub member: String,
-    pub operator: ComparisonOperator,
-    pub value: Value,
-}
-
-#[derive(Tsify, Serialize, Deserialize, Debug)]
-#[tsify(into_wasm_abi, from_wasm_abi)]
-pub enum ComparisonOperator {
-    Eq,
-    Neq,
-    Gt,
-    Gte,
-    Lt,
-    Lte,
 }
 
 #[derive(Tsify, Serialize, Deserialize, Debug)]
