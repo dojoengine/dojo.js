@@ -18,7 +18,7 @@ export type BurnerRecord = {
 export type Burner = {
     address: string;
     active: boolean;
-    masterAccount: string;
+    masterAccount?: string;
     accountIndex?: number;
 };
 
