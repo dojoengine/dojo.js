@@ -753,6 +753,9 @@ importers:
       starknet:
         specifier: ^5.25.0
         version: 5.25.0(encoding@0.1.13)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@dojoengine/torii-client':
         specifier: ^0.6.0-alpha.5

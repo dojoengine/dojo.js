@@ -30,5 +30,8 @@
     },
     "bin": {
         "create-components": "./dist/bin/generateComponents.cjs"
+    },
+    "dependencies": {
+        "zod": "^3.22.4"
     }
 }
