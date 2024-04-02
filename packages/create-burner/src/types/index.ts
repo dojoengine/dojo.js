@@ -1,10 +1,11 @@
-import { Account, RpcProvider, AccountInterface } from "starknet";
+import { Account, AccountInterface, RpcProvider } from "starknet";
 
 export type BurnerStorage = {
     [address: string]: BurnerRecord;
 };
 
 export type BurnerRecord = {
+    chainId: string;
     privateKey: string;
     publicKey: string;
     deployTx: string;
@@ -53,3 +54,21 @@ export interface BurnerKeys {
     publicKey: string;
     address: string;
 }
+
+export type Predeployed = Burner & { name?: string };
+
+export type PredeployedStorage = {
+    [address: string]: PredeployedAccount;
+};
+
+export interface PredeployedManagerOptions {
+    rpcProvider: RpcProvider;
+    predeployedAccounts: PredeployedAccount[];
+}
+
+export type PredeployedAccount = {
+    name?: string;
+    address: string;
+    privateKey: string;
+    active: boolean;
+};

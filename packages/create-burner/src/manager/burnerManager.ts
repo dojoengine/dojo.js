@@ -5,6 +5,7 @@ import {
     ec,
     hash,
     RpcProvider,
+    shortString,
     stark,
 } from "starknet";
 import {
@@ -68,6 +69,7 @@ export class BurnerManager {
     public masterAccount: AccountInterface;
     public accountClassHash: string;
     public provider: RpcProvider;
+    public chainId: string = "";
 
     public account: Account | null = null;
     public isDeploying: boolean = false;
@@ -98,8 +100,12 @@ export class BurnerManager {
         }
     }
 
+    private getBurnerKey(): string {
+        return `burners_${this.chainId}`;
+    }
+
     private getBurnerStorage(): BurnerStorage {
-        return Storage.get("burners") || {};
+        return Storage.get(this.getBurnerKey()) || {};
     }
 
     private setActiveBurnerAccount(storage: BurnerStorage): void {
@@ -130,7 +136,9 @@ export class BurnerManager {
         if (this.isInitialized) {
             throw new Error("BurnerManager is already initialized");
         }
-
+        this.chainId = shortString.decodeShortString(
+            (await this.provider.getChainId()) as string
+        );
         const storage = this.getBurnerStorage();
         const addresses = Object.keys(storage);
 
@@ -155,10 +163,10 @@ export class BurnerManager {
         });
 
         if (Object.keys(storage).length) {
-            Storage.set("burners", storage);
+            Storage.set(this.getBurnerKey(), storage);
             this.setActiveBurnerAccount(storage); // Re-select the active burner account
         } else {
-            Storage.clear();
+            this.clear();
         }
 
         this.isInitialized = true;
@@ -187,7 +195,7 @@ export class BurnerManager {
         }
         storage[address].active = true;
 
-        Storage.set("burners", storage);
+        Storage.set(this.getBurnerKey(), storage);
         this.account = new Account(
             this.provider,
             address,
@@ -210,8 +218,19 @@ export class BurnerManager {
         );
     }
 
+    public delete(address: string) {
+        const storage = this.getBurnerStorage();
+        if (!storage[address]) {
+            throw new Error("burner not found");
+        }
+
+        delete storage[address];
+
+        Storage.set(this.getBurnerKey(), storage);
+    }
+
     clear(): void {
-        Storage.clear();
+        Storage.remove(this.getBurnerKey());
     }
 
     getActiveAccount(): Account | null {
@@ -294,6 +313,7 @@ export class BurnerManager {
         }
 
         storage[address] = {
+            chainId: this.chainId,
             privateKey,
             publicKey,
             deployTx,
@@ -310,7 +330,7 @@ export class BurnerManager {
 
         this.account = burner;
         this.updateIsDeploying(false);
-        Storage.set("burners", storage);
+        Storage.set(this.getBurnerKey(), storage);
 
         return burner;
     }
@@ -340,7 +360,7 @@ export class BurnerManager {
                 }
             }
 
-            Storage.set("burners", burners);
+            Storage.set(this.getBurnerKey(), burners);
 
             // If there's an active burner, select it
             if (activeAddress) {
