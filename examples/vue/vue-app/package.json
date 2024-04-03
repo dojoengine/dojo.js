@@ -10,11 +10,13 @@
         "create-components": "npx @dojoengine/core ../../dojo-starter/target/dev/manifest.json src/dojo/generated/contractComponents.ts http://localhost:5050 0x28f5999ae62fec17c09c52a800e244961dba05251f5aaf923afabd9c9804d1a"
     },
     "dependencies": {
-        "@dojoengine/core": "0.5.9",
+        "@dojoengine/core": "workspace:*",
+        "@dojoengine/create-burner": "workspace:*",
+        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/utils": "workspace:*",
+        "@dojoengine/react": "workspace:*",
+        "@dojoengine/state": "workspace:*",
         "@dojoengine/recs": "0.1.35",
-        "@dojoengine/state": "0.5.9",
-        "@dojoengine/torii-client": "0.5.9",
-        "@dojoengine/utils": "0.5.9",
         "@latticexyz/utils": "^1.43.0",
         "starknet": "^5.24.3",
         "vite-plugin-top-level-await": "^1.4.1",

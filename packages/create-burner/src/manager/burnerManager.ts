@@ -1,6 +1,5 @@
 import {
     Account,
-    AccountInterface,
     CallData,
     ec,
     hash,
@@ -60,7 +59,7 @@ import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
  */
 
 export class BurnerManager {
-    public masterAccount: AccountInterface;
+    public masterAccount: Account;
     public accountClassHash: string;
     public feeTokenAddress: string;
     public provider: RpcProvider;

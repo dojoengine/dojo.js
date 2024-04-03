@@ -6,7 +6,7 @@ import { createSystemCalls } from "../createSystemCalls";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { setupWorld } from "./generated";
-import { Account } from "starknet";
+import { Account, ProviderOptions } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
@@ -35,15 +35,20 @@ export async function setup({ ...config }: DojoConfig) {
     // setup world
     const client = await setupWorld(dojoProvider);
 
+    const providerOptions: ProviderOptions = {
+        nodeUrl: config.rpcUrl,
+    };
+
     // create burner manager
     const burnerManager = new BurnerManager({
         masterAccount: new Account(
-            dojoProvider.provider,
+            providerOptions,
             config.masterAddress,
             config.masterPrivateKey
         ),
         accountClassHash: config.accountClassHash,
         rpcProvider: dojoProvider.provider,
+        feeTokenAddress: "",
     });
 
     try {
