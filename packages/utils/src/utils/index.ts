@@ -16,6 +16,7 @@ import { poseidonHashMany } from "micro-starknet";
  * @returns {any[]} An array of events that meet the filtering criteria.
  */
 export function getEvents(receipt: any): any[] {
+    console.log(receipt);
     return receipt.events.filter((event: any) => {
         return (
             event.keys.length === 1 &&
@@ -45,6 +46,7 @@ export function setComponentFromEvent(
     components: Components,
     eventData: string[]
 ) {
+    console.log(eventData);
     // retrieve the component name
     const componentName = hexToAscii(eventData[0]);
 
@@ -61,7 +63,7 @@ export function setComponentFromEvent(
     const entityIndex = getEntityIdFromKeys(keys);
 
     // get values
-    const numberOfValues = parseInt(eventData[index++]);
+    const numberOfValues = parseInt(eventData[index]);
 
     const string_keys = keys.map((key) => key.toString());
 
@@ -73,8 +75,6 @@ export function setComponentFromEvent(
         ...string_keys,
         ...values,
     ]);
-
-    // console.log(componentName, entityIndex, componentValues);
 
     // set component
     setComponent(component, entityIndex, componentValues);

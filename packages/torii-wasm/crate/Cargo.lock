@@ -2431,8 +2431,8 @@ dependencies = [
 
 [[package]]
 name = "dojo-bindgen"
-version = "0.6.0-alpha.12"
-source = "git+https://github.com/dojoengine/dojo?rev=c595fc927b7e33bd2c1d14e75dba459229d40363#c595fc927b7e33bd2c1d14e75dba459229d40363"
+version = "0.6.0-alpha.13"
+source = "git+https://github.com/dojoengine/dojo?rev=5bdcfdff82c7a01443bf603047f4bfe00d210ed6#5bdcfdff82c7a01443bf603047f4bfe00d210ed6"
 dependencies = [
  "async-trait",
  "cainome 0.1.5",
@@ -2448,8 +2448,8 @@ dependencies = [
 
 [[package]]
 name = "dojo-lang"
-version = "0.6.0-alpha.12"
-source = "git+https://github.com/dojoengine/dojo?rev=c595fc927b7e33bd2c1d14e75dba459229d40363#c595fc927b7e33bd2c1d14e75dba459229d40363"
+version = "0.6.0-alpha.13"
+source = "git+https://github.com/dojoengine/dojo?rev=5bdcfdff82c7a01443bf603047f4bfe00d210ed6#5bdcfdff82c7a01443bf603047f4bfe00d210ed6"
 dependencies = [
  "anyhow",
  "cairo-lang-compiler",
@@ -2493,8 +2493,8 @@ dependencies = [
 
 [[package]]
 name = "dojo-types"
-version = "0.6.0-alpha.12"
-source = "git+https://github.com/dojoengine/dojo?rev=c595fc927b7e33bd2c1d14e75dba459229d40363#c595fc927b7e33bd2c1d14e75dba459229d40363"
+version = "0.6.0-alpha.13"
+source = "git+https://github.com/dojoengine/dojo?rev=5bdcfdff82c7a01443bf603047f4bfe00d210ed6#5bdcfdff82c7a01443bf603047f4bfe00d210ed6"
 dependencies = [
  "crypto-bigint",
  "hex",
@@ -2509,8 +2509,8 @@ dependencies = [
 
 [[package]]
 name = "dojo-world"
-version = "0.6.0-alpha.12"
-source = "git+https://github.com/dojoengine/dojo?rev=c595fc927b7e33bd2c1d14e75dba459229d40363#c595fc927b7e33bd2c1d14e75dba459229d40363"
+version = "0.6.0-alpha.13"
+source = "git+https://github.com/dojoengine/dojo?rev=5bdcfdff82c7a01443bf603047f4bfe00d210ed6#5bdcfdff82c7a01443bf603047f4bfe00d210ed6"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -8043,8 +8043,8 @@ dependencies = [
 
 [[package]]
 name = "sozo-ops"
-version = "0.6.0-alpha.12"
-source = "git+https://github.com/dojoengine/dojo?rev=c595fc927b7e33bd2c1d14e75dba459229d40363#c595fc927b7e33bd2c1d14e75dba459229d40363"
+version = "0.6.0-alpha.13"
+source = "git+https://github.com/dojoengine/dojo?rev=5bdcfdff82c7a01443bf603047f4bfe00d210ed6#5bdcfdff82c7a01443bf603047f4bfe00d210ed6"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -9251,8 +9251,8 @@ dependencies = [
 
 [[package]]
 name = "torii-client"
-version = "0.6.0-alpha.12"
-source = "git+https://github.com/dojoengine/dojo?rev=c595fc927b7e33bd2c1d14e75dba459229d40363#c595fc927b7e33bd2c1d14e75dba459229d40363"
+version = "0.6.0-alpha.13"
+source = "git+https://github.com/dojoengine/dojo?rev=5bdcfdff82c7a01443bf603047f4bfe00d210ed6#5bdcfdff82c7a01443bf603047f4bfe00d210ed6"
 dependencies = [
  "async-trait",
  "crypto-bigint",
@@ -9307,8 +9307,8 @@ dependencies = [
 
 [[package]]
 name = "torii-core"
-version = "0.6.0-alpha.12"
-source = "git+https://github.com/dojoengine/dojo?rev=c595fc927b7e33bd2c1d14e75dba459229d40363#c595fc927b7e33bd2c1d14e75dba459229d40363"
+version = "0.6.0-alpha.13"
+source = "git+https://github.com/dojoengine/dojo?rev=5bdcfdff82c7a01443bf603047f4bfe00d210ed6#5bdcfdff82c7a01443bf603047f4bfe00d210ed6"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -9341,8 +9341,8 @@ dependencies = [
 
 [[package]]
 name = "torii-grpc"
-version = "0.6.0-alpha.12"
-source = "git+https://github.com/dojoengine/dojo?rev=c595fc927b7e33bd2c1d14e75dba459229d40363#c595fc927b7e33bd2c1d14e75dba459229d40363"
+version = "0.6.0-alpha.13"
+source = "git+https://github.com/dojoengine/dojo?rev=5bdcfdff82c7a01443bf603047f4bfe00d210ed6#5bdcfdff82c7a01443bf603047f4bfe00d210ed6"
 dependencies = [
  "bytes",
  "crypto-bigint",
@@ -9380,8 +9380,8 @@ dependencies = [
 
 [[package]]
 name = "torii-relay"
-version = "0.6.0-alpha.12"
-source = "git+https://github.com/dojoengine/dojo?rev=c595fc927b7e33bd2c1d14e75dba459229d40363#c595fc927b7e33bd2c1d14e75dba459229d40363"
+version = "0.6.0-alpha.13"
+source = "git+https://github.com/dojoengine/dojo?rev=5bdcfdff82c7a01443bf603047f4bfe00d210ed6#5bdcfdff82c7a01443bf603047f4bfe00d210ed6"
 dependencies = [
  "anyhow",
  "async-trait",
