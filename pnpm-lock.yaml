@@ -43,26 +43,26 @@ importers:
   examples/react/react-app:
     dependencies:
       '@dojoengine/core':
-        specifier: ^0.5.0
-        version: 0.5.9(starknet@5.25.0)
+        specifier: ^0.6.1-alpha.1
+        version: link:../../../packages/core
       '@dojoengine/create-burner':
-        specifier: ^0.5.0
-        version: 0.5.9(react-dom@18.2.0)(react@18.2.0)(starknet@5.25.0)
+        specifier: ^0.6.1-alpha.1
+        version: link:../../../packages/create-burner
       '@dojoengine/react':
-        specifier: ^0.5.0
-        version: 0.5.9(react@18.2.0)(starknet@5.25.0)(type-fest@2.19.0)(typescript@5.4.3)(zod@3.22.4)
+        specifier: ^0.6.1-alpha.1
+        version: link:../../../packages/react
       '@dojoengine/recs':
         specifier: 0.1.35
         version: 0.1.35(typescript@5.4.3)(zod@3.22.4)
       '@dojoengine/state':
-        specifier: ^0.5.0
-        version: 0.5.9(starknet@5.25.0)(typescript@5.4.3)(zod@3.22.4)
+        specifier: ^0.6.1-alpha.1
+        version: link:../../../packages/state
       '@dojoengine/torii-client':
-        specifier: ^0.5.0
-        version: 0.5.9
+        specifier: ^0.6.1-alpha.1
+        version: link:../../../packages/torii-client
       '@dojoengine/utils':
-        specifier: ^0.5.0
-        version: 0.5.9(starknet@5.25.0)(typescript@5.4.3)(zod@3.22.4)
+        specifier: ^0.6.1-alpha.1
+        version: link:../../../packages/utils
       '@latticexyz/react':
         specifier: ^2.0.0-next.11
         version: 2.0.4(typescript@5.4.3)(zod@3.22.4)
@@ -12005,7 +12005,7 @@ packages:
       graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       graphql: 16.8.1
-      tslib: 2.4.1
+      tslib: 2.6.2
     dev: true
 
   /graphql-ws@5.16.0(graphql@16.8.1):
