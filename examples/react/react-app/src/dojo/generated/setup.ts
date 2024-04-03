@@ -35,21 +35,18 @@ export async function setup({ ...config }: DojoConfig) {
     // setup world
     const client = await setupWorld(dojoProvider);
 
-    const providerOptions: ProviderOptions = {
-        nodeUrl: config.rpcUrl,
-    };
-
     // create burner manager
     const burnerManager = new BurnerManager({
         masterAccount: new Account(
-            providerOptions,
+            {
+                nodeUrl: config.rpcUrl,
+            },
             config.masterAddress,
             config.masterPrivateKey
         ),
         accountClassHash: config.accountClassHash,
         rpcProvider: dojoProvider.provider,
-        feeTokenAddress:
-            "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        feeTokenAddress: config.feeTokenAddress,
     });
 
     try {
