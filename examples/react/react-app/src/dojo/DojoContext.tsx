@@ -45,6 +45,7 @@ export const DojoProvider = ({
         select,
         isDeploying,
         clear,
+        count,
         copyToClipboard,
         applyFromClipboard,
     } = useBurnerManager({
@@ -62,6 +63,7 @@ export const DojoProvider = ({
                     get,
                     select,
                     clear,
+                    count,
                     account: account ? account : masterAccount,
                     isDeploying,
                     copyToClipboard,
