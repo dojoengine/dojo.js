@@ -44,6 +44,12 @@ export function createSystemCalls(
                 account,
             });
 
+            console.log(
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
+                })
+            );
+
             setComponentsFromEvents(
                 contractComponents,
                 getEvents(

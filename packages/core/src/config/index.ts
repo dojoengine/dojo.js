@@ -3,7 +3,9 @@ import {
     KATANA_PREFUNDED_ADDRESS,
     KATANA_PREFUNDED_PRIVATE_KEY,
     LOCAL_KATANA,
+    LOCAL_RELAY,
     LOCAL_TORII,
+    KATANA_ETH_CONTRACT_ADDRESS,
 } from "../constants";
 
 export type DojoConfig = ReturnType<typeof createDojoConfig>;
@@ -11,9 +13,11 @@ export type DojoConfig = ReturnType<typeof createDojoConfig>;
 interface DojoConfigParams {
     rpcUrl?: string;
     toriiUrl?: string;
+    relayUrl?: string;
     masterAddress?: string;
     masterPrivateKey?: string;
     accountClassHash?: string;
+    feeTokenAddress?: string;
     manifest: any;
 }
 
@@ -24,10 +28,12 @@ export function createDojoConfig({ manifest, ...config }: DojoConfigParams) {
     return {
         rpcUrl: config.rpcUrl ?? LOCAL_KATANA,
         toriiUrl: config.toriiUrl ?? LOCAL_TORII,
+        relayUrl: config.relayUrl ?? LOCAL_RELAY,
         masterAddress: config.masterAddress ?? KATANA_PREFUNDED_ADDRESS,
         masterPrivateKey:
             config.masterPrivateKey ?? KATANA_PREFUNDED_PRIVATE_KEY,
         accountClassHash: config.accountClassHash ?? KATANA_CLASS_HASH,
+        feeTokenAddress: config.feeTokenAddress ?? KATANA_ETH_CONTRACT_ADDRESS,
         manifest,
     };
 }
