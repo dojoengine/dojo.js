@@ -4,7 +4,7 @@ on:
     push:
         branches: [main]
     pull_request:
-        branches: [main]
+        branches: [opened, synchronize]
 
 jobs:
     check:
@@ -25,6 +25,11 @@ jobs:
                   cd examples/dojo-starter
                   /home/runner/.config/.dojo/bin/sozo build
                   /home/runner/.config/.dojo/bin/sozo test
+
+            - name: "Setup npm"
+              run: |
+                  npm set @ponderingdemocritus:registry=https://npm.pkg.github.com/dojoengine
+                  npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
 
             - name: Install Protobuf Compiler
               run: sudo apt-get install -y protobuf-compiler
