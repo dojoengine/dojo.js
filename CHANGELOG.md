@@ -8,7 +8,9 @@ All notable changes to Dojo.js will be documented in this file.
 
 -   Increased batch size of entity query
 -   Improved burner architecture
--   updated to Starknet js
+-   Updated Starknet js
+-   Added relayUrl into ToriiClient ready for RTC
+-   Remove bun and replaced with pnpm everywhere
 
 ### Changed
 
