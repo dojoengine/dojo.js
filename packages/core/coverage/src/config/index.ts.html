@@ -29,7 +29,7 @@
                     <div class="fl pad1y space-right2">
                         <span class="strong">100% </span>
                         <span class="quiet">Statements</span>
-                        <span class="fraction">36/36</span>
+                        <span class="fraction">39/39</span>
                     </div>
 
                     <div class="fl pad1y space-right2">
@@ -47,7 +47,7 @@
                     <div class="fl pad1y space-right2">
                         <span class="strong">100% </span>
                         <span class="quiet">Lines</span>
-                        <span class="fraction">36/36</span>
+                        <span class="fraction">39/39</span>
                     </div>
                 </div>
                 <p class="quiet">
@@ -100,7 +100,13 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -141,6 +147,7 @@
     KATANA_PREFUNDED_ADDRESS,
     KATANA_PREFUNDED_PRIVATE_KEY,
     LOCAL_KATANA,
+    LOCAL_RELAY,
     LOCAL_TORII,
     KATANA_ETH_CONTRACT_ADDRESS,
 } from "../constants";
@@ -150,6 +157,7 @@ export type DojoConfig = ReturnType&lt;typeof createDojoConfig&gt;;
 interface DojoConfigParams {
     rpcUrl?: string;
     toriiUrl?: string;
+    relayUrl?: string;
     masterAddress?: string;
     masterPrivateKey?: string;
     accountClassHash?: string;
@@ -164,6 +172,7 @@ export function createDojoConfig({ manifest, ...config }: DojoConfigParams) {
     return {
         rpcUrl: config.<span class="branch-0 cbranch-no" title="branch not covered" >rpcUrl ?? LOCAL_KATANA,</span>
         toriiUrl: config.<span class="branch-0 cbranch-no" title="branch not covered" >toriiUrl ?? LOCAL_TORII,</span>
+        relayUrl: config.relayUrl ?? LOCAL_RELAY,
         masterAddress: config.<span class="branch-0 cbranch-no" title="branch not covered" >masterAddress ?? KATANA_PREFUNDED_ADDRESS,</span>
         masterPrivateKey:
             config.<span class="branch-0 cbranch-no" title="branch not covered" >masterPrivateKey ?? KATANA_PREFUNDED_PRIVATE_KEY,</span>
@@ -186,7 +195,7 @@ export function createDojoConfig({ manifest, ...config }: DojoConfigParams) {
                 rel="noopener noreferrer"
                 >istanbul</a
             >
-            at 2024-04-03T00:17:48.860Z
+            at 2024-04-04T02:29:31.651Z
         </div>
         <script src="../../prettify.js"></script>
         <script>

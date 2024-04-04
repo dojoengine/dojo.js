@@ -18,6 +18,9 @@ jobs:
               with:
                   node-version: "20"
 
+            - name: Install Protobuf Compiler
+              run: sudo apt-get install -y protobuf-compiler
+
             - uses: pnpm/action-setup@v3
               with:
                   version: 8

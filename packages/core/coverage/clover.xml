@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712103468870" clover="3.2.0">
-  <project timestamp="1712103468870" name="All files">
-    <metrics statements="823" coveredstatements="93" conditionals="22" coveredconditionals="10" methods="10" coveredmethods="3" elements="855" coveredelements="106" complexity="0" loc="823" ncloc="823" packages="8" files="10" classes="10"/>
+<coverage generated="1712197771663" clover="3.2.0">
+  <project timestamp="1712197771663" name="All files">
+    <metrics statements="827" coveredstatements="97" conditionals="22" coveredconditionals="10" methods="10" coveredmethods="3" elements="859" coveredelements="110" complexity="0" loc="827" ncloc="827" packages="8" files="10" classes="10"/>
     <package name="bin">
       <metrics statements="180" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="generateComponents.cjs" path="/Users/os/Documents/code/dojo/dojo.js/packages/core/bin/generateComponents.cjs">
@@ -200,9 +200,9 @@
       </file>
     </package>
     <package name="src.config">
-      <metrics statements="36" coveredstatements="36" conditionals="6" coveredconditionals="1" methods="1" coveredmethods="1"/>
+      <metrics statements="39" coveredstatements="39" conditionals="6" coveredconditionals="1" methods="1" coveredmethods="1"/>
       <file name="index.ts" path="/Users/os/Documents/code/dojo/dojo.js/packages/core/src/config/index.ts">
-        <metrics statements="36" coveredstatements="36" conditionals="6" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <metrics statements="39" coveredstatements="39" conditionals="6" coveredconditionals="1" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -227,24 +227,27 @@
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
-        <line num="25" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="25" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
-        <line num="27" count="1" type="cond" truecount="0" falsecount="1"/>
-        <line num="28" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="27" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="28" count="1" type="stmt"/>
         <line num="29" count="1" type="cond" truecount="0" falsecount="1"/>
-        <line num="30" count="1" type="stmt"/>
-        <line num="31" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="30" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="31" count="1" type="stmt"/>
         <line num="32" count="1" type="cond" truecount="0" falsecount="1"/>
         <line num="33" count="1" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
-        <line num="35" count="1" type="stmt"/>
+        <line num="34" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="35" count="1" type="cond" truecount="0" falsecount="1"/>
         <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.constants">
-      <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="index.ts" path="/Users/os/Documents/code/dojo/dojo.js/packages/core/src/constants/index.ts">
-        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -255,6 +258,7 @@
         <line num="8" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.logger">
