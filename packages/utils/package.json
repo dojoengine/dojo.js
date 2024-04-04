@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/utils",
-    "version": "0.6.1-alpha.1",
+    "version": "0.6.1",
     "description": "Helpful Dojo onchain game engine utils",
     "author": "Loaf",
     "license": "MIT",
