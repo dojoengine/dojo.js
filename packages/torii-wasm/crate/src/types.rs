@@ -54,6 +54,13 @@ pub struct ClientConfig {
     pub world_address: String,
 }
 
+#[derive(Tsify, Serialize, Deserialize)]
+#[tsify(into_wasm_abi, from_wasm_abi)]
+pub struct Signature {
+    pub r: String,
+    pub s: String,
+}
+
 #[cfg(test)]
 mod test {
 
