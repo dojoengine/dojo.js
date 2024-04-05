@@ -823,6 +823,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@dojoengine/recs':
+        specifier: 0.1.35
+        version: 0.1.35(typescript@5.4.3)(zod@3.22.4)
       starknet:
         specifier: ^6.1.5
         version: 6.6.6(encoding@0.1.13)
