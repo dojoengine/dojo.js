@@ -32,20 +32,31 @@ async function run() {
     try {
         const { template, projectName } = await prompt();
 
+        // Create the main project directory
+        const projectPath = path.join(process.cwd(), projectName);
+        fs.mkdirSync(projectPath, { recursive: true });
+
         // clone template using degit into projectName directory
         console.log(`Downloading ${template}...`);
         spawn.sync("npx", [
             "degit",
             `dojoengine/dojo.js/examples/react/${template}`,
-            `${projectName}`,
+            projectName, // Cloning directly into the project directory
         ]);
 
         // rewrite package.json
         await rewritePackageJson(projectName);
 
-        // clone dojo-starter
+        // clone dojo-starter into a subdirectory of the project directory
+        const dojoStarterPath = path.join(projectPath, 'dojo-starter');
         console.log(`Downloading dojo-starter...`);
-        spawn.sync("npx", ["degit", `dojoengine/dojo-starter`, `dojo-starter`]);
+        spawn.sync("npx", ["degit", `dojoengine/dojo-starter`, dojoStarterPath]);
+
+        console.log("Congrats! You are now installed.");
+        console.log("\nYou can now build the starter and run the client. Follow the readme here:");
+
+        console.log('https://book.dojoengine.org/cairo/hello-dojo');
+
     } catch (e: any) {
         console.log(e);
     }
@@ -67,7 +78,7 @@ async function rewritePackageJson(projectName: string) {
     for (let dep of Object.keys(packageJson.dependencies)) {
         if (
             dep.startsWith("@dojoengine") &&
-            packageJson.dependencies[dep].startsWith("link:")
+            packageJson.dependencies[dep].startsWith("workspace:")
         ) {
             packageJson.dependencies[dep] = latestVersion;
         }
