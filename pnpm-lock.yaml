@@ -99,7 +99,7 @@ importers:
         version: 3.0.11
       bun-types:
         specifier: latest
-        version: 1.1.0
+        version: 1.1.1
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
@@ -826,6 +826,9 @@ importers:
       starknet:
         specifier: ^6.1.5
         version: 6.6.6(encoding@0.1.13)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@dojoengine/torii-client':
         specifier: ^0.6.12
@@ -9662,8 +9665,8 @@ packages:
       semver: 7.6.0
     dev: true
 
-  /bun-types@1.1.0:
-    resolution: {integrity: sha512-GhMDD7TosdJzQPGUOcQD5PZshvXVxDfwGAZs2dq+eSaPsRn3iUCzvpFlsg7Q51bXVzLAUs+FWHlnmpgZ5UggIg==}
+  /bun-types@1.1.1:
+    resolution: {integrity: sha512-+dg+3Q7QQ9GdUazfgth7AGYD9NuqOCKL1Hdi5Ut1WbKlmSrKBuAOobTO4g1sn3KSajnxqVQ69MdQrITZfuFxvg==}
     dependencies:
       '@types/node': 20.11.30
       '@types/ws': 8.5.10
