@@ -55,20 +55,26 @@ const abiItem = z.union([
 ]);
 
 const generalFields = z.object({
-    kind: z.string(),
     class_hash: z.string(),
     name: z.string(),
     abi: z.array(abiItem),
 });
 
 const world = generalFields.extend({
+    kind: z.literal("Contract"),
     address: z.string(),
     transaction_hash: z.string(),
     block_number: z.number(),
     seed: z.string(),
 });
 
+const base = generalFields.extend({
+    kind: z.literal("Class"),
+    abi: z.literal(null),
+});
+
 const contract = generalFields.extend({
+    kind: z.literal("DojoContract"),
     address: z.string(),
     reads: z.array(z.unknown()),
     writes: z.array(z.unknown()),
@@ -76,6 +82,7 @@ const contract = generalFields.extend({
 });
 
 const model = generalFields.extend({
+    kind: z.literal("DojoModel"),
     members: z.array(
         z.object({
             name: z.string(),
@@ -87,7 +94,7 @@ const model = generalFields.extend({
 
 const manifestSchema = z.object({
     world: world,
-    base: generalFields,
+    base,
     contracts: z.array(contract),
     models: z.array(model),
 });
