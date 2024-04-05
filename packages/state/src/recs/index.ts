@@ -27,7 +27,10 @@ export const getEntities = async <S extends Schema>(
     let continueFetching = true;
 
     while (continueFetching) {
-        const entities = await client.getEntities(limit, cursor);
+        const entities = await client.getEntities({
+            limit,
+            offset: cursor,
+        });
 
         setEntities(entities, components);
 
