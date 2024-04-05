@@ -16,6 +16,7 @@ export async function setup({ ...config }: DojoConfig) {
     const toriiClient = await torii.createClient([], {
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
+        relayUrl: config.relayUrl,
         worldAddress: config.manifest.world.address || "",
         // hardcoded empty string until this is actually implemented
         relayUrl: "",
@@ -39,12 +40,15 @@ export async function setup({ ...config }: DojoConfig) {
     // create burner manager
     const burnerManager = new BurnerManager({
         masterAccount: new Account(
-            dojoProvider.provider,
+            {
+                nodeUrl: config.rpcUrl,
+            },
             config.masterAddress,
             config.masterPrivateKey
         ),
         accountClassHash: config.accountClassHash,
         rpcProvider: dojoProvider.provider,
+        feeTokenAddress: config.feeTokenAddress,
     });
 
     try {

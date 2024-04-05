@@ -4,6 +4,8 @@ import { BurnerManager, DojoBurnerStarknetWindowObject } from "..";
 
 export const useBurnerWindowObject = (burnerManager?: BurnerManager) => {
     const [isInitialized, setIsInitialized] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState<string | undefined>();
 
     useEffect(() => {
         const initAsync = async () => {
@@ -12,20 +14,27 @@ export const useBurnerWindowObject = (burnerManager?: BurnerManager) => {
                 return;
             }
 
-            await burnerManager.init();
+            try {
+                await burnerManager.init();
 
-            const starknetWindowObject = new DojoBurnerStarknetWindowObject(
-                burnerManager
-            );
-            const key = `starknet_${starknetWindowObject.id}`;
+                const starknetWindowObject = new DojoBurnerStarknetWindowObject(
+                    burnerManager
+                );
 
-            (window as any)[key] = starknetWindowObject as StarknetWindowObject;
+                const key = `starknet_${starknetWindowObject.id}`;
+                (window as any)[key] =
+                    starknetWindowObject as StarknetWindowObject;
 
-            setIsInitialized(true);
+                setIsInitialized(true);
+            } catch (e: any) {
+                console.log(e);
+                setIsError(true);
+                setError("failed to initialize burnerManager");
+            }
         };
 
         initAsync();
     }, [burnerManager]);
 
-    return { isInitialized };
+    return { isInitialized, isError, error };
 };
