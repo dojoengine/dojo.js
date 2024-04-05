@@ -15,7 +15,9 @@ export const useBurnerWindowObject = (burnerManager?: BurnerManager) => {
             }
 
             try {
-                await burnerManager.init();
+                if (!burnerManager.isInitialized) {
+                    await burnerManager.init();
+                }
 
                 const starknetWindowObject = new DojoBurnerStarknetWindowObject(
                     burnerManager
