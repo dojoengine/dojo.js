@@ -11,15 +11,16 @@ export const createBurner = async ({ ...config }: DojoConfig) => {
 
     const burnerManager = new BurnerManager({
         masterAccount: new Account(
-            rpcProvider,
+            {
+                nodeUrl: config.rpcUrl,
+            },
             config.masterAddress,
-            config.masterPrivateKey,
-            "1"
+            config.masterPrivateKey
         ),
         accountClassHash: config.accountClassHash,
-        rpcProvider,
+        rpcProvider: rpcProvider,
+        feeTokenAddress: config.feeTokenAddress,
     });
-
     try {
         await burnerManager.init();
         if (burnerManager.list().length === 0) {
