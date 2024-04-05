@@ -72,9 +72,20 @@ export const useBurnerManager = ({
     );
 
     /**
-     * Clears a burner account based on its address.
+     * Deletes a burner account based on its address.
      *
-     * @returns The Burner account corresponding to the provided address.
+     * @param address - The address of the burner account to delete.
+     */
+    const remove = useCallback(
+        (address: string): void => {
+            burnerManager.delete(address);
+            setCount((prev) => Math.max(prev - 1, 0));
+        },
+        [burnerManager]
+    );
+
+    /**
+     * Clears a burner account based on its address.
      */
     const clear = useCallback(() => {
         burnerManager.clear();
@@ -153,6 +164,7 @@ export const useBurnerManager = ({
         get,
         list,
         select,
+        remove,
         create,
         listConnectors,
         clear,

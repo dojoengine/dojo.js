@@ -32,6 +32,7 @@ export interface BurnerAccount {
     create: (options?: BurnerCreateOptions) => void;
     list: () => Burner[];
     get: (address: string) => AccountInterface;
+    remove: (address: string) => void;
     account: AccountInterface;
     select: (address: string) => void;
     isDeploying: boolean;

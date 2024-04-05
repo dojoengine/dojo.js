@@ -304,8 +304,9 @@ export class BurnerManager {
         );
 
         // shouldn't we wait to make sure it was accepted?
-        // const response = await burner.waitForTransaction(deployTx)
-        // console.log(response)
+        // console.log(`DEPLOY TX:`, deployTx)
+        // const receipt = await this.masterAccount.waitForTransaction(deployTx)
+        // console.log(`DEPLOY RECEIPT:`, receipt)
 
         const storage = this.getBurnerStorage();
         for (let address in storage) {
