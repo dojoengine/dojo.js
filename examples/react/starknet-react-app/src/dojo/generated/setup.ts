@@ -16,8 +16,6 @@ export async function setup({ ...config }: DojoConfig) {
         toriiUrl: config.toriiUrl,
         relayUrl: "",
         worldAddress: config.manifest.world.address || "",
-        // hardcoded empty string until this is actually implemented
-        relayUrl: "",
     });
 
     // create contract components
