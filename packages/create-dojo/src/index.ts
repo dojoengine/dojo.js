@@ -32,31 +32,58 @@ async function run() {
     try {
         const { template, projectName } = await prompt();
 
-        // clone template using degit into projectName directory
-        console.log(`Downloading ${template}...`);
+        // Create the main project directory
+        const projectPath = path.join(process.cwd(), projectName);
+        fs.mkdirSync(projectPath, { recursive: true });
+
+        // Create client and dojo-starter directories inside the main project directory
+        const clientPath = path.join(projectPath, 'client');
+        const dojoStarterPath = path.join(projectPath, 'dojo-starter');
+        fs.mkdirSync(clientPath, { recursive: true });
+        fs.mkdirSync(dojoStarterPath, { recursive: true });
+
+        // clone template using degit into client directory
+        console.log(`Downloading ${template} into client directory...`);
         spawn.sync("npx", [
             "degit",
             `dojoengine/dojo.js/examples/react/${template}`,
-            `${projectName}`,
+            clientPath, // Cloning directly into the client directory
         ]);
 
-        // rewrite package.json
+        // Ensure the client directory exists before rewriting package.json
+        if (!fs.existsSync(clientPath)) {
+            throw new Error(`Client directory not found at ${clientPath}`);
+        }
+
+        // rewrite package.json in client directory
         await rewritePackageJson(projectName);
 
-        // clone dojo-starter
+        // clone dojo-starter into the dojo-starter directory
         console.log(`Downloading dojo-starter...`);
-        spawn.sync("npx", ["degit", `dojoengine/dojo-starter`, `dojo-starter`]);
-    } catch (e: any) {
-        console.log(e);
+        spawn.sync("npx", ["degit", `dojoengine/dojo-starter`, dojoStarterPath]);
+        
+        console.log("Congrats! Your new project has been set up successfully.\n");
+        console.log(`Navigate into your project directory with:\n  cd ${projectName}\n`);
+        console.log("You can then build the starter and run the client.\n");
+        console.log("For detailed instructions, follow the README here:\n");
+
+        console.log('https://book.dojoengine.org/cairo/hello-dojo');
+
+    } catch (e) {
+        console.error(`Error: ${e}`);
     }
 }
 
 async function rewritePackageJson(projectName: string) {
-    const packageJsonPath = path.join(
-        process.cwd(),
-        projectName,
-        "package.json"
-    );
+    // The package.json is expected to be in the 'client' subdirectory
+    const clientPath = path.join(process.cwd(), projectName, 'client');
+    process.chdir(clientPath);
+
+    const packageJsonPath = path.join("package.json");
+    // Check if package.json exists before reading it
+    if (!fs.existsSync(packageJsonPath)) {
+        throw new Error(`package.json not found in ${clientPath}`);
+    }
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
     const latestVersion = await getLatestVersion();
 
@@ -67,7 +94,7 @@ async function rewritePackageJson(projectName: string) {
     for (let dep of Object.keys(packageJson.dependencies)) {
         if (
             dep.startsWith("@dojoengine") &&
-            packageJson.dependencies[dep].startsWith("link:")
+            packageJson.dependencies[dep].startsWith("workspace:")
         ) {
             packageJson.dependencies[dep] = latestVersion;
         }

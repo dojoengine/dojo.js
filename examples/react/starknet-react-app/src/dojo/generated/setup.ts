@@ -6,8 +6,6 @@ import { createSystemCalls } from "../createSystemCalls";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { setupWorld } from "./generated";
-import { Account } from "starknet";
-import { BurnerManager } from "@dojoengine/create-burner";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -16,6 +14,7 @@ export async function setup({ ...config }: DojoConfig) {
     const toriiClient = await torii.createClient([], {
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
+        relayUrl: "",
         worldAddress: config.manifest.world.address || "",
     });
 

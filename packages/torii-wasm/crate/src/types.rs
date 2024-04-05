@@ -1,6 +1,6 @@
-use torii_grpc::types::KeysClause;
 use serde::{Deserialize, Serialize};
 use starknet::core::types::FieldElement;
+use torii_grpc::types::KeysClause;
 use tsify::Tsify;
 use wasm_bindgen::prelude::wasm_bindgen;
 
@@ -48,6 +48,8 @@ pub struct ClientConfig {
     pub rpc_url: String,
     #[serde(rename = "toriiUrl")]
     pub torii_url: String,
+    #[serde(rename = "relayUrl")]
+    pub relay_url: String,
     #[serde(rename = "worldAddress")]
     pub world_address: String,
 }
@@ -69,9 +71,6 @@ mod test {
         let keys_clause: KeysClause = entity_model.try_into().unwrap();
 
         assert_eq!(keys_clause.model, "Position");
-        assert_eq!(
-            keys_clause.keys,
-            vec![felt!("0x1"), felt!("0x2")]
-        );
+        assert_eq!(keys_clause.keys, vec![felt!("0x1"), felt!("0x2")]);
     }
 }
