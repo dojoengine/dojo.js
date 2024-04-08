@@ -797,7 +797,7 @@ importers:
         version: 1.43.0(ethers@5.7.2)(mobx@6.12.3)(proxy-deep@3.1.1)(rxjs@7.8.1)(typedoc@0.25.12)(web3-utils@1.10.4)
       starknet:
         specifier: ^5.24.3
-        version: 5.25.0
+        version: 5.25.0(encoding@0.1.13)
       vite-plugin-top-level-await:
         specifier: ^1.4.1
         version: 1.4.1(vite@5.2.7)
@@ -960,7 +960,7 @@ importers:
         version: 3.1.3
       get-starknet-core:
         specifier: ^3.2.0
-        version: 3.2.0(starknet@6.6.6)
+        version: 3.2.0(starknet@5.25.0)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -972,10 +972,13 @@ importers:
         version: 7.5.5
       starknet:
         specifier: ^6.1.5
-        version: 6.6.6(encoding@0.1.13)
+        version: 5.25.0(encoding@0.1.13)
       type-fest:
         specifier: ^2.14.0
         version: 2.19.0
+      zustand:
+        specifier: ^4.5.2
+        version: 4.5.2(@types/react@18.2.74)(react@18.2.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.21.4
@@ -11999,6 +12002,14 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /get-starknet-core@3.2.0(starknet@5.25.0):
+    resolution: {integrity: sha512-SZhxtLlKoPKLZ2H3l9WIU7CiNmkL3qLWGksALmvZdAXa/9PykYfLtvIB5B8A2UZMpf2ojTZlWLfuo1KhgmVobA==}
+    peerDependencies:
+      starknet: ^5.18.0
+    dependencies:
+      starknet: 5.25.0(encoding@0.1.13)
+    dev: false
+
   /get-starknet-core@3.2.0(starknet@6.6.6):
     resolution: {integrity: sha512-SZhxtLlKoPKLZ2H3l9WIU7CiNmkL3qLWGksALmvZdAXa/9PykYfLtvIB5B8A2UZMpf2ojTZlWLfuo1KhgmVobA==}
     peerDependencies:
@@ -17147,7 +17158,7 @@ packages:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
     dev: true
 
-  /starknet@5.25.0:
+  /starknet@5.25.0(encoding@0.1.13):
     resolution: {integrity: sha512-ja5pV610voxTCw/MzXhZoZcwe+XZ5RVWkpa/Fhxsy0OP635DxKDbnPQSKCLWXmSi/BkfkpeefXXv4IUvYJo4kw==}
     dependencies:
       '@noble/curves': 1.3.0

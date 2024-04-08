@@ -4,3 +4,4 @@ export * from "./usePromise";
 export * from "./useEntityQuery";
 export * from "./utils";
 export * from "./useSyncWorld";
+export * from "./useFindEntity";
