@@ -9,14 +9,14 @@ export const findAndSyncEntities = async <
         findEntities: () => Promise<Record<string, any>>;
     },
 >(
-    data: Promise<T>,
+    input: Promise<T>,
     callback?: (
         entity: T extends { findEntities: () => Promise<infer R> } ? R : any
     ) => void
 ): Promise<T extends { findEntities: () => Promise<infer R> } ? R : any> => {
-    const dataStuff = await data;
+    const awaitedInput = await input;
 
-    const result = (await dataStuff.findEntities()) as T extends {
+    const result = (await awaitedInput.findEntities()) as T extends {
         findEntities: () => Promise<infer R>;
     }
         ? R
@@ -26,7 +26,7 @@ export const findAndSyncEntities = async <
 
     const idsToWatch = Object.keys(result);
 
-    dataStuff.torii.onEntityUpdated(
+    awaitedInput.torii.onEntityUpdated(
         idsToWatch,
         (
             entities: T extends { findEntities: () => Promise<infer R> }
@@ -47,7 +47,7 @@ export const findAndSyncEntity = async <
         findEntities: () => Promise<Record<string, any>>;
     },
 >(
-    data: Promise<T>,
+    input: Promise<T>,
     callback?: (
         entity: T extends { findEntities: () => Promise<infer R> }
             ? R[keyof R]
@@ -56,15 +56,15 @@ export const findAndSyncEntity = async <
 ): Promise<
     T extends { findEntities: () => Promise<infer R> } ? R[keyof R] : any
 > => {
-    const dataStuff = await data;
+    const awaitedInput = await input;
 
-    const result = await dataStuff.findEntities();
+    const result = await awaitedInput.findEntities();
 
     const [firstKey, firstEntity] = Object.entries(result)[0] as [string, any];
 
     store.setState({ [firstKey]: firstEntity });
 
-    dataStuff.torii.onEntityUpdated(
+    awaitedInput.torii.onEntityUpdated(
         [firstKey],
         (entities: Record<string, any>) => {
             const [firstUpdatedKey, firstUpdatedEntity] = Object.entries(
