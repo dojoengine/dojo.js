@@ -35,9 +35,9 @@
     },
     "dependencies": {
         "@dojoengine/recs": "0.1.35",
-        "@dojoengine/state": "^0.6.12",
-        "@dojoengine/torii-client": "^0.6.12",
-        "@dojoengine/utils": "^0.6.12",
+        "@dojoengine/state": "workspace:*",
+        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/utils": "workspace:*",
         "@latticexyz/utils": "^2.0.0-next.11",
         "encoding": "^0.1.13",
         "fast-deep-equal": "^3.1.3",
