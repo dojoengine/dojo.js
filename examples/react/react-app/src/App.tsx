@@ -1,33 +1,32 @@
-import { useComponentValue } from "@dojoengine/react";
-import { Entity } from "@dojoengine/recs";
+import { useFindEntity } from "@dojoengine/react";
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Direction } from "./utils";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
+import { dojo } from "./dojo";
+import { validateAndParseAddress } from "starknet";
 
 function App() {
     const {
         setup: {
             systemCalls: { spawn, move },
-            clientComponents: { Position, Moves },
         },
         account,
     } = useDojo();
+
+    const playerEntity = useFindEntity(
+        dojo.query({
+            Moves: {
+                player: validateAndParseAddress(account?.account.address),
+            },
+            Position: {},
+        })
+    );
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
         isError: false,
     });
-
-    // entity id we are syncing
-    const entityId = getEntityIdFromKeys([
-        BigInt(account?.account.address),
-    ]) as Entity;
-
-    // get current component values
-    const position = useComponentValue(Position, entityId);
-    const moves = useComponentValue(Moves, entityId);
 
     const handleRestoreBurners = async () => {
         try {
@@ -104,12 +103,15 @@ function App() {
             <div className="card">
                 <button onClick={() => spawn(account.account)}>Spawn</button>
                 <div>
-                    Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
+                    Moves Left:{" "}
+                    {playerEntity
+                        ? `${playerEntity.Moves.remaining}`
+                        : "Need to Spawn"}
                 </div>
                 <div>
                     Position:{" "}
-                    {position
-                        ? `${position.vec.x}, ${position.vec.y}`
+                    {playerEntity
+                        ? `${playerEntity.Position.vec.x}, ${playerEntity.Position.vec.y}`
                         : "Need to Spawn"}
                 </div>
             </div>
@@ -118,7 +120,7 @@ function App() {
                 <div>
                     <button
                         onClick={() =>
-                            position && position.vec.y > 0
+                            playerEntity && playerEntity.Position.vec.y > 0
                                 ? move(account.account, Direction.Up)
                                 : console.log("Reach the borders of the world.")
                         }
@@ -129,7 +131,7 @@ function App() {
                 <div>
                     <button
                         onClick={() =>
-                            position && position.vec.x > 0
+                            playerEntity && playerEntity.Position.vec.x > 0
                                 ? move(account.account, Direction.Left)
                                 : console.log("Reach the borders of the world.")
                         }
@@ -147,6 +149,11 @@ function App() {
                         onClick={() => move(account.account, Direction.Down)}
                     >
                         Move Down
+                    </button>
+                </div>
+                <div>
+                    <button onClick={() => console.log(store.getState())}>
+                        Get store
                     </button>
                 </div>
             </div>
