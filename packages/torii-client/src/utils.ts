@@ -94,27 +94,3 @@ export function valueToToriiValueAndOperator(
         },
     };
 }
-
-// Given a Torri result, this function will extract the necessary fields from it
-// e.g. if the query was { moves: { remaining: 10 } } and the result is
-// { e22398sdwerkjh: { Moves: { remaining: 10, player: "John" } }, { Position: { x: 0, y: 0 } } }
-// the result will be { moves: { remaining: 10, player: "John" } }
-export function extractQueryFromResult<T extends {}>(
-    query: T,
-    result: { [key: string]: any }
-): { [key: string]: any } {
-    return Object.keys(query).reduce(
-        (acc, key) => {
-            const resultKey = Object.keys(result).find(
-                (k) => k.toLowerCase() === key.toLowerCase()
-            );
-
-            if (resultKey) {
-                acc[key] = result[resultKey];
-            }
-
-            return acc;
-        },
-        {} as { [key: string]: any }
-    );
-}
