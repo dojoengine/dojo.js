@@ -162,10 +162,10 @@ importers:
         version: 7.8.1
       starknet:
         specifier: ^6.1.5
-        version: 6.6.6
+        version: 6.6.6(encoding@0.1.13)
       vite-plugin-top-level-await:
         specifier: ^1.3.1
-        version: 1.4.1(vite@4.5.3)
+        version: 1.4.1(rollup@2.79.1)(vite@4.5.3)
       vite-plugin-wasm:
         specifier: ^3.2.2
         version: 3.3.0(vite@4.5.3)
@@ -1019,6 +1019,9 @@ importers:
       starknet:
         specifier: ^6.1.5
         version: 6.6.6(encoding@0.1.13)
+      zustand:
+        specifier: ^4.5.2
+        version: 4.5.2(@types/react@18.2.74)(react@18.2.0)
     devDependencies:
       tsup:
         specifier: ^8.0.1
@@ -1186,7 +1189,7 @@ packages:
     resolution: {integrity: sha512-xhlTqH0m31mnsG0tIP4ETgfSB6gXDaYYsUWTrlUV93fFQPI9dd8hE0Ot6MHLCtqgB32hwJAC3YZMWlXZw7AleA==}
     engines: {node: '>=14'}
     dependencies:
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     dev: true
@@ -6507,16 +6510,6 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/plugin-virtual@3.0.2:
-    resolution: {integrity: sha512-10monEYsBp3scM4/ND4LNH5Rxvh3e/cVeL3jWTgZ2SrQ+BmUoQcopVQvnaMcOnykb1VkxUFuDAN+0FnpTFRy2A==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dev: false
-
   /@rollup/plugin-virtual@3.0.2(rollup@2.79.1):
     resolution: {integrity: sha512-10monEYsBp3scM4/ND4LNH5Rxvh3e/cVeL3jWTgZ2SrQ+BmUoQcopVQvnaMcOnykb1VkxUFuDAN+0FnpTFRy2A==}
     engines: {node: '>=14.0.0'}
@@ -10384,20 +10377,12 @@ packages:
       cross-spawn: 7.0.3
     dev: false
 
-  /cross-fetch@3.1.8:
-    resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
-    dependencies:
-      node-fetch: 2.7.0
-    transitivePeerDependencies:
-      - encoding
-
   /cross-fetch@3.1.8(encoding@0.1.13):
     resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
     dependencies:
       node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
-    dev: false
 
   /cross-inspect@1.0.0:
     resolution: {integrity: sha512-4PFfn4b5ZN6FMNGSZlyb7wUhuN8wvj8t/VQHZdM4JsDcruGJ8L2kf9zao98QIrBPFCpdk27qst/AGTl7pL3ypQ==}
@@ -11649,7 +11634,7 @@ packages:
   /fbjs@3.0.5:
     resolution: {integrity: sha512-ztsSx77JBtkuMrEypfhgc3cI0+0h+svqeie7xHbh1k/IKdcydnvadp/mUaGgjAOXQmQSxsqgaRhS3q9fy+1kxg==}
     dependencies:
-      cross-fetch: 3.1.8
+      cross-fetch: 3.1.8(encoding@0.1.13)
       fbjs-css-vars: 1.0.2
       loose-envify: 1.4.0
       object-assign: 4.1.1
@@ -12282,7 +12267,7 @@ packages:
       graphql: 14 - 16
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
-      cross-fetch: 3.1.8
+      cross-fetch: 3.1.8(encoding@0.1.13)
       graphql: 16.8.1
     transitivePeerDependencies:
       - encoding
@@ -13082,15 +13067,6 @@ packages:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
     engines: {node: '>=0.10.0'}
     dev: true
-
-  /isomorphic-fetch@3.0.0:
-    resolution: {integrity: sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==}
-    dependencies:
-      node-fetch: 2.7.0
-      whatwg-fetch: 3.6.20
-    transitivePeerDependencies:
-      - encoding
-    dev: false
 
   /isomorphic-fetch@3.0.0(encoding@0.1.13):
     resolution: {integrity: sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==}
@@ -14865,17 +14841,6 @@ packages:
     dependencies:
       whatwg-url: 5.0.0
     dev: true
-
-  /node-fetch@2.7.0:
-    resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
-    engines: {node: 4.x || >=6.0.0}
-    peerDependencies:
-      encoding: ^0.1.0
-    peerDependenciesMeta:
-      encoding:
-        optional: true
-    dependencies:
-      whatwg-url: 5.0.0
 
   /node-fetch@2.7.0(encoding@0.1.13):
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
@@ -17196,23 +17161,6 @@ packages:
       - encoding
     dev: false
 
-  /starknet@6.6.6:
-    resolution: {integrity: sha512-hriWRdfyvetf7mGqaKS7U7KSuGJ8tANFiY9gLxB7EJSRYvAXUcn2Xg/39QUenH5D4WzX4T4GVrpMw2GLZ+NZKw==}
-    dependencies:
-      '@noble/curves': 1.3.0
-      '@scure/base': 1.1.6
-      '@scure/starknet': 1.0.0
-      abi-wan-kanabi: 2.2.2
-      fetch-cookie: 3.0.1
-      isomorphic-fetch: 3.0.0
-      lossless-json: 4.0.1
-      pako: 2.1.0
-      ts-mixer: 6.0.4
-      url-join: 4.0.1
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /starknet@6.6.6(encoding@0.1.13):
     resolution: {integrity: sha512-hriWRdfyvetf7mGqaKS7U7KSuGJ8tANFiY9gLxB7EJSRYvAXUcn2Xg/39QUenH5D4WzX4T4GVrpMw2GLZ+NZKw==}
     dependencies:
@@ -18632,20 +18580,6 @@ packages:
       vite: '>=2.8'
     dependencies:
       '@rollup/plugin-virtual': 3.0.2(rollup@2.79.1)
-      '@swc/core': 1.4.11
-      uuid: 9.0.1
-      vite: 4.5.3(@types/node@20.12.3)
-    transitivePeerDependencies:
-      - '@swc/helpers'
-      - rollup
-    dev: false
-
-  /vite-plugin-top-level-await@1.4.1(vite@4.5.3):
-    resolution: {integrity: sha512-hogbZ6yT7+AqBaV6lK9JRNvJDn4/IJvHLu6ET06arNfo0t2IsyCaon7el9Xa8OumH+ESuq//SDf8xscZFE0rWw==}
-    peerDependencies:
-      vite: '>=2.8'
-    dependencies:
-      '@rollup/plugin-virtual': 3.0.2
       '@swc/core': 1.4.11
       uuid: 9.0.1
       vite: 4.5.3(@types/node@20.12.3)
