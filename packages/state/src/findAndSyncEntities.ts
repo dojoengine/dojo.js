@@ -6,15 +6,21 @@ export const store = createStore<Record<string, object>>(() => ({}));
 export const findAndSyncEntities = async <
     T extends {
         torii: Client;
-        findEntities: () => Promise<Awaited<ReturnType<T["findEntities"]>>>;
+        findEntities: () => Promise<Record<string, any>>;
     },
 >(
     data: Promise<T>,
-    callback?: (entity: Awaited<ReturnType<T["findEntities"]>>) => void
-): Promise<ReturnType<T["findEntities"]>> => {
+    callback?: (
+        entity: T extends { findEntities: () => Promise<infer R> } ? R : any
+    ) => void
+): Promise<T extends { findEntities: () => Promise<infer R> } ? R : any> => {
     const dataStuff = await data;
 
-    const result = await dataStuff.findEntities();
+    const result = (await dataStuff.findEntities()) as T extends {
+        findEntities: () => Promise<infer R>;
+    }
+        ? R
+        : any;
 
     store.setState({ ...result });
 
@@ -22,7 +28,11 @@ export const findAndSyncEntities = async <
 
     dataStuff.torii.onEntityUpdated(
         idsToWatch,
-        (entities: Awaited<ReturnType<T["findEntities"]>>) => {
+        (
+            entities: T extends { findEntities: () => Promise<infer R> }
+                ? R
+                : any
+        ) => {
             store.setState({ ...entities });
             callback?.(entities);
         }
