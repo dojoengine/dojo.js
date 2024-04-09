@@ -29,6 +29,8 @@ function App() {
     const position = useComponentValue(Position, entityId);
     const moves = useComponentValue(Moves, entityId);
 
+    console.log(moves);
+
     const handleRestoreBurners = async () => {
         try {
             await account?.applyFromClipboard();
@@ -112,6 +114,8 @@ function App() {
                         ? `${position.vec.x}, ${position.vec.y}`
                         : "Need to Spawn"}
                 </div>
+
+                <div>{moves && moves.last_direction}</div>
             </div>
 
             <div className="card">

@@ -62,6 +62,7 @@ const cairoToRecsType = {
     u256: "RecsType.BigInt",
     felt252: "RecsType.BigInt",
     contractaddress: "RecsType.BigInt",
+    enum: "RecsType.String",
 };
 
 const manifestStr = fs.readFileSync(manifestPath, "utf8");
