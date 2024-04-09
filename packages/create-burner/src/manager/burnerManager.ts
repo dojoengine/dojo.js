@@ -1,3 +1,4 @@
+import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
 import {
     Account,
     CallData,
@@ -10,7 +11,6 @@ import {
 import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
-import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
 
 /**
  * A class to manage Burner accounts.
@@ -70,6 +70,13 @@ export class BurnerManager {
     public isInitialized: boolean = false;
 
     private setIsDeploying?: (isDeploying: boolean) => void;
+    private afterDeploying?: ({
+        account,
+        deployTx,
+    }: {
+        account: Account;
+        deployTx: string;
+    }) => Promise<void>;
 
     constructor({
         masterAccount,
@@ -87,6 +94,18 @@ export class BurnerManager {
         callback: (isDeploying: boolean) => void
     ): void {
         this.setIsDeploying = callback;
+    }
+
+    public setAfterDeployingCallback(
+        callback: ({
+            account,
+            deployTx,
+        }: {
+            account: Account;
+            deployTx: string;
+        }) => Promise<void>
+    ): void {
+        this.afterDeploying = callback;
     }
 
     private updateIsDeploying(status: boolean) {
@@ -302,6 +321,14 @@ export class BurnerManager {
         this.account = burner;
         this.updateIsDeploying(false);
         Storage.set(this.getBurnerKey(), storage);
+
+        if (this.afterDeploying) {
+            try {
+                await this.afterDeploying({ account: this.account, deployTx });
+            } catch (e: any) {
+                console.log("error on afterDeploying", e);
+            }
+        }
 
         return burner;
     }
