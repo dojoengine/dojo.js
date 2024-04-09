@@ -1,18 +1,13 @@
 import { useFindEntity } from "@dojoengine/react";
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Direction } from "./utils";
 import { useDojo } from "./dojo/useDojo";
 import { dojo } from "./dojo";
 import { validateAndParseAddress } from "starknet";
+import { Direction } from "./dojo_starter";
 
 function App() {
-    const {
-        setup: {
-            systemCalls: { spawn, move },
-        },
-        account,
-    } = useDojo();
+    const { account } = useDojo();
 
     const playerEntity = useFindEntity(
         dojo.query({
@@ -22,6 +17,12 @@ function App() {
             Position: {},
         })
     );
+
+    useEffect(() => {
+        if (account) {
+            dojo.account = account.account;
+        }
+    }, [account]);
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
@@ -101,7 +102,7 @@ function App() {
             </div>
 
             <div className="card">
-                <button onClick={() => spawn(account.account)}>Spawn</button>
+                <button onClick={() => dojo.actions.spawn()}>Spawn</button>
                 <div>
                     Moves Left:{" "}
                     {playerEntity
@@ -121,7 +122,7 @@ function App() {
                     <button
                         onClick={() =>
                             playerEntity && playerEntity.Position.vec.y > 0
-                                ? move(account.account, Direction.Up)
+                                ? dojo.actions.move(Direction.Up)
                                 : console.log("Reach the borders of the world.")
                         }
                     >
@@ -132,28 +133,19 @@ function App() {
                     <button
                         onClick={() =>
                             playerEntity && playerEntity.Position.vec.x > 0
-                                ? move(account.account, Direction.Left)
+                                ? dojo.actions.move(Direction.Left)
                                 : console.log("Reach the borders of the world.")
                         }
                     >
                         Move Left
                     </button>
-                    <button
-                        onClick={() => move(account.account, Direction.Right)}
-                    >
+                    <button onClick={() => dojo.actions.move(Direction.Right)}>
                         Move Right
                     </button>
                 </div>
                 <div>
-                    <button
-                        onClick={() => move(account.account, Direction.Down)}
-                    >
+                    <button onClick={() => dojo.actions.move(Direction.Down)}>
                         Move Down
-                    </button>
-                </div>
-                <div>
-                    <button onClick={() => console.log(store.getState())}>
-                        Get store
                     </button>
                 </div>
             </div>
