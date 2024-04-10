@@ -204,6 +204,15 @@ export class BurnerManager {
         );
     }
 
+    public deselect(): void {
+        const storage = this.getBurnerStorage();
+        for (let addr in storage) {
+            storage[addr].active = false;
+        }
+        Storage.set(this.getBurnerKey(), storage);
+        this.account = null;
+    }
+
     public get(address: string): Account {
         const storage = this.getBurnerStorage();
         if (!storage[address]) {

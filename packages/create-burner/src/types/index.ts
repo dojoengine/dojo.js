@@ -35,6 +35,7 @@ export interface BurnerAccount {
     remove: (address: string) => void;
     account: AccountInterface;
     select: (address: string) => void;
+    deselect: () => void;
     isDeploying: boolean;
     clear: () => void;
     count: number;

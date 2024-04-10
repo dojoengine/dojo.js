@@ -59,6 +59,14 @@ export const useBurnerManager = ({
     );
 
     /**
+     * Deselects the active burner, account will be set to null. Useful to allow guests.
+     */
+    const deselect = useCallback((): void => {
+        burnerManager.deselect();
+        setAccount(null);
+    }, [burnerManager]);
+
+    /**
      * Retrieves a burner account based on its address.
      *
      * @param address - The address of the burner account to retrieve.
@@ -164,6 +172,7 @@ export const useBurnerManager = ({
         get,
         list,
         select,
+        deselect,
         remove,
         create,
         listConnectors,
