@@ -30,14 +30,14 @@ export const DojoProvider = ({
 
     const { account: walletAccount } = useAccount();
 
+    const {
+        config: { masterAddress, masterPrivateKey },
+        dojoProvider,
+    } = value;
+
     if (walletAccount) {
         masterAccount = walletAccount;
     } else {
-        const {
-            config: { masterAddress, masterPrivateKey },
-            dojoProvider,
-        } = value;
-
         masterAccount = new Account(
             dojoProvider.provider,
             masterAddress,
@@ -46,12 +46,17 @@ export const DojoProvider = ({
         );
     }
 
-    console.log(value.dojoProvider.provider);
-
     const burnerManager = new BurnerManager({
-        masterAccount: masterAccount,
+        masterAccount: new Account(
+            {
+                nodeUrl: dojoConfig.rpcUrl,
+            },
+            dojoConfig.masterAddress,
+            dojoConfig.masterPrivateKey
+        ),
         accountClassHash: dojoConfig.accountClassHash,
-        rpcProvider: value.dojoProvider.provider,
+        rpcProvider: dojoProvider.provider,
+        feeTokenAddress: dojoConfig.feeTokenAddress,
     });
 
     const {

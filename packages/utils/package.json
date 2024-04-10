@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/utils",
-    "version": "0.6.0-alpha.5",
+    "version": "0.6.122",
     "description": "Helpful Dojo onchain game engine utils",
     "author": "Loaf",
     "license": "MIT",
@@ -22,7 +22,7 @@
         "typescript": "^5.0.3"
     },
     "peerDependencies": {
-        "starknet": "5.25.0"
+        "starknet": "^6.1.5"
     },
     "dependencies": {
         "@dojoengine/recs": "0.1.35",
