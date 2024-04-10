@@ -10,7 +10,7 @@ import { createSystemCalls } from "../createSystemCalls";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { setupWorld } from "./generated";
-import { WeierstrassSignatureType } from "starknet";
+import { TypedData, WeierstrassSignatureType } from "starknet";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -69,12 +69,9 @@ export async function setup({ ...config }: DojoConfig) {
             clientComponents
         ),
         publish: (
-            name: string,
-            model: any,
+            typedData: TypedData,
             signature: WeierstrassSignatureType
         ) => {
-            const typedData = createModelTypedData(name, model);
-
             toriiClient.publishMessage(typedData, {
                 r: signature.r.toString(),
                 s: signature.s.toString(),

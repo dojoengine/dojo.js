@@ -1,3 +1,5 @@
+import { TypedData } from "starknet";
+
 /**
  * Gets a contract from a manifest by name.
  *
@@ -53,7 +55,7 @@ export const parseModelName = (model: any) => {
  * @returns {any} The model typed data object.
  *
  */
-export const createModelTypedData = (name: string, model: any) => {
+export const createModelTypedData = (name: string, model: any): TypedData => {
     const typesFromSchema = (
         name: string,
         schema: any,

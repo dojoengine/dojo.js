@@ -14,6 +14,7 @@ import {
     Account,
     RpcProvider,
     Signature,
+    TypedData,
     WeierstrassSignatureType,
 } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
@@ -76,12 +77,9 @@ export async function setup({ ...config }: DojoConfig) {
             clientComponents
         ),
         publish: (
-            name: string,
-            model: any,
+            typedData: TypedData,
             signature: WeierstrassSignatureType
         ) => {
-            const typedData = createModelTypedData(name, model);
-
             toriiClient.publishMessage(typedData, {
                 r: signature.r.toString(),
                 s: signature.s.toString(),
