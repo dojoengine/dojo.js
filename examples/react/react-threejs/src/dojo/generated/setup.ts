@@ -16,6 +16,7 @@ export async function setup({ ...config }: DojoConfig) {
     const toriiClient = await torii.createClient([], {
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
+        relayUrl: config.relayUrl,
         worldAddress: config.manifest.world.address || "",
     });
 
@@ -28,24 +29,23 @@ export async function setup({ ...config }: DojoConfig) {
     // fetch all existing entities from torii
     await getSyncEntities(toriiClient, contractComponents as any);
 
+    const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl);
+
     const client = await setupWorld(
         new DojoProvider(config.manifest, config.rpcUrl)
     );
 
-    const rpcProvider = new RpcProvider({
-        nodeUrl: config.rpcUrl,
-    });
-
-    const masterAccount = new Account(
-        rpcProvider,
-        config.masterAddress,
-        config.masterPrivateKey
-    );
-
     const burnerManager = new BurnerManager({
-        masterAccount,
+        masterAccount: new Account(
+            {
+                nodeUrl: config.rpcUrl,
+            },
+            config.masterAddress,
+            config.masterPrivateKey
+        ),
         accountClassHash: config.accountClassHash,
-        rpcProvider,
+        rpcProvider: dojoProvider.provider,
+        feeTokenAddress: config.feeTokenAddress,
     });
 
     try {

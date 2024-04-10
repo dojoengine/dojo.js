@@ -1,6 +1,6 @@
+import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
 import {
     Account,
-    AccountInterface,
     CallData,
     ec,
     hash,
@@ -59,8 +59,9 @@ import { prefundAccount } from "./prefundAccount";
  */
 
 export class BurnerManager {
-    public masterAccount: AccountInterface;
+    public masterAccount: Account;
     public accountClassHash: string;
+    public feeTokenAddress: string;
     public provider: RpcProvider;
     public chainId: string = "";
 
@@ -69,14 +70,23 @@ export class BurnerManager {
     public isInitialized: boolean = false;
 
     private setIsDeploying?: (isDeploying: boolean) => void;
+    private afterDeploying?: ({
+        account,
+        deployTx,
+    }: {
+        account: Account;
+        deployTx: string;
+    }) => Promise<void>;
 
     constructor({
         masterAccount,
         accountClassHash,
+        feeTokenAddress = KATANA_ETH_CONTRACT_ADDRESS,
         rpcProvider,
     }: BurnerManagerOptions) {
         this.masterAccount = masterAccount;
         this.accountClassHash = accountClassHash;
+        this.feeTokenAddress = feeTokenAddress;
         this.provider = rpcProvider;
     }
 
@@ -84,6 +94,18 @@ export class BurnerManager {
         callback: (isDeploying: boolean) => void
     ): void {
         this.setIsDeploying = callback;
+    }
+
+    public setAfterDeployingCallback(
+        callback: ({
+            account,
+            deployTx,
+        }: {
+            account: Account;
+            deployTx: string;
+        }) => Promise<void>
+    ): void {
+        this.afterDeploying = callback;
     }
 
     private updateIsDeploying(status: boolean) {
@@ -255,7 +277,11 @@ export class BurnerManager {
             throw new Error("wallet account not found");
         }
         try {
-            await prefundAccount(address, this.masterAccount);
+            await prefundAccount(
+                address,
+                this.masterAccount,
+                this.feeTokenAddress
+            );
         } catch (e) {
             this.isDeploying = false;
         }
@@ -295,6 +321,14 @@ export class BurnerManager {
         this.account = burner;
         this.updateIsDeploying(false);
         Storage.set(this.getBurnerKey(), storage);
+
+        if (this.afterDeploying) {
+            try {
+                await this.afterDeploying({ account: this.account, deployTx });
+            } catch (e: any) {
+                console.log("error on afterDeploying", e);
+            }
+        }
 
         return burner;
     }

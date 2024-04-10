@@ -233,6 +233,7 @@ pub async fn create_client(
     let ClientConfig {
         rpc_url,
         torii_url,
+        relay_url,
         world_address,
     } = config;
 
@@ -245,7 +246,7 @@ pub async fn create_client(
         .map_err(|err| JsValue::from(format!("failed to parse world address: {err}")))?;
 
     let client =
-        torii_client::client::Client::new(torii_url, rpc_url, world_address, Some(models))
+        torii_client::client::Client::new(torii_url, rpc_url, relay_url, world_address, Some(models))
             .await
             .map_err(|err| JsValue::from(format!("failed to build client: {err}")))?;
 

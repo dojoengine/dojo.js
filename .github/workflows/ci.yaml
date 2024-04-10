@@ -4,10 +4,10 @@ on:
     push:
         branches: [main]
     pull_request:
-        branches: [main]
+        branches: [opened, synchronize]
 
 jobs:
-    prettier:
+    check:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
@@ -20,11 +20,16 @@ jobs:
               run: git submodule update --init --recursive
 
             - run: curl -L https://install.dojoengine.org | bash
-            - run: /home/runner/.config/.dojo/bin/dojoup -v v0.5.1
+            - run: /home/runner/.config/.dojo/bin/dojoup -v v0.6.0-alpha.13
             - run: |
                   cd examples/dojo-starter
                   /home/runner/.config/.dojo/bin/sozo build
                   /home/runner/.config/.dojo/bin/sozo test
+
+            - name: "Setup npm"
+              run: |
+                  npm set @ponderingdemocritus:registry=https://npm.pkg.github.com/dojoengine
+                  npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
 
             - name: Install Protobuf Compiler
               run: sudo apt-get install -y protobuf-compiler
