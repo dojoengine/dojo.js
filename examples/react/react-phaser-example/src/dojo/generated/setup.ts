@@ -5,7 +5,12 @@ import { createSystemCalls } from "../createSystemCalls";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { setupWorld } from "./generated";
-import { DojoConfig, DojoProvider } from "@dojoengine/core";
+import {
+    DojoConfig,
+    DojoProvider,
+    createModelTypedData,
+} from "@dojoengine/core";
+import { WeierstrassSignatureType } from "starknet";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -40,6 +45,18 @@ export async function setup({ ...config }: DojoConfig) {
             contractComponents,
             clientComponents
         ),
+        publish: (
+            name: string,
+            model: any,
+            signature: WeierstrassSignatureType
+        ) => {
+            const typedData = createModelTypedData(name, model);
+
+            toriiClient.publishMessage(typedData, {
+                r: signature.r.toString(),
+                s: signature.s.toString(),
+            });
+        },
         config,
     };
 }
