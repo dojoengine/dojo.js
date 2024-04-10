@@ -96,7 +96,7 @@ export const createModelTypedData = (name: string, model: any) => {
                 { name: "model", type: "shortstring" },
                 { name: name, type: "Model" },
             ],
-            Model: []
+            Model: [],
         }),
         primaryType: "OffchainMessage",
         domain: {
@@ -107,13 +107,15 @@ export const createModelTypedData = (name: string, model: any) => {
         },
         message: {
             model: name,
-            [name]: Object.fromEntries(Object.entries(model).map(([k, v]) => {
-                if (typeof v == "bigint") {
-                    return [k, "0x" + v.toString(16)];
-                }
-                
-                return [k, v];
-            })),
+            [name]: Object.fromEntries(
+                Object.entries(model).map(([k, v]) => {
+                    if (typeof v == "bigint") {
+                        return [k, "0x" + v.toString(16)];
+                    }
+
+                    return [k, v];
+                })
+            ),
         },
     };
 };

@@ -1,12 +1,21 @@
 import { getSyncEntities } from "@dojoengine/state";
-import { DojoProvider, DojoConfig } from "@dojoengine/core";
+import {
+    DojoProvider,
+    DojoConfig,
+    createModelTypedData,
+} from "@dojoengine/core";
 import * as torii from "@dojoengine/torii-client";
 import { createClientComponents } from "../createClientComponents";
 import { createSystemCalls } from "../createSystemCalls";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { setupWorld } from "./generated";
-import { Account, RpcProvider } from "starknet";
+import {
+    Account,
+    RpcProvider,
+    Signature,
+    WeierstrassSignatureType,
+} from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
@@ -66,6 +75,18 @@ export async function setup({ ...config }: DojoConfig) {
             contractComponents,
             clientComponents
         ),
+        publish: (
+            name: string,
+            model: any,
+            signature: WeierstrassSignatureType
+        ) => {
+            const typedData = createModelTypedData(name, model);
+
+            toriiClient.publishMessage(typedData, {
+                r: signature.r.toString(),
+                s: signature.s.toString(),
+            });
+        },
         config,
         world,
         burnerManager,
