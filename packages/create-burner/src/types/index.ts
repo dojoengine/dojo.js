@@ -43,7 +43,7 @@ export interface BurnerAccount {
     copyToClipboard: () => Promise<void>;
     applyFromClipboard: () => Promise<void>;
     getActiveAccount?: () => Account | null;
-    generateAddressFromSeed: (options?: BurnerCreateOptions) => string;
+    generateAddressFromSeed?: (options?: BurnerCreateOptions) => string;
 }
 
 export interface BurnerCreateOptions {
