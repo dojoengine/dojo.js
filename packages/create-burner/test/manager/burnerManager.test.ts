@@ -2,6 +2,7 @@ import { shortString } from "starknet";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import Storage from "../../src/utils/storage";
 import { getBurnerManager } from "../mocks/mocks"; // Adjust the path as necessary
+import { BurnerCreateOptions } from "../../src/types";
 
 // Explicitly mock the 'starknet' module
 vi.mock("starknet", async () => {
@@ -187,6 +188,78 @@ describe("BurnerManager - init method", () => {
 
         expect(burnerManager.account).toBeNull();
     });
+});
+
+it("generateKeysAndAddress", async () => {
+    const burnerManager = getBurnerManager();
+
+    await burnerManager.init();
+
+    const wallet1_index0: BurnerCreateOptions = {
+        secret: "0x66efb28ac62686966ae85095ff3a772e014e7fbf56d4c5f6fac5606d4dde23a",
+        index: 0,
+    };
+    const wallet1_index1: BurnerCreateOptions = {
+        secret: "0x66efb28ac62686966ae85095ff3a772e014e7fbf56d4c5f6fac5606d4dde23a",
+        index: 1,
+    };
+    const wallet1_index2: BurnerCreateOptions = {
+        secret: "0x66efb28ac62686966ae85095ff3a772e014e7fbf56d4c5f6fac5606d4dde23a",
+        index: 2,
+    };
+    const wallet2_index0: BurnerCreateOptions = {
+        secret: "0x3ebb4767aae1262f8eb28d9368db5388cfe367f50552a8244123506f0b0bcca",
+        index: 0,
+    };
+    const wallet2_index1: BurnerCreateOptions = {
+        secret: "0x3ebb4767aae1262f8eb28d9368db5388cfe367f50552a8244123506f0b0bcca",
+        index: 1,
+    };
+
+    expect(burnerManager.generateKeysAndAddress(wallet1_index0)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet1_index0)
+    );
+    expect(burnerManager.generateKeysAndAddress(wallet1_index1)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet1_index1)
+    );
+    expect(burnerManager.generateKeysAndAddress(wallet1_index2)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet1_index2)
+    );
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index0)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet1_index1));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index1)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet1_index2));
+
+    expect(burnerManager.generateKeysAndAddress(wallet2_index0)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet2_index0)
+    );
+    expect(burnerManager.generateKeysAndAddress(wallet2_index1)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet2_index1)
+    );
+    expect(
+        burnerManager.generateKeysAndAddress(wallet2_index0)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
+
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index0)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index0));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index0)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index1)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index0));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index1)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index2)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index0));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index2)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
 });
 
 describe("BurnerManager", () => {
