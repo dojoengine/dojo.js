@@ -23,14 +23,15 @@ tokio = { version = "1.32.0", default-features = false, features = ["rt"] }
 url = "2.4.0"
 
 # Dojo
-dojo-types = { git = "https://github.com/dojoengine/dojo", rev = "5bdcfdff82c7a01443bf603047f4bfe00d210ed6" }
-torii-client = { git = "https://github.com/dojoengine/dojo", rev = "5bdcfdff82c7a01443bf603047f4bfe00d210ed6" }
-torii-grpc = { git = "https://github.com/dojoengine/dojo", rev = "5bdcfdff82c7a01443bf603047f4bfe00d210ed6" }
+dojo-types = { git = "https://github.com/dojoengine/dojo" }
+torii-client = { git = "https://github.com/dojoengine/dojo" }
+torii-grpc = { git = "https://github.com/dojoengine/dojo" }
+torii-relay = { git = "https://github.com/dojoengine/dojo" }
 
 # WASM
 js-sys = "0.3.64"
 serde-wasm-bindgen = "0.6.0"
-wasm-bindgen = "=0.2.92"
+wasm-bindgen = "0.2.92"
 wasm-bindgen-futures = "^0.4.42"
 web-sys = { version = "0.3.4", features = [
     'MessageEvent',
@@ -54,7 +55,7 @@ incremental = true
 opt-level = 1
 
 [dev-dependencies]
-wasm-bindgen-test = "=0.3.40"
+wasm-bindgen-test = "0.3.40"
 crypto-bigint = { version = "0.5.3", features = ["serde"] }
 
 [features]
