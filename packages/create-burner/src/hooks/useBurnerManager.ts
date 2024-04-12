@@ -15,12 +15,7 @@ export const useBurnerManager = ({
 }: {
     burnerManager: BurnerManager; // Accepts the BurnerManager class as an parameter
 }) => {
-    if (!burnerManager.masterAccount) {
-        throw new Error("BurnerManagerClass must be provided");
-    }
-    if (!burnerManager.isInitialized) {
-        throw new Error("BurnerManagerClass must be intialized");
-    }
+    const [isError, setIsError] = useState(false);
 
     // State to manage the current active account.
     const [account, setAccount] = useState<Account | null>(null);
@@ -30,11 +25,25 @@ export const useBurnerManager = ({
     // On mount, set the active account and count the number of burners.
     // burnerManager has to be initialized before the component mounts
     useEffect(() => {
+        // allow null burner manager
+        // when the game rpc is unavailable, its impossible to create a valid Burner Manager and will result in client error
+        if (!burnerManager) {
+            setIsError(true);
+            console.error("BurnerManager object must be provided");
+            return;
+        }
+        if (!burnerManager.isInitialized) {
+            throw new Error("BurnerManager must be intialized");
+        }
+        if (!burnerManager.masterAccount) {
+            throw new Error("BurnerManager Master Account must be provided");
+        }
+        setIsError(false);
         (async () => {
             setAccount(burnerManager.getActiveAccount());
             setCount(burnerManager.list().length);
         })();
-    }, []);
+    }, [burnerManager]);
 
     /**
      * Lists all the burners available in the storage.
@@ -42,7 +51,7 @@ export const useBurnerManager = ({
      * @returns An array of Burner accounts.
      */
     const list = useCallback((): Burner[] => {
-        return burnerManager.list();
+        return burnerManager?.list() ?? [];
     }, [count]);
 
     /**
@@ -136,7 +145,7 @@ export const useBurnerManager = ({
                 get(burner.address)
             );
         });
-    }, [burnerManager.isDeploying]);
+    }, [burnerManager?.isDeploying]);
 
     /**
      * Copy burners to clipboard
@@ -169,6 +178,7 @@ export const useBurnerManager = ({
     );
 
     return {
+        isError,
         get,
         list,
         select,
