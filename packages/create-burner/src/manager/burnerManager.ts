@@ -12,6 +12,8 @@ import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
 
+export const PREFUND_AMOUNT = "0x2386f26fc10000";
+
 /**
  * A class to manage Burner accounts.
  * This class exposes methods and properties to manage Burner accounts.
@@ -257,7 +259,9 @@ export class BurnerManager {
         return null;
     }
 
-    public async create(): Promise<Account> {
+    public async create(
+        prefundedAmount: string = PREFUND_AMOUNT
+    ): Promise<Account> {
         if (!this.isInitialized) {
             throw new Error("BurnerManager is not initialized");
         }
@@ -280,7 +284,8 @@ export class BurnerManager {
             await prefundAccount(
                 address,
                 this.masterAccount,
-                this.feeTokenAddress
+                this.feeTokenAddress,
+                prefundedAmount
             );
         } catch (e) {
             this.isDeploying = false;
