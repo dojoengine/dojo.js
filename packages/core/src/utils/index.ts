@@ -1,3 +1,5 @@
+import { TypedData } from "starknet";
+
 /**
  * Gets a contract from a manifest by name.
  *
@@ -44,4 +46,78 @@ export const parseModelName = (model: any) => {
             return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
         })
         .join("");
+};
+
+/**
+ * Creates a model typed data object.
+ *
+ * @param {any} model - The model object.
+ * @returns {any} The model typed data object.
+ *
+ */
+export const createModelTypedData = (name: string, model: any): TypedData => {
+    const typesFromSchema = (
+        name: string,
+        schema: any,
+        types: { [typeName: string]: { name: string; type: string }[] }
+    ) => {
+        Object.entries(schema).forEach(([key, value]) => {
+            let typeName = value?.constructor.name;
+            switch (typeName) {
+                case "Object":
+                    typesFromSchema(key, value, types);
+                    break;
+                case "BigInt":
+                    types[name].push({ name: key, type: "felt" });
+                    break;
+                case "String":
+                    types[name].push({ name: key, type: "shortstring" });
+                    break;
+                case "Number":
+                    types[name].push({ name: key, type: "u128" });
+                    break;
+                case "Boolean":
+                    types[name].push({ name: key, type: "bool" });
+                    break;
+                default:
+                    throw new Error(`Unsupported type: ${typeName}`);
+            }
+        });
+        return types;
+    };
+
+    return {
+        types: typesFromSchema("Model", model, {
+            StarknetDomain: [
+                { name: "name", type: "shortstring" },
+                { name: "version", type: "shortstring" },
+                { name: "chainId", type: "shortstring" },
+                { name: "revision", type: "shortstring" },
+            ],
+            OffchainMessage: [
+                { name: "model", type: "shortstring" },
+                { name: name, type: "Model" },
+            ],
+            Model: [],
+        }),
+        primaryType: "OffchainMessage",
+        domain: {
+            name: "Dojo",
+            version: "1",
+            chainId: "1",
+            revision: "1",
+        },
+        message: {
+            model: name,
+            [name]: Object.fromEntries(
+                Object.entries(model).map(([k, v]) => {
+                    if (typeof v == "bigint") {
+                        return [k, "0x" + v.toString(16)];
+                    }
+
+                    return [k, v];
+                })
+            ),
+        },
+    };
 };
