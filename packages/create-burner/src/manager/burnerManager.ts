@@ -16,8 +16,8 @@ import {
     BurnerKeys,
 } from "../types";
 import Storage from "../utils/storage";
+import { derivePrivateKeyFromSeed } from "../utils/keyDerivation";
 import { prefundAccount } from "./prefundAccount";
-import { derivePrivateKeyFromSeed } from "./keyDerivation";
 
 /**
  * A class to manage Burner accounts.
