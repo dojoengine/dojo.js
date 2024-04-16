@@ -4,8 +4,6 @@ import {
     TransactionFinalityStatus,
 } from "starknet";
 
-export const PREFUND_AMOUNT = "0x2386f26fc10000";
-
 /**
  * Pre-funds a given account by initiating a transfer transaction.
  *
@@ -21,14 +19,15 @@ export const PREFUND_AMOUNT = "0x2386f26fc10000";
 export const prefundAccount = async (
     address: string,
     account: AccountInterface,
-    feeTokenAddress: string
+    feeTokenAddress: string,
+    prefundAmount: string
 ): Promise<any> => {
     try {
         // Configure the options for the transfer transaction
         const transferOptions = {
             contractAddress: feeTokenAddress,
             entrypoint: "transfer",
-            calldata: CallData.compile([address, PREFUND_AMOUNT, "0x0"]),
+            calldata: CallData.compile([address, prefundAmount, "0x0"]),
         };
 
         // Retrieve the nonce for the account to avoid transaction collisions

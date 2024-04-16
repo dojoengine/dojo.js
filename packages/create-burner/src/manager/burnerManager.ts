@@ -19,6 +19,8 @@ import Storage from "../utils/storage";
 import { derivePrivateKeyFromSeed } from "../utils/keyDerivation";
 import { prefundAccount } from "./prefundAccount";
 
+export const PREFUND_AMOUNT = "0x2386f26fc10000";
+
 /**
  * A class to manage Burner accounts.
  * This class exposes methods and properties to manage Burner accounts.
@@ -313,7 +315,8 @@ export class BurnerManager {
             await prefundAccount(
                 address,
                 this.masterAccount,
-                this.feeTokenAddress
+                this.feeTokenAddress,
+                options?.prefundedAmount || PREFUND_AMOUNT
             );
         } catch (e) {
             console.error(`burner manager create() error:`, e);
