@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Account } from "starknet";
 import { BurnerConnector } from "..";
 import { BurnerManager } from "../manager/burnerManager";
-import { Burner } from "../types";
+import { Burner, BurnerCreateOptions } from "../types";
 
 /**
  * A React hook that takes the Burner Manager object avoiding the React Context.
@@ -15,12 +15,7 @@ export const useBurnerManager = ({
 }: {
     burnerManager: BurnerManager; // Accepts the BurnerManager class as an parameter
 }) => {
-    if (!burnerManager.masterAccount) {
-        throw new Error("BurnerManagerClass must be provided");
-    }
-    if (!burnerManager.isInitialized) {
-        throw new Error("BurnerManagerClass must be intialized");
-    }
+    const [isError, setIsError] = useState(false);
 
     // State to manage the current active account.
     const [account, setAccount] = useState<Account | null>(null);
@@ -30,11 +25,25 @@ export const useBurnerManager = ({
     // On mount, set the active account and count the number of burners.
     // burnerManager has to be initialized before the component mounts
     useEffect(() => {
+        // allow null burner manager
+        // when the game rpc is unavailable, its impossible to create a valid Burner Manager and will result in client error
+        if (!burnerManager) {
+            setIsError(true);
+            console.error("BurnerManager object must be provided");
+            return;
+        }
+        if (!burnerManager.isInitialized) {
+            throw new Error("BurnerManager must be intialized");
+        }
+        if (!burnerManager.masterAccount) {
+            throw new Error("BurnerManager Master Account must be provided");
+        }
+        setIsError(false);
         (async () => {
             setAccount(burnerManager.getActiveAccount());
             setCount(burnerManager.list().length);
         })();
-    }, []);
+    }, [burnerManager]);
 
     /**
      * Lists all the burners available in the storage.
@@ -42,7 +51,7 @@ export const useBurnerManager = ({
      * @returns An array of Burner accounts.
      */
     const list = useCallback((): Burner[] => {
-        return burnerManager.list();
+        return burnerManager?.list() ?? [];
     }, [count]);
 
     /**
@@ -59,6 +68,14 @@ export const useBurnerManager = ({
     );
 
     /**
+     * Deselects the active burner, account will be set to null. Useful to allow guests.
+     */
+    const deselect = useCallback((): void => {
+        burnerManager.deselect();
+        setAccount(null);
+    }, [burnerManager]);
+
+    /**
      * Retrieves a burner account based on its address.
      *
      * @param address - The address of the burner account to retrieve.
@@ -72,10 +89,20 @@ export const useBurnerManager = ({
     );
 
     /**
-     * Clears a burner account based on its address.
+     * Deletes a burner account based on its address.
      *
-     * @param address - The address of the burner account to retrieve.
-     * @returns The Burner account corresponding to the provided address.
+     * @param address - The address of the burner account to delete.
+     */
+    const remove = useCallback(
+        (address: string): void => {
+            burnerManager.delete(address);
+            setCount((prev) => Math.max(prev - 1, 0));
+        },
+        [burnerManager]
+    );
+
+    /**
+     * Clears a burner account based on its address.
      */
     const clear = useCallback(() => {
         burnerManager.clear();
@@ -85,15 +112,19 @@ export const useBurnerManager = ({
     /**
      * Creates a new burner account and sets it as the active account.
      *
+     * @param options - (optional) secret seed and index for deterministic accounts.
      * @returns A promise that resolves to the newly created Burner account.
      */
-    const create = useCallback(async (): Promise<Account> => {
-        burnerManager.setIsDeployingCallback(setIsDeploying);
-        const newAccount = await burnerManager.create();
-        setAccount(newAccount);
-        setCount((prev) => prev + 1);
-        return newAccount;
-    }, [burnerManager]);
+    const create = useCallback(
+        async (options?: BurnerCreateOptions): Promise<Account> => {
+            burnerManager.setIsDeployingCallback(setIsDeploying);
+            const newAccount = await burnerManager.create(options);
+            setAccount(newAccount);
+            setCount((prev) => prev + 1);
+            return newAccount;
+        },
+        [burnerManager]
+    );
 
     /**
      * Generates a list of BurnerConnector instances for each burner account. These can be added to Starknet React.
@@ -114,7 +145,7 @@ export const useBurnerManager = ({
                 get(burner.address)
             );
         });
-    }, [burnerManager.isDeploying]);
+    }, [burnerManager?.isDeploying]);
 
     /**
      * Copy burners to clipboard
@@ -132,10 +163,27 @@ export const useBurnerManager = ({
         setCount(burnerManager.list().length);
     }, [burnerManager]);
 
+    /**
+     * Returns a deterministic account addresses based on a seed and index.
+     *
+     * @param options - (optional) account secret seed and index
+     * @returns A deterministic Burner address
+     */
+    const generateAddressFromSeed = useCallback(
+        (options?: BurnerCreateOptions): string => {
+            const { address } = burnerManager.generateKeysAndAddress(options);
+            return address;
+        },
+        [burnerManager]
+    );
+
     return {
+        isError,
         get,
         list,
         select,
+        deselect,
+        remove,
         create,
         listConnectors,
         clear,
@@ -144,5 +192,6 @@ export const useBurnerManager = ({
         count,
         copyToClipboard,
         applyFromClipboard,
+        generateAddressFromSeed,
     };
 };

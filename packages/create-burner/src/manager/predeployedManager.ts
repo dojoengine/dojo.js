@@ -53,6 +53,7 @@ export class PredeployedManager {
 
     public account: Account | null = null;
     public predeployedAccounts: PredeployedAccount[] = [];
+    public isInitialized: boolean = false;
 
     constructor({
         rpcProvider,
@@ -103,6 +104,8 @@ export class PredeployedManager {
             }
             Storage.set(this.getStorageKey(), storage);
         }
+
+        this.isInitialized = true;
     }
 
     public list(): Predeployed[] {
