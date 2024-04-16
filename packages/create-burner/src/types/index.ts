@@ -50,6 +50,7 @@ export interface BurnerCreateOptions {
     secret: string;
     index: number;
     metadata?: any;
+    prefundedAmount?: string;
 }
 
 export interface BurnerKeys {
