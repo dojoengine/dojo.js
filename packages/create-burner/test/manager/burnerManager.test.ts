@@ -2,6 +2,7 @@ import { shortString } from "starknet";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import Storage from "../../src/utils/storage";
 import { getBurnerManager } from "../mocks/mocks"; // Adjust the path as necessary
+import { BurnerCreateOptions } from "../../src/types";
 
 // Explicitly mock the 'starknet' module
 vi.mock("starknet", async () => {
@@ -37,6 +38,29 @@ vi.mock("../../src/utils/storage", () => ({
     },
 }));
 
+class MockStorage {
+    state = undefined;
+    constructor(initialState) {
+        this.state = initialState;
+        Storage.get.mockImplementation((key: string) => {
+            if (key === "burners_katana_test") {
+                return this.state;
+            }
+            return null;
+        });
+        Storage.set.mockImplementation((key: string, newStore: any) => {
+            if (key === "burners_katana_test") {
+                this.state = newStore;
+            }
+        });
+        Storage.remove.mockImplementation((key: string) => {
+            if (key === "burners_katana_test") {
+                this.state = undefined;
+            }
+        });
+    }
+}
+
 describe("BurnerManager - init method", () => {
     beforeEach(() => {
         // Reset mocks to default behavior before each test
@@ -57,18 +81,13 @@ describe("BurnerManager - init method", () => {
 
     it("loads and activates an existing burner account", async () => {
         // Setup Storage.get to return a mock burner account
-        Storage.get.mockImplementation((key: string) => {
-            if (key === "burners_katana_test") {
-                return {
-                    account1: {
-                        privateKey: "0x00aa",
-                        publicKey: "0x00bb",
-                        deployTx: "0x00cc",
-                        active: true,
-                    },
-                };
-            }
-            return null;
+        const storage = new MockStorage({
+            account1: {
+                privateKey: "0x00aa",
+                publicKey: "0x00bb",
+                deployTx: "0x00cc",
+                active: true,
+            },
         });
 
         const burnerManager = getBurnerManager();
@@ -88,20 +107,76 @@ describe("BurnerManager - init method", () => {
         expect(burnerManager.getActiveAccount()?.address).toBe("account1");
     });
 
+    it("list, get, select, deselect, remove, clear", async () => {
+        const storage = new MockStorage({
+            account1: {
+                privateKey: "0x00aa",
+                publicKey: "0x00bb",
+                deployTx: "0x00cc",
+                active: false,
+            },
+            account2: {
+                privateKey: "0x88aa",
+                publicKey: "0x88bb",
+                deployTx: "0x88cc",
+                active: true,
+            },
+        });
+
+        const burnerManager = getBurnerManager();
+
+        // Mock getTransactionReceipt to return null, simulating an undeployed account
+        burnerManager.masterAccount.getTransactionReceipt.mockResolvedValue(
+            "receipt not null"
+        );
+
+        await burnerManager.init();
+
+        // initial state
+        expect(burnerManager.list().length).toStrictEqual(2);
+        expect(burnerManager.getActiveAccount()?.address).toStrictEqual(
+            "account2"
+        );
+
+        // get()
+        expect(burnerManager.get("account1")?.address).toStrictEqual(
+            "account1"
+        );
+        expect(burnerManager.get("account2")?.address).toStrictEqual(
+            "account2"
+        );
+
+        // deselect()
+        expect(burnerManager.deselect()).toEqual(undefined);
+        expect(burnerManager.getActiveAccount()).toStrictEqual(null);
+
+        // select()
+        expect(burnerManager.select("account1")).toEqual(undefined);
+        expect(burnerManager.getActiveAccount()?.address).toStrictEqual(
+            "account1"
+        );
+
+        // delete()
+        expect(burnerManager.select("account2")).toEqual(undefined);
+        expect(burnerManager.delete("account2")).toEqual(undefined);
+        expect(burnerManager.getActiveAccount()).toStrictEqual(null);
+        expect(burnerManager.list().length).toStrictEqual(1);
+
+        // clear()
+        expect(burnerManager.clear()).toEqual(undefined);
+        expect(burnerManager.list().length).toStrictEqual(0);
+        expect(burnerManager.getActiveAccount()).toStrictEqual(null);
+    });
+
     it("handles storage with one undeployed burner account", async () => {
         // Mock Storage.get to return one burner account that is not deployed
-        Storage.get.mockImplementation((key) => {
-            if (key === "burners") {
-                return {
-                    account1: {
-                        privateKey: "0x00aa",
-                        publicKey: "0x00bb",
-                        deployTx: "0x00cc",
-                        active: true,
-                    },
-                };
-            }
-            return null;
+        const storage = new MockStorage({
+            account1: {
+                privateKey: "0x00aa",
+                publicKey: "0x00bb",
+                deployTx: "0x00cc",
+                active: true,
+            },
         });
 
         const burnerManager = getBurnerManager();
@@ -113,6 +188,78 @@ describe("BurnerManager - init method", () => {
 
         expect(burnerManager.account).toBeNull();
     });
+});
+
+it("generateKeysAndAddress", async () => {
+    const burnerManager = getBurnerManager();
+
+    await burnerManager.init();
+
+    const wallet1_index0: BurnerCreateOptions = {
+        secret: "0x66efb28ac62686966ae85095ff3a772e014e7fbf56d4c5f6fac5606d4dde23a",
+        index: 0,
+    };
+    const wallet1_index1: BurnerCreateOptions = {
+        secret: "0x66efb28ac62686966ae85095ff3a772e014e7fbf56d4c5f6fac5606d4dde23a",
+        index: 1,
+    };
+    const wallet1_index2: BurnerCreateOptions = {
+        secret: "0x66efb28ac62686966ae85095ff3a772e014e7fbf56d4c5f6fac5606d4dde23a",
+        index: 2,
+    };
+    const wallet2_index0: BurnerCreateOptions = {
+        secret: "0x3ebb4767aae1262f8eb28d9368db5388cfe367f50552a8244123506f0b0bcca",
+        index: 0,
+    };
+    const wallet2_index1: BurnerCreateOptions = {
+        secret: "0x3ebb4767aae1262f8eb28d9368db5388cfe367f50552a8244123506f0b0bcca",
+        index: 1,
+    };
+
+    expect(burnerManager.generateKeysAndAddress(wallet1_index0)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet1_index0)
+    );
+    expect(burnerManager.generateKeysAndAddress(wallet1_index1)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet1_index1)
+    );
+    expect(burnerManager.generateKeysAndAddress(wallet1_index2)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet1_index2)
+    );
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index0)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet1_index1));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index1)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet1_index2));
+
+    expect(burnerManager.generateKeysAndAddress(wallet2_index0)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet2_index0)
+    );
+    expect(burnerManager.generateKeysAndAddress(wallet2_index1)).toStrictEqual(
+        burnerManager.generateKeysAndAddress(wallet2_index1)
+    );
+    expect(
+        burnerManager.generateKeysAndAddress(wallet2_index0)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
+
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index0)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index0));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index0)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index1)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index0));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index1)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index2)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index0));
+    expect(
+        burnerManager.generateKeysAndAddress(wallet1_index2)
+    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
 });
 
 describe("BurnerManager", () => {
@@ -147,7 +294,9 @@ describe("BurnerManager", () => {
     });
 
     it("should create burner accounts", async () => {
-        expect(burnerManager.create()).rejects.toThrowError();
+        expect(burnerManager.create()).rejects.toThrowError(
+            "BurnerManager is not initialized"
+        );
     });
 
     it("should copy burner to clipboard", async () => {

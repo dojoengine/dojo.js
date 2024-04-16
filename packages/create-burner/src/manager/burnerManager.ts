@@ -8,8 +8,15 @@ import {
     shortString,
     stark,
 } from "starknet";
-import { Burner, BurnerManagerOptions, BurnerStorage } from "../types";
+import {
+    Burner,
+    BurnerCreateOptions,
+    BurnerManagerOptions,
+    BurnerStorage,
+    BurnerKeys,
+} from "../types";
 import Storage from "../utils/storage";
+import { derivePrivateKeyFromSeed } from "../utils/keyDerivation";
 import { prefundAccount } from "./prefundAccount";
 
 export const PREFUND_AMOUNT = "0x2386f26fc10000";
@@ -149,7 +156,7 @@ export class BurnerManager {
         }
     }
 
-    public async init(): Promise<void> {
+    public async init(keepNonDeployed = false): Promise<void> {
         if (this.isInitialized) {
             throw new Error("BurnerManager is already initialized");
         }
@@ -171,8 +178,12 @@ export class BurnerManager {
         );
 
         toRemove.forEach((address) => {
-            console.log(`Removing non-deployed burner at address ${address}.`);
-            delete storage[address];
+            if (!keepNonDeployed) {
+                console.log(
+                    `Removing non-deployed burner at address ${address}.`
+                );
+                delete storage[address];
+            }
         });
 
         if (Object.keys(storage).length) {
@@ -191,6 +202,8 @@ export class BurnerManager {
             return {
                 address,
                 active: storage[address].active,
+                masterAccount: storage[address].masterAccount,
+                accountIndex: storage[address].accountIndex,
             };
         });
     }
@@ -213,6 +226,15 @@ export class BurnerManager {
             storage[address].privateKey,
             "1"
         );
+    }
+
+    public deselect(): void {
+        const storage = this.getBurnerStorage();
+        for (let addr in storage) {
+            storage[addr].active = false;
+        }
+        Storage.set(this.getBurnerKey(), storage);
+        this.account = null;
     }
 
     public get(address: string): Account {
@@ -259,23 +281,32 @@ export class BurnerManager {
         return null;
     }
 
-    public async create(
-        prefundedAmount: string = PREFUND_AMOUNT
-    ): Promise<Account> {
+    public generateKeysAndAddress(options?: BurnerCreateOptions): BurnerKeys {
+        const privateKey = options?.secret
+            ? derivePrivateKeyFromSeed(options.secret, options.index)
+            : stark.randomAddress();
+        const publicKey = ec.starkCurve.getStarkKey(privateKey);
+        return {
+            privateKey,
+            publicKey,
+            address: hash.calculateContractAddressFromHash(
+                publicKey,
+                this.accountClassHash,
+                CallData.compile({ publicKey }),
+                0
+            ),
+        };
+    }
+
+    public async create(options?: BurnerCreateOptions): Promise<Account> {
         if (!this.isInitialized) {
             throw new Error("BurnerManager is not initialized");
         }
 
         this.updateIsDeploying(true);
 
-        const privateKey = stark.randomAddress();
-        const publicKey = ec.starkCurve.getStarkKey(privateKey);
-        const address = hash.calculateContractAddressFromHash(
-            publicKey,
-            this.accountClassHash,
-            CallData.compile({ publicKey }),
-            0
-        );
+        const { privateKey, publicKey, address } =
+            this.generateKeysAndAddress(options);
 
         if (!this.masterAccount) {
             throw new Error("wallet account not found");
@@ -285,10 +316,11 @@ export class BurnerManager {
                 address,
                 this.masterAccount,
                 this.feeTokenAddress,
-                prefundedAmount
+                options?.prefundedAmount || PREFUND_AMOUNT
             );
         } catch (e) {
-            this.isDeploying = false;
+            console.error(`burner manager create() error:`, e);
+            this.updateIsDeploying(false);
         }
 
         const accountOptions = {
@@ -300,15 +332,31 @@ export class BurnerManager {
         // deploy burner
         const burner = new Account(this.provider, address, privateKey, "1");
 
-        const nonce = await this.account?.getNonce();
-
-        const { transaction_hash: deployTx } = await burner.deployAccount(
-            accountOptions,
-            {
-                nonce,
-                maxFee: 0, // TODO: update
+        let deployTx = "";
+        try {
+            const nonce = await this.account?.getNonce();
+            const { transaction_hash } = await burner.deployAccount(
+                accountOptions,
+                {
+                    nonce,
+                    maxFee: 0, // TODO: update
+                }
+            );
+            const receipt = await this.masterAccount.waitForTransaction(
+                deployTx,
+                {
+                    retryInterval: 100,
+                }
+            );
+            if (!receipt) {
+                throw new Error("Transaction did not complete successfully.");
             }
-        );
+
+            deployTx = transaction_hash;
+        } catch (error) {
+            this.updateIsDeploying(false);
+            throw error;
+        }
 
         const storage = this.getBurnerStorage();
         for (let address in storage) {
@@ -320,8 +368,16 @@ export class BurnerManager {
             privateKey,
             publicKey,
             deployTx,
+            masterAccount: this.masterAccount.address,
             active: true,
         };
+
+        if (options?.secret) {
+            storage[address].accountIndex = options.index;
+        }
+        if (options?.metadata) {
+            storage[address].metadata = options.metadata;
+        }
 
         this.account = burner;
         this.updateIsDeploying(false);

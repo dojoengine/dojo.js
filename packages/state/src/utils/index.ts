@@ -5,8 +5,6 @@ export function convertValues(schema: Schema, values: any) {
         const schemaType = schema[key];
         const value = values[key];
 
-        console.log(schemaType, key, values[key]);
-
         if (value === null || value === undefined) {
             acc[key] = value;
             return acc;

@@ -17,7 +17,9 @@ export const usePredeployedWindowObject = (
             }
 
             try {
-                await predeployedManager.init();
+                if (!predeployedManager.isInitialized) {
+                    await predeployedManager.init();
+                }
 
                 const starknetWindowObject =
                     new DojoPredeployedStarknetWindowObject(predeployedManager);

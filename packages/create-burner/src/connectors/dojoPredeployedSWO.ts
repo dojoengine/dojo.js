@@ -3,13 +3,15 @@ import { AccountInterface, RpcProvider } from "starknet";
 import { PredeployedManager } from "..";
 import { katanaIcon } from "./icons";
 
+const ID = "dojopredeployed";
+const NAME = "Dojo Predeployed";
 const VERSION = "0.0.1";
 
 export class DojoPredeployedStarknetWindowObject
     implements IStarknetWindowObject
 {
-    id = "dojopredeployed";
-    name = "Dojo Predeployed";
+    id = ID;
+    name = NAME;
     icon = katanaIcon;
     account?: AccountInterface = undefined;
     provider?: RpcProvider = undefined;
@@ -86,4 +88,14 @@ export class DojoPredeployedStarknetWindowObject
     off = (event: any, handleEvent: any) => {
         //console.log("off", event);
     };
+
+    /** @returns {string} the connector id */
+    static getId(): string {
+        return ID;
+    }
+
+    /** @returns {string} the connector name */
+    static getName(): string {
+        return NAME;
+    }
 }

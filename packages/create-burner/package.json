@@ -39,6 +39,7 @@
     },
     "dependencies": {
         "@dojoengine/core": "^0.6.122",
+        "@scure/bip32": "^1.4.0",
         "@starknet-react/core": "2.3.0",
         "encoding": "^0.1.13",
         "get-starknet-core": "^3.2.0",
