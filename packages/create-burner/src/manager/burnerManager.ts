@@ -316,7 +316,8 @@ export class BurnerManager {
                 this.feeTokenAddress
             );
         } catch (e) {
-            this.isDeploying = false;
+            console.error(`burner manager create() error:`, e);
+            this.updateIsDeploying(false);
         }
 
         const accountOptions = {
@@ -328,20 +329,31 @@ export class BurnerManager {
         // deploy burner
         const burner = new Account(this.provider, address, privateKey, "1");
 
-        const nonce = await this.account?.getNonce();
-
-        const { transaction_hash: deployTx } = await burner.deployAccount(
-            accountOptions,
-            {
-                nonce,
-                maxFee: 0, // TODO: update
+        let deployTx = "";
+        try {
+            const nonce = await this.account?.getNonce();
+            const { transaction_hash } = await burner.deployAccount(
+                accountOptions,
+                {
+                    nonce,
+                    maxFee: 0, // TODO: update
+                }
+            );
+            const receipt = await this.masterAccount.waitForTransaction(
+                deployTx,
+                {
+                    retryInterval: 100,
+                }
+            );
+            if (!receipt) {
+                throw new Error("Transaction did not complete successfully.");
             }
-        );
 
-        // shouldn't we wait to make sure it was accepted?
-        // console.log(`DEPLOY TX:`, deployTx)
-        // const receipt = await this.masterAccount.waitForTransaction(deployTx)
-        // console.log(`DEPLOY RECEIPT:`, receipt)
+            deployTx = transaction_hash;
+        } catch (error) {
+            this.updateIsDeploying(false);
+            throw error;
+        }
 
         const storage = this.getBurnerStorage();
         for (let address in storage) {
