@@ -283,7 +283,7 @@ export class BurnerManager {
 
     public generateKeysAndAddress(options?: BurnerCreateOptions): BurnerKeys {
         const privateKey = options?.secret
-            ? derivePrivateKeyFromSeed(options.secret, options.index)
+            ? derivePrivateKeyFromSeed(options.secret, options.index || 0)
             : stark.randomAddress();
         const publicKey = ec.starkCurve.getStarkKey(privateKey);
         return {
