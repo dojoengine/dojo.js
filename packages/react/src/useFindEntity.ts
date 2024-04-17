@@ -9,7 +9,8 @@ export const useFindEntities = <
         findEntities: () => Promise<Record<string, any>>;
     },
 >(
-    input: Promise<T>
+    input: Promise<T>,
+    dependencies: any[] = []
 ) => {
     const [entityIds, setEntityIds] = useState<string[]>([]);
 
@@ -27,7 +28,7 @@ export const useFindEntities = <
         };
 
         fetchEntity();
-    }, [input]);
+    }, dependencies);
 
     return useBoundStore;
 };
@@ -38,7 +39,8 @@ export const useFindEntity = <
         findEntities: () => Promise<Record<string, any>>;
     },
 >(
-    input: Promise<T>
+    input: Promise<T>,
+    dependencies: any[] = []
 ) => {
     const [entityId, setEntityId] = useState<string>("");
 
@@ -55,7 +57,7 @@ export const useFindEntity = <
         };
 
         fetchEntity();
-    }, [input]);
+    }, dependencies);
 
     return useBoundStore;
 };

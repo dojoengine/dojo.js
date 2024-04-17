@@ -15,7 +15,8 @@ function App() {
                 player: validateAndParseAddress(account?.account.address),
             },
             Position: {},
-        })
+        }),
+        [account?.account.address]
     );
 
     useEffect(() => {
