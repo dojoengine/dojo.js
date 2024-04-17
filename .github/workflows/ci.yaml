@@ -35,10 +35,7 @@ jobs:
               run: sudo apt-get install -y protobuf-compiler
 
             - name: cargo-install
-              uses: baptiste0928/cargo-install@v3.1.0
-              with:
-                  toolchain: nightly
-                  packages: wasm-pack
+              run: curl https://sh.rustup.rs -sSf | sh
 
             - name: Install wasm-pack
               run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
