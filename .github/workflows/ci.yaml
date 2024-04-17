@@ -38,7 +38,7 @@ jobs:
               run: cargo
 
             - name: Install wasm-pack
-              run: cargo install wasm-pack
+              run: cargo install wasm-pack cargo clippy rust-docs
 
             - name: Install dependencies
               run: pnpm i
