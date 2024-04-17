@@ -61,11 +61,14 @@ const generalFields = z.object({
 });
 
 const world = generalFields.extend({
-    kind: z.literal("Contract"),
+    kind: z.literal("WorldContract"),
     address: z.string(),
     transaction_hash: z.string(),
     block_number: z.number(),
     seed: z.string(),
+    metadata: z.object({
+        rpc_url: z.string(),
+    }),
 });
 
 const base = generalFields.extend({
