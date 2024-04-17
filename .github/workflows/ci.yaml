@@ -34,6 +34,9 @@ jobs:
             - name: Install Protobuf Compiler
               run: sudo apt-get install -y protobuf-compiler
 
+            - name: Install wasm-pack
+              run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
             - name: Install dependencies
               run: pnpm i
 
