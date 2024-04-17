@@ -4,7 +4,7 @@ on:
     push:
         branches: [main]
     pull_request:
-        branches: [opened, synchronize]
+        branches: [main]
 
 jobs:
     check:
