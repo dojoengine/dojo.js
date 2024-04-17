@@ -99,7 +99,7 @@ importers:
         version: 3.0.11
       bun-types:
         specifier: latest
-        version: 1.1.1
+        version: 1.1.0
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
@@ -859,13 +859,13 @@ importers:
         version: 1.4.0
       '@starknet-react/core':
         specifier: 2.3.0
-        version: 2.3.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@5.29.0)
+        version: 2.3.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.6.6)
       encoding:
         specifier: ^0.1.13
         version: 0.1.13
       get-starknet-core:
         specifier: ^3.2.0
-        version: 3.2.0(starknet@5.29.0)
+        version: 3.2.0(starknet@6.6.6)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -874,7 +874,7 @@ importers:
         version: 18.2.0
       starknet:
         specifier: ^6.1.5
-        version: 5.29.0(encoding@0.1.13)
+        version: 6.6.6(encoding@0.1.13)
     devDependencies:
       '@babel/core':
         specifier: ^7.21.4
@@ -6663,54 +6663,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@rometools/cli-darwin-arm64@12.1.3:
-    resolution: {integrity: sha512-AmFTUDYjBuEGQp/Wwps+2cqUr+qhR7gyXAUnkL5psCuNCz3807TrUq/ecOoct5MIavGJTH6R4aaSL6+f+VlBEg==}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-darwin-x64@12.1.3:
-    resolution: {integrity: sha512-k8MbWna8q4LRlb005N2X+JS1UQ+s3ZLBBvwk4fP8TBxlAJXUz17jLLu/Fi+7DTTEmMhM84TWj4FDKW+rNar28g==}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-linux-arm64@12.1.3:
-    resolution: {integrity: sha512-X/uLhJ2/FNA3nu5TiyeNPqiD3OZoFfNfRvw6a3ut0jEREPvEn72NI7WPijH/gxSz55znfQ7UQ6iM4DZumUknJg==}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-linux-x64@12.1.3:
-    resolution: {integrity: sha512-csP17q1eWiUXx9z6Jr/JJPibkplyKIwiWPYNzvPCGE8pHlKhwZj3YHRuu7Dm/4EOqx0XFIuqqWZUYm9bkIC8xg==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-win32-arm64@12.1.3:
-    resolution: {integrity: sha512-RymHWeod57EBOJY4P636CgUwYA6BQdkQjh56XKk4pLEHO6X1bFyMet2XL7KlHw5qOTalzuzf5jJqUs+vf3jdXQ==}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-win32-x64@12.1.3:
-    resolution: {integrity: sha512-yHSKYidqJMV9nADqg78GYA+cZ0hS1twANAjiFibQdXj9aGzD+s/IzIFEIi/U/OBLvWYg/SCw0QVozi2vTlKFDQ==}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@sapphire/async-queue@1.5.2:
     resolution: {integrity: sha512-7X7FFAA4DngXUl95+hYbUF19bp1LGiffjJtu7ygrZrbdCSsdDDBaSjB7Akw0ZbOu6k0xpXyljnJ6/RZUvLfRdg==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
@@ -6961,23 +6913,6 @@ packages:
 
   /@starknet-react/chains@0.1.7:
     resolution: {integrity: sha512-UNh97I1SvuJKaAhKOmpEk8JcWuZWMlPG/ba2HcvFYL9x/47BKndJ+Da9V+iJFtkHUjreVnajT1snsaz1XMG+UQ==}
-    dev: false
-
-  /@starknet-react/core@2.3.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@5.29.0):
-    resolution: {integrity: sha512-8g9d0Gs811gJnQJHVMxQoXYhv+y5/qug7NQ0lnJ51uytdBhr/Zz5wgeTHW4ZQ5Igljyvf+ks+yhp4P1iSvnSqA==}
-    peerDependencies:
-      get-starknet-core: ^3.2.0
-      react: ^18.0
-      starknet: ^5.25.0
-    dependencies:
-      '@starknet-react/chains': 0.1.7
-      '@tanstack/react-query': 5.28.14(react@18.2.0)
-      eventemitter3: 5.0.1
-      get-starknet-core: 3.2.0(starknet@5.29.0)
-      immutable: 4.3.5
-      react: 18.2.0
-      starknet: 5.29.0(encoding@0.1.13)
-      zod: 3.22.4
     dev: false
 
   /@starknet-react/core@2.3.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.6.6):
@@ -8748,7 +8683,7 @@ packages:
       strip-literal: 2.1.0
       test-exclude: 6.0.0
       v8-to-istanbul: 9.2.0
-      vitest: 1.4.0(@types/node@18.19.29)(jsdom@24.0.0)
+      vitest: 1.4.0(@types/node@20.12.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -9024,16 +8959,6 @@ packages:
     resolution: {integrity: sha512-6/mh1E2u2YgEsCHdY0Yx5oW+61gZU+1vXaoiHHrpKeuRNNgFvS+/jrwHiQhB5apAf5oB7UB7E19ol2R2LKH8hQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dev: true
-
-  /abi-wan-kanabi@1.0.3:
-    resolution: {integrity: sha512-Xwva0AnhXx/IVlzo3/kwkI7Oa7ZX7codtcSn+Gmoa2PmjGPF/0jeVud9puasIPtB7V50+uBdUj4Mh3iATqtBvg==}
-    hasBin: true
-    dependencies:
-      fs-extra: 10.1.0
-      rome: 12.1.3
-      typescript: 4.9.5
-      yargs: 17.7.2
-    dev: false
 
   /abi-wan-kanabi@2.2.2:
     resolution: {integrity: sha512-sTCv2HyNIj1x2WFUoc9oL8ZT9liosrL+GoqEGZJK1kDND096CfA7lwx06vLxLWMocQ41FQXO3oliwoh/UZHYdQ==}
@@ -9762,8 +9687,8 @@ packages:
       semver: 7.6.0
     dev: true
 
-  /bun-types@1.1.1:
-    resolution: {integrity: sha512-+dg+3Q7QQ9GdUazfgth7AGYD9NuqOCKL1Hdi5Ut1WbKlmSrKBuAOobTO4g1sn3KSajnxqVQ69MdQrITZfuFxvg==}
+  /bun-types@1.1.0:
+    resolution: {integrity: sha512-GhMDD7TosdJzQPGUOcQD5PZshvXVxDfwGAZs2dq+eSaPsRn3iUCzvpFlsg7Q51bXVzLAUs+FWHlnmpgZ5UggIg==}
     dependencies:
       '@types/node': 20.11.30
       '@types/ws': 8.5.10
@@ -12093,14 +12018,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /get-starknet-core@3.2.0(starknet@5.29.0):
-    resolution: {integrity: sha512-SZhxtLlKoPKLZ2H3l9WIU7CiNmkL3qLWGksALmvZdAXa/9PykYfLtvIB5B8A2UZMpf2ojTZlWLfuo1KhgmVobA==}
-    peerDependencies:
-      starknet: ^5.18.0
-    dependencies:
-      starknet: 5.29.0(encoding@0.1.13)
-    dev: false
-
   /get-starknet-core@3.2.0(starknet@6.6.6):
     resolution: {integrity: sha512-SZhxtLlKoPKLZ2H3l9WIU7CiNmkL3qLWGksALmvZdAXa/9PykYfLtvIB5B8A2UZMpf2ojTZlWLfuo1KhgmVobA==}
     peerDependencies:
@@ -14254,10 +14171,6 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
-
-  /lossless-json@2.0.11:
-    resolution: {integrity: sha512-BP0vn+NGYvzDielvBZaFain/wgeJ1hTvURCqtKvhr1SCPePdaaTanmmcplrHfEJSJOUql7hk4FHwToNJjWRY3g==}
-    dev: false
 
   /lossless-json@4.0.1:
     resolution: {integrity: sha512-l0L+ppmgPDnb+JGxNLndPtJZGNf6+ZmVaQzoxQm3u6TXmhdnsA+YtdVR8DjzZd/em58686CQhOFDPewfJ4l7MA==}
@@ -16763,20 +16676,6 @@ packages:
       '@rollup/rollup-win32-x64-msvc': 4.14.0
       fsevents: 2.3.3
 
-  /rome@12.1.3:
-    resolution: {integrity: sha512-e+ff72hxDpe/t5/Us7YRBVw3PBET7SeczTQNn6tvrWdrCaAw3qOukQQ+tDCkyFtS4yGsnhjrJbm43ctNbz27Yg==}
-    engines: {node: '>=14.*'}
-    hasBin: true
-    requiresBuild: true
-    optionalDependencies:
-      '@rometools/cli-darwin-arm64': 12.1.3
-      '@rometools/cli-darwin-x64': 12.1.3
-      '@rometools/cli-linux-arm64': 12.1.3
-      '@rometools/cli-linux-x64': 12.1.3
-      '@rometools/cli-win32-arm64': 12.1.3
-      '@rometools/cli-win32-x64': 12.1.3
-    dev: false
-
   /rrweb-cssom@0.6.0:
     resolution: {integrity: sha512-APM0Gt1KoXBz0iIkkdB/kfvGOwC4UuJFeG/c+yV7wSc7q96cG/kJ0HiYCnzivD9SB53cLV1MlHFNfOuPaadYSw==}
     dev: true
@@ -17262,22 +17161,6 @@ packages:
   /stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
     dev: true
-
-  /starknet@5.29.0(encoding@0.1.13):
-    resolution: {integrity: sha512-eEcd6uiYIwGvl8MtHOsXGBhREqjJk84M/qUkvPLQ3n/JAMkbKBGnygDlh+HAsvXJsGlMQfwrcVlm6KpDoPha7w==}
-    dependencies:
-      '@noble/curves': 1.3.0
-      '@scure/base': 1.1.6
-      '@scure/starknet': 1.0.0
-      abi-wan-kanabi-v1: /abi-wan-kanabi@1.0.3
-      abi-wan-kanabi-v2: /abi-wan-kanabi@2.2.2
-      isomorphic-fetch: 3.0.0(encoding@0.1.13)
-      lossless-json: 2.0.11
-      pako: 2.1.0
-      url-join: 4.0.1
-    transitivePeerDependencies:
-      - encoding
-    dev: false
 
   /starknet@6.1.5:
     resolution: {integrity: sha512-mhkadsHf3uoqax0UEfb7VMdfbY5UK8DAlDMnEVKYtG9PstE3ajLWoTu2KKdG0F2CWtPlYqTejuJ0fOEhwIwoPA==}
@@ -18253,12 +18136,6 @@ packages:
       minimatch: 9.0.4
       shiki: 0.14.7
       typescript: 5.4.3
-
-  /typescript@4.9.5:
-    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
-    dev: false
 
   /typescript@5.4.3:
     resolution: {integrity: sha512-KrPd3PKaCLr78MalgiwJnA25Nm8HAmdwN3mYUYZgG/wizIo9EainNVQI9/yDavtVFRN2h3k8uf3GLHuhDMgEHg==}
