@@ -46,9 +46,9 @@ export const syncEntities = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[]
 ) => {
-    client.onEntityUpdated([], (entities: any) =>
-        setEntities(entities, components)
-    );
+    client.onEntityUpdated([], (entities: any) => {
+        setEntities(entities, components);
+    });
 };
 
 export const setEntities = async <S extends Schema>(

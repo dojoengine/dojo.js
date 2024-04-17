@@ -3,11 +3,13 @@ import { AccountInterface, RpcProvider } from "starknet";
 import { BurnerManager } from "..";
 import { katanaIcon } from "./icons";
 
+const ID = "dojoburner";
+const NAME = "Dojo Burner";
 const VERSION = "0.0.1";
 
 export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject {
-    id = "dojoburner";
-    name = "Dojo Burner";
+    id = ID;
+    name = NAME;
     icon = katanaIcon;
     account?: AccountInterface = undefined;
     provider?: RpcProvider = undefined;
@@ -77,4 +79,14 @@ export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject {
     off = (event: any, handleEvent: any) => {
         //console.log("off", event);
     };
+
+    /** @returns {string} the connector id */
+    static getId(): string {
+        return ID;
+    }
+
+    /** @returns {string} the connector name */
+    static getName(): string {
+        return NAME;
+    }
 }

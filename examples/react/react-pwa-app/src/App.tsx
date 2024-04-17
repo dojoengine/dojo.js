@@ -56,7 +56,7 @@ function App() {
 
     return (
         <>
-            <button onClick={account?.create}>
+            <button onClick={() => account?.create()}>
                 {account?.isDeploying ? "deploying burner" : "create burner"}
             </button>
             {account && account?.list().length > 0 && (

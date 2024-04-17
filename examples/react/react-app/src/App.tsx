@@ -57,7 +57,7 @@ function App() {
 
     return (
         <>
-            <button onClick={account?.create}>
+            <button onClick={() => account?.create()}>
                 {account?.isDeploying ? "deploying burner" : "create burner"}
             </button>
             {account && account?.list().length > 0 && (
@@ -116,6 +116,8 @@ function App() {
                         ? `${playerEntity.Position.vec.x}, ${playerEntity.Position.vec.y}`
                         : "Need to Spawn"}
                 </div>
+
+                <div>{moves && moves.last_direction}</div>
             </div>
 
             <div className="card">

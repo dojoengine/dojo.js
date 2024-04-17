@@ -10,16 +10,21 @@ export function convertValues(schema: Schema, values: any) {
             return acc;
         }
 
-        if (
+        // Check if the schemaType is a string, if so, assign the value directly
+        if (schemaType === RecsType.String) {
+            acc[key] = value;
+        } else if (
             typeof schemaType === "object" &&
             value &&
             typeof value === "object"
         ) {
             acc[key] = convertValues(schemaType, value);
         } else {
+            // Convert to BigInt or Number based on schemaType
             acc[key] =
                 schemaType === RecsType.BigInt ? BigInt(value) : Number(value);
         }
+
         return acc;
     }, {});
 }

@@ -3,17 +3,19 @@
 use std::str::FromStr;
 
 use crypto_bigint::U256;
-use futures::StreamExt;
 use serde::{Deserialize, Serialize};
 use starknet::core::types::FieldElement;
 use starknet::core::utils::cairo_short_string_to_felt;
 use tsify::Tsify;
+use futures::StreamExt;
+use js_sys::JSON::stringify;
+use torii_relay::{typed_data::TypedData, types::Message};
 use wasm_bindgen::prelude::*;
 
 mod types;
 mod utils;
 
-use types::{ClientConfig, EntityModel, IEntityModel};
+use types::{ClientConfig, EntityModel, IEntityModel, Signature};
 use utils::{parse_entities_as_json_str, parse_ty_as_json_str};
 
 type JsFieldElement = JsValue;
@@ -369,6 +371,53 @@ impl Client {
 
         Ok(())
     }
+
+    #[wasm_bindgen(js_name = publishMessage)]
+    pub async fn publish_message(
+        &self,
+        message: JsValue,
+        signature: Signature,
+    ) -> Result<js_sys::Uint8Array, JsValue> {
+        #[cfg(feature = "console-error-panic")]
+        console_error_panic_hook::set_once();
+
+        let message: String = stringify(&message)
+            .map_err(|_| JsValue::from("failed to stringify message"))?
+            .into();
+
+        let message = serde_json::from_str::<TypedData>(&message)
+            .map_err(|err| JsValue::from(format!("failed to parse message: {err}")))?;
+
+        self.inner
+            .publish_message(Message {
+                message,
+                signature_r: FieldElement::from_str(&signature.r)
+                    .map_err(|err| JsValue::from(format!("failed to parse signature r: {err}")))?,
+                signature_s: FieldElement::from_str(&signature.s)
+                    .map_err(|err| JsValue::from(format!("failed to parse signature s: {err}")))?,
+            })
+            .await
+            .map(|id| id.as_slice().into())
+            .map_err(|err| JsValue::from(format!("failed to publish message: {err}")))
+    }
+}
+
+#[wasm_bindgen(js_name = encoreTypedData)]
+pub fn encode_typed_data(data: JsValue, address: &str) -> Result<String, JsValue> {
+    let data: String = stringify(&data)
+        .map_err(|_| JsValue::from(format!("failed to stringify typed data")))?
+        .into();
+
+    let typed_data = serde_json::from_str::<TypedData>(&data)
+        .map_err(|err| JsValue::from(format!("failed to parse typed data: {err}")))?;
+
+    let address = FieldElement::from_str(address)
+        .map_err(|err| JsValue::from(format!("failed to parse address: {err}")))?;
+
+    typed_data
+        .encode(address)
+        .map(|f| format!("{:#x}", f))
+        .map_err(|err| JsValue::from(format!("failed to encode typed data: {err}")))
 }
 
 /// Create the a client with the given configurations.
@@ -393,16 +442,26 @@ pub async fn create_client(
     let world_address = FieldElement::from_str(&world_address)
         .map_err(|err| JsValue::from(format!("failed to parse world address: {err}")))?;
 
-    let client =
-        torii_client::client::Client::new(torii_url, rpc_url, relay_url, world_address, Some(models))
-            .await
-            .map_err(|err| JsValue::from(format!("failed to build client: {err}")))?;
+    let client = torii_client::client::Client::new(
+        torii_url,
+        rpc_url,
+        relay_url,
+        world_address,
+        Some(models),
+    )
+    .await
+    .map_err(|err| JsValue::from(format!("failed to build client: {err}")))?;
 
     wasm_bindgen_futures::spawn_local(client.start_subscription().await.map_err(|err| {
         JsValue::from(format!(
             "failed to start torii client subscription service: {err}"
         ))
     })?);
+
+    let relay_runner = client.relay_runner();
+    wasm_bindgen_futures::spawn_local(async move {
+        relay_runner.lock().await.run().await;
+    });
 
     Ok(Client { inner: client })
 }

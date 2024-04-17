@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-client",
-    "version": "0.6.12",
+    "version": "0.6.122",
     "description": "Torii client for the dojo onchain game engine",
     "keywords": [],
     "author": "Dojo",

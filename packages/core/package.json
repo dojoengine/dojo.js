@@ -1,14 +1,13 @@
 {
     "name": "@dojoengine/core",
-    "version": "0.6.12",
+    "version": "0.6.122",
     "description": "Dojo onchain game engine core",
     "author": "Loaf",
     "license": "MIT",
     "main": "./dist/index.js",
     "type": "module",
     "scripts": {
-        "build": "tsup",
-        "postbuild": "cp -R bin dist/",
+        "build": "tsup && cp -R bin dist/",
         "test": "vitest run --coverage"
     },
     "exports": {
@@ -27,6 +26,9 @@
         "tsup": "^8.0.1",
         "typescript": "^5.0.3",
         "vitest": "^1.1.0"
+    },
+    "dependencies": {
+        "@dojoengine/recs": "0.1.35"
     },
     "bin": {
         "create-components": "./dist/bin/generateComponents.cjs"
