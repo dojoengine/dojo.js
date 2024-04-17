@@ -47,8 +47,8 @@ export interface BurnerAccount {
 }
 
 export interface BurnerCreateOptions {
-    secret: string;
-    index: number;
+    secret?: string;
+    index?: number;
     metadata?: any;
     prefundedAmount?: string;
 }

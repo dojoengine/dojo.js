@@ -1,5 +1,4 @@
-import { hexToBytes } from "@noble/curves/abstract/utils";
-import { ec, encode } from "starknet";
+import { ec, encode, num } from "starknet";
 import { HDKey } from "@scure/bip32";
 
 //
@@ -29,8 +28,7 @@ export function derivePrivateKeyFromSeed(
     if (!secret) {
         throw "seed is undefined";
     }
-    const hex = encode.sanitizeBytes(encode.removeHexPrefix(secret));
-    const masterNode = HDKey.fromMasterSeed(hexToBytes(hex));
+    const masterNode = HDKey.fromMasterSeed(num.hexToBytes(secret));
     const childNode = masterNode.derive(getPathForIndex(index));
     if (!childNode.privateKey) {
         throw "childNode.privateKey is undefined";

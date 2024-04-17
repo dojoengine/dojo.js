@@ -1,4 +1,4 @@
-import { shortString } from "starknet";
+import { shortString, validateAndParseAddress } from "starknet";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import Storage from "../../src/utils/storage";
 import { getBurnerManager } from "../mocks/mocks"; // Adjust the path as necessary
@@ -216,50 +216,75 @@ it("generateKeysAndAddress", async () => {
         index: 1,
     };
 
-    expect(burnerManager.generateKeysAndAddress(wallet1_index0)).toStrictEqual(
+    const keys_random = burnerManager.generateKeysAndAddress();
+    const keys_wallet1_index0 =
+        burnerManager.generateKeysAndAddress(wallet1_index0);
+    const keys_wallet1_index1 =
+        burnerManager.generateKeysAndAddress(wallet1_index1);
+    const keys_wallet1_index2 =
+        burnerManager.generateKeysAndAddress(wallet1_index2);
+    const keys_wallet2_index0 =
+        burnerManager.generateKeysAndAddress(wallet2_index0);
+    const keys_wallet2_index1 =
+        burnerManager.generateKeysAndAddress(wallet2_index1);
+
+    // generated keys are valid
+    expect(BigInt(keys_random.privateKey)).toEqual(
+        BigInt(validateAndParseAddress(keys_random.privateKey))
+    );
+    expect(BigInt(keys_random.publicKey)).toEqual(
+        BigInt(validateAndParseAddress(keys_random.publicKey))
+    );
+    expect(BigInt(keys_random.address)).toEqual(
+        BigInt(validateAndParseAddress(keys_random.address))
+    );
+    expect(BigInt(keys_wallet1_index0.privateKey)).toEqual(
+        BigInt(validateAndParseAddress(keys_wallet1_index0.privateKey))
+    );
+    expect(BigInt(keys_wallet1_index0.publicKey)).toEqual(
+        BigInt(validateAndParseAddress(keys_wallet1_index0.publicKey))
+    );
+    expect(BigInt(keys_wallet1_index0.address)).toEqual(
+        BigInt(validateAndParseAddress(keys_wallet1_index0.address))
+    );
+
+    // random are not deterministic
+    expect(keys_random).not.toStrictEqual(
+        burnerManager.generateKeysAndAddress()
+    );
+
+    // indexed are deterministic
+    expect(keys_wallet1_index0).toStrictEqual(
         burnerManager.generateKeysAndAddress(wallet1_index0)
     );
-    expect(burnerManager.generateKeysAndAddress(wallet1_index1)).toStrictEqual(
+    expect(keys_wallet1_index1).toStrictEqual(
         burnerManager.generateKeysAndAddress(wallet1_index1)
     );
-    expect(burnerManager.generateKeysAndAddress(wallet1_index2)).toStrictEqual(
+    expect(keys_wallet1_index2).toStrictEqual(
         burnerManager.generateKeysAndAddress(wallet1_index2)
     );
-    expect(
-        burnerManager.generateKeysAndAddress(wallet1_index0)
-    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet1_index1));
-    expect(
-        burnerManager.generateKeysAndAddress(wallet1_index1)
-    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet1_index2));
-
-    expect(burnerManager.generateKeysAndAddress(wallet2_index0)).toStrictEqual(
+    expect(keys_wallet2_index0).toStrictEqual(
         burnerManager.generateKeysAndAddress(wallet2_index0)
     );
-    expect(burnerManager.generateKeysAndAddress(wallet2_index1)).toStrictEqual(
+    expect(keys_wallet2_index1).toStrictEqual(
         burnerManager.generateKeysAndAddress(wallet2_index1)
     );
-    expect(
-        burnerManager.generateKeysAndAddress(wallet2_index0)
-    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
 
-    expect(
-        burnerManager.generateKeysAndAddress(wallet1_index0)
-    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index0));
-    expect(
-        burnerManager.generateKeysAndAddress(wallet1_index0)
-    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
-    expect(
-        burnerManager.generateKeysAndAddress(wallet1_index1)
-    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index0));
-    expect(
-        burnerManager.generateKeysAndAddress(wallet1_index1)
-    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
-    expect(
-        burnerManager.generateKeysAndAddress(wallet1_index2)
-    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index0));
-    expect(
-        burnerManager.generateKeysAndAddress(wallet1_index2)
-    ).not.toStrictEqual(burnerManager.generateKeysAndAddress(wallet2_index1));
+    // indexes per wallet are unique
+    expect(keys_wallet1_index0).not.toStrictEqual(keys_random);
+    expect(keys_wallet1_index0).not.toStrictEqual(keys_wallet1_index1);
+    expect(keys_wallet1_index0).not.toStrictEqual(keys_wallet2_index0);
+    expect(keys_wallet1_index0).not.toStrictEqual(keys_wallet2_index1);
+    expect(keys_wallet1_index1).not.toStrictEqual(keys_wallet1_index2);
+    expect(keys_wallet1_index1).not.toStrictEqual(keys_random);
+    expect(keys_wallet1_index1).not.toStrictEqual(keys_wallet2_index0);
+    expect(keys_wallet1_index1).not.toStrictEqual(keys_wallet2_index1);
+    expect(keys_wallet1_index2).not.toStrictEqual(keys_wallet2_index0);
+    expect(keys_wallet1_index2).not.toStrictEqual(keys_random);
+    expect(keys_wallet1_index2).not.toStrictEqual(keys_wallet2_index1);
+    expect(keys_wallet2_index0).not.toStrictEqual(keys_wallet2_index1);
+    expect(keys_wallet2_index0).not.toStrictEqual(keys_random);
+    expect(keys_wallet2_index1).not.toStrictEqual(keys_random);
 });
 
 describe("BurnerManager", () => {

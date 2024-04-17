@@ -342,6 +342,20 @@ export class BurnerManager {
                     maxFee: 0, // TODO: update
                 }
             );
+            deployTx = transaction_hash;
+        } catch (error) {
+            this.updateIsDeploying(false);
+            throw error;
+        }
+
+        // check if account is already deployed
+        let isDeployed = false;
+        try {
+            isDeployed = await this.isBurnerDeployed(deployTx);
+        } catch {}
+
+        // wait to deploy
+        if (!isDeployed) {
             const receipt = await this.masterAccount.waitForTransaction(
                 deployTx,
                 {
@@ -351,11 +365,6 @@ export class BurnerManager {
             if (!receipt) {
                 throw new Error("Transaction did not complete successfully.");
             }
-
-            deployTx = transaction_hash;
-        } catch (error) {
-            this.updateIsDeploying(false);
-            throw error;
         }
 
         const storage = this.getBurnerStorage();
