@@ -47,34 +47,37 @@ export function setComponentFromEvent(
     eventData: string[]
 ) {
     console.log(eventData);
-    // retrieve the component name
-    const componentName = hexToAscii(eventData[0]);
 
-    // retrieve the component from name
-    const component = components[componentName];
+    let index = 0;
 
-    // get keys
-    const keysNumber = parseInt(eventData[1]);
-    let index = 2 + keysNumber + 1;
+    // index 0: get component name
+    const componentName = hexToAscii(eventData[index++]);
 
-    const keys = eventData.slice(2, 2 + keysNumber).map((key) => BigInt(key));
+    // index 1: keys count
+    const keysNumber = parseInt(eventData[index++]);
 
-    // get entityIndex from keys
-    const entityIndex = getEntityIdFromKeys(keys);
-
-    // get values
-    const numberOfValues = parseInt(eventData[index]);
-
+    // index 2: keys
+    const keys = eventData
+        .slice(index, index + keysNumber)
+        .map((key) => BigInt(key));
     const string_keys = keys.map((key) => key.toString());
 
     // get values
+    index += keysNumber;
+    const numberOfValues = parseInt(eventData[index++]);
     const values = eventData.slice(index, index + numberOfValues);
+
+    // retrieve the component from name
+    const component = components[componentName];
 
     // create component object from values with schema
     const componentValues = decodeComponent(component, [
         ...string_keys,
         ...values,
     ]);
+
+    // get entityIndex from keys
+    const entityIndex = getEntityIdFromKeys(keys);
 
     // set component
     setComponent(component, entityIndex, componentValues);
