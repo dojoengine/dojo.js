@@ -1,14 +1,12 @@
 name: Publish
 on:
-    pull_request:
-        # types: [closed]
+    push:
         branches:
             - development
             - main
 
 jobs:
     publish:
-        # if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
 
         steps:
@@ -41,7 +39,7 @@ jobs:
                   git config user.email "${{ github.actor}}@users.noreply.github.com"
 
                   if [ ${{ github.base_ref }} = development ]; then
-                    npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes --no-private --force-publish --premajor-version-bump force-patch
+                    npx lerna version prerelease --preid beta --yes --no-private --force-publish
                   else
                     npx lerna version --conventional-commits --conventional-graduate --yes --no-private --force-publish
                   fi
