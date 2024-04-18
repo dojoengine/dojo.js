@@ -1,7 +1,7 @@
 name: Publish
 on:
     pull_request:
-        types: [closed]
+        # types: [closed]
         branches:
             - development
             - main
@@ -42,5 +42,3 @@ jobs:
                   else
                     npx lerna version --conventional-commits --conventional-graduate --yes --no-private --force-publish
                   fi
-
-                  npx lerna publish from-git --yes
