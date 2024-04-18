@@ -21,6 +21,9 @@ jobs:
               with:
                   version: 8
 
+            - name: Install Protobuf Compiler
+              run: sudo apt-get install -y protobuf-compiler
+
             - name: Install dependencies
               run: pnpm i
 
