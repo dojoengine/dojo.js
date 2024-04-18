@@ -6,6 +6,10 @@ jobs:
     merge_develop_to_master:
         runs-on: ubuntu-latest
         steps:
+            - uses: pnpm/action-setup@v3
+              with:
+                  version: 8
+
             - name: "Checkout"
               uses: actions/checkout@v4
               with:
