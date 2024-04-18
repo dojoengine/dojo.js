@@ -1,7 +1,6 @@
 name: Release Prerelease
 
-on:
-    workflow_dispatch: # This enables manual trigger through GitHub UI
+on: workflow_dispatch
 
 jobs:
     merge_develop_to_master:
