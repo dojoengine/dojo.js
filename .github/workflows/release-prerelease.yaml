@@ -1,6 +1,6 @@
 name: Release Prerelease
 
-on: workflow_dispatch
+on: [workflow_dispatch, push]
 
 jobs:
     merge_develop_to_master:
