@@ -1,9 +1,9 @@
-name: Release Patch
+name: Release Preminor
 
-on: workflow_dispatch
+on: [workflow_dispatch, push]
 
 jobs:
-    release_patch:
+    release_preminor:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -32,4 +32,4 @@ jobs:
 
             - name: Tag packages
               run: |
-                  npx lerna version patch --preid beta --yes --no-private --force-publish
+                  npx lerna version preminor --preid beta --yes --no-private --force-publish
