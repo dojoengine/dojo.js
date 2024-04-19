@@ -6,20 +6,7 @@ jobs:
     release_prepatch:
         runs-on: ubuntu-latest
         steps:
-            - uses: pnpm/action-setup@v3
-              with:
-                  version: 8
-
-            - name: "Checkout"
-              uses: actions/checkout@v4
-              with:
-                  ref: feature/optimise-ci
-                  fetch-depth: 0
-
-            - name: Configure Git
-              run: |
-                  git config user.name "${{ github.actor }}"
-                  git config user.email "${{ github.actor}}@users.noreply.github.com"
+            - uses: ./.github/workflows/prepare-release.yaml
 
             - name: Tag packages
               run: |
