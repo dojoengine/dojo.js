@@ -3,12 +3,12 @@ name: Release Prepatch
 on: [workflow_dispatch, push]
 
 jobs:
+    prepare_release:
+        uses: ./.github/workflows/prepare-release.yaml
+
     release_prepatch:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - uses: ./.github/workflows/prepare-release.yaml
-
             - name: Tag packages
               run: |
                   npx lerna version prepatch --preid beta --yes --no-private --force-publish
