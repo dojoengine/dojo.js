@@ -6,6 +6,7 @@ jobs:
     release_prepatch:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v4
             - uses: ./.github/workflows/prepare-release.yaml
 
             - name: Tag packages
