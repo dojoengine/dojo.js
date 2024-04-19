@@ -33,3 +33,4 @@ jobs:
             - name: Tag packages
               run: |
                   npx lerna version prepatch --preid beta --yes --no-private --force-publish
+                  npx lerna publish from-git --yes

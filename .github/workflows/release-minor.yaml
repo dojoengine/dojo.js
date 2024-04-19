@@ -1,6 +1,6 @@
 name: Release Minor
 
-on: [workflow_dispatch, push]
+on: workflow_dispatch
 
 jobs:
     release_minor:
@@ -33,3 +33,4 @@ jobs:
             - name: Tag packages
               run: |
                   npx lerna version minor --preid beta --yes --no-private --force-publish
+                  npx lerna publish from-git --yes
