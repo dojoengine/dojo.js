@@ -1,0 +1,26 @@
+name: Release Prepatch
+
+on: [workflow_dispatch, push]
+
+jobs:
+    release_prepatch:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: pnpm/action-setup@v3
+              with:
+                  version: 8
+
+            - name: "Checkout"
+              uses: actions/checkout@v4
+              with:
+                  ref: feature/optimise-ci
+                  fetch-depth: 0
+
+            - name: Configure Git
+              run: |
+                  git config user.name "${{ github.actor }}"
+                  git config user.email "${{ github.actor}}@users.noreply.github.com"
+
+            - name: Tag packages
+              run: |
+                  npx lerna version prepatch --preid beta --yes --no-private --force-publish
