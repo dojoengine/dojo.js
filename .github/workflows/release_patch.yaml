@@ -32,5 +32,5 @@ jobs:
 
             - name: Tag packages
               run: |
-                  npx lerna version patch --preid beta --yes --no-private --force-publish
+                  npx lerna version patch --conventional-commits --preid beta --yes --no-private --force-publish
                   npx lerna publish from-git --yes
