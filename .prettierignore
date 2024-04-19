@@ -12,3 +12,5 @@ packages/create-dojo
 **/*-lock.yaml
 package-lock.json
 dev-dist
+
+**/CHANGELOG.md

@@ -10,7 +10,7 @@ jobs:
     check:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
             - uses: oven-sh/setup-bun@v1
             - uses: pnpm/action-setup@v3
               with:
@@ -40,7 +40,7 @@ jobs:
             - name: Run Prettier
               run: pnpm run prettier --check .
 
-            - name: Build dependencies
+            - name: Build packages
               run: pnpm run build && pnpm run build-examples
 
             - name: Run tests

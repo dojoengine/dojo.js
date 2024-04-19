@@ -1,0 +1,36 @@
+name: Release Prerelease
+
+on: workflow_dispatch
+
+jobs:
+    release_prerelease:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v3
+              with:
+                  version: 8
+
+            - name: Configure Git
+              run: |
+                  git config user.name "${{ github.actor }}"
+                  git config user.email "${{ github.actor}}@users.noreply.github.com"
+
+            - name: "Setup npm"
+              run: |
+                  npm set @ponderingdemocritus:registry=https://npm.pkg.github.com/dojoengine
+                  npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
+
+            - name: Install Protobuf Compiler
+              run: sudo apt-get install -y protobuf-compiler
+
+            - name: Install dependencies
+              run: pnpm i
+
+            - name: Build packages
+              run: pnpm run build
+
+            - name: Tag packages
+              run: |
+                  npx lerna version prerelease --conventional-commits --preid beta --yes --no-private --force-publish
+                  npx lerna publish from-git --yes --dist-tag next
