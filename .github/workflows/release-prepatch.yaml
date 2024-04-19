@@ -3,12 +3,33 @@ name: Release Prepatch
 on: [workflow_dispatch, push]
 
 jobs:
-    prepare_release:
-        uses: ./.github/workflows/prepare-release.yaml
-
     release_prepatch:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v3
+              with:
+                  version: 8
+
+            - name: Configure Git
+              run: |
+                  git config user.name "${{ github.actor }}"
+                  git config user.email "${{ github.actor}}@users.noreply.github.com"
+
+            - name: "Setup npm"
+              run: |
+                  npm set @ponderingdemocritus:registry=https://npm.pkg.github.com/dojoengine
+                  npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
+
+            - name: Install Protobuf Compiler
+              run: sudo apt-get install -y protobuf-compiler
+
+            - name: Install dependencies
+              run: pnpm i
+
+            - name: Build dependencies
+              run: pnpm run build
+
             - name: Tag packages
               run: |
                   npx lerna version prepatch --preid beta --yes --no-private --force-publish
