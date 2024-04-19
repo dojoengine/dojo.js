@@ -33,4 +33,4 @@ jobs:
             - name: Tag packages
               run: |
                   npx lerna version preminor --conventional-commits --preid beta --yes --no-private --force-publish
-                  npx lerna publish from-git --yes
+                  npx lerna publish from-git --yes --dist-tag next
