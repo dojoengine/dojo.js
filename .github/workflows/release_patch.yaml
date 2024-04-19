@@ -1,9 +1,9 @@
-name: Release Prerelease
+name: Release Patch
 
-on: workflow_dispatch
+on: [workflow_dispatch, push]
 
 jobs:
-    release_prerelease:
+    release_patch:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -32,4 +32,4 @@ jobs:
 
             - name: Tag packages
               run: |
-                  npx lerna version prerelease --preid beta --yes --no-private --force-publish
+                  npx lerna version patch --preid beta --yes --no-private --force-publish

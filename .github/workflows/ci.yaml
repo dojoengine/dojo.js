@@ -40,7 +40,7 @@ jobs:
             - name: Run Prettier
               run: pnpm run prettier --check .
 
-            - name: Build dependencies
+            - name: Build packages
               run: pnpm run build && pnpm run build-examples
 
             - name: Run tests

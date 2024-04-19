@@ -27,7 +27,7 @@ jobs:
             - name: Install dependencies
               run: pnpm i
 
-            - name: Build dependencies
+            - name: Build packages
               run: pnpm run build
 
             - name: Tag packages
