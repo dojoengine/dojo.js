@@ -1,3 +1,16 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 0.6.123 (2024-04-24)
+
+**Note:** Version bump only for package @dojoengine/torii-wasm
+
+
+
+
+
 ## [0.6.122](https://github.com/dojoengine/dojo.js/compare/v0.6.121...v0.6.122) (2024-04-09)
 
 
@@ -209,6 +222,3 @@
 
 
 ## [0.1.34](https://github.com/dojoengine/dojo.js/compare/v0.1.33...v0.1.34) (2023-11-03)
-
-
-
