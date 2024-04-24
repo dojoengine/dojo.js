@@ -1,3 +1,16 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 0.6.123 (2024-04-24)
+
+**Note:** Version bump only for package dojo.js
+
+
+
+
+
 # [](https://github.com/dojoengine/dojo.js/compare/v0.6.122...v) (2024-04-19)
 
 
@@ -615,6 +628,3 @@
 
 
 ## 0.1.2 (2023-10-07)
-
-
-

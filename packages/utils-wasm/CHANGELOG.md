@@ -1,3 +1,16 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 0.6.123 (2024-04-24)
+
+**Note:** Version bump only for package @dojoengine/utils-wasm
+
+
+
+
+
 ## [0.6.122](https://github.com/dojoengine/dojo.js/compare/v0.6.121...v0.6.122) (2024-04-09)
 
 
@@ -83,6 +96,3 @@
 * mod289 & permute + tests ([9cb9323](https://github.com/dojoengine/dojo.js/commit/9cb9323a8b5cc7f2c710633bf24434c30df8d6e3))
 * recursive_s_noise ([6ad6194](https://github.com/dojoengine/dojo.js/commit/6ad6194c7397db01c373e91e5a28cd58fc43e6aa))
 * step: function + tests ([ebc3569](https://github.com/dojoengine/dojo.js/commit/ebc3569de956101e659f5ee885ab989c50d760bc))
-
-
-
