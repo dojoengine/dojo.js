@@ -316,7 +316,8 @@ export class BurnerManager {
                 address,
                 this.masterAccount,
                 this.feeTokenAddress,
-                options?.prefundedAmount || PREFUND_AMOUNT
+                options?.prefundedAmount || PREFUND_AMOUNT,
+                options?.maxFee || 0
             );
         } catch (e) {
             console.error(`burner manager create() error:`, e);
@@ -339,7 +340,6 @@ export class BurnerManager {
                 accountOptions,
                 {
                     nonce,
-                    maxFee: 0, // TODO: update
                 }
             );
             deployTx = transaction_hash;
