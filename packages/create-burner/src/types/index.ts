@@ -51,6 +51,7 @@ export interface BurnerCreateOptions {
     index?: number;
     metadata?: any;
     prefundedAmount?: string;
+    maxFee?: number;
 }
 
 export interface BurnerKeys {
