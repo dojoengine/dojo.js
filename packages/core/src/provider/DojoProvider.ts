@@ -4,13 +4,13 @@ import {
     InvokeFunctionResponse,
     Contract,
     shortString,
-    InvocationsDetails,
     AllowArray,
     Call,
     num,
     Result,
     CallContractResponse,
     AccountInterface,
+    UniversalDetails,
 } from "starknet";
 import { Provider } from "./provider";
 import { ConsoleLogger, LogLevel } from "../logger/logger";
@@ -151,19 +151,17 @@ export class DojoProvider extends Provider {
      * @param {string} contract - The contract to execute.
      * @param {string} call - The function to call.
      * @param {num.BigNumberish[]} call_data - The call data for the function.
-     * @param {InvocationsDetails | undefined} transactionDetails - The transactionDetails allow to override maxFee & version
+     * @param {UniversalDetails} details - https://github.com/starknet-io/starknet.js/blob/5efa196017ee8f761ae837ecac9c059da8f3e09a/src/types/account.ts#L26
      * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
      */
     public async execute(
         account: Account | AccountInterface,
         contract_name: string,
-        call: string,
+        entrypoint: string,
         calldata: num.BigNumberish[],
-        transactionDetails?: InvocationsDetails | undefined
+        details: UniversalDetails = {}
     ): Promise<InvokeFunctionResponse> {
         try {
-            const nonce = await account?.getNonce();
-
             return await account?.execute(
                 [
                     {
@@ -171,16 +169,12 @@ export class DojoProvider extends Provider {
                             this.manifest,
                             contract_name
                         )?.address,
-                        entrypoint: call,
-                        calldata: calldata,
+                        entrypoint,
+                        calldata,
                     },
                 ],
                 undefined,
-                {
-                    maxFee: 0, // TODO: Update this value as needed.
-                    ...transactionDetails,
-                    nonce,
-                }
+                details
             );
         } catch (error) {
             this.logger.error("Error occured: ", error);
@@ -197,22 +191,16 @@ export class DojoProvider extends Provider {
      * ```
      * @param {Account} account - The account to use.
      * @param {AllowArray<Call>} calls - The calls to execute.
-     * @param {InvocationsDetails | undefined} transactionDetails - The transactionDetails allow to override maxFee & version
+     * @param {UniversalDetails} details - https://github.com/starknet-io/starknet.js/blob/5efa196017ee8f761ae837ecac9c059da8f3e09a/src/types/account.ts#L26
      * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
      */
     public async executeMulti(
         account: Account | AccountInterface,
         calls: AllowArray<Call>,
-        transactionDetails?: InvocationsDetails | undefined
+        details: UniversalDetails = {}
     ): Promise<InvokeFunctionResponse> {
         try {
-            const nonce = await account?.getNonce();
-
-            return await account?.execute(calls, undefined, {
-                maxFee: 0, // TODO: Update this value as needed.
-                ...transactionDetails,
-                nonce,
-            });
+            return await account?.execute(calls, undefined, details);
         } catch (error) {
             this.logger.error("Error occured: ", error);
             throw error;
