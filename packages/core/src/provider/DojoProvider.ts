@@ -6,11 +6,11 @@ import {
     shortString,
     AllowArray,
     Call,
-    num,
     Result,
     CallContractResponse,
     AccountInterface,
     UniversalDetails,
+    ArgsOrCalldata,
 } from "starknet";
 import { Provider } from "./provider";
 import { ConsoleLogger, LogLevel } from "../logger/logger";
@@ -198,55 +198,63 @@ export class DojoProvider extends Provider {
     }
 
     /**
-     * Calls a function with the given parameters.
+     * Calls a function with the given parameters and return parsed results for a DojoCall.
      *
-     * @param {string} contract_name - The contract to call.
-     * @param {string} call - The function to call.
-     * @returns {Promise<CallContractResponse>} - A promise that resolves to the response of the function call.
-     */
-    public async call(
-        contract_name: string,
-        call: string,
-        calldata?: num.BigNumberish[]
-    ): Promise<CallContractResponse> {
-        try {
-            return await this.provider.callContract({
-                contractAddress: getContractByName(this.manifest, contract_name)
-                    ?.address,
-                entrypoint: call,
-                calldata,
-            });
-        } catch (error) {
-            this.logger.error(`Failed to call: ${error}`);
-            throw new Error(`Failed to call: ${error}`);
-        }
-    }
-    /**
-     * Calls a function with the given parameters and return parsed results.
-     *
-     * @param {string} contract_name - The contract to call.
-     * @param {string} call - The function to call.
+     * ```ts
+     * let parsedResult = await provider.call({ contractName, entrypoint, calldata });
+     * ```
+     * @param {DojoCall | Call} call - The dojoCall or call
      * @returns {Promise<Result>} - A promise that resolves to the response of the function call.
      */
-    public async callContract(
-        contract_name: string,
-        call: string,
-        calldata?: num.BigNumberish[]
-    ): Promise<Result> {
+    public async call(call: DojoCall | Call): Promise<Result> {
+        if ("contractName" in call) {
+            try {
+                const contractInfos = getContractByName(
+                    this.manifest,
+                    call.contractName
+                );
+                const contract = new Contract(
+                    contractInfos.abi,
+                    contractInfos.address,
+                    this.provider
+                );
+                return await contract.call(
+                    call.entrypoint,
+                    call.calldata as ArgsOrCalldata
+                );
+            } catch (error) {
+                this.logger.error(
+                    `Failed to callContract ${call.contractName}: ${error}`
+                );
+                throw new Error(
+                    `Failed to callContract ${call.contractName}: ${error}`
+                );
+            }
+        } else {
+            return this.callRaw(call);
+        }
+    }
+
+    /**
+     * Calls a function with the given parameters.
+     *
+     * ```ts
+     * let result = await provider.callRaw({ contractName, entrypoint, calldata });
+     * ```
+     * @param {DojoCall | Call} call - The dojoCall or call
+     * @returns {Promise<CallContractResponse>} - A promise that resolves to the response of the function call.
+     */
+    async callRaw(call: DojoCall | Call): Promise<CallContractResponse> {
+        const parsedCall = parseDojoCall(this.manifest, call);
         try {
-            const contractInfos = getContractByName(
-                this.manifest,
-                contract_name
-            );
-            const contract = new Contract(
-                contractInfos.abi,
-                contractInfos.address,
-                this.provider
-            );
-            return await contract.call(call, calldata);
+            return await this.provider.callContract(parsedCall);
         } catch (error) {
-            this.logger.error(`Failed to callContract: ${error}`);
-            throw new Error(`Failed to callContract: ${error}`);
+            this.logger.error(
+                `Failed to call ${parsedCall.contractAddress}: ${error}`
+            );
+            throw new Error(
+                `Failed to call ${parsedCall.contractAddress}: ${error}`
+            );
         }
     }
 }
