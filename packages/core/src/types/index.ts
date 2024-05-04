@@ -1,3 +1,5 @@
+import { Calldata, RawArgs } from "starknet";
+
 /**
  * Enumeration representing various entry points or functions available in the World.
  */
@@ -124,3 +126,9 @@ export interface IWorld {
     // Get the age or duration since the World was created
     worldAge?(): Promise<bigint>;
 }
+
+export type DojoCall = {
+    contractName: string;
+    entrypoint: string;
+    calldata: RawArgs | Calldata;
+};

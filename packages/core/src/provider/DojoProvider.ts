@@ -14,9 +14,9 @@ import {
 } from "starknet";
 import { Provider } from "./provider";
 import { ConsoleLogger, LogLevel } from "../logger/logger";
-import { WorldEntryPoints } from "../types";
+import { DojoCall, WorldEntryPoints } from "../types";
 import { LOCAL_KATANA } from "../constants";
-import { getContractByName } from "../utils";
+import { getContractByName, parseDojoCall } from "../utils";
 
 /**
  * DojoProvider: The DojoProvider is an execution provider for dojo worlds. It allows you to easily interact with a dojo world via the Starknet.js library.
@@ -26,8 +26,6 @@ import { getContractByName } from "../utils";
  * const provider = new DojoProvider(
  *      manifest
  * );
- *
- * await provider.execute(signer, contract, system, call_data);
  * ```
  */
 export class DojoProvider extends Provider {
@@ -141,73 +139,6 @@ export class DojoProvider extends Provider {
     }
 
     /**
-     * Executes a function with the given parameters.
-     * This function is a wrapper around the Starknet.js Account.execute function, but is more convenient to use.
-     *
-     * ```ts
-     * await provider.execute(signer, contract, system, call_data);
-     * ```
-     * @param {Account} account - The account to use.
-     * @param {string} contract - The contract to execute.
-     * @param {string} call - The function to call.
-     * @param {num.BigNumberish[]} call_data - The call data for the function.
-     * @param {UniversalDetails} details - https://github.com/starknet-io/starknet.js/blob/5efa196017ee8f761ae837ecac9c059da8f3e09a/src/types/account.ts#L26
-     * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
-     */
-    public async execute(
-        account: Account | AccountInterface,
-        contract_name: string,
-        entrypoint: string,
-        calldata: num.BigNumberish[],
-        details: UniversalDetails = {}
-    ): Promise<InvokeFunctionResponse> {
-        try {
-            return await account?.execute(
-                [
-                    {
-                        contractAddress: getContractByName(
-                            this.manifest,
-                            contract_name
-                        )?.address,
-                        entrypoint,
-                        calldata,
-                    },
-                ],
-                undefined,
-                details
-            );
-        } catch (error) {
-            this.logger.error("Error occured: ", error);
-            throw error;
-        }
-    }
-
-    /**
-     * Executes a multicall.
-     * This function is a wrapper around the Starknet.js Account.execute function, but allows for executing multiple calls at once.
-     *
-     * ```ts
-     * await provider.executeMulti(account, calls);
-     * ```
-     * @param {Account} account - The account to use.
-     * @param {AllowArray<Call>} calls - The calls to execute.
-     * @param {UniversalDetails} details - https://github.com/starknet-io/starknet.js/blob/5efa196017ee8f761ae837ecac9c059da8f3e09a/src/types/account.ts#L26
-     * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
-     */
-    public async executeMulti(
-        account: Account | AccountInterface,
-        calls: AllowArray<Call>,
-        details: UniversalDetails = {}
-    ): Promise<InvokeFunctionResponse> {
-        try {
-            return await account?.execute(calls, undefined, details);
-        } catch (error) {
-            this.logger.error("Error occured: ", error);
-            throw error;
-        }
-    }
-
-    /**
      * Retrieves current uuid from the world contract.
      *
      * @returns {Promise<number>} - A promise that resolves to the world uuid
@@ -235,6 +166,37 @@ export class DojoProvider extends Provider {
             throw new Error(`Failed to fetch uuid: ${error}`);
         }
     }
+
+    /**
+     * Executes a function with the given parameters.
+     * This function is a wrapper around the Starknet.js Account.execute function, but is more convenient to use.
+     *
+     * ```ts
+     * await provider.execute(signer, { contractName, entrypoint, calldata });
+     * await provider.execute(signer, { contractAddress, entrypoint, calldata });
+     * await provider.execute(signer, [{ contractName, entrypoint, calldata }, { contractAddress, entrypoint, calldata }]);
+     * ```
+     * @param {Account} account - The account to use.
+     * @param {AllowArray<DojoCall | Call>} call - The call or calls
+     * @param {UniversalDetails} details - https://github.com/starknet-io/starknet.js/blob/5efa196017ee8f761ae837ecac9c059da8f3e09a/src/types/account.ts#L26
+     * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
+     */
+    public async execute(
+        account: Account | AccountInterface,
+        call: AllowArray<DojoCall | Call>,
+        details: UniversalDetails = {}
+    ): Promise<InvokeFunctionResponse> {
+        const dojoCalls = Array.isArray(call) ? call : [call];
+        const calls = dojoCalls.map((i) => parseDojoCall(this.manifest, i));
+
+        try {
+            return await account?.execute(calls, undefined, details);
+        } catch (error) {
+            this.logger.error("Error occured: ", error);
+            throw error;
+        }
+    }
+
     /**
      * Calls a function with the given parameters.
      *
