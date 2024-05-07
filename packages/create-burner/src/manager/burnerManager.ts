@@ -308,6 +308,7 @@ export class BurnerManager {
         const { privateKey, publicKey, address } =
             this.generateKeysAndAddress(options);
 
+        console.log("\n\n", "DEBUGGING PUBLIC ADDRESS", {privateKey, publicKey, address}, "\n\n");
         if (!this.masterAccount) {
             throw new Error("wallet account not found");
         }
