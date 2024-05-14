@@ -29,7 +29,7 @@ export interface BurnerManagerOptions {
     rpcProvider: RpcProvider;
 }
 
-export interface BurnerAccount {
+export interface BurnerManagerHook {
     create: (options?: BurnerCreateOptions) => void;
     list: () => Burner[];
     get: (address: string) => AccountInterface;
