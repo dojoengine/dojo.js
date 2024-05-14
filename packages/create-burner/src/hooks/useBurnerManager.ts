@@ -13,7 +13,7 @@ import { Burner, BurnerCreateOptions } from "../types";
 export const useBurnerManager = ({
     burnerManager,
 }: {
-    burnerManager: BurnerManager; // Accepts the BurnerManager class as an parameter
+    burnerManager: BurnerManager | null; // Accepts the BurnerManager class as an parameter
 }) => {
     const [isError, setIsError] = useState(false);
 
@@ -23,26 +23,29 @@ export const useBurnerManager = ({
     const [isDeploying, setIsDeploying] = useState(false);
 
     // On mount, set the active account and count the number of burners.
-    // burnerManager has to be initialized before the component mounts
+    // - if burnerManager not null, it has to be initialized before the component mounts
+    // - otherwise (if null) set account to null and count to 0, meaning we don't
+    // have master account yet to create a burner or in case when the game rpc is unavailable,
+    // its impossible to create a valid Burner Manager and will result in client error
     useEffect(() => {
-        // allow null burner manager
-        // when the game rpc is unavailable, its impossible to create a valid Burner Manager and will result in client error
         if (!burnerManager) {
-            setIsError(true);
-            console.error("BurnerManager object must be provided");
+            console.log(
+                "BurnerManager object is null, setting account to null and count to 0."
+            );
+            setAccount(null);
+            setCount(0);
             return;
         }
         if (!burnerManager.isInitialized) {
-            throw new Error("BurnerManager must be intialized");
+            throw new Error("BurnerManager must be initialized");
         }
         if (!burnerManager.masterAccount) {
             throw new Error("BurnerManager Master Account must be provided");
         }
         setIsError(false);
-        (async () => {
-            setAccount(burnerManager.getActiveAccount());
-            setCount(burnerManager.list().length);
-        })();
+
+        setAccount(burnerManager.getActiveAccount());
+        setCount(burnerManager.list().length);
     }, [burnerManager]);
 
     /**
@@ -51,8 +54,8 @@ export const useBurnerManager = ({
      * @returns An array of Burner accounts.
      */
     const list = useCallback((): Burner[] => {
-        return burnerManager?.list() ?? [];
-    }, [count]);
+        return burnerManager ? burnerManager.list() : [];
+    }, [count, burnerManager]);
 
     /**
      * Selects and sets a burner as the active account.
@@ -61,8 +64,8 @@ export const useBurnerManager = ({
      */
     const select = useCallback(
         (address: string): void => {
-            burnerManager.select(address);
-            setAccount(burnerManager.getActiveAccount());
+            burnerManager?.select(address);
+            setAccount(burnerManager?.getActiveAccount() ?? null);
         },
         [burnerManager]
     );
@@ -71,7 +74,7 @@ export const useBurnerManager = ({
      * Deselects the active burner, account will be set to null. Useful to allow guests.
      */
     const deselect = useCallback((): void => {
-        burnerManager.deselect();
+        burnerManager?.deselect();
         setAccount(null);
     }, [burnerManager]);
 
@@ -82,8 +85,8 @@ export const useBurnerManager = ({
      * @returns The Burner account corresponding to the provided address.
      */
     const get = useCallback(
-        (address: string): Account => {
-            return burnerManager.get(address);
+        (address: string): Account | undefined => {
+            return burnerManager?.get(address);
         },
         [burnerManager]
     );
@@ -94,9 +97,12 @@ export const useBurnerManager = ({
      * @param address - The address of the burner account to delete.
      */
     const remove = useCallback(
-        (address: string): void => {
-            burnerManager.delete(address);
-            setCount((prev) => Math.max(prev - 1, 0));
+        async (address: string): Promise<void> => {
+            if (burnerManager) {
+                await burnerManager.delete(address);
+                setCount((prev) => Math.max(prev - 1, 0));
+                setAccount(burnerManager.account);
+            }
         },
         [burnerManager]
     );
@@ -104,9 +110,12 @@ export const useBurnerManager = ({
     /**
      * Clears a burner account based on its address.
      */
-    const clear = useCallback(() => {
-        burnerManager.clear();
-        setCount(0);
+    const clear = useCallback(async () => {
+        if (burnerManager) {
+            await burnerManager.clear();
+            setCount(0);
+            setAccount(null);
+        }
     }, [burnerManager]);
 
     /**
@@ -116,12 +125,14 @@ export const useBurnerManager = ({
      * @returns A promise that resolves to the newly created Burner account.
      */
     const create = useCallback(
-        async (options?: BurnerCreateOptions): Promise<Account> => {
-            burnerManager.setIsDeployingCallback(setIsDeploying);
-            const newAccount = await burnerManager.create(options);
-            setAccount(newAccount);
-            setCount((prev) => prev + 1);
-            return newAccount;
+        async (options?: BurnerCreateOptions): Promise<Account | undefined> => {
+            if (burnerManager) {
+                burnerManager.setIsDeployingCallback(setIsDeploying);
+                const newAccount = await burnerManager.create(options);
+                setAccount(newAccount);
+                setCount((prev) => prev + 1);
+                return newAccount;
+            }
         },
         [burnerManager]
     );
@@ -132,35 +143,40 @@ export const useBurnerManager = ({
      * @returns An array of BurnerConnector instances.
      */
     const listConnectors = useCallback((): BurnerConnector[] => {
-        // Retrieve all the burners.
-        const burners = list();
-
-        // Map each burner to its respective BurnerConnector instance.
-        return burners.map((burner) => {
-            return new BurnerConnector(
-                {
-                    id: burner.address,
-                    name: "Dojo Burner",
-                },
-                get(burner.address)
-            );
-        });
-    }, [burnerManager?.isDeploying]);
+        const burners = list(); // List all burners
+        return burners
+            .map((burner) => {
+                const account = get(burner.address); // Attempt to get the account
+                if (!account) return null; // If account is undefined, skip this burner
+                return new BurnerConnector(
+                    {
+                        id: burner.address,
+                        name: "Dojo Burner",
+                    },
+                    account // This is now guaranteed to be a valid Account
+                );
+            })
+            .filter((connector) => connector !== null) as BurnerConnector[]; // Filter out nulls and cast the result to ensure type correctness
+    }, [burnerManager?.isDeploying, list, get]);
 
     /**
      * Copy burners to clipboard
      */
     const copyToClipboard = useCallback(async () => {
-        await burnerManager.copyBurnersToClipboard();
+        if (burnerManager) {
+            await burnerManager.copyBurnersToClipboard();
+        }
     }, [burnerManager]);
 
     /**
      * Set burners from clipboard
      */
     const applyFromClipboard = useCallback(async () => {
-        await burnerManager.setBurnersFromClipboard();
-        setAccount(burnerManager.getActiveAccount());
-        setCount(burnerManager.list().length);
+        if (burnerManager) {
+            await burnerManager.setBurnersFromClipboard();
+            setAccount(burnerManager.getActiveAccount());
+            setCount(burnerManager.list().length);
+        }
     }, [burnerManager]);
 
     /**
@@ -170,9 +186,12 @@ export const useBurnerManager = ({
      * @returns A deterministic Burner address
      */
     const generateAddressFromSeed = useCallback(
-        (options?: BurnerCreateOptions): string => {
-            const { address } = burnerManager.generateKeysAndAddress(options);
-            return address;
+        (options?: BurnerCreateOptions): string | undefined => {
+            if (burnerManager) {
+                const { address } =
+                    burnerManager.generateKeysAndAddress(options);
+                return address;
+            }
         },
         [burnerManager]
     );
