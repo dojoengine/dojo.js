@@ -18,8 +18,9 @@ import {
 import Storage from "../utils/storage";
 import { derivePrivateKeyFromSeed } from "../utils/keyDerivation";
 import { prefundAccount } from "./prefundAccount";
+import { emptyAccount } from "./emptyAccount";
 
-export const PREFUND_AMOUNT = "0x2386f26fc10000";
+export const PREFUND_AMOUNT = "0x2386f26fc10000"; // 10000000000000000 = 0.1 ETH
 
 /**
  * A class to manage Burner accounts.
@@ -198,14 +199,18 @@ export class BurnerManager {
 
     public list(): Burner[] {
         const storage = this.getBurnerStorage();
-        return Object.keys(storage).map((address) => {
-            return {
-                address,
-                active: storage[address].active,
-                masterAccount: storage[address].masterAccount,
-                accountIndex: storage[address].accountIndex,
-            };
-        });
+        return Object.keys(storage)
+            .map((address) => {
+                return {
+                    address,
+                    active: storage[address].active,
+                    masterAccount: storage[address].masterAccount,
+                    accountIndex: storage[address].accountIndex,
+                };
+            })
+            .filter(
+                (burner) => burner.masterAccount === this.masterAccount.address
+            );
     }
 
     public select(address: string): void {
@@ -251,18 +256,40 @@ export class BurnerManager {
         );
     }
 
-    public delete(address: string) {
+    public async delete(address: string): Promise<void> {
         const storage = this.getBurnerStorage();
         if (!storage[address]) {
             throw new Error("burner not found");
         }
 
+        try {
+            await emptyAccount(
+                this.provider,
+                this.masterAccount.address,
+                this.get(address),
+                this.feeTokenAddress,
+                0
+            );
+        } catch (e) {
+            console.error(`burner manager delete() error:`, e);
+            return;
+        }
+
         delete storage[address];
 
         Storage.set(this.getBurnerKey(), storage);
+
+        this.account = null;
     }
 
-    clear(): void {
+    public async clear(): Promise<void> {
+        const storage = this.getBurnerStorage();
+        const addresses = Object.keys(storage);
+
+        const deletePromises = addresses.map((address) => this.delete(address));
+
+        await Promise.all(deletePromises);
+
         Storage.remove(this.getBurnerKey());
     }
 
