@@ -5,7 +5,6 @@ import "./index.css";
 import { setup } from "./dojo/generated/setup.ts";
 import { DojoProvider } from "./dojo/DojoContext.tsx";
 import { dojoConfig } from "../dojoConfig.ts";
-import { sepolia } from "@starknet-react/chains";
 import { StarknetConfig, argent, braavos } from "@starknet-react/core";
 import { provider, katana } from "./katana.tsx";
 

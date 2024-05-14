@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { DojoContext } from "./DojoContext";
+import { BurnerManagerHook } from "@dojoengine/create-burner";
 
 export const useDojo = () => {
     const context = useContext(DojoContext);
@@ -10,6 +11,6 @@ export const useDojo = () => {
 
     return {
         setup: context,
-        account: context.account,
+        burnerManager: context.burnerManager as BurnerManagerHook,
     };
 };
