@@ -10,7 +10,7 @@ export default function BurnerSelector() {
         <div className="card">
             Select signer:{" "}
             <select
-                value={account.address}
+                value={account ? account.address : ""}
                 onChange={(e) => select(e.target.value)}
             >
                 {list().map((burner: Burner, index: number) => {

@@ -276,10 +276,16 @@ export class BurnerManager {
         }
 
         delete storage[address];
-
         Storage.set(this.getBurnerKey(), storage);
 
-        this.account = null;
+        // Check if there are any remaining burners
+        const remainingAddresses = Object.keys(storage);
+        if (remainingAddresses.length > 0) {
+            // Select the first remaining burner as the active account
+            this.select(remainingAddresses[0]);
+        } else {
+            this.account = null;
+        }
     }
 
     public async clear(): Promise<void> {
