@@ -38,7 +38,7 @@ export const DojoProvider = ({
         useState<BurnerManager | null>(null);
 
     useEffect(() => {
-        const initializeBurnerManager = async (
+        const initBurnerManagerInstance = async (
             masterAccount: AccountInterface
         ) => {
             const burnerManager = new BurnerManager({
@@ -58,12 +58,15 @@ export const DojoProvider = ({
         };
 
         if (masterAccount) {
-            initializeBurnerManager(masterAccount);
+            console.log(
+                "Burner Manager init masterAccount " + masterAccount.address
+            );
+            initBurnerManagerInstance(masterAccount);
         }
     }, [masterAccount]);
 
     const burnerManager = useBurnerManager({
-        burnerManagerInstance,
+        burnerManager: burnerManagerInstance,
     });
 
     return (
