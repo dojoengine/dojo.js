@@ -69,13 +69,20 @@ export const emptyAccount = async (
         // First read the balance of the account
         const contract = new Contract(abi, feeTokenAddress, provider);
         const res = await contract.call("balanceOf", [account.address]);
-        const balance = res.balance.low as bigint;
+        const balance = BigInt(res.balance.low);
+
+        const maxFee = transactionDetails?.maxFee || 0;
+        const transferAmount = balance - BigInt(maxFee);
+
+        if (transferAmount <= 0) {
+            throw new Error("Insufficient balance to cover the max fee.");
+        }
 
         // Configure the options for the transfer transaction
         const transferOptions = {
             contractAddress: feeTokenAddress,
             entrypoint: "transfer",
-            calldata: CallData.compile([masterAddress, balance, "0x0"]),
+            calldata: CallData.compile([masterAddress, transferAmount, "0x0"]),
         };
 
         // Retrieve the nonce for the account to avoid transaction collisions
