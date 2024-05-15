@@ -1,6 +1,7 @@
 import {
     AccountInterface,
     CallData,
+    InvocationsDetails,
     TransactionFinalityStatus,
 } from "starknet";
 
@@ -11,6 +12,8 @@ import {
  * @param account - The source account from which funds will be deducted.
  * @param feeTokenAddress - The Ethereum contract address responsible for the transfer.
  *                             If not provided, defaults to KATANA_ETH_CONTRACT_ADDRESS.
+ * @param prefundAmount - The amount to be transferred to the destination account.
+ * @param transactionDetails - Additional transaction details to be included in the transaction.
  *
  * @returns - Returns the result of the transfer transaction, typically including transaction details.
  *
@@ -21,7 +24,7 @@ export const prefundAccount = async (
     account: AccountInterface,
     feeTokenAddress: string,
     prefundAmount: string,
-    maxFee: number
+    transactionDetails?: InvocationsDetails
 ): Promise<any> => {
     try {
         // Configure the options for the transfer transaction
@@ -38,8 +41,9 @@ export const prefundAccount = async (
             [transferOptions],
             undefined,
             {
+                maxFee: 0,
                 nonce,
-                maxFee,
+                ...transactionDetails,
             }
         );
 

@@ -1,4 +1,9 @@
-import { Account, AccountInterface, RpcProvider } from "starknet";
+import {
+    Account,
+    AccountInterface,
+    InvocationsDetails,
+    RpcProvider,
+} from "starknet";
 
 export type BurnerStorage = {
     [address: string]: BurnerRecord;
@@ -33,12 +38,12 @@ export interface BurnerManagerHook {
     create: (options?: BurnerCreateOptions) => void;
     list: () => Burner[];
     get: (address: string) => AccountInterface;
-    remove: (address: string) => void;
+    remove: (address: string, transactionDetails?: InvocationsDetails) => void;
     account: AccountInterface;
     select: (address: string) => void;
     deselect: () => void;
     isDeploying: boolean;
-    clear: () => void;
+    clear: (transactionDetails?: InvocationsDetails) => void;
     count: number;
     copyToClipboard: () => Promise<void>;
     applyFromClipboard: () => Promise<void>;
@@ -51,7 +56,7 @@ export interface BurnerCreateOptions {
     index?: number;
     metadata?: any;
     prefundedAmount?: string;
-    maxFee?: number;
+    transactionDetails?: InvocationsDetails;
 }
 
 export interface BurnerKeys {

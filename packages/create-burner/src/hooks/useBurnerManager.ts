@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Account } from "starknet";
+import { Account, InvocationsDetails } from "starknet";
 import { BurnerConnector } from "..";
 import { BurnerManager } from "../manager/burnerManager";
 import { Burner, BurnerCreateOptions } from "../types";
@@ -97,9 +97,12 @@ export const useBurnerManager = ({
      * @param address - The address of the burner account to delete.
      */
     const remove = useCallback(
-        async (address: string): Promise<void> => {
+        async (
+            address: string,
+            transactionDetails?: InvocationsDetails
+        ): Promise<void> => {
             if (burnerManager) {
-                await burnerManager.delete(address);
+                await burnerManager.delete(address, transactionDetails);
                 setCount((prev) => Math.max(prev - 1, 0));
                 setAccount(burnerManager.account);
             }
@@ -110,13 +113,16 @@ export const useBurnerManager = ({
     /**
      * Clears a burner account based on its address.
      */
-    const clear = useCallback(async () => {
-        if (burnerManager) {
-            await burnerManager.clear();
-            setCount(0);
-            setAccount(null);
-        }
-    }, [burnerManager]);
+    const clear = useCallback(
+        async (transactionDetails?: InvocationsDetails) => {
+            if (burnerManager) {
+                await burnerManager.clear(transactionDetails);
+                setCount(0);
+                setAccount(null);
+            }
+        },
+        [burnerManager]
+    );
 
     /**
      * Creates a new burner account and sets it as the active account.

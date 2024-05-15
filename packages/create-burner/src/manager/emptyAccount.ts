@@ -2,6 +2,7 @@ import {
     AccountInterface,
     CallData,
     Contract,
+    InvocationsDetails,
     RpcProvider,
     TransactionFinalityStatus,
 } from "starknet";
@@ -46,10 +47,12 @@ const abi = [
 /**
  * Empty a given account by initiating a transfer transaction to the masterAccount
  *
- * @param address - The destination address to which funds are to be transferred.
+ * @param provider - The RPC provider used to interact with the StarkNet network.
+ * @param masterAddress - The address of the master account to which funds are to be transferred.
  * @param account - The source account from which funds will be deducted.
  * @param feeTokenAddress - The Ethereum contract address responsible for the transfer.
  *                             If not provided, defaults to KATANA_ETH_CONTRACT_ADDRESS.
+ * @param transactionDetails - Additional transaction details to be included in the transaction.
  *
  * @returns - Returns the result of the transfer transaction, typically including transaction details.
  *
@@ -60,7 +63,7 @@ export const emptyAccount = async (
     masterAddress: string,
     account: AccountInterface,
     feeTokenAddress: string,
-    maxFee: number
+    transactionDetails?: InvocationsDetails
 ): Promise<any> => {
     try {
         // First read the balance of the account
@@ -82,8 +85,9 @@ export const emptyAccount = async (
             [transferOptions],
             undefined,
             {
+                maxFee: 0,
                 nonce,
-                maxFee,
+                ...transactionDetails,
             }
         );
 

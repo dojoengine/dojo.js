@@ -4,6 +4,7 @@ import {
     CallData,
     ec,
     hash,
+    InvocationsDetails,
     RpcProvider,
     shortString,
     stark,
@@ -256,7 +257,10 @@ export class BurnerManager {
         );
     }
 
-    public async delete(address: string): Promise<void> {
+    public async delete(
+        address: string,
+        transactionDetails?: InvocationsDetails
+    ): Promise<void> {
         const storage = this.getBurnerStorage();
         if (!storage[address]) {
             throw new Error("burner not found");
@@ -268,10 +272,13 @@ export class BurnerManager {
                 this.masterAccount.address,
                 this.get(address),
                 this.feeTokenAddress,
-                0
+                transactionDetails
             );
         } catch (e) {
-            console.error(`burner manager delete() error:`, e);
+            console.error(
+                `burner manager delete() while emptying account error:`,
+                e
+            );
             return;
         }
 
@@ -288,11 +295,13 @@ export class BurnerManager {
         }
     }
 
-    public async clear(): Promise<void> {
+    public async clear(transactionDetails?: InvocationsDetails): Promise<void> {
         const storage = this.getBurnerStorage();
         const addresses = Object.keys(storage);
 
-        const deletePromises = addresses.map((address) => this.delete(address));
+        const deletePromises = addresses.map((address) =>
+            this.delete(address, transactionDetails)
+        );
 
         await Promise.all(deletePromises);
 
@@ -350,7 +359,7 @@ export class BurnerManager {
                 this.masterAccount,
                 this.feeTokenAddress,
                 options?.prefundedAmount || PREFUND_AMOUNT,
-                options?.maxFee || 0
+                options?.transactionDetails
             );
         } catch (e) {
             console.error(`burner manager create() error:`, e);
@@ -372,7 +381,9 @@ export class BurnerManager {
             const { transaction_hash } = await burner.deployAccount(
                 accountOptions,
                 {
+                    maxFee: 0,
                     nonce,
+                    ...options?.transactionDetails,
                 }
             );
             deployTx = transaction_hash;
