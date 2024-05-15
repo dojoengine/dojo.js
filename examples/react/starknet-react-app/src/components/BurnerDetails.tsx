@@ -6,7 +6,7 @@ import Balance from "./Balance";
 interface BurnerDetailsProps {
     burner: Burner;
     index: number;
-    removeBurner: (adress: string) => Promise<void>;
+    removeBurner: () => Promise<void>;
 }
 
 export default function BurnerDetails({
@@ -19,7 +19,7 @@ export default function BurnerDetails({
     const handleDelete = async () => {
         setIsLoading(true);
         try {
-            await removeBurner(burner.address);
+            await removeBurner();
         } catch (error) {
             console.error("Error removing burner:", error);
         }

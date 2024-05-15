@@ -1,5 +1,6 @@
 import { useContractRead } from "@starknet-react/core";
 import { erc20ABI } from "./erc20";
+import { BlockTag } from "starknet";
 
 interface BalanceProps {
     address: string;
@@ -14,7 +15,7 @@ const Balance = ({ address, token_address }: BalanceProps) => {
         abi: erc20ABI,
         address: token_address,
         watch: true,
-        refetchInterval: 1000,
+        blockIdentifier: BlockTag.pending,
     });
 
     if (isLoading) return <div>Loading ...</div>;

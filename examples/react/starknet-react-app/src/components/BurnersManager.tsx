@@ -1,8 +1,10 @@
 import BurnerDetails from "./BurnerDetails";
 import { useEffect, useState } from "react";
 import { useDojo } from "../dojo/useDojo";
+import { useNetwork } from "@starknet-react/core";
 
 export default function BurnersManager() {
+    const { chain } = useNetwork();
     const {
         burnerManager: {
             applyFromClipboard,
@@ -65,7 +67,11 @@ export default function BurnersManager() {
                     <BurnerDetails
                         key={burner.address}
                         burner={burner}
-                        removeBurner={async () => remove(burner.address)}
+                        removeBurner={async () =>
+                            remove(burner.address, {
+                                maxFee: "1000000000000000", // 0.001 ETH
+                            })
+                        }
                         index={i}
                     />
                 ))}
@@ -80,7 +86,13 @@ export default function BurnersManager() {
                 <button
                     onClick={() =>
                         create({
-                            prefundedAmount: "400000000000000000", // 0.4 ETH
+                            prefundedAmount:
+                                chain.network === "katana"
+                                    ? "400000000000000000" // 0.4 ETH
+                                    : "10000000000000000", // 0.01 ETH
+                            transactionDetails: {
+                                maxFee: "1000000000000000", // 0.001 ETH
+                            },
                         })
                     }
                 >
@@ -103,7 +115,15 @@ export default function BurnersManager() {
                         {clipboardStatus.message}
                     </div>
                 )}
-                <button onClick={() => clear()}>Clear burners</button>
+                <button
+                    onClick={() =>
+                        clear({
+                            maxFee: "1000000000000000", // 0.001 ETH
+                        })
+                    }
+                >
+                    Clear burners
+                </button>
             </div>
         </div>
     );
