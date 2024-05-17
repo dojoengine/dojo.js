@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/core",
-    "version": "0.6.122",
+    "version": "0.6.125",
     "description": "Dojo onchain game engine core",
     "author": "Loaf",
     "license": "MIT",
@@ -28,12 +28,10 @@
         "vitest": "^1.1.0"
     },
     "dependencies": {
-        "@dojoengine/recs": "0.1.35"
+        "@dojoengine/recs": "0.1.35",
+        "zod": "^3.22.4"
     },
     "bin": {
         "create-components": "./dist/bin/generateComponents.cjs"
-    },
-    "dependencies": {
-        "zod": "^3.22.4"
     }
 }

@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-client",
-    "version": "0.6.122",
+    "version": "0.6.125",
     "description": "Torii client for the dojo onchain game engine",
     "keywords": [],
     "author": "Dojo",
@@ -17,7 +17,11 @@
         }
     },
     "dependencies": {
+<<<<<<< HEAD
         "@dojoengine/torii-wasm": "workspace:*",
+=======
+        "@dojoengine/torii-wasm": "^0.6.125",
+>>>>>>> main
         "typescript": "^5.0.3"
     },
     "devDependencies": {

@@ -20,7 +20,8 @@ export const prefundAccount = async (
     address: string,
     account: AccountInterface,
     feeTokenAddress: string,
-    prefundAmount: string
+    prefundAmount: string,
+    maxFee: number
 ): Promise<any> => {
     try {
         // Configure the options for the transfer transaction
@@ -38,7 +39,7 @@ export const prefundAccount = async (
             undefined,
             {
                 nonce,
-                maxFee: 0, // This is set to 0 for now, consider adjusting it based on network conditions or requirements.
+                maxFee,
             }
         );
 
