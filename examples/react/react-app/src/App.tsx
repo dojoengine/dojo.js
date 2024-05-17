@@ -1,34 +1,71 @@
-import { useFindEntity } from "@dojoengine/react";
+import { useComponentValue } from "@dojoengine/react";
+import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
+import { Direction } from "./utils";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
-import { dojo } from "./dojo";
+import { valueToToriiValueAndOperator } from "@dojoengine/torii-client";
 import { validateAndParseAddress } from "starknet";
-import { Direction } from "./dojo_starter";
+import { getSyncEntities, syncEntities } from "@dojoengine/state";
 
 function App() {
-    const { account } = useDojo();
-
-    const playerEntity = useFindEntity(
-        dojo.query({
-            Moves: {
-                player: validateAndParseAddress(account?.account.address),
-            },
-            Position: {},
-        }),
-        [account?.account.address]
-    );
-
-    useEffect(() => {
-        if (account) {
-            dojo.account = account.account;
-        }
-    }, [account]);
+    const {
+        setup: {
+            systemCalls: { spawn, move },
+            clientComponents: { Position, Moves },
+            contractComponents,
+            toriiClient,
+        },
+        account,
+    } = useDojo();
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
         isError: false,
     });
+
+    const fetchValues = async () => {
+        const entities = await toriiClient.getEntities({
+            limit: 100,
+            offset: 0,
+            clause: {
+                Member: {
+                    model: "Moves",
+                    member: "player",
+                    ...valueToToriiValueAndOperator(
+                        validateAndParseAddress(account?.account.address)
+                    ),
+                },
+            },
+        });
+
+        const entityKeys = Object.keys(entities);
+
+        console.log(entityKeys);
+
+        await getSyncEntities(
+            toriiClient,
+            contractComponents as any,
+            entityKeys
+        );
+    };
+
+    const fetchAndLogValues = async () => {
+        const values = await fetchValues();
+        console.log(values);
+    };
+
+    fetchAndLogValues();
+
+    // entity id we are syncing
+    const entityId = getEntityIdFromKeys([
+        BigInt(account?.account.address),
+    ]) as Entity;
+
+    // get current component values
+    const position = useComponentValue(Position, entityId);
+    const moves = useComponentValue(Moves, entityId);
 
     const handleRestoreBurners = async () => {
         try {
@@ -103,17 +140,14 @@ function App() {
             </div>
 
             <div className="card">
-                <button onClick={() => dojo.actions.spawn()}>Spawn</button>
+                <button onClick={() => spawn(account.account)}>Spawn</button>
                 <div>
-                    Moves Left:{" "}
-                    {playerEntity
-                        ? `${playerEntity.Moves.remaining}`
-                        : "Need to Spawn"}
+                    Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
                 </div>
                 <div>
                     Position:{" "}
-                    {playerEntity
-                        ? `${playerEntity.Position.vec.x}, ${playerEntity.Position.vec.y}`
+                    {position
+                        ? `${position.vec.x}, ${position.vec.y}`
                         : "Need to Spawn"}
                 </div>
 
@@ -124,8 +158,8 @@ function App() {
                 <div>
                     <button
                         onClick={() =>
-                            playerEntity && playerEntity.Position.vec.y > 0
-                                ? dojo.actions.move(Direction.Up)
+                            position && position.vec.y > 0
+                                ? move(account.account, Direction.Up)
                                 : console.log("Reach the borders of the world.")
                         }
                     >
@@ -135,19 +169,23 @@ function App() {
                 <div>
                     <button
                         onClick={() =>
-                            playerEntity && playerEntity.Position.vec.x > 0
-                                ? dojo.actions.move(Direction.Left)
+                            position && position.vec.x > 0
+                                ? move(account.account, Direction.Left)
                                 : console.log("Reach the borders of the world.")
                         }
                     >
                         Move Left
                     </button>
-                    <button onClick={() => dojo.actions.move(Direction.Right)}>
+                    <button
+                        onClick={() => move(account.account, Direction.Right)}
+                    >
                         Move Right
                     </button>
                 </div>
                 <div>
-                    <button onClick={() => dojo.actions.move(Direction.Down)}>
+                    <button
+                        onClick={() => move(account.account, Direction.Down)}
+                    >
                         Move Down
                     </button>
                 </div>
