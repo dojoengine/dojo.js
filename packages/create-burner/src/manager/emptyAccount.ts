@@ -72,9 +72,10 @@ export const emptyAccount = async (
         const balance = BigInt(res.balance.low);
 
         const maxFee = transactionDetails?.maxFee || 0;
+        if (maxFee === 0) return; // No need to transfer if the max fee is 0
         const transferAmount = balance - BigInt(maxFee);
 
-        if (transferAmount <= 0) {
+        if (transferAmount < 0) {
             throw new Error("Insufficient balance to cover the max fee.");
         }
 

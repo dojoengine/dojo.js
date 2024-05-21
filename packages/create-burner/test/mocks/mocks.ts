@@ -3,9 +3,10 @@ import {
     KATANA_PREFUNDED_PRIVATE_KEY,
     LOCAL_KATANA,
 } from "@dojoengine/core";
-import { Account, RpcProvider } from "starknet";
+import { Account, RpcProvider, RpcProvider } from "starknet";
 import { BurnerConnector } from "../../src/connectors/burner";
 import { BurnerManager } from "../../src/manager/burnerManager";
+import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
 
 export const getBurnerManager = (): BurnerManager => {
     const burnerManager = new BurnerManager({
@@ -16,6 +17,7 @@ export const getBurnerManager = (): BurnerManager => {
         ),
         accountClassHash: KATANA_PREFUNDED_PRIVATE_KEY,
         rpcProvider: new RpcProvider({ nodeUrl: LOCAL_KATANA }),
+        feeTokenAddress: KATANA_ETH_CONTRACT_ADDRESS,
     });
     return burnerManager;
 };

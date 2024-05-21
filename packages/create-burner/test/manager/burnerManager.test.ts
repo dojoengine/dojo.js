@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import Storage from "../../src/utils/storage";
 import { getBurnerManager } from "../mocks/mocks"; // Adjust the path as necessary
 import { BurnerCreateOptions } from "../../src/types";
+import { KATANA_PREFUNDED_ADDRESS } from "@dojoengine/core";
 
 // Explicitly mock the 'starknet' module
 vi.mock("starknet", async () => {
@@ -87,12 +88,13 @@ describe("BurnerManager - init method", () => {
                 publicKey: "0x00bb",
                 deployTx: "0x00cc",
                 active: true,
+                masterAccount: KATANA_PREFUNDED_ADDRESS,
             },
         });
 
         const burnerManager = getBurnerManager();
 
-        // Mock getTransactionReceipt to return null, simulating an undeployed account
+        // Mock getTransactionReceipt to return not null, simulating a deployed account
         burnerManager.masterAccount.getTransactionReceipt.mockResolvedValue(
             "receipt not null"
         );
@@ -114,26 +116,37 @@ describe("BurnerManager - init method", () => {
                 publicKey: "0x00bb",
                 deployTx: "0x00cc",
                 active: false,
+                masterAccount: KATANA_PREFUNDED_ADDRESS,
             },
             account2: {
                 privateKey: "0x88aa",
                 publicKey: "0x88bb",
                 deployTx: "0x88cc",
                 active: true,
+                masterAccount: KATANA_PREFUNDED_ADDRESS,
+            },
+            account3: {
+                privateKey: "0x44aa",
+                publicKey: "0x44bb",
+                deployTx: "0x44cc",
+                active: true,
+                masterAccount: KATANA_PREFUNDED_ADDRESS,
             },
         });
 
         const burnerManager = getBurnerManager();
 
-        // Mock getTransactionReceipt to return null, simulating an undeployed account
+        // Mock getTransactionReceipt to return not null, simulating a deployed account
         burnerManager.masterAccount.getTransactionReceipt.mockResolvedValue(
             "receipt not null"
         );
 
         await burnerManager.init();
 
+        expect(Storage.get).toHaveBeenCalledWith("burners_katana_test");
+
         // initial state
-        expect(burnerManager.list().length).toStrictEqual(2);
+        expect(burnerManager.list().length).toStrictEqual(3);
         expect(burnerManager.getActiveAccount()?.address).toStrictEqual(
             "account2"
         );
@@ -157,13 +170,16 @@ describe("BurnerManager - init method", () => {
         );
 
         // delete()
+        expect(Storage.get).toHaveBeenCalledWith("burners_katana_test");
         expect(burnerManager.select("account2")).toEqual(undefined);
-        expect(burnerManager.delete("account2")).toEqual(undefined);
-        expect(burnerManager.getActiveAccount()).toStrictEqual(null);
-        expect(burnerManager.list().length).toStrictEqual(1);
+        await burnerManager.delete("account2");
+        expect(burnerManager.list().length).toStrictEqual(2);
+        expect(burnerManager.getActiveAccount()?.address).toStrictEqual(
+            "account1"
+        );
 
         // clear()
-        expect(burnerManager.clear()).toEqual(undefined);
+        await burnerManager.clear();
         expect(burnerManager.list().length).toStrictEqual(0);
         expect(burnerManager.getActiveAccount()).toStrictEqual(null);
     });
@@ -176,6 +192,7 @@ describe("BurnerManager - init method", () => {
                 publicKey: "0x00bb",
                 deployTx: "0x00cc",
                 active: true,
+                masterAccount: KATANA_PREFUNDED_ADDRESS,
             },
         });
 
