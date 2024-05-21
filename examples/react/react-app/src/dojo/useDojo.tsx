@@ -10,6 +10,6 @@ export const useDojo = () => {
 
     return {
         setup: context,
-        account: context.account,
+        burnerManager: context.burnerManagerHook,
     };
 };
