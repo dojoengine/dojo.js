@@ -173,10 +173,10 @@ describe("BurnerManager - init method", () => {
         expect(Storage.get).toHaveBeenCalledWith("burners_katana_test");
         expect(burnerManager.select("account2")).toEqual(undefined);
         await burnerManager.delete("account2");
-        expect(burnerManager.list().length).toStrictEqual(2);
         expect(burnerManager.getActiveAccount()?.address).toStrictEqual(
             "account1"
         );
+        expect(burnerManager.list().length).toStrictEqual(2);
 
         // clear()
         await burnerManager.clear();
