@@ -7,6 +7,12 @@ interface BalanceProps {
     token_address: string;
 }
 
+interface BalanceData {
+    balance: {
+        low: bigint;
+    };
+}
+
 const Balance = ({ address, token_address }: BalanceProps) => {
     // useBalance doesn't work on Katana, don't know why
     const { data, isError, isLoading, error } = useContractRead({
@@ -20,9 +26,12 @@ const Balance = ({ address, token_address }: BalanceProps) => {
 
     if (isLoading) return <div>Loading ...</div>;
     if (isError || !data) return <div>{error?.message}</div>;
+
+    const balanceData = data as BalanceData; // Type assertion here
+
     return (
         <div>
-            {`${parseFloat(formatUnits(data.balance.low, 18)).toFixed(7)} ETH`}
+            {`${parseFloat(formatUnits(balanceData.balance.low, 18)).toFixed(7)} ETH`}
         </div>
     );
 };
@@ -71,6 +80,7 @@ function formatUnits(value: bigint, decimals: number) {
 
     display = display.padStart(decimals, "0");
 
+    // eslint-disable-next-line prefer-const
     let [integer, fraction] = [
         display.slice(0, display.length - decimals),
         display.slice(display.length - decimals),
