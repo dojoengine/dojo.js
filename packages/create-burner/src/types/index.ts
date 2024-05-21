@@ -4,6 +4,7 @@ import {
     InvocationsDetails,
     RpcProvider,
 } from "starknet";
+import { BurnerConnector } from "..";
 
 export type BurnerStorage = {
     [address: string]: BurnerRecord;
@@ -28,18 +29,19 @@ export type Burner = {
 };
 
 export interface BurnerManagerOptions {
-    masterAccount: Account;
+    masterAccount: AccountInterface;
     accountClassHash: string;
     feeTokenAddress: string;
     rpcProvider: RpcProvider;
 }
 
 export interface BurnerManagerHook {
+    isError: boolean;
     create: (options?: BurnerCreateOptions) => void;
     list: () => Burner[];
-    get: (address: string) => AccountInterface;
+    get: (address: string) => Account | undefined;
     remove: (address: string, transactionDetails?: InvocationsDetails) => void;
-    account: AccountInterface;
+    account: Account | null;
     select: (address: string) => void;
     deselect: () => void;
     isDeploying: boolean;
@@ -48,7 +50,10 @@ export interface BurnerManagerHook {
     copyToClipboard: () => Promise<void>;
     applyFromClipboard: () => Promise<void>;
     getActiveAccount?: () => Account | null;
-    generateAddressFromSeed?: (options?: BurnerCreateOptions) => string;
+    generateAddressFromSeed?: (
+        options?: BurnerCreateOptions
+    ) => string | undefined;
+    listConnectors?: () => BurnerConnector[];
 }
 
 export interface BurnerCreateOptions {

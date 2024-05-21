@@ -1,6 +1,7 @@
 import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
 import {
     Account,
+    AccountInterface,
     CallData,
     ec,
     hash,
@@ -70,7 +71,7 @@ export const PREFUND_AMOUNT = "0x2386f26fc10000"; // 10000000000000000 = 0.1 ETH
  */
 
 export class BurnerManager {
-    public masterAccount: Account;
+    public masterAccount: AccountInterface;
     public accountClassHash: string;
     public feeTokenAddress: string;
     public provider: RpcProvider;

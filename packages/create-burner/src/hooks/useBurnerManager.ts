@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Account, InvocationsDetails } from "starknet";
 import { BurnerConnector } from "..";
 import { BurnerManager } from "../manager/burnerManager";
-import { Burner, BurnerCreateOptions } from "../types";
+import { Burner, BurnerCreateOptions, BurnerManagerHook } from "../types";
 
 /**
  * A React hook that takes the Burner Manager object avoiding the React Context.
@@ -14,7 +14,7 @@ export const useBurnerManager = ({
     burnerManager,
 }: {
     burnerManager: BurnerManager | null; // Accepts the BurnerManager class as an parameter
-}) => {
+}): BurnerManagerHook => {
     const [isError, setIsError] = useState(false);
 
     // State to manage the current active account.
