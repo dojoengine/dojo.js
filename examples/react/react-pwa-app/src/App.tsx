@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
-import { AccountInterface } from "starknet";
 import "./App.css";
 
 function App() {
@@ -13,7 +12,17 @@ function App() {
             systemCalls: { spawn, move },
             clientComponents: { Position, Moves },
         },
-        burnerManager,
+        burnerManager: {
+            applyFromClipboard,
+            copyToClipboard,
+            list,
+            count,
+            select,
+            clear,
+            account,
+            isDeploying,
+            create,
+        },
     } = useDojo();
 
     const [clipboardStatus, setClipboardStatus] = useState({
@@ -21,15 +30,10 @@ function App() {
         isError: false,
     });
 
-    const [account, setAccount] = useState<AccountInterface | null>(null);
     const [entityId, setEntityId] = useState<Entity | undefined>(undefined);
 
     const position = useComponentValue(Position, entityId);
     const moves = useComponentValue(Moves, entityId);
-
-    useEffect(() => {
-        setAccount(burnerManager?.account);
-    }, [burnerManager?.account]);
 
     useEffect(() => {
         if (account) {
@@ -44,7 +48,7 @@ function App() {
 
     const handleRestoreBurners = async () => {
         try {
-            await burnerManager?.applyFromClipboard();
+            await applyFromClipboard();
             setClipboardStatus({
                 message: "Burners restored successfully!",
                 isError: false,
@@ -69,15 +73,11 @@ function App() {
 
     return (
         <>
-            <button onClick={() => burnerManager?.create()}>
-                {burnerManager?.isDeploying
-                    ? "deploying burner"
-                    : "create burner"}
+            <button onClick={() => create()}>
+                {isDeploying ? "deploying burner" : "create burner"}
             </button>
-            {burnerManager && burnerManager?.list().length > 0 && (
-                <button
-                    onClick={async () => await burnerManager?.copyToClipboard()}
-                >
+            {list().length > 0 && (
+                <button onClick={async () => await copyToClipboard()}>
                     Save Burners to Clipboard
                 </button>
             )}
@@ -91,18 +91,14 @@ function App() {
             )}
 
             <div className="card">
-                <div>{`burners deployed: ${burnerManager.count}`}</div>
+                <div>{`burners deployed: ${count}`}</div>
                 <div>
                     select signer:{" "}
                     <select
-                        value={
-                            burnerManager?.account
-                                ? burnerManager.account.address
-                                : ""
-                        }
-                        onChange={(e) => burnerManager.select(e.target.value)}
+                        value={account ? account.address : ""}
+                        onChange={(e) => select(e.target.value)}
                     >
-                        {burnerManager?.list().map((account, index) => {
+                        {list().map((account, index) => {
                             return (
                                 <option value={account.address} key={index}>
                                     {account.address}
@@ -112,9 +108,7 @@ function App() {
                     </select>
                 </div>
                 <div>
-                    <button onClick={() => burnerManager.clear()}>
-                        Clear burners
-                    </button>
+                    <button onClick={() => clear()}>Clear burners</button>
                 </div>
             </div>
 

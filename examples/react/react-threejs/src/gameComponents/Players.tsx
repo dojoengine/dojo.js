@@ -1,7 +1,7 @@
 import { useDojo } from "@/dojo/useDojo";
 import { Has, defineSystem } from "@dojoengine/recs";
 import { Player } from "./Player";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useElementStore } from "@/store";
 
 export const Players = (props: any) => {

@@ -41,7 +41,7 @@ export interface BurnerManagerHook {
     list: () => Burner[];
     get: (address: string) => Account | undefined;
     remove: (address: string, transactionDetails?: InvocationsDetails) => void;
-    account: Account | null;
+    account: AccountInterface | null;
     select: (address: string) => void;
     deselect: () => void;
     isDeploying: boolean;

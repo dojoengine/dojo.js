@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Account, InvocationsDetails } from "starknet";
+import { Account, AccountInterface, InvocationsDetails } from "starknet";
 import { BurnerConnector } from "..";
 import { BurnerManager } from "../manager/burnerManager";
 import { Burner, BurnerCreateOptions, BurnerManagerHook } from "../types";
@@ -18,7 +18,7 @@ export const useBurnerManager = ({
     const [isError, setIsError] = useState(false);
 
     // State to manage the current active account.
-    const [account, setAccount] = useState<Account | null>(null);
+    const [account, setAccount] = useState<AccountInterface | null>(null);
     const [count, setCount] = useState(0);
     const [isDeploying, setIsDeploying] = useState(false);
 
