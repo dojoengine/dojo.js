@@ -1,9 +1,5 @@
 import { getSyncEntities } from "@dojoengine/state";
-import {
-    DojoConfig,
-    DojoProvider,
-    createModelTypedData,
-} from "@dojoengine/core";
+import { DojoConfig, DojoProvider } from "@dojoengine/core";
 import * as torii from "@dojoengine/torii-client";
 import { createClientComponents } from "../createClientComponents";
 import { createSystemCalls } from "../createSystemCalls";
@@ -20,7 +16,7 @@ export async function setup({ ...config }: DojoConfig) {
     const toriiClient = await torii.createClient([], {
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
-        relayUrl: config.relayUrl,
+        relayUrl: "",
         worldAddress: config.manifest.world.address || "",
     });
 
