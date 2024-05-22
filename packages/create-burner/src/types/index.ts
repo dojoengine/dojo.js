@@ -1,4 +1,10 @@
-import { Account, AccountInterface, RpcProvider } from "starknet";
+import {
+    Account,
+    AccountInterface,
+    InvocationsDetails,
+    RpcProvider,
+} from "starknet";
+import { BurnerConnector } from "..";
 
 export type BurnerStorage = {
     [address: string]: BurnerRecord;
@@ -23,27 +29,31 @@ export type Burner = {
 };
 
 export interface BurnerManagerOptions {
-    masterAccount: Account;
+    masterAccount: AccountInterface;
     accountClassHash: string;
     feeTokenAddress: string;
     rpcProvider: RpcProvider;
 }
 
-export interface BurnerAccount {
+export interface BurnerManagerHook {
+    isError: boolean;
     create: (options?: BurnerCreateOptions) => void;
     list: () => Burner[];
-    get: (address: string) => AccountInterface;
-    remove: (address: string) => void;
-    account: AccountInterface;
+    get: (address: string) => Account | undefined;
+    remove: (address: string, transactionDetails?: InvocationsDetails) => void;
+    account: AccountInterface | null;
     select: (address: string) => void;
     deselect: () => void;
     isDeploying: boolean;
-    clear: () => void;
+    clear: (transactionDetails?: InvocationsDetails) => void;
     count: number;
     copyToClipboard: () => Promise<void>;
     applyFromClipboard: () => Promise<void>;
     getActiveAccount?: () => Account | null;
-    generateAddressFromSeed?: (options?: BurnerCreateOptions) => string;
+    generateAddressFromSeed?: (
+        options?: BurnerCreateOptions
+    ) => string | undefined;
+    listConnectors?: () => BurnerConnector[];
 }
 
 export interface BurnerCreateOptions {
@@ -51,7 +61,7 @@ export interface BurnerCreateOptions {
     index?: number;
     metadata?: any;
     prefundedAmount?: string;
-    maxFee?: number;
+    transactionDetails?: InvocationsDetails;
 }
 
 export interface BurnerKeys {

@@ -1,4 +1,4 @@
-import { AccountInterface } from "starknet";
+import { AccountInterface, InvocationsDetails } from "starknet";
 import { Entity, getComponentValue } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";

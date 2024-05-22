@@ -1,11 +1,11 @@
-import { BurnerAccount, useBurnerManager } from "@dojoengine/create-burner";
+import { BurnerManagerHook, useBurnerManager } from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext, useMemo } from "react";
 import { Account, RpcProvider } from "starknet";
 import { SetupResult } from "./generated/setup";
 
 interface DojoContextType extends SetupResult {
     masterAccount: Account;
-    account: BurnerAccount;
+    burnerManagerHook: BurnerManagerHook;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
@@ -38,20 +38,7 @@ export const DojoProvider = ({
         [rpcProvider, masterAddress, masterPrivateKey]
     );
 
-    const {
-        create,
-        list,
-        get,
-        select,
-        deselect,
-        remove,
-        clear,
-        account,
-        isDeploying,
-        count,
-        copyToClipboard,
-        applyFromClipboard,
-    } = useBurnerManager({
+    const burnerManagerHook = useBurnerManager({
         burnerManager,
     });
 
@@ -60,19 +47,11 @@ export const DojoProvider = ({
             value={{
                 ...value,
                 masterAccount,
-                account: {
-                    create,
-                    list,
-                    get,
-                    select,
-                    deselect,
-                    remove,
-                    clear,
-                    account: account ? account : masterAccount,
-                    isDeploying,
-                    count,
-                    copyToClipboard,
-                    applyFromClipboard,
+                burnerManagerHook: {
+                    ...burnerManagerHook,
+                    account: burnerManager
+                        ? burnerManager.account
+                        : masterAccount,
                 },
             }}
         >

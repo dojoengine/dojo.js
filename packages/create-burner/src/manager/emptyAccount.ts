@@ -1,37 +1,90 @@
 import {
     AccountInterface,
     CallData,
+    Contract,
     InvocationsDetails,
+    RpcProvider,
     TransactionFinalityStatus,
 } from "starknet";
 
+const abi = [
+    {
+        members: [
+            {
+                name: "low",
+                offset: 0,
+                type: "felt",
+            },
+            {
+                name: "high",
+                offset: 1,
+                type: "felt",
+            },
+        ],
+        name: "Uint256",
+        size: 2,
+        type: "struct",
+    },
+    {
+        name: "balanceOf",
+        type: "function",
+        inputs: [
+            {
+                name: "account",
+                type: "felt",
+            },
+        ],
+        outputs: [
+            {
+                name: "balance",
+                type: "Uint256",
+            },
+        ],
+        stateMutability: "view",
+    },
+];
+
 /**
- * Pre-funds a given account by initiating a transfer transaction.
+ * Empty a given account by initiating a transfer transaction to the masterAccount
  *
- * @param address - The destination address to which funds are to be transferred.
+ * @param provider - The RPC provider used to interact with the StarkNet network.
+ * @param masterAddress - The address of the master account to which funds are to be transferred.
  * @param account - The source account from which funds will be deducted.
  * @param feeTokenAddress - The Ethereum contract address responsible for the transfer.
  *                             If not provided, defaults to KATANA_ETH_CONTRACT_ADDRESS.
- * @param prefundAmount - The amount to be transferred to the destination account.
  * @param transactionDetails - Additional transaction details to be included in the transaction.
  *
  * @returns - Returns the result of the transfer transaction, typically including transaction details.
  *
  * @throws - Throws an error if the transaction does not complete successfully.
  */
-export const prefundAccount = async (
-    address: string,
+export const emptyAccount = async (
+    provider: RpcProvider,
+    masterAddress: string,
     account: AccountInterface,
     feeTokenAddress: string,
-    prefundAmount: string,
     transactionDetails?: InvocationsDetails
 ): Promise<any> => {
     try {
+        const maxFee = transactionDetails?.maxFee || 0;
+        if (maxFee === 0) return; // No need to transfer if the max fee is 0
+
+        // First read the balance of the account
+        const contract = new Contract(abi, feeTokenAddress, provider);
+        const res = await contract.call("balanceOf", [account.address]);
+        const balance = BigInt(res.balance.low);
+
+        const transferAmount = balance - BigInt(maxFee);
+
+        if (transferAmount < 0) {
+            throw new Error("Insufficient balance to cover the max fee.");
+        }
+
         // Configure the options for the transfer transaction
         const transferOptions = {
             contractAddress: feeTokenAddress,
             entrypoint: "transfer",
-            calldata: CallData.compile([address, prefundAmount, "0x0"]),
+            calldata: CallData.compile([masterAddress, transferAmount, "0x0"]),
         };
 
         // Retrieve the nonce for the account to avoid transaction collisions

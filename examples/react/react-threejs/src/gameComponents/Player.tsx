@@ -7,15 +7,17 @@ import { Direction } from "@/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { MAP_SCALE } from "@/config";
+import { Entity } from "@dojoengine/recs";
 
 export const Player = (props: any) => {
     const {
-        account: { account },
+        burnerManager,
         setup: {
             clientComponents: { Position },
             systemCalls: { move },
         },
     } = useDojo();
+    const { account } = burnerManager;
 
     const [hoveredTile, setHoveredTile] = useState<Direction | undefined>(
         undefined
@@ -26,17 +28,23 @@ export const Player = (props: any) => {
     let targetPosition = useRef<THREE.Vector3 | undefined>();
 
     // Retrieve player info
+    const [entityId, setEntityId] = useState<Entity | undefined>(undefined);
+
+    useEffect(() => {
+        if (account) {
+            const newEntityId = getEntityIdFromKeys([
+                BigInt(account.address),
+            ]) as Entity;
+            setEntityId(newEntityId);
+        } else {
+            setEntityId(undefined);
+        }
+    }, [account]);
+
     const { player } = props;
 
     // Retrieve local player
-    const localPlayer = useComponentValue(
-        Position,
-        getEntityIdFromKeys([BigInt(account.address)])
-    );
-
-    const handleTileClick = (direction: Direction) => {
-        move(account, direction);
-    };
+    const localPlayer = useComponentValue(Position, entityId);
 
     const isLocalPlayer = localPlayer?.player == player.player;
 
@@ -149,14 +157,15 @@ export const Player = (props: any) => {
             />
             {
                 // Add 4 cells around the local player
-                isLocalPlayer &&
+                account &&
+                    isLocalPlayer &&
                     blueCellsAroundPlayer.map((cellInfo, k: number) => {
                         return (
                             <mesh
                                 key={k}
                                 receiveShadow
                                 onClick={() =>
-                                    handleTileClick(cellInfo.direction)
+                                    move(account, cellInfo.direction)
                                 }
                                 position={cellInfo.position}
                                 geometry={squareGeometry}

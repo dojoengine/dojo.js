@@ -1,9 +1,5 @@
 import { getSyncEntities } from "@dojoengine/state";
-import {
-    DojoConfig,
-    DojoProvider,
-    createModelTypedData,
-} from "@dojoengine/core";
+import { DojoConfig, DojoProvider } from "@dojoengine/core";
 import * as torii from "@dojoengine/torii-client";
 import { createClientComponents } from "../createClientComponents";
 import { createSystemCalls } from "../createSystemCalls";
@@ -38,27 +34,6 @@ export async function setup({ ...config }: DojoConfig) {
     // setup world
     const client = await setupWorld(dojoProvider);
 
-    // // create burner manager
-    // const burnerManager = new BurnerManager({
-    //     masterAccount: new Account(
-    //         dojoProvider.provider,
-    //         config.masterAddress,
-    //         config.masterPrivateKey
-    //     ),
-    //     accountClassHash: config.accountClassHash,
-    //     rpcProvider: dojoProvider.provider,
-    // });
-
-    // if (burnerManager.list().length === 0) {
-    //     try {
-    //         await burnerManager.create();
-    //     } catch (e) {
-    //         console.error(e);
-    //     }
-    // }
-
-    // await burnerManager.init();
-
     return {
         client,
         clientComponents,
@@ -79,6 +54,5 @@ export async function setup({ ...config }: DojoConfig) {
         },
         config,
         dojoProvider,
-        // burnerManager,
     };
 }

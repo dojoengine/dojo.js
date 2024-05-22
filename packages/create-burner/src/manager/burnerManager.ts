@@ -1,9 +1,11 @@
 import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
 import {
     Account,
+    AccountInterface,
     CallData,
     ec,
     hash,
+    InvocationsDetails,
     RpcProvider,
     shortString,
     stark,
@@ -18,8 +20,9 @@ import {
 import Storage from "../utils/storage";
 import { derivePrivateKeyFromSeed } from "../utils/keyDerivation";
 import { prefundAccount } from "./prefundAccount";
+import { emptyAccount } from "./emptyAccount";
 
-export const PREFUND_AMOUNT = "0x2386f26fc10000";
+export const PREFUND_AMOUNT = "0x2386f26fc10000"; // 10000000000000000 = 0.1 ETH
 
 /**
  * A class to manage Burner accounts.
@@ -68,7 +71,7 @@ export const PREFUND_AMOUNT = "0x2386f26fc10000";
  */
 
 export class BurnerManager {
-    public masterAccount: Account;
+    public masterAccount: AccountInterface;
     public accountClassHash: string;
     public feeTokenAddress: string;
     public provider: RpcProvider;
@@ -198,14 +201,18 @@ export class BurnerManager {
 
     public list(): Burner[] {
         const storage = this.getBurnerStorage();
-        return Object.keys(storage).map((address) => {
-            return {
-                address,
-                active: storage[address].active,
-                masterAccount: storage[address].masterAccount,
-                accountIndex: storage[address].accountIndex,
-            };
-        });
+        return Object.keys(storage)
+            .map((address) => {
+                return {
+                    address,
+                    active: storage[address].active,
+                    masterAccount: storage[address].masterAccount,
+                    accountIndex: storage[address].accountIndex,
+                };
+            })
+            .filter(
+                (burner) => burner.masterAccount === this.masterAccount.address
+            );
     }
 
     public select(address: string): void {
@@ -251,18 +258,54 @@ export class BurnerManager {
         );
     }
 
-    public delete(address: string) {
+    public async delete(
+        address: string,
+        transactionDetails?: InvocationsDetails
+    ): Promise<void> {
         const storage = this.getBurnerStorage();
         if (!storage[address]) {
             throw new Error("burner not found");
         }
 
-        delete storage[address];
+        try {
+            await emptyAccount(
+                this.provider,
+                this.masterAccount.address,
+                this.get(address),
+                this.feeTokenAddress,
+                transactionDetails
+            );
+        } catch (e) {
+            console.error(
+                `burner manager delete() while emptying account error:`,
+                e
+            );
+            return;
+        }
 
+        delete storage[address];
         Storage.set(this.getBurnerKey(), storage);
+
+        // Check if there are any remaining burners
+        const remainingAddresses = Object.keys(storage);
+        if (remainingAddresses.length > 0) {
+            // Select the first remaining burner as the active account
+            this.select(remainingAddresses[0]);
+        } else {
+            this.account = null;
+        }
     }
 
-    clear(): void {
+    public async clear(transactionDetails?: InvocationsDetails): Promise<void> {
+        const storage = this.getBurnerStorage();
+        const addresses = Object.keys(storage);
+
+        const deletePromises = addresses.map((address) =>
+            this.delete(address, transactionDetails)
+        );
+
+        await Promise.all(deletePromises);
+
         Storage.remove(this.getBurnerKey());
     }
 
@@ -317,7 +360,7 @@ export class BurnerManager {
                 this.masterAccount,
                 this.feeTokenAddress,
                 options?.prefundedAmount || PREFUND_AMOUNT,
-                options?.maxFee || 0
+                options?.transactionDetails
             );
         } catch (e) {
             console.error(`burner manager create() error:`, e);
@@ -339,7 +382,9 @@ export class BurnerManager {
             const { transaction_hash } = await burner.deployAccount(
                 accountOptions,
                 {
+                    maxFee: 0,
                     nonce,
+                    ...options?.transactionDetails,
                 }
             );
             deployTx = transaction_hash;
