@@ -66,13 +66,14 @@ export const emptyAccount = async (
     transactionDetails?: InvocationsDetails
 ): Promise<any> => {
     try {
+        const maxFee = transactionDetails?.maxFee || 0;
+        if (maxFee === 0) return; // No need to transfer if the max fee is 0
+
         // First read the balance of the account
         const contract = new Contract(abi, feeTokenAddress, provider);
         const res = await contract.call("balanceOf", [account.address]);
         const balance = BigInt(res.balance.low);
 
-        const maxFee = transactionDetails?.maxFee || 0;
-        if (maxFee === 0) return; // No need to transfer if the max fee is 0
         const transferAmount = balance - BigInt(maxFee);
 
         if (transferAmount < 0) {
