@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/react",
-    "version": "0.6.126",
+    "version": "0.6.127",
     "description": "Useful React hooks for Starknet",
     "source": "src/index.ts",
     "main": "dist/index.js",
