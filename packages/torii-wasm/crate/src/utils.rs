@@ -48,6 +48,9 @@ pub fn parse_ty_as_json_str(ty: &Ty) -> Value {
         }
 
         Ty::Tuple(_) => unimplemented!("tuple not supported"),
+
+        // TODO: Implement these
+        &dojo_types::schema::Ty::Array(_) | &dojo_types::schema::Ty::ByteArray(_) => todo!(),
     }
 }
 
@@ -289,7 +292,7 @@ mod test {
                             name: "is_dead".into(),
                             key: false,
                             ty: Ty::Primitive(Primitive::Bool(Some(false))),
-                        }
+                        },
                     ],
                 },
             ],
@@ -359,22 +362,30 @@ mod test {
                 Member {
                     name: "type_felt252".into(),
                     key: false,
-                    ty: Ty::Primitive(Primitive::Felt252(Some(felt!("0x123456789abcdef123456789abcdef12"))))
+                    ty: Ty::Primitive(Primitive::Felt252(Some(felt!(
+                        "0x123456789abcdef123456789abcdef12"
+                    )))),
                 },
                 Member {
                     name: "type_class_hash".into(),
                     key: false,
-                    ty: Ty::Primitive(Primitive::ClassHash(Some(felt!("0x123456789abcdef123456789abcdef12"))))
+                    ty: Ty::Primitive(Primitive::ClassHash(Some(felt!(
+                        "0x123456789abcdef123456789abcdef12"
+                    )))),
                 },
                 Member {
                     name: "type_contract_address".into(),
                     key: false,
-                    ty: Ty::Primitive(Primitive::ContractAddress(Some(felt!("0x123456789abcdef123456789abcdef12"))))
+                    ty: Ty::Primitive(Primitive::ContractAddress(Some(felt!(
+                        "0x123456789abcdef123456789abcdef12"
+                    )))),
                 },
                 Member {
                     name: "type_u256".into(),
                     key: false,
-                    ty: Ty::Primitive(Primitive::U256(Some(U256::from_be_hex("aaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbccccccccccccccccdddddddddddddddd"))))
+                    ty: Ty::Primitive(Primitive::U256(Some(U256::from_be_hex(
+                        "aaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbccccccccccccccccdddddddddddddddd",
+                    )))),
                 },
             ],
         });

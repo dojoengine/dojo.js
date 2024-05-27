@@ -25,38 +25,38 @@ function App() {
         isError: false,
     });
 
-    const fetchValues = async () => {
-        const entities = await toriiClient.getEntities({
-            limit: 100,
-            offset: 0,
-            clause: {
-                Member: {
-                    model: "Moves",
-                    member: "player",
-                    ...valueToToriiValueAndOperator(
-                        validateAndParseAddress(account?.account.address)
-                    ),
-                },
-            },
-        });
+    // const fetchValues = async () => {
+    //     const entities = await toriiClient.getEntities({
+    //         limit: 100,
+    //         offset: 0,
+    //         clause: {
+    //             Member: {
+    //                 model: "Moves",
+    //                 member: "player",
+    //                 ...valueToToriiValueAndOperator(
+    //                     validateAndParseAddress(account?.account.address)
+    //                 ),
+    //             },
+    //         },
+    //     });
 
-        const entityKeys = Object.keys(entities);
+    //     const entityKeys = Object.keys(entities);
 
-        console.log(entityKeys);
+    //     console.log(entityKeys);
 
-        await getSyncEntities(
-            toriiClient,
-            contractComponents as any,
-            entityKeys
-        );
-    };
+    //     await getSyncEntities(
+    //         toriiClient,
+    //         contractComponents as any,
+    //         entityKeys
+    //     );
+    // };
 
-    const fetchAndLogValues = async () => {
-        const values = await fetchValues();
-        console.log(values);
-    };
+    // const fetchAndLogValues = async () => {
+    //     const values = await fetchValues();
+    //     console.log(values);
+    // };
 
-    fetchAndLogValues();
+    // fetchAndLogValues();
 
     // entity id we are syncing
     const entityId = getEntityIdFromKeys([
