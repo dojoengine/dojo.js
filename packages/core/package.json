@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/core",
-    "version": "0.6.127",
+    "version": "0.7.0-alpha.0",
     "description": "Dojo onchain game engine core",
     "author": "Loaf",
     "license": "MIT",
