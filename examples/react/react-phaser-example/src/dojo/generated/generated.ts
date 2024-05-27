@@ -13,16 +13,13 @@ export interface MoveProps {
 
 export async function setupWorld(provider: DojoProvider) {
     function actions() {
-        const contract_name = "actions";
-
         const spawn = async ({ account }: { account: AccountInterface }) => {
             try {
-                return await provider.execute(
-                    account,
-                    contract_name,
-                    "spawn",
-                    []
-                );
+                return await provider.execute(account, {
+                    contractName: "actions",
+                    entrypoint: "spawn",
+                    calldata: [],
+                });
             } catch (error) {
                 console.error("Error executing spawn:", error);
                 throw error;
@@ -31,9 +28,11 @@ export async function setupWorld(provider: DojoProvider) {
 
         const move = async ({ account, direction }: MoveProps) => {
             try {
-                return await provider.execute(account, contract_name, "move", [
-                    direction,
-                ]);
+                return await provider.execute(account, {
+                    contractName: "actions",
+                    entrypoint: "move",
+                    calldata: [direction],
+                });
             } catch (error) {
                 console.error("Error executing move:", error);
                 throw error;

@@ -4,19 +4,19 @@ import {
     InvokeFunctionResponse,
     Contract,
     shortString,
-    InvocationsDetails,
     AllowArray,
     Call,
-    num,
     Result,
     CallContractResponse,
     AccountInterface,
+    UniversalDetails,
+    ArgsOrCalldata,
 } from "starknet";
 import { Provider } from "./provider";
 import { ConsoleLogger, LogLevel } from "../logger/logger";
-import { WorldEntryPoints } from "../types";
+import { DojoCall, WorldEntryPoints } from "../types";
 import { LOCAL_KATANA } from "../constants";
-import { getContractByName } from "../utils";
+import { getContractByName, parseDojoCall } from "../utils";
 
 /**
  * DojoProvider: The DojoProvider is an execution provider for dojo worlds. It allows you to easily interact with a dojo world via the Starknet.js library.
@@ -26,8 +26,6 @@ import { getContractByName } from "../utils";
  * const provider = new DojoProvider(
  *      manifest
  * );
- *
- * await provider.execute(signer, contract, system, call_data);
  * ```
  */
 export class DojoProvider extends Provider {
@@ -141,85 +139,6 @@ export class DojoProvider extends Provider {
     }
 
     /**
-     * Executes a function with the given parameters.
-     * This function is a wrapper around the Starknet.js Account.execute function, but is more convenient to use.
-     *
-     * ```ts
-     * await provider.execute(signer, contract, system, call_data);
-     * ```
-     * @param {Account} account - The account to use.
-     * @param {string} contract - The contract to execute.
-     * @param {string} call - The function to call.
-     * @param {num.BigNumberish[]} call_data - The call data for the function.
-     * @param {InvocationsDetails | undefined} transactionDetails - The transactionDetails allow to override maxFee & version
-     * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
-     */
-    public async execute(
-        account: Account | AccountInterface,
-        contract_name: string,
-        call: string,
-        calldata: num.BigNumberish[],
-        transactionDetails?: InvocationsDetails | undefined
-    ): Promise<InvokeFunctionResponse> {
-        try {
-            const nonce = await account?.getNonce();
-
-            return await account?.execute(
-                [
-                    {
-                        contractAddress: getContractByName(
-                            this.manifest,
-                            contract_name
-                        )?.address,
-                        entrypoint: call,
-                        calldata: calldata,
-                    },
-                ],
-                undefined,
-                {
-                    maxFee: 0, // TODO: Update this value as needed.
-                    ...transactionDetails,
-                    nonce,
-                }
-            );
-        } catch (error) {
-            this.logger.error("Error occured: ", error);
-            throw error;
-        }
-    }
-
-    /**
-     * Executes a multicall.
-     * This function is a wrapper around the Starknet.js Account.execute function, but allows for executing multiple calls at once.
-     *
-     * ```ts
-     * await provider.executeMulti(account, calls);
-     * ```
-     * @param {Account} account - The account to use.
-     * @param {AllowArray<Call>} calls - The calls to execute.
-     * @param {InvocationsDetails | undefined} transactionDetails - The transactionDetails allow to override maxFee & version
-     * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
-     */
-    public async executeMulti(
-        account: Account | AccountInterface,
-        calls: AllowArray<Call>,
-        transactionDetails?: InvocationsDetails | undefined
-    ): Promise<InvokeFunctionResponse> {
-        try {
-            const nonce = await account?.getNonce();
-
-            return await account?.execute(calls, undefined, {
-                maxFee: 0, // TODO: Update this value as needed.
-                ...transactionDetails,
-                nonce,
-            });
-        } catch (error) {
-            this.logger.error("Error occured: ", error);
-            throw error;
-        }
-    }
-
-    /**
      * Retrieves current uuid from the world contract.
      *
      * @returns {Promise<number>} - A promise that resolves to the world uuid
@@ -247,56 +166,95 @@ export class DojoProvider extends Provider {
             throw new Error(`Failed to fetch uuid: ${error}`);
         }
     }
+
+    /**
+     * Executes a function with the given parameters.
+     * This function is a wrapper around the Starknet.js Account.execute function, but is more convenient to use.
+     *
+     * ```ts
+     * await provider.execute(signer, { contractName, entrypoint, calldata });
+     * await provider.execute(signer, { contractAddress, entrypoint, calldata });
+     * await provider.execute(signer, [{ contractName, entrypoint, calldata }, { contractAddress, entrypoint, calldata }]);
+     * ```
+     * @param {Account} account - The account to use.
+     * @param {AllowArray<DojoCall | Call>} call - The call or calls
+     * @param {UniversalDetails} details - https://github.com/starknet-io/starknet.js/blob/5efa196017ee8f761ae837ecac9c059da8f3e09a/src/types/account.ts#L26
+     * @returns {Promise<InvokeFunctionResponse>} - A promise that resolves to the response of the function execution.
+     */
+    public async execute(
+        account: Account | AccountInterface,
+        call: AllowArray<DojoCall | Call>,
+        details: UniversalDetails = {}
+    ): Promise<InvokeFunctionResponse> {
+        const dojoCalls = Array.isArray(call) ? call : [call];
+        const calls = dojoCalls.map((i) => parseDojoCall(this.manifest, i));
+
+        try {
+            return await account?.execute(calls, undefined, details);
+        } catch (error) {
+            this.logger.error("Error occured: ", error);
+            throw error;
+        }
+    }
+
+    /**
+     * Calls a function with the given parameters and return parsed results for a DojoCall.
+     *
+     * ```ts
+     * let parsedResult = await provider.call({ contractName, entrypoint, calldata });
+     * ```
+     * @param {DojoCall | Call} call - The dojoCall or call
+     * @returns {Promise<Result>} - A promise that resolves to the response of the function call.
+     */
+    public async call(call: DojoCall | Call): Promise<Result> {
+        if ("contractName" in call) {
+            try {
+                const contractInfos = getContractByName(
+                    this.manifest,
+                    call.contractName
+                );
+                const contract = new Contract(
+                    contractInfos.abi,
+                    contractInfos.address,
+                    this.provider
+                );
+                return await contract.call(
+                    call.entrypoint,
+                    call.calldata as ArgsOrCalldata
+                );
+            } catch (error) {
+                this.logger.error(
+                    `Failed to callContract ${call.contractName}: ${error}`
+                );
+                throw new Error(
+                    `Failed to callContract ${call.contractName}: ${error}`
+                );
+            }
+        } else {
+            return this.callRaw(call);
+        }
+    }
+
     /**
      * Calls a function with the given parameters.
      *
-     * @param {string} contract_name - The contract to call.
-     * @param {string} call - The function to call.
+     * ```ts
+     * let result = await provider.callRaw({ contractName, entrypoint, calldata });
+     * ```
+     * @param {DojoCall | Call} call - The dojoCall or call
      * @returns {Promise<CallContractResponse>} - A promise that resolves to the response of the function call.
      */
-    public async call(
-        contract_name: string,
-        call: string,
-        calldata?: num.BigNumberish[]
-    ): Promise<CallContractResponse> {
+    async callRaw(call: DojoCall | Call): Promise<CallContractResponse> {
+        const parsedCall = parseDojoCall(this.manifest, call);
         try {
-            return await this.provider.callContract({
-                contractAddress: getContractByName(this.manifest, contract_name)
-                    ?.address,
-                entrypoint: call,
-                calldata,
-            });
+            return await this.provider.callContract(parsedCall);
         } catch (error) {
-            this.logger.error(`Failed to call: ${error}`);
-            throw new Error(`Failed to call: ${error}`);
-        }
-    }
-    /**
-     * Calls a function with the given parameters and return parsed results.
-     *
-     * @param {string} contract_name - The contract to call.
-     * @param {string} call - The function to call.
-     * @returns {Promise<Result>} - A promise that resolves to the response of the function call.
-     */
-    public async callContract(
-        contract_name: string,
-        call: string,
-        calldata?: num.BigNumberish[]
-    ): Promise<Result> {
-        try {
-            const contractInfos = getContractByName(
-                this.manifest,
-                contract_name
+            this.logger.error(
+                `Failed to call ${parsedCall.contractAddress}: ${error}`
             );
-            const contract = new Contract(
-                contractInfos.abi,
-                contractInfos.address,
-                this.provider
+            throw new Error(
+                `Failed to call ${parsedCall.contractAddress}: ${error}`
             );
-            return await contract.call(call, calldata);
-        } catch (error) {
-            this.logger.error(`Failed to callContract: ${error}`);
-            throw new Error(`Failed to callContract: ${error}`);
         }
     }
 }
