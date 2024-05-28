@@ -5,6 +5,7 @@ import "./index.css";
 import { setup } from "./dojo/generated/setup.ts";
 import { DojoProvider } from "./dojo/DojoContext.tsx";
 import { dojoConfig } from "../dojoConfig.ts";
+import { Loading } from "./Loading.tsx";
 
 async function init() {
     const rootElement = document.getElementById("root");
@@ -12,6 +13,8 @@ async function init() {
     const root = ReactDOM.createRoot(rootElement as HTMLElement);
 
     const setupResult = await setup(dojoConfig);
+
+    !setupResult && <Loading />;
 
     root.render(
         <React.StrictMode>

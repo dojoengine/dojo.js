@@ -44,20 +44,11 @@ export function createSystemCalls(
                 account,
             });
 
-            console.log(
-                await account.waitForTransaction(transaction_hash, {
-                    retryInterval: 100,
-                })
-            );
+            await account.waitForTransaction(transaction_hash, {
+                retryInterval: 100,
+            });
 
-            // setComponentsFromEvents(
-            //     contractComponents,
-            //     getEvents(
-            //         await account.waitForTransaction(transaction_hash, {
-            //             retryInterval: 100,
-            //         })
-            //     )
-            // );
+            await new Promise((resolve) => setTimeout(resolve, 1000));
         } catch (e) {
             console.log(e);
             Position.removeOverride(positionId);
@@ -105,14 +96,7 @@ export function createSystemCalls(
                 retryInterval: 100,
             });
 
-            // setComponentsFromEvents(
-            //     contractComponents,
-            //     getEvents(
-            //         await account.waitForTransaction(transaction_hash, {
-            //             retryInterval: 100,
-            //         })
-            //     )
-            // );
+            await new Promise((resolve) => setTimeout(resolve, 1000));
         } catch (e) {
             console.log(e);
             Position.removeOverride(positionId);

@@ -139,12 +139,6 @@ importers:
       ethers:
         specifier: ^5.7.2
         version: 5.7.2
-      graphql:
-        specifier: ^16.7.1
-        version: 16.8.1
-      graphql-request:
-        specifier: ^6.1.0
-        version: 6.1.0(graphql@16.8.1)
       mobx:
         specifier: ^6.9.0
         version: 6.12.3
@@ -170,18 +164,6 @@ importers:
         specifier: ^3.2.2
         version: 3.3.0(vite@4.5.3)
     devDependencies:
-      '@graphql-codegen/cli':
-        specifier: ^5.0.0
-        version: 5.0.2(@types/node@20.12.12)(graphql@16.8.1)(typescript@5.4.5)
-      '@graphql-codegen/typescript':
-        specifier: ^4.0.1
-        version: 4.0.7(graphql@16.8.1)
-      '@graphql-codegen/typescript-graphql-request':
-        specifier: ^5.0.0
-        version: 5.0.0(graphql-request@6.1.0)(graphql-tag@2.12.6)(graphql@16.8.1)
-      '@graphql-codegen/typescript-operations':
-        specifier: ^4.0.1
-        version: 4.2.1(graphql@16.8.1)
       '@types/node':
         specifier: ^20.4.8
         version: 20.12.12
