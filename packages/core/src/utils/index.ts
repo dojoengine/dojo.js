@@ -1,4 +1,5 @@
-import { TypedData } from "starknet";
+import { Call, TypedData } from "starknet";
+import { DojoCall } from "../types";
 
 /**
  * Gets a contract from a manifest by name.
@@ -16,6 +17,28 @@ export const getContractByName = (manifest: any, name: string) => {
             nameParts[nameParts.length - 1] === name || contract.name === name
         );
     });
+};
+
+/**
+ * Convert a DojoCall to a Call replacing contractName with contractAddress
+ *
+ * @param {any} manifest - The manifest object.
+ * @param {DojoCall | Call} call - A DojoCall or Call
+ * @returns {Call} The contract object.
+ *
+ */
+export const parseDojoCall = (manifest: any, call: DojoCall | Call): Call => {
+    if ("contractName" in call) {
+        const contract = getContractByName(manifest, call.contractName);
+
+        return {
+            contractAddress: contract.address,
+            calldata: call.calldata,
+            entrypoint: call.entrypoint,
+        };
+    } else {
+        return call;
+    }
 };
 
 /**

@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/state",
-    "version": "0.6.125",
+    "version": "0.7.0-alpha.0",
     "description": "State sync for dojo",
     "author": "Loaf",
     "license": "MIT",
