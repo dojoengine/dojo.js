@@ -5,17 +5,12 @@ import "./App.css";
 import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
-import { valueToToriiValueAndOperator } from "@dojoengine/torii-client";
-import { validateAndParseAddress } from "starknet";
-import { getSyncEntities, syncEntities } from "@dojoengine/state";
 
 function App() {
     const {
         setup: {
             systemCalls: { spawn, move },
             clientComponents: { Position, Moves },
-            contractComponents,
-            toriiClient,
         },
         account,
     } = useDojo();
@@ -24,39 +19,6 @@ function App() {
         message: "",
         isError: false,
     });
-
-    // const fetchValues = async () => {
-    //     const entities = await toriiClient.getEntities({
-    //         limit: 100,
-    //         offset: 0,
-    //         clause: {
-    //             Member: {
-    //                 model: "Moves",
-    //                 member: "player",
-    //                 ...valueToToriiValueAndOperator(
-    //                     validateAndParseAddress(account?.account.address)
-    //                 ),
-    //             },
-    //         },
-    //     });
-
-    //     const entityKeys = Object.keys(entities);
-
-    //     console.log(entityKeys);
-
-    //     await getSyncEntities(
-    //         toriiClient,
-    //         contractComponents as any,
-    //         entityKeys
-    //     );
-    // };
-
-    // const fetchAndLogValues = async () => {
-    //     const values = await fetchValues();
-    //     console.log(values);
-    // };
-
-    // fetchAndLogValues();
 
     // entity id we are syncing
     const entityId = getEntityIdFromKeys([
