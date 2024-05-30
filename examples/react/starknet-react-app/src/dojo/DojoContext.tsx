@@ -89,7 +89,9 @@ export const DojoProvider = ({
                     deselect,
                     remove,
                     clear,
-                    account: account ? account : masterAccount,
+                    account: (account as any)
+                        ? (account as any)
+                        : masterAccount,
                     isDeploying,
                     count,
                     copyToClipboard,

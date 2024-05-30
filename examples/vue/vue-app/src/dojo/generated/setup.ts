@@ -30,7 +30,7 @@ export async function setup({ ...config }: DojoConfig) {
     const clientComponents = createClientComponents({ contractComponents });
 
     // fetch all existing entities from torii
-    await getSyncEntities(toriiClient, contractComponents as any);
+    await getSyncEntities(toriiClient, contractComponents as any, []);
 
     // create dojo provider
     const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl);

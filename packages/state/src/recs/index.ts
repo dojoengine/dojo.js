@@ -12,10 +12,11 @@ import { convertValues } from "../utils";
 export const getSyncEntities = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[],
+    entities: any[],
     limit: number = 100
 ) => {
     await getEntities(client, components, limit);
-    syncEntities(client, components);
+    syncEntities(client, components, entities);
 };
 
 export const getEntities = async <S extends Schema>(
@@ -27,7 +28,7 @@ export const getEntities = async <S extends Schema>(
     let continueFetching = true;
 
     while (continueFetching) {
-        const entities = await client.getEntities(limit, cursor);
+        const entities = await client.getAllEntities(limit, cursor);
 
         setEntities(entities, components);
 
@@ -41,9 +42,10 @@ export const getEntities = async <S extends Schema>(
 
 export const syncEntities = async <S extends Schema>(
     client: Client,
-    components: Component<S, Metadata, undefined>[]
+    components: Component<S, Metadata, undefined>[],
+    entities: any[]
 ) => {
-    client.onEntityUpdated([], (entities: any) => {
+    client.onEntityUpdated(entities, (entities: any) => {
         setEntities(entities, components);
     });
 };

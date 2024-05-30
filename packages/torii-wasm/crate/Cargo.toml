@@ -23,10 +23,10 @@ tokio = { version = "1.32.0", default-features = false, features = ["rt"] }
 url = "2.4.0"
 
 # Dojo
-dojo-types = { git = "https://github.com/dojoengine/dojo" }
-torii-client = { git = "https://github.com/dojoengine/dojo" }
-torii-grpc = { git = "https://github.com/dojoengine/dojo" }
-torii-relay = { git = "https://github.com/dojoengine/dojo" }
+dojo-types = { git = "https://github.com/dojoengine/dojo", commit = "328004d65bbbf7692c26f030b75fa95b7947841d" }
+torii-client = { git = "https://github.com/dojoengine/dojo", commit = "328004d65bbbf7692c26f030b75fa95b7947841d" }
+torii-grpc = { git = "https://github.com/dojoengine/dojo", commit = "328004d65bbbf7692c26f030b75fa95b7947841d" }
+torii-relay = { git = "https://github.com/dojoengine/dojo", commit = "328004d65bbbf7692c26f030b75fa95b7947841d" }
 
 # WASM
 js-sys = "0.3.64"
@@ -47,6 +47,8 @@ web-sys = { version = "0.3.4", features = [
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.7", optional = true }
 tsify = "0.4.5"
+crypto-bigint = "0.5.5"
+ahash = "0.8.7"
 
 # Compiler optimization when running test to prevent ‘locals exceed maximum’ error, 
 # where a function is using more that the maximum allowed local variables.
