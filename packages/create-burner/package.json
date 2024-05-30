@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/create-burner",
-    "version": "0.7.0-alpha.0",
+    "version": "0.7.0-alpha.1",
     "description": "Useful hooks and functions to create a Starknet burner wallet",
     "author": "Loaf",
     "license": "MIT",
@@ -24,6 +24,7 @@
     "devDependencies": {
         "@babel/core": "^7.21.4",
         "@babel/preset-env": "^7.21.4",
+        "@scure/bip32": "^1.4.0",
         "@testing-library/react": "^14.1.2",
         "@testing-library/react-hooks": "^8.0.1",
         "@types/js-cookie": "^3.0.3",
@@ -35,8 +36,7 @@
         "jsdom": "^24.0.0",
         "tsup": "^8.0.1",
         "typescript": "^5.0.3",
-        "vitest": "^1.2.2",
-        "@scure/bip32": "^1.4.0"
+        "vitest": "^1.2.2"
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
