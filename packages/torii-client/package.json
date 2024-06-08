@@ -8,7 +8,7 @@
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
-        "build": "tsc"
+        "build": "tsup --dts-resolve"
     },
     "exports": {
         ".": {
