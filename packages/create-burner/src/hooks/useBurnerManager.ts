@@ -110,6 +110,20 @@ export const useBurnerManager = ({
     }, [burnerManager]);
 
     /**
+     * Checks if an account has been deployed.
+     *
+     * @param address - The address of the burner account to check.
+     * @param deployTx - Optional deployment transaction hash.
+     * @returns True if account has been deployed.
+     */
+    const checkIsDeployed = useCallback(
+        async (address: string, deployTx?: string): Promise<boolean> => {
+            return burnerManager.isBurnerDeployed(address, deployTx);
+        },
+        [burnerManager]
+    );
+
+    /**
      * Creates a new burner account and sets it as the active account.
      *
      * @param options - (optional) secret seed and index for deterministic accounts.
@@ -184,6 +198,7 @@ export const useBurnerManager = ({
         select,
         deselect,
         remove,
+        checkIsDeployed,
         create,
         listConnectors,
         clear,

@@ -44,6 +44,7 @@ export interface BurnerAccount {
     applyFromClipboard: () => Promise<void>;
     getActiveAccount?: () => Account | null;
     generateAddressFromSeed?: (options?: BurnerCreateOptions) => string;
+    checkIsDeployed: (address: string, deployTx?: string) => Promise<boolean>;
 }
 
 export interface BurnerCreateOptions {
