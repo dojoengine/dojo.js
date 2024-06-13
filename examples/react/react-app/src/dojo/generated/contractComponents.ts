@@ -8,6 +8,19 @@ export type ContractComponents = Awaited<
 
 export function defineContractComponents(world: World) {
     return {
+        DirectionsAvailable: (() => {
+            return defineComponent(
+                world,
+                { player: RecsType.BigInt, directions: RecsType.StringArray },
+                {
+                    metadata: {
+                        name: "DirectionsAvailable",
+                        types: ["contractaddress"],
+                        customTypes: [],
+                    },
+                }
+            );
+        })(),
         Moves: (() => {
             return defineComponent(
                 world,

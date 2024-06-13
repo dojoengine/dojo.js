@@ -16,9 +16,7 @@ mod types;
 mod utils;
 
 use types::{ClientConfig, EntityModel, IEntityModel, Signature};
-use utils::{parse_entities_as_json_str, parse_ty_as_json_str};
-
-type JsFieldElement = JsValue;
+use utils::{parse_entities_as_json_str};
 
 #[wasm_bindgen]
 extern "C" {
