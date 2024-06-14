@@ -1,5 +1,5 @@
 import { useComponentValue } from "@dojoengine/react";
-import { Entity } from "@dojoengine/recs";
+import { Entity, getComponentValue } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Direction } from "./utils";
@@ -10,7 +10,7 @@ function App() {
     const {
         setup: {
             systemCalls: { spawn, move },
-            clientComponents: { Position, Moves },
+            clientComponents: { Position, Moves, DirectionsAvailable },
         },
         account,
     } = useDojo();
@@ -28,6 +28,9 @@ function App() {
     // get current component values
     const position = useComponentValue(Position, entityId);
     const moves = useComponentValue(Moves, entityId);
+    const directions = useComponentValue(DirectionsAvailable, entityId);
+
+    console.log(directions);
 
     const handleRestoreBurners = async () => {
         try {
@@ -109,7 +112,7 @@ function App() {
                 <div>
                     Position:{" "}
                     {position
-                        ? `${position.vec.x}, ${position.vec.y}`
+                        ? `${position?.vec.x}, ${position?.vec.y}`
                         : "Need to Spawn"}
                 </div>
 

@@ -30,6 +30,8 @@ export const getEntities = async <S extends Schema>(
     while (continueFetching) {
         const entities = await client.getAllEntities(limit, cursor);
 
+        console.log("load entities", entities);
+
         setEntities(entities, components);
 
         if (Object.keys(entities).length < limit) {

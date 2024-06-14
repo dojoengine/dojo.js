@@ -23,10 +23,10 @@ tokio = { version = "1.32.0", default-features = false, features = ["rt"] }
 url = "2.4.0"
 
 # Dojo
-dojo-types = { git = "https://github.com/dojoengine/dojo", commit = "328004d65bbbf7692c26f030b75fa95b7947841d" }
-torii-client = { git = "https://github.com/dojoengine/dojo", commit = "328004d65bbbf7692c26f030b75fa95b7947841d" }
-torii-grpc = { git = "https://github.com/dojoengine/dojo", commit = "328004d65bbbf7692c26f030b75fa95b7947841d" }
-torii-relay = { git = "https://github.com/dojoengine/dojo", commit = "328004d65bbbf7692c26f030b75fa95b7947841d" }
+dojo-types = { git = "https://github.com/dojoengine/dojo" }
+torii-client = { git = "https://github.com/dojoengine/dojo" }
+torii-grpc = { git = "https://github.com/dojoengine/dojo" }
+torii-relay = { git = "https://github.com/dojoengine/dojo" }
 
 # WASM
 js-sys = "0.3.64"
