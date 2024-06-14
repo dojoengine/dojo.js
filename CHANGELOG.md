@@ -11,6 +11,10 @@ Version 7 has breaking changes and will only work correctly with Dojo v7.
 
 * Fixed issue with Safari, Firefox and mobile browsers not syncing
 
+### Features
+
+* Support for Arrays within Recs
+
 
 ## 0.6.124 (2024-04-24)
 
@@ -19,10 +23,6 @@ Version 7 has breaking changes and will only work correctly with Dojo v7.
 ## 0.6.123 (2024-04-24)
 
 **Note:** Version bump only for package dojo.js
-
-
-
-
 
 # [](https://github.com/dojoengine/dojo.js/compare/v0.6.122...v) (2024-04-19)
 
