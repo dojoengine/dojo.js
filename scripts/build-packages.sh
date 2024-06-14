@@ -4,9 +4,9 @@
 set -e
 
 # Build commands
-pnpm build-torii-wasm
+# pnpm build-torii-wasm
 pnpm build-utils-wasm
-pnpm build-torii-client
+# pnpm build-torii-client
 pnpm build-state
 pnpm build-core
 pnpm build-create-burner
