@@ -63,6 +63,7 @@ const cairoToRecsType = {
     felt252: "RecsType.BigInt",
     contractaddress: "RecsType.BigInt",
     enum: "RecsType.String",
+    array: "RecsType.StringArray",
 };
 
 const manifestStr = fs.readFileSync(manifestPath, "utf8");
@@ -138,6 +139,8 @@ function parseModelSchemaToRecsImpl(schema, types, customTypes) {
     const type = schema.type;
     const content = schema.content;
 
+    console.log(type, content);
+
     if (type === "primitive") {
         return parseSchemaPrimitive(content, types);
     } else if (type === "struct") {
@@ -149,6 +152,8 @@ function parseModelSchemaToRecsImpl(schema, types, customTypes) {
         return parseSchemaEnum(content);
     } else if (type === "tuple") {
         return parseSchemaTuple(content, types, customTypes);
+    } else if (type == "array") {
+        return `RecsType.StringArray`;
     }
 }
 

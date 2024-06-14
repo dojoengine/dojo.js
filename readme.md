@@ -47,12 +47,10 @@ npx @dojoengine/create-dojo
 
 ## Contributing to dojo.js
 
-Dojo.js is MIT licensed and welcomes contributors. Setting up your environment is simple.
-
 From the repository root, run the following to install all the necessary package dependencies:
 
 ```console
-pnpm install
+pnpm i
 ```
 
 #### Building Packages:

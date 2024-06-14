@@ -44,6 +44,7 @@ export function useComponentValue<S extends Schema>(
                 update.entity === entity
             ) {
                 const [nextValue] = update.value;
+
                 setValue(nextValue);
             }
         });

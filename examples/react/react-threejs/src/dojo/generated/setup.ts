@@ -76,10 +76,7 @@ export async function setup({ ...config }: DojoConfig) {
             contractComponents,
             clientComponents
         ),
-        publish: (
-            typedData: TypedData,
-            signature: WeierstrassSignatureType
-        ) => {
+        publish: (typedData: string, signature: WeierstrassSignatureType) => {
             toriiClient.publishMessage(typedData, {
                 r: signature.r.toString(),
                 s: signature.s.toString(),

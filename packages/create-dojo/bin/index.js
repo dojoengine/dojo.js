@@ -83,8 +83,7 @@ async function prompt() {
   const projectName = await input({
     message: "Project name ",
     validate: (input2) => {
-      if (/^([A-Za-z\-\_\d])+$/.test(input2))
-        return true;
+      if (/^([A-Za-z\-\_\d])+$/.test(input2)) return true;
       else
         return "Project name may only include letters, numbers, underscores and hashes.";
     },
