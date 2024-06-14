@@ -72,6 +72,7 @@ export const DojoProvider = ({
         count,
         copyToClipboard,
         applyFromClipboard,
+        checkIsDeployed,
     } = useBurnerManager({
         burnerManager,
     });
@@ -96,6 +97,7 @@ export const DojoProvider = ({
                     count,
                     copyToClipboard,
                     applyFromClipboard,
+                    checkIsDeployed,
                 },
             }}
         >

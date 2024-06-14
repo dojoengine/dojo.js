@@ -146,14 +146,23 @@ export class BurnerManager {
         }
     }
 
-    private async isBurnerDeployed(deployTx: string): Promise<boolean> {
-        try {
-            const receipt =
-                await this.masterAccount.getTransactionReceipt(deployTx);
-            return receipt !== null;
-        } catch (error) {
-            return false;
+    public async isBurnerDeployed(
+        address: string,
+        deployTx?: string
+    ): Promise<boolean> {
+        if (deployTx) {
+            try {
+                const receipt =
+                    await this.masterAccount.getTransactionReceipt(deployTx);
+                return receipt !== null;
+            } catch {}
         }
+        try {
+            // if account has a nonce, it was already deployed
+            const nonce = await this.masterAccount.getNonceForAddress(address);
+            return BigInt(nonce) > 0n;
+        } catch {}
+        return false;
     }
 
     public async init(keepNonDeployed = false): Promise<void> {
@@ -168,6 +177,7 @@ export class BurnerManager {
 
         const checks = addresses.map(async (address) => {
             const isDeployed = await this.isBurnerDeployed(
+                address,
                 storage[address].deployTx
             );
             return isDeployed ? null : address;
@@ -330,32 +340,24 @@ export class BurnerManager {
             addressSalt: publicKey,
         };
 
-        // deploy burner
         const burner = new Account(this.provider, address, privateKey, "1");
 
         let deployTx = "";
-        try {
-            const nonce = await this.account?.getNonce();
-            const { transaction_hash } = await burner.deployAccount(
-                accountOptions,
-                {
-                    nonce,
-                }
-            );
-            deployTx = transaction_hash;
-        } catch (error) {
-            this.updateIsDeploying(false);
-            throw error;
-        }
 
-        // check if account is already deployed
-        let isDeployed = false;
-        try {
-            isDeployed = await this.isBurnerDeployed(deployTx);
-        } catch {}
+        const isDeployed = await this.isBurnerDeployed(address);
 
-        // wait to deploy
         if (!isDeployed) {
+            // deploy burner
+            try {
+                const { transaction_hash } =
+                    await burner.deployAccount(accountOptions);
+                deployTx = transaction_hash;
+            } catch (error) {
+                this.updateIsDeploying(false);
+                throw error;
+            }
+
+            // wait to deploy
             const receipt = await this.masterAccount.waitForTransaction(
                 deployTx,
                 {
