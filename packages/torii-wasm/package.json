@@ -7,7 +7,7 @@
     "main": "./pkg/dojo_c.js",
     "type": "module",
     "scripts": {
-        "build-wasm": "cd crate && ./build.sh",
+        "build-wasm": "sh ./build.sh",
         "build": "npm run build-wasm && tsc"
     },
     "files": [
