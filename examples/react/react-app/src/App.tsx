@@ -30,6 +30,8 @@ function App() {
     const moves = useComponentValue(Moves, entityId);
     const directions = useComponentValue(DirectionsAvailable, entityId);
 
+    console.log(moves);
+
     const handleRestoreBurners = async () => {
         try {
             await account?.applyFromClipboard();
