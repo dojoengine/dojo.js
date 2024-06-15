@@ -28,11 +28,12 @@ export function defineContractComponents(world: World) {
                     player: RecsType.BigInt,
                     remaining: RecsType.Number,
                     last_direction: RecsType.Number,
+                    can_move: RecsType.Boolean,
                 },
                 {
                     metadata: {
                         name: "Moves",
-                        types: ["contractaddress", "u8", "enum"],
+                        types: ["contractaddress", "u8", "enum", "bool"],
                         customTypes: ["Direction"],
                     },
                 }
