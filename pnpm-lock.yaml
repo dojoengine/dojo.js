@@ -219,8 +219,8 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/torii-client
       '@dojoengine/torii-wasm':
-        specifier: ^0.5.0
-        version: 0.5.9
+        specifier: workspace:*
+        version: link:../../../packages/torii-wasm
       '@dojoengine/utils':
         specifier: workspace:*
         version: link:../../../packages/utils
@@ -2846,10 +2846,6 @@ packages:
       - typescript
       - utf-8-validate
       - zod
-    dev: false
-
-  /@dojoengine/torii-wasm@0.5.9:
-    resolution: {integrity: sha512-IXcKqmIYQBO/rQl/O0gx04/EQbEjAaMp4e6zr9Z2nhNk/koESdVRS6KcUMO91kCbz9uPKuQuf87pAgZEDgZ32w==}
     dev: false
 
   /@emotion/is-prop-valid@1.2.2:
