@@ -16,7 +16,7 @@ export const getSyncEntities = async <S extends Schema>(
     limit: number = 100
 ) => {
     await getEntities(client, components, limit);
-    syncEntities(client, components, entities);
+    return await syncEntities(client, components, entities);
 };
 
 export const getEntities = async <S extends Schema>(
@@ -45,7 +45,7 @@ export const syncEntities = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     entities: any[]
 ) => {
-    client.onEntityUpdated(entities, (entities: any) => {
+    return await client.onEntityUpdated(entities, (entities: any) => {
         setEntities(entities, components);
     });
 };
