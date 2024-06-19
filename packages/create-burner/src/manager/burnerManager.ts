@@ -335,22 +335,27 @@ export class BurnerManager {
                 addressSalt: publicKey,
             };
 
-            let prefundAmount = BigInt(options?.prefundedAmount ?? 0);
+            let prefundAmount = BigInt(
+                options?.prefundedAmount || PREFUND_AMOUNT
+            );
 
-            try {
-                const { suggestedMaxFee } =
-                    await this.masterAccount.estimateAccountDeployFee(payload, {
-                        version: "0x3",
-                    });
-                if (suggestedMaxFee > prefundAmount) {
-                    prefundAmount = suggestedMaxFee;
-                }
-            } catch (error) {
-                console.warn(error);
-                if (!prefundAmount) {
-                    prefundAmount = BigInt(PREFUND_AMOUNT);
-                }
-            }
+            // we could be doing this to save funds
+            // but ArgentX and Braavos always throw errors
+            // let prefundAmount = BigInt(options?.prefundedAmount ?? 0);
+            // try {
+            //     const { suggestedMaxFee } =
+            //         await this.masterAccount.estimateAccountDeployFee(payload, {
+            //             version: "0x3",
+            //         });
+            //     if (suggestedMaxFee > prefundAmount) {
+            //         prefundAmount = suggestedMaxFee;
+            //     }
+            // } catch (error) {
+            //     console.warn(error);
+            //     if (!prefundAmount) {
+            //         prefundAmount = BigInt(PREFUND_AMOUNT);
+            //     }
+            // }
 
             if (prefundAmount > 0n) {
                 try {
