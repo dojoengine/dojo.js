@@ -2,6 +2,7 @@ import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
 import {
     Account,
     CallData,
+    DeployAccountContractPayload,
     ec,
     hash,
     RpcProvider,
@@ -19,7 +20,7 @@ import Storage from "../utils/storage";
 import { derivePrivateKeyFromSeed } from "../utils/keyDerivation";
 import { prefundAccount } from "./prefundAccount";
 
-export const PREFUND_AMOUNT = "0x2386f26fc10000";
+export const PREFUND_AMOUNT = "10000000000000000"; // 0.01 ETH
 
 /**
  * A class to manage Burner accounts.
@@ -312,33 +313,14 @@ export class BurnerManager {
         if (!this.isInitialized) {
             throw new Error("BurnerManager is not initialized");
         }
+        if (!this.masterAccount) {
+            throw new Error("master wallet account not found");
+        }
 
         this.updateIsDeploying(true);
 
         const { privateKey, publicKey, address } =
             this.generateKeysAndAddress(options);
-
-        if (!this.masterAccount) {
-            throw new Error("wallet account not found");
-        }
-        try {
-            await prefundAccount(
-                address,
-                this.masterAccount,
-                this.feeTokenAddress,
-                options?.prefundedAmount || PREFUND_AMOUNT,
-                options?.maxFee || 0
-            );
-        } catch (e) {
-            console.error(`burner manager create() error:`, e);
-            this.updateIsDeploying(false);
-        }
-
-        const accountOptions = {
-            classHash: this.accountClassHash,
-            constructorCalldata: CallData.compile({ publicKey }),
-            addressSalt: publicKey,
-        };
 
         const burner = new Account(this.provider, address, privateKey, "1");
 
@@ -347,10 +329,53 @@ export class BurnerManager {
         const isDeployed = await this.isBurnerDeployed(address);
 
         if (!isDeployed) {
+            const payload: DeployAccountContractPayload = {
+                classHash: this.accountClassHash,
+                constructorCalldata: CallData.compile({ publicKey }),
+                addressSalt: publicKey,
+            };
+
+            let prefundAmount = BigInt(
+                options?.prefundedAmount || PREFUND_AMOUNT
+            );
+
+            // we could be doing this to save funds
+            // but ArgentX and Braavos always throw errors
+            // let prefundAmount = BigInt(options?.prefundedAmount ?? 0);
+            // try {
+            //     const { suggestedMaxFee } =
+            //         await this.masterAccount.estimateAccountDeployFee(payload, {
+            //             version: "0x3",
+            //         });
+            //     if (suggestedMaxFee > prefundAmount) {
+            //         prefundAmount = suggestedMaxFee;
+            //     }
+            // } catch (error) {
+            //     console.warn(error);
+            //     if (!prefundAmount) {
+            //         prefundAmount = BigInt(PREFUND_AMOUNT);
+            //     }
+            // }
+
+            if (prefundAmount > 0n) {
+                try {
+                    await prefundAccount(
+                        address,
+                        this.masterAccount,
+                        this.feeTokenAddress,
+                        prefundAmount.toString(),
+                        options?.maxFee || 0
+                    );
+                } catch (e) {
+                    console.error(`burner manager create() error:`, e);
+                    this.updateIsDeploying(false);
+                }
+            }
+
             // deploy burner
             try {
                 const { transaction_hash } =
-                    await burner.deployAccount(accountOptions);
+                    await burner.deployAccount(payload);
                 deployTx = transaction_hash;
             } catch (error) {
                 this.updateIsDeploying(false);
