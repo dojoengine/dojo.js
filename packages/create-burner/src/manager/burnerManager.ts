@@ -20,7 +20,7 @@ import Storage from "../utils/storage";
 import { derivePrivateKeyFromSeed } from "../utils/keyDerivation";
 import { prefundAccount } from "./prefundAccount";
 
-export const PREFUND_AMOUNT = "0x2386f26fc10000";
+export const PREFUND_AMOUNT = "10000000000000000"; // 0.01 ETH
 
 /**
  * A class to manage Burner accounts.
