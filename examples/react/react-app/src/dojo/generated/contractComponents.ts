@@ -16,7 +16,7 @@ export function defineContractComponents(world: World) {
                     metadata: {
                         name: "DirectionsAvailable",
                         types: ["contractaddress"],
-                        customTypes: [],
+                        customTypes: ["Direction"],
                     },
                 }
             );

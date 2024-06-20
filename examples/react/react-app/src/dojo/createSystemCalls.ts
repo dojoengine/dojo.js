@@ -37,27 +37,27 @@ export function createSystemCalls(
             BigInt(account.address),
         ]) as Entity;
 
-        const positionId = uuid();
-        Position.addOverride(positionId, {
-            entity: entityId,
-            value: {
-                player: BigInt(entityId),
-                vec: updatePositionWithDirection(
-                    direction,
-                    getComponentValue(Position, entityId) as any
-                ).vec,
-            },
-        });
+        // const positionId = uuid();
+        // Position.addOverride(positionId, {
+        //     entity: entityId,
+        //     value: {
+        //         player: BigInt(entityId),
+        //         vec: updatePositionWithDirection(
+        //             direction,
+        //             getComponentValue(Position, entityId) as any
+        //         ).vec,
+        //     },
+        // });
 
-        const movesId = uuid();
-        Moves.addOverride(movesId, {
-            entity: entityId,
-            value: {
-                player: BigInt(entityId),
-                remaining:
-                    (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
-            },
-        });
+        // const movesId = uuid();
+        // Moves.addOverride(movesId, {
+        //     entity: entityId,
+        //     value: {
+        //         player: BigInt(entityId),
+        //         remaining:
+        //             (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
+        //     },
+        // });
 
         try {
             const { transaction_hash } = await client.actions.move({
@@ -69,20 +69,20 @@ export function createSystemCalls(
                 retryInterval: 100,
             });
 
-            console.log(
-                await account.waitForTransaction(transaction_hash, {
-                    retryInterval: 100,
-                })
-            );
+            // console.log(
+            //     await account.waitForTransaction(transaction_hash, {
+            //         retryInterval: 100,
+            //     })
+            // );
 
             await new Promise((resolve) => setTimeout(resolve, 1000));
         } catch (e) {
             console.log(e);
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
+            // Position.removeOverride(positionId);
+            // Moves.removeOverride(movesId);
         } finally {
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
+            // Position.removeOverride(positionId);
+            // Moves.removeOverride(movesId);
         }
     };
 

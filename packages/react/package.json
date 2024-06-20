@@ -34,7 +34,7 @@
         "typescript": "^5.0.3"
     },
     "dependencies": {
-        "@dojoengine/recs": "0.1.35",
+        "@dojoengine/recs": "2.0.13",
         "@dojoengine/state": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/utils": "workspace:*",

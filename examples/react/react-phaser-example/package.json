@@ -18,7 +18,7 @@
         "@dojoengine/utils": "workspace:*",
         "@dojoengine/react": "workspace:*",
         "@dojoengine/state": "workspace:*",
-        "@dojoengine/recs": "0.1.35",
+        "@dojoengine/recs": "2.0.13",
         "@dojoengine/torii-wasm": "workspace:*",
         "@latticexyz/phaserx": "^2.0.0-next.14",
         "@latticexyz/utils": "^2.0.0-next.14",
