@@ -140,8 +140,6 @@ function parseModelSchemaToRecsImpl(schema, types, customTypes) {
     const type = schema.type;
     const content = schema.content;
 
-    console.log(type, content);
-
     if (type === "primitive") {
         return parseSchemaPrimitive(content, types);
     } else if (type === "struct") {
