@@ -64,6 +64,7 @@ const cairoToRecsType = {
     contractaddress: "RecsType.BigInt",
     enum: "RecsType.String",
     array: "RecsType.StringArray",
+    bytearray: "RecsType.String",
 };
 
 const manifestStr = fs.readFileSync(manifestPath, "utf8");
@@ -154,6 +155,8 @@ function parseModelSchemaToRecsImpl(schema, types, customTypes) {
         return parseSchemaTuple(content, types, customTypes);
     } else if (type == "array") {
         return `RecsType.StringArray`;
+    } else if (type == "bytearray") {
+        return `RecsType.String`;
     }
 }
 
