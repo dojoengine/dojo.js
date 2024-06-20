@@ -18,7 +18,7 @@
         "@dojoengine/utils": "workspace:*",
         "@dojoengine/react": "workspace:*",
         "@dojoengine/state": "workspace:*",
-        "@dojoengine/recs": "0.1.35",
+        "@dojoengine/recs": "2.0.13",
         "@fortawesome/fontawesome-svg-core": "^6.5.1",
         "@fortawesome/free-brands-svg-icons": "^6.5.1",
         "@fortawesome/free-regular-svg-icons": "^6.5.1",

@@ -1,5 +1,5 @@
 import { useComponentValue } from "@dojoengine/react";
-import { Entity, getComponentValue } from "@dojoengine/recs";
+import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Direction } from "./utils";
@@ -30,7 +30,7 @@ function App() {
     const moves = useComponentValue(Moves, entityId);
     const directions = useComponentValue(DirectionsAvailable, entityId);
 
-    console.log(moves);
+    console.log("directions", directions);
 
     const handleRestoreBurners = async () => {
         try {
@@ -117,6 +117,15 @@ function App() {
                 </div>
 
                 <div>{moves && moves.last_direction}</div>
+
+                <div>
+                    <div>Available Positions</div>
+                    {directions?.directions.map((a: any, index: any) => (
+                        <div key={index} className="">
+                            {a}
+                        </div>
+                    ))}
+                </div>
             </div>
 
             <div className="card">
