@@ -1,30 +1,15 @@
-<!-- markdownlint-disable -->
 <div align="center">
   <img src="./media/dojo-mark-full-dark.svg" height="128">
-</div>
-<div align="center">
-<br />
-<!-- markdownlint-restore -->
-
-<a href="https://twitter.com/dojostarknet">
-<img src="https://img.shields.io/twitter/follow/dojostarknet?style=social"/>
-</a>
-<a href="https://github.com/dojoengine/dojo">
-<img src="https://img.shields.io/github/stars/dojoengine/dojo?style=social"/>
-</a>
-
-[![discord](https://img.shields.io/badge/join-dojo-green?logo=discord&logoColor=white)](https://discord.gg/PwDa2mKhR4)
-![Github Actions][gha-badge] [![Telegram Chat][tg-badge]][tg-url]
-
-[gha-badge]: https://img.shields.io/github/actions/workflow/status/dojoengine/dojo/ci.yml?branch=main
-[tg-badge]: https://img.shields.io/endpoint?color=neon&logo=telegram&label=chat&style=flat-square&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Fdojoengine
-[tg-url]: https://t.me/dojoengine
-
+  <h1>Dojo: The Provable Game Engine</h1>
+  <p><strong>Dojo is a community driven open-source, Provable Game Engine, providing a comprehensive toolkit for building verifiable games and autonomous worlds.</strong></p>
+  <a href="https://twitter.com/dojostarknet"><img src="https://img.shields.io/twitter/follow/dojostarknet?style=social"/></a>
+  <a href="https://github.com/dojoengine/dojo"><img src="https://img.shields.io/github/stars/dojoengine/dojo?style=social"/></a>
+  <a href="https://discord.gg/PwDa2mKhR4"><img src="https://img.shields.io/badge/join-discord-blue?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://t.me/dojoengine"><img src="https://img.shields.io/badge/join-telegram-blue?logo=telegram" alt="Telegram"></a>
+  <img src="https://img.shields.io/github/actions/workflow/status/dojoengine/dojo/ci.yml?branch=main" alt="CI Status">
 </div>
 
-# Dojo: The Provable Game Engine
-
-**Dojo is a community driven open-source, Provable Game Engine, providing a comprehensive toolkit for building verifiable games and autonomous worlds.**
+</div>
 
 Dojo.js is the official JavaScript SDK for interacting with Dojo worlds. It is currently a work in progress (WIP), and we are actively seeking contributors.
 
