@@ -8,4 +8,13 @@ export const tsupConfig: Options = {
     sourcemap: true,
     clean: true,
     minify: true,
+    terserOptions: {
+        // Ensure the options are compatible with the specified terser version
+        format: {
+            comments: false,
+        },
+        compress: {
+            drop_console: true,
+        },
+    },
 };

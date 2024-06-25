@@ -14,13 +14,13 @@ jobs:
             - uses: oven-sh/setup-bun@v1
             - uses: pnpm/action-setup@v3
               with:
-                  version: 8
+                  version: 9.4.0
 
             - name: Update Submodules
               run: git submodule update --init --recursive
 
             - run: curl -L https://install.dojoengine.org | bash
-            - run: /home/runner/.config/.dojo/bin/dojoup -v v0.7.0
+            - run: /home/runner/.config/.dojo/bin/dojoup -v v0.7.2
             - run: |
                   cd examples/dojo-starter
                   /home/runner/.config/.dojo/bin/sozo build
