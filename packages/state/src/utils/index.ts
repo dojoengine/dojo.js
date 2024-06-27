@@ -30,11 +30,17 @@ export function convertValues(schema: Schema, values: any) {
                 break;
 
             case RecsType.String:
+                acc[key] = value.value;
+                break;
+
             case RecsType.BigInt:
                 acc[key] = BigInt(value.value);
                 break;
 
             case RecsType.Boolean:
+                acc[key] = value.value;
+                break;
+
             case RecsType.Number:
                 acc[key] = Number(value.value);
                 break;
