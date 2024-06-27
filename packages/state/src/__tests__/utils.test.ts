@@ -10,13 +10,28 @@ describe("convertValues", () => {
             const schema = { hugeNumber: RecsType.BigInt };
             const values = {
                 hugeNumber: {
-                    value: 123456789101231231231231232132132132132132132131231231231223132,
+                    value: "000000000000000000000000000000000000000000000000000000000000000b",
                 },
             };
             const result = convertValues(schema, values);
             expect(result.hugeNumber).toBe(
                 BigInt(
-                    123456789101231231231231232132132132132132132131231231231223132
+                    "0x000000000000000000000000000000000000000000000000000000000000000b"
+                )
+            );
+        });
+
+        it("should correctly convert huge BigInt values", () => {
+            const schema = { hugeNumber: RecsType.BigInt };
+            const values = {
+                hugeNumber: {
+                    value: "7f000000000000000000000000000000000000000000000000000000103fffff",
+                },
+            };
+            const result = convertValues(schema, values);
+            expect(result.hugeNumber).toBe(
+                BigInt(
+                    "0x7f000000000000000000000000000000000000000000000000000000103fffff"
                 )
             );
         });

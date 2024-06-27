@@ -49,7 +49,8 @@ export function convertValues(schema: Schema, values: any) {
                     console.warn(
                         `Failed to convert ${value.value} to BigInt. Using string value instead.`
                     );
-                    acc[key] = value.value;
+
+                    acc[key] = BigInt(`0x${value.value}`);
                 }
                 break;
 
