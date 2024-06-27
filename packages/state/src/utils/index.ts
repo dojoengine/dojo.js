@@ -34,7 +34,7 @@ export function convertValues(schema: Schema, values: any) {
                 break;
 
             case RecsType.BigInt:
-                acc[key] = BigInt(value.value);
+                acc[key] = BigInt(value.value.toString());
                 break;
 
             case RecsType.Boolean:
