@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import { getContractByName, parseModelName } from "../../src/utils";
-import manifest from "../../src/utils/manifest.json";
+import { getContractByName, parseModelName } from "../../utils";
+import manifest from "../../utils/manifest.json";
 
 test("get address by contract name", () => {
     expect(getContractByName(manifest, "actions")?.address).toBe(

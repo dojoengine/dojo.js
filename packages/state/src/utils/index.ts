@@ -25,7 +25,16 @@ export function convertValues(schema: Schema, values: any) {
                         (item: any) => item.value.option
                     );
                 } else {
-                    acc[key] = value.value.map((a: any) => Number(a.value));
+                    acc[key] = value.value.map((a: any) => {
+                        try {
+                            return BigInt(a.value);
+                        } catch (error) {
+                            console.warn(
+                                `Failed to convert ${a.value} to BigInt. Using string value instead.`
+                            );
+                            return a.value;
+                        }
+                    });
                 }
                 break;
 
@@ -34,7 +43,15 @@ export function convertValues(schema: Schema, values: any) {
                 break;
 
             case RecsType.BigInt:
-                acc[key] = BigInt(value.value.toString());
+                try {
+                    acc[key] = BigInt(value.value);
+                } catch (error) {
+                    console.warn(
+                        `Failed to convert ${value.value} to BigInt. Using string value instead.`
+                    );
+
+                    acc[key] = BigInt(`0x${value.value}`);
+                }
                 break;
 
             case RecsType.Boolean:

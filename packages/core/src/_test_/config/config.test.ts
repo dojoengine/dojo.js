@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { createDojoConfig } from "../../src/config/index";
+import { createDojoConfig } from "../../config/index";
 
 describe("config", () => {
     it("should return an object of type DojoConfigParams", async () => {

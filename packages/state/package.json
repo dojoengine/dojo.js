@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/state",
-    "version": "0.7.8",
+    "version": "0.7.9-alpha.1",
     "description": "State sync for dojo",
     "author": "Loaf",
     "license": "MIT",
@@ -8,7 +8,7 @@
     "type": "module",
     "scripts": {
         "build": "tsup --dts-resolve",
-        "test": "jest"
+        "test": "vitest"
     },
     "exports": {
         ".": {
@@ -27,6 +27,7 @@
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/torii-client": "workspace:*",
         "@latticexyz/utils": "^2.0.0-next.11",
+        "vitest": "^1.6.0",
         "zustand": "^4.5.2"
     }
 }

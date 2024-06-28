@@ -1010,6 +1010,9 @@ importers:
       starknet:
         specifier: ^6.1.5
         version: 6.10.0(encoding@0.1.13)
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.14.8)(jsdom@24.1.0)(terser@5.31.1)
       zustand:
         specifier: ^4.5.2
         version: 4.5.2(@types/react@18.3.3)(react@18.3.1)
