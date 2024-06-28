@@ -10,13 +10,13 @@ describe("convertValues", () => {
             const schema = { hugeNumber: RecsType.BigInt };
             const values = {
                 hugeNumber: {
-                    value: "000000000000000000000000000000000000000000000000000000000000000b",
+                    value: "1000000000000000000000000000000000000000000000000000000000000001",
                 },
             };
             const result = convertValues(schema, values);
             expect(result.hugeNumber).toBe(
                 BigInt(
-                    "0x000000000000000000000000000000000000000000000000000000000000000b"
+                    "1000000000000000000000000000000000000000000000000000000000000001"
                 )
             );
         });
