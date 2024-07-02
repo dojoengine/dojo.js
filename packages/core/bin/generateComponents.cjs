@@ -6,7 +6,7 @@ const { execSync } = require("child_process");
 
 const parseModelName = (model) => {
     // Define a set of known acronyms
-    const acronyms = new Set(["ERC"]);
+    const acronyms = new Set(["ERC", "SRC"]);
 
     return model.name
         .split("::")
