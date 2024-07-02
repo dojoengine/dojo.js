@@ -19,7 +19,7 @@ Dojo.js is the official JavaScript SDK for interacting with Dojo worlds. It is c
 
 Bootstrap a dojo world like so. You will need [dojo](https://github.com/dojoengine/dojo) installed.
 
-```console
+```bash
 npx @dojoengine/create-dojo
 ```
 
@@ -34,7 +34,7 @@ npx @dojoengine/create-dojo
 
 From the repository root, run the following to install all the necessary package dependencies:
 
-```console
+```bash
 pnpm i
 ```
 
@@ -44,13 +44,13 @@ pnpm i
 
 To build all packages, from the root directory, run:
 
-```console
+```bash
 pnpm run build
 ```
 
 To watch for changes on all packages in parallel, from the root directory, run:
 
-```console
+```bash
 pnpm run build-watch
 ```
 
@@ -58,7 +58,7 @@ pnpm run build-watch
 
 To install dojo-starter submodule (which allows interactions with the examples), run:
 
-```console
+```bash
 git submodule update --init --recursive
 ```
 
@@ -68,7 +68,7 @@ git submodule update --init --recursive
 
 If you have issues on WSL, install package first then run command:
 
-```console
+```bash
 npm i @dojoengine/create-dojo -g
 npx @dojoengine/create-dojo
 ```
@@ -79,22 +79,27 @@ To run the examples that have the linked packages, follow the steps below:
 
 **Terminal 1**: Set up the dojo starter with specific configurations.
 
-```console
+```bash
 cd examples/dojo-starter
-katana --disable-fee --block-time 1000
+katana --disable-fee --allowed-origins "*"
 ```
 
 **Terminal 2**: Build and migrate the dojo starter.
 
-```console
+```bash
 cd examples/dojo-starter
+
+# Build and migrate
 sozo build
-sozo migrate
+sozo migrate apply
+
+# Run Torii
+torii --world 0xb4079627ebab1cd3cf9fd075dda1ad2454a7a448bf659591f259efa2519b18 --allowed-origins "*"
 ```
 
-**Terminal 3**: Start the React app.
+**Terminal 3**: Start the App
 
-```console
+```bash
 cd examples/<package>
 pnpm install
 pnpm run dev
