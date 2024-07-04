@@ -14,7 +14,7 @@
     "peerDependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "starknet": "^6.1.5"
+        "starknet": "6.1.5"
     },
     "exports": {
         ".": {
