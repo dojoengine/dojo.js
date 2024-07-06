@@ -1,19 +1,30 @@
-import { useComponentValue } from "@dojoengine/react";
+import { useComponentValue, useQuerySync } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
+import { getSyncEntities } from "@dojoengine/state";
+import { Subscription } from "@dojoengine/torii-client";
 
 function App() {
     const {
         setup: {
             systemCalls: { spawn, move },
             clientComponents: { Position, Moves, DirectionsAvailable },
+            toriiClient,
+            contractComponents,
         },
         account,
     } = useDojo();
+
+    useQuerySync(
+        toriiClient,
+        contractComponents as any,
+        ["Moves", "Position", "DirectionsAvailable"],
+        [account?.account.address.toString()]
+    );
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
