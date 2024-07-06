@@ -13,18 +13,18 @@ import { convertValues } from "../utils";
  * Fetches and synchronizes entities with their components.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
- * @param entities - An array of entities to synchronize.
+ * @param entityKeyClause - An array of entities to synchronize.
  * @param limit - The maximum number of entities to fetch per request (default: 100).
  * @returns A promise that resolves when synchronization is complete.
  */
 export const getSyncEntities = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[],
-    entities: EntityKeysClause | undefined,
+    entityKeyClause: EntityKeysClause | undefined,
     limit: number = 100
 ) => {
     await getEntities(client, components, limit);
-    return await syncEntities(client, components, entities);
+    return await syncEntities(client, components, entityKeyClause);
 };
 
 /**
@@ -63,8 +63,8 @@ export const getEntities = async <S extends Schema>(
  */
 export const getEntitiesQuery = async <S extends Schema>(
     client: Client,
-    entities: EntityKeysClause | undefined,
     components: Component<S, Metadata, undefined>[],
+    entities: EntityKeysClause | undefined,
     limit: number = 1000
 ) => {
     let cursor = 0;
@@ -114,11 +114,14 @@ export const getEntitiesQuery = async <S extends Schema>(
 export const syncEntities = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[],
-    entities: EntityKeysClause | undefined
+    entityKeyClause: EntityKeysClause | undefined
 ) => {
-    return await client.onEntityUpdated(entities, (entities: any) => {
-        setEntities(entities, components);
-    });
+    return await client.onEntityUpdated(
+        entityKeyClause,
+        (fetchedEntities: any) => {
+            setEntities(fetchedEntities, components);
+        }
+    );
 };
 
 /**
@@ -127,9 +130,11 @@ export const syncEntities = async <S extends Schema>(
  * @param components - An array of component definitions.
  */
 export const setEntities = async <S extends Schema>(
-    entities: any[],
+    entities: any,
     components: Component<S, Metadata, undefined>[]
 ) => {
+    console.log(entities);
+    console.log(components);
     for (let key in entities) {
         if (entities.hasOwnProperty(key)) {
             for (let componentName in entities[key]) {

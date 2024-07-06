@@ -29,9 +29,9 @@ export async function setup({ ...config }: DojoConfig) {
     // fetch all existing entities from torii
     const sync = await getSyncEntities(toriiClient, contractComponents as any, {
         Keys: {
-            keys: [],
-            models: [],
-            pattern_matching: "FixedLen",
+            keys: ["player"],
+            models: ["Moves"],
+            pattern_matching: "VariableLen",
         },
     });
 
