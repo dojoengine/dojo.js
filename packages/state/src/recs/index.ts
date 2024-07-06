@@ -6,7 +6,7 @@ import {
     Schema,
     setComponent,
 } from "@dojoengine/recs";
-import { Client } from "@dojoengine/torii-client";
+import { Clause, Client, EntityKeysClause } from "@dojoengine/torii-client";
 import { convertValues } from "../utils";
 
 /**
@@ -20,7 +20,7 @@ import { convertValues } from "../utils";
 export const getSyncEntities = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[],
-    entities: any[],
+    entities: EntityKeysClause | undefined,
     limit: number = 100
 ) => {
     await getEntities(client, components, limit);
@@ -55,6 +55,56 @@ export const getEntities = async <S extends Schema>(
 };
 
 /**
+ * Fetches all entities and their components from the client.
+ * @param client - The client instance for API communication.
+ * @param entities - An optional EntityKeysClause to filter entities.
+ * @param components - An array of component definitions.
+ * @param limit - The maximum number of entities to fetch per request (default: 100).
+ */
+export const getEntitiesQuery = async <S extends Schema>(
+    client: Client,
+    entities: EntityKeysClause | undefined,
+    components: Component<S, Metadata, undefined>[],
+    limit: number = 1000
+) => {
+    let cursor = 0;
+    let continueFetching = true;
+
+    while (continueFetching) {
+        const clause: Clause | null = entities
+            ? {
+                  Keys: {
+                      keys:
+                          "HashedKeys" in entities
+                              ? entities.HashedKeys
+                              : entities.Keys.keys,
+                      pattern_matching: "FixedLen",
+                      models: [
+                          ...components.map(
+                              (c) => (c.metadata?.name as string) || ""
+                          ),
+                      ],
+                  },
+              }
+            : null;
+
+        const fetchedEntities = await client.getEntities({
+            limit,
+            offset: cursor,
+            clause,
+        });
+
+        setEntities(fetchedEntities, components);
+
+        if (Object.keys(fetchedEntities).length < limit) {
+            continueFetching = false;
+        } else {
+            cursor += limit;
+        }
+    }
+};
+
+/**
  * Sets up a subscription to sync entity updates.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
@@ -64,7 +114,7 @@ export const getEntities = async <S extends Schema>(
 export const syncEntities = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[],
-    entities: any[]
+    entities: EntityKeysClause | undefined
 ) => {
     return await client.onEntityUpdated(entities, (entities: any) => {
         setEntities(entities, components);

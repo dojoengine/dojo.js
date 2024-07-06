@@ -13,7 +13,7 @@ export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
 export async function setup({ ...config }: DojoConfig) {
     // torii client
-    const toriiClient = await torii.createClient([], {
+    const toriiClient = await torii.createClient({
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
         relayUrl: "",
@@ -27,11 +27,13 @@ export async function setup({ ...config }: DojoConfig) {
     const clientComponents = createClientComponents({ contractComponents });
 
     // fetch all existing entities from torii
-    const sync = await getSyncEntities(
-        toriiClient,
-        contractComponents as any,
-        []
-    );
+    const sync = await getSyncEntities(toriiClient, contractComponents as any, {
+        Keys: {
+            keys: [],
+            models: [],
+            pattern_matching: "FixedLen",
+        },
+    });
 
     // create dojo provider
     const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl);

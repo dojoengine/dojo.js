@@ -4,7 +4,7 @@
 set -ex
 
 # # Clone the repository
-git clone --depth 1 --branch v0.7.0 https://github.com/dojoengine/dojo.c dojo.c
+git clone --depth 1 --branch v0.7.3 https://github.com/dojoengine/dojo.c dojo.c
 cd dojo.c
 
 set -ex
