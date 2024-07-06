@@ -18,7 +18,7 @@
         "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/utils": "workspace:*",
         "@latticexyz/utils": "^1.43.0",
-        "starknet": "^6.1.5",
+        "starknet": "6.1.5",
         "vite-plugin-top-level-await": "^1.4.1",
         "vite-plugin-wasm": "^3.3.0",
         "vue": "^3.4.19"
