@@ -7,6 +7,14 @@ import {
 } from "@dojoengine/torii-client";
 import { getSyncEntities } from "@dojoengine/state";
 
+/**
+ * Synchronizes entities with their components.
+ * @param toriiClient - The client instance for API communication.
+ * @param components - An array of component definitions.
+ * @param models - An array of models to synchronize.
+ * @param keys - An array of keys to synchronize.
+ * @param patternMatching - The pattern matching strategy to use (default: "VariableLen").
+ */
 export function useQuerySync<S extends Schema>(
     toriiClient: Client,
     components: Component<S, Metadata, undefined>[],
@@ -16,15 +24,13 @@ export function useQuerySync<S extends Schema>(
 ) {
     const setupSync = useCallback(async () => {
         try {
-            const sync = await getSyncEntities(toriiClient, components, {
+            return await getSyncEntities(toriiClient, components, {
                 Keys: {
                     keys,
                     models,
                     pattern_matching: patternMatching,
                 },
             });
-
-            return sync;
         } catch (error) {
             throw error;
         }
