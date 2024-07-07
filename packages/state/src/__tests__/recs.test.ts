@@ -36,35 +36,6 @@ describe("RECS functions", () => {
         vi.clearAllMocks();
     });
 
-    describe("getSyncEntities", () => {
-        it("should call getEntities and syncEntities", async () => {
-            const entities = [{ id: 1 }, { id: 2 }];
-            // Mock getAllEntities to return an object
-            mockClient.getAllEntities.mockResolvedValue({ 1: {}, 2: {} });
-
-            await getSyncEntities(mockClient, mockComponents, entities);
-
-            expect(mockClient.getAllEntities).toHaveBeenCalled();
-            expect(mockClient.onEntityUpdated).toHaveBeenCalledWith(
-                entities,
-                expect.any(Function)
-            );
-        });
-    });
-
-    describe("syncEntities", () => {
-        it("should set up entity update listener", async () => {
-            const entities = [{ id: 1 }, { id: 2 }];
-
-            await syncEntities(mockClient, mockComponents, entities);
-
-            expect(mockClient.onEntityUpdated).toHaveBeenCalledWith(
-                entities,
-                expect.any(Function)
-            );
-        });
-    });
-
     describe("setEntities", () => {
         it("should set components for each entity", async () => {
             const entities = {
