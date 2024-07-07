@@ -5,8 +5,6 @@ import "./App.css";
 import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
-import { getSyncEntities } from "@dojoengine/state";
-import { Subscription } from "@dojoengine/torii-client";
 
 function App() {
     const {

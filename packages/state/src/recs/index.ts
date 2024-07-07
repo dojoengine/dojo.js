@@ -57,27 +57,27 @@ export const getEntities = async <S extends Schema>(
 /**
  * Fetches all entities and their components from the client.
  * @param client - The client instance for API communication.
- * @param entities - An optional EntityKeysClause to filter entities.
+ * @param entityKeyClause - An optional EntityKeysClause to filter entities.
  * @param components - An array of component definitions.
  * @param limit - The maximum number of entities to fetch per request (default: 100).
  */
 export const getEntitiesQuery = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[],
-    entities: EntityKeysClause | undefined,
+    entityKeyClause: EntityKeysClause | undefined,
     limit: number = 1000
 ) => {
     let cursor = 0;
     let continueFetching = true;
 
     while (continueFetching) {
-        const clause: Clause | null = entities
+        const clause: Clause | null = entityKeyClause
             ? {
                   Keys: {
                       keys:
-                          "HashedKeys" in entities
-                              ? entities.HashedKeys
-                              : entities.Keys.keys,
+                          "HashedKeys" in entityKeyClause
+                              ? entityKeyClause.HashedKeys
+                              : entityKeyClause.Keys.keys,
                       pattern_matching: "FixedLen",
                       models: [
                           ...components.map(
@@ -108,7 +108,7 @@ export const getEntitiesQuery = async <S extends Schema>(
  * Sets up a subscription to sync entity updates.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
- * @param entities - An array of entities to watch for updates.
+ * @param entityKeyClause - An optional EntityKeysClause to filter entities.
  * @returns A promise that resolves with the subscription handler.
  */
 export const syncEntities = async <S extends Schema>(
