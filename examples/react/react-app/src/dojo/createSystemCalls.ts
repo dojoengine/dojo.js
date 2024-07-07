@@ -1,8 +1,10 @@
 import { AccountInterface } from "starknet";
 import {
     Entity,
+    Has,
+    HasValue,
     World,
-    defineComponentSystem,
+    defineSystem,
     getComponentValue,
 } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
@@ -53,13 +55,16 @@ export function createSystemCalls(
             // Wait for the indexer to update the entity
             // By doing this we keep the optimistic UI in sync with the actual state
             await new Promise<void>((resolve) => {
-                defineComponentSystem(world, Moves, (update) => {
-                    const { value } = update;
-
-                    if (value[0]?.player === BigInt(account.address)) {
+                defineSystem(
+                    world,
+                    [
+                        Has(Moves),
+                        HasValue(Moves, { player: BigInt(account.address) }),
+                    ],
+                    () => {
                         resolve();
                     }
-                });
+                );
             });
         } catch (e) {
             console.log(e);
@@ -109,13 +114,16 @@ export function createSystemCalls(
             // Wait for the indexer to update the entity
             // By doing this we keep the optimistic UI in sync with the actual state
             await new Promise<void>((resolve) => {
-                defineComponentSystem(world, Moves, (update) => {
-                    const { value } = update;
-
-                    if (value[0]?.player === BigInt(account.address)) {
+                defineSystem(
+                    world,
+                    [
+                        Has(Moves),
+                        HasValue(Moves, { player: BigInt(account.address) }),
+                    ],
+                    () => {
                         resolve();
                     }
-                });
+                );
             });
         } catch (e) {
             console.log(e);
