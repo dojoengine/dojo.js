@@ -105,22 +105,27 @@ function App() {
             <div className="card">
                 <button onClick={() => spawn(account.account)}>Spawn</button>
                 <div>
-                    Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
+                    Moves Left:{" "}
+                    <b>{moves ? `${moves.remaining}` : "Need to Spawn"}</b>
                 </div>
                 <div>
                     Position:{" "}
-                    {position
-                        ? `${position?.vec.x}, ${position?.vec.y}`
-                        : "Need to Spawn"}
+                    <b>
+                        {position
+                            ? `${position.vec.x}, ${position.vec.y}`
+                            : "Need to Spawn"}
+                    </b>
                 </div>
 
-                <div>{moves && moves.last_direction}</div>
+                <div>
+                    Last Direction: <b>{moves?.last_direction}</b>
+                </div>
 
                 <div>
-                    <div>Available Positions</div>
+                    <div>Available Positions:</div>
                     {directions?.directions.map((a: any, index: any) => (
                         <div key={index} className="">
-                            {a}
+                            <b>{a}</b>
                         </div>
                     ))}
                 </div>
