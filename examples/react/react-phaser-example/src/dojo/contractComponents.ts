@@ -10,7 +10,7 @@ export function defineContractComponents(world: World) {
                 {
                     player: RecsType.BigInt,
                     remaining: RecsType.Number,
-                    last_direction: RecsType.Number,
+                    last_direction: RecsType.String,
                 },
                 {
                     metadata: {

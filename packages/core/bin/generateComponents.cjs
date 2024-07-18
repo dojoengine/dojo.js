@@ -177,7 +177,7 @@ function parseSchemaStruct(content, types, customTypes) {
 }
 
 function parseSchemaEnum(_schema) {
-    return "RecsType.Number";
+    return "RecsType.String";
 }
 
 function parseSchemaTuple(content, types, customTypes) {
