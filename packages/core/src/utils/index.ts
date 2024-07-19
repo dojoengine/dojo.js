@@ -9,13 +9,13 @@ import { DojoCall } from "../types";
  * @returns {any} The contract object.
  *
  */
-export const getContractByName = (manifest: any, name: string) => {
+export const getContractByName = (
+    manifest: any,
+    nameSpace: string,
+    name: string
+) => {
     return manifest.contracts.find((contract: any) => {
-        const nameParts = contract.name.split("::");
-        // Check if the last part matches or if the full name matches
-        return (
-            nameParts[nameParts.length - 1] === name || contract.name === name
-        );
+        return contract.tag === nameSpace + "-" + name;
     });
 };
 
@@ -27,9 +27,17 @@ export const getContractByName = (manifest: any, name: string) => {
  * @returns {Call} The contract object.
  *
  */
-export const parseDojoCall = (manifest: any, call: DojoCall | Call): Call => {
+export const parseDojoCall = (
+    manifest: any,
+    nameSpace: string,
+    call: DojoCall | Call
+): Call => {
     if ("contractName" in call) {
-        const contract = getContractByName(manifest, call.contractName);
+        const contract = getContractByName(
+            manifest,
+            nameSpace,
+            call.contractName
+        );
 
         return {
             contractAddress: contract.address,

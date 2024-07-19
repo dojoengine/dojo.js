@@ -1,5 +1,9 @@
-import { useComponentValue, useQuerySync } from "@dojoengine/react";
-import { Entity } from "@dojoengine/recs";
+import {
+    useComponentValue,
+    useEntityQuery,
+    useQuerySync,
+} from "@dojoengine/react";
+import { Entity, HasValue } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Direction } from "./utils";
@@ -23,6 +27,8 @@ function App() {
         ["Moves", "Position", "DirectionsAvailable"],
         [account?.account.address.toString()]
     );
+
+    // get entites = filter by
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",

@@ -17,7 +17,7 @@
         }
     },
     "peerDependencies": {
-        "starknet": "6.1.5"
+        "starknet": "6.11.0"
     },
     "devDependencies": {
         "@dojoengine/torii-client": "workspace:*",

@@ -184,11 +184,15 @@ export const setEntities = async <S extends Schema>(
     entities: any,
     components: Component<S, Metadata, undefined>[]
 ) => {
+    console.log(entities, components);
     for (let key in entities) {
         if (entities.hasOwnProperty(key)) {
             for (let componentName in entities[key]) {
                 if (entities[key].hasOwnProperty(componentName)) {
-                    let recsComponent = components[componentName as any];
+                    let recsComponent = Object.values(components).find(
+                        (component) =>
+                            component.metadata?.name === componentName
+                    );
 
                     if (recsComponent) {
                         setComponent(

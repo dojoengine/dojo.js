@@ -81,7 +81,7 @@ manifest.models.forEach((model) => {
     const types = [];
     const customTypes = [];
 
-    let modelName = parseModelName(model);
+    let modelName = model.tag;
 
     try {
         const output = execSync(
