@@ -1,11 +1,7 @@
-import {
-    useComponentValue,
-    useEntityQuery,
-    useQuerySync,
-} from "@dojoengine/react";
-import { Entity, HasValue } from "@dojoengine/recs";
-import { useEffect, useState } from "react";
 import "./App.css";
+import { useComponentValue, useQuerySync } from "@dojoengine/react";
+import { Entity } from "@dojoengine/recs";
+import { useEffect, useState } from "react";
 import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
@@ -21,14 +17,15 @@ function App() {
         account,
     } = useDojo();
 
-    useQuerySync(
-        toriiClient,
-        contractComponents as any,
-        ["Moves", "Position", "DirectionsAvailable"],
-        [account?.account.address.toString()]
-    );
-
-    // get entites = filter by
+    useQuerySync(toriiClient, contractComponents as any, [
+        {
+            Keys: {
+                keys: [BigInt(account?.account.address).toString()],
+                models: ["Position", "Moves", "DirectionsAvailable"],
+                pattern_matching: "FixedLen",
+            },
+        },
+    ]);
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",

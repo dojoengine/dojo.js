@@ -42,7 +42,7 @@ import { convertValues } from "../utils";
 export const getSyncEntities = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[],
-    entityKeyClause: EntityKeysClause | undefined,
+    entityKeyClause: EntityKeysClause[],
     limit: number = 100
 ) => {
     await getEntities(client, components, limit);
@@ -165,7 +165,7 @@ export const getEntitiesQuery = async <S extends Schema>(
 export const syncEntities = async <S extends Schema>(
     client: Client,
     components: Component<S, Metadata, undefined>[],
-    entityKeyClause: EntityKeysClause | undefined
+    entityKeyClause: EntityKeysClause[]
 ) => {
     return await client.onEntityUpdated(
         entityKeyClause,
