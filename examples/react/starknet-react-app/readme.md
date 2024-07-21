@@ -1,3 +1,0 @@
-## Starknet React App
-
-WIP -

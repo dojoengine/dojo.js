@@ -245,11 +245,13 @@ export class DojoProvider extends Provider {
     /**
      * Calls a function with the given parameters.
      *
-     * ```ts
-     * let result = await provider.callRaw({ contractName, entrypoint, calldata });
-     * ```
+     * @param {string} nameSpace - The namespace of the contract within the world
      * @param {DojoCall | Call} call - The dojoCall or call
      * @returns {Promise<CallContractResponse>} - A promise that resolves to the response of the function call.
+     * @throws {Error} - Throws an error if the call fails.
+     *
+     * @example
+     * const result = await provider.callRaw("namespace", { contractAddress, entrypoint, calldata });
      */
     async callRaw(
         nameSpace: string,

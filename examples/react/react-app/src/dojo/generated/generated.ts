@@ -2,17 +2,28 @@ import { Account, AccountInterface } from "starknet";
 import { DojoProvider } from "@dojoengine/core";
 import { Direction } from "../../utils";
 
-export type IWorld = Awaited<ReturnType<typeof setupWorld>>;
+const NAMESPACE = "dojo_starter";
+
+export interface IWorld {
+    actions: {
+        spawn: (props: { account: AccountInterface }) => Promise<any>;
+        move: (props: MoveProps) => Promise<any>;
+    };
+}
 
 export interface MoveProps {
     account: Account | AccountInterface;
     direction: Direction;
 }
 
-export async function setupWorld(provider: DojoProvider) {
-    const nameSpace = "dojo_starter";
-    function actions() {
-        const spawn = async ({ account }: { account: AccountInterface }) => {
+const handleError = (action: string, error: unknown) => {
+    console.error(`Error executing ${action}:`, error);
+    throw error;
+};
+
+export const setupWorld = async (provider: DojoProvider): Promise<IWorld> => {
+    const actions = () => ({
+        spawn: async ({ account }: { account: AccountInterface }) => {
             try {
                 return await provider.execute(
                     account,
@@ -21,15 +32,14 @@ export async function setupWorld(provider: DojoProvider) {
                         entrypoint: "spawn",
                         calldata: [],
                     },
-                    nameSpace
+                    NAMESPACE
                 );
             } catch (error) {
-                console.error("Error executing spawn:", error);
-                throw error;
+                handleError("spawn", error);
             }
-        };
+        },
 
-        const move = async ({ account, direction }: MoveProps) => {
+        move: async ({ account, direction }: MoveProps) => {
             try {
                 return await provider.execute(
                     account,
@@ -38,16 +48,13 @@ export async function setupWorld(provider: DojoProvider) {
                         entrypoint: "move",
                         calldata: [direction],
                     },
-                    nameSpace
+                    NAMESPACE
                 );
             } catch (error) {
-                console.error("Error executing move:", error);
-                throw error;
+                handleError("move", error);
             }
-        };
-        return { spawn, move };
-    }
-    return {
-        actions: actions(),
-    };
-}
+        },
+    });
+
+    return { actions: actions() };
+};

@@ -33,7 +33,7 @@ export async function setup({ ...config }: DojoConfig) {
     const sync = await getSyncEntities(
         toriiClient,
         contractComponents as any,
-        undefined // syncs all entities
+        []
     );
 
     const client = await setupWorld(
