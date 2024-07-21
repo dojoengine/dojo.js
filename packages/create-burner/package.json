@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/create-burner",
-    "version": "0.7.9",
+    "version": "0.7.10-alpha.0",
     "description": "Useful hooks and functions to create a Starknet burner wallet",
     "author": "Loaf",
     "license": "MIT",
@@ -14,7 +14,7 @@
     "peerDependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "starknet": "6.1.5"
+        "starknet": "6.11.0"
     },
     "exports": {
         ".": {

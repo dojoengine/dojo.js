@@ -13,7 +13,7 @@ export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
 export async function setup({ ...config }: DojoConfig) {
     // torii client
-    const toriiClient = await torii.createClient([], {
+    const toriiClient = await torii.createClient({
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
         relayUrl: "",
@@ -27,11 +27,6 @@ export async function setup({ ...config }: DojoConfig) {
     const clientComponents = createClientComponents({ contractComponents });
 
     // fetch all existing entities from torii
-    const sync = await getSyncEntities(
-        toriiClient,
-        contractComponents as any,
-        []
-    );
 
     // create dojo provider
     const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl);
@@ -66,11 +61,7 @@ export async function setup({ ...config }: DojoConfig) {
         client,
         clientComponents,
         contractComponents,
-        systemCalls: createSystemCalls(
-            { client },
-            contractComponents,
-            clientComponents
-        ),
+        systemCalls: createSystemCalls({ client }, clientComponents, world),
         publish: (typedData: string, signature: WeierstrassSignatureType) => {
             toriiClient.publishMessage(typedData, {
                 r: signature.r.toString(),
@@ -81,6 +72,6 @@ export async function setup({ ...config }: DojoConfig) {
         dojoProvider,
         burnerManager,
         toriiClient,
-        sync,
+        // sync,
     };
 }

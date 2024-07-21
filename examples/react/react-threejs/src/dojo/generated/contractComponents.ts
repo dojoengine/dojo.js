@@ -12,6 +12,19 @@ export type ContractComponents = Awaited<
 
 export function defineContractComponents(world: World) {
     return {
+        DirectionsAvailable: (() => {
+            return defineComponent(
+                world,
+                { player: RecsType.BigInt, directions: RecsType.StringArray },
+                {
+                    metadata: {
+                        name: "dojo_starter-DirectionsAvailable",
+                        types: ["contractaddress"],
+                        customTypes: ["Direction"],
+                    },
+                }
+            );
+        })(),
         Moves: (() => {
             return defineComponent(
                 world,
@@ -19,11 +32,12 @@ export function defineContractComponents(world: World) {
                     player: RecsType.BigInt,
                     remaining: RecsType.Number,
                     last_direction: RecsType.Number,
+                    can_move: RecsType.Boolean,
                 },
                 {
                     metadata: {
-                        name: "Moves",
-                        types: ["contractaddress", "u8", "enum"],
+                        name: "dojo_starter-Moves",
+                        types: ["contractaddress", "u8", "enum", "bool"],
                         customTypes: ["Direction"],
                     },
                 }
@@ -38,7 +52,7 @@ export function defineContractComponents(world: World) {
                 },
                 {
                     metadata: {
-                        name: "Position",
+                        name: "dojo_starter-Position",
                         types: ["contractaddress", "u32", "u32"],
                         customTypes: ["Vec2"],
                     },

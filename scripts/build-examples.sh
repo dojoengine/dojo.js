@@ -6,7 +6,6 @@ set -e
 # Build commands for each example
 pnpm run build-phaser
 pnpm run build-react-app
-pnpm run build-starknet-react-app
 pnpm run build-threejs
 pnpm run build-react-pwa-app
 pnpm run build-vue-app

@@ -184,10 +184,13 @@ export class DojoProvider extends Provider {
     public async execute(
         account: Account | AccountInterface,
         call: AllowArray<DojoCall | Call>,
+        nameSpace: string,
         details: UniversalDetails = {}
     ): Promise<InvokeFunctionResponse> {
         const dojoCalls = Array.isArray(call) ? call : [call];
-        const calls = dojoCalls.map((i) => parseDojoCall(this.manifest, i));
+        const calls = dojoCalls.map((i) =>
+            parseDojoCall(this.manifest, nameSpace, i)
+        );
 
         try {
             return await account?.execute(calls, undefined, details);
@@ -206,11 +209,15 @@ export class DojoProvider extends Provider {
      * @param {DojoCall | Call} call - The dojoCall or call
      * @returns {Promise<Result>} - A promise that resolves to the response of the function call.
      */
-    public async call(call: DojoCall | Call): Promise<Result> {
+    public async call(
+        nameSpace: string,
+        call: DojoCall | Call
+    ): Promise<Result> {
         if ("contractName" in call) {
             try {
                 const contractInfos = getContractByName(
                     this.manifest,
+                    nameSpace,
                     call.contractName
                 );
                 const contract = new Contract(
@@ -231,21 +238,26 @@ export class DojoProvider extends Provider {
                 );
             }
         } else {
-            return this.callRaw(call);
+            return this.callRaw(nameSpace, call);
         }
     }
 
     /**
      * Calls a function with the given parameters.
      *
-     * ```ts
-     * let result = await provider.callRaw({ contractName, entrypoint, calldata });
-     * ```
+     * @param {string} nameSpace - The namespace of the contract within the world
      * @param {DojoCall | Call} call - The dojoCall or call
      * @returns {Promise<CallContractResponse>} - A promise that resolves to the response of the function call.
+     * @throws {Error} - Throws an error if the call fails.
+     *
+     * @example
+     * const result = await provider.callRaw("namespace", { contractAddress, entrypoint, calldata });
      */
-    async callRaw(call: DojoCall | Call): Promise<CallContractResponse> {
-        const parsedCall = parseDojoCall(this.manifest, call);
+    async callRaw(
+        nameSpace: string,
+        call: DojoCall | Call
+    ): Promise<CallContractResponse> {
+        const parsedCall = parseDojoCall(this.manifest, nameSpace, call);
         try {
             return await this.provider.callContract(parsedCall);
         } catch (error) {

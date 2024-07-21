@@ -1,2 +1,2 @@
 export * from "./recs";
-export * from "./findAndSyncEntities";
+// export * from "./findAndSyncEntities";
