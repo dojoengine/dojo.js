@@ -15,6 +15,7 @@
         "build-threejs": "pnpm --dir examples/react/react-threejs build",
         "build-react-pwa-app": "pnpm --dir examples/react/react-pwa-app build",
         "build-vue-app": "pnpm --dir examples/vue/vue-app build",
+        "build-vanilla-phaser": "pnpm --dir examples/vanilla/vanilla-phaser build",
         "build": "bash ./scripts/build-packages.sh",
         "build-examples": "bash ./scripts/build-examples.sh",
         "test-create-burner": "pnpm --dir packages/create-burner test",
