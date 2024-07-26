@@ -21,7 +21,11 @@ function App() {
         {
             Keys: {
                 keys: [BigInt(account?.account.address).toString()],
-                models: ["Position", "Moves", "DirectionsAvailable"],
+                models: [
+                    "dojo_starter-Position",
+                    "dojo_starter-Moves",
+                    "dojo_starter-DirectionsAvailable",
+                ],
                 pattern_matching: "FixedLen",
             },
         },
