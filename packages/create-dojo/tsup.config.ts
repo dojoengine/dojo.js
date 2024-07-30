@@ -1,9 +1,9 @@
-import { defineConfig } from "tsup";
+import { defineConfig, Options } from "tsup";
 import { tsupConfig } from "../../tsup.config";
 
 export default defineConfig({
-    ...tsupConfig,
-    minify: false,
-    splitting: false,
-    outDir: "./bin",
+  ...(tsupConfig as Options),
+  minify: false,
+  splitting: false,
+  outDir: "./bin",
 });
