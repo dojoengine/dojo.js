@@ -10,11 +10,19 @@
     },
     "devDependencies": {
         "typescript": "^5.2.2",
-        "vite": "^5.3.4"
+        "vite": "^5.3.4",
+        "vite-plugin-wasm": "^3.3.0"
     },
     "dependencies": {
+        "@dojoengine/core": "workspace:*",
+        "@dojoengine/create-burner": "workspace:*",
+        "@dojoengine/recs": "2.0.13",
+        "@dojoengine/state": "workspace:*",
+        "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/utils": "workspace:*",
+        "@latticexyz/utils": "^2.0.12",
         "noise": "^0.0.0",
-        "phaser": "3.60.0-beta.14"
+        "phaser": "3.60.0-beta.14",
+        "starknet": "6.11.0"
     }
 }

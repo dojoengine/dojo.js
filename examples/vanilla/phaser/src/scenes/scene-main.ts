@@ -1,7 +1,8 @@
 import { Scene } from "phaser";
 import { Chunk } from "../entities";
-
+import { IDojo } from "../dojo/setup";
 export default class SceneMain extends Scene {
+    dojo: IDojo;
     chunkSize: number;
     tileSize: number;
     cameraSpeed: number;
@@ -12,8 +13,9 @@ export default class SceneMain extends Scene {
     keyA: Phaser.Input.Keyboard.Key | null;
     keyD: Phaser.Input.Keyboard.Key | null;
 
-    constructor() {
+    constructor(dojo: IDojo) {
         super({ key: "MainScene" });
+        this.dojo = dojo;
 
         this.chunkSize = 16;
         this.tileSize = 16;
