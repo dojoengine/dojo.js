@@ -10,7 +10,8 @@ import { setupWorld } from "./defineContractSystems.ts";
 
 import { DojoProvider } from "@dojoengine/core";
 import { BurnerManager } from "@dojoengine/create-burner";
-import { Account, RpcProvider } from "starknet";
+import { Account, RpcProvider, wallet } from "starknet";
+import { createClientComponents } from "./createClientComponent.ts";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 export type IDojo = Awaited<ReturnType<typeof setup>>;
@@ -25,10 +26,12 @@ export async function setup({ ...config }: Config) {
     });
 
     // create contract components
-    const contractModels = defineContractComponents(world);
+    const contractModels = createClientComponents({
+        contractComponents: defineContractComponents(world),
+    });
 
     // create client components
-    const clientModels = models({ contractModels });
+    const { models: clientModels } = models({ contractModels });
 
     // fetch all existing entities from torii
     const sync = await getSyncEntities(
@@ -67,16 +70,26 @@ export async function setup({ ...config }: Config) {
     } catch (e) {
         console.error(e);
     }
+    const actions = systems({
+        client,
+        clientModels,
+        contractComponents: contractModels,
+    });
+    const account = burnerManager.getActiveAccount();
+    if (null === account || undefined === account) {
+        throw new Error("failed to get active account");
+    }
 
     return {
         client,
         clientModels,
         contractComponents: clientModels,
-        systemCalls: systems({ client, clientModels }),
+        systemCalls: actions.actions,
         config,
         world,
         burnerManager,
         rpcProvider,
         sync,
+        account,
     };
 }

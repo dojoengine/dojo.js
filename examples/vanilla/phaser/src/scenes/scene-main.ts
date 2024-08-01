@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { Chunk } from "../entities";
 import { IDojo } from "../dojo/setup";
+import { Direction } from "../dojo/utils";
 export default class SceneMain extends Scene {
     dojo: IDojo;
     chunkSize: number;
@@ -69,6 +70,8 @@ export default class SceneMain extends Scene {
         this.keyD = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.D
         );
+
+        this.dojo.systemCalls.spawn(this.dojo.account);
     }
 
     getChunk(x: number, y: number) {
@@ -138,21 +141,25 @@ export default class SceneMain extends Scene {
         if (null !== this.keyW && this.keyW.isDown) {
             this.followPoint.y -= this.cameraSpeed;
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
+            this.dojo.systemCalls.move(this.dojo.account, Direction.Up);
             return;
         }
         if (null !== this.keyS && this.keyS.isDown) {
             this.followPoint.y += this.cameraSpeed;
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
+            this.dojo.systemCalls.move(this.dojo.account, Direction.Down);
             return;
         }
         if (null !== this.keyA && this.keyA.isDown) {
             this.followPoint.x -= this.cameraSpeed;
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
+            this.dojo.systemCalls.move(this.dojo.account, Direction.Left);
             return;
         }
         if (null !== this.keyD && this.keyD.isDown) {
             this.followPoint.x += this.cameraSpeed;
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
+            this.dojo.systemCalls.move(this.dojo.account, Direction.Right);
             return;
         }
 

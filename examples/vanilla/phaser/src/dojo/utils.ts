@@ -9,6 +9,8 @@ export function updatePositionWithDirection(
     direction: Direction,
     value: { vec: { x: number; y: number } }
 ) {
+    console.log(value);
+    debugger;
     switch (direction) {
         case Direction.Left:
             value.vec.x--;
