@@ -8,6 +8,11 @@ import {
     Schema,
 } from "@dojoengine/recs";
 import { poseidonHashMany } from "micro-starknet";
+import { byteArray, ByteArray } from "starknet";
+
+const STORE_SET_RECORD_EVENT_NAME =
+    "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d";
+const TAG_SEPARATOR = "-";
 
 /**
  * Filters events from a given receipt based on specific criteria.
@@ -16,12 +21,10 @@ import { poseidonHashMany } from "micro-starknet";
  * @returns {any[]} An array of events that meet the filtering criteria.
  */
 export function getEvents(receipt: any): any[] {
-    console.log(receipt);
     return receipt.events.filter((event: any) => {
         return (
             event.keys.length === 1 &&
-            event.keys[0] ===
-                "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d"
+            event.keys[0] === STORE_SET_RECORD_EVENT_NAME
         );
     });
 }
@@ -46,38 +49,57 @@ export function setComponentFromEvent(
     components: Components,
     eventData: string[]
 ) {
-    console.log(eventData);
+    const componentNames = getComponentNames(components);
     // retrieve the component name
-    const componentName = hexToAscii(eventData[0]);
+    try {
+        const componentName = getComponentNameFromEvent(
+            Array.from(componentNames.keys()),
+            eventData
+        );
+        // retrieve the component from name
+        const component =
+            components[componentNames.get(componentName) as string];
 
-    // retrieve the component from name
-    const component = components[componentName];
+        // get keys
+        const keysNumber = parseInt(eventData[1]);
+        let index = 2 + keysNumber + 1;
 
-    // get keys
-    const keysNumber = parseInt(eventData[1]);
-    let index = 2 + keysNumber + 1;
+        const keys = eventData
+            .slice(2, 2 + keysNumber)
+            .map((key) => BigInt(key));
 
-    const keys = eventData.slice(2, 2 + keysNumber).map((key) => BigInt(key));
+        // get entityIndex from keys
+        const entityIndex = getEntityIdFromKeys(keys);
 
-    // get entityIndex from keys
-    const entityIndex = getEntityIdFromKeys(keys);
+        // get values
+        const numberOfValues = parseInt(eventData[index]);
 
-    // get values
-    const numberOfValues = parseInt(eventData[index]);
+        const string_keys = keys.map((key) => key.toString());
 
-    const string_keys = keys.map((key) => key.toString());
+        // get values
+        const values = eventData.slice(index, index + numberOfValues);
 
-    // get values
-    const values = eventData.slice(index, index + numberOfValues);
+        // create component object from values with schema
+        const componentValues = decodeComponent(component, [
+            ...string_keys,
+            ...values,
+        ]);
 
-    // create component object from values with schema
-    const componentValues = decodeComponent(component, [
-        ...string_keys,
-        ...values,
-    ]);
+        // set component
+        setComponent(component, entityIndex, componentValues);
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-    // set component
-    setComponent(component, entityIndex, componentValues);
+// Extract component names from components
+function getComponentNames(components: Components): Map<string, string> {
+    let names = new Map<string, string>();
+    for (const key of Object.keys(components)) {
+        const c: Component = components[key];
+        names.set(c.metadata?.name as string, key);
+    }
+    return names;
 }
 
 /**
@@ -159,16 +181,75 @@ function decodeComponentValues(
 
 /**
  * Converts a hexadecimal string to an ASCII string.
- *
- * @param {string} hex - The hexadecimal string.
- * @returns {string} The converted ASCII string.
  */
-export function hexToAscii(hex: string) {
+export function hexToAscii(hex: string): string {
     var str = "";
     for (var n = 2; n < hex.length; n += 2) {
         str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
     }
     return str;
+}
+
+/**
+ * Get the component name from felt event name
+ */
+export function getComponentNameFromEvent(
+    actions: string[],
+    event: string[]
+): string {
+    const actionFelt: Record<string, string> = actions.reduce(
+        (acc: Record<string, string>, action: string) => {
+            const parts = splitEventTag(action);
+            acc[getSelectorFromTag(parts[0], parts[1])] = action;
+            return acc;
+        },
+        {}
+    );
+    const eventName: string = event[0];
+    const action: string | undefined = actionFelt[eventName];
+    if (!action) {
+        throw new Error(
+            `Action ${eventName} not found in actions : ${actions}`
+        );
+    }
+    return action;
+}
+
+// Encodes big number to formatted hex string
+function toHexString(bn: bigint): string {
+    return "0x" + bn.toString(16);
+}
+
+// Computes dojo selector from namespace and event name
+export function getSelectorFromTag(namespace: string, event: string): string {
+    return toHexString(
+        poseidonHashMany([
+            computeByteArrayHash(namespace),
+            computeByteArrayHash(event),
+        ])
+    );
+}
+
+// Serializes a ByteArray to a bigint array
+function serializeByteArray(byteArray: ByteArray): bigint[] {
+    const result: bigint[] = [
+        BigInt(byteArray.data.length),
+        ...byteArray.data.map((word) => BigInt(word.toString())),
+        BigInt(byteArray.pending_word),
+        BigInt(byteArray.pending_word_len),
+    ];
+    return result;
+}
+
+// Poseidon hash of a string representated as a ByteArray
+export function computeByteArrayHash(str: string): bigint {
+    const bytes = byteArray.byteArrayFromString(str);
+    return poseidonHashMany(serializeByteArray(bytes));
+}
+
+// Splits selector name into namespace and event name
+export function splitEventTag(event: string): string[] {
+    return event.split(TAG_SEPARATOR);
 }
 
 /**
@@ -237,7 +318,6 @@ export function setComponentFromGraphQLEntity(
             {}
         );
 
-        // console.log(componentValues);
         setComponent(component, entityIndex, componentValues);
     });
 }

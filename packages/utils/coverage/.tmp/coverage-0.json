@@ -1,0 +1,38 @@
+{
+    "result": [
+        {
+            "scriptId": "576",
+            "url": "file:///Users/valentindosimont/www/dojo.js/packages/utils/src/_test_/utils/index.test.ts",
+            "functions": [
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 0, "endOffset": 1213, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 13, "endOffset": 1213, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 339, "endOffset": 467, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                },
+                {
+                    "functionName": "",
+                    "ranges": [
+                        { "startOffset": 400, "endOffset": 463, "count": 1 }
+                    ],
+                    "isBlockCoverage": true
+                }
+            ]
+        }
+    ]
+}
