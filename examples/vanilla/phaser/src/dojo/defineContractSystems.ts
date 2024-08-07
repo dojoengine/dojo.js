@@ -16,7 +16,7 @@ const handleError = (action: string, error: unknown) => {
 
 export type IWorld = Awaited<ReturnType<typeof setupWorld>>;
 
-export async function setupWorld(provider: DojoProvider, config: Config) {
+export async function setupWorld(provider: DojoProvider, _config: Config) {
     const actions = () => ({
         spawn: async ({ account }: { account: AccountInterface }) => {
             try {

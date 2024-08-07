@@ -45,22 +45,19 @@ export function systems({
             });
 
             try {
-                const { transaction_hash } = await client.actions.spawn({
+                const { transaction_hash } = (await client.actions.spawn({
                     account,
-                });
-                //   setComponentsFromEvents(
-                //     contractComponents,
-                //     getEvents(
-                //       await account.waitForTransaction(transaction_hash, {
-                //         retryInterval: 100,
-                //       })
-                //     )
-                //   );
+                })) as { transaction_hash: string };
+                setComponentsFromEvents(
+                    contractComponents,
+                    getEvents(
+                        await account.waitForTransaction(transaction_hash, {
+                            retryInterval: 100,
+                        })
+                    )
+                );
             } catch (e) {
-                console.log(e);
-                Position.removeOverride(positionId);
-                Moves.removeOverride(movesId);
-            } finally {
+                console.error(e);
                 Position.removeOverride(positionId);
                 Moves.removeOverride(movesId);
             }
@@ -74,7 +71,6 @@ export function systems({
                 BigInt(account.address),
             ]) as Entity;
 
-            console.log(direction, getComponentValue(Position, entityId));
             const positionId = uuid();
             Position.addOverride(positionId, {
                 entity: entityId,
@@ -99,10 +95,10 @@ export function systems({
             });
 
             try {
-                const { transaction_hash } = await client.actions.move({
+                const { transaction_hash } = (await client.actions.move({
                     account,
                     direction,
-                });
+                })) as { transaction_hash: string };
 
                 setComponentsFromEvents(
                     contractComponents,
@@ -114,9 +110,6 @@ export function systems({
                 );
             } catch (e) {
                 console.error(e);
-                Position.removeOverride(positionId);
-                Moves.removeOverride(movesId);
-            } finally {
                 Position.removeOverride(positionId);
                 Moves.removeOverride(movesId);
             }

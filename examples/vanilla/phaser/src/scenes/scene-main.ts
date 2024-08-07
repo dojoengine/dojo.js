@@ -8,7 +8,7 @@ export default class SceneMain extends Scene {
     tileSize: number;
     cameraSpeed: number;
     followPoint?: Phaser.Math.Vector2;
-    chunks: Chunk[];
+    chunks: Map<String, Chunk>;
     keyW: Phaser.Input.Keyboard.Key | null;
     keyS: Phaser.Input.Keyboard.Key | null;
     keyA: Phaser.Input.Keyboard.Key | null;
@@ -21,11 +21,12 @@ export default class SceneMain extends Scene {
         this.chunkSize = 16;
         this.tileSize = 16;
         this.cameraSpeed = 2;
-        this.chunks = [];
+        this.chunks = new Map<string, Chunk>();
         this.keyW = null;
         this.keyS = null;
         this.keyA = null;
         this.keyD = null;
+        this.followPoint = new Phaser.Math.Vector2(0, 0);
     }
     preload() {
         this.load.spritesheet("sprWater", "assets/sprWater.png", {
@@ -75,11 +76,9 @@ export default class SceneMain extends Scene {
     }
 
     getChunk(x: number, y: number) {
-        var chunk = null;
-        for (var i = 0; i < this.chunks.length; i++) {
-            if (this.chunks[i].x == x && this.chunks[i].y == y) {
-                chunk = this.chunks[i];
-            }
+        let chunk = this.chunks.get(`${x},${y}`);
+        if (chunk === undefined) {
+            return null;
         }
         return chunk;
     }
@@ -88,10 +87,7 @@ export default class SceneMain extends Scene {
         if (this.followPoint === null || this.followPoint === undefined) {
             throw new Error("failed to initialize followPoint");
         }
-        if (
-            this.checkInputs([this.keyA, this.keyD, this.keyW, this.keyS]) ===
-            false
-        ) {
+        if (!this.checkInputs([this.keyA, this.keyD, this.keyW, this.keyS])) {
             throw new Error("failed to initialize inputs");
         }
         var snappedChunkX =
@@ -106,19 +102,19 @@ export default class SceneMain extends Scene {
         snappedChunkX = snappedChunkX / this.chunkSize / this.tileSize;
         snappedChunkY = snappedChunkY / this.chunkSize / this.tileSize;
 
-        for (var x = snappedChunkX - 2; x < snappedChunkX + 2; x++) {
-            for (var y = snappedChunkY - 2; y < snappedChunkY + 2; y++) {
-                var existingChunk = this.getChunk(x, y);
+        for (let x = snappedChunkX - 2; x < snappedChunkX + 2; x++) {
+            for (let y = snappedChunkY - 2; y < snappedChunkY + 2; y++) {
+                const existingChunk = this.getChunk(x, y);
 
-                if (existingChunk == null) {
-                    var newChunk = new Chunk(this, x, y);
-                    this.chunks.push(newChunk);
+                if (existingChunk !== null) {
+                    continue;
                 }
+                this.chunks.set(`${x},${y}`, new Chunk(this, x, y));
             }
         }
 
-        for (var i = 0; i < this.chunks.length; i++) {
-            var chunk = this.chunks[i];
+        for (const [_, chunk] of this.chunks) {
+            if (chunk === null) continue;
 
             if (
                 Phaser.Math.Distance.Between(
@@ -128,14 +124,10 @@ export default class SceneMain extends Scene {
                     chunk.y
                 ) < 3
             ) {
-                if (chunk !== null) {
-                    chunk.load();
-                }
-            } else {
-                if (chunk !== null) {
-                    chunk.unload();
-                }
+                chunk.load();
+                continue;
             }
+            chunk.unload();
         }
 
         if (null !== this.keyW && this.keyW.isDown) {
@@ -167,7 +159,7 @@ export default class SceneMain extends Scene {
     }
 
     private checkInputs(inputs: (Phaser.Input.Keyboard.Key | null)[]): boolean {
-        for (var i = 0; i < inputs.length; i++) {
+        for (let i = 0; i < inputs.length; i++) {
             if (inputs[i] === null || inputs[i] === undefined) {
                 return false;
             }

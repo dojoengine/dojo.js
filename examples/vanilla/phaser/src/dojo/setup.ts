@@ -10,57 +10,90 @@ import { setupWorld } from "./defineContractSystems.ts";
 
 import { DojoProvider } from "@dojoengine/core";
 import { BurnerManager } from "@dojoengine/create-burner";
-import { Account, RpcProvider, wallet } from "starknet";
-import { createClientComponents } from "./createClientComponent.ts";
+import { Account, RpcProvider } from "starknet";
+import {
+    ClientComponents,
+    createClientComponents,
+} from "./createClientComponent.ts";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 export type IDojo = Awaited<ReturnType<typeof setup>>;
 
 export async function setup({ ...config }: Config) {
     // torii client
-    const toriiClient = await torii.createClient({
-        rpcUrl: config.rpcUrl,
-        toriiUrl: config.toriiUrl,
-        relayUrl: "",
-        worldAddress: config.manifest.world.address || "",
-    });
+    let toriiClient = null;
+    try {
+        toriiClient = await torii.createClient({
+            rpcUrl: config.rpcUrl,
+            toriiUrl: config.toriiUrl,
+            relayUrl: "",
+            worldAddress: config.manifest.world.address || "",
+        });
+    } catch (e) {
+        console.error("Failed to create torii client:", e);
+        throw e;
+    }
 
     // create contract components
-    const contractModels = createClientComponents({
-        contractComponents: defineContractComponents(world),
-    });
+    let contractModels = null;
+    try {
+        contractModels = createClientComponents({
+            contractComponents: defineContractComponents(world),
+        });
+    } catch (e) {
+        console.error("Failed to create contract components:", e);
+        throw e;
+    }
 
     // create client components
     const { models: clientModels } = models({ contractModels });
 
     // fetch all existing entities from torii
-    const sync = await getSyncEntities(
-        toriiClient,
-        contractModels as any,
-        [],
-        1000
-    );
+    let sync = null;
+    try {
+        sync = await getSyncEntities(
+            toriiClient,
+            contractModels as any,
+            [],
+            1000
+        );
+    } catch (e) {
+        console.error("Failed to fetch sync:", e);
+        throw e;
+    }
 
-    const client = await setupWorld(
-        new DojoProvider(config.manifest, config.rpcUrl),
-        config
-    );
+    let client = null;
+    try {
+        client = await setupWorld(
+            new DojoProvider(config.manifest, config.rpcUrl),
+            config
+        );
+    } catch (e) {
+        console.error("Failed to create client:", e);
+        throw e;
+    }
 
     const rpcProvider = new RpcProvider({
         nodeUrl: config.rpcUrl,
     });
 
-    const burnerManager = new BurnerManager({
-        masterAccount: new Account(
-            rpcProvider,
-            config.masterAddress,
-            config.masterPrivateKey
-        ),
-        feeTokenAddress: config.feeTokenAddress,
-        accountClassHash: config.accountClassHash,
+    let burnerManager = null;
+    try {
+        burnerManager = new BurnerManager({
+            masterAccount: new Account(
+                rpcProvider,
+                config.masterAddress,
+                config.masterPrivateKey
+            ),
+            feeTokenAddress: config.feeTokenAddress,
+            accountClassHash: config.accountClassHash,
 
-        rpcProvider,
-    });
+            rpcProvider,
+        });
+    } catch (e) {
+        console.log("Failed to create burner manager:", e);
+        throw e;
+    }
 
     try {
         await burnerManager.init();
@@ -72,7 +105,7 @@ export async function setup({ ...config }: Config) {
     }
     const actions = systems({
         client,
-        clientModels,
+        clientModels: clientModels as ClientComponents,
         contractComponents: contractModels,
     });
     const account = burnerManager.getActiveAccount();
