@@ -8,7 +8,7 @@ import {
 } from "@dojoengine/recs";
 import {
     Clause,
-    Client,
+    ToriiClient,
     EntityKeysClause,
     PatternMatching,
 } from "@dojoengine/torii-client";
@@ -40,7 +40,7 @@ import { convertValues } from "../utils";
  * the batch size of each request.
  */
 export const getSyncEntities = async <S extends Schema>(
-    client: Client,
+    client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause[],
     limit: number = 100
@@ -62,7 +62,7 @@ export const getSyncEntities = async <S extends Schema>(
  * This function performs paginated queries to fetch all entities and their components.
  */
 export const getEntities = async <S extends Schema>(
-    client: Client,
+    client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     limit: number = 100
 ) => {
@@ -109,7 +109,7 @@ export const getEntities = async <S extends Schema>(
  * to control the batch size of each request.
  */
 export const getEntitiesQuery = async <S extends Schema>(
-    client: Client,
+    client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause,
     patternMatching: PatternMatching = "FixedLen",
@@ -137,7 +137,7 @@ export const getEntitiesQuery = async <S extends Schema>(
         const fetchedEntities = await client.getEntities({
             limit,
             offset: cursor,
-            clause,
+            clause: clause || undefined,
         });
 
         setEntities(fetchedEntities, components);
@@ -163,14 +163,14 @@ export const getEntitiesQuery = async <S extends Schema>(
  * sync.cancel(); // cancel the subscription
  */
 export const syncEntities = async <S extends Schema>(
-    client: Client,
+    client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause[]
 ) => {
     return await client.onEntityUpdated(
         entityKeyClause,
-        (fetchedEntities: any) => {
-            setEntities(fetchedEntities, components);
+        (fetchedEntities: any, data: any) => {
+            setEntities({ [fetchedEntities]: data }, components);
         }
     );
 };
