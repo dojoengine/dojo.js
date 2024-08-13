@@ -185,24 +185,33 @@ export const setEntities = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[]
 ) => {
     for (let key in entities) {
-        if (entities.hasOwnProperty(key)) {
-            for (let componentName in entities[key]) {
-                if (entities[key].hasOwnProperty(componentName)) {
-                    let recsComponent = Object.values(components).find(
-                        (component) =>
-                            component.metadata?.name === componentName
-                    );
+        if (!Object.hasOwn(entities, key)) {
+            continue;
+        }
 
-                    if (recsComponent) {
-                        setComponent(
-                            recsComponent,
-                            key as Entity,
-                            convertValues(
-                                recsComponent.schema,
-                                entities[key][componentName]
-                            ) as ComponentValue
-                        );
-                    }
+        for (let componentName in entities[key]) {
+            if (!Object.hasOwn(entities[key], componentName)) {
+                continue;
+            }
+            let recsComponent = Object.values(components).find(
+                (component) => component.metadata?.name === componentName
+            );
+
+            if (recsComponent) {
+                try {
+                    setComponent(
+                        recsComponent,
+                        key as Entity,
+                        convertValues(
+                            recsComponent.schema,
+                            entities[key][componentName]
+                        ) as ComponentValue
+                    );
+                } catch (error) {
+                    console.warn(
+                        `Failed to set component ${recsComponent.metadata?.name} on ${key}`,
+                        error
+                    );
                 }
             }
         }

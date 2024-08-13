@@ -3,7 +3,7 @@ import { Type as RecsType, Schema } from "@dojoengine/recs";
 export function convertValues(schema: Schema, values: any) {
     return Object.keys(schema).reduce<any>((acc, key) => {
         if (!acc) {
-            acc = {}; // Ensure acc is initialized
+            acc = {};
         }
         const schemaType = schema[key];
         const value = values[key];
@@ -17,11 +17,6 @@ export function convertValues(schema: Schema, values: any) {
             acc[key] = value.value.option;
             return acc;
         }
-
-        // if (value.type === "struct") {
-        //     acc[key] = convertValues(schemaType, value.value);
-        //     return acc;
-        // }
 
         switch (schemaType) {
             case RecsType.StringArray:
