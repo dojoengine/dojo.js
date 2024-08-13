@@ -1,7 +1,7 @@
 import { Component, Metadata, Schema } from "@dojoengine/recs";
 import { useCallback, useEffect } from "react";
 import {
-    Client,
+    ToriiClient,
     EntityKeysClause,
     Subscription,
 } from "@dojoengine/torii-client";
@@ -28,7 +28,7 @@ import { getSyncEntities } from "@dojoengine/state";
  * ]);
  */
 export function useQuerySync<S extends Schema>(
-    toriiClient: Client,
+    toriiClient: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause[]
 ) {

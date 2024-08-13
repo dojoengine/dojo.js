@@ -17,19 +17,7 @@ function App() {
         account,
     } = useDojo();
 
-    useQuerySync(toriiClient, contractComponents as any, [
-        {
-            Keys: {
-                keys: [BigInt(account?.account.address).toString()],
-                models: [
-                    "dojo_starter-Position",
-                    "dojo_starter-Moves",
-                    "dojo_starter-DirectionsAvailable",
-                ],
-                pattern_matching: "FixedLen",
-            },
-        },
-    ]);
+    useQuerySync(toriiClient, contractComponents as any, []);
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",

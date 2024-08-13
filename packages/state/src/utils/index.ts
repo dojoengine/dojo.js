@@ -18,6 +18,11 @@ export function convertValues(schema: Schema, values: any) {
             return acc;
         }
 
+        // if (value.type === "struct") {
+        //     acc[key] = convertValues(schemaType, value.value);
+        //     return acc;
+        // }
+
         switch (schemaType) {
             case RecsType.StringArray:
                 if (value.type === "array" && value.value[0].type === "enum") {
@@ -63,11 +68,22 @@ export function convertValues(schema: Schema, values: any) {
                 break;
 
             default:
-                if (
-                    typeof schemaType === "object" &&
-                    typeof value === "object"
+                if (typeof schemaType === "object" && value.type === "struct") {
+                    if (value.value instanceof Map) {
+                        const structValues = Object.fromEntries(value.value);
+                        acc[key] = convertValues(schemaType, structValues);
+                    } else {
+                        acc[key] = convertValues(schemaType, value.value);
+                    }
+                } else if (
+                    Array.isArray(schemaType) &&
+                    value.type === "array"
                 ) {
-                    acc[key] = convertValues(schemaType, value.value);
+                    acc[key] = value.value.map((item: any) =>
+                        convertValues(schemaType[0], item)
+                    );
+                } else {
+                    acc[key] = value.value;
                 }
                 break;
         }
