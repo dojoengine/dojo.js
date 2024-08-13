@@ -29,6 +29,7 @@ npx @dojoengine/create-dojo
 -   [React-phaser](./examples/react/react-phaser-example) - A vite phaser react app using Dojo
 -   [Torii-bot](./examples/node/torii-bot) - A small discord bot for interacting with Torii
 -   [vue-app](./examples/vue/vue-app) - A vite vue app example using Dojo
+-   [Vanilla-phaser](./examples/vanilla/phaser) - A vanilla phaser example using Dojo
 
 ## Contributing to dojo.js
 
@@ -38,7 +39,7 @@ From the repository root, run the following to install all the necessary package
 pnpm i
 ```
 
-#### Building Packages:
+#### Building Packages
 
 **Note**: Before running the examples, you must build each package.
 
@@ -54,7 +55,7 @@ To watch for changes on all packages in parallel, from the root directory, run:
 pnpm run build-watch
 ```
 
-#### Dojo starter:
+#### Dojo starter
 
 To install dojo-starter submodule (which allows interactions with the examples), run:
 
@@ -92,6 +93,8 @@ cd examples/dojo-starter
 # Build and migrate
 sozo build
 sozo migrate apply
+# From your frontend project directory
+DOJO_MANIFEST_PATH=../relative/path/to/contracts/Scarb.toml sozo build --typescript --bindings-output=./dojo/gen
 
 # Run Torii
 torii --world 0xb4079627ebab1cd3cf9fd075dda1ad2454a7a448bf659591f259efa2519b18 --allowed-origins "*"
