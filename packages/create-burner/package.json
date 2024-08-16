@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/create-burner",
-    "version": "1.0.0-alpha.2",
+    "version": "1.0.0-alpha.3",
     "description": "Useful hooks and functions to create a Starknet burner wallet",
     "author": "Loaf",
     "license": "MIT",
