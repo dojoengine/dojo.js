@@ -127,9 +127,6 @@ importers:
       '@dojoengine/torii-client':
         specifier: workspace:*
         version: link:../../../packages/torii-client
-      '@dojoengine/torii-wasm':
-        specifier: workspace:*
-        version: link:../../../packages/torii-wasm
       '@dojoengine/utils':
         specifier: workspace:*
         version: link:../../../packages/utils
