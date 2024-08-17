@@ -192,7 +192,7 @@ importers:
         specifier: ^0.3.4
         version: 0.3.5(eslint@8.57.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
       vite:
         specifier: ^4.3.9
@@ -443,7 +443,7 @@ importers:
         specifier: ^0.3.4
         version: 0.3.5(eslint@8.57.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
       vite:
         specifier: ^4.3.9
@@ -645,7 +645,7 @@ importers:
         specifier: ^7.6.10
         version: 7.6.20(encoding@0.1.13)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
       vite:
         specifier: ^4.3.9
@@ -774,7 +774,7 @@ importers:
         specifier: ^8.0.1
         version: 8.2.3(@swc/core@1.7.2)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
       vitest:
         specifier: ^1.1.0
@@ -847,7 +847,7 @@ importers:
         specifier: ^8.0.1
         version: 8.2.3(@swc/core@1.7.2)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
       vitest:
         specifier: ^1.2.2
@@ -869,7 +869,7 @@ importers:
         specifier: ^8.0.1
         version: 8.2.3(@swc/core@1.7.2)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
 
   packages/react:
@@ -942,7 +942,7 @@ importers:
         specifier: ^8.0.1
         version: 8.2.3(@swc/core@1.7.2)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
 
   packages/state:
@@ -970,7 +970,7 @@ importers:
         specifier: ^8.0.1
         version: 8.2.3(@swc/core@1.7.2)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
 
   packages/torii-client:
@@ -979,7 +979,7 @@ importers:
         specifier: workspace:*
         version: link:../torii-wasm
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
     devDependencies:
       tsup:
@@ -992,7 +992,7 @@ importers:
         specifier: ^8.1.0
         version: 8.2.3(@swc/core@1.7.2)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
       wasm-pack:
         specifier: ^0.13.0
@@ -1026,7 +1026,7 @@ importers:
         specifier: ^8.0.1
         version: 8.2.3(@swc/core@1.7.2)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
       vitest:
         specifier: ^1.1.0
@@ -1038,7 +1038,7 @@ importers:
         specifier: ^8.0.1
         version: 8.2.3(@swc/core@1.7.2)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
       typescript:
-        specifier: ^5.0.3
+        specifier: ^5.5.4
         version: 5.5.4
       wasm-pack:
         specifier: ^0.12.1
