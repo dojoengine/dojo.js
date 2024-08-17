@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "lib": ["ESNext"],
+        "module": "esnext",
+        "target": "esnext",
+        "moduleResolution": "bundler",
+        "moduleDetection": "force",
+        "strict": true,
+        "jsxImportSource": "hono/jsx",
+        "esModuleInterop": true
+    }
+}

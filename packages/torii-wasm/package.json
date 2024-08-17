@@ -16,11 +16,6 @@
     "files": [
         "dist/pkg/**/*"
     ],
-    "sideEffects": [
-        "dist/pkg/web/dojo_c.js",
-        "dist/pkg/node/dojo_c.js",
-        "dist/pkg/snippets/*"
-    ],
     "devDependencies": {
         "tsup": "^8.1.0",
         "typescript": "^5.0.3",
