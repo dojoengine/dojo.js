@@ -4,26 +4,31 @@
     "description": "Torii wasm bindings for Dojo onchain game engine",
     "author": "",
     "license": "MIT",
-    "main": "dist/pkg/node/dojo_c.js",
-    "browser": "dist/pkg/web/dojo_c.js",
+    "main": "./pkg/node/dojo_c.js",
+    "browser": "./pkg/web/dojo_c.js",
     "type": "module",
     "scripts": {
         "build-wasm": "sh ./build.sh",
         "build": "npm run build-wasm && tsc"
     },
-    "module": "dist/pkg/web/dojo_c.js",
-    "types": "dist/pkg/web/dojo_c.d.ts",
+    "module": "./pkg/web/dojo_c.js",
+    "types": "./pkg/web/dojo_c.d.ts",
     "files": [
-        "dist/pkg/**/*"
+        "./pkg/web/dojo_c_bg.wasm",
+        "./pkg/web/dojo_c.js",
+        "./pkg/web/dojo_c_bg.js",
+        "./pkg/web/dojo_c.d.ts",
+        "./pkg/node/dojo_c_bg.wasm",
+        "./pkg/node/dojo_c.js",
+        "./pkg/node/dojo_c_bg.js",
+        "./pkg/node/dojo_c.d.ts"
     ],
     "sideEffects": [
-        "dist/pkg/web/dojo_c.js",
-        "dist/pkg/node/dojo_c.js",
-        "dist/pkg/snippets/*"
+        "./pkg/web/dojo_c.js"
     ],
     "devDependencies": {
         "tsup": "^8.1.0",
-        "typescript": "^5.0.3",
+        "typescript": "^5.5.4",
         "wasm-pack": "^0.13.0"
     }
 }

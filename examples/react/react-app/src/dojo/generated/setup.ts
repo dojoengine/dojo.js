@@ -1,4 +1,3 @@
-import { getSyncEntities } from "@dojoengine/state";
 import { DojoConfig, DojoProvider } from "@dojoengine/core";
 import * as torii from "@dojoengine/torii-client";
 import { createClientComponents } from "../createClientComponents";
@@ -6,16 +5,13 @@ import { createSystemCalls } from "../createSystemCalls";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { setupWorld } from "./generated";
-import {
-    Account,
-    ArraySignatureType,
-    WeierstrassSignatureType,
-} from "starknet";
+import { Account, ArraySignatureType } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
 export async function setup({ ...config }: DojoConfig) {
+    console.log(torii.poseidonHash(["1"]));
     // torii client
     const toriiClient = await torii.createClient({
         rpcUrl: config.rpcUrl,
@@ -29,8 +25,6 @@ export async function setup({ ...config }: DojoConfig) {
 
     // create client components
     const clientComponents = createClientComponents({ contractComponents });
-
-    // fetch all existing entities from torii
 
     // create dojo provider
     const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl);
