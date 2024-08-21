@@ -9,16 +9,27 @@ import { dojoConfig } from "../dojoConfig";
 
 const app = new Hono();
 
-// export const toriiClient = await torii.createClient({
-//     rpcUrl: dojoConfig.rpcUrl,
-//     toriiUrl: dojoConfig.toriiUrl,
-//     relayUrl: "",
-//     worldAddress: dojoConfig.manifest.world.address || "",
-// });
+async function initializeToriiClient() {
+    return await torii.createClient({
+        rpcUrl: dojoConfig.rpcUrl,
+        toriiUrl: dojoConfig.toriiUrl,
+        relayUrl: "",
+        worldAddress: dojoConfig.manifest.world.address || "",
+    });
+}
 
-torii.poseidonHash(["1"]);
+let toriiClient: Awaited<ReturnType<typeof torii.createClient>>;
 
-torii.createProvider("http://localhost:5050");
+app.use(async (c, next) => {
+    if (!toriiClient) {
+        toriiClient = await initializeToriiClient();
+
+        toriiClient.onEntityUpdated([], (fetchedEntities: any, data: any) => {
+            console.log("Entity updated", data);
+        });
+    }
+    await next();
+});
 
 export default {
     port: 7070,
