@@ -10,7 +10,7 @@ function App() {
     const {
         setup: {
             systemCalls: { spawn, move },
-            clientComponents: { Position, Moves, DirectionsAvailable },
+            clientComponents: { Position, Moves, DirectionsAvailable, Moved },
             toriiClient,
             contractComponents,
         },
@@ -33,6 +33,10 @@ function App() {
     const position = useComponentValue(Position, entityId);
     const moves = useComponentValue(Moves, entityId);
     const directions = useComponentValue(DirectionsAvailable, entityId);
+
+    const moved = useComponentValue(Moved, entityId);
+
+    console.log("moved", moved);
 
     const handleRestoreBurners = async () => {
         try {

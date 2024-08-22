@@ -1,4 +1,4 @@
-import { AccountInterface } from "starknet";
+import { Account, AccountInterface } from "starknet";
 import {
     Entity,
     Has,
@@ -11,7 +11,7 @@ import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { Direction, updatePositionWithDirection } from "../utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import type { IWorld } from "./generated/generated";
+import type { IWorld } from "./typescript/contracts.gen";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -20,7 +20,7 @@ export function createSystemCalls(
     { Position, Moves }: ClientComponents,
     world: World
 ) {
-    const spawn = async (account: AccountInterface) => {
+    const spawn = async (account: Account) => {
         const entityId = getEntityIdFromKeys([
             BigInt(account.address),
         ]) as Entity;
@@ -76,7 +76,7 @@ export function createSystemCalls(
         }
     };
 
-    const move = async (account: AccountInterface, direction: Direction) => {
+    const move = async (account: Account, direction: Direction) => {
         const entityId = getEntityIdFromKeys([
             BigInt(account.address),
         ]) as Entity;
@@ -108,7 +108,7 @@ export function createSystemCalls(
         try {
             await client.actions.move({
                 account,
-                direction,
+                direction: { type: "Left" },
             });
 
             // Wait for the indexer to update the entity

@@ -1,17 +1,17 @@
 import { DojoConfig, DojoProvider } from "@dojoengine/core";
 import * as torii from "@dojoengine/torii-client";
-import { createClientComponents } from "../createClientComponents";
-import { createSystemCalls } from "../createSystemCalls";
-import { defineContractComponents } from "./contractComponents";
+import { createClientComponents } from "./createClientComponents";
+import { createSystemCalls } from "./createSystemCalls";
+import { defineContractComponents } from "./typescript/models.gen";
 import { world } from "./world";
-import { setupWorld } from "./generated";
+import { setupWorld } from "./typescript/contracts.gen";
 import { Account, ArraySignatureType } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
+import { getSyncEvents } from "@dojoengine/state";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
 export async function setup({ ...config }: DojoConfig) {
-    console.log(torii.poseidonHash(["1"]));
     // torii client
     const toriiClient = await torii.createClient({
         rpcUrl: config.rpcUrl,
@@ -28,6 +28,13 @@ export async function setup({ ...config }: DojoConfig) {
 
     // create dojo provider
     const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl);
+
+    const eventSync = getSyncEvents(
+        toriiClient,
+        contractComponents as any,
+        undefined,
+        []
+    );
 
     // setup world
     const client = await setupWorld(dojoProvider);
@@ -67,5 +74,6 @@ export async function setup({ ...config }: DojoConfig) {
         dojoProvider,
         burnerManager,
         toriiClient,
+        eventSync,
     };
 }
