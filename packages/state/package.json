@@ -1,8 +1,8 @@
 {
     "name": "@dojoengine/state",
     "version": "1.0.0-alpha.6",
-    "description": "State sync for dojo",
-    "author": "Loaf",
+    "description": "dojo: State syncing for dojo games. Currently supports RECS.",
+    "author": "dojo",
     "license": "MIT",
     "main": "dist/index.js",
     "type": "module",

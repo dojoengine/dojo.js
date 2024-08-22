@@ -1,11 +1,10 @@
 {
     "name": "@dojoengine/torii-wasm",
     "version": "1.0.0-alpha.6",
-    "description": "Torii wasm bindings for Dojo onchain game engine",
-    "author": "",
+    "description": "dojo: WASM bindings for torii",
+    "author": "ohayo",
     "license": "MIT",
-    "main": "./pkg/node/dojo_c.js",
-    "browser": "./pkg/web/dojo_c.js",
+    "main": "./pkg/web/dojo_c.js",
     "type": "module",
     "scripts": {
         "build-wasm": "sh ./build.sh",
@@ -23,6 +22,18 @@
         "./pkg/node/dojo_c_bg.js",
         "./pkg/node/dojo_c.d.ts"
     ],
+    "exports": {
+        ".": {
+            "import": "./pkg/web/dojo_c.js",
+            "require": "./pkg/web/dojo_c.js",
+            "types": "./pkg/web/dojo_c.d.ts"
+        },
+        "./node": {
+            "import": "./pkg/node/dojo_c.js",
+            "require": "./pkg/node/dojo_c.js",
+            "types": "./pkg/node/dojo_c.d.ts"
+        }
+    },
     "sideEffects": [
         "./pkg/web/dojo_c.js",
         "./pkg/web/dojo_c_bg.wasm"

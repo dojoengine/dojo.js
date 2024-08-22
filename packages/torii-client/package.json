@@ -1,9 +1,8 @@
 {
     "name": "@dojoengine/torii-client",
     "version": "1.0.0-alpha.6",
-    "description": "Torii client for the dojo onchain game engine",
-    "keywords": [],
-    "author": "Dojo",
+    "description": "dojo: package bundles torii wasm into a helpful export for web",
+    "author": "dojo",
     "license": "MIT",
     "main": "dist/index.js",
     "type": "module",

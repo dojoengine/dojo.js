@@ -1,7 +1,8 @@
 {
     "name": "@dojoengine/react",
     "version": "1.0.0-alpha.6",
-    "description": "Useful React hooks for Starknet",
+    "description": "dojo: React hooks for working with the dojo engine stack.",
+    "author": "dojo",
     "source": "src/index.ts",
     "main": "dist/index.js",
     "type": "module",
@@ -9,7 +10,6 @@
         "build": "tsup --dts-resolve",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "author": "Loaf",
     "license": "MIT",
     "peerDependencies": {
         "react": "^18.2.0",
