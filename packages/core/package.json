@@ -1,8 +1,8 @@
 {
     "name": "@dojoengine/core",
     "version": "1.0.0-alpha.6",
-    "description": "Dojo onchain game engine core",
-    "author": "Loaf",
+    "description": "dojo: Core package for interacting with dojo worlds. Execution client and other helpful functions",
+    "author": "dojo",
     "license": "MIT",
     "main": "./dist/index.js",
     "type": "module",

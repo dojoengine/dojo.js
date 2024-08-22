@@ -1,6 +1,3 @@
 packages:
     - "packages/*"
-    - "examples/react/*"
-    - "examples/vue/*"
-    - "examples/node/*"
-    - "examples/vanilla/*"
+    - "examples/clients/**"

@@ -1,0 +1,31 @@
+{
+    "name": "vue-app",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@dojoengine/core": "workspace:*",
+        "@dojoengine/create-burner": "workspace:*",
+        "@dojoengine/react": "workspace:*",
+        "@dojoengine/recs": "2.0.13",
+        "@dojoengine/state": "workspace:*",
+        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/utils": "workspace:*",
+        "@latticexyz/utils": "^2.1.1",
+        "starknet": "6.11.0",
+        "vite-plugin-top-level-await": "^1.4.1",
+        "vite-plugin-wasm": "^3.3.0",
+        "vue": "^3.4.19"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^5.0.4",
+        "typescript": "^5.2.2",
+        "vite": "^5.1.4",
+        "vue-tsc": "^2.0.4"
+    }
+}

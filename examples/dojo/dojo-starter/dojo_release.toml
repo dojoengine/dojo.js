@@ -1,0 +1,23 @@
+[world]
+name = "Dojo starter"
+description = "The official Dojo Starter guide, the quickest and most streamlined way to get your Dojo Autonomous World up and running. This guide will assist you with the initial setup, from cloning the repository to deploying your world."
+cover_uri = "file://assets/cover.png"
+icon_uri = "file://assets/icon.png"
+website = "https://github.com/dojoengine/dojo-starter"
+seed = "dojo_starter"
+
+[world.socials]
+x = "https://x.com/ohayo_dojo"
+discord = "https://discord.gg/FB2wR6uF"
+github = "https://github.com/dojoengine/dojo-starter"
+telegram = "https://t.me/dojoengine"
+
+[namespace]
+default = "dojo_starter"
+
+[env]
+rpc_url = "http://localhost:5050/"
+# Default account for katana with seed = 0
+account_address = "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca"
+private_key = "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
+# world_address = "0x3fc79ccfd72c1450d2ccb73c5c521a7ec68b6c6af0caf96a0f1c39ce58876c8"  # Uncomment and update this line with your world address.
