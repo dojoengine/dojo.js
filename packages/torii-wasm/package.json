@@ -36,7 +36,8 @@
     },
     "sideEffects": [
         "./pkg/web/dojo_c.js",
-        "./pkg/web/dojo_c_bg.wasm"
+        "./pkg/web/dojo_c_bg.wasm",
+        "./pkg/node/dojo_c_bg.wasm"
     ],
     "devDependencies": {
         "tsup": "^8.1.0",
