@@ -1,21 +1,35 @@
 {
     "compilerOptions": {
-        "lib": ["dom", "dom.iterable", "esnext"],
+        "module": "ESNext",
+        "target": "ESNext",
+        "lib": ["ESNext", "DOM", "DOM.Iterable"],
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,
         "noEmit": true,
         "esModuleInterop": true,
-        "module": "esnext",
-        "moduleResolution": "bundler",
+        "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
         "jsx": "preserve",
         "incremental": true,
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
         "paths": {
             "@/*": ["./src/*"]
-        }
+        },
+        // allows VSCode to prompt for path rename when files are moved/renamed
+        "baseUrl": "."
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "include": [
+        "./src",
+        "./dist/types/**/*.ts",
+        "./next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx"
+    ],
     "exclude": ["node_modules"]
 }

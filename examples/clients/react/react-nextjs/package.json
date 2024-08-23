@@ -1,26 +1,41 @@
 {
     "name": "react-nextjs",
     "version": "0.1.0",
-    "private": true,
+    "private": false,
+    "type": "module",
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
+        "dev": "NODE_OPTIONS='--experimental-wasm-modules' next dev",
+        "build": "tsc && NODE_OPTIONS='--experimental-wasm-modules' next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
     },
     "dependencies": {
+        "@dojoengine/core": "workspace:*",
+        "@dojoengine/create-burner": "workspace:*",
+        "@dojoengine/react": "workspace:*",
+        "@dojoengine/recs": "2.0.13",
+        "@dojoengine/state": "workspace:*",
+        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/utils": "workspace:*",
+        "@latticexyz/react": "^2.0.12",
+        "@latticexyz/utils": "^2.0.12",
+        "next": "^13.5.6",
         "react": "^18",
         "react-dom": "^18",
-        "next": "14.2.6"
+        "starknet": "6.11.0"
     },
     "devDependencies": {
-        "typescript": "^5",
+        "@next/eslint-plugin-next": "^14.0.3",
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",
+        "@typescript-eslint/eslint-plugin": "^5.59.0",
+        "@typescript-eslint/parser": "^5.59.0",
+        "eslint": "^8.38.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.3.4",
         "postcss": "^8",
         "tailwindcss": "^3.4.1",
-        "eslint": "^8",
-        "eslint-config-next": "14.2.6"
+        "typescript": "^5.5.4"
     }
 }
