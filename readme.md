@@ -27,6 +27,7 @@ npx @dojoengine/create-dojo
 
 -   [React-app](./examples/clients/react/react-app) - A vite react app example using Dojo
 -   [React-phaser](./examples/clients/react/react-phaser-example) - A vite phaser react app using Dojo
+-   [React-nextjs](./examples/clients/react/react-nextjs) - A next.js react app example using Dojo
 -   [Torii-bot](./examples/clients/node/torii-bot) - A small discord bot for interacting with Torii
 -   [vue-app](./examples/clients/vue/vue-app) - A vite vue app example using Dojo
 -   [Vanilla-phaser](./examples/clients/vanilla/phaser) - A vanilla phaser example using Dojo
