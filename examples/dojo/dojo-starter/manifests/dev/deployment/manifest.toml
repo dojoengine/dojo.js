@@ -48,6 +48,7 @@ class_hash = "0x72c6666cfeebc41544f502cfe9c32ad7b91fce12881709420335794dfcb324a"
 original_class_hash = "0x72c6666cfeebc41544f502cfe9c32ad7b91fce12881709420335794dfcb324a"
 abi = "manifests/dev/deployment/abis/models/dojo_starter-DirectionsAvailable-77844f1f.json"
 tag = "dojo_starter-DirectionsAvailable"
+qualified_path = "dojo_starter::models::directions_available"
 manifest_name = "dojo_starter-DirectionsAvailable-77844f1f"
 
 [[models.members]]
@@ -66,6 +67,7 @@ class_hash = "0x2e06be7cf406eb3161fedf460a47faca68855eb9dad7d505c1b1f1875192ccd"
 original_class_hash = "0x2e06be7cf406eb3161fedf460a47faca68855eb9dad7d505c1b1f1875192ccd"
 abi = "manifests/dev/deployment/abis/models/dojo_starter-Moved-504403e5.json"
 tag = "dojo_starter-Moved"
+qualified_path = "dojo_starter::systems::actions::actions::moved"
 manifest_name = "dojo_starter-Moved-504403e5"
 
 [[models.members]]
@@ -84,6 +86,7 @@ class_hash = "0x4eac0db062821cc05485ba088b0bb748de83e901116216da171744dfc5ec6fa"
 original_class_hash = "0x4eac0db062821cc05485ba088b0bb748de83e901116216da171744dfc5ec6fa"
 abi = "manifests/dev/deployment/abis/models/dojo_starter-Moves-2a29373f.json"
 tag = "dojo_starter-Moves"
+qualified_path = "dojo_starter::models::moves"
 manifest_name = "dojo_starter-Moves-2a29373f"
 
 [[models.members]]
@@ -112,6 +115,7 @@ class_hash = "0x6531637b0bbd741f8823b127d8958ed10a483dd1f2d7654975c1d7d7cbdab65"
 original_class_hash = "0x6531637b0bbd741f8823b127d8958ed10a483dd1f2d7654975c1d7d7cbdab65"
 abi = "manifests/dev/deployment/abis/models/dojo_starter-Position-2ac8b4c1.json"
 tag = "dojo_starter-Position"
+qualified_path = "dojo_starter::models::position"
 manifest_name = "dojo_starter-Position-2ac8b4c1"
 
 [[models.members]]

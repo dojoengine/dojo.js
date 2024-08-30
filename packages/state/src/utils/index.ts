@@ -20,7 +20,12 @@ export function convertValues(schema: Schema, values: any) {
 
         switch (schemaType) {
             case RecsType.StringArray:
-                if (value.type === "array" && value.value[0].type === "enum") {
+                if (value.type === "array" && value.value.length === 0) {
+                    acc[key] = [];
+                } else if (
+                    value.type === "array" &&
+                    value.value[0].type === "enum"
+                ) {
                     acc[key] = value.value.map(
                         (item: any) => item.value.option
                     );
