@@ -3,6 +3,7 @@ class_hash = "0x4eac0db062821cc05485ba088b0bb748de83e901116216da171744dfc5ec6fa"
 original_class_hash = "0x4eac0db062821cc05485ba088b0bb748de83e901116216da171744dfc5ec6fa"
 abi = "manifests/dev/base/abis/models/dojo_starter-Moves-2a29373f.json"
 tag = "dojo_starter-Moves"
+qualified_path = "dojo_starter::models::moves"
 manifest_name = "dojo_starter-Moves-2a29373f"
 
 [[members]]
