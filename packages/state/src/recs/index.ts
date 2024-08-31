@@ -160,7 +160,7 @@ export const getEvents = async <S extends Schema>(
 };
 
 /**
- * Fetches entities and their components from the client based on specified criteria.
+ * Fetches entities and their components from the client based on specified criteria, helping to reduce the loading time when the entities are fetched.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions to fetch.
  * @param entityKeyClause - An optional EntityKeysClause to filter entities by their keys.
@@ -170,20 +170,25 @@ export const getEvents = async <S extends Schema>(
  * @example
  * const components = createClientComponents({ contractComponents });
  * await getEntitiesQuery(client, components, undefined, "FixedLen", 1000);
+ * return await syncEntities(toriiClient, components as any, []);
  *
  * @example
  * const components = createClientComponents({ contractComponents });
  * await getEntitiesQuery(client, components, { Keys: { keys: ["0x1"], models: ["Position"] } }, "FixedLen", 1000);
+ * return await syncEntities(toriiClient, components as any, []);
  *
  * @example
  * const components = createClientComponents({ contractComponents });
  * await getEntitiesQuery(client, components, { HashedKeys: ["0x1"] }, "FixedLen", 1000);
+ * return await syncEntities(toriiClient, components as any, []);
  *
  * This function performs paginated queries to fetch all matching entities and their
  * components. It uses the provided EntityKeysClause (if any) to filter entities and
  * the specified components to determine which data to retrieve. The function continues
  * fetching until all matching entities have been retrieved, using the 'limit' parameter
  * to control the batch size of each request.
+ *
+ * Note: Make sure to synchronize the entities by calling the syncEntities method
  */
 export const getEntitiesQuery = async <S extends Schema>(
     client: ToriiClient,
@@ -195,22 +200,24 @@ export const getEntitiesQuery = async <S extends Schema>(
     let cursor = 0;
     let continueFetching = true;
 
-    while (continueFetching) {
-        const clause: Clause | null = entityKeyClause
-            ? {
-                  Keys: {
-                      keys:
-                          "HashedKeys" in entityKeyClause
-                              ? entityKeyClause.HashedKeys
-                              : entityKeyClause.Keys.keys,
-                      pattern_matching: patternMatching,
-                      models: [
-                          ...components.map((c) => c.metadata?.name as string),
-                      ],
-                  },
-              }
-            : null;
+    const componentArray = Object.values(components);
 
+    const clause: Clause | null = entityKeyClause
+        ? {
+              Keys: {
+                  keys:
+                      "HashedKeys" in entityKeyClause
+                          ? entityKeyClause.HashedKeys
+                          : entityKeyClause.Keys.keys,
+                  pattern_matching: patternMatching,
+                  models: [
+                      ...componentArray.map((c) => c.metadata?.name as string),
+                  ],
+              },
+          }
+        : null;
+
+    while (continueFetching) {
         const fetchedEntities = await client.getEntities({
             limit,
             offset: cursor,
