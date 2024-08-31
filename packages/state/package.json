@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/state",
-    "version": "1.0.0-alpha.9",
+    "version": "1.0.0-alpha.10",
     "description": "dojo: State syncing for dojo games. Currently supports RECS.",
     "author": "dojo",
     "license": "MIT",
