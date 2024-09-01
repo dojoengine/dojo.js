@@ -41,7 +41,7 @@ sozo build
 sozo migrate apply
 
 # Start Torii
-torii --world 0x403b5f047b8c4797139e30801e310473d99ca6877d19e0f27506f353f8f70f7 --allowed-origins "*"
+torii --world 0x3b34889efbdf01f707d5d7421f112e8fb85a42fb6f2e5422c75ce3253148b0e --allowed-origins "*"
 ```
 
 ---

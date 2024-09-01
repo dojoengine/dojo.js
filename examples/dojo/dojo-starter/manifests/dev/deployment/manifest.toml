@@ -1,10 +1,10 @@
 [world]
 kind = "WorldContract"
-class_hash = "0x458d0ce5b14a4844092bdb62050f462d53362304a13febbac6d973691d61be2"
-original_class_hash = "0x458d0ce5b14a4844092bdb62050f462d53362304a13febbac6d973691d61be2"
+class_hash = "0xa349b743d361ce4567361475a89b84a386bb383448c6926954e5fe0b525597"
+original_class_hash = "0xa349b743d361ce4567361475a89b84a386bb383448c6926954e5fe0b525597"
 abi = "manifests/dev/deployment/abis/dojo-world.json"
-address = "0x403b5f047b8c4797139e30801e310473d99ca6877d19e0f27506f353f8f70f7"
-transaction_hash = "0x12df6c5a6c89d2c128c96026395f1f8917c36a7864aca26f0c7b9e2ea152bca"
+address = "0x3b34889efbdf01f707d5d7421f112e8fb85a42fb6f2e5422c75ce3253148b0e"
+transaction_hash = "0x4729b83525f0dddbfce0afd73e0b6a39303de51690efd756691356c21c30067"
 block_number = 3
 seed = "dojo_starter"
 manifest_name = "dojo-world"
@@ -23,9 +23,9 @@ manifest_name = "dojo-base"
 
 [[contracts]]
 kind = "DojoContract"
-address = "0x36e4506b35e6dfb301d437c95f74b3e1f4f82da5d8841bec894bb8de29ec13"
-class_hash = "0x4f10da1ba615523c1a4b9e2ad40df134edbcf2d971a1074efbd9772c86c2173"
-original_class_hash = "0x4f10da1ba615523c1a4b9e2ad40df134edbcf2d971a1074efbd9772c86c2173"
+address = "0x5e8df8a235031ba8e66e590a7289d27d7d54c026bcdbda62b791c0a69055225"
+class_hash = "0x7304354bfea03508e0a8beaca98c9580c852a0e350b74dcafb55192c62fa3f4"
+original_class_hash = "0x7304354bfea03508e0a8beaca98c9580c852a0e350b74dcafb55192c62fa3f4"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/dojo_starter-actions-7a1c7102.json"
 reads = []

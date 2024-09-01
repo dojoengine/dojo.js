@@ -7,7 +7,7 @@ import { world } from "./world";
 import { setupWorld } from "./typescript/contracts.gen";
 import { Account, ArraySignatureType } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
-import { getSyncEvents } from "@dojoengine/state";
+import { getSyncEvents, getSyncEntities } from "@dojoengine/state";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -29,10 +29,18 @@ export async function setup({ ...config }: DojoConfig) {
     // create dojo provider
     const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl);
 
+    // Sync all events
     const eventSync = getSyncEvents(
         toriiClient,
         contractComponents as any,
         undefined,
+        []
+    );
+
+    // Sync all entities
+    const sync = await getSyncEntities(
+        toriiClient,
+        contractComponents as any,
         []
     );
 
@@ -75,5 +83,6 @@ export async function setup({ ...config }: DojoConfig) {
         burnerManager,
         toriiClient,
         eventSync,
+        sync,
     };
 }

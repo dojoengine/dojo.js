@@ -17,6 +17,7 @@ function App() {
         account,
     } = useDojo();
 
+    // sync entities
     useQuerySync(toriiClient, contractComponents as any, []);
 
     const [clipboardStatus, setClipboardStatus] = useState({
