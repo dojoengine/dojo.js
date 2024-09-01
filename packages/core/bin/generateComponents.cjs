@@ -82,7 +82,7 @@ manifest.models.forEach((model) => {
     const customTypes = [];
 
     let modelName = model.tag;
-    let modelNameNoNamespace = model.tag.split("-")[1];
+    let [modelNamespace, modelNameNoNamespace] = model.tag.split("-");
 
     try {
         const output = execSync(
@@ -102,7 +102,8 @@ manifest.models.forEach((model) => {
         fileContent += `        ${recsTypeObject},\n`;
         fileContent += `        {\n`;
         fileContent += `          metadata: {\n`;
-        fileContent += `            name: "${modelName}",\n`;
+        fileContent += `            namespace: "${modelNamespace}",\n`;
+        fileContent += `            name: "${modelNameNoNamespace}",\n`;
         fileContent += `            types: ${JSON.stringify(types)},\n`;
         fileContent += `            customTypes: ${JSON.stringify(
             customTypes
