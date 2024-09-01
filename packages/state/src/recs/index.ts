@@ -217,13 +217,13 @@ export const getEntitiesQuery = async <S extends Schema>(
           }
         : null;
 
-    while (continueFetching) {
-        const fetchedEntities = await client.getEntities({
-            limit,
-            offset: cursor,
-            clause: clause || undefined,
-        });
+    const fetchedEntities = await client.getEntities({
+        limit,
+        offset: cursor,
+        clause: clause || undefined,
+    });
 
+    while (continueFetching) {
         setEntities(fetchedEntities, components);
 
         if (Object.keys(fetchedEntities).length < limit) {
