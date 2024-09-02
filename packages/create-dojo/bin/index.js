@@ -37,7 +37,7 @@ async function run() {
     console.log(`Downloading ${template} into client directory...`);
     spawn.sync("npx", [
       "degit",
-      `dojoengine/dojo.js/examples/react/${template}`,
+      `dojoengine/dojo.js/examples/clients/react/${template}`,
       clientPath
       // Cloning directly into the client directory
     ]);
@@ -53,7 +53,7 @@ async function run() {
 `);
     console.log("You can then build the starter and run the client.\n");
     console.log("For detailed instructions, follow the README here:\n");
-    console.log("https://book.dojoengine.org/cairo/hello-dojo");
+    console.log("https://book.dojoengine.org");
   } catch (e) {
     console.error(`Error: ${e}`);
   }

@@ -17,9 +17,12 @@ export async function init<T extends SchemaType>(
         query: { [P in keyof T]?: Partial<T[P]> },
         callback: (response: { data?: torii.Entities; error?: Error }) => void
     ) => Promise<torii.Subscription>;
-    getEntities: (query: {
-        [P in keyof T]?: Partial<T[P]>;
-    }) => Promise<torii.Entities>;
+    getEntities: (
+        query: {
+            [P in keyof T]?: Partial<T[P]>;
+        },
+        callback: (response: { data?: torii.Entities; error?: Error }) => void
+    ) => Promise<torii.Entities>;
 }> {
     const config: torii.ClientConfig = {
         rpcUrl: options.rpcUrl,
@@ -34,7 +37,7 @@ export async function init<T extends SchemaType>(
         client,
         subscribeQuery: (query, callback) =>
             subscribeQuery(client, query, callback),
-        getEntities: (query) => getEntities(client, query),
+        getEntities: (query, callback) => getEntities(client, query, callback),
     };
 }
 
@@ -97,7 +100,21 @@ async function exampleUsage() {
 
     // Example usage of getEntities
     try {
-        const entities = await db.getEntities({ todos: { done: true } });
+        const entities = await db.getEntities(
+            { todos: { done: true } },
+            (resp) => {
+                if (resp.error) {
+                    console.error(
+                        "Error querying completed todos:",
+                        resp.error.message
+                    );
+                    return;
+                }
+                if (resp.data) {
+                    console.log("Completed todos:", resp.data);
+                }
+            }
+        );
         console.log("Queried entities:", entities);
     } catch (error) {
         console.error("Error querying entities:", error);

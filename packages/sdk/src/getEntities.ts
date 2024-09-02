@@ -5,6 +5,11 @@ import * as torii from "@dojoengine/torii-client";
 export async function getEntities<T extends SchemaType, K extends keyof T>(
     client: torii.ToriiClient,
     query: { [P in K]?: Partial<T[P]> },
+    callback: (response: {
+        entities?: torii.Entities;
+        data: torii.Entities;
+        error?: Error;
+    }) => void,
     limit: number = 100, // Default limit
     offset: number = 0 // Default offset
 ): Promise<torii.Entities> {
@@ -19,5 +24,12 @@ export async function getEntities<T extends SchemaType, K extends keyof T>(
             },
         },
     };
-    return client.getEntities(toriiQuery);
+
+    try {
+        const entities = await client.getEntities(toriiQuery);
+        callback({ data: entities });
+        return entities;
+    } catch (error) {
+        throw error;
+    }
 }
