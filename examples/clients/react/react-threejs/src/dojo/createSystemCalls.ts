@@ -1,4 +1,4 @@
-import { Account, AccountInterface } from "starknet";
+import { Account } from "starknet";
 import {
     Entity,
     Has,

@@ -5,7 +5,13 @@ import { createAccount, getAccount, useComponentValue } from "./utils";
 import { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { setup } from "./dojo/setup.ts";
-import { Direction } from "./dojo/typescript/models.gen.ts";
+
+export type Direction =
+    | { type: "None" }
+    | { type: "Left" }
+    | { type: "Right" }
+    | { type: "Up" }
+    | { type: "Down" };
 
 const dojoContext = reactive<any>({
     setup: null,

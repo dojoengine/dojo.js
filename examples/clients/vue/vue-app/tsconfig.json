@@ -6,16 +6,19 @@
         "module": "ESNext",
         "skipLibCheck": true,
         "moduleResolution": "node",
+        "esModuleInterop": true,
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "preserve",
         "strict": true,
-        // "noUnusedLocals": true,
-        // "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
     },
     "include": ["src", "dojoConfig.ts"],
     "exclude": ["node_modules"],

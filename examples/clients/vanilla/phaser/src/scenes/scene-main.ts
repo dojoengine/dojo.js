@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { Chunk } from "../entities";
 
 import { SetupResult } from "../dojo/setup";
+import { Account } from "starknet";
 export default class SceneMain extends Scene {
     dojo: SetupResult;
     chunkSize: number;
@@ -72,7 +73,7 @@ export default class SceneMain extends Scene {
             Phaser.Input.Keyboard.KeyCodes.D
         );
 
-        this.dojo.systemCalls.spawn(this.dojo.account);
+        this.dojo.systemCalls.spawn(this.dojo.burnerManager.account as Account);
     }
 
     getChunk(x: number, y: number) {
@@ -133,25 +134,37 @@ export default class SceneMain extends Scene {
         if (null !== this.keyW && this.keyW.isDown) {
             this.followPoint.y -= this.cameraSpeed;
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
-            this.dojo.systemCalls.move(this.dojo.account, { type: "Up" });
+            this.dojo.systemCalls.move(
+                this.dojo.burnerManager.account as Account,
+                { type: "Up" }
+            );
             return;
         }
         if (null !== this.keyS && this.keyS.isDown) {
             this.followPoint.y += this.cameraSpeed;
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
-            this.dojo.systemCalls.move(this.dojo.account, { type: "Down" });
+            this.dojo.systemCalls.move(
+                this.dojo.burnerManager.account as Account,
+                { type: "Down" }
+            );
             return;
         }
         if (null !== this.keyA && this.keyA.isDown) {
             this.followPoint.x -= this.cameraSpeed;
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
-            this.dojo.systemCalls.move(this.dojo.account, { type: "Left" });
+            this.dojo.systemCalls.move(
+                this.dojo.burnerManager.account as Account,
+                { type: "Left" }
+            );
             return;
         }
         if (null !== this.keyD && this.keyD.isDown) {
             this.followPoint.x += this.cameraSpeed;
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
-            this.dojo.systemCalls.move(this.dojo.account, { type: "Right" });
+            this.dojo.systemCalls.move(
+                this.dojo.burnerManager.account as Account,
+                { type: "Right" }
+            );
             return;
         }
 
