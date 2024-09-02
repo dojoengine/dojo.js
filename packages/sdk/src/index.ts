@@ -24,14 +24,7 @@ export async function init<T extends SchemaType>(
         callback: (response: { data?: torii.Entities; error?: Error }) => void
     ) => Promise<torii.Entities>;
 }> {
-    const config: torii.ClientConfig = {
-        rpcUrl: options.rpcUrl,
-        toriiUrl: options.toriiUrl,
-        relayUrl: options.relayUrl,
-        worldAddress: options.worldAddress,
-    };
-
-    const client = await createClient(config);
+    const client = await createClient(options);
 
     return {
         client,
