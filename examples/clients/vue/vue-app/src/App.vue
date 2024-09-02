@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, toRaw, reactive } from "vue";
-import { setup } from "./dojo/generated/setup.ts";
 import { dojoConfig } from "../dojoConfig.ts";
 import {
     createAccount,
-    Direction,
     getAccount,
     useComponentValue,
 } from "./utils";
 import { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { setup } from "./dojo/setup.ts";
+import { Direction } from "./dojo/typescript/models.gen.ts";
 
 const dojoContext = reactive<any>({
     setup: null,
@@ -38,7 +38,7 @@ const spawnFun = async () => {
     await spawn(dojoContext.account);
 };
 
-const moveFun = async (direction: any) => {
+const moveFun = async (direction: Direction) => {
     const account = dojoContext.account;
     if (!account) {
         console.log("No account");

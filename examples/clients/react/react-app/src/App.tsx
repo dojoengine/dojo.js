@@ -140,7 +140,7 @@ function App() {
                     <button
                         onClick={() =>
                             position && position.vec.y > 0
-                                ? move(account.account, Direction.Up)
+                                ? move(account.account, { type: "Up" })
                                 : console.log("Reach the borders of the world.")
                         }
                     >
@@ -151,21 +151,21 @@ function App() {
                     <button
                         onClick={() =>
                             position && position.vec.x > 0
-                                ? move(account.account, Direction.Left)
+                                ? move(account.account, { type: "Left" })
                                 : console.log("Reach the borders of the world.")
                         }
                     >
                         Move Left
                     </button>
                     <button
-                        onClick={() => move(account.account, Direction.Right)}
+                        onClick={() => move(account.account, { type: "Right" })}
                     >
                         Move Right
                     </button>
                 </div>
                 <div>
                     <button
-                        onClick={() => move(account.account, Direction.Down)}
+                        onClick={() => move(account.account, { type: "Down" })}
                     >
                         Move Down
                     </button>

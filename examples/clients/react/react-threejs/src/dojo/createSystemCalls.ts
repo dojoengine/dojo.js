@@ -1,57 +1,71 @@
-import { AccountInterface } from "starknet";
-import { Entity, getComponentValue } from "@dojoengine/recs";
+import { Account, AccountInterface } from "starknet";
+import {
+    Entity,
+    Has,
+    HasValue,
+    World,
+    defineSystem,
+    getComponentValue,
+} from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
-import { Direction, updatePositionWithDirection } from "../utils";
-import {
-    getEntityIdFromKeys,
-    getEvents,
-    setComponentsFromEvents,
-} from "@dojoengine/utils";
-import { ContractComponents } from "./generated/contractComponents";
-import type { IWorld } from "./generated/generated";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import type { IWorld } from "./typescript/contracts.gen";
+import { Direction } from "./typescript/models.gen";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
     { client }: { client: IWorld },
-    contractComponents: ContractComponents,
-    { Position, Moves }: ClientComponents
+    { Position, Moves }: ClientComponents,
+    world: World
 ) {
-    const spawn = async (account: AccountInterface) => {
+    const spawn = async (account: Account) => {
         const entityId = getEntityIdFromKeys([
             BigInt(account.address),
         ]) as Entity;
-
-        const positionId = uuid();
-        Position.addOverride(positionId, {
-            entity: entityId,
-            value: { player: BigInt(entityId), vec: { x: 10, y: 10 } },
-        });
 
         const movesId = uuid();
         Moves.addOverride(movesId, {
             entity: entityId,
             value: {
                 player: BigInt(entityId),
-                remaining: 100,
-                last_direction: 0,
+                remaining:
+                    (getComponentValue(Moves, entityId)?.remaining || 0) + 100,
+            },
+        });
+
+        const positionId = uuid();
+        Position.addOverride(positionId, {
+            entity: entityId,
+            value: {
+                player: BigInt(entityId),
+                vec: {
+                    x: 10 + (getComponentValue(Position, entityId)?.vec.x || 0),
+                    y: 10 + (getComponentValue(Position, entityId)?.vec.y || 0),
+                },
             },
         });
 
         try {
-            const { transaction_hash } = await client.actions.spawn({
+            await client.actions.spawn({
                 account,
             });
 
-            setComponentsFromEvents(
-                contractComponents,
-                getEvents(
-                    await account.waitForTransaction(transaction_hash, {
-                        retryInterval: 100,
-                    })
-                )
-            );
+            // Wait for the indexer to update the entity
+            // By doing this we keep the optimistic UI in sync with the actual state
+            await new Promise<void>((resolve) => {
+                defineSystem(
+                    world,
+                    [
+                        Has(Moves),
+                        HasValue(Moves, { player: BigInt(account.address) }),
+                    ],
+                    () => {
+                        resolve();
+                    }
+                );
+            });
         } catch (e) {
             console.log(e);
             Position.removeOverride(positionId);
@@ -62,54 +76,29 @@ export function createSystemCalls(
         }
     };
 
-    const move = async (account: AccountInterface, direction: Direction) => {
-        const entityId = getEntityIdFromKeys([
-            BigInt(account.address),
-        ]) as Entity;
-
-        const positionId = uuid();
-        Position.addOverride(positionId, {
-            entity: entityId,
-            value: {
-                player: BigInt(entityId),
-                vec: updatePositionWithDirection(
-                    direction,
-                    getComponentValue(Position, entityId) as any
-                ).vec,
-            },
-        });
-
-        const movesId = uuid();
-        Moves.addOverride(movesId, {
-            entity: entityId,
-            value: {
-                player: BigInt(entityId),
-                remaining:
-                    (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
-            },
-        });
-
+    const move = async (account: Account, direction: Direction) => {
         try {
-            const { transaction_hash } = await client.actions.move({
+            await client.actions.move({
                 account,
                 direction,
             });
 
-            setComponentsFromEvents(
-                contractComponents,
-                getEvents(
-                    await account.waitForTransaction(transaction_hash, {
-                        retryInterval: 100,
-                    })
-                )
-            );
+            // Wait for the indexer to update the entity
+            // By doing this we keep the optimistic UI in sync with the actual state
+            await new Promise<void>((resolve) => {
+                defineSystem(
+                    world,
+                    [
+                        Has(Moves),
+                        HasValue(Moves, { player: BigInt(account.address) }),
+                    ],
+                    () => {
+                        resolve();
+                    }
+                );
+            });
         } catch (e) {
             console.log(e);
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
-        } finally {
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
         }
     };
 
