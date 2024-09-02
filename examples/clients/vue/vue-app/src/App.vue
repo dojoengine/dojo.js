@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, toRaw, reactive } from "vue";
 import { dojoConfig } from "../dojoConfig.ts";
-import {
-    createAccount,
-    getAccount,
-    useComponentValue,
-} from "./utils";
+import { createAccount, getAccount, useComponentValue } from "./utils";
 import { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { setup } from "./dojo/setup.ts";
