@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, toRaw, reactive } from "vue";
-import { setup } from "./dojo/generated/setup.ts";
 import { dojoConfig } from "../dojoConfig.ts";
-import {
-    createAccount,
-    Direction,
-    getAccount,
-    useComponentValue,
-} from "./utils";
+import { createAccount, getAccount, useComponentValue } from "./utils";
 import { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { setup } from "./dojo/setup.ts";
+
+export type Direction =
+    | { type: "None" }
+    | { type: "Left" }
+    | { type: "Right" }
+    | { type: "Up" }
+    | { type: "Down" };
 
 const dojoContext = reactive<any>({
     setup: null,
@@ -38,7 +40,7 @@ const spawnFun = async () => {
     await spawn(dojoContext.account);
 };
 
-const moveFun = async (direction: any) => {
+const moveFun = async (direction: Direction) => {
     const account = dojoContext.account;
     if (!account) {
         console.log("No account");
@@ -106,7 +108,7 @@ watch(
                     @click="
                         () =>
                             position && position.vec.y > 0
-                                ? moveFun(Direction.Up)
+                                ? moveFun({ type: 'Up' })
                                 : console.log(`Reach the borders of the world.`)
                     "
                 >
@@ -118,16 +120,16 @@ watch(
                     @click="
                         () =>
                             position && position.vec.x > 0
-                                ? moveFun(Direction.Left)
+                                ? moveFun({ type: 'Left' })
                                 : console.log(`Reach the borders of the world.`)
                     "
                 >
                     Move Left
                 </button>
-                <button @click="moveFun(Direction.Right)">Move Right</button>
+                <button @click="moveFun({ type: 'Right' })">Move Right</button>
             </div>
             <div>
-                <button @click="moveFun(Direction.Down)">Move Down</button>
+                <button @click="moveFun({ type: 'Down' })">Move Down</button>
             </div>
         </div>
     </div>

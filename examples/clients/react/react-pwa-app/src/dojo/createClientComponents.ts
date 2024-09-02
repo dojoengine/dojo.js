@@ -1,5 +1,5 @@
 import { overridableComponent } from "@dojoengine/recs";
-import { ContractComponents } from "./generated/contractComponents";
+import { ContractComponents } from "./typescript/models.gen";
 
 export type ClientComponents = ReturnType<typeof createClientComponents>;
 

@@ -1,8 +1,9 @@
 import { world as recsWorld } from "./world";
-import { setup } from "./generated/setup";
+
 import { dojoConfig } from "../../dojoConfig";
 import { createBurner } from "./createBurner";
 import { Account } from "starknet";
+import { setup } from "./setup";
 
 export type NetworkLayer = Awaited<ReturnType<typeof createNetworkLayer>>;
 

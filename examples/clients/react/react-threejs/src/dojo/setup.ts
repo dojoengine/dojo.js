@@ -84,5 +84,6 @@ export async function setup({ ...config }: DojoConfig) {
         toriiClient,
         eventSync,
         sync,
+        world,
     };
 }

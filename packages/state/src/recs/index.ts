@@ -217,13 +217,13 @@ export const getEntitiesQuery = async <S extends Schema>(
           }
         : null;
 
-    const fetchedEntities = await client.getEntities({
-        limit,
-        offset: cursor,
-        clause: clause || undefined,
-    });
-
     while (continueFetching) {
+        const fetchedEntities = await client.getEntities({
+            limit,
+            offset: cursor,
+            clause: clause || undefined,
+        });
+
         setEntities(fetchedEntities, components);
 
         if (Object.keys(fetchedEntities).length < limit) {
@@ -279,8 +279,6 @@ export const syncEvents = async <S extends Schema>(
     return await client.onEventMessageUpdated(
         entityKeyClause,
         (fetchedEntities: any, data: any) => {
-            // Log the fetched entities and data for debugging purposes
-            console.log("fetchedEntities", data);
             // Update the local state with the fetched entities and their data
             setEntities({ [fetchedEntities]: data }, components);
         }

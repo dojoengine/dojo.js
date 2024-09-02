@@ -3,10 +3,11 @@ import { useDojo } from "@/dojo/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { Cone } from "@react-three/drei";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { Direction } from "@/utils";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { MAP_SCALE } from "@/config";
+import { Direction } from "@/dojo/typescript/models.gen";
 
 export const Player = (props: any) => {
     const {
@@ -17,9 +18,7 @@ export const Player = (props: any) => {
         },
     } = useDojo();
 
-    const [hoveredTile, setHoveredTile] = useState<Direction | undefined>(
-        undefined
-    );
+    const [hoveredTile, setHoveredTile] = useState<Direction>({ type: "None" });
     const [startPosition, setStartPosition] = useState<
         THREE.Vector3 | undefined
     >();
@@ -49,9 +48,14 @@ export const Player = (props: any) => {
         [MAP_SCALE]
     );
 
-    const blueCellsAroundPlayer = [
+    interface BlueCell {
+        direction: Direction;
+        position: THREE.Vector3;
+    }
+
+    const blueCellsAroundPlayer: BlueCell[] = [
         {
-            direction: Direction.Up,
+            direction: { type: "Up" },
             position: new THREE.Vector3(
                 (vec.y - 1) * MAP_SCALE,
                 -MAP_SCALE + 0.1,
@@ -59,7 +63,7 @@ export const Player = (props: any) => {
             ),
         },
         {
-            direction: Direction.Down,
+            direction: { type: "Down" },
             position: new THREE.Vector3(
                 (vec.y + 1) * MAP_SCALE,
                 -MAP_SCALE + 0.1,
@@ -67,7 +71,7 @@ export const Player = (props: any) => {
             ),
         },
         {
-            direction: Direction.Right,
+            direction: { type: "Right" },
             position: new THREE.Vector3(
                 vec.y * MAP_SCALE,
                 -MAP_SCALE + 0.1,
@@ -75,7 +79,7 @@ export const Player = (props: any) => {
             ),
         },
         {
-            direction: Direction.Left,
+            direction: { type: "Left" },
             position: new THREE.Vector3(
                 vec.y * MAP_SCALE,
                 -MAP_SCALE + 0.1,
@@ -130,7 +134,7 @@ export const Player = (props: any) => {
         lerpProgress.current = 0;
 
         // Reset Hovered Tile
-        setHoveredTile(undefined);
+        setHoveredTile({ type: "None" });
     }, [coneRef, player, vec.x, vec.y]);
 
     useEffect(() => {
@@ -178,7 +182,7 @@ export const Player = (props: any) => {
                                     // Stop propagation to avoid selecting other cells
                                     // onPointerLeave does not stop at the first cell encountered by default
                                     e.stopPropagation();
-                                    setHoveredTile(undefined);
+                                    setHoveredTile({ type: "None" });
                                 }}
                             ></mesh>
                         );

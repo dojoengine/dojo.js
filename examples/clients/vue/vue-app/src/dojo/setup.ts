@@ -80,7 +80,7 @@ export async function setup({ ...config }: DojoConfig) {
         },
         config,
         dojoProvider,
-        burnerManager,
+        account: burnerManager.account as Account,
         toriiClient,
         eventSync,
         sync,
