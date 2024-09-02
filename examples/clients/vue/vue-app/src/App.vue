@@ -108,7 +108,7 @@ watch(
                     @click="
                         () =>
                             position && position.vec.y > 0
-                                ? moveFun(Direction.Up)
+                                ? moveFun({ type: 'Up' })
                                 : console.log(`Reach the borders of the world.`)
                     "
                 >
@@ -120,16 +120,16 @@ watch(
                     @click="
                         () =>
                             position && position.vec.x > 0
-                                ? moveFun(Direction.Left)
+                                ? moveFun({ type: 'Left' })
                                 : console.log(`Reach the borders of the world.`)
                     "
                 >
                     Move Left
                 </button>
-                <button @click="moveFun(Direction.Right)">Move Right</button>
+                <button @click="moveFun({ type: 'Right' })">Move Right</button>
             </div>
             <div>
-                <button @click="moveFun(Direction.Down)">Move Down</button>
+                <button @click="moveFun({ type: 'Down' })">Move Down</button>
             </div>
         </div>
     </div>
