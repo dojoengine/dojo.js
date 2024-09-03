@@ -8,6 +8,7 @@ export async function subscribeQuery<T extends SchemaType, K extends keyof T>(
     callback: (response: { entities?: torii.Entities; error?: Error }) => void
 ): Promise<torii.Subscription> {
     const clauses = convertQueryToClauses(query);
+
     return client.onEntityUpdated(
         clauses,
         (entities: string, data: torii.Entities) => {
