@@ -1,39 +1,7 @@
 import { convertQueryToClause } from "./convertQuerytoClause";
+import { parseEntities } from "./parseEntities";
 import { SchemaType } from "./types";
 import * as torii from "@dojoengine/torii-client";
-
-export function parseEntities<T extends SchemaType, K extends keyof T>(
-    entities: torii.Entities,
-    query: { [P in K]?: Partial<T[P]> }
-): { [P in K]: T[P][] } {
-    const result = {} as { [P in K]: T[P][] };
-
-    for (const modelName in query) {
-        if (entities[modelName]) {
-            result[modelName as K] = Object.values(entities[modelName]).map(
-                (entity) => {
-                    const parsedEntity = {} as T[K];
-                    for (const key in entity) {
-                        const value = entity[key];
-                        if (
-                            value &&
-                            typeof value === "object" &&
-                            "value" in value
-                        ) {
-                            parsedEntity[key as keyof T[K]] =
-                                value.value as any;
-                        }
-                    }
-                    return parsedEntity;
-                }
-            );
-        } else {
-            result[modelName as K] = [];
-        }
-    }
-
-    return result;
-}
 
 export async function getEntities<T extends SchemaType, K extends keyof T>(
     client: torii.ToriiClient,
