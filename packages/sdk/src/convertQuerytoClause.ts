@@ -2,7 +2,8 @@ import * as torii from "@dojoengine/torii-client";
 import { SchemaType } from "./types";
 
 export function convertQueryToClause<T extends SchemaType>(
-    query: Partial<T>
+    query: Partial<T>,
+    operator: "And" | "Or" = "And"
 ): torii.Clause {
     const clauses: torii.Clause[] = [];
 
@@ -37,10 +38,10 @@ export function convertQueryToClause<T extends SchemaType>(
         return clauses[0];
     }
 
-    // If there are multiple clauses, combine them with an AND operator
+    // Combine clauses with the specified operator
     return {
         Composite: {
-            operator: "And",
+            operator: operator,
             clauses: clauses,
         },
     };
