@@ -13,16 +13,20 @@ export async function init<T extends SchemaType>(
     options: torii.ClientConfig
 ): Promise<{
     client: torii.ToriiClient;
-    subscribeQuery: (
-        query: { [P in keyof T]?: Partial<T[P]> },
-        callback: (response: { data?: torii.Entities; error?: Error }) => void
+    subscribeQuery: <K extends keyof T>(
+        query: { [P in K]?: Partial<T[P]> },
+        callback: (response: {
+            data?: { [P in K]: T[P][] };
+            error?: Error;
+        }) => void
     ) => Promise<torii.Subscription>;
-    getEntities: (
-        query: {
-            [P in keyof T]?: Partial<T[P]>;
-        },
-        callback: (response: { data?: torii.Entities; error?: Error }) => void
-    ) => Promise<torii.Entities>;
+    getEntities: <K extends keyof T>(
+        query: { [P in K]?: Partial<T[P]> },
+        callback: (response: {
+            data?: { [P in K]: T[P][] };
+            error?: Error;
+        }) => void
+    ) => Promise<{ [P in K]: T[P][] }>;
 }> {
     const client = await createClient(options);
 
@@ -33,7 +37,6 @@ export async function init<T extends SchemaType>(
         getEntities: (query, callback) => getEntities(client, query, callback),
     };
 }
-
 // EXAMPLE FOR NOW
 
 interface Todo {
@@ -43,8 +46,16 @@ interface Todo {
     createdAt: number;
 }
 
+interface Goals {
+    id: string;
+    text: string;
+    done: boolean;
+    createdAt: number;
+}
+
 type Schema = {
     todos: Todo;
+    goals: Goals;
 };
 
 async function exampleUsage() {
@@ -56,7 +67,7 @@ async function exampleUsage() {
     });
 
     // Query all todos
-    db.subscribeQuery({ todos: {} }, (resp) => {
+    db.subscribeQuery({ todos: {}, goals: {} }, (resp) => {
         if (resp.error) {
             console.error("Error querying todos:", resp.error.message);
             return;
