@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { SchemaType } from "../types";
 import * as torii from "@dojoengine/torii-client";
 import { parseEntities } from "../parseEntities";
-
+import { QueryType } from "..";
 // Mock SchemaType for testing
 interface TestSchema extends SchemaType {
     player: {
@@ -86,12 +86,12 @@ describe("parseEntities", () => {
             },
         };
 
-        const query: { [P in keyof TestSchema]?: Partial<TestSchema[P]> } = {
-            player: {},
-            item: {},
+        const query: QueryType<TestSchema, "player" | "item"> = {
+            player: { $: {} },
+            item: { $: {} },
         };
 
-        const result = parseEntities<TestSchema, keyof TestSchema>(
+        const result = parseEntities<TestSchema, "player" | "item">(
             mockEntities,
             query
         );
@@ -107,12 +107,12 @@ describe("parseEntities", () => {
 
     it("should handle empty entities", () => {
         const mockEntities: torii.Entities = {};
-        const query: { [P in keyof TestSchema]?: Partial<TestSchema[P]> } = {
-            player: {},
-            item: {},
+        const query: QueryType<TestSchema, "player" | "item"> = {
+            player: { $: {} },
+            item: { $: {} },
         };
 
-        const result = parseEntities<TestSchema, keyof TestSchema>(
+        const result = parseEntities<TestSchema, "player" | "item">(
             mockEntities,
             query
         );
@@ -149,14 +149,11 @@ describe("parseEntities", () => {
             },
         };
 
-        const query: { [P in keyof TestSchema]?: Partial<TestSchema[P]> } = {
-            player: {},
+        const query: QueryType<TestSchema, "player"> = {
+            player: { $: {} },
         };
 
-        const result = parseEntities<TestSchema, keyof TestSchema>(
-            mockEntities,
-            query
-        );
+        const result = parseEntities<TestSchema, "player">(mockEntities, query);
 
         expect(result).toEqual({
             player: [{ id: "0x1", name: "Alice", score: 100 }],
@@ -184,14 +181,11 @@ describe("parseEntities", () => {
             },
         };
 
-        const query: { [P in keyof TestSchema]?: Partial<TestSchema[P]> } = {
-            player: {},
+        const query: QueryType<TestSchema, "player"> = {
+            player: { $: {} },
         };
 
-        const result = parseEntities<TestSchema, keyof TestSchema>(
-            mockEntities,
-            query
-        );
+        const result = parseEntities<TestSchema, "player">(mockEntities, query);
 
         expect(result).toEqual({
             player: [{ id: "0x1", name: "Alice" }],
@@ -243,14 +237,11 @@ describe("parseEntities", () => {
             },
         };
 
-        const query: { [P in keyof TestSchema]?: Partial<TestSchema[P]> } = {
-            player: {},
+        const query: QueryType<TestSchema, never> = {
+            player: { $: {}, inventory: { $: {} } },
         };
 
-        const result = parseEntities<TestSchema, keyof TestSchema>(
-            mockEntities,
-            query
-        );
+        const result = parseEntities<TestSchema, never>(mockEntities, query);
 
         expect(result).toEqual({
             player: [
@@ -316,10 +307,7 @@ describe("parseEntities", () => {
             player: {},
         };
 
-        const result = parseEntities<TestSchema, keyof TestSchema>(
-            mockEntities,
-            query
-        );
+        const result = parseEntities<TestSchema, never>(mockEntities, query);
 
         expect(result).toEqual({
             player: [
@@ -377,10 +365,7 @@ describe("parseEntities", () => {
             player: {},
         };
 
-        const result = parseEntities<TestSchema, keyof TestSchema>(
-            mockEntities,
-            query
-        );
+        const result = parseEntities<TestSchema, never>(mockEntities, query);
 
         expect(result).toEqual({
             player: [

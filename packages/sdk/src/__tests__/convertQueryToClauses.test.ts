@@ -1,11 +1,23 @@
-import { describe, it, expect, vi } from "vitest";
-
-import { SchemaType } from "../types";
+import { describe, it, expect } from "vitest";
+import { QueryType } from "..";
 import { convertQueryToClauses } from "../convertQueryToClauses";
 
+// Define a mock SchemaType for testing purposes
+interface MockSchemaType {
+    Player: {
+        id: string;
+        name: string;
+        score: number;
+    };
+    Item: {
+        id: string;
+        owner: string;
+    };
+}
+
 describe("convertQueryToClauses", () => {
-    it("should convert a query with conditions to clauses", () => {
-        const query: Partial<SchemaType> = {
+    it("should convert a query with direct key-value pairs to clauses", () => {
+        const query: QueryType<MockSchemaType> = {
             Player: { id: "1", name: "Alice" },
             Item: { id: "2" },
         };
@@ -31,8 +43,8 @@ describe("convertQueryToClauses", () => {
     });
 
     it("should handle empty conditions with VariableLen pattern matching", () => {
-        const query: Partial<SchemaType> = {
-            Player: {},
+        const query: QueryType<MockSchemaType> = {
+            Player: { $: {} },
             Item: { id: "2" },
         };
 
@@ -56,11 +68,20 @@ describe("convertQueryToClauses", () => {
         ]);
     });
 
-    it("should ignore non-object conditions", () => {
-        const query: Partial<SchemaType> = {
-            Player: { id: "1" },
-            Item: null as any,
-            Enemy: undefined as any,
+    it("should convert a query with entityIds to HashedKeys clause", () => {
+        const query: QueryType<MockSchemaType> = {
+            entityIds: ["hash1", "hash2"],
+        };
+
+        const result = convertQueryToClauses(query);
+
+        expect(result).toEqual([{ HashedKeys: ["hash1", "hash2"] }]);
+    });
+
+    it("should ignore $ key and nested queries", () => {
+        const query: QueryType<MockSchemaType> = {
+            Player: { $: { where: { score: { $gt: 100 } } }, id: "1" },
+            Item: { $: {} },
         };
 
         const result = convertQueryToClauses(query);
@@ -73,11 +94,18 @@ describe("convertQueryToClauses", () => {
                     models: ["Player"],
                 },
             },
+            {
+                Keys: {
+                    keys: [],
+                    pattern_matching: "VariableLen",
+                    models: ["Item"],
+                },
+            },
         ]);
     });
 
     it("should return an empty array for an empty query", () => {
-        const query: Partial<SchemaType> = {};
+        const query: QueryType<MockSchemaType> = {};
 
         const result = convertQueryToClauses(query);
 

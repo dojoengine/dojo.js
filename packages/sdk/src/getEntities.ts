@@ -1,3 +1,4 @@
+import { QueryResult, QueryType } from ".";
 import { convertQueryToClause } from "./convertQuerytoClause";
 import { parseEntities } from "./parseEntities";
 import { SchemaType } from "./types";
@@ -5,15 +6,12 @@ import * as torii from "@dojoengine/torii-client";
 
 export async function getEntities<T extends SchemaType, K extends keyof T>(
     client: torii.ToriiClient,
-    query: { [P in K]?: Partial<T[P]> },
-    callback: (response: {
-        data?: { [P in K]: T[P][] };
-        error?: Error;
-    }) => void,
+    query: QueryType<T, K>,
+    callback: (response: { data?: QueryResult<T, K>; error?: Error }) => void,
     limit: number = 100, // Default limit
     offset: number = 0 // Default offset
-): Promise<{ [P in K]: T[P][] }> {
-    const clauses = convertQueryToClause(query);
+): Promise<QueryResult<T, K>> {
+    const clause = convertQueryToClause(query);
     let cursor = offset;
     let continueFetching = true;
     let allEntities: torii.Entities = {};
@@ -22,12 +20,7 @@ export async function getEntities<T extends SchemaType, K extends keyof T>(
         const toriiQuery: torii.Query = {
             limit: limit,
             offset: cursor,
-            clause: {
-                Composite: {
-                    operator: "And",
-                    clauses: [clauses],
-                },
-            },
+            clause: clause,
         };
 
         try {
