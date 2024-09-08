@@ -7,8 +7,12 @@ import { QueryOptions, QueryType } from ".";
  * @returns {torii.EntityKeysClause[]}
  */
 export function convertQueryToClauses<T extends SchemaType>(
-    query: QueryType<T>
+    query?: QueryType<T>
 ): torii.EntityKeysClause[] {
+    if (!query) {
+        return [];
+    }
+
     const clauses: torii.EntityKeysClause[] = [];
 
     // Handle entityIds

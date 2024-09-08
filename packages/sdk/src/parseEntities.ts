@@ -25,7 +25,7 @@ function parseStruct(struct: Record<string, torii.Ty>): any {
 
 export function parseEntities<T extends SchemaType, K extends keyof T>(
     entities: torii.Entities,
-    query: QueryType<T, K>
+    query?: QueryType<T, K>
 ): QueryResult<T, K> {
     const result = {} as QueryResult<T, K>;
 
@@ -70,11 +70,7 @@ export function parseEntities<T extends SchemaType, K extends keyof T>(
                             : QueryResult<T, SubKey & keyof T>;
                     };
                 }
-            ) as (T[K] & {
-                [SubKey in keyof QueryType<T, K>]: SubKey extends "$"
-                    ? never
-                    : QueryResult<T, SubKey & keyof T>;
-            })[];
+            );
         } else {
             result[modelName as K] = [];
         }

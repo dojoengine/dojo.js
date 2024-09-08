@@ -6,7 +6,7 @@ import { QueryResult, QueryType } from ".";
 
 export async function subscribeQuery<T extends SchemaType, K extends keyof T>(
     client: torii.ToriiClient,
-    query: QueryType<T, K>,
+    query?: QueryType<T, K>,
     callback?: (response: { data?: QueryResult<T, K>; error?: Error }) => void
 ): Promise<torii.Subscription> {
     return client.onEntityUpdated(
