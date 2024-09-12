@@ -1,11 +1,6 @@
 import * as torii from "@dojoengine/torii-client";
-import { SchemaType } from "./types";
-import { QueryOptions, QueryType } from ".";
+import { SchemaType, QueryType, QueryOptions } from "./types";
 
-/**
- * @param {Partial<SchemaType>} query
- * @returns {torii.EntityKeysClause[]}
- */
 export function convertQueryToClauses<T extends SchemaType>(
     query?: QueryType<T>
 ): torii.EntityKeysClause[] {
@@ -24,45 +19,42 @@ export function convertQueryToClauses<T extends SchemaType>(
         clauses.push({ HashedKeys: query.entityIds });
     }
 
-    for (const [model, conditions] of Object.entries(query)) {
-        if (model === "entityIds") continue; // Skip the entityIds key
+    for (const [namespace, models] of Object.entries(query)) {
+        if (namespace === "entityIds") continue; // Skip the entityIds key
 
-        if (conditions && typeof conditions === "object") {
-            const keys: (string | undefined)[] = [];
+        if (models && typeof models === "object") {
+            for (const [model, conditions] of Object.entries(models)) {
+                const namespaceModel = `${namespace}-${model}`;
+                const keys: string[] = [];
 
-            for (const [key, value] of Object.entries(conditions)) {
-                if (key === "$") {
-                    // Handle query options
-                    const queryOptions = value as QueryOptions;
+                if (conditions && typeof conditions === "object") {
+                    const queryOptions = conditions as QueryOptions;
                     if (queryOptions.where) {
-                        // Handle 'where' conditions if needed
-                        // For now, we're not doing anything with 'where'
+                        // Process 'where' conditions if needed
+                        // This might involve converting the 'where' clause to keys
+                        // depending on your specific requirements
                     }
-                    continue;
-                }
-                if (typeof value === "object" && value !== null) {
-                    // This is a nested query, we don't include it in the keys
-                    continue;
-                }
-                keys.push(value as string | undefined);
-            }
 
-            if (keys.length > 0) {
-                clauses.push({
-                    Keys: {
-                        keys,
-                        pattern_matching: "FixedLen",
-                        models: [model],
-                    },
-                });
-            } else {
-                clauses.push({
-                    Keys: {
-                        keys: [],
-                        pattern_matching: "VariableLen",
-                        models: [model],
-                    },
-                });
+                    // Add other conditions processing if needed
+                }
+
+                if (keys.length > 0) {
+                    clauses.push({
+                        Keys: {
+                            keys,
+                            pattern_matching: "FixedLen",
+                            models: [namespaceModel],
+                        },
+                    });
+                } else {
+                    clauses.push({
+                        Keys: {
+                            keys: [],
+                            pattern_matching: "VariableLen",
+                            models: [namespaceModel],
+                        },
+                    });
+                }
             }
         }
     }

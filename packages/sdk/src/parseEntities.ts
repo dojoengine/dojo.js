@@ -1,5 +1,4 @@
-import { QueryResult, QueryType } from ".";
-import { SchemaType } from "./types";
+import { QueryResult, QueryType, SchemaType } from "./types";
 import * as torii from "@dojoengine/torii-client";
 
 function parseValue(value: torii.Ty): any {
@@ -23,57 +22,47 @@ function parseStruct(struct: Record<string, torii.Ty>): any {
     );
 }
 
-export function parseEntities<T extends SchemaType, K extends keyof T>(
+export function parseEntities<T extends SchemaType>(
     entities: torii.Entities,
-    query?: QueryType<T, K>
-): QueryResult<T, K> {
-    const result = {} as QueryResult<T, K>;
+    query?: QueryType<T>,
+    options?: { logging?: boolean }
+): QueryResult<T> {
+    const result = {} as QueryResult<T>;
 
-    for (const modelName in query) {
-        if (modelName !== "entityIds" && entities[modelName]) {
-            result[modelName as K] = Object.entries(entities[modelName]).map(
-                ([entityKey, entity]) => {
-                    let parsedEntity = parseStruct(entity) as T[K];
-                    const subQuery = (query as any)[modelName];
+    if (options?.logging) {
+        console.log("Parsing entities:", entities);
+        console.log("Query:", query);
+    }
 
-                    // Handle nested queries
-                    if (subQuery && typeof subQuery === "object") {
-                        for (const key in subQuery) {
-                            if (
-                                key !== "$" &&
-                                typeof subQuery[key] === "object"
-                            ) {
-                                const nestedEntity = entity[key] as torii.Ty;
-                                if (nestedEntity?.type === "struct") {
-                                    const nestedEntities: torii.Entities = {
-                                        [key]: {
-                                            [entityKey]:
-                                                nestedEntity.value as torii.Model,
-                                        },
-                                    };
-                                    const nestedResult = parseEntities(
-                                        nestedEntities,
-                                        { [key]: subQuery[key] } as any
-                                    );
-                                    (parsedEntity as any)[key] =
-                                        nestedResult[
-                                            key as keyof typeof nestedResult
-                                        ]?.[0];
-                                }
-                            }
-                        }
-                    }
+    for (const entityId in entities) {
+        const entityData = entities[entityId];
+        for (const modelName in entityData) {
+            const [namespace, model] = modelName.split("-");
+            const lowerModel = model.toLowerCase();
 
-                    return parsedEntity as T[K] & {
-                        [SubKey in keyof QueryType<T, K>]: SubKey extends "$"
-                            ? never
-                            : QueryResult<T, SubKey & keyof T>;
-                    };
-                }
+            if (!result[namespace]) {
+                (result as any)[namespace] = {};
+            }
+            if (!(result as any)[namespace][lowerModel]) {
+                (result as any)[namespace][lowerModel] = [];
+            }
+
+            const parsedEntity = parseStruct(
+                entityData[modelName] as Record<string, torii.Ty>
             );
-        } else {
-            result[modelName as K] = [];
+            (result[namespace][lowerModel] as any[]).push(parsedEntity);
+
+            if (options?.logging) {
+                console.log(
+                    `Parsed entity for model ${lowerModel}:`,
+                    parsedEntity
+                );
+            }
         }
+    }
+
+    if (options?.logging) {
+        console.log("Parsed result:", result);
     }
 
     return result;

@@ -1,96 +1,122 @@
 import * as torii from "@dojoengine/torii-client";
-import { SchemaType } from "./types";
-import { QueryType } from ".";
+import { SchemaType, QueryType } from "./types";
 
-export function convertQueryToClause<T extends SchemaType, K extends keyof T>(
-    query: QueryType<T, K>,
+export function convertQueryToClause<T extends SchemaType>(
+    query: QueryType<T>,
     operator: torii.LogicalOperator = "And"
 ): torii.Clause {
     const clauses: torii.Clause[] = [];
 
-    for (const [model, conditions] of Object.entries(query)) {
-        if (conditions && typeof conditions === "object") {
-            const keys: (string | undefined)[] = [];
-            const memberClauses: torii.Clause[] = [];
+    for (const [namespace, models] of Object.entries(query)) {
+        if (namespace === "entityIds") continue; // Skip entityIds
 
-            for (const [key, value] of Object.entries(conditions)) {
-                if (key === "$") {
-                    // Handle MemberClause
+        if (models && typeof models === "object") {
+            for (const [model, modelData] of Object.entries(models)) {
+                const namespaceModel = `${namespace}-${model}`;
+
+                if (
+                    modelData &&
+                    typeof modelData === "object" &&
+                    "$" in modelData
+                ) {
+                    const conditions = modelData.$;
                     if (
-                        value &&
-                        typeof value === "object" &&
-                        "where" in value
+                        conditions &&
+                        typeof conditions === "object" &&
+                        "where" in conditions
                     ) {
-                        const whereClause = (
-                            value as { where?: Record<string, any> }
-                        ).where;
-                        if (whereClause) {
+                        const whereClause = conditions.where;
+                        if (whereClause && typeof whereClause === "object") {
                             for (const [member, memberValue] of Object.entries(
                                 whereClause
                             )) {
-                                memberClauses.push({
-                                    Member: {
-                                        model,
-                                        member,
-                                        operator: "Eq", // Default to Eq, can be extended for other operators
-                                        value: convertToPrimitive(memberValue),
-                                    },
-                                });
+                                if (
+                                    typeof memberValue === "object" &&
+                                    memberValue !== null
+                                ) {
+                                    for (const [op, val] of Object.entries(
+                                        memberValue
+                                    )) {
+                                        clauses.push({
+                                            Member: {
+                                                model: namespaceModel,
+                                                member,
+                                                operator: convertOperator(op),
+                                                value: convertToPrimitive(val),
+                                            },
+                                        });
+                                    }
+                                } else {
+                                    clauses.push({
+                                        Member: {
+                                            model: namespaceModel,
+                                            member,
+                                            operator: "Eq", // Default to Eq
+                                            value: convertToPrimitive(
+                                                memberValue
+                                            ),
+                                        },
+                                    });
+                                }
                             }
                         }
                     }
-                } else if (typeof value !== "object" || value === null) {
-                    keys.push(value as string | undefined);
+                } else {
+                    // Handle the case where there are no conditions
+                    return {
+                        Keys: {
+                            keys: [],
+                            pattern_matching: "VariableLen",
+                            models: [namespaceModel],
+                        },
+                    };
                 }
-            }
-
-            if (keys.length > 0) {
-                clauses.push({
-                    Keys: {
-                        keys,
-                        pattern_matching: "FixedLen",
-                        models: [model],
-                    },
-                });
-            }
-
-            clauses.push(...memberClauses);
-
-            if (keys.length === 0 && memberClauses.length === 0) {
-                // If no specific conditions, include all entities of this model
-                clauses.push({
-                    Keys: {
-                        keys: [],
-                        pattern_matching: "VariableLen",
-                        models: [model],
-                    },
-                });
             }
         }
     }
 
-    // If there's only one clause, return it directly
-    if (clauses.length === 1) {
-        return clauses[0];
+    // If there are clauses, combine them under a single Composite clause
+    if (clauses.length > 0) {
+        return {
+            Composite: {
+                operator: operator,
+                clauses: clauses,
+            },
+        };
     }
 
-    // Combine clauses with the specified operator
+    // If there are no clauses, return an empty Composite
     return {
         Composite: {
             operator: operator,
-            clauses: clauses,
+            clauses: [],
         },
     };
 }
-
 function convertToPrimitive(value: any): torii.Primitive {
     if (typeof value === "number") {
-        return { I128: value.toString() };
+        return { U32: value };
     } else if (typeof value === "boolean") {
         return { Bool: value };
     } else if (typeof value === "string") {
         return { Felt252: value };
+    } else if (typeof value === "bigint") {
+        return { Felt252: value.toString() };
     }
     // Add more type conversions as needed
     throw new Error(`Unsupported primitive type: ${typeof value}`);
+}
+
+function convertOperator(operator: string): torii.ComparisonOperator {
+    switch (operator) {
+        case "$eq":
+            return "Eq";
+        case "$gt":
+            return "Gt";
+        case "$lt":
+            return "Lt";
+        // Add more operators as needed
+        default:
+            throw new Error(`Unsupported operator: ${operator}`);
+    }
 }
