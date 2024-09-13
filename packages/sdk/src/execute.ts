@@ -14,8 +14,31 @@ type AbiType =
     | "core::array::Array<u256>"
     | string; // For custom types
 
-type InputsType = ReadonlyArray<{ name: string; type: AbiType }>;
-type OutputsType = ReadonlyArray<{ type: AbiType }>;
+interface TypeMapping {
+    felt: string;
+    "felt*": string[];
+    "core::integer::u8": number;
+    "core::integer::u16": number;
+    "core::integer::u32": number;
+    "core::integer::u64": number;
+    "core::integer::u128": bigint;
+    "core::integer::u256": bigint;
+    "core::bool": boolean;
+    "core::array::Array<felt>": string[];
+    "core::array::Array<u256>": bigint[];
+    // Add custom type mappings here
+    "dojo_starter::models::Direction": "Left" | "Right" | "Up" | "Down";
+}
+
+type MapAbiType<T extends AbiType> = T extends keyof TypeMapping
+    ? TypeMapping[T]
+    : unknown; // Default to unknown for unmapped types
+
+type InputDefinition = { name: string; type: AbiType };
+type OutputDefinition = { type: AbiType };
+
+type InputsType = ReadonlyArray<InputDefinition>;
+type OutputsType = ReadonlyArray<OutputDefinition>;
 
 interface FunctionAbi {
     type: "function";
@@ -41,51 +64,30 @@ export interface ContractDefinition {
     tag: string;
 }
 
-type MapAbiType<T extends AbiType> = T extends "felt"
-    ? string
-    : T extends "felt*"
-      ? string[]
-      : T extends
-              | "core::integer::u8"
-              | "core::integer::u16"
-              | "core::integer::u32"
-              | "core::integer::u64"
-        ? number
-        : T extends "core::integer::u128" | "core::integer::u256"
-          ? bigint
-          : T extends "core::bool"
-            ? boolean
-            : T extends "core::array::Array<felt>"
-              ? string[]
-              : T extends "core::array::Array<u256>"
-                ? bigint[]
-                : string; // Default case for custom types
-
 type MapInputType<T extends InputsType> = {
     [K in T[number] as K["name"]]: MapAbiType<K["type"]>;
 };
 
-type MapOutputType<T extends OutputsType> = T["length"] extends 0
+type MapOutputType<T extends OutputsType> = T extends []
     ? void
     : T["length"] extends 1
       ? MapAbiType<T[0]["type"]>
       : { [K in keyof T]: MapAbiType<T[K]["type"]> };
 
-type ExtractFunctions<T extends readonly AbiItem[]> = Extract<
-    T[number],
-    FunctionAbi
->;
-
-type ContractFunctions<T extends readonly AbiItem[]> = {
-    [K in ExtractFunctions<T>["name"]]: (
-        args: MapInputType<Extract<ExtractFunctions<T>, { name: K }>["inputs"]>
-    ) => Promise<
-        MapOutputType<Extract<ExtractFunctions<T>, { name: K }>["outputs"]>
-    >;
+type ContractFunctions<T extends readonly FunctionAbi[]> = {
+    [F in T[number] as F["name"]]: (
+        args: MapInputType<F["inputs"]>
+    ) => Promise<MapOutputType<F["outputs"]>>;
 };
 
 export type WorldContracts<T extends readonly ContractDefinition[]> = {
-    [K in T[number]["tag"]]: ContractFunctions<T[number]["abi"]>;
+    [K in T[number]["tag"]]: ContractFunctions<
+        Extract<T[number], { tag: K }>["abi"] extends readonly (infer U)[]
+            ? U extends FunctionAbi
+                ? readonly U[]
+                : never
+            : never
+    >;
 };
 
 export function createWorldProxy<T extends readonly ContractDefinition[]>(
@@ -94,40 +96,50 @@ export function createWorldProxy<T extends readonly ContractDefinition[]>(
 ): WorldContracts<T> {
     const proxy = {} as WorldContracts<T>;
 
-    for (const contractDef of contractDefinitions) {
+    contractDefinitions.forEach((contractDef) => {
+        type Tag = typeof contractDef.tag;
+        type ContractDef = Extract<T[number], { tag: Tag }>;
+        type AbiItems = ContractDef["abi"];
+        type FunctionAbis = AbiItems extends readonly (infer U)[]
+            ? U extends FunctionAbi
+                ? readonly U[]
+                : never
+            : never;
+        type Functions = ContractFunctions<FunctionAbis>;
+
         const contract = new Contract(
             contractDef.abi as AbiItem[],
             contractDef.address,
             providerOrAccount
         );
 
-        (proxy as any)[contractDef.tag] = new Proxy(
-            {} as ContractFunctions<typeof contractDef.abi>,
-            {
-                get: (target, prop: string) => {
-                    if (prop in contract.functions) {
-                        return async (args: any) => {
-                            const functionAbi = contractDef.abi.find(
-                                (item) =>
-                                    item.type === "function" &&
-                                    "name" in item &&
-                                    item.name === prop
-                            ) as FunctionAbi;
-                            const inputs = functionAbi.inputs.map(
-                                (input) => args[input.name]
-                            );
-                            return await contract.functions[prop](...inputs);
-                        };
-                    }
-                    return undefined;
-                },
-            }
-        );
-    }
+        const functions = {} as Functions;
+
+        const functionAbis = contractDef.abi.filter(
+            (item): item is FunctionAbi => item.type === "function"
+        ) as unknown as FunctionAbis;
+
+        (functionAbis as readonly FunctionAbi[]).forEach((functionAbi) => {
+            const func = async (
+                args: MapInputType<typeof functionAbi.inputs>
+            ): Promise<MapOutputType<typeof functionAbi.outputs>> => {
+                const inputs = functionAbi.inputs.map(
+                    (input) => args[input.name]
+                ) as any[];
+                const result = await (contract.functions as any)[
+                    functionAbi.name
+                ](...inputs);
+                return result as MapOutputType<typeof functionAbi.outputs>;
+            };
+
+            functions[functionAbi.name as keyof Functions] = func as any;
+        });
+
+        proxy[contractDef.tag as keyof WorldContracts<T>] = functions;
+    });
 
     return proxy;
 }
-
 // Example usage
 const contractDefinitions = [
     {
@@ -154,8 +166,8 @@ const contractDefinitions = [
                 outputs: [],
                 state_mutability: "external",
             },
-        ],
-        systems: ["spawn", "move"],
+        ] as const,
+        systems: ["spawn", "move"] as const,
         tag: "actions",
     },
 ] as const;
