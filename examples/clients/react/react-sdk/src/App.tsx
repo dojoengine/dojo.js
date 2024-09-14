@@ -133,7 +133,11 @@ function App() {
 
         fetchEntities();
     }, []);
-    return <></>;
+    return (
+        <>
+            <button onClick={() => console.log("s")}></button>
+        </>
+    );
 }
 
 export default App;
