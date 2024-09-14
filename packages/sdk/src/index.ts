@@ -118,8 +118,8 @@ async function exampleUsage() {
         account
     );
 
-    await db.worldProxy.actions.spawn({});
-    await db.worldProxy.actions.move({ direction: "Left" });
+    // await db.worldProxy.actions.spawn({});
+    // await db.worldProxy.actions.move({ direction: "Left" });
 
     db.subscribeQuery(
         {
