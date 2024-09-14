@@ -22,6 +22,14 @@ export type QueryType<T extends SchemaType> = {
     };
 };
 
+export type SubscriptionQueryType<T extends SchemaType> = {
+    entityIds?: string[];
+} & {
+    [K in keyof T]?: {
+        [L in keyof T[K]]?: true | string[];
+    };
+};
+
 export type QueryResult<T extends SchemaType> = {
     [K in keyof T]: {
         [L in keyof T[K]]: Array<{

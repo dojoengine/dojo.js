@@ -1,5 +1,10 @@
 import * as torii from "@dojoengine/torii-client";
-import { QueryResult, QueryType, SchemaType } from "./types";
+import {
+    QueryResult,
+    QueryType,
+    SchemaType,
+    SubscriptionQueryType,
+} from "./types";
 import { subscribeQuery } from "./subscribeQuery";
 import { getEntities } from "./getEntities";
 import { Contract, AccountInterface } from "starknet";
@@ -27,7 +32,7 @@ export async function init<
 ): Promise<{
     client: torii.ToriiClient;
     subscribeQuery: (
-        query: QueryType<T>,
+        query: SubscriptionQueryType<T>,
         callback: (response: { data?: QueryResult<T>; error?: Error }) => void
     ) => Promise<torii.Subscription>;
     getEntities: (
@@ -124,14 +129,8 @@ async function exampleUsage() {
     db.subscribeQuery(
         {
             world: {
-                todos: {
-                    $: {
-                        where: {
-                            done: { $eq: false },
-                        },
-                    },
-                },
-                goals: {},
+                todos: true,
+                goals: true,
             },
         },
         (resp) => {
@@ -152,9 +151,8 @@ async function exampleUsage() {
     db.subscribeQuery(
         {
             world: {
-                todos: {
-                    $: { where: { id: { $eq: "123" } } },
-                },
+                todos: true,
+                goals: true,
             },
         },
         (resp) => {
@@ -188,9 +186,8 @@ async function exampleUsage() {
     db.subscribeQuery(
         {
             world: {
-                todos: {
-                    $: { where: { done: { $eq: true } } },
-                },
+                todos: true,
+                goals: true,
             },
         },
         (resp) => {
@@ -212,9 +209,7 @@ async function exampleUsage() {
     db.subscribeQuery(
         {
             world: {
-                todos: {
-                    $: { where: { createdAt: { $gt: specificDate } } },
-                },
+                todos: true,
             },
         },
         (resp) => {
@@ -238,14 +233,8 @@ async function exampleUsage() {
     db.subscribeQuery(
         {
             world: {
-                todos: {
-                    $: {
-                        where: {
-                            done: { $eq: false },
-                            createdAt: { $gt: specificDate },
-                        },
-                    },
-                },
+                todos: true,
+                goals: true,
             },
         },
         (resp) => {

@@ -1,16 +1,16 @@
 import * as torii from "@dojoengine/torii-client";
-import { convertQueryToClauses } from "./convertQueryToClauses";
-import { QueryResult, QueryType, SchemaType } from "./types";
+import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses";
+import { SubscriptionQueryType, QueryResult, SchemaType } from "./types";
 import { parseEntities } from "./parseEntities";
 
 export async function subscribeQuery<T extends SchemaType>(
     client: torii.ToriiClient,
-    query?: QueryType<T>,
+    query?: SubscriptionQueryType<T>,
     callback?: (response: { data?: QueryResult<T>; error?: Error }) => void,
     options?: { logging?: boolean }
 ): Promise<torii.Subscription> {
     return client.onEntityUpdated(
-        convertQueryToClauses(query),
+        convertQueryToEntityKeyClauses(query),
         (_entities: string, data: torii.Entities) => {
             try {
                 if (callback) {

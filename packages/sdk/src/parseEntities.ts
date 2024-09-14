@@ -1,4 +1,9 @@
-import { QueryResult, QueryType, SchemaType } from "./types";
+import {
+    QueryResult,
+    QueryType,
+    SchemaType,
+    SubscriptionQueryType,
+} from "./types";
 import * as torii from "@dojoengine/torii-client";
 
 function parseValue(value: torii.Ty): any {
@@ -24,7 +29,7 @@ function parseStruct(struct: Record<string, torii.Ty>): any {
 
 export function parseEntities<T extends SchemaType>(
     entities: torii.Entities,
-    query?: QueryType<T>,
+    query?: QueryType<T> | SubscriptionQueryType<T>,
     options?: { logging?: boolean }
 ): QueryResult<T> {
     const result = {} as QueryResult<T>;
