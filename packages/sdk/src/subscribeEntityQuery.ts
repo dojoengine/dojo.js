@@ -3,7 +3,7 @@ import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses
 import { SubscriptionQueryType, QueryResult, SchemaType } from "./types";
 import { parseEntities } from "./parseEntities";
 
-export async function subscribeQuery<T extends SchemaType>(
+export async function subscribeEntityQuery<T extends SchemaType>(
     client: torii.ToriiClient,
     query?: SubscriptionQueryType<T>,
     callback?: (response: { data?: QueryResult<T>; error?: Error }) => void,

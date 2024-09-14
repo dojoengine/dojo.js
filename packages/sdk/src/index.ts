@@ -5,7 +5,7 @@ import {
     SchemaType,
     SubscriptionQueryType,
 } from "./types";
-import { subscribeQuery } from "./subscribeQuery";
+import { subscribeEntityQuery } from "./subscribeEntityQuery";
 import { getEntities } from "./getEntities";
 import { Contract, AccountInterface } from "starknet";
 import {
@@ -15,6 +15,7 @@ import {
 } from "./execute";
 
 import rawWorldJson from "/Users/os/Documents/code/dojo/dojo.js/examples/dojo/dojo-starter/manifests/dev/deployment/manifest.json";
+import { subscribeEventQuery } from "./subscribeEventQuery";
 
 async function createClient(
     config: torii.ClientConfig
@@ -31,11 +32,19 @@ export async function init<
     account: AccountInterface
 ): Promise<{
     client: torii.ToriiClient;
-    subscribeQuery: (
+    subscribeEntityQuery: (
+        query: SubscriptionQueryType<T>,
+        callback: (response: { data?: QueryResult<T>; error?: Error }) => void
+    ) => Promise<torii.Subscription>;
+    subscribeEventQuery: (
         query: SubscriptionQueryType<T>,
         callback: (response: { data?: QueryResult<T>; error?: Error }) => void
     ) => Promise<torii.Subscription>;
     getEntities: (
+        query: QueryType<T>,
+        callback: (response: { data?: QueryResult<T>; error?: Error }) => void
+    ) => Promise<QueryResult<T>>;
+    getEventMessages: (
         query: QueryType<T>,
         callback: (response: { data?: QueryResult<T>; error?: Error }) => void
     ) => Promise<QueryResult<T>>;
@@ -46,9 +55,13 @@ export async function init<
 
     return {
         client,
-        subscribeQuery: (query, callback) =>
-            subscribeQuery(client, query, callback),
+        subscribeEntityQuery: (query, callback) =>
+            subscribeEntityQuery(client, query, callback),
+        subscribeEventQuery: (query, callback) =>
+            subscribeEventQuery(client, query, callback),
         getEntities: (query, callback) => getEntities(client, query, callback),
+        getEventMessages: (query, callback) =>
+            getEntities(client, query, callback),
         worldProxy,
     };
 }
@@ -126,7 +139,7 @@ async function exampleUsage() {
     // await db.worldProxy.actions.spawn({});
     // await db.worldProxy.actions.move({ direction: "Left" });
 
-    db.subscribeQuery(
+    db.subscribeEntityQuery(
         {
             world: {
                 todos: true,
@@ -148,7 +161,7 @@ async function exampleUsage() {
     );
 
     // Query todos with a specific id using where clause
-    db.subscribeQuery(
+    db.subscribeEntityQuery(
         {
             world: {
                 todos: true,
@@ -167,7 +180,7 @@ async function exampleUsage() {
     );
 
     // Hashed version of the above query
-    db.subscribeQuery(
+    db.subscribeEntityQuery(
         {
             entityIds: ["123"],
         },
@@ -183,7 +196,7 @@ async function exampleUsage() {
     );
 
     // Query completed todos using where clause
-    db.subscribeQuery(
+    db.subscribeEntityQuery(
         {
             world: {
                 todos: true,
@@ -206,7 +219,7 @@ async function exampleUsage() {
 
     // Query todos created after a specific date
     const specificDate = new Date("2023-01-01").getTime();
-    db.subscribeQuery(
+    db.subscribeEntityQuery(
         {
             world: {
                 todos: true,
@@ -230,7 +243,7 @@ async function exampleUsage() {
     );
 
     // Query todos with multiple conditions
-    db.subscribeQuery(
+    db.subscribeEntityQuery(
         {
             world: {
                 todos: true,
