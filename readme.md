@@ -81,14 +81,14 @@ To run the examples that have the linked packages, follow the steps below:
 **Terminal 1**: Set up the dojo starter with specific configurations.
 
 ```bash
-cd examples/dojo-starter
+cd examples/dojo/dojo-starter
 katana --disable-fee --allowed-origins "*"
 ```
 
 **Terminal 2**: Build and migrate the dojo starter.
 
 ```bash
-cd examples/dojo-starter
+cd examples/dojo/dojo-starter
 
 # Build and migrate
 sozo build
