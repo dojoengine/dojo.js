@@ -7,14 +7,13 @@ import {
 } from "./types";
 import { subscribeEntityQuery } from "./subscribeEntityQuery";
 import { getEntities } from "./getEntities";
-import { Contract, AccountInterface } from "starknet";
+import { AccountInterface } from "starknet";
 import {
     createWorldProxy,
     WorldContracts,
     ContractDefinition,
 } from "./execute";
 
-import rawWorldJson from "/Users/os/Documents/code/dojo/dojo.js/examples/dojo/dojo-starter/manifests/dev/deployment/manifest.json";
 import { subscribeEventQuery } from "./subscribeEventQuery";
 
 async function createClient(
@@ -276,7 +275,6 @@ async function exampleUsage() {
                         $: {
                             where: {
                                 done: { $eq: true },
-                                text: { $contains: "important" },
                             },
                         },
                     },

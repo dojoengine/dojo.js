@@ -93,6 +93,8 @@ export function convertQueryToClause<T extends SchemaType>(
         },
     };
 }
+
+// TODO: we could expand on these
 function convertToPrimitive(value: any): torii.Primitive {
     if (typeof value === "number") {
         return { U32: value };
@@ -111,11 +113,16 @@ function convertOperator(operator: string): torii.ComparisonOperator {
     switch (operator) {
         case "$eq":
             return "Eq";
+        case "$neq":
+            return "Neq";
         case "$gt":
             return "Gt";
+        case "$gte":
+            return "Gte";
         case "$lt":
             return "Lt";
-        // Add more operators as needed
+        case "$lte":
+            return "Lte";
         default:
             throw new Error(`Unsupported operator: ${operator}`);
     }

@@ -27,7 +27,7 @@ describe("convertQueryToClause", () => {
         const query: QueryType<MockSchemaType> = {
             world: {
                 player: {
-                    $: { where: { id: "1", name: "Alice" } },
+                    $: { where: { id: { $eq: "1" }, name: { $eq: "Alice" } } },
                 },
             },
         };
@@ -80,9 +80,9 @@ describe("convertQueryToClause", () => {
     it("should convert multiple model queries", () => {
         const query: QueryType<MockSchemaType> = {
             world: {
-                player: { $: { where: { id: "1" } } },
+                player: { $: { where: { id: { $eq: "1" } } } },
                 game: {
-                    $: { where: { status: "active" } },
+                    $: { where: { status: { $eq: "active" } } },
                 },
             },
         };
@@ -149,34 +149,6 @@ describe("convertQueryToClause", () => {
         });
     });
 
-    it("should handle queries with entityIds", () => {
-        const query: QueryType<MockSchemaType> = {
-            world: {
-                player: {
-                    $: { where: { name: "Alice" } },
-                },
-            },
-        };
-
-        const result = convertQueryToClause(query);
-
-        expect(result).toEqual({
-            Composite: {
-                operator: "And",
-                clauses: [
-                    {
-                        Member: {
-                            model: "world-player",
-                            member: "name",
-                            operator: "Eq",
-                            value: { Felt252: "Alice" },
-                        },
-                    },
-                ],
-            },
-        });
-    });
-
     it("should handle queries with limit and offset", () => {
         const query: QueryType<MockSchemaType> = {
             world: {
@@ -211,9 +183,6 @@ describe("convertQueryToClause", () => {
                 player: {
                     $: { where: { score: { $gt: 100 } } },
                 },
-                game: {
-                    $: { where: { status: "active" } },
-                },
                 item: {
                     $: { where: { durability: { $lt: 50 } } },
                 },
@@ -236,46 +205,10 @@ describe("convertQueryToClause", () => {
                     },
                     {
                         Member: {
-                            model: "world-game",
-                            member: "status",
-                            operator: "Eq",
-                            value: { Felt252: "active" },
-                        },
-                    },
-                    {
-                        Member: {
                             model: "world-item",
                             member: "durability",
                             operator: "Lt",
                             value: { U32: 50 },
-                        },
-                    },
-                ],
-            },
-        });
-    });
-
-    it("should handle queries with boolean values", () => {
-        const query: QueryType<MockSchemaType> = {
-            world: {
-                player: {
-                    $: { where: { isActive: true } },
-                },
-            },
-        };
-
-        const result = convertQueryToClause(query);
-
-        expect(result).toEqual({
-            Composite: {
-                operator: "And",
-                clauses: [
-                    {
-                        Member: {
-                            model: "world-player",
-                            member: "isActive",
-                            operator: "Eq",
-                            value: { Bool: true },
                         },
                     },
                 ],

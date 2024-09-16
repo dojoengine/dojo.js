@@ -1,3 +1,4 @@
+// TODO: We might be able to reuse types from torii-client. However, they are nested, we can simplify them like this:
 export type PrimitiveType = string | number | boolean;
 
 export type SchemaType = {
@@ -7,17 +8,32 @@ export type SchemaType = {
 };
 
 export type QueryOptions = {
-    where?: Record<string, any>;
-    limit?: number;
-    offset?: number;
+    limit?: number; // Limit the number of results returned
+    offset?: number; // Offset the results returned
+    entityId?: string; // Get the specific entity by ID. Which is the key in the db.
 };
 
+export interface WhereOptions extends QueryOptions {
+    where?: Record<
+        string,
+        {
+            // Add more operators as needed
+            $eq?: PrimitiveType;
+            $neq?: PrimitiveType;
+            $gt?: PrimitiveType;
+            $gte?: PrimitiveType;
+            $lt?: PrimitiveType;
+            $lte?: PrimitiveType;
+        }
+    >;
+}
+// Used for complex queries in fetching data
 export type QueryType<T extends SchemaType> = {
     entityIds?: string[];
 } & {
     [K in keyof T]?: {
         [L in keyof T[K]]?: {
-            $?: QueryOptions;
+            $?: WhereOptions;
         };
     };
 };
