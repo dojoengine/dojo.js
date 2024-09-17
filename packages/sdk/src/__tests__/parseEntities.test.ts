@@ -172,18 +172,20 @@ describe("parseEntities", () => {
                 entityId:
                     "0x14c362c17947ef1d40152d6e3bedd859c98bebfad41f75ef3f26798556a4c85",
                 models: {
-                    Position: {
-                        player: "0x7f7e355d3ae20c34de26c21b46612622f4e4012e7debc10f0300cf193a46366",
-                        vec: {
-                            x: 6,
-                            y: 10,
+                    dojo_starter: {
+                        Position: {
+                            player: "0x7f7e355d3ae20c34de26c21b46612622f4e4012e7debc10f0300cf193a46366",
+                            vec: {
+                                x: 6,
+                                y: 10,
+                            },
                         },
-                    },
-                    Moves: {
-                        last_direction: "Left",
-                        remaining: 98,
-                        can_move: true,
-                        player: "0x7f7e355d3ae20c34de26c21b46612622f4e4012e7debc10f0300cf193a46366",
+                        Moves: {
+                            last_direction: "Left",
+                            remaining: 98,
+                            can_move: true,
+                            player: "0x7f7e355d3ae20c34de26c21b46612622f4e4012e7debc10f0300cf193a46366",
+                        },
                     },
                 },
             },
@@ -191,17 +193,19 @@ describe("parseEntities", () => {
                 entityId:
                     "0x144c128b8ead7d0da39c6a150abbfdd38f572ba9418d3e36929eb6107b4ce4d",
                 models: {
-                    Moves: {
-                        last_direction: "Left",
-                        remaining: 99,
-                        can_move: true,
-                        player: "0x70c774f8d061323ada4e4924c12c894f39b5874b71147af254b3efae07e68c0",
-                    },
-                    Position: {
-                        player: "0x70c774f8d061323ada4e4924c12c894f39b5874b71147af254b3efae07e68c0",
-                        vec: {
-                            x: 6,
-                            y: 10,
+                    dojo_starter: {
+                        Moves: {
+                            last_direction: "Left",
+                            remaining: 99,
+                            can_move: true,
+                            player: "0x70c774f8d061323ada4e4924c12c894f39b5874b71147af254b3efae07e68c0",
+                        },
+                        Position: {
+                            player: "0x70c774f8d061323ada4e4924c12c894f39b5874b71147af254b3efae07e68c0",
+                            vec: {
+                                x: 6,
+                                y: 10,
+                            },
                         },
                     },
                 },

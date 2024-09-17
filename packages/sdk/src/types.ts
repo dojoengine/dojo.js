@@ -61,15 +61,15 @@ export type QueryResult<T extends SchemaType> = {
     };
 };
 
-export type StandardizedQueryResult<T extends SchemaType> = {
-    [K in keyof T]?: {
-        [L in keyof T[K]]?: Array<ParsedEntity<T[K][L]>>;
-    };
-};
+export type StandardizedQueryResult<T extends SchemaType> = Array<
+    ParsedEntity<T>
+>;
 
-export type ParsedEntity<T extends Record<string, any>> = {
-    entityId: string; // Original Entity ID
+export type ParsedEntity<T extends SchemaType> = {
+    entityId: string;
     models: {
-        [P in keyof T]?: T[P];
+        [K in keyof T]: {
+            [M in keyof T[K]]?: T[K][M];
+        };
     };
 };

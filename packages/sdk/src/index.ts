@@ -129,17 +129,17 @@ export async function init<
 // ] as const;
 
 // async function exampleUsage() {
-//     const account: AccountInterface = {} as any; // Replace with actual account
+//     // const account: AccountInterface = {} as any; // Replace with actual account
 
-//     const db = await init<SchemaNamed, typeof contractDefinitions>(
+//     const db = await init<SchemaNamed>(
 //         {
 //             rpcUrl: "your-rpc-url",
 //             toriiUrl: "your-torii-url",
 //             relayUrl: "your-relay-url",
 //             worldAddress: "your-world-address",
-//         },
-//         contractDefinitions,
-//         account
+//         }
+//         // contractDefinitions,
+//         // account
 //     );
 
 //     // await db.worldProxy.actions.spawn({});
@@ -285,6 +285,13 @@ export async function init<
 //                             },
 //                         },
 //                     },
+//                     goals: {
+//                         $: {
+//                             where: {
+//                                 done: { $eq: true },
+//                             },
+//                         },
+//                     },
 //                 },
 //             },
 //             (resp) => {
@@ -298,7 +305,7 @@ export async function init<
 //                 if (resp.data) {
 //                     console.log(
 //                         "Completed important todos:",
-//                         resp.data.world.todos
+//                         resp.data.map((a) => a.models)
 //                     );
 //                 }
 //             }

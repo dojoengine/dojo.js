@@ -36,22 +36,24 @@ function parseStruct(
     );
 }
 
-export function parseEntities(
+export function parseEntities<T extends SchemaType>(
     entities: torii.Entities,
-    query?: QueryType<SchemaType> | SubscriptionQueryType<SchemaType>,
+    query?: QueryType<T>,
     options?: { logging?: boolean }
-): StandardizedQueryResult<SchemaType> {
-    const result: StandardizedQueryResult<SchemaType> =
-        {} as StandardizedQueryResult<SchemaType>;
+): StandardizedQueryResult<T> {
+    const result: StandardizedQueryResult<T> = [];
 
     for (const entityId in entities) {
         const entityData = entities[entityId];
-        const models: { [key: string]: any } = {};
+        const parsedEntity: ParsedEntity<T> = {
+            entityId,
+            models: {} as ParsedEntity<T>["models"],
+        };
 
         for (const modelName in entityData) {
             const [schemaKey, modelKey] = modelName.split("-") as [
-                keyof SchemaType,
-                keyof SchemaType[keyof SchemaType],
+                keyof T,
+                string,
             ];
 
             if (!schemaKey || !modelKey) {
@@ -61,13 +63,14 @@ export function parseEntities(
                 continue;
             }
 
-            models[modelKey as string] = parseStruct(entityData[modelName]);
-        }
+            if (!parsedEntity.models[schemaKey]) {
+                parsedEntity.models[schemaKey] = {} as T[typeof schemaKey];
+            }
 
-        const parsedEntity: ParsedEntity<SchemaType[keyof SchemaType]> = {
-            entityId,
-            models,
-        };
+            (parsedEntity.models[schemaKey] as any)[modelKey] = parseStruct(
+                entityData[modelName]
+            );
+        }
 
         result.push(parsedEntity);
 
