@@ -42,7 +42,10 @@ export function convertQueryToClause<T extends SchemaType>(
                                                 model: namespaceModel,
                                                 member,
                                                 operator: convertOperator(op),
-                                                value: convertToPrimitive(val),
+                                                value: {
+                                                    Primitive:
+                                                        convertToPrimitive(val),
+                                                },
                                             },
                                         });
                                     }
@@ -52,9 +55,12 @@ export function convertQueryToClause<T extends SchemaType>(
                                             model: namespaceModel,
                                             member,
                                             operator: "Eq", // Default to Eq
-                                            value: convertToPrimitive(
-                                                memberValue
-                                            ),
+                                            value: {
+                                                Primitive:
+                                                    convertToPrimitive(
+                                                        memberValue
+                                                    ),
+                                            },
                                         },
                                     });
                                 }
@@ -65,8 +71,8 @@ export function convertQueryToClause<T extends SchemaType>(
                     // Handle the case where there are no conditions
                     return {
                         Keys: {
-                            keys: [],
-                            pattern_matching: "VariableLen",
+                            keys: [undefined],
+                            pattern_matching: "FixedLen",
                             models: [namespaceModel],
                         },
                     };

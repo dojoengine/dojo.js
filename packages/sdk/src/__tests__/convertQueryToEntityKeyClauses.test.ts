@@ -57,7 +57,7 @@ describe("convertQueryToEntityKeyClauses", () => {
         const expected: torii.EntityKeysClause[] = [
             {
                 Keys: {
-                    keys: [],
+                    keys: [undefined],
                     pattern_matching: "VariableLen",
                     models: ["world-player"],
                 },
@@ -98,7 +98,7 @@ describe("convertQueryToEntityKeyClauses", () => {
             { HashedKeys: ["hash1"] },
             {
                 Keys: {
-                    keys: [],
+                    keys: [undefined],
                     pattern_matching: "VariableLen",
                     models: ["world-player"],
                 },
@@ -147,7 +147,7 @@ describe("convertQueryToEntityKeyClauses", () => {
         const expected: torii.EntityKeysClause[] = [
             {
                 Keys: {
-                    keys: [],
+                    keys: [undefined],
                     pattern_matching: "VariableLen",
                     models: ["world-player"],
                 },
@@ -167,7 +167,7 @@ describe("convertQueryToEntityKeyClauses", () => {
         const expected: torii.EntityKeysClause[] = [
             {
                 Keys: {
-                    keys: [],
+                    keys: [undefined],
                     pattern_matching: "VariableLen",
                     models: ["world-player"],
                 },

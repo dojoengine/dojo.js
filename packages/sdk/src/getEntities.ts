@@ -1,4 +1,4 @@
-import { QueryResult, QueryType } from "./types";
+import { StandardizedQueryResult, QueryType } from "./types";
 import { convertQueryToClause } from "./convertQuerytoClause";
 import { parseEntities } from "./parseEntities";
 import { SchemaType } from "./types";
@@ -7,14 +7,17 @@ import * as torii from "@dojoengine/torii-client";
 export async function getEntities<T extends SchemaType>(
     client: torii.ToriiClient,
     query: QueryType<T>,
-    callback: (response: { data?: QueryResult<T>; error?: Error }) => void,
+    callback: (response: {
+        data?: StandardizedQueryResult<T>;
+        error?: Error;
+    }) => void,
     limit: number = 100, // Default limit
     offset: number = 0, // Default offset
     options?: { logging?: boolean } // Logging option
-): Promise<QueryResult<T>> {
+): Promise<StandardizedQueryResult<T>> {
     const clause = convertQueryToClause(query);
 
-    console.log(clause);
+    console.log("clause", clause, query);
 
     let cursor = offset;
     let continueFetching = true;
@@ -39,7 +42,7 @@ export async function getEntities<T extends SchemaType>(
 
             Object.assign(allEntities, entities);
 
-            const parsedEntities = parseEntities<T>(allEntities, query);
+            const parsedEntities = parseEntities(allEntities, query);
 
             console.log("parsedEntities", parsedEntities);
 
@@ -62,5 +65,5 @@ export async function getEntities<T extends SchemaType>(
     if (options?.logging) {
         console.log("All fetched entities:", allEntities);
     }
-    return parseEntities<T>(allEntities, query);
+    return parseEntities(allEntities, query);
 }

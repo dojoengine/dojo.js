@@ -39,9 +39,9 @@ interface Vec2 {
 
 type Schema = {
     dojo_starter: {
-        moves: Moves;
-        directionsAvailable: DirectionsAvailable;
-        position: Position;
+        Moves: Moves;
+        DirectionsAvailable: DirectionsAvailable;
+        Position: Position;
     };
 };
 
@@ -54,57 +54,15 @@ const db = await init<Schema>({
 });
 
 function App() {
-    // useEffect(() => {
-    //     let unsubscribe: Subscription | undefined;
-
-    //     const subscribe = async () => {
-    //         try {
-    //             unsubscribe = await db.subscribeQuery(
-    //                 {
-    //                     moves: {},
-    //                 },
-    //                 (resp) => {
-    //                     if (resp.error) {
-    //                         console.error(
-    //                             "Error querying moves:",
-    //                             resp.error.message
-    //                         );
-    //                         return;
-    //                     }
-    //                     if (resp.data) {
-    //                         console.log("Moves for player 123:", resp.data);
-    //                     }
-    //                 },
-    //                 { logging: true }
-    //             );
-    //         } catch (error) {
-    //             console.error("Subscription error:", error);
-    //         }
-    //     };
-
-    //     subscribe();
-
-    //     return () => {
-    //         if (unsubscribe) {
-    //             unsubscribe.cancel();
-    //             console.log("Unsubscribed from moves query");
-    //         }
-    //     };
-    // }, []);
-
     useEffect(() => {
         const fetchEntities = async () => {
             try {
                 const entities = await db.getEntities(
                     {
                         dojo_starter: {
-                            moves: {
+                            Moves: {
                                 $: {
-                                    where: {
-                                        remaining: {
-                                            $eq: 97,
-                                        },
-                                    },
+                                    where: { can_move: { $eq: true } },
                                 },
                             },
                         },
@@ -112,20 +70,17 @@ function App() {
                     (resp) => {
                         if (resp.error) {
                             console.error(
-                                "Error querying completed important tasks:",
+                                "resp.error.message:",
                                 resp.error.message
                             );
                             return;
                         }
                         if (resp.data) {
-                            console.log(
-                                "Completed important tasks:",
-                                resp.data
-                            );
+                            console.log("resp.data:", resp.data.dojo_starter);
                         }
                     }
                 );
-                console.log("Queried entities:", entities.dojo_starter);
+                console.log("Queried entities:", entities);
             } catch (error) {
                 console.error("Error querying entities:", error);
             }

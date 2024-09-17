@@ -140,51 +140,51 @@ export function createWorldProxy<T extends readonly ContractDefinition[]>(
 
     return proxy;
 }
-// Example usage
-const contractDefinitions = [
-    {
-        kind: "DojoContract",
-        address:
-            "0x25d128c5fe89696e7e15390ea58927bbed4290ae46b538b28cfc7c2190e378b",
-        abi: [
-            {
-                type: "function",
-                name: "spawn",
-                inputs: [],
-                outputs: [],
-                state_mutability: "external",
-            },
-            {
-                type: "function",
-                name: "move",
-                inputs: [
-                    {
-                        name: "direction",
-                        type: "dojo_starter::models::Direction",
-                    },
-                ],
-                outputs: [],
-                state_mutability: "external",
-            },
-        ] as const,
-        systems: ["spawn", "move"] as const,
-        tag: "actions",
-    },
-] as const;
+// // Example usage
+// const contractDefinitions = [
+//     {
+//         kind: "DojoContract",
+//         address:
+//             "0x25d128c5fe89696e7e15390ea58927bbed4290ae46b538b28cfc7c2190e378b",
+//         abi: [
+//             {
+//                 type: "function",
+//                 name: "spawn",
+//                 inputs: [],
+//                 outputs: [],
+//                 state_mutability: "external",
+//             },
+//             {
+//                 type: "function",
+//                 name: "move",
+//                 inputs: [
+//                     {
+//                         name: "direction",
+//                         type: "dojo_starter::models::Direction",
+//                     },
+//                 ],
+//                 outputs: [],
+//                 state_mutability: "external",
+//             },
+//         ] as const,
+//         systems: ["spawn", "move"] as const,
+//         tag: "actions",
+//     },
+// ] as const;
 
-// Assuming you have a provider or account set up
-const providerOrAccount: AccountInterface = {} as any; // replace with actual provider or account
+// // Assuming you have a provider or account set up
+// const providerOrAccount: AccountInterface = {} as any; // replace with actual provider or account
 
-const world = createWorldProxy(contractDefinitions, providerOrAccount);
+// const world = createWorldProxy(contractDefinitions, providerOrAccount);
 
-// Usage example
-async function useWorld() {
-    await world.actions.spawn({});
-    await world.actions.move({ direction: "Left" });
+// // Usage example
+// async function useWorld() {
+//     await world.actions.spawn({});
+//     await world.actions.move({ direction: "Left" });
 
-    // TypeScript will catch these errors:
-    // @ts-expect-error
-    await world.actions.nonexistentMethod();
-    // @ts-expect-error
-    await world.nonexistentContract.someMethod();
-}
+//     // TypeScript will catch these errors:
+//     // @ts-expect-error
+//     await world.actions.nonexistentMethod();
+//     // @ts-expect-error
+//     await world.nonexistentContract.someMethod();
+// }

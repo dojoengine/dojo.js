@@ -52,7 +52,7 @@ function createClause(
     if (value === true) {
         return {
             Keys: {
-                keys: [],
+                keys: [undefined],
                 pattern_matching: "VariableLen",
                 models: [namespaceModel],
             },
