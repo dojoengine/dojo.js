@@ -1,20 +1,29 @@
 import * as torii from "@dojoengine/torii-client";
 import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses";
-import { SubscriptionQueryType, QueryResult, SchemaType } from "./types";
+import {
+    SubscriptionQueryType,
+    StandardizedQueryResult,
+    SchemaType,
+} from "./types";
 import { parseEntities } from "./parseEntities";
 
 export async function subscribeEventQuery<T extends SchemaType>(
     client: torii.ToriiClient,
     query?: SubscriptionQueryType<T>,
-    callback?: (response: { data?: QueryResult<T>; error?: Error }) => void,
+    callback?: (response: {
+        data?: StandardizedQueryResult<T>;
+        error?: Error;
+    }) => void,
     options?: { logging?: boolean }
 ): Promise<torii.Subscription> {
     return client.onEventMessageUpdated(
         convertQueryToEntityKeyClauses(query),
-        (_entities: string, data: torii.Entities) => {
+        (entityId: string, entityData: any) => {
             try {
                 if (callback) {
-                    const parsedData = parseEntities<T>(data, query);
+                    const parsedData = parseEntities<T>({
+                        [entityId]: entityData,
+                    });
                     if (options?.logging) {
                         console.log("Parsed entity data:", parsedData);
                     }

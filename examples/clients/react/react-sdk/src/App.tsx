@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import { init } from "@dojoengine/sdk";
 
@@ -55,6 +53,41 @@ const db = await init<Schema>({
 
 function App() {
     useEffect(() => {
+        let unsubscribe: (() => void) | undefined;
+
+        const subscribe = async () => {
+            const subscription = await db.subscribeEntityQuery(
+                {
+                    dojo_starter: {
+                        Moves: true,
+                    },
+                },
+                (response) => {
+                    if (response.error) {
+                        console.error(
+                            "Error setting up entity sync:",
+                            response.error
+                        );
+                    } else {
+                        console.log(response);
+                    }
+                }
+            );
+
+            unsubscribe = () => subscription.cancel();
+        };
+
+        subscribe();
+
+        return () => {
+            if (unsubscribe) {
+                unsubscribe();
+                console.log("Sync unsubscribed");
+            }
+        };
+    }, []);
+
+    useEffect(() => {
         const fetchEntities = async () => {
             try {
                 const entities = await db.getEntities(
@@ -62,7 +95,7 @@ function App() {
                         dojo_starter: {
                             Moves: {
                                 $: {
-                                    where: { can_move: { $eq: true } },
+                                    where: { last_direction: { $eq: "Left" } },
                                 },
                             },
                         },
@@ -76,11 +109,10 @@ function App() {
                             return;
                         }
                         if (resp.data) {
-                            console.log("resp.data:", resp.data.dojo_starter);
                         }
                     }
                 );
-                console.log("Queried entities:", entities);
+                // console.log("Queried entities:", entities);
             } catch (error) {
                 console.error("Error querying entities:", error);
             }

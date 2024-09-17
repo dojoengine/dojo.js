@@ -1,7 +1,6 @@
 import {
     SchemaType,
     QueryType,
-    SubscriptionQueryType,
     StandardizedQueryResult,
     ParsedEntity,
 } from "./types";
@@ -38,7 +37,7 @@ function parseStruct(
 
 export function parseEntities<T extends SchemaType>(
     entities: torii.Entities,
-    query?: QueryType<T>,
+    // query?: QueryType<T>,
     options?: { logging?: boolean }
 ): StandardizedQueryResult<T> {
     const result: StandardizedQueryResult<T> = [];

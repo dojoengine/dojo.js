@@ -30,8 +30,6 @@ export async function getEntities<T extends SchemaType>(
             clause,
         };
 
-        console.log(toriiQuery);
-
         try {
             const entities = await client.getEntities(toriiQuery);
 
@@ -42,9 +40,7 @@ export async function getEntities<T extends SchemaType>(
 
             Object.assign(allEntities, entities);
 
-            const parsedEntities = parseEntities(allEntities, query);
-
-            console.log("parsedEntities", parsedEntities);
+            const parsedEntities = parseEntities<T>(allEntities);
 
             callback({ data: parsedEntities });
 
@@ -65,5 +61,5 @@ export async function getEntities<T extends SchemaType>(
     if (options?.logging) {
         console.log("All fetched entities:", allEntities);
     }
-    return parseEntities(allEntities, query);
+    return parseEntities<T>(allEntities);
 }

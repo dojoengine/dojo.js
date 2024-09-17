@@ -1,6 +1,5 @@
 import * as torii from "@dojoengine/torii-client";
 import {
-    QueryResult,
     StandardizedQueryResult,
     QueryType,
     SchemaType,
@@ -34,11 +33,17 @@ export async function init<
     client: torii.ToriiClient;
     subscribeEntityQuery: (
         query: SubscriptionQueryType<T>,
-        callback: (response: { data?: QueryResult<T>; error?: Error }) => void
+        callback: (response: {
+            data?: StandardizedQueryResult<T>;
+            error?: Error;
+        }) => void
     ) => Promise<torii.Subscription>;
     subscribeEventQuery: (
         query: SubscriptionQueryType<T>,
-        callback: (response: { data?: QueryResult<T>; error?: Error }) => void
+        callback: (response: {
+            data?: StandardizedQueryResult<T>;
+            error?: Error;
+        }) => void
     ) => Promise<torii.Subscription>;
     getEntities: (
         query: QueryType<T>,

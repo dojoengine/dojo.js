@@ -42,10 +42,7 @@ export function convertQueryToClause<T extends SchemaType>(
                                                 model: namespaceModel,
                                                 member,
                                                 operator: convertOperator(op),
-                                                value: {
-                                                    Primitive:
-                                                        convertToPrimitive(val),
-                                                },
+                                                value: convertToPrimitive(val),
                                             },
                                         });
                                     }
@@ -55,12 +52,9 @@ export function convertQueryToClause<T extends SchemaType>(
                                             model: namespaceModel,
                                             member,
                                             operator: "Eq", // Default to Eq
-                                            value: {
-                                                Primitive:
-                                                    convertToPrimitive(
-                                                        memberValue
-                                                    ),
-                                            },
+                                            value: convertToPrimitive(
+                                                memberValue
+                                            ),
                                         },
                                     });
                                 }
@@ -69,6 +63,7 @@ export function convertQueryToClause<T extends SchemaType>(
                     }
                 } else {
                     // Handle the case where there are no conditions
+
                     return {
                         Keys: {
                             keys: [undefined],
@@ -101,16 +96,21 @@ export function convertQueryToClause<T extends SchemaType>(
 }
 
 // TODO: we could expand on these
-function convertToPrimitive(value: any): torii.Primitive {
+function convertToPrimitive(value: any): torii.MemberValue {
     if (typeof value === "number") {
-        return { U32: value };
+        return { Primitive: { U32: value } };
     } else if (typeof value === "boolean") {
-        return { Bool: value };
-    } else if (typeof value === "string") {
-        return { Felt252: value };
+        return { Primitive: { Bool: value } };
     } else if (typeof value === "bigint") {
-        return { Felt252: value.toString() };
+        return {
+            Primitive: {
+                Felt252: torii.cairoShortStringToFelt(value.toString()),
+            },
+        };
+    } else if (typeof value === "string") {
+        return { String: value };
     }
+
     // Add more type conversions as needed
     throw new Error(`Unsupported primitive type: ${typeof value}`);
 }

@@ -165,7 +165,7 @@ describe("parseEntities", () => {
                 },
         };
 
-        const result = parseEntities(mockEntities, query);
+        const result = parseEntities(mockEntities);
 
         expect(result).toEqual([
             {
