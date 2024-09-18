@@ -7,12 +7,8 @@ import {
 } from "./types";
 import { subscribeEntityQuery } from "./subscribeEntityQuery";
 import { getEntities } from "./getEntities";
-// import { AccountInterface } from "starknet";
-// import {
-//     createWorldProxy,
-//     WorldContracts,
-//     ContractDefinition,
-// } from "./execute";
+
+export * from "./types";
 
 import { subscribeEventQuery } from "./subscribeEventQuery";
 

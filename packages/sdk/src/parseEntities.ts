@@ -1,9 +1,4 @@
-import {
-    SchemaType,
-    QueryType,
-    StandardizedQueryResult,
-    ParsedEntity,
-} from "./types";
+import { SchemaType, StandardizedQueryResult, ParsedEntity } from "./types";
 import * as torii from "@dojoengine/torii-client";
 
 function parseValue(value: torii.Ty): any {
@@ -37,7 +32,6 @@ function parseStruct(
 
 export function parseEntities<T extends SchemaType>(
     entities: torii.Entities,
-    // query?: QueryType<T>,
     options?: { logging?: boolean }
 ): StandardizedQueryResult<T> {
     const result: StandardizedQueryResult<T> = [];
