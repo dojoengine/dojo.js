@@ -1,8 +1,8 @@
-import { StandardizedQueryResult, QueryType } from "./types";
+import * as torii from "@dojoengine/torii-client";
+
+import { StandardizedQueryResult, QueryType, SchemaType } from "./types";
 import { convertQueryToClause } from "./convertQuerytoClause";
 import { parseEntities } from "./parseEntities";
-import { SchemaType } from "./types";
-import * as torii from "@dojoengine/torii-client";
 
 /**
  * Fetches event messages from the Torii client based on the provided query.
@@ -43,12 +43,9 @@ export async function getEventMessages<T extends SchemaType>(
             clause,
         };
 
-        console.log(toriiQuery);
-
         try {
             const entities = await client.getEventMessages(toriiQuery);
 
-            console.log("entities", entities);
             if (options?.logging) {
                 console.log(`Fetched entities at offset ${cursor}:`, entities);
             }
@@ -56,8 +53,6 @@ export async function getEventMessages<T extends SchemaType>(
             Object.assign(allEntities, entities);
 
             const parsedEntities = parseEntities<T>(allEntities);
-
-            console.log("parsedEntities", parsedEntities);
 
             callback({ data: parsedEntities });
 

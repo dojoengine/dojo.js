@@ -35,10 +35,6 @@ export async function subscribeEntityQuery<T extends SchemaType>(
     }) => void,
     options?: { logging?: boolean }
 ): Promise<torii.Subscription> {
-    console.log(
-        "convertQueryToEntityKeyClauses",
-        convertQueryToEntityKeyClauses(query)
-    );
     return client.onEntityUpdated(
         convertQueryToEntityKeyClauses(query),
         (entityId: string, entityData: any) => {
@@ -48,6 +44,10 @@ export async function subscribeEntityQuery<T extends SchemaType>(
                         [entityId]: entityData,
                     });
                     if (options?.logging) {
+                        console.log(
+                            "Converted query to entity key clauses:",
+                            convertQueryToEntityKeyClauses(query)
+                        );
                         console.log("Parsed entity data:", parsedData);
                     }
                     callback({ data: parsedData });

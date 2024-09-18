@@ -68,7 +68,7 @@ export type SubscriptionQueryType<T extends SchemaType> = {
     entityIds?: string[];
 } & {
     [Entity in keyof T]?: {
-        [Model in keyof T[Entity]]?: true | (keyof T[Entity][Model])[];
+        [Model in keyof T[Entity]]?: (keyof T[Entity][Model])[];
     };
 };
 
@@ -192,9 +192,11 @@ export interface SDK<T extends SchemaType> {
         callback: (response: {
             data?: StandardizedQueryResult<T>;
             error?: Error;
-        }) => void
+        }) => void,
+        limit?: number,
+        offset?: number,
+        options?: { logging?: boolean } // Logging option
     ) => Promise<StandardizedQueryResult<T>>;
-
     /**
      * Fetches event messages from the Torii client based on the provided query.
      *
@@ -212,6 +214,9 @@ export interface SDK<T extends SchemaType> {
         callback: (response: {
             data?: StandardizedQueryResult<T>;
             error?: Error;
-        }) => void
+        }) => void,
+        limit?: number,
+        offset?: number,
+        options?: { logging?: boolean } // Logging option
     ) => Promise<StandardizedQueryResult<T>>;
 }

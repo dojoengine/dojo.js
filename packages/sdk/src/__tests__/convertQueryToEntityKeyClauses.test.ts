@@ -50,7 +50,7 @@ describe("convertQueryToEntityKeyClauses", () => {
     it("should convert query with namespace and model set to true to VariableLen Keys clause", () => {
         const query: SubscriptionQueryType<MockSchemaType> = {
             world: {
-                player: true,
+                player: [],
             },
         };
         const result = convertQueryToEntityKeyClauses(query);
@@ -88,7 +88,7 @@ describe("convertQueryToEntityKeyClauses", () => {
     it("should handle multiple namespaces and models", () => {
         const query: SubscriptionQueryType<MockSchemaType> = {
             world: {
-                player: true,
+                player: [],
                 item: ["id", "type"],
             },
             entityIds: ["hash1"],
@@ -118,7 +118,7 @@ describe("convertQueryToEntityKeyClauses", () => {
         const query: SubscriptionQueryType<MockSchemaType> = {
             entityIds: [],
             world: {
-                player: true,
+                player: [],
             },
         } as unknown as SubscriptionQueryType<MockSchemaType>;
         const result = convertQueryToEntityKeyClauses(query);
@@ -137,7 +137,7 @@ describe("convertQueryToEntityKeyClauses", () => {
     it("should handle multiple models within a single namespace", () => {
         const query: SubscriptionQueryType<MockSchemaType> = {
             world: {
-                player: true,
+                player: [],
                 item: ["id", "type"],
             },
         };

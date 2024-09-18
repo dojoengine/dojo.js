@@ -39,8 +39,6 @@ export async function getEntities<T extends SchemaType>(
 ): Promise<StandardizedQueryResult<T>> {
     const clause = convertQueryToClause(query);
 
-    console.log("clause", clause, query);
-
     let cursor = offset;
     let continueFetching = true;
     let allEntities: torii.Entities = {};
@@ -55,8 +53,8 @@ export async function getEntities<T extends SchemaType>(
         try {
             const entities = await client.getEntities(toriiQuery);
 
-            console.log("entities", entities);
             if (options?.logging) {
+                console.log("Clause", clause, "Query", query);
                 console.log(`Fetched entities at offset ${cursor}:`, entities);
             }
 

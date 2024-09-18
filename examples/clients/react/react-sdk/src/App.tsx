@@ -23,7 +23,7 @@ function App() {
                 {
                     dojo_starter: {
                         Position: [],
-                        // Moves: ["player"],
+                        Moves: ["player"],
                     },
                 },
                 (response) => {

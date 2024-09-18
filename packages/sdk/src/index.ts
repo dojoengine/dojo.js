@@ -25,9 +25,10 @@ export async function init<T extends SchemaType>(
             subscribeEntityQuery(client, query, callback),
         subscribeEventQuery: (query, callback) =>
             subscribeEventQuery(client, query, callback),
-        getEntities: (query, callback) => getEntities(client, query, callback),
-        getEventMessages: (query, callback) =>
-            getEventMessages(client, query, callback),
+        getEntities: (query, callback, limit, offset, options) =>
+            getEntities(client, query, callback, limit, offset, options),
+        getEventMessages: (query, callback, limit, offset, options) =>
+            getEventMessages(client, query, callback, limit, offset, options),
     };
 }
 // // EXAMPLE FOR NOW

@@ -25,7 +25,7 @@ export function convertQueryToEntityKeyClauses<T extends SchemaType>(
     Object.entries(namespaces).forEach(([namespace, models]) => {
         if (models && typeof models === "object") {
             Object.entries(models).forEach(([model, value]) => {
-                if (typeof value === "boolean" || Array.isArray(value)) {
+                if (Array.isArray(value)) {
                     const namespaceModel = `${namespace}-${model}`;
                     const clause = createClause(namespaceModel, value);
                     if (clause) {
@@ -47,9 +47,9 @@ export function convertQueryToEntityKeyClauses<T extends SchemaType>(
  */
 function createClause(
     namespaceModel: string,
-    value: boolean | string[]
+    value: string[]
 ): torii.EntityKeysClause | undefined {
-    if (value === true) {
+    if (Array.isArray(value) && value.length === 0) {
         return {
             Keys: {
                 keys: [undefined],
