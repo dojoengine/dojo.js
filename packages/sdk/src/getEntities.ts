@@ -4,6 +4,28 @@ import { parseEntities } from "./parseEntities";
 import { SchemaType } from "./types";
 import * as torii from "@dojoengine/torii-client";
 
+/**
+ * Fetches entities from the Torii client based on the provided query.
+ *
+ * @template T - The schema type.
+ * @param {torii.ToriiClient} client - The Torii client instance used to fetch entities.
+ * @param {QueryType<T>} query - The query object used to filter entities.
+ * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
+ * @param {number} [limit=100] - The maximum number of entities to fetch per request. Default is 100.
+ * @param {number} [offset=0] - The offset to start fetching entities from. Default is 0.
+ * @param {{ logging?: boolean }} [options] - Optional settings.
+ * @param {boolean} [options.logging] - If true, enables logging of the fetching process. Default is false.
+ * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
+ *
+ * @example
+ * const result = await getEntities(client, query, (response) => {
+ *     if (response.error) {
+ *         console.error("Error:", response.error);
+ *     } else {
+ *         console.log("Data:", response.data);
+ *     }
+ * }, 100, 0, { logging: true });
+ */
 export async function getEntities<T extends SchemaType>(
     client: torii.ToriiClient,
     query: QueryType<T>,

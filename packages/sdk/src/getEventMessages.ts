@@ -1,17 +1,33 @@
-import { QueryResult, QueryType } from "./types";
+import { StandardizedQueryResult, QueryType } from "./types";
 import { convertQueryToClause } from "./convertQuerytoClause";
 import { parseEntities } from "./parseEntities";
 import { SchemaType } from "./types";
 import * as torii from "@dojoengine/torii-client";
 
+/**
+ * Fetches event messages from the Torii client based on the provided query.
+ *
+ * @template T - The schema type.
+ * @param {torii.ToriiClient} client - The Torii client instance used to fetch event messages.
+ * @param {QueryType<T>} query - The query object used to filter event messages.
+ * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
+ * @param {number} [limit=100] - The maximum number of event messages to fetch per request. Default is 100.
+ * @param {number} [offset=0] - The offset to start fetching event messages from. Default is 0.
+ * @param {{ logging?: boolean }} [options] - Optional settings.
+ * @param {boolean} [options.logging] - If true, enables logging of the fetching process. Default is false.
+ * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
+ */
 export async function getEventMessages<T extends SchemaType>(
     client: torii.ToriiClient,
     query: QueryType<T>,
-    callback: (response: { data?: QueryResult<T>; error?: Error }) => void,
+    callback: (response: {
+        data?: StandardizedQueryResult<T>;
+        error?: Error;
+    }) => void,
     limit: number = 100, // Default limit
     offset: number = 0, // Default offset
     options?: { logging?: boolean } // Logging option
-): Promise<QueryResult<T>> {
+): Promise<StandardizedQueryResult<T>> {
     const clause = convertQueryToClause(query);
 
     console.log(clause);
@@ -39,7 +55,7 @@ export async function getEventMessages<T extends SchemaType>(
 
             Object.assign(allEntities, entities);
 
-            const parsedEntities = parseEntities<T>(allEntities, query);
+            const parsedEntities = parseEntities<T>(allEntities);
 
             console.log("parsedEntities", parsedEntities);
 
@@ -62,5 +78,5 @@ export async function getEventMessages<T extends SchemaType>(
     if (options?.logging) {
         console.log("All fetched entities:", allEntities);
     }
-    return parseEntities<T>(allEntities, query);
+    return parseEntities<T>(allEntities);
 }

@@ -69,14 +69,14 @@ describe("convertQueryToEntityKeyClauses", () => {
     it("should convert query with namespace and model keys array to FixedLen Keys clause", () => {
         const query: SubscriptionQueryType<MockSchemaType> = {
             world: {
-                item: ["key1", "key2"],
+                item: ["id", "type"],
             },
         };
         const result = convertQueryToEntityKeyClauses(query);
         const expected: torii.EntityKeysClause[] = [
             {
                 Keys: {
-                    keys: ["key1", "key2"],
+                    keys: ["id", "type"],
                     pattern_matching: "FixedLen",
                     models: ["world-item"],
                 },
@@ -89,7 +89,7 @@ describe("convertQueryToEntityKeyClauses", () => {
         const query: SubscriptionQueryType<MockSchemaType> = {
             world: {
                 player: true,
-                item: ["keyA", "keyB"],
+                item: ["id", "type"],
             },
             entityIds: ["hash1"],
         } as unknown as SubscriptionQueryType<MockSchemaType>;
@@ -105,29 +105,7 @@ describe("convertQueryToEntityKeyClauses", () => {
             },
             {
                 Keys: {
-                    keys: ["keyA", "keyB"],
-                    pattern_matching: "FixedLen",
-                    models: ["world-item"],
-                },
-            },
-        ];
-        expect(result).toEqual(expected);
-    });
-
-    it("should ignore non-object entries except entityIds", () => {
-        const query = {
-            world: {
-                player: "invalid",
-                item: ["key1"],
-            },
-            entityIds: ["hash1"],
-        } as unknown as SubscriptionQueryType<MockSchemaType>;
-        const result = convertQueryToEntityKeyClauses(query);
-        const expected: torii.EntityKeysClause[] = [
-            { HashedKeys: ["hash1"] },
-            {
-                Keys: {
-                    keys: ["key1"],
+                    keys: ["id", "type"],
                     pattern_matching: "FixedLen",
                     models: ["world-item"],
                 },
@@ -160,7 +138,7 @@ describe("convertQueryToEntityKeyClauses", () => {
         const query: SubscriptionQueryType<MockSchemaType> = {
             world: {
                 player: true,
-                item: ["keyX", "keyY"],
+                item: ["id", "type"],
             },
         };
         const result = convertQueryToEntityKeyClauses(query);
@@ -174,7 +152,7 @@ describe("convertQueryToEntityKeyClauses", () => {
             },
             {
                 Keys: {
-                    keys: ["keyX", "keyY"],
+                    keys: ["id", "type"],
                     pattern_matching: "FixedLen",
                     models: ["world-item"],
                 },

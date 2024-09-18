@@ -1,6 +1,29 @@
 import * as torii from "@dojoengine/torii-client";
 import { SchemaType, QueryType } from "./types";
 
+/**
+ * Converts a query object into a Torii clause.
+ *
+ * @template T - The schema type.
+ * @param {QueryType<T>} query - The query object to convert.
+ * @param {torii.LogicalOperator} [operator="And"] - The logical operator to combine clauses. Default is "And".
+ * @returns {torii.Clause} - The resulting Torii clause.
+ *
+ * @example
+ * const query = {
+ *     users: {
+ *         age: {
+ *             $: {
+ *                 where: {
+ *                     $gt: 18
+ *                 }
+ *             }
+ *         }
+ *     }
+ * };
+ * const clause = convertQueryToClause(query);
+ * console.log(clause);
+ */
 export function convertQueryToClause<T extends SchemaType>(
     query: QueryType<T>,
     operator: torii.LogicalOperator = "And"
@@ -95,7 +118,17 @@ export function convertQueryToClause<T extends SchemaType>(
     };
 }
 
-// TODO: we could expand on these
+/**
+ * Converts a value to a Torii primitive type.
+ *
+ * @param {any} value - The value to convert.
+ * @returns {torii.MemberValue} - The converted primitive value.
+ * @throws {Error} - If the value type is unsupported.
+ *
+ * @example
+ * const primitiveValue = convertToPrimitive(42);
+ * console.log(primitiveValue); // { Primitive: { U32: 42 } }
+ */
 function convertToPrimitive(value: any): torii.MemberValue {
     if (typeof value === "number") {
         return { Primitive: { U32: value } };
@@ -115,6 +148,17 @@ function convertToPrimitive(value: any): torii.MemberValue {
     throw new Error(`Unsupported primitive type: ${typeof value}`);
 }
 
+/**
+ * Converts a query operator to a Torii comparison operator.
+ *
+ * @param {string} operator - The query operator to convert.
+ * @returns {torii.ComparisonOperator} - The corresponding Torii comparison operator.
+ * @throws {Error} - If the operator is unsupported.
+ *
+ * @example
+ * const comparisonOperator = convertOperator("$eq");
+ * console.log(comparisonOperator); // "Eq"
+ */
 function convertOperator(operator: string): torii.ComparisonOperator {
     switch (operator) {
         case "$eq":

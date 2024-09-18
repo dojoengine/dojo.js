@@ -22,8 +22,8 @@ function App() {
             const subscription = await db.subscribeEntityQuery(
                 {
                     dojo_starter: {
-                        Position: true,
-                        Moves: true,
+                        Position: [],
+                        // Moves: ["player"],
                     },
                 },
                 (response) => {
@@ -124,8 +124,6 @@ function App() {
                     </p>
                     <h3>Moves</h3>
                     <p>
-                        Player:{" "}
-                        {entity.models.dojo_starter.Moves?.player ?? "N/A"}
                         <br />
                         Can Move:{" "}
                         {entity.models.dojo_starter.Moves?.can_move?.toString() ??

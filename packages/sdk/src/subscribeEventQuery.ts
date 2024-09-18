@@ -7,6 +7,25 @@ import {
 } from "./types";
 import { parseEntities } from "./parseEntities";
 
+/**
+ * Subscribes to event messages based on the provided query and invokes the callback with the updated data.
+ *
+ * @template T - The schema type.
+ * @param {torii.ToriiClient} client - The Torii client instance.
+ * @param {SubscriptionQueryType<T>} [query] - The subscription query to filter the events.
+ * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
+ * @param {{ logging?: boolean }} [options] - Optional settings for the subscription.
+ * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
+ *
+ * @example
+ * const subscription = await subscribeEventQuery(client, query, (response) => {
+ *     if (response.error) {
+ *         console.error("Error:", response.error);
+ *     } else {
+ *         console.log("Data:", response.data);
+ *     }
+ * }, { logging: true });
+ */
 export async function subscribeEventQuery<T extends SchemaType>(
     client: torii.ToriiClient,
     query?: SubscriptionQueryType<T>,

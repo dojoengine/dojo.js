@@ -35,5 +35,6 @@ type Schema = {
         Position: Position;
     };
 };
+
 export type { Schema, Moves, DirectionsAvailable, Position, Vec2 };
 export { Direction };

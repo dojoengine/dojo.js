@@ -1,16 +1,12 @@
 import * as torii from "@dojoengine/torii-client";
-import {
-    StandardizedQueryResult,
-    QueryType,
-    SchemaType,
-    SubscriptionQueryType,
-} from "./types";
+import { SchemaType, SDK } from "./types";
 import { subscribeEntityQuery } from "./subscribeEntityQuery";
 import { getEntities } from "./getEntities";
 
 export * from "./types";
 
 import { subscribeEventQuery } from "./subscribeEventQuery";
+import { getEventMessages } from "./getEventMessages";
 
 async function createClient(
     config: torii.ClientConfig
@@ -18,47 +14,10 @@ async function createClient(
     return await torii.createClient(config);
 }
 
-export async function init<
-    T extends SchemaType,
-    // U extends readonly ContractDefinition[],
->(
+export async function init<T extends SchemaType>(
     options: torii.ClientConfig
-    // worldContracts: U,
-    // account: AccountInterface
-): Promise<{
-    client: torii.ToriiClient;
-    subscribeEntityQuery: (
-        query: SubscriptionQueryType<T>,
-        callback: (response: {
-            data?: StandardizedQueryResult<T>;
-            error?: Error;
-        }) => void
-    ) => Promise<torii.Subscription>;
-    subscribeEventQuery: (
-        query: SubscriptionQueryType<T>,
-        callback: (response: {
-            data?: StandardizedQueryResult<T>;
-            error?: Error;
-        }) => void
-    ) => Promise<torii.Subscription>;
-    getEntities: (
-        query: QueryType<T>,
-        callback: (response: {
-            data?: StandardizedQueryResult<T>;
-            error?: Error;
-        }) => void
-    ) => Promise<StandardizedQueryResult<T>>;
-    getEventMessages: (
-        query: QueryType<T>,
-        callback: (response: {
-            data?: StandardizedQueryResult<T>;
-            error?: Error;
-        }) => void
-    ) => Promise<StandardizedQueryResult<T>>;
-    // worldProxy: WorldContracts<U>;
-}> {
+): Promise<SDK<T>> {
     const client = await createClient(options);
-    // const worldProxy = createWorldProxy(worldContracts, account);
 
     return {
         client,
@@ -68,8 +27,7 @@ export async function init<
             subscribeEventQuery(client, query, callback),
         getEntities: (query, callback) => getEntities(client, query, callback),
         getEventMessages: (query, callback) =>
-            getEntities(client, query, callback),
-        // worldProxy,
+            getEventMessages(client, query, callback),
     };
 }
 // // EXAMPLE FOR NOW
