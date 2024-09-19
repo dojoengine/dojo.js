@@ -1,5 +1,6 @@
 import { IStarknetWindowObject } from "get-starknet-core";
 import { AccountInterface, RpcProvider } from "starknet";
+
 import { BurnerManager } from "..";
 import { katanaIcon } from "./icons";
 

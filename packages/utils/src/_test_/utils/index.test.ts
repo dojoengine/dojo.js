@@ -1,11 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { byteArray } from "starknet";
+import { describe, expect, it } from "vitest";
+
 import {
     computeByteArrayHash,
-    getSelectorFromTag,
     getComponentNameFromEvent,
+    getSelectorFromTag,
     splitEventTag,
 } from "../../utils/index";
-import { byteArray } from "starknet";
 
 describe("utils", () => {
     it("should getComponentFromEvent", () => {

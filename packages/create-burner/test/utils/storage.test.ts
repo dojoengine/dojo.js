@@ -1,13 +1,14 @@
-import { describe, it, expect, vi } from "vitest";
-import Storage from "../../src/utils/storage";
-import Cookies from "js-cookie";
-import { BurnerStorage } from "../../src/types";
 import {
-    KATANA_PREFUNDED_ADDRESS,
-    KATANA_PREFUNDED_PRIVATE_KEY,
     KATANA_CLASS_HASH,
     KATANA_ETH_CONTRACT_ADDRESS,
+    KATANA_PREFUNDED_ADDRESS,
+    KATANA_PREFUNDED_PRIVATE_KEY,
 } from "@dojoengine/core";
+import Cookies from "js-cookie";
+import { describe, expect, it, vi } from "vitest";
+
+import { BurnerStorage } from "../../src/types";
+import Storage from "../../src/utils/storage";
 
 vi.mock("js-cookie");
 

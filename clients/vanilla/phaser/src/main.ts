@@ -1,7 +1,8 @@
 import Phaser from "phaser";
-import SceneMain from "./scenes/scene-main.ts";
+
 import { dojoConfig } from "../dojoConfig.ts";
 import { setup } from "./dojo/setup.ts";
+import SceneMain from "./scenes/scene-main.ts";
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,

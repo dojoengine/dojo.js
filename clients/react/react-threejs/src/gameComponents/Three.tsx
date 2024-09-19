@@ -1,10 +1,10 @@
-import { Canvas, useThree } from "@react-three/fiber";
-
-import { Stage, OrbitControls } from "@react-three/drei";
-import { TileGrid } from "./TileGrid";
-import { Players } from "./Players";
 import { useEffect } from "react";
+import { OrbitControls, Stage } from "@react-three/drei";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
+
+import { Players } from "./Players";
+import { TileGrid } from "./TileGrid";
 
 interface CameraAdjusterProps {
     position: Vector3;

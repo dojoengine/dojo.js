@@ -1,8 +1,8 @@
-import { StandardizedQueryResult, QueryType } from "./types";
+import * as torii from "@dojoengine/torii-client";
+
 import { convertQueryToClause } from "./convertQuerytoClause";
 import { parseEntities } from "./parseEntities";
-import { SchemaType } from "./types";
-import * as torii from "@dojoengine/torii-client";
+import { QueryType, SchemaType, StandardizedQueryResult } from "./types";
 
 /**
  * Fetches entities from the Torii client based on the provided query.

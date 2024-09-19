@@ -1,8 +1,9 @@
-import { defineQuery, QueryFragment } from "@dojoengine/recs";
 import { useEffect, useMemo, useState } from "react";
-import { useDeepMemo } from "./utils/useDeepMemo";
+import { defineQuery, QueryFragment } from "@dojoengine/recs";
 import isEqual from "fast-deep-equal";
 import { distinctUntilChanged, map } from "rxjs";
+
+import { useDeepMemo } from "./utils/useDeepMemo";
 
 // This does a little more rendering than is necessary when arguments change,
 // but at least it's giving correct results now. Will optimize later!

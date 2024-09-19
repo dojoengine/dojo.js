@@ -1,11 +1,11 @@
-import { Component, Metadata, Schema } from "@dojoengine/recs";
 import { useCallback, useEffect } from "react";
+import { Component, Metadata, Schema } from "@dojoengine/recs";
+import { getSyncEntities } from "@dojoengine/state";
 import {
-    ToriiClient,
     EntityKeysClause,
     Subscription,
+    ToriiClient,
 } from "@dojoengine/torii-client";
-import { getSyncEntities } from "@dojoengine/state";
 
 /**
  * Synchronizes entities with their components.

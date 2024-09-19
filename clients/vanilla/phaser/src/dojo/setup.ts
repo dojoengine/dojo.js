@@ -1,20 +1,19 @@
-import { getSyncEntities } from "@dojoengine/state";
-import * as torii from "@dojoengine/torii-client";
-
-import { models } from "./models.ts";
-import { systems } from "./systems.ts";
-import { defineContractComponents } from "./defineContractComponents.ts";
-import { world } from "./world.ts";
-import { Config } from "../../dojoConfig.ts";
-import { setupWorld } from "./defineContractSystems.ts";
-
 import { DojoProvider } from "@dojoengine/core";
 import { BurnerManager } from "@dojoengine/create-burner";
+import { getSyncEntities } from "@dojoengine/state";
+import * as torii from "@dojoengine/torii-client";
 import { Account, RpcProvider } from "starknet";
+
+import { Config } from "../../dojoConfig.ts";
 import {
     ClientComponents,
     createClientComponents,
 } from "./createClientComponent.ts";
+import { defineContractComponents } from "./defineContractComponents.ts";
+import { setupWorld } from "./defineContractSystems.ts";
+import { models } from "./models.ts";
+import { systems } from "./systems.ts";
+import { world } from "./world.ts";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 export type IDojo = Awaited<ReturnType<typeof setup>>;

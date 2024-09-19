@@ -1,4 +1,4 @@
-import { Contract, AccountInterface } from "starknet";
+import { AccountInterface, Contract } from "starknet";
 
 type AbiType =
     | "felt"

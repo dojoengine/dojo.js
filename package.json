@@ -31,7 +31,7 @@
     "devDependencies": {
         "husky": "^9.0.11",
         "lerna": "^8.1.5",
-        "prettier": "^3.0.3",
+        "prettier": "^3.3.3",
         "tsup": "^8.1.0",
         "typedoc": "^0.26.7",
         "typedoc-material-theme": "^1.1.0",
@@ -40,6 +40,7 @@
     "dependencies": {
         "@commitlint/cli": "^18.4.4",
         "@commitlint/config-conventional": "^18.4.4",
+        "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
         "react": "^18.2.0"
     }
 }

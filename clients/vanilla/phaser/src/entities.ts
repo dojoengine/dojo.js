@@ -1,5 +1,6 @@
-import { GameObjects, Scene } from "phaser";
 import { snoise } from "@dojoengine/utils";
+import { GameObjects, Scene } from "phaser";
+
 import SceneMain from "./scenes/scene-main";
 
 export class Chunk {

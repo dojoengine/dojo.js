@@ -1,22 +1,23 @@
-import { getSyncEntities } from "@dojoengine/state";
 import {
+    createModelTypedData,
     DojoConfig,
     DojoProvider,
-    createModelTypedData,
 } from "@dojoengine/core";
+import { BurnerManager } from "@dojoengine/create-burner";
+import { getSyncEntities } from "@dojoengine/state";
 import * as torii from "@dojoengine/torii-client";
-import { createClientComponents } from "../createClientComponents";
-import { createSystemCalls } from "../createSystemCalls";
-import { defineContractComponents } from "./contractComponents";
-import { world } from "./world";
-import { setupWorld } from "./generated";
 import {
     Account,
     ArraySignatureType,
     TypedData,
     WeierstrassSignatureType,
 } from "starknet";
-import { BurnerManager } from "@dojoengine/create-burner";
+
+import { createClientComponents } from "../createClientComponents";
+import { createSystemCalls } from "../createSystemCalls";
+import { defineContractComponents } from "./contractComponents";
+import { setupWorld } from "./generated";
+import { world } from "./world";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 

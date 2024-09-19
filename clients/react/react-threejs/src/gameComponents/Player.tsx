@@ -1,12 +1,12 @@
-import * as THREE from "three";
-import { useDojo } from "@/dojo/useDojo";
-import { useComponentValue } from "@dojoengine/react";
-import { Cone } from "@react-three/drei";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { Direction } from "@/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
 import { MAP_SCALE } from "@/config";
+import { useDojo } from "@/dojo/useDojo";
+import { Direction } from "@/utils";
+import { useComponentValue } from "@dojoengine/react";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { Cone } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 
 export const Player = (props: any) => {
     const {

@@ -1,6 +1,6 @@
-import * as THREE from "three";
 import { useMemo } from "react";
 import { MAP_SCALE } from "@/config";
+import * as THREE from "three";
 
 export const Tile = ({ position }: any) => {
     const squareGeometry = useMemo(

@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, toRaw, reactive } from "vue";
-import { setup } from "./dojo/generated/setup.ts";
+import { Entity } from "@dojoengine/recs";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { onMounted, reactive, ref, toRaw, watch } from "vue";
+
 import { dojoConfig } from "../dojoConfig.ts";
+import { setup } from "./dojo/generated/setup.ts";
 import {
     createAccount,
     Direction,
     getAccount,
     useComponentValue,
 } from "./utils/index.ts";
-import { Entity } from "@dojoengine/recs";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 const dojoContext = reactive<any>({
     setup: null,

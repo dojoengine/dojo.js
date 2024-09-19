@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
+
 import { BurnerConnector } from "../../src/connectors/burner";
+
 // import { getBurnerConnector } from "../mocks/mocks";
 
 // describe("BurnerConnector", () => {

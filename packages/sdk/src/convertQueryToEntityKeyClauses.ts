@@ -1,4 +1,5 @@
 import * as torii from "@dojoengine/torii-client";
+
 import { SchemaType, SubscriptionQueryType } from "./types";
 
 /**

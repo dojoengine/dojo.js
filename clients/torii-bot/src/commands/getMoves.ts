@@ -1,4 +1,5 @@
 import { Command } from "@sapphire/framework";
+
 import { getMoves } from "../queries/getMoves";
 
 export class Moves extends Command {

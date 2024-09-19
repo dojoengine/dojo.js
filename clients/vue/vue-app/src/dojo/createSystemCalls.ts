@@ -1,13 +1,14 @@
-import { Account } from "starknet";
 import { Entity, getComponentValue } from "@dojoengine/recs";
-import { uuid } from "@latticexyz/utils";
-import { ClientComponents } from "./createClientComponents";
-import { Direction, updatePositionWithDirection } from "../utils";
 import {
     getEntityIdFromKeys,
     getEvents,
     setComponentsFromEvents,
 } from "@dojoengine/utils";
+import { uuid } from "@latticexyz/utils";
+import { Account } from "starknet";
+
+import { Direction, updatePositionWithDirection } from "../utils";
+import { ClientComponents } from "./createClientComponents";
 import { ContractComponents } from "./generated/contractComponents";
 import type { IWorld } from "./generated/generated";
 

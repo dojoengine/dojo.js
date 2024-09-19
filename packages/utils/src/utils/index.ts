@@ -1,11 +1,11 @@
 import {
-    Entity,
-    setComponent,
     Component,
     Components,
     ComponentValue,
+    Entity,
     Type as RecsType,
     Schema,
+    setComponent,
 } from "@dojoengine/recs";
 import { poseidonHashMany } from "micro-starknet";
 import { byteArray, ByteArray } from "starknet";

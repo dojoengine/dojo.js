@@ -1,22 +1,23 @@
 import {
-    RpcProvider,
     Account,
-    InvokeFunctionResponse,
-    Contract,
-    shortString,
-    AllowArray,
-    Call,
-    Result,
-    CallContractResponse,
     AccountInterface,
-    UniversalDetails,
+    AllowArray,
     ArgsOrCalldata,
+    Call,
+    CallContractResponse,
+    Contract,
+    InvokeFunctionResponse,
+    Result,
+    RpcProvider,
+    shortString,
+    UniversalDetails,
 } from "starknet";
-import { Provider } from "./provider";
+
+import { LOCAL_KATANA } from "../constants";
 import { ConsoleLogger, LogLevel } from "../logger/logger";
 import { DojoCall, WorldEntryPoints } from "../types";
-import { LOCAL_KATANA } from "../constants";
 import { getContractByName, parseDojoCall } from "../utils";
+import { Provider } from "./provider";
 
 /**
  * DojoProvider: The DojoProvider is an execution provider for dojo worlds. It allows you to easily interact with a dojo world via the Starknet.js library.

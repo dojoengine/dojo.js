@@ -1,5 +1,6 @@
 import { Connector } from "@starknet-react/core";
 import { Account, AccountInterface, shortString } from "starknet";
+
 import { katanaIcon } from "./icons";
 
 /** Burner connector options. */

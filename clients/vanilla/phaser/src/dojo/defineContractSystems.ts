@@ -1,7 +1,9 @@
-import { Account, AccountInterface } from "starknet";
 import { DojoProvider } from "@dojoengine/core";
+import { Account, AccountInterface } from "starknet";
+
 import { Config } from "../../dojoConfig.ts";
 import { Direction } from "./utils.ts";
+
 const NAMESPACE = "dojo_starter";
 
 export interface MoveProps {

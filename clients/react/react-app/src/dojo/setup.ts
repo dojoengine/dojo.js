@@ -1,13 +1,14 @@
 import { DojoConfig, DojoProvider } from "@dojoengine/core";
-import * as torii from "@dojoengine/torii-client";
-import { createClientComponents } from "./createClientComponents";
-import { createSystemCalls } from "./createSystemCalls";
-import { defineContractComponents } from "./typescript/models.gen";
-import { world } from "./world";
-import { setupWorld } from "./typescript/contracts.gen";
-import { Account, ArraySignatureType } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
 import { getSyncEvents } from "@dojoengine/state";
+import * as torii from "@dojoengine/torii-client";
+import { Account, ArraySignatureType } from "starknet";
+
+import { createClientComponents } from "./createClientComponents";
+import { createSystemCalls } from "./createSystemCalls";
+import { setupWorld } from "./typescript/contracts.gen";
+import { defineContractComponents } from "./typescript/models.gen";
+import { world } from "./world";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 

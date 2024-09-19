@@ -1,5 +1,6 @@
-import { Tile } from "./Tile";
 import { MAP_SCALE } from "@/config";
+
+import { Tile } from "./Tile";
 
 export const TileGrid = ({ rows, cols }: any) => {
     const squares = [];

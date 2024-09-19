@@ -1,5 +1,6 @@
 import { IStarknetWindowObject } from "get-starknet-core";
 import { AccountInterface, RpcProvider } from "starknet";
+
 import { PredeployedManager } from "..";
 import { katanaIcon } from "./icons";
 

@@ -1,5 +1,3 @@
-import { Account, ec, stark, RpcProvider, hash, CallData } from "starknet";
-import { ref, reactive, watchEffect, onUnmounted, toRaw } from "vue";
 import {
     Component,
     ComponentValue,
@@ -10,6 +8,8 @@ import {
     isComponentUpdate,
     Schema,
 } from "@dojoengine/recs";
+import { Account, CallData, ec, hash, RpcProvider, stark } from "starknet";
+import { onUnmounted, reactive, ref, toRaw, watchEffect } from "vue";
 
 export enum Direction {
     Left = 1,

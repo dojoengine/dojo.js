@@ -1,7 +1,8 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
+
+import { MockSchemaType, schema } from "../__example__/index";
 import { convertQueryToClause } from "../convertQuerytoClause";
 import { QueryType, SchemaType } from "../types";
-import { MockSchemaType, schema } from "../__example__/index";
 
 describe("convertQueryToClause", () => {
     it("should convert a single model query with conditions", () => {

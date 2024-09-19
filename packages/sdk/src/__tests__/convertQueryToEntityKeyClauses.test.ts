@@ -1,8 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { convertQueryToEntityKeyClauses } from "../convertQueryToEntityKeyClauses";
 import * as torii from "@dojoengine/torii-client";
-import { QueryType } from "../types";
+import { describe, expect, it } from "vitest";
+
 import { MockSchemaType, schema } from "../__example__/index";
+import { convertQueryToEntityKeyClauses } from "../convertQueryToEntityKeyClauses";
+import { QueryType } from "../types";
 
 describe("convertQueryToEntityKeyClauses", () => {
     it("should handle multiple models within a single namespace with ordered keys", () => {

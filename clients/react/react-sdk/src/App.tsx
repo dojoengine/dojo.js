@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+
 import "./App.css";
-import { ParsedEntity, init } from "@dojoengine/sdk";
+
+import { init, ParsedEntity } from "@dojoengine/sdk";
+
 import { dojoConfig } from "../dojoConfig.ts";
 import { Direction, Schema, schema } from "./bindings.ts";
 

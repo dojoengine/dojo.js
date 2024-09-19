@@ -1,5 +1,6 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Account } from "starknet";
+
 import { BurnerConnector } from "..";
 import { BurnerContext } from "../context";
 import { BurnerManager } from "../manager/burnerManager";

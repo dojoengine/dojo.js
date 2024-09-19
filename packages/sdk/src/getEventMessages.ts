@@ -1,8 +1,8 @@
 import * as torii from "@dojoengine/torii-client";
 
-import { StandardizedQueryResult, QueryType, SchemaType } from "./types";
 import { convertQueryToClause } from "./convertQuerytoClause";
 import { parseEntities } from "./parseEntities";
+import { QueryType, SchemaType, StandardizedQueryResult } from "./types";
 
 /**
  * Fetches event messages from the Torii client based on the provided query.

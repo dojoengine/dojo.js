@@ -1,5 +1,5 @@
-import { ec, encode, num } from "starknet";
 import { HDKey } from "@scure/bip32";
+import { ec, encode, num } from "starknet";
 
 //
 // inspired by:

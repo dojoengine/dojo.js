@@ -1,6 +1,7 @@
 import * as torii from "@dojoengine/torii-client";
-import { SchemaType, QueryType, SubscriptionQueryType } from "./types";
+
 import { convertQueryToKeysClause } from "./convertQueryToEntityKeyClauses";
+import { QueryType, SchemaType, SubscriptionQueryType } from "./types";
 
 /**
  * Converts a query object into a Torii clause.

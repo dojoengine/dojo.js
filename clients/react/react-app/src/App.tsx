@@ -1,10 +1,12 @@
 import "./App.css";
+
+import { useEffect, useState } from "react";
 import { useComponentValue, useQuerySync } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
-import { useEffect, useState } from "react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { useDojo } from "./dojo/useDojo";
+
 import { Direction } from "./dojo/typescript/models.gen";
+import { useDojo } from "./dojo/useDojo";
 
 enum DirectionEnum {
     None = "0",

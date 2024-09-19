@@ -1,7 +1,9 @@
 import { Scene } from "phaser";
-import { Chunk } from "../entities";
+
 import { IDojo } from "../dojo/setup";
 import { Direction } from "../dojo/utils";
+import { Chunk } from "../entities";
+
 export default class SceneMain extends Scene {
     dojo: IDojo;
     chunkSize: number;

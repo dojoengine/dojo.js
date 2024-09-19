@@ -1,8 +1,10 @@
-import { useDojo } from "../dojo/useDojo";
-import { Button } from "@/components/ui/button";
 import { useComponentValue } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+
+import { Button } from "@/components/ui/button";
+
+import { useDojo } from "../dojo/useDojo";
 
 export const UIContainer = () => {
     const {

@@ -1,10 +1,12 @@
+import { GraphQLError, print } from "graphql";
 import { GraphQLClient } from "graphql-request";
+import gql from "graphql-tag";
+
 export type GraphQLClientRequestHeaders =
     | Headers
     | string[][]
     | Record<string, string>;
-import { GraphQLError, print } from "graphql";
-import gql from "graphql-tag";
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {

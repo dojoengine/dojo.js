@@ -1,15 +1,16 @@
-import { Account, AccountInterface } from "starknet";
 import {
+    defineSystem,
     Entity,
+    getComponentValue,
     Has,
     HasValue,
     World,
-    defineSystem,
-    getComponentValue,
 } from "@dojoengine/recs";
-import { uuid } from "@latticexyz/utils";
-import { ClientComponents } from "./createClientComponents";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { uuid } from "@latticexyz/utils";
+import { Account, AccountInterface } from "starknet";
+
+import { ClientComponents } from "./createClientComponents";
 import type { IWorld } from "./typescript/contracts.gen";
 import { Direction } from "./typescript/models.gen";
 

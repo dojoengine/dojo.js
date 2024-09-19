@@ -9,15 +9,16 @@ import {
     shortString,
     stark,
 } from "starknet";
+
 import {
     Burner,
     BurnerCreateOptions,
+    BurnerKeys,
     BurnerManagerOptions,
     BurnerStorage,
-    BurnerKeys,
 } from "../types";
-import Storage from "../utils/storage";
 import { derivePrivateKeyFromSeed } from "../utils/keyDerivation";
+import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
 
 export const PREFUND_AMOUNT = "10000000000000000"; // 0.01 ETH

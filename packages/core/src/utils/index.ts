@@ -1,4 +1,5 @@
 import { Call, TypedData } from "starknet";
+
 import { DojoCall } from "../types";
 
 /**

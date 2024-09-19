@@ -1,5 +1,6 @@
-import { StarknetWindowObject } from "get-starknet-core";
 import { useEffect, useState } from "react";
+import { StarknetWindowObject } from "get-starknet-core";
+
 import { BurnerManager, DojoBurnerStarknetWindowObject } from "..";
 
 export const useBurnerWindowObject = (burnerManager?: BurnerManager) => {

@@ -1,11 +1,11 @@
 import {
     KATANA_CLASS_HASH,
+    KATANA_ETH_CONTRACT_ADDRESS,
     KATANA_PREFUNDED_ADDRESS,
     KATANA_PREFUNDED_PRIVATE_KEY,
     LOCAL_KATANA,
     LOCAL_RELAY,
     LOCAL_TORII,
-    KATANA_ETH_CONTRACT_ADDRESS,
 } from "../constants";
 
 export type DojoConfig = ReturnType<typeof createDojoConfig>;

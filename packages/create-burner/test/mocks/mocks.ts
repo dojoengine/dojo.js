@@ -4,6 +4,7 @@ import {
     LOCAL_KATANA,
 } from "@dojoengine/core";
 import { Account, RpcProvider } from "starknet";
+
 import { BurnerConnector } from "../../src/connectors/burner";
 import { BurnerManager } from "../../src/manager/burnerManager";
 

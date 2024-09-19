@@ -1,4 +1,5 @@
 import { Account, RpcProvider, shortString } from "starknet";
+
 import {
     Predeployed,
     PredeployedAccount,

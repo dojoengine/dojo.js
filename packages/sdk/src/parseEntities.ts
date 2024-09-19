@@ -1,5 +1,6 @@
-import { SchemaType, StandardizedQueryResult, ParsedEntity } from "./types";
 import * as torii from "@dojoengine/torii-client";
+
+import { ParsedEntity, SchemaType, StandardizedQueryResult } from "./types";
 
 function parseValue(value: torii.Ty): any {
     switch (value.type) {

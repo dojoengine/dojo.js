@@ -1,5 +1,6 @@
-import { describe, it, expect } from "vitest";
 import * as torii from "@dojoengine/torii-client";
+import { describe, expect, it } from "vitest";
+
 import { parseEntities } from "../parseEntities";
 
 describe("parseEntities", () => {

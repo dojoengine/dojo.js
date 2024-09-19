@@ -1,5 +1,6 @@
-import { Account, AccountInterface } from "starknet";
 import { DojoProvider } from "@dojoengine/core";
+import { Account, AccountInterface } from "starknet";
+
 import { Direction } from "../../utils";
 
 const NAMESPACE = "dojo_starter";

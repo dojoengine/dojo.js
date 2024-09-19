@@ -1,6 +1,7 @@
-import { describe, it, expect } from "vitest";
-import { convertValues } from "../utils";
 import { Type as RecsType } from "@dojoengine/recs";
+import { describe, expect, it } from "vitest";
+
+import { convertValues } from "../utils";
 
 describe("convertValues", () => {
     // ... existing tests ...

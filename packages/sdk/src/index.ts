@@ -1,9 +1,10 @@
 import * as torii from "@dojoengine/torii-client";
-import { SchemaType, SDK } from "./types";
-import { subscribeEntityQuery } from "./subscribeEntityQuery";
+
 import { getEntities } from "./getEntities";
-import { subscribeEventQuery } from "./subscribeEventQuery";
 import { getEventMessages } from "./getEventMessages";
+import { subscribeEntityQuery } from "./subscribeEntityQuery";
+import { subscribeEventQuery } from "./subscribeEventQuery";
+import { SchemaType, SDK } from "./types";
 
 export * from "./types";
 

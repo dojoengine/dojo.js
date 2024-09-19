@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { setEntities } from "../recs";
 import { setComponent } from "@dojoengine/recs";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { setEntities } from "../recs";
 import { convertValues } from "../utils";
 
 // Mock dependencies

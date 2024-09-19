@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, test, vi } from "vitest";
+import { beforeEach, describe, expect, it, test, vi } from "vitest";
+
 import { createTypedStore } from "../zustand";
 
 describe("createTypedStore", () => {

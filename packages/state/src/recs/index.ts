@@ -8,10 +8,11 @@ import {
 } from "@dojoengine/recs";
 import {
     Clause,
-    ToriiClient,
     EntityKeysClause,
     PatternMatching,
+    ToriiClient,
 } from "@dojoengine/torii-client";
+
 import { convertValues } from "../utils";
 
 /**

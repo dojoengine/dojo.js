@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
     Component,
     ComponentValue,
@@ -8,7 +9,6 @@ import {
     isComponentUpdate,
     Schema,
 } from "@dojoengine/recs";
-import { useEffect, useState } from "react";
 
 export function useComponentValue<S extends Schema>(
     component: Component<S>,

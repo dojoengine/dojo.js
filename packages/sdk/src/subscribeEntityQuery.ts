@@ -1,11 +1,12 @@
 import * as torii from "@dojoengine/torii-client";
+
 import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses";
-import {
-    SubscriptionQueryType,
-    StandardizedQueryResult,
-    SchemaType,
-} from "./types";
 import { parseEntities } from "./parseEntities";
+import {
+    SchemaType,
+    StandardizedQueryResult,
+    SubscriptionQueryType,
+} from "./types";
 
 /**
  * Subscribes to entity updates based on the provided query and invokes the callback with the updated data.

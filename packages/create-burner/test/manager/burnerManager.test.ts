@@ -1,8 +1,9 @@
 import { shortString, validateAndParseAddress } from "starknet";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import Storage from "../../src/utils/storage";
+
 // import { getBurnerManager } from "../mocks/mocks"; // Adjust the path as necessary
 import { BurnerCreateOptions } from "../../src/types";
+import Storage from "../../src/utils/storage";
 
 // // Explicitly mock the 'starknet' module
 // vi.mock("starknet", async () => {
