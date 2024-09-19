@@ -1,12 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-    getSyncEntities,
-    getEntities,
-    syncEntities,
-    setEntities,
-} from "../recs";
-import { Component, setComponent } from "@dojoengine/recs";
-import { Client } from "@dojoengine/torii-client";
+import { setEntities } from "../recs";
+import { setComponent } from "@dojoengine/recs";
 import { convertValues } from "../utils";
 
 // Mock dependencies

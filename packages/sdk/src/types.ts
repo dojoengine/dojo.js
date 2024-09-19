@@ -109,7 +109,22 @@ export interface QueryWhereOptions<TModel> extends QueryOptions {
     };
 }
 /**
- * SubscriptionQueryType for subscriptions, only using SubscriptionWhereOptions
+ * SubscriptionQueryType for subscriptions, only using SubscriptionWhereOptions.
+ *
+ * This type defines the structure of a subscription query, which can be used to subscribe to changes in the data.
+ * It allows specifying conditions to filter the subscription results based on the provided schema.
+ *
+ * @template T - The schema type.
+ *
+ * @property {string[]} [entityIds] - An optional array of entity IDs to subscribe to. If provided, the subscription will be limited to these entities.
+ *
+ * @property {Object} [K in keyof T] - A mapping of namespaces in the schema.
+ *
+ * @property {Object} [L in keyof T[K]] - A mapping of models within each namespace.
+ *
+ * @property {AtLeastOne<{ $: SubscriptionWhereOptions<T[K][L]> }> | string[]} [L] -
+ * - An object containing at least one SubscriptionWhereOptions condition to filter the subscription results.
+ * - Alternatively, an array of strings representing specific values to subscribe to.
  */
 export type SubscriptionQueryType<T extends SchemaType> = {
     entityIds?: string[];

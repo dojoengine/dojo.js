@@ -33,9 +33,9 @@
         "lerna": "^8.1.5",
         "prettier": "^3.0.3",
         "tsup": "^8.1.0",
-        "typedoc": "^0.25.4",
-        "typedoc-material-theme": "^1.0.1",
-        "typedoc-plugin-coverage": "^2.2.0"
+        "typedoc": "^0.26.7",
+        "typedoc-material-theme": "^1.1.0",
+        "typedoc-plugin-coverage": "^3.3.0"
     },
     "dependencies": {
         "@commitlint/cli": "^18.4.4",

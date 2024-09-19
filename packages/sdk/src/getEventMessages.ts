@@ -20,6 +20,7 @@ import { parseEntities } from "./parseEntities";
 export async function getEventMessages<T extends SchemaType>(
     client: torii.ToriiClient,
     query: QueryType<T>,
+    schema: T,
     callback: (response: {
         data?: StandardizedQueryResult<T>;
         error?: Error;
@@ -28,7 +29,7 @@ export async function getEventMessages<T extends SchemaType>(
     offset: number = 0, // Default offset
     options?: { logging?: boolean } // Logging option
 ): Promise<StandardizedQueryResult<T>> {
-    const clause = convertQueryToClause(query);
+    const clause = convertQueryToClause(query, schema);
 
     console.log(clause);
 

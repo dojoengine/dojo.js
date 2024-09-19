@@ -4,6 +4,7 @@
     "$schema": "https://typedoc.org/schema.json",
     "name": "dojo.js docs",
     "entryPoints": [
+        "./packages/sdk/src/index.ts",
         "./packages/core/src/index.ts",
         "./packages/react/src/index.ts",
         "./packages/create-burner/src/index.ts",
@@ -11,7 +12,7 @@
         "./packages/torii-client/src/index.ts"
     ],
     "sort": ["source-order"],
-    "media": "media",
+
     "categorizeByGroup": true,
     "searchCategoryBoosts": {
         "Component": 2,
