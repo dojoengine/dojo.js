@@ -40,99 +40,29 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0(typedoc@0.26.7(typescript@5.5.4))
 
-  examples/clients/node/torii-bot:
+  clients/react/react-app:
     dependencies:
       '@dojoengine/core':
         specifier: workspace:*
-        version: link:../../../../packages/core
-      '@pinecone-database/pinecone':
-        specifier: ^1.1.2
-        version: 1.1.3
-      '@sapphire/decorators':
-        specifier: ^6.0.2
-        version: 6.1.0
-      '@sapphire/framework':
-        specifier: ^4.6.0
-        version: 4.8.5
-      discord.js:
-        specifier: ^14.13.0
-        version: 14.15.3
-      express:
-        specifier: ^4.18.2
-        version: 4.19.2
-      graphql-tag:
-        specifier: ^2.12.6
-        version: 2.12.6(graphql@16.9.0)
-      langchain:
-        specifier: ^0.0.200
-        version: 0.0.200(@pinecone-database/pinecone@1.1.3)(axios@1.7.4)(encoding@0.1.13)(ignore@5.3.2)(jsdom@24.1.1)(lodash@4.17.21)(ws@8.18.0)
-      node-cron:
-        specifier: ^3.0.2
-        version: 3.0.3
-      openai:
-        specifier: ^4.20.1
-        version: 4.56.0(encoding@0.1.13)(zod@3.23.8)
-      twitter-api-v2:
-        specifier: ^1.15.2
-        version: 1.17.2
-      typescript:
-        specifier: ^5.2.2
-        version: 5.5.4
-    devDependencies:
-      '@graphql-codegen/cli':
-        specifier: ^5.0.0
-        version: 5.0.2(@types/node@20.16.1)(encoding@0.1.13)(enquirer@2.3.6)(graphql@16.9.0)(typescript@5.5.4)
-      '@graphql-codegen/typescript':
-        specifier: ^4.0.1
-        version: 4.0.9(encoding@0.1.13)(graphql@16.9.0)
-      '@graphql-codegen/typescript-graphql-request':
-        specifier: ^6.0.0
-        version: 6.2.0(encoding@0.1.13)(graphql-request@6.1.0(encoding@0.1.13)(graphql@16.9.0))(graphql-tag@2.12.6(graphql@16.9.0))(graphql@16.9.0)
-      '@graphql-codegen/typescript-operations':
-        specifier: ^4.0.1
-        version: 4.2.3(encoding@0.1.13)(graphql@16.9.0)
-      '@types/express':
-        specifier: ^4.17.17
-        version: 4.17.21
-      '@types/node':
-        specifier: ^20.11.10
-        version: 20.16.1
-      '@types/node-cron':
-        specifier: ^3.0.10
-        version: 3.0.11
-      bun-types:
-        specifier: latest
-        version: 1.1.27
-      graphql:
-        specifier: ^16.8.1
-        version: 16.9.0
-      graphql-request:
-        specifier: ^6.1.0
-        version: 6.1.0(encoding@0.1.13)(graphql@16.9.0)
-
-  examples/clients/react/react-app:
-    dependencies:
-      '@dojoengine/core':
-        specifier: workspace:*
-        version: link:../../../../packages/core
+        version: link:../../../packages/core
       '@dojoengine/create-burner':
         specifier: workspace:*
-        version: link:../../../../packages/create-burner
+        version: link:../../../packages/create-burner
       '@dojoengine/react':
         specifier: workspace:*
-        version: link:../../../../packages/react
+        version: link:../../../packages/react
       '@dojoengine/recs':
         specifier: 2.0.13
         version: 2.0.13(typescript@5.5.4)(zod@3.23.8)
       '@dojoengine/state':
         specifier: workspace:*
-        version: link:../../../../packages/state
+        version: link:../../../packages/state
       '@dojoengine/torii-client':
         specifier: workspace:*
-        version: link:../../../../packages/torii-client
+        version: link:../../../packages/torii-client
       '@dojoengine/utils':
         specifier: workspace:*
-        version: link:../../../../packages/utils
+        version: link:../../../packages/utils
       '@latticexyz/react':
         specifier: ^2.0.12
         version: 2.1.1(typescript@5.5.4)(zod@3.23.8)
@@ -201,32 +131,32 @@ importers:
         specifier: ^4.3.9
         version: 4.5.3(@types/node@20.16.1)(terser@5.31.6)
 
-  examples/clients/react/react-phaser-example:
+  clients/react/react-phaser-example:
     dependencies:
       '@dojoengine/core':
         specifier: workspace:*
-        version: link:../../../../packages/core
+        version: link:../../../packages/core
       '@dojoengine/create-burner':
         specifier: workspace:*
-        version: link:../../../../packages/create-burner
+        version: link:../../../packages/create-burner
       '@dojoengine/react':
         specifier: workspace:*
-        version: link:../../../../packages/react
+        version: link:../../../packages/react
       '@dojoengine/recs':
         specifier: 2.0.13
         version: 2.0.13(typescript@5.5.4)(zod@3.23.8)
       '@dojoengine/state':
         specifier: workspace:*
-        version: link:../../../../packages/state
+        version: link:../../../packages/state
       '@dojoengine/torii-client':
         specifier: workspace:*
-        version: link:../../../../packages/torii-client
+        version: link:../../../packages/torii-client
       '@dojoengine/torii-wasm':
         specifier: workspace:*
-        version: link:../../../../packages/torii-wasm
+        version: link:../../../packages/torii-wasm
       '@dojoengine/utils':
         specifier: workspace:*
-        version: link:../../../../packages/utils
+        version: link:../../../packages/utils
       '@latticexyz/phaserx':
         specifier: ^2.0.0-next.14
         version: 2.0.0-transaction-context-af4b168c
@@ -340,29 +270,29 @@ importers:
         specifier: ^4.3.9
         version: 4.5.3(@types/node@20.16.1)(terser@5.31.6)
 
-  examples/clients/react/react-pwa-app:
+  clients/react/react-pwa-app:
     dependencies:
       '@dojoengine/core':
         specifier: workspace:*
-        version: link:../../../../packages/core
+        version: link:../../../packages/core
       '@dojoengine/create-burner':
         specifier: workspace:*
-        version: link:../../../../packages/create-burner
+        version: link:../../../packages/create-burner
       '@dojoengine/react':
         specifier: workspace:*
-        version: link:../../../../packages/react
+        version: link:../../../packages/react
       '@dojoengine/recs':
         specifier: 2.0.13
         version: 2.0.13(typescript@5.5.4)(zod@3.23.8)
       '@dojoengine/state':
         specifier: workspace:*
-        version: link:../../../../packages/state
+        version: link:../../../packages/state
       '@dojoengine/torii-client':
         specifier: workspace:*
-        version: link:../../../../packages/torii-client
+        version: link:../../../packages/torii-client
       '@dojoengine/utils':
         specifier: workspace:*
-        version: link:../../../../packages/utils
+        version: link:../../../packages/utils
       '@latticexyz/react':
         specifier: ^2.0.0-next.11
         version: 2.1.1(typescript@5.5.4)(zod@3.23.8)
@@ -455,14 +385,14 @@ importers:
         specifier: ^0.19.0
         version: 0.19.8(@vite-pwa/assets-generator@0.2.4)(vite@4.5.3(@types/node@20.16.1)(terser@5.31.6))(workbox-build@7.1.1(@types/babel__core@7.20.5))(workbox-window@7.1.0)
 
-  examples/clients/react/react-sdk:
+  clients/react/react-sdk:
     dependencies:
       '@dojoengine/core':
         specifier: 1.0.0-alpha.12
         version: 1.0.0-alpha.12(starknet@6.11.0(encoding@0.1.13))(typescript@5.5.4)
       '@dojoengine/sdk':
         specifier: workspace:*
-        version: link:../../../../packages/sdk
+        version: link:../../../packages/sdk
       '@dojoengine/torii-wasm':
         specifier: 1.0.0-alpha.12
         version: 1.0.0-alpha.12
@@ -513,29 +443,29 @@ importers:
         specifier: ^5.4.1
         version: 5.4.2(@types/node@20.16.1)(terser@5.31.6)
 
-  examples/clients/react/react-threejs:
+  clients/react/react-threejs:
     dependencies:
       '@dojoengine/core':
         specifier: workspace:*
-        version: link:../../../../packages/core
+        version: link:../../../packages/core
       '@dojoengine/create-burner':
         specifier: workspace:*
-        version: link:../../../../packages/create-burner
+        version: link:../../../packages/create-burner
       '@dojoengine/react':
         specifier: workspace:*
-        version: link:../../../../packages/react
+        version: link:../../../packages/react
       '@dojoengine/recs':
         specifier: 2.0.13
         version: 2.0.13(typescript@5.5.4)(zod@3.23.8)
       '@dojoengine/state':
         specifier: workspace:*
-        version: link:../../../../packages/state
+        version: link:../../../packages/state
       '@dojoengine/torii-client':
         specifier: workspace:*
-        version: link:../../../../packages/torii-client
+        version: link:../../../packages/torii-client
       '@dojoengine/utils':
         specifier: workspace:*
-        version: link:../../../../packages/utils
+        version: link:../../../packages/utils
       '@fortawesome/fontawesome-svg-core':
         specifier: ^6.5.1
         version: 6.6.0
@@ -712,26 +642,96 @@ importers:
         specifier: ^4.3.9
         version: 4.5.3(@types/node@20.16.1)(terser@5.31.6)
 
-  examples/clients/vanilla/phaser:
+  clients/torii-bot:
     dependencies:
       '@dojoengine/core':
         specifier: workspace:*
-        version: link:../../../../packages/core
+        version: link:../../packages/core
+      '@pinecone-database/pinecone':
+        specifier: ^1.1.2
+        version: 1.1.3
+      '@sapphire/decorators':
+        specifier: ^6.0.2
+        version: 6.1.0
+      '@sapphire/framework':
+        specifier: ^4.6.0
+        version: 4.8.5
+      discord.js:
+        specifier: ^14.13.0
+        version: 14.15.3
+      express:
+        specifier: ^4.18.2
+        version: 4.19.2
+      graphql-tag:
+        specifier: ^2.12.6
+        version: 2.12.6(graphql@16.9.0)
+      langchain:
+        specifier: ^0.0.200
+        version: 0.0.200(@pinecone-database/pinecone@1.1.3)(axios@1.7.4)(encoding@0.1.13)(ignore@5.3.2)(jsdom@24.1.1)(lodash@4.17.21)(ws@8.18.0)
+      node-cron:
+        specifier: ^3.0.2
+        version: 3.0.3
+      openai:
+        specifier: ^4.20.1
+        version: 4.56.0(encoding@0.1.13)(zod@3.23.8)
+      twitter-api-v2:
+        specifier: ^1.15.2
+        version: 1.17.2
+      typescript:
+        specifier: ^5.2.2
+        version: 5.5.4
+    devDependencies:
+      '@graphql-codegen/cli':
+        specifier: ^5.0.0
+        version: 5.0.2(@types/node@20.16.1)(encoding@0.1.13)(enquirer@2.3.6)(graphql@16.9.0)(typescript@5.5.4)
+      '@graphql-codegen/typescript':
+        specifier: ^4.0.1
+        version: 4.0.9(encoding@0.1.13)(graphql@16.9.0)
+      '@graphql-codegen/typescript-graphql-request':
+        specifier: ^6.0.0
+        version: 6.2.0(encoding@0.1.13)(graphql-request@6.1.0(encoding@0.1.13)(graphql@16.9.0))(graphql-tag@2.12.6(graphql@16.9.0))(graphql@16.9.0)
+      '@graphql-codegen/typescript-operations':
+        specifier: ^4.0.1
+        version: 4.2.3(encoding@0.1.13)(graphql@16.9.0)
+      '@types/express':
+        specifier: ^4.17.17
+        version: 4.17.21
+      '@types/node':
+        specifier: ^20.11.10
+        version: 20.16.1
+      '@types/node-cron':
+        specifier: ^3.0.10
+        version: 3.0.11
+      bun-types:
+        specifier: latest
+        version: 1.1.28
+      graphql:
+        specifier: ^16.8.1
+        version: 16.9.0
+      graphql-request:
+        specifier: ^6.1.0
+        version: 6.1.0(encoding@0.1.13)(graphql@16.9.0)
+
+  clients/vanilla/phaser:
+    dependencies:
+      '@dojoengine/core':
+        specifier: workspace:*
+        version: link:../../../packages/core
       '@dojoengine/create-burner':
         specifier: workspace:*
-        version: link:../../../../packages/create-burner
+        version: link:../../../packages/create-burner
       '@dojoengine/recs':
         specifier: 2.0.13
         version: 2.0.13(typescript@5.5.4)(zod@3.23.8)
       '@dojoengine/state':
         specifier: workspace:*
-        version: link:../../../../packages/state
+        version: link:../../../packages/state
       '@dojoengine/torii-client':
         specifier: workspace:*
-        version: link:../../../../packages/torii-client
+        version: link:../../../packages/torii-client
       '@dojoengine/utils':
         specifier: workspace:*
-        version: link:../../../../packages/utils
+        version: link:../../../packages/utils
       '@latticexyz/utils':
         specifier: ^2.0.12
         version: 2.1.1
@@ -758,29 +758,29 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0(vite@5.4.2(@types/node@20.16.1)(terser@5.31.6))
 
-  examples/clients/vue/vue-app:
+  clients/vue/vue-app:
     dependencies:
       '@dojoengine/core':
         specifier: workspace:*
-        version: link:../../../../packages/core
+        version: link:../../../packages/core
       '@dojoengine/create-burner':
         specifier: workspace:*
-        version: link:../../../../packages/create-burner
+        version: link:../../../packages/create-burner
       '@dojoengine/react':
         specifier: workspace:*
-        version: link:../../../../packages/react
+        version: link:../../../packages/react
       '@dojoengine/recs':
         specifier: 2.0.13
         version: 2.0.13(typescript@5.5.4)(zod@3.23.8)
       '@dojoengine/state':
         specifier: workspace:*
-        version: link:../../../../packages/state
+        version: link:../../../packages/state
       '@dojoengine/torii-client':
         specifier: workspace:*
-        version: link:../../../../packages/torii-client
+        version: link:../../../packages/torii-client
       '@dojoengine/utils':
         specifier: workspace:*
-        version: link:../../../../packages/utils
+        version: link:../../../packages/utils
       '@latticexyz/utils':
         specifier: ^2.1.1
         version: 2.1.1
@@ -5554,8 +5554,8 @@ packages:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
 
-  bun-types@1.1.27:
-    resolution: {integrity: sha512-rHXAiIDefeMS/fleNM1rRDYqolJGNRdch3+AuCRwcZWaqTa1vjGBNsahH/HVV7Y82frllYhJomCVSEiHzLzkgg==}
+  bun-types@1.1.28:
+    resolution: {integrity: sha512-XiWHzHZIxkgssHSUwJVrkUDHvwhHzE9mrFUMXZ3BKqNiGzL0n/fB/XUQZibcHjg0SvW/Tt5WUNeKmiM9njuy/w==}
 
   bundle-require@5.0.0:
     resolution: {integrity: sha512-GuziW3fSSmopcx4KRymQEJVbZUfqlCqcq7dvs6TYwKRZiegK/2buMxQTPs6MGlNv50wms1699qYO54R8XfRX4w==}
@@ -11218,11 +11218,6 @@ packages:
   yaml-ast-parser@0.0.43:
     resolution: {integrity: sha512-2PTINUwsRqSd+s8XxKaJWQlUuEMHJQyEuh2edBbW8KNJz0SJPwUSD2zRWqezFEdN7IzAgeuYHFUCF7o8zRdZ0A==}
 
-  yaml@2.5.0:
-    resolution: {integrity: sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==}
-    engines: {node: '>= 14'}
-    hasBin: true
-
   yaml@2.5.1:
     resolution: {integrity: sha512-bLQOjaX/ADgQ20isPJRvF0iRUHIxVhYvr53Of7wGcWlO2jvtUlH5m87DsmulFVxRpNLOnI4tB6p/oh8D7kpn9Q==}
     engines: {node: '>= 14'}
@@ -13130,7 +13125,7 @@ snapshots:
       string-env-interpolation: 1.0.1
       ts-log: 2.2.5
       tslib: 2.6.3
-      yaml: 2.5.0
+      yaml: 2.5.1
       yargs: 17.7.2
     transitivePeerDependencies:
       - '@types/node'
@@ -17148,7 +17143,7 @@ snapshots:
 
   builtin-modules@3.3.0: {}
 
-  bun-types@1.1.27:
+  bun-types@1.1.28:
     dependencies:
       '@types/node': 20.12.14
       '@types/ws': 8.5.12
@@ -19177,7 +19172,7 @@ snapshots:
 
   humanize-ms@1.2.1:
     dependencies:
-      ms: 2.1.2
+      ms: 2.1.3
 
   husky@9.1.5: {}
 
@@ -19762,7 +19757,7 @@ snapshots:
       openapi-types: 12.1.3
       p-retry: 4.6.2
       uuid: 9.0.1
-      yaml: 2.5.0
+      yaml: 2.5.1
       zod: 3.23.8
       zod-to-json-schema: 3.20.3(zod@3.23.8)
     optionalDependencies:
@@ -21000,7 +20995,7 @@ snapshots:
   postcss-load-config@4.0.2(postcss@8.4.41):
     dependencies:
       lilconfig: 3.1.2
-      yaml: 2.5.0
+      yaml: 2.5.1
     optionalDependencies:
       postcss: 8.4.41
 
@@ -23285,8 +23280,6 @@ snapshots:
   yallist@4.0.0: {}
 
   yaml-ast-parser@0.0.43: {}
-
-  yaml@2.5.0: {}
 
   yaml@2.5.1: {}
 

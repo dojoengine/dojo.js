@@ -20,7 +20,7 @@
         "target": "esnext",
         "types": ["node", "web"],
         "baseUrl": ".",
-        "rootDir": "src",
+        "rootDir": ".",
         "paths": {
             "~/*": ["src/*"]
         }

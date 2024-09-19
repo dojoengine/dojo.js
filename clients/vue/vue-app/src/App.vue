@@ -7,7 +7,7 @@ import {
     Direction,
     getAccount,
     useComponentValue,
-} from "./utils";
+} from "./utils/index.ts";
 import { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 
