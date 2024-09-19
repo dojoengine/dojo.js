@@ -4,6 +4,5 @@ import { tsupConfig } from "../../tsup.config";
 export default defineConfig({
   ...(tsupConfig as Options),
   minify: false,
-  splitting: false,
-  outDir: "./bin",
+  splitting: false
 });

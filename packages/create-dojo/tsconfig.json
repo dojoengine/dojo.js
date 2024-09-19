@@ -7,7 +7,7 @@
         "moduleDetection": "force",
         "allowImportingTsExtensions": true,
         "noEmit": true,
-        "composite": true,
+       
         "strict": true,
         "downlevelIteration": true,
         "skipLibCheck": true,
@@ -15,5 +15,12 @@
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
         "allowJs": true,
-    }
+        "isolatedModules": false,
+        "baseUrl": ".",
+        "paths": {
+          "@/*": ["./*"]
+        }
+    },
+    "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+    "exclude": ["node_modules"]
 }

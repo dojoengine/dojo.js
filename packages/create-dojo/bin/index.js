@@ -1,114 +1,74 @@
-#!/usr/bin/env node
+// src/commands/start.ts
+import { Command } from "commander";
+import path from "path";
+import { promises as fs } from "fs";
+import { execSync } from "child_process";
+import prompts from "prompts";
+var repos = [
+  { name: "client", url: "https://github.com/example/client-repo.git" },
+  { name: "contracts", url: "https://github.com/example/contracts-repo.git" }
+];
+async function init(projectName, cwd) {
+  const projectPath = path.join(cwd, projectName);
+  await fs.mkdir(projectPath, { recursive: true });
+  for (const repo of repos) {
+    console.log(`Cloning ${repo.name} repository...`);
+    execSync(`git clone ${repo.url} ${path.join(projectPath, repo.name)}`, {
+      stdio: "inherit"
+    });
+  }
+  const readmePath = path.join(projectPath, "README.md");
+  const readmeContent = `# ${projectName}
+
+This project contains:
+- Client
+- Contracts`;
+  await fs.writeFile(readmePath, readmeContent);
+  console.log(`Project initialized at ${projectPath}`);
+}
+var start = new Command().name("start").description("initialize a new project with client and contracts repositories").option("-c, --cwd <cwd>", "the working directory", process.cwd()).action(async (options) => {
+  try {
+    const cwd = path.resolve(options.cwd);
+    const response = await prompts({
+      type: "text",
+      name: "projectName",
+      message: "What would you like to name your project?"
+    });
+    if (!response.projectName) {
+      console.error("Project name is required.");
+      process.exit(1);
+    }
+    await init(response.projectName, cwd);
+    console.log("Initialization complete");
+  } catch (error) {
+    console.error("An error occurred:", error);
+    process.exit(1);
+  }
+});
 
 // src/index.ts
-import spawn from "cross-spawn";
-import * as fs from "fs";
-import https from "https";
-import path from "path";
-import { input, select } from "@inquirer/prompts";
-var templates = [
-  {
-    value: "react-app",
-    description: "React app using Dojo"
-  },
-  {
-    value: "react-phaser-example",
-    description: "React/Phaser app using Dojo"
-  },
-  {
-    value: "react-pwa-app",
-    description: "React Progressive Web Apps using Dojo"
-  },
-  {
-    value: "react-threejs",
-    description: "React Threejs using Dojo"
-  }
-];
-run();
-async function run() {
-  try {
-    const { template, projectName } = await prompt();
-    const projectPath = path.join(process.cwd(), projectName);
-    fs.mkdirSync(projectPath, { recursive: true });
-    const clientPath = path.join(projectPath, "client");
-    const dojoStarterPath = path.join(projectPath, "dojo-starter");
-    fs.mkdirSync(clientPath, { recursive: true });
-    fs.mkdirSync(dojoStarterPath, { recursive: true });
-    console.log(`Downloading ${template} into client directory...`);
-    spawn.sync("npx", [
-      "degit",
-      `dojoengine/dojo.js/examples/clients/react/${template}`,
-      clientPath
-      // Cloning directly into the client directory
-    ]);
-    if (!fs.existsSync(clientPath)) {
-      throw new Error(`Client directory not found at ${clientPath}`);
-    }
-    await rewritePackageJson(projectName);
-    console.log(`Downloading dojo-starter...`);
-    spawn.sync("npx", ["degit", `dojoengine/dojo-starter`, dojoStarterPath]);
-    console.log("Congrats! Your new project has been set up successfully.\n");
-    console.log(`Navigate into your project directory with:
-  cd ${projectName}
-`);
-    console.log("You can then build the starter and run the client.\n");
-    console.log("For detailed instructions, follow the README here:\n");
-    console.log("https://book.dojoengine.org");
-  } catch (e) {
-    console.error(`Error: ${e}`);
-  }
+import { Command as Command2 } from "commander";
+
+// src/utils/get-package-info.ts
+import path2 from "path";
+import fs2 from "fs-extra";
+function getPackageInfo() {
+  const packageJsonPath = path2.join("package.json");
+  return fs2.readJSONSync(packageJsonPath);
 }
-async function rewritePackageJson(projectName) {
-  const clientPath = path.join(process.cwd(), projectName, "client");
-  process.chdir(clientPath);
-  const packageJsonPath = path.join("package.json");
-  if (!fs.existsSync(packageJsonPath)) {
-    throw new Error(`package.json not found in ${clientPath}`);
-  }
-  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-  const latestVersion = await getLatestVersion();
-  packageJson.name = projectName;
-  for (let dep of Object.keys(packageJson.dependencies)) {
-    if (dep.startsWith("@dojoengine") && packageJson.dependencies[dep].startsWith("workspace:")) {
-      packageJson.dependencies[dep] = latestVersion;
-    }
-  }
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+
+// src/index.ts
+process.on("SIGINT", () => process.exit(0));
+process.on("SIGTERM", () => process.exit(0));
+async function main() {
+  const packageInfo = await getPackageInfo();
+  const program = new Command2().name("@dojoengine").description("install a dojoc client").version(
+    packageInfo.version || "1.0.0",
+    "-v, --version",
+    "display the version number"
+  );
+  program.addCommand(start);
+  program.parse();
 }
-async function prompt() {
-  const template = await select({
-    message: "Select a template",
-    choices: templates
-  });
-  const projectName = await input({
-    message: "Project name ",
-    validate: (input2) => {
-      if (/^([A-Za-z\-\_\d])+$/.test(input2)) return true;
-      else
-        return "Project name may only include letters, numbers, underscores and hashes.";
-    },
-    default: template
-  });
-  return { template, projectName };
-}
-async function getLatestVersion() {
-  return new Promise((resolve, reject) => {
-    https.get(
-      "https://registry.npmjs.org/-/package/@dojoengine/core/dist-tags",
-      (res) => {
-        if (res.statusCode === 200) {
-          let body = "";
-          res.on("data", (data) => body += data);
-          res.on("end", () => {
-            resolve(JSON.parse(body).latest);
-          });
-        } else {
-          reject();
-        }
-      }
-    ).on("error", () => {
-      reject();
-    });
-  });
-}
+main();
 //# sourceMappingURL=index.js.map

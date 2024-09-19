@@ -4,21 +4,28 @@
     "description": "dojo: scaffolding dojo projects via npx",
     "author": "dojo",
     "module": "index.ts",
-    "main": "./bin/index.js",
+    "main": "./dist/index.js",
     "type": "module",
     "license": "MIT",
     "publishConfig": {
         "access": "public"
     },
-    "bin": {
-        "create-dojo": "./bin/index.js"
-    },
+    "exports": "./dist/index.js",
+    "bin": "./dist/index.js",
+    
     "scripts": {
+        "dev": "tsup --watch",
         "build": "tsup --dts-resolve"
     },
     "dependencies": {
         "@inquirer/prompts": "^3.3.0",
-        "cross-spawn": "^7.0.3"
+        "@types/fs-extra": "^11.0.4",
+        "@types/prompts": "^2.4.9",
+        "commander": "^12.1.0",
+        "cross-spawn": "^7.0.3",
+        "fs-extra": "^11.2.0",
+        "prompts": "^2.4.2",
+        "type-fest": "^4.26.1"
     },
     "devDependencies": {
         "@types/cross-spawn": "^6.0.6",
