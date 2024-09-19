@@ -1,4 +1,5 @@
 interface Moves {
+    fieldOrder: string[];
     player: string;
     remaining: number;
     last_direction: Direction;
@@ -6,11 +7,13 @@ interface Moves {
 }
 
 interface DirectionsAvailable {
+    fieldOrder: string[];
     player: string;
     directions: Direction[];
 }
 
 interface Position {
+    fieldOrder: string[];
     player: string;
     vec: Vec2;
 }
@@ -36,5 +39,27 @@ type Schema = {
     };
 };
 
+const schema: Schema = {
+    dojo_starter: {
+        Moves: {
+            fieldOrder: ["player", "remaining", "last_direction", "can_move"],
+            player: "",
+            remaining: 0,
+            last_direction: Direction.None,
+            can_move: false,
+        },
+        DirectionsAvailable: {
+            fieldOrder: ["player", "directions"],
+            player: "",
+            directions: [],
+        },
+        Position: {
+            fieldOrder: ["player", "vec"],
+            player: "",
+            vec: { x: 0, y: 0 },
+        },
+    },
+};
+
 export type { Schema, Moves, DirectionsAvailable, Position, Vec2 };
-export { Direction };
+export { Direction, schema };

@@ -161,7 +161,8 @@ export interface SDK<T extends SchemaType> {
         callback: (response: {
             data?: StandardizedQueryResult<T>;
             error?: Error;
-        }) => void
+        }) => void,
+        options?: { logging?: boolean }
     ) => Promise<torii.Subscription>;
 
     /**
@@ -177,7 +178,8 @@ export interface SDK<T extends SchemaType> {
         callback: (response: {
             data?: StandardizedQueryResult<T>;
             error?: Error;
-        }) => void
+        }) => void,
+        options?: { logging?: boolean }
     ) => Promise<torii.Subscription>;
 
     /**

@@ -5,6 +5,8 @@ import { getEntities } from "./getEntities";
 import { subscribeEventQuery } from "./subscribeEventQuery";
 import { getEventMessages } from "./getEventMessages";
 
+export * from "./types";
+
 export async function createClient(
     config: torii.ClientConfig
 ): Promise<torii.ToriiClient> {
@@ -19,10 +21,10 @@ export async function init<T extends SchemaType>(
 
     return {
         client,
-        subscribeEntityQuery: (query, callback) =>
-            subscribeEntityQuery(client, query, schema, callback),
-        subscribeEventQuery: (query, callback) =>
-            subscribeEventQuery(client, query, schema, callback),
+        subscribeEntityQuery: (query, callback, options) =>
+            subscribeEntityQuery(client, query, schema, callback, options),
+        subscribeEventQuery: (query, callback, options) =>
+            subscribeEventQuery(client, query, schema, callback, options),
         getEntities: (query, callback, limit, offset, options) =>
             getEntities(
                 client,

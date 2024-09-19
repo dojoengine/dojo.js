@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { ParsedEntity, init } from "@dojoengine/sdk";
 import { dojoConfig } from "../dojoConfig.ts";
-import { Schema } from "./bindings.ts";
+import { Schema, schema } from "./bindings.ts";
 
-const db = await init<Schema>({
-    rpcUrl: dojoConfig.rpcUrl,
-    toriiUrl: dojoConfig.toriiUrl,
-    relayUrl: dojoConfig.relayUrl,
-    worldAddress:
-        "0x5d475a9221f6cbf1a016b12400a01b9a89935069aecd57e9876fcb2a7bb29da",
-});
+const db = await init<Schema>(
+    {
+        rpcUrl: dojoConfig.rpcUrl,
+        toriiUrl: dojoConfig.toriiUrl,
+        relayUrl: dojoConfig.relayUrl,
+        worldAddress:
+            "0x5d475a9221f6cbf1a016b12400a01b9a89935069aecd57e9876fcb2a7bb29da",
+    },
+    schema
+);
 
 function App() {
     const [entities, setEntities] = useState<ParsedEntity<Schema>[]>([]);
@@ -22,8 +25,11 @@ function App() {
             const subscription = await db.subscribeEntityQuery(
                 {
                     dojo_starter: {
-                        Position: [],
-                        Moves: ["player"],
+                        Moves: {
+                            $: {
+                                where: { remaining: { $is: 22 } },
+                            },
+                        },
                     },
                 },
                 (response) => {
@@ -36,6 +42,7 @@ function App() {
                         response.data &&
                         response.data[0].entityId !== "0x0"
                     ) {
+                        console.log(response.data);
                         setEntities((prevEntities) => {
                             return prevEntities.map((entity) => {
                                 const newEntity = response.data?.find(
@@ -45,7 +52,8 @@ function App() {
                             });
                         });
                     }
-                }
+                },
+                { logging: true }
             );
 
             unsubscribe = () => subscription.cancel();
@@ -80,6 +88,7 @@ function App() {
                             return;
                         }
                         if (resp.data) {
+                            console.log(resp.data);
                             setEntities((prevEntities) => {
                                 const updatedEntities = [...prevEntities];
                                 resp.data?.forEach((newEntity) => {
