@@ -41,19 +41,29 @@ export type SchemaType = {
  * Options for querying the database
  */
 export type QueryOptions = {
-    limit?: number; // Limit the number of results returned
-    offset?: number; // Offset the results returned
-    entityId?: string; // Get the specific entity by ID. Which is the key in the db.
+    limit?: number;
+    offset?: number;
+    entityId?: string;
 };
 
 /**
- * WhereOptions now takes a generic parameter representing the model's fields.
- *
- * @template TModel - The type of the model's fields.
+ * WhereOptions for subscriptions, only including the $is operator
  */
-export interface WhereOptions<TModel> extends QueryOptions {
+export interface SubscriptionWhereOptions<TModel> extends QueryOptions {
     where?: {
         [P in keyof TModel]?: {
+            $is?: TModel[P];
+        };
+    };
+}
+
+/**
+ * WhereOptions for queries, including all operators
+ */
+export interface QueryWhereOptions<TModel> extends QueryOptions {
+    where?: {
+        [P in keyof TModel]?: {
+            $is?: TModel[P];
             $eq?: TModel[P];
             $neq?: TModel[P];
             $gt?: TModel[P];
@@ -65,9 +75,22 @@ export interface WhereOptions<TModel> extends QueryOptions {
 }
 
 /**
- * QueryType now takes a generic parameter representing the schema.
- *
- * @template T - The schema type.
+ * SubscriptionQueryType for subscriptions, only using SubscriptionWhereOptions
+ */
+export type SubscriptionQueryType<T extends SchemaType> = {
+    entityIds?: string[];
+} & {
+    [K in keyof T]?: {
+        [L in keyof T[K]]?:
+            | AtLeastOne<{
+                  $: SubscriptionWhereOptions<T[K][L]>;
+              }>
+            | string[];
+    };
+};
+
+/**
+ * QueryType for queries, using QueryWhereOptions
  */
 export type QueryType<T extends SchemaType> = {
     entityIds?: string[];
@@ -75,7 +98,7 @@ export type QueryType<T extends SchemaType> = {
     [K in keyof T]?: {
         [L in keyof T[K]]?:
             | AtLeastOne<{
-                  $: WhereOptions<T[K][L]>;
+                  $: QueryWhereOptions<T[K][L]>;
               }>
             | string[];
     };
@@ -129,12 +152,12 @@ export interface SDK<T extends SchemaType> {
      * Subscribes to entity updates based on the provided query and invokes the callback with the updated data.
      *
      * @template T - The schema type.
-     * @param {QueryType<T>} [query] - The subscription query to filter the entities.
+     * @param {SubscriptionQueryType<T>} [query] - The subscription query to filter the entities.
      * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
      * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
      */
     subscribeEntityQuery: (
-        query: QueryType<T>,
+        query: SubscriptionQueryType<T>,
         callback: (response: {
             data?: StandardizedQueryResult<T>;
             error?: Error;
@@ -145,12 +168,12 @@ export interface SDK<T extends SchemaType> {
      * Subscribes to event messages based on the provided query and invokes the callback with the updated data.
      *
      * @template T - The schema type.
-     * @param {QueryType<T>} [query] - The subscription query to filter the events.
+     * @param {SubscriptionQueryType<T>} [query] - The subscription query to filter the events.
      * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
      * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
      */
     subscribeEventQuery: (
-        query: QueryType<T>,
+        query: SubscriptionQueryType<T>,
         callback: (response: {
             data?: StandardizedQueryResult<T>;
             error?: Error;
@@ -161,7 +184,7 @@ export interface SDK<T extends SchemaType> {
      * Fetches entities from the Torii client based on the provided query.
      *
      * @template T - The schema type.
-     * @param {QueryType<T>} query - The query object used to filter entities.
+     * @param {SubscriptionQueryType<T>} query - The query object used to filter entities.
      * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
      * @param {number} [limit=100] - The maximum number of entities to fetch per request. Default is 100.
      * @param {number} [offset=0] - The offset to start fetching entities from. Default is 0.

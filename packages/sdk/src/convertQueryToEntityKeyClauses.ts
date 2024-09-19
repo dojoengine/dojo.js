@@ -1,5 +1,5 @@
 import * as torii from "@dojoengine/torii-client";
-import { SchemaType, QueryType } from "./types";
+import { SchemaType, SubscriptionQueryType } from "./types";
 
 /**
  * Converts a subscription query to an array of EntityKeysClause.
@@ -10,7 +10,7 @@ import { SchemaType, QueryType } from "./types";
  * @returns An array of EntityKeysClause.
  */
 export function convertQueryToEntityKeyClauses<T extends SchemaType>(
-    query: QueryType<T>,
+    query: SubscriptionQueryType<T>,
     schema: T
 ): torii.EntityKeysClause[] {
     if (!query) {
@@ -24,6 +24,17 @@ export function convertQueryToEntityKeyClauses<T extends SchemaType>(
     if (entityIds && entityIds.length > 0) {
         clauses.push({ HashedKeys: entityIds });
     }
+
+    clauses.push(...convertQueryToKeysClause(namespaces, schema));
+
+    return clauses;
+}
+
+export function convertQueryToKeysClause<T extends SchemaType>(
+    namespaces: Omit<SubscriptionQueryType<T>, "entityIds">,
+    schema: T
+): torii.EntityKeysClause[] {
+    const clauses: torii.EntityKeysClause[] = [];
 
     Object.entries(namespaces).forEach(([namespace, models]) => {
         if (models && typeof models === "object") {
@@ -106,6 +117,7 @@ function createClauseFromWhere(
     whereOptions?: Record<
         string,
         {
+            $is?: any;
             $eq?: any;
             $neq?: any;
             $gt?: any;
@@ -136,6 +148,9 @@ function createClauseFromWhere(
         const index = fieldOrder.indexOf(field);
         if (index !== -1) {
             // Assign value without operator prefixes
+            if (condition.$is !== undefined) {
+                keys[index] = condition.$is.toString();
+            }
             if (condition.$eq !== undefined) {
                 keys[index] = condition.$eq.toString();
             }

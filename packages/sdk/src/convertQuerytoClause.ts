@@ -1,5 +1,6 @@
 import * as torii from "@dojoengine/torii-client";
-import { SchemaType, QueryType } from "./types";
+import { SchemaType, QueryType, SubscriptionQueryType } from "./types";
+import { convertQueryToKeysClause } from "./convertQueryToEntityKeyClauses";
 
 /**
  * Converts a query object into a Torii clause.
@@ -26,7 +27,7 @@ import { SchemaType, QueryType } from "./types";
  */
 export function convertQueryToClause<T extends SchemaType>(
     query: QueryType<T>,
-    operator: torii.LogicalOperator = "And"
+    schema: T
 ): torii.Clause {
     const clauses: torii.Clause[] = [];
 
@@ -50,50 +51,137 @@ export function convertQueryToClause<T extends SchemaType>(
                     ) {
                         const whereClause = conditions.where;
                         if (whereClause && typeof whereClause === "object") {
-                            for (const [member, memberValue] of Object.entries(
-                                whereClause
-                            )) {
-                                if (
-                                    typeof memberValue === "object" &&
-                                    memberValue !== null
-                                ) {
-                                    for (const [op, val] of Object.entries(
-                                        memberValue
-                                    )) {
+                            // Separate $is conditions from other conditions
+                            const hasIsClause = Object.values(whereClause).some(
+                                (condition: any) => "$is" in condition
+                            );
+
+                            if (hasIsClause) {
+                                // Extract $is conditions for Keys clause
+                                const isConditions: any = {};
+                                const otherConditions: any = {};
+                                for (const [
+                                    member,
+                                    memberValue,
+                                ] of Object.entries(whereClause)) {
+                                    if (
+                                        typeof memberValue === "object" &&
+                                        memberValue !== null &&
+                                        "$is" in memberValue
+                                    ) {
+                                        isConditions[member] = memberValue;
+                                    } else {
+                                        otherConditions[member] = memberValue;
+                                    }
+                                }
+
+                                // Build Keys clause using existing function
+                                const keyClauses = convertQueryToKeysClause(
+                                    {
+                                        [namespace]: {
+                                            [model]: {
+                                                $: {
+                                                    where: isConditions,
+                                                },
+                                            },
+                                        },
+                                    } as Omit<
+                                        SubscriptionQueryType<T>,
+                                        "entityIds"
+                                    >,
+                                    schema
+                                );
+                                clauses.push(...(keyClauses as any));
+
+                                // Process other conditions as Member clauses
+                                for (const [
+                                    member,
+                                    memberValue,
+                                ] of Object.entries(otherConditions)) {
+                                    if (
+                                        typeof memberValue === "object" &&
+                                        memberValue !== null
+                                    ) {
+                                        for (const [op, val] of Object.entries(
+                                            memberValue
+                                        )) {
+                                            clauses.push({
+                                                Member: {
+                                                    model: namespaceModel,
+                                                    member,
+                                                    operator:
+                                                        convertOperator(op),
+                                                    value: convertToPrimitive(
+                                                        val
+                                                    ),
+                                                },
+                                            });
+                                        }
+                                    } else {
+                                        // Assume equality condition
                                         clauses.push({
                                             Member: {
                                                 model: namespaceModel,
                                                 member,
-                                                operator: convertOperator(op),
-                                                value: convertToPrimitive(val),
+                                                operator: "Eq",
+                                                value: convertToPrimitive(
+                                                    memberValue
+                                                ),
                                             },
                                         });
                                     }
-                                } else {
-                                    clauses.push({
-                                        Member: {
-                                            model: namespaceModel,
-                                            member,
-                                            operator: "Eq", // Default to Eq
-                                            value: convertToPrimitive(
-                                                memberValue
-                                            ),
-                                        },
-                                    });
+                                }
+                            } else {
+                                // No $is conditions, process all as Member clauses
+                                for (const [
+                                    member,
+                                    memberValue,
+                                ] of Object.entries(whereClause)) {
+                                    if (
+                                        typeof memberValue === "object" &&
+                                        memberValue !== null
+                                    ) {
+                                        for (const [op, val] of Object.entries(
+                                            memberValue
+                                        )) {
+                                            clauses.push({
+                                                Member: {
+                                                    model: namespaceModel,
+                                                    member,
+                                                    operator:
+                                                        convertOperator(op),
+                                                    value: convertToPrimitive(
+                                                        val
+                                                    ),
+                                                },
+                                            });
+                                        }
+                                    } else {
+                                        // Assume equality condition
+                                        clauses.push({
+                                            Member: {
+                                                model: namespaceModel,
+                                                member,
+                                                operator: "Eq",
+                                                value: convertToPrimitive(
+                                                    memberValue
+                                                ),
+                                            },
+                                        });
+                                    }
                                 }
                             }
                         }
                     }
                 } else {
                     // Handle the case where there are no conditions
-
-                    return {
+                    clauses.push({
                         Keys: {
                             keys: [undefined],
                             pattern_matching: "FixedLen",
                             models: [namespaceModel],
                         },
-                    };
+                    });
                 }
             }
         }
@@ -103,7 +191,7 @@ export function convertQueryToClause<T extends SchemaType>(
     if (clauses.length > 0) {
         return {
             Composite: {
-                operator: operator,
+                operator: "And",
                 clauses: clauses,
             },
         };
@@ -112,7 +200,7 @@ export function convertQueryToClause<T extends SchemaType>(
     // If there are no clauses, return an empty Composite
     return {
         Composite: {
-            operator: operator,
+            operator: "And",
             clauses: [],
         },
     };

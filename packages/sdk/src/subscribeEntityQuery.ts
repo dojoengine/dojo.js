@@ -1,6 +1,10 @@
 import * as torii from "@dojoengine/torii-client";
 import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses";
-import { QueryType, StandardizedQueryResult, SchemaType } from "./types";
+import {
+    SubscriptionQueryType,
+    StandardizedQueryResult,
+    SchemaType,
+} from "./types";
 import { parseEntities } from "./parseEntities";
 
 /**
@@ -24,7 +28,7 @@ import { parseEntities } from "./parseEntities";
  */
 export async function subscribeEntityQuery<T extends SchemaType>(
     client: torii.ToriiClient,
-    query: QueryType<T>,
+    query: SubscriptionQueryType<T>,
     schema: T,
     callback?: (response: {
         data?: StandardizedQueryResult<T>;

@@ -51,7 +51,7 @@ export const schema: MockSchemaType = {
             durability: 0,
         },
     },
-} as MockSchemaType;
+};
 
 async function exampleUsage() {
     const db = await init<MockSchemaType>(
@@ -70,9 +70,8 @@ async function exampleUsage() {
                 player: {
                     $: {
                         where: {
-                            // done does not exisst and no warning is thrown
-                            name: { $eq: "Alice" },
-                            score: { $gt: 10 },
+                            name: { $is: "Alice" },
+                            score: { $is: 10 },
                         },
                     },
                 },

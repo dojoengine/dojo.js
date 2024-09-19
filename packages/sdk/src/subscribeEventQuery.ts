@@ -1,6 +1,10 @@
 import * as torii from "@dojoengine/torii-client";
 import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses";
-import { QueryType, StandardizedQueryResult, SchemaType } from "./types";
+import {
+    SubscriptionQueryType,
+    StandardizedQueryResult,
+    SchemaType,
+} from "./types";
 import { parseEntities } from "./parseEntities";
 
 /**
@@ -8,7 +12,7 @@ import { parseEntities } from "./parseEntities";
  *
  * @template T - The schema type.
  * @param {torii.ToriiClient} client - The Torii client instance.
- * @param {QueryType<T>} [query] - The subscription query to filter the events.
+ * @param {SubscriptionQueryType<T>} [query] - The subscription query to filter the events.
  * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
  * @param {{ logging?: boolean }} [options] - Optional settings for the subscription.
  * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
@@ -24,7 +28,7 @@ import { parseEntities } from "./parseEntities";
  */
 export async function subscribeEventQuery<T extends SchemaType>(
     client: torii.ToriiClient,
-    query: QueryType<T>,
+    query: SubscriptionQueryType<T>,
     schema: T,
     callback?: (response: {
         data?: StandardizedQueryResult<T>;

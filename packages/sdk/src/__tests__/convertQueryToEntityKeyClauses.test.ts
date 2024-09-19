@@ -103,8 +103,12 @@ describe("convertQueryToEntityKeyClauses", () => {
     it("should handle queries with entityIds", () => {
         const query: QueryType<MockSchemaType> = {
             world: {
-                player: {
-                    $: {},
+                item: {
+                    $: {
+                        where: {
+                            type: { $is: "sword" },
+                        },
+                    },
                 },
             },
         };
@@ -113,9 +117,9 @@ describe("convertQueryToEntityKeyClauses", () => {
         const expected: torii.EntityKeysClause[] = [
             {
                 Keys: {
-                    keys: Array(3).fill(undefined), // ['id', 'name', 'score']
+                    keys: [undefined, "sword", undefined], // ['id', 'type']
                     pattern_matching: "VariableLen",
-                    models: ["world-player"],
+                    models: ["world-item"],
                 },
             },
         ];

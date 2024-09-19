@@ -13,7 +13,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query);
+        const result = convertQueryToClause(query, schema);
 
         expect(result).toEqual({
             Composite: {
@@ -70,7 +70,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query);
+        const result = convertQueryToClause(query, schema);
 
         expect(result).toEqual({
             Composite: {
@@ -105,7 +105,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query);
+        const result = convertQueryToClause(query, schema);
 
         expect(result).toEqual({
             Composite: {
@@ -141,7 +141,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query);
+        const result = convertQueryToClause(query, schema);
 
         expect(result).toEqual({
             Composite: {
@@ -167,12 +167,17 @@ describe("convertQueryToClause", () => {
                     $: { where: { score: { $gt: 100 } } },
                 },
                 item: {
-                    $: { where: { durability: { $lt: 50 } } },
+                    $: {
+                        where: {
+                            durability: { $lt: 50 },
+                            type: { $is: "diamond" },
+                        },
+                    },
                 },
             },
         };
 
-        const result = convertQueryToClause(query);
+        const result = convertQueryToClause(query, schema);
 
         expect(result).toEqual({
             Composite: {
@@ -184,6 +189,13 @@ describe("convertQueryToClause", () => {
                             member: "score",
                             operator: "Gt",
                             value: { Primitive: { U32: 100 } },
+                        },
+                    },
+                    {
+                        Keys: {
+                            keys: [undefined, "diamond", undefined],
+                            pattern_matching: "VariableLen",
+                            models: ["world-item"],
                         },
                     },
                     {
