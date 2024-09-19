@@ -28,8 +28,9 @@ function App() {
                         Moves: {
                             $: {
                                 where: {
-                                    can_move: { $is: true },
-                                    last_direction: { $is: "Down" },
+                                    player: {
+                                        $is: "0x3628a39cc6bd2347e79967e9458ac41ab65bac6949f2aa311b311aff0d7334d",
+                                    },
                                 },
                             },
                         },

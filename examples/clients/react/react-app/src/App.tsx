@@ -2,9 +2,17 @@ import "./App.css";
 import { useComponentValue, useQuerySync } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
-import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
+import { Direction } from "./dojo/typescript/models.gen";
+
+enum DirectionEnum {
+    None = "0",
+    Left = "Left",
+    Right = "Right",
+    Up = "Up",
+    Down = "Down",
+}
 
 function App() {
     const {
@@ -139,7 +147,9 @@ function App() {
                     <button
                         onClick={() =>
                             position && position.vec.y > 0
-                                ? move(account.account, Direction.Up)
+                                ? move(account.account, {
+                                      type: DirectionEnum.Up,
+                                  })
                                 : console.log("Reach the borders of the world.")
                         }
                     >
@@ -150,21 +160,27 @@ function App() {
                     <button
                         onClick={() =>
                             position && position.vec.x > 0
-                                ? move(account.account, Direction.Left)
+                                ? move(account.account, {
+                                      type: DirectionEnum.Left,
+                                  })
                                 : console.log("Reach the borders of the world.")
                         }
                     >
                         Move Left
                     </button>
                     <button
-                        onClick={() => move(account.account, Direction.Right)}
+                        onClick={() =>
+                            move(account.account, { type: DirectionEnum.Right })
+                        }
                     >
                         Move Right
                     </button>
                 </div>
                 <div>
                     <button
-                        onClick={() => move(account.account, Direction.Down)}
+                        onClick={() =>
+                            move(account.account, { type: DirectionEnum.Down })
+                        }
                     >
                         Move Down
                     </button>

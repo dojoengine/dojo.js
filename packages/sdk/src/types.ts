@@ -61,19 +61,53 @@ export interface SubscriptionWhereOptions<TModel> extends QueryOptions {
  * WhereOptions for queries, including all operators
  */
 export interface QueryWhereOptions<TModel> extends QueryOptions {
+    /**
+     * Conditions to filter the query results.
+     */
     where?: {
+        /**
+         * Field to apply the condition on.
+         * Example: { name: { $eq: "Alice" } }
+         */
         [P in keyof TModel]?: {
+            /**
+             * Checks if the field is equal to the specified value.
+             * Example: { age: { $is: 25 } }
+             */
             $is?: TModel[P];
+            /**
+             * Checks if the field is equal to the specified value.
+             * Example: { score: { $eq: 100 } }
+             */
             $eq?: TModel[P];
+            /**
+             * Checks if the field is not equal to the specified value.
+             * Example: { status: { $neq: "inactive" } }
+             */
             $neq?: TModel[P];
+            /**
+             * Checks if the field is greater than the specified value.
+             * Example: { height: { $gt: 170 } }
+             */
             $gt?: TModel[P];
+            /**
+             * Checks if the field is greater than or equal to the specified value.
+             * Example: { experience: { $gte: 5 } }
+             */
             $gte?: TModel[P];
+            /**
+             * Checks if the field is less than the specified value.
+             * Example: { weight: { $lt: 70 } }
+             */
             $lt?: TModel[P];
+            /**
+             * Checks if the field is less than or equal to the specified value.
+             * Example: { price: { $lte: 50 } }
+             */
             $lte?: TModel[P];
         };
     };
 }
-
 /**
  * SubscriptionQueryType for subscriptions, only using SubscriptionWhereOptions
  */

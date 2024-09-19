@@ -1,44 +1,140 @@
-## TODO:
+# Dojo SDK: Unleash Type-Safe Game Development
 
-We need to define every case people would use in this library.
+Supercharge your Dojo Engine projects with our TypeScript SDK. Build, query, and interact with your game world using the power of static typing.
 
-It should be the go-to library for building onchain applications, from games to simple NFT websites. The library should provide comprehensive querying and subscription capabilities to interact with onchain data efficiently.
+## 🚀 Type Safety on Steroids
 
-### Queries:
+Generate TypeScript types directly from your world schema:
 
-1. **Get all entities by Entity ID**:
+To take advantage of this type safety:
 
-    - Fetches all models associated with the entity.
-    - This could even flatten the object into one big entity object for easier access.
+1. Generate the TypeScript types for your world:
 
-2. **Get entity and specific models**:
+    ```bash
+    sozo build --typescript-v2
+    ```
 
-    - Allows fetching a specific entity and its associated models.
-    - Useful for retrieving detailed information about a particular entity.
+2. Import and use these types when initializing the SDK and constructing queries.
 
-3. **Get all entities matching a Clause**:
+This approach ensures that your code remains in sync with your Dojo world definition, catching potential issues early in the development process.
 
-    - Retrieves all entities that match a given clause.
-    - Clauses can include various conditions and operators to filter the entities.
+## Installation
 
-4. **Get all entities**:
+```bash
+npm install @dojoengine/sdk
+```
 
-    - Fetches all entities without any filtering.
-    - Useful for getting a complete list of all entities in the system.
+## Usage
 
-5. **Get all entities by hashed Keys**:
-    - Retrieves entities based on their hashed keys.
-    - This method is efficient for fetching entities when the hashed keys are known.
+```typescript
+import { init, SchemaType } from "@dojoengine/sdk";
 
-### Subscriptions:
+// Define your schema
+const schema: SchemaType = {
+    // Your schema definition here
+};
 
-1. **Subscribe by hashed Keys**:
+// Initialize the SDK
+const sdk = await init(
+    {
+        rpcUrl: "http://localhost:8080",
+        // Other config options
+    },
+    schema
+);
 
-    - Allows subscribing to updates for entities identified by their hashed keys.
-    - Useful for real-time updates on specific entities.
+// Use the SDK methods
+```
 
-2. **Subscribe by EntityKeysClause**:
-    - Enables subscriptions based on EntityKeysClause.
-    - This method provides flexibility to subscribe to a range of entities based on complex conditions and clauses.
+## Key Functions
 
-By defining these use cases, we aim to make this library the go-to solution for developers building onchain applications, ensuring they have all the necessary tools to query and subscribe to onchain data effectively.
+-   `createClient(config)`: Creates a Torii client.
+-   `init(options, schema)`: Initializes the SDK with the given configuration and schema.
+
+## SDK Methods
+
+-   `subscribeEntityQuery`: Subscribe to entity updates.
+-   `subscribeEventQuery`: Subscribe to event updates.
+-   `getEntities`: Fetch entities based on a query.
+-   `getEventMessages`: Fetch event messages based on a query.
+
+## Examples
+
+### Subscribing to Entity Updates
+
+```typescript
+const subscription = await sdk.subscribeEntityQuery(
+    {
+        Player: {
+            position: [{ $: { where: { x: { $gt: 10 } } } }],
+        },
+    },
+    (response) => {
+        if (response.data) {
+            console.log("Updated entities:", response.data);
+        } else if (response.error) {
+            console.error("Subscription error:", response.error);
+        }
+    }
+);
+
+// Later, to unsubscribe
+subscription.unsubscribe();
+```
+
+### Fetching Entities
+
+```typescript
+const entities = await sdk.getEntities(
+    {
+        Player: {
+            health: [{ $: { where: { value: { $gte: 50 } } } }],
+        },
+    },
+    (response) => {
+        if (response.data) {
+            console.log("Fetched entities:", response.data);
+        } else if (response.error) {
+            console.error("Fetch error:", response.error);
+        }
+    },
+    10, // limit
+    0 // offset
+);
+```
+
+## Query Explanation
+
+@types.ts
+
+The SDK uses two main types of queries:
+
+1. `SubscriptionQueryType`: Used for subscriptions (entity and event).
+2. `QueryType`: Used for fetching entities and event messages.
+
+Both query types allow you to filter data based on entity IDs and specific model properties. The main difference is in the `where` clause:
+
+-   `SubscriptionQueryType` only supports the `$is` operator for exact matches.
+-   `QueryType` supports additional operators like `$eq`, `$neq`, `$gt`, `$gte`, `$lt`, and `$lte` for more complex filtering.
+
+Example of a subscription query:
+
+```typescript
+{
+    Player: {
+        position: [{ $: { where: { x: { $is: 5 } } } }];
+    }
+}
+```
+
+Example of a fetch query:
+
+```typescript
+{
+    Player: {
+        health: [{ $: { where: { value: { $gte: 50, $lt: 100 } } } }];
+    }
+}
+```
+
+These query structures allow you to efficiently filter and retrieve the data you need from the Dojo Engine.

@@ -149,7 +149,7 @@ function createClauseFromWhere(
         if (index !== -1) {
             // Assign value without operator prefixes
             if (condition.$is !== undefined) {
-                keys[index] = condition.$is;
+                keys[index] = condition.$is.toString();
             }
             if (condition.$eq !== undefined) {
                 keys[index] = condition.$eq.toString();

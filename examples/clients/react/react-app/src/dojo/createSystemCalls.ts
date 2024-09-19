@@ -9,9 +9,9 @@ import {
 } from "@dojoengine/recs";
 import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
-import { Direction, updatePositionWithDirection } from "../utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import type { IWorld } from "./typescript/contracts.gen";
+import { Direction } from "./typescript/models.gen";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -81,34 +81,10 @@ export function createSystemCalls(
             BigInt(account.address),
         ]) as Entity;
 
-        // Update the state before the transaction
-        // const positionId = uuid();
-        // Position.addOverride(positionId, {
-        //     entity: entityId,
-        //     value: {
-        //         player: BigInt(entityId),
-        //         vec: updatePositionWithDirection(
-        //             direction,
-        //             getComponentValue(Position, entityId) as any
-        //         ).vec,
-        //     },
-        // });
-
-        // // Update the state before the transaction
-        // const movesId = uuid();
-        // Moves.addOverride(movesId, {
-        //     entity: entityId,
-        //     value: {
-        //         player: BigInt(entityId),
-        //         remaining:
-        //             (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
-        //     },
-        // });
-
         try {
             await client.actions.move({
                 account,
-                direction: { type: "Left" },
+                direction,
             });
 
             // Wait for the indexer to update the entity
