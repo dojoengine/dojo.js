@@ -1,10 +1,6 @@
 import * as torii from "@dojoengine/torii-client";
 import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses";
-import {
-    SubscriptionQueryType,
-    StandardizedQueryResult,
-    SchemaType,
-} from "./types";
+import { QueryType, StandardizedQueryResult, SchemaType } from "./types";
 import { parseEntities } from "./parseEntities";
 
 /**
@@ -12,7 +8,7 @@ import { parseEntities } from "./parseEntities";
  *
  * @template T - The schema type.
  * @param {torii.ToriiClient} client - The Torii client instance.
- * @param {SubscriptionQueryType<T>} [query] - The subscription query to filter the entities.
+ * @param {QueryType<T>} [query] - The subscription query to filter the entities.
  * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
  * @param {{ logging?: boolean }} [options] - Optional settings for the subscription.
  * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
@@ -28,7 +24,8 @@ import { parseEntities } from "./parseEntities";
  */
 export async function subscribeEntityQuery<T extends SchemaType>(
     client: torii.ToriiClient,
-    query?: SubscriptionQueryType<T>,
+    query: QueryType<T>,
+    schema: T,
     callback?: (response: {
         data?: StandardizedQueryResult<T>;
         error?: Error;
@@ -36,7 +33,7 @@ export async function subscribeEntityQuery<T extends SchemaType>(
     options?: { logging?: boolean }
 ): Promise<torii.Subscription> {
     return client.onEntityUpdated(
-        convertQueryToEntityKeyClauses(query),
+        convertQueryToEntityKeyClauses(query, schema),
         (entityId: string, entityData: any) => {
             try {
                 if (callback) {
@@ -46,7 +43,7 @@ export async function subscribeEntityQuery<T extends SchemaType>(
                     if (options?.logging) {
                         console.log(
                             "Converted query to entity key clauses:",
-                            convertQueryToEntityKeyClauses(query)
+                            convertQueryToEntityKeyClauses(query, schema)
                         );
                         console.log("Parsed entity data:", parsedData);
                     }

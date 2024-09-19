@@ -1,43 +1,81 @@
 // EXAMPLE FOR NOW
 
 import { init } from "..";
+import { SchemaType } from "../types";
 
-interface Todo {
+export interface PlayerModel {
+    fieldOrder: string[];
     id: string;
-    text: string;
-    done: boolean;
-    createdAt: number;
+    name: string;
+    score: number;
 }
 
-interface Goals {
+export interface GameModel {
+    fieldOrder: string[];
     id: string;
-    text: string;
-    done: boolean;
-    createdAt: number;
+    status: string;
 }
 
-type Schema = {
-    todos: Todo;
-    goals: Goals;
-};
+export interface ItemModel {
+    fieldOrder: string[];
+    id: string;
+    type: string;
+    durability: number;
+}
 
-type SchemaNamed = {
-    world: Schema;
-};
+export interface MockSchemaType extends SchemaType {
+    world: {
+        player: PlayerModel;
+        game: GameModel;
+        item: ItemModel;
+    };
+}
+
+export const schema: MockSchemaType = {
+    world: {
+        player: {
+            fieldOrder: ["id", "name", "score"],
+            id: "",
+            name: "",
+            score: 0,
+        },
+        game: {
+            fieldOrder: ["id", "status"],
+            id: "",
+            status: "",
+        },
+        item: {
+            fieldOrder: ["id", "type", "durability"],
+            id: "",
+            type: "",
+            durability: 0,
+        },
+    },
+} as MockSchemaType;
 
 async function exampleUsage() {
-    const db = await init<SchemaNamed>({
-        rpcUrl: "your-rpc-url",
-        toriiUrl: "your-torii-url",
-        relayUrl: "your-relay-url",
-        worldAddress: "your-world-address",
-    });
+    const db = await init<MockSchemaType>(
+        {
+            rpcUrl: "your-rpc-url",
+            toriiUrl: "your-torii-url",
+            relayUrl: "your-relay-url",
+            worldAddress: "your-world-address",
+        },
+        schema
+    );
 
     db.subscribeEntityQuery(
         {
             world: {
-                todos: [],
-                goals: [],
+                player: {
+                    $: {
+                        where: {
+                            // done does not exisst and no warning is thrown
+                            name: { $eq: "Alice" },
+                            score: { $gt: 10 },
+                        },
+                    },
+                },
             },
         },
         (resp) => {
@@ -49,7 +87,10 @@ async function exampleUsage() {
                 return;
             }
             if (resp.data) {
-                console.log("Queried todos and goals:", resp.data);
+                console.log(
+                    "Queried todos and goals:",
+                    resp.data.map((a) => a.models.world)
+                );
             }
         }
     );
@@ -58,17 +99,18 @@ async function exampleUsage() {
         const entities = await db.getEntities(
             {
                 world: {
-                    todos: {
+                    item: {
                         $: {
                             where: {
-                                done: { $eq: true },
+                                type: { $eq: "sword" },
+                                durability: { $lt: 5 },
                             },
                         },
                     },
-                    goals: {
+                    game: {
                         $: {
                             where: {
-                                done: { $eq: true },
+                                status: { $eq: "completed" },
                             },
                         },
                     },

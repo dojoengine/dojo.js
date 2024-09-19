@@ -1,36 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { SchemaType, QueryType } from "../types";
 import * as torii from "@dojoengine/torii-client";
 import { parseEntities } from "../parseEntities";
-
-// Mock SchemaType for testing
-interface TestSchema extends SchemaType {
-    dojo_starter: {
-        // Corrected 'dojo_stater' to 'dojo_starter'
-        Position: {
-            player: string;
-            vec: Record<string, unknown>;
-        };
-        Moves: {
-            last_direction: string;
-            remaining: number;
-            can_move: boolean;
-            player: string;
-        };
-    };
-}
-
-// Updated Query to match the fixed SchemaType structure
-const query: QueryType<TestSchema> = {
-    dojo_starter: {
-        Position: {
-            $: {},
-        },
-        Moves: {
-            $: {},
-        },
-    },
-};
 
 describe("parseEntities", () => {
     it("should parse entities correctly", () => {

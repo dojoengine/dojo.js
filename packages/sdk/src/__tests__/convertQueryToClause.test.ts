@@ -1,26 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { convertQueryToClause } from "../convertQuerytoClause";
 import { QueryType, SchemaType } from "../types";
-
-// Define a mock SchemaType for testing purposes
-interface MockSchemaType extends SchemaType {
-    world: {
-        player: {
-            id: string;
-            name: string;
-            score: number;
-        };
-        game: {
-            id: string;
-            status: string;
-        };
-        item: {
-            id: string;
-            type: string;
-            durability: number;
-        };
-    };
-}
+import { MockSchemaType, schema } from "../__example__/index";
 
 describe("convertQueryToClause", () => {
     it("should convert a single model query with conditions", () => {

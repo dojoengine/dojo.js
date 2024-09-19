@@ -12,16 +12,17 @@ export async function createClient(
 }
 
 export async function init<T extends SchemaType>(
-    options: torii.ClientConfig
+    options: torii.ClientConfig,
+    schema: T
 ): Promise<SDK<T>> {
     const client = await createClient(options);
 
     return {
         client,
         subscribeEntityQuery: (query, callback) =>
-            subscribeEntityQuery(client, query, callback),
+            subscribeEntityQuery(client, query, schema, callback),
         subscribeEventQuery: (query, callback) =>
-            subscribeEventQuery(client, query, callback),
+            subscribeEventQuery(client, query, schema, callback),
         getEntities: (query, callback, limit, offset, options) =>
             getEntities(client, query, callback, limit, offset, options),
         getEventMessages: (query, callback, limit, offset, options) =>
