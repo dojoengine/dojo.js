@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { ParsedEntity, init } from "@dojoengine/sdk";
 import { dojoConfig } from "../dojoConfig.ts";
-import { Schema, schema } from "./bindings.ts";
+import { Direction, Schema, schema } from "./bindings.ts";
 
 const db = await init<Schema>(
     {
@@ -27,7 +27,10 @@ function App() {
                     dojo_starter: {
                         Moves: {
                             $: {
-                                where: { remaining: { $is: 22 } },
+                                where: {
+                                    can_move: { $is: true },
+                                    last_direction: { $is: "Down" },
+                                },
                             },
                         },
                     },
