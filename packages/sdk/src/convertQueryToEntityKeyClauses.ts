@@ -6,9 +6,9 @@ import { SchemaType, SubscriptionQueryType } from "./types";
  * Converts a subscription query to an array of EntityKeysClause.
  *
  * @template T - The schema type.
- * @param query - The subscription query to convert.
- * @param schema - The schema providing field order information.
- * @returns An array of EntityKeysClause.
+ * @param {SubscriptionQueryType<T>} query - The subscription query to convert.
+ * @param {T} schema - The schema providing field order information.
+ * @returns {torii.EntityKeysClause[]} An array of EntityKeysClause.
  */
 export function convertQueryToEntityKeyClauses<T extends SchemaType>(
     query: SubscriptionQueryType<T>,
@@ -31,6 +31,14 @@ export function convertQueryToEntityKeyClauses<T extends SchemaType>(
     return clauses;
 }
 
+/**
+ * Converts namespaces to an array of EntityKeysClause.
+ *
+ * @template T - The schema type.
+ * @param {Omit<SubscriptionQueryType<T>, "entityIds">} namespaces - The namespaces to convert.
+ * @param {T} schema - The schema providing field order information.
+ * @returns {torii.EntityKeysClause[]} An array of EntityKeysClause.
+ */
 export function convertQueryToKeysClause<T extends SchemaType>(
     namespaces: Omit<SubscriptionQueryType<T>, "entityIds">,
     schema: T
@@ -75,9 +83,9 @@ export function convertQueryToKeysClause<T extends SchemaType>(
 /**
  * Creates an EntityKeysClause based on the provided model and value.
  *
- * @param namespaceModel - The combined namespace and model string.
- * @param value - The value associated with the model.
- * @returns An EntityKeysClause or undefined.
+ * @param {string} namespaceModel - The combined namespace and model string.
+ * @param {string[]} value - The value associated with the model.
+ * @returns {torii.EntityKeysClause | undefined} An EntityKeysClause or undefined.
  */
 function createClause(
     namespaceModel: string,
@@ -108,10 +116,10 @@ function createClause(
  * Orders the keys array based on the fieldOrder from the schema,
  * inserting undefined placeholders where necessary.
  *
- * @param namespaceModel - The combined namespace and model string.
- * @param whereOptions - The where conditions from the query.
- * @param fieldOrder - The defined order of fields for the model.
- * @returns An EntityKeysClause or undefined.
+ * @param {string} namespaceModel - The combined namespace and model string.
+ * @param {Record<string, { $is?: any; $eq?: any; $neq?: any; $gt?: any; $gte?: any; $lt?: any; $lte?: any }>} [whereOptions] - The where conditions from the query.
+ * @param {string[]} [fieldOrder=[]] - The defined order of fields for the model.
+ * @returns {torii.EntityKeysClause | undefined} An EntityKeysClause or undefined.
  */
 function createClauseFromWhere(
     namespaceModel: string,

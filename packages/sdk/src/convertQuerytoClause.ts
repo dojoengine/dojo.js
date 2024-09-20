@@ -8,7 +8,7 @@ import { QueryType, SchemaType, SubscriptionQueryType } from "./types";
  *
  * @template T - The schema type.
  * @param {QueryType<T>} query - The query object to convert.
- * @param {torii.LogicalOperator} [operator="And"] - The logical operator to combine clauses. Default is "And".
+ * @param {T} schema - The schema providing field order information.
  * @returns {torii.Clause} - The resulting Torii clause.
  *
  * @example
@@ -23,13 +23,13 @@ import { QueryType, SchemaType, SubscriptionQueryType } from "./types";
  *         }
  *     }
  * };
- * const clause = convertQueryToClause(query);
+ * const clause = convertQueryToClause(query, schema);
  * console.log(clause);
  */
 export function convertQueryToClause<T extends SchemaType>(
     query: QueryType<T>,
     schema: T
-): torii.Clause {
+): torii.Clause | undefined {
     const clauses: torii.Clause[] = [];
 
     for (const [namespace, models] of Object.entries(query)) {
@@ -199,12 +199,7 @@ export function convertQueryToClause<T extends SchemaType>(
     }
 
     // If there are no clauses, return an empty Composite
-    return {
-        Composite: {
-            operator: "And",
-            clauses: [],
-        },
-    };
+    return undefined;
 }
 
 /**

@@ -10,12 +10,21 @@ import { QueryType, SchemaType, StandardizedQueryResult } from "./types";
  * @template T - The schema type.
  * @param {torii.ToriiClient} client - The Torii client instance used to fetch event messages.
  * @param {QueryType<T>} query - The query object used to filter event messages.
+ * @param {T} schema - The schema type for the entities.
  * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
  * @param {number} [limit=100] - The maximum number of event messages to fetch per request. Default is 100.
  * @param {number} [offset=0] - The offset to start fetching event messages from. Default is 0.
  * @param {{ logging?: boolean }} [options] - Optional settings.
- * @param {boolean} [options.logging] - If true, enables logging of the fetching process. Default is false.
  * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
+ *
+ * @example
+ * const eventMessages = await getEventMessages(client, query, schema, (response) => {
+ *     if (response.error) {
+ *         console.error("Error:", response.error);
+ *     } else {
+ *         console.log("Data:", response.data);
+ *     }
+ * }, 100, 0, { logging: true });
  */
 export async function getEventMessages<T extends SchemaType>(
     client: torii.ToriiClient,
@@ -30,8 +39,6 @@ export async function getEventMessages<T extends SchemaType>(
     options?: { logging?: boolean } // Logging option
 ): Promise<StandardizedQueryResult<T>> {
     const clause = convertQueryToClause(query, schema);
-
-    console.log(clause);
 
     let cursor = offset;
     let continueFetching = true;

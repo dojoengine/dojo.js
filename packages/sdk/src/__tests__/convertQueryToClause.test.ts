@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { MockSchemaType, schema } from "../__example__/index";
 import { convertQueryToClause } from "../convertQuerytoClause";
-import { QueryType, SchemaType } from "../types";
+import { QueryType } from "../types";
 
 describe("convertQueryToClause", () => {
     it("should convert a single model query with conditions", () => {
@@ -41,25 +41,15 @@ describe("convertQueryToClause", () => {
         });
     });
 
-    // it("should convert a single model query without conditions", () => {
-    //     const query: QueryType<MockSchemaType> = {
-    //         world: {
-    //             player: {
-    //                 $: {},
-    //             },
-    //         },
-    //     };
+    it("should return undefined, indicating fetch all", () => {
+        const query: QueryType<MockSchemaType> = {
+            world: {},
+        };
 
-    //     const result = convertQueryToClause(query);
+        const result = convertQueryToClause(query, schema);
 
-    //     expect(result).toEqual({
-    //         Keys: {
-    //             keys: [undefined],
-    //             pattern_matching: "FixedLen",
-    //             models: ["world-player"],
-    //         },
-    //     });
-    // });
+        expect(result).toEqual(undefined);
+    });
 
     it("should convert multiple model queries", () => {
         const query: QueryType<MockSchemaType> = {
@@ -97,6 +87,7 @@ describe("convertQueryToClause", () => {
             },
         });
     });
+
     it("should handle complex conditions with multiple operators", () => {
         const query: QueryType<MockSchemaType> = {
             world: {

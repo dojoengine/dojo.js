@@ -29,6 +29,13 @@ export interface MockSchemaType extends SchemaType {
         game: GameModel;
         item: ItemModel;
     };
+    universe: {
+        galaxy: {
+            fieldOrder: string[];
+            id: string;
+            name: string;
+        };
+    };
 }
 
 export const schema: MockSchemaType = {
@@ -49,6 +56,13 @@ export const schema: MockSchemaType = {
             id: "",
             type: "",
             durability: 0,
+        },
+    },
+    universe: {
+        galaxy: {
+            fieldOrder: ["id", "name"],
+            id: "",
+            name: "",
         },
     },
 };

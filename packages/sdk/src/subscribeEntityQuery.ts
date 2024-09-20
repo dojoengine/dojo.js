@@ -13,13 +13,14 @@ import {
  *
  * @template T - The schema type.
  * @param {torii.ToriiClient} client - The Torii client instance.
- * @param {QueryType<T>} [query] - The subscription query to filter the entities.
+ * @param {SubscriptionQueryType<T>} query - The subscription query to filter the entities.
+ * @param {T} schema - The schema type for the entities.
  * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
  * @param {{ logging?: boolean }} [options] - Optional settings for the subscription.
  * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
  *
  * @example
- * const subscription = await subscribeEntityQuery(client, query, (response) => {
+ * const subscription = await subscribeEntityQuery(client, query, schema, (response) => {
  *     if (response.error) {
  *         console.error("Error:", response.error);
  *     } else {

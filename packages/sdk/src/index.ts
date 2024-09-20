@@ -39,7 +39,7 @@ export async function init<T extends SchemaType>(
         /**
          * Subscribes to entity queries.
          *
-         * @param {QueryType<T>} query - The query object used to filter entities.
+         * @param {SubscriptionQueryType<T>} query - The query object used to filter entities.
          * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
          * @param {{ logging?: boolean }} [options] - Optional settings.
          * @returns {Promise<void>} - A promise that resolves when the subscription is set up.
@@ -49,7 +49,7 @@ export async function init<T extends SchemaType>(
         /**
          * Subscribes to event queries.
          *
-         * @param {QueryType<T>} query - The query object used to filter events.
+         * @param {SubscriptionQueryType<T>} query - The query object used to filter events.
          * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
          * @param {{ logging?: boolean }} [options] - Optional settings.
          * @returns {Promise<void>} - A promise that resolves when the subscription is set up.
@@ -59,7 +59,7 @@ export async function init<T extends SchemaType>(
         /**
          * Fetches entities based on the provided query.
          *
-         * @param {QueryType<T>} query - The query object used to filter entities.
+         * @param {SubscriptionQueryType<T>} query - The query object used to filter entities.
          * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
          * @param {number} [limit=100] - The maximum number of entities to fetch per request. Default is 100.
          * @param {number} [offset=0] - The offset to start fetching entities from. Default is 0.
@@ -79,7 +79,7 @@ export async function init<T extends SchemaType>(
         /**
          * Fetches event messages based on the provided query.
          *
-         * @param {QueryType<T>} query - The query object used to filter event messages.
+         * @param {SubscriptionQueryType<T>} query - The query object used to filter event messages.
          * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
          * @param {number} [limit=100] - The maximum number of event messages to fetch per request. Default is 100.
          * @param {number} [offset=0] - The offset to start fetching event messages from. Default is 0.
