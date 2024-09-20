@@ -41,10 +41,13 @@ export type SchemaType = {
  * Options for querying the database
  */
 export type QueryOptions = {
-    limit?: number;
-    offset?: number;
     entityId?: string;
 };
+
+/**
+ * Logical operators for combining multiple conditions
+ */
+export type LogicalOperator = "AND" | "OR";
 
 /**
  * WhereOptions for subscriptions, only including the $is operator
@@ -58,7 +61,7 @@ export interface SubscriptionWhereOptions<TModel> extends QueryOptions {
 }
 
 /**
- * WhereOptions for queries, including all operators
+ * WhereOptions for queries, including all operators and logical operators
  */
 export interface QueryWhereOptions<TModel> extends QueryOptions {
     /**
@@ -66,48 +69,27 @@ export interface QueryWhereOptions<TModel> extends QueryOptions {
      */
     where?: {
         /**
-         * Field to apply the condition on.
+         * Logical operators to combine multiple conditions.
+         * Example: { AND: [condition1, condition2] }
+         */
+        [key in LogicalOperator]?: Array<QueryWhereOptions<TModel>["where"]>;
+    } & {
+        /**
+         * Field-specific conditions.
          * Example: { name: { $eq: "Alice" } }
          */
         [P in keyof TModel]?: {
-            /**
-             * Checks if the field is equal to the specified value.
-             * Example: { age: { $is: 25 } }
-             */
             $is?: TModel[P];
-            /**
-             * Checks if the field is equal to the specified value.
-             * Example: { score: { $eq: 100 } }
-             */
             $eq?: TModel[P];
-            /**
-             * Checks if the field is not equal to the specified value.
-             * Example: { status: { $neq: "inactive" } }
-             */
             $neq?: TModel[P];
-            /**
-             * Checks if the field is greater than the specified value.
-             * Example: { height: { $gt: 170 } }
-             */
             $gt?: TModel[P];
-            /**
-             * Checks if the field is greater than or equal to the specified value.
-             * Example: { experience: { $gte: 5 } }
-             */
             $gte?: TModel[P];
-            /**
-             * Checks if the field is less than the specified value.
-             * Example: { weight: { $lt: 70 } }
-             */
             $lt?: TModel[P];
-            /**
-             * Checks if the field is less than or equal to the specified value.
-             * Example: { price: { $lte: 50 } }
-             */
             $lte?: TModel[P];
         };
     };
 }
+
 /**
  * SubscriptionQueryType for subscriptions, only using SubscriptionWhereOptions.
  *

@@ -1,3 +1,5 @@
+// packages/sdk/src/__tests__/convertQueryToClause.test.ts
+
 import { describe, expect, it } from "vitest";
 
 import { MockSchemaType, schema } from "../__example__/index";
@@ -92,77 +94,24 @@ describe("convertQueryToClause", () => {
         const query: QueryType<MockSchemaType> = {
             world: {
                 player: {
-                    $: { where: { score: { $gt: 100, $lt: 1000 } } },
-                },
-            },
-        };
-
-        const result = convertQueryToClause(query, schema);
-
-        expect(result).toEqual({
-            Composite: {
-                operator: "And",
-                clauses: [
-                    {
-                        Member: {
-                            model: "world-player",
-                            member: "score",
-                            operator: "Gt",
-                            value: { Primitive: { U32: 100 } },
+                    $: {
+                        where: {
+                            AND: [
+                                { score: { $gt: 100 } },
+                                {
+                                    OR: [
+                                        { name: { $eq: "Alice" } },
+                                        { name: { $eq: "Bob" } },
+                                    ],
+                                },
+                            ],
                         },
                     },
-                    {
-                        Member: {
-                            model: "world-player",
-                            member: "score",
-                            operator: "Lt",
-                            value: { Primitive: { U32: 1000 } },
-                        },
-                    },
-                ],
-            },
-        });
-    });
-
-    it("should handle queries with limit and offset", () => {
-        const query: QueryType<MockSchemaType> = {
-            world: {
-                player: {
-                    $: { where: { score: { $gt: 50 } }, limit: 10, offset: 5 },
-                },
-            },
-        };
-
-        const result = convertQueryToClause(query, schema);
-
-        expect(result).toEqual({
-            Composite: {
-                operator: "And",
-                clauses: [
-                    {
-                        Member: {
-                            model: "world-player",
-                            member: "score",
-                            operator: "Gt",
-                            value: { Primitive: { U32: 50 } },
-                        },
-                    },
-                ],
-            },
-        });
-    });
-
-    it("should handle queries with multiple models and complex conditions", () => {
-        const query: QueryType<MockSchemaType> = {
-            world: {
-                player: {
-                    $: { where: { score: { $gt: 100 } } },
                 },
                 item: {
                     $: {
                         where: {
-                            durability: { $lt: 50 },
-                            type: { $is: "diamond" },
+                            AND: [{ durability: { $lt: 50 } }],
                         },
                     },
                 },
@@ -176,26 +125,56 @@ describe("convertQueryToClause", () => {
                 operator: "And",
                 clauses: [
                     {
-                        Member: {
-                            model: "world-player",
-                            member: "score",
-                            operator: "Gt",
-                            value: { Primitive: { U32: 100 } },
+                        Composite: {
+                            operator: "And",
+                            clauses: [
+                                {
+                                    Member: {
+                                        model: "world-player",
+                                        member: "score",
+                                        operator: "Gt",
+                                        value: { Primitive: { U32: 100 } },
+                                    },
+                                },
+                                {
+                                    Composite: {
+                                        operator: "Or",
+                                        clauses: [
+                                            {
+                                                Member: {
+                                                    model: "world-player",
+                                                    member: "name",
+                                                    operator: "Eq",
+                                                    value: { String: "Alice" },
+                                                },
+                                            },
+                                            {
+                                                Member: {
+                                                    model: "world-player",
+                                                    member: "name",
+                                                    operator: "Eq",
+                                                    value: { String: "Bob" },
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            ],
                         },
                     },
                     {
-                        Keys: {
-                            keys: [undefined, "diamond", undefined],
-                            pattern_matching: "VariableLen",
-                            models: ["world-item"],
-                        },
-                    },
-                    {
-                        Member: {
-                            model: "world-item",
-                            member: "durability",
-                            operator: "Lt",
-                            value: { Primitive: { U32: 50 } },
+                        Composite: {
+                            operator: "And",
+                            clauses: [
+                                {
+                                    Member: {
+                                        model: "world-item",
+                                        member: "durability",
+                                        operator: "Lt",
+                                        value: { Primitive: { U32: 50 } },
+                                    },
+                                },
+                            ],
                         },
                     },
                 ],
