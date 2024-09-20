@@ -50,6 +50,25 @@ export type QueryOptions = {
 export type LogicalOperator = "AND" | "OR";
 
 /**
+ * Recursively defines the conditions for the `where` clause.
+ */
+export type WhereCondition<TModel> =
+    | {
+          [key in LogicalOperator]?: Array<WhereCondition<TModel>>;
+      }
+    | {
+          [P in keyof TModel]?: {
+              $is?: TModel[P];
+              $eq?: TModel[P];
+              $neq?: TModel[P];
+              $gt?: TModel[P];
+              $gte?: TModel[P];
+              $lt?: TModel[P];
+              $lte?: TModel[P];
+          };
+      };
+
+/**
  * WhereOptions for subscriptions, only including the $is operator
  */
 export interface SubscriptionWhereOptions<TModel> extends QueryOptions {
@@ -67,27 +86,7 @@ export interface QueryWhereOptions<TModel> extends QueryOptions {
     /**
      * Conditions to filter the query results.
      */
-    where?: {
-        /**
-         * Logical operators to combine multiple conditions.
-         * Example: { AND: [condition1, condition2] }
-         */
-        [key in LogicalOperator]?: Array<QueryWhereOptions<TModel>["where"]>;
-    } & {
-        /**
-         * Field-specific conditions.
-         * Example: { name: { $eq: "Alice" } }
-         */
-        [P in keyof TModel]?: {
-            $is?: TModel[P];
-            $eq?: TModel[P];
-            $neq?: TModel[P];
-            $gt?: TModel[P];
-            $gte?: TModel[P];
-            $lt?: TModel[P];
-            $lte?: TModel[P];
-        };
-    };
+    where?: WhereCondition<TModel>;
 }
 
 /**
@@ -217,7 +216,7 @@ export interface SDK<T extends SchemaType> {
      * Fetches entities from the Torii client based on the provided query.
      *
      * @template T - The schema type.
-     * @param {SubscriptionQueryType<T>} query - The query object used to filter entities.
+     * @param {QueryType<T>} query - The query object used to filter entities.
      * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
      * @param {number} [limit=100] - The maximum number of entities to fetch per request. Default is 100.
      * @param {number} [offset=0] - The offset to start fetching entities from. Default is 0.

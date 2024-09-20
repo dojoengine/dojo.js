@@ -1,8 +1,16 @@
 // packages/sdk/src/convertQuerytoClause.ts
 
 import * as torii from "@dojoengine/torii-client";
-import { QueryType, SchemaType, LogicalOperator } from "./types";
-import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses"; // Import added
+import {
+    QueryType,
+    SchemaType,
+    LogicalOperator,
+    SubscriptionQueryType,
+} from "./types";
+import {
+    convertQueryToEntityKeyClauses,
+    convertQueryToKeysClause,
+} from "./convertQueryToEntityKeyClauses";
 
 /**
  * Converts a query object into a Torii clause.
@@ -23,15 +31,8 @@ export function convertQueryToClause<T extends SchemaType>(
 
         if (models && typeof models === "object") {
             const modelClauses = processModels(namespace, models, schema);
-            if (modelClauses.length === 1) {
-                clauses.push(modelClauses[0]);
-            } else if (modelClauses.length > 1) {
-                clauses.push({
-                    Composite: {
-                        operator: "And",
-                        clauses: modelClauses,
-                    },
-                });
+            if (modelClauses.length > 0) {
+                clauses.push(...modelClauses);
             }
         }
     }
@@ -80,24 +81,58 @@ function processModels<T extends SchemaType>(
             ) {
                 const whereClause = conditions.where;
                 if (whereClause && typeof whereClause === "object") {
-                    // Check if $is exists in whereClause
-                    if ("$is" in whereClause) {
-                        // Convert $is to EntityKeysClause
-                        const isClauses = convertQueryToEntityKeyClauses(
-                            { [model]: modelData },
-                            schema
-                        );
-                        clauses.push(...isClauses);
+                    // Iterate over each member in the whereClause to handle $is
+                    for (const [member, memberConditions] of Object.entries(
+                        whereClause
+                    )) {
+                        if (
+                            typeof memberConditions === "object" &&
+                            memberConditions !== null &&
+                            "$is" in memberConditions
+                        ) {
+                            // Convert $is to EntityKeysClause
+                            const isClauses = convertQueryToEntityKeyClauses(
+                                {
+                                    [namespace]: {
+                                        [model]: {
+                                            $: {
+                                                where: {
+                                                    [member]: {
+                                                        $is: memberConditions[
+                                                            "$is"
+                                                        ],
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                } as SubscriptionQueryType<T>,
+                                schema
+                            );
+                            clauses.push(...(isClauses as any));
+
+                            // Remove $is from memberConditions to prevent further processing
+                            const { $is, ...remainingConditions } =
+                                memberConditions;
+                            (whereClause as Record<string, unknown>)[member] =
+                                remainingConditions;
+                        }
                     }
 
+                    // After handling all $is, build the remaining whereClause
                     const clause = buildWhereClause(
                         namespaceModel,
                         whereClause
                     );
                     if (clause) {
-                        if (Array.isArray(clause)) {
-                            clauses.push(...clause);
+                        if (
+                            "Composite" in clause &&
+                            clause.Composite.operator === "And"
+                        ) {
+                            // If the composite operator is "And", flatten the clauses
+                            clauses.push(...clause.Composite.clauses);
                         } else {
+                            // Otherwise, keep the composite as is to preserve logical structure
                             clauses.push(clause);
                         }
                     }
@@ -119,51 +154,49 @@ function processModels<T extends SchemaType>(
 }
 
 /**
- * Builds a Torii clause based on the provided where conditions.
+ * Builds a Torii clause from a where clause object.
  *
  * @param {string} namespaceModel - The namespaced model identifier.
- * @param {any} where - The where conditions.
- * @returns {torii.Clause | torii.Clause[]} - A Torii clause or an array of clauses.
+ * @param {Record<string, any>} where - The where clause conditions.
+ * @returns {torii.Clause | undefined} - The constructed Torii clause or undefined.
  */
 function buildWhereClause(
     namespaceModel: string,
-    where: any
-): torii.Clause | torii.Clause[] | undefined {
-    // Check for logical operators
-    const logicalOperators = ["AND", "OR"];
+    where: Record<string, any>
+): torii.Clause | undefined {
+    // Define logical operator mapping
+    const logicalOperators: Record<string, torii.LogicalOperator> = {
+        AND: "And",
+        OR: "Or",
+    };
+
+    // Check for logical operators first
     const keys = Object.keys(where);
-    const hasLogicalOperator = keys.some((key) =>
-        logicalOperators.includes(key)
-    );
+    const logicalKey = keys.find((key) => key in logicalOperators);
 
-    if (hasLogicalOperator) {
-        const operator = keys.find((key) =>
-            logicalOperators.includes(key)
-        ) as LogicalOperator;
-        const conditions = where[operator];
+    if (logicalKey) {
+        const operator = logicalOperators[logicalKey];
+        const conditions = where[logicalKey] as Array<Record<string, any>>;
 
-        if (Array.isArray(conditions)) {
-            const subClauses: torii.Clause[] = [];
-            for (const condition of conditions) {
-                const clause = buildWhereClause(namespaceModel, condition);
-                if (clause) {
-                    if (Array.isArray(clause)) {
-                        subClauses.push(...clause);
-                    } else {
-                        subClauses.push(clause);
-                    }
-                }
+        const subClauses: torii.Clause[] = [];
+
+        for (const condition of conditions) {
+            const clause = buildWhereClause(namespaceModel, condition);
+            if (clause) {
+                subClauses.push(clause);
             }
-
-            if (subClauses.length === 0) return undefined;
-
-            return {
-                Composite: {
-                    operator: operator === "AND" ? "And" : "Or",
-                    clauses: subClauses,
-                },
-            };
         }
+
+        if (subClauses.length === 1) {
+            return subClauses[0];
+        }
+
+        return {
+            Composite: {
+                operator: operator,
+                clauses: subClauses,
+            },
+        };
     }
 
     // If no logical operator, build Member clauses
@@ -171,25 +204,37 @@ function buildWhereClause(
 
     for (const [member, memberValue] of Object.entries(where)) {
         if (typeof memberValue === "object" && memberValue !== null) {
-            const keys = Object.keys(memberValue);
+            const memberKeys = Object.keys(memberValue);
             // Check if memberValue contains logical operators
-            const isNestedLogical = keys.some((key) =>
-                ["AND", "OR"].includes(key)
+            const memberLogicalKey = memberKeys.find(
+                (key) => key in logicalOperators
             );
-            if (isNestedLogical) {
-                // Recursively build nested Composite clauses
-                const nestedClause = buildWhereClause(
-                    namespaceModel,
-                    memberValue
-                );
-                if (nestedClause) {
-                    if (Array.isArray(nestedClause)) {
-                        memberClauses.push(...nestedClause);
-                    } else {
-                        memberClauses.push(nestedClause);
+            if (memberLogicalKey) {
+                const operator = logicalOperators[memberLogicalKey];
+                const conditions = memberValue[memberLogicalKey] as Array<
+                    Record<string, any>
+                >;
+
+                const nestedClauses: torii.Clause[] = [];
+                for (const condition of conditions) {
+                    const clause = buildWhereClause(namespaceModel, condition);
+                    if (clause) {
+                        nestedClauses.push(clause);
                     }
                 }
+
+                if (nestedClauses.length === 1) {
+                    memberClauses.push(nestedClauses[0]);
+                } else {
+                    memberClauses.push({
+                        Composite: {
+                            operator: operator,
+                            clauses: nestedClauses,
+                        },
+                    });
+                }
             } else {
+                // Process operators like $eq, $gt, etc
                 for (const [op, val] of Object.entries(memberValue)) {
                     memberClauses.push({
                         Member: {

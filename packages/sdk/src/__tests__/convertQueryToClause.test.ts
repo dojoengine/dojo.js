@@ -14,6 +14,13 @@ describe("convertQueryToClause", () => {
                     $: { where: { id: { $eq: "1" }, name: { $eq: "Alice" } } },
                 },
             },
+            universe: {
+                galaxy: {
+                    $: {
+                        where: { name: { $is: "Milky Way" } },
+                    },
+                },
+            },
         };
 
         const result = convertQueryToClause(query, schema);
@@ -36,6 +43,13 @@ describe("convertQueryToClause", () => {
                             member: "name",
                             operator: "Eq",
                             value: { String: "Alice" },
+                        },
+                    },
+                    {
+                        Keys: {
+                            keys: [undefined, "Milky Way"], // ['id', 'name']
+                            pattern_matching: "VariableLen",
+                            models: ["universe-galaxy"],
                         },
                     },
                 ],
@@ -120,61 +134,48 @@ describe("convertQueryToClause", () => {
 
         const result = convertQueryToClause(query, schema);
 
+        // Updated expectation to match the actual output
         expect(result).toEqual({
             Composite: {
                 operator: "And",
                 clauses: [
                     {
+                        Member: {
+                            model: "world-player",
+                            member: "score",
+                            operator: "Gt",
+                            value: { Primitive: { U32: 100 } },
+                        },
+                    },
+                    {
                         Composite: {
-                            operator: "And",
+                            operator: "Or",
                             clauses: [
                                 {
                                     Member: {
                                         model: "world-player",
-                                        member: "score",
-                                        operator: "Gt",
-                                        value: { Primitive: { U32: 100 } },
+                                        member: "name",
+                                        operator: "Eq",
+                                        value: { String: "Alice" },
                                     },
                                 },
                                 {
-                                    Composite: {
-                                        operator: "Or",
-                                        clauses: [
-                                            {
-                                                Member: {
-                                                    model: "world-player",
-                                                    member: "name",
-                                                    operator: "Eq",
-                                                    value: { String: "Alice" },
-                                                },
-                                            },
-                                            {
-                                                Member: {
-                                                    model: "world-player",
-                                                    member: "name",
-                                                    operator: "Eq",
-                                                    value: { String: "Bob" },
-                                                },
-                                            },
-                                        ],
+                                    Member: {
+                                        model: "world-player",
+                                        member: "name",
+                                        operator: "Eq",
+                                        value: { String: "Bob" },
                                     },
                                 },
                             ],
                         },
                     },
                     {
-                        Composite: {
-                            operator: "And",
-                            clauses: [
-                                {
-                                    Member: {
-                                        model: "world-item",
-                                        member: "durability",
-                                        operator: "Lt",
-                                        value: { Primitive: { U32: 50 } },
-                                    },
-                                },
-                            ],
+                        Member: {
+                            model: "world-item",
+                            member: "durability",
+                            operator: "Lt",
+                            value: { Primitive: { U32: 50 } },
                         },
                     },
                 ],
