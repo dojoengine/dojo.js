@@ -10,21 +10,6 @@ import { QueryType, SchemaType, SubscriptionQueryType } from "./types";
  * @param {QueryType<T>} query - The query object to convert.
  * @param {T} schema - The schema providing field order information.
  * @returns {torii.Clause} - The resulting Torii clause.
- *
- * @example
- * const query = {
- *     users: {
- *         age: {
- *             $: {
- *                 where: {
- *                     $gt: 18
- *                 }
- *             }
- *         }
- *     }
- * };
- * const clause = convertQueryToClause(query, schema);
- * console.log(clause);
  */
 export function convertQueryToClause<T extends SchemaType>(
     query: QueryType<T>,
@@ -36,155 +21,7 @@ export function convertQueryToClause<T extends SchemaType>(
         if (namespace === "entityIds") continue; // Skip entityIds
 
         if (models && typeof models === "object") {
-            for (const [model, modelData] of Object.entries(models)) {
-                const namespaceModel = `${namespace}-${model}`;
-
-                if (
-                    modelData &&
-                    typeof modelData === "object" &&
-                    "$" in modelData
-                ) {
-                    const conditions = modelData.$;
-                    if (
-                        conditions &&
-                        typeof conditions === "object" &&
-                        "where" in conditions
-                    ) {
-                        const whereClause = conditions.where;
-                        if (whereClause && typeof whereClause === "object") {
-                            // Separate $is conditions from other conditions
-                            const hasIsClause = Object.values(whereClause).some(
-                                (condition: any) => "$is" in condition
-                            );
-
-                            if (hasIsClause) {
-                                // Extract $is conditions for Keys clause
-                                const isConditions: any = {};
-                                const otherConditions: any = {};
-                                for (const [
-                                    member,
-                                    memberValue,
-                                ] of Object.entries(whereClause)) {
-                                    if (
-                                        typeof memberValue === "object" &&
-                                        memberValue !== null &&
-                                        "$is" in memberValue
-                                    ) {
-                                        isConditions[member] = memberValue;
-                                    } else {
-                                        otherConditions[member] = memberValue;
-                                    }
-                                }
-
-                                // Build Keys clause using existing function
-                                const keyClauses = convertQueryToKeysClause(
-                                    {
-                                        [namespace]: {
-                                            [model]: {
-                                                $: {
-                                                    where: isConditions,
-                                                },
-                                            },
-                                        },
-                                    } as Omit<
-                                        SubscriptionQueryType<T>,
-                                        "entityIds"
-                                    >,
-                                    schema
-                                );
-                                clauses.push(...(keyClauses as any));
-
-                                // Process other conditions as Member clauses
-                                for (const [
-                                    member,
-                                    memberValue,
-                                ] of Object.entries(otherConditions)) {
-                                    if (
-                                        typeof memberValue === "object" &&
-                                        memberValue !== null
-                                    ) {
-                                        for (const [op, val] of Object.entries(
-                                            memberValue
-                                        )) {
-                                            clauses.push({
-                                                Member: {
-                                                    model: namespaceModel,
-                                                    member,
-                                                    operator:
-                                                        convertOperator(op),
-                                                    value: convertToPrimitive(
-                                                        val
-                                                    ),
-                                                },
-                                            });
-                                        }
-                                    } else {
-                                        // Assume equality condition
-                                        clauses.push({
-                                            Member: {
-                                                model: namespaceModel,
-                                                member,
-                                                operator: "Eq",
-                                                value: convertToPrimitive(
-                                                    memberValue
-                                                ),
-                                            },
-                                        });
-                                    }
-                                }
-                            } else {
-                                // No $is conditions, process all as Member clauses
-                                for (const [
-                                    member,
-                                    memberValue,
-                                ] of Object.entries(whereClause)) {
-                                    if (
-                                        typeof memberValue === "object" &&
-                                        memberValue !== null
-                                    ) {
-                                        for (const [op, val] of Object.entries(
-                                            memberValue
-                                        )) {
-                                            clauses.push({
-                                                Member: {
-                                                    model: namespaceModel,
-                                                    member,
-                                                    operator:
-                                                        convertOperator(op),
-                                                    value: convertToPrimitive(
-                                                        val
-                                                    ),
-                                                },
-                                            });
-                                        }
-                                    } else {
-                                        // Assume equality condition
-                                        clauses.push({
-                                            Member: {
-                                                model: namespaceModel,
-                                                member,
-                                                operator: "Eq",
-                                                value: convertToPrimitive(
-                                                    memberValue
-                                                ),
-                                            },
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    // Handle the case where there are no conditions
-                    clauses.push({
-                        Keys: {
-                            keys: [undefined],
-                            pattern_matching: "FixedLen",
-                            models: [namespaceModel],
-                        },
-                    });
-                }
-            }
+            clauses.push(...processModels(namespace, models, schema));
         }
     }
 
@@ -198,8 +35,146 @@ export function convertQueryToClause<T extends SchemaType>(
         };
     }
 
-    // If there are no clauses, return an empty Composite
+    // If there are no clauses, return undefined
     return undefined;
+}
+
+/**
+ * Processes all models within a namespace and generates corresponding clauses.
+ *
+ * @template T - The schema type.
+ * @param {string} namespace - The namespace of the models.
+ * @param {any} models - The models object to process.
+ * @param {T} schema - The schema providing field order information.
+ * @returns {torii.Clause[]} - An array of generated clauses.
+ */
+function processModels<T extends SchemaType>(
+    namespace: string,
+    models: any,
+    schema: T
+): torii.Clause[] {
+    const clauses: torii.Clause[] = [];
+
+    for (const [model, modelData] of Object.entries(models)) {
+        const namespaceModel = `${namespace}-${model}`;
+
+        if (modelData && typeof modelData === "object" && "$" in modelData) {
+            const conditions = modelData.$;
+            if (
+                conditions &&
+                typeof conditions === "object" &&
+                "where" in conditions
+            ) {
+                const whereClause = conditions.where;
+                if (whereClause && typeof whereClause === "object") {
+                    const { isConditions, otherConditions } =
+                        extractConditions(whereClause);
+
+                    if (Object.keys(isConditions).length > 0) {
+                        // Build Keys clause using existing function
+                        const keyClauses = convertQueryToKeysClause(
+                            {
+                                [namespace]: {
+                                    [model]: {
+                                        $: {
+                                            where: isConditions,
+                                        },
+                                    },
+                                },
+                            } as Omit<SubscriptionQueryType<T>, "entityIds">,
+                            schema
+                        );
+                        clauses.push(...(keyClauses as any));
+                    }
+
+                    // Process other conditions as Member clauses
+                    clauses.push(
+                        ...buildMemberClauses(namespaceModel, otherConditions)
+                    );
+                }
+            }
+        } else {
+            // Handle the case where there are no conditions
+            clauses.push({
+                Keys: {
+                    keys: [undefined],
+                    pattern_matching: "FixedLen",
+                    models: [namespaceModel],
+                },
+            });
+        }
+    }
+
+    return clauses;
+}
+
+/**
+ * Extracts $is conditions from the where clause and separates other conditions.
+ *
+ * @param {any} whereClause - The where clause containing conditions.
+ * @returns {{ isConditions: any; otherConditions: any }} - The separated conditions.
+ */
+function extractConditions(whereClause: any): {
+    isConditions: any;
+    otherConditions: any;
+} {
+    const isConditions: any = {};
+    const otherConditions: any = {};
+
+    for (const [member, memberValue] of Object.entries(whereClause)) {
+        if (
+            typeof memberValue === "object" &&
+            memberValue !== null &&
+            "$is" in memberValue
+        ) {
+            isConditions[member] = memberValue;
+        } else {
+            otherConditions[member] = memberValue;
+        }
+    }
+
+    return { isConditions, otherConditions };
+}
+
+/**
+ * Builds Member clauses from the provided conditions.
+ *
+ * @param {string} namespaceModel - The namespaced model identifier.
+ * @param {any} conditions - The conditions to convert into Member clauses.
+ * @returns {torii.Clause[]} - An array of Member clauses.
+ */
+function buildMemberClauses(
+    namespaceModel: string,
+    conditions: any
+): torii.Clause[] {
+    const memberClauses: torii.Clause[] = [];
+
+    for (const [member, memberValue] of Object.entries(conditions)) {
+        if (typeof memberValue === "object" && memberValue !== null) {
+            for (const [op, val] of Object.entries(memberValue)) {
+                memberClauses.push({
+                    Member: {
+                        model: namespaceModel,
+                        member,
+                        operator: convertOperator(op),
+                        value: convertToPrimitive(val),
+                    },
+                });
+            }
+        } else {
+            // Assume equality condition
+            memberClauses.push({
+                Member: {
+                    model: namespaceModel,
+                    member,
+                    operator: "Eq",
+                    value: convertToPrimitive(memberValue),
+                },
+            });
+        }
+    }
+
+    return memberClauses;
 }
 
 /**
@@ -208,10 +183,6 @@ export function convertQueryToClause<T extends SchemaType>(
  * @param {any} value - The value to convert.
  * @returns {torii.MemberValue} - The converted primitive value.
  * @throws {Error} - If the value type is unsupported.
- *
- * @example
- * const primitiveValue = convertToPrimitive(42);
- * console.log(primitiveValue); // { Primitive: { U32: 42 } }
  */
 function convertToPrimitive(value: any): torii.MemberValue {
     if (typeof value === "number") {
@@ -238,10 +209,6 @@ function convertToPrimitive(value: any): torii.MemberValue {
  * @param {string} operator - The query operator to convert.
  * @returns {torii.ComparisonOperator} - The corresponding Torii comparison operator.
  * @throws {Error} - If the operator is unsupported.
- *
- * @example
- * const comparisonOperator = convertOperator("$eq");
- * console.log(comparisonOperator); // "Eq"
  */
 function convertOperator(operator: string): torii.ComparisonOperator {
     switch (operator) {
