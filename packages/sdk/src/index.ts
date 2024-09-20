@@ -4,7 +4,8 @@ import { getEntities } from "./getEntities";
 import { getEventMessages } from "./getEventMessages";
 import { subscribeEntityQuery } from "./subscribeEntityQuery";
 import { subscribeEventQuery } from "./subscribeEventQuery";
-import { SchemaType, SDK } from "./types";
+import { SchemaType, SDK, UnionOfModelData } from "./types";
+import { Account, TypedData } from "starknet";
 
 export * from "./types";
 
@@ -96,5 +97,72 @@ export async function init<T extends SchemaType>(
                 offset,
                 options
             ),
+
+        /**
+         * Generates typed data for any user-defined message.
+         *
+         * @template M - The message type defined by the schema models.
+         * @param {string} name - The name of the domain.
+         * @param {string} version - The version of the domain.
+         * @param {string} chainId - The chain ID.
+         * @param {string} revision - The revision of the domain.
+         * @param {string} primaryType - The primary type of the message.
+         * @param {M} message - The user-defined message content, must be part of the schema models.
+         * @returns {TypedData} - The generated typed data.
+         */
+        generateTypedData: <M extends UnionOfModelData<T>>(
+            name: string,
+            version: string,
+            chainId: string,
+            revision: string,
+            primaryType: string,
+            message: M
+        ): TypedData => ({
+            types: {
+                StarknetDomain: [
+                    { name: "name", type: "shortstring" },
+                    { name: "version", type: "shortstring" },
+                    { name: "chainId", type: "shortstring" },
+                    { name: "revision", type: "shortstring" },
+                ],
+                [primaryType]: Object.keys(message).map((key) => ({
+                    name: key,
+                    type:
+                        typeof message[key] === "bigint" ||
+                        typeof message[key] === "number"
+                            ? "felt"
+                            : "string", // Adjust types as needed
+                })),
+            },
+            primaryType,
+            domain: {
+                name,
+                version,
+                chainId,
+                revision,
+            },
+            message,
+        }),
+        sendMessage: async (
+            data: TypedData,
+            account: Account
+        ): Promise<void> => {
+            try {
+                // Sign the typed data
+                const signature: any = await account.signMessage(data);
+
+                // Stringify typed data for publishing
+                const dataString = JSON.stringify(data);
+
+                // Publish the signed message
+                await client.publishMessage(dataString, [
+                    signature.r,
+                    signature.s,
+                ]);
+            } catch (error) {
+                console.error("Failed to send message:", error);
+                throw error;
+            }
+        },
     };
 }

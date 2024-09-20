@@ -78,6 +78,39 @@ async function exampleUsage() {
         schema
     );
 
+    // Correct usage: message conforms to the Player model
+    const playerMessage = {
+        id: "0x123",
+        name: "Alice",
+        score: 100,
+    };
+
+    const typedData = db.generateTypedData(
+        "GameDomain",
+        "1.0",
+        "chain-1",
+        "rev-1",
+        "Player",
+        playerMessage
+    );
+
+    // Incorrect usage: TypeScript will throw an error as 'unknownField' is not part of the Player model
+    const invalidMessage = {
+        id: "0x123",
+        name: "Alice",
+        score: 100,
+        unknownField: "Invalid",
+    };
+
+    const invalidTypedData = db.generateTypedData(
+        "GameDomain",
+        "1.0",
+        "chain-1",
+        "rev-1",
+        "Player",
+        invalidMessage // TypeScript Error
+    );
+
     db.subscribeEntityQuery(
         {
             world: {

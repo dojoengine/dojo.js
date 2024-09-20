@@ -1,6 +1,7 @@
 // packages/sdk/src/types.ts
 
 import * as torii from "@dojoengine/torii-client";
+import { Account, TypedData } from "starknet";
 
 /**
  * Utility type to ensure at least one property is present
@@ -231,6 +232,15 @@ export type ParsedEntity<T extends SchemaType> = {
 };
 
 /**
+ * Utility type to extract all models' data from SchemaType without `fieldOrder`
+ */
+export type UnionOfModelData<T extends SchemaType> = {
+    [K in keyof T]: {
+        [L in keyof T[K]]: Omit<T[K][L], "fieldOrder">;
+    }[keyof T[K]];
+}[keyof T];
+
+/**
  * SDK interface for interacting with the DojoEngine.
  *
  * @template T - The schema type.
@@ -320,4 +330,13 @@ export interface SDK<T extends SchemaType> {
         offset?: number,
         options?: { logging?: boolean }
     ) => Promise<StandardizedQueryResult<T>>;
+    generateTypedData: <M extends UnionOfModelData<T>>(
+        name: string,
+        version: string,
+        chainId: string,
+        revision: string,
+        primaryType: string,
+        message: M
+    ) => TypedData;
+    sendMessage: (data: TypedData, account: Account) => Promise<void>;
 }
