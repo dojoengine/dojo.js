@@ -27,11 +27,47 @@ export type ModelDefinition = {
 /**
  * SchemaType represents the structure of the schema.
  * Each namespace contains models defined by ModelDefinition.
+ *
+ * @example
+ * const schema: SchemaType = {
+ *   world: {
+ *     Player: {
+ *       fieldOrder: ['id', 'name', 'score'],
+ *       id: 'felt252',
+ *       name: 'string',
+ *       score: 'u32'
+ *     },
+ *     Item: {
+ *       fieldOrder: ['id', 'name', 'durability'],
+ *       id: 'felt252',
+ *       name: 'string',
+ *       durability: 'u8'
+ *     }
+ *   }
+ * }
  */
 export type SchemaType = {
+    /**
+     * namespace: Your namespace for grouping related models.
+     * This is typically used to organize models by their domain or context.
+     * For example, 'world', 'game', 'inventory', etc.
+     */
     [namespace: string]: {
+        /**
+         * model: Your model name, case sensitive.
+         * This represents a specific entity or concept within your namespace.
+         * For example, 'Player', 'Item', 'Quest', etc.
+         */
         [model: string]: {
+            /**
+             * fieldOrder: An array of strings representing the order of fields in the model.
+             * This is crucial for maintaining consistent field ordering across your application.
+             */
             fieldOrder: string[];
+            /**
+             * Dynamic fields of the model.
+             * These can be of any type, typically representing the properties of your model.
+             */
             [field: string]: any;
         };
     };
@@ -157,6 +193,33 @@ export type StandardizedQueryResult<T extends SchemaType> = Array<
 /**
  * Parsed entity with its ID and models.
  * Ensures that each model's data adheres to the schema's field types.
+ *
+ * @example
+ * // Given a schema:
+ * const schema: SchemaType = {
+ *   world: {
+ *     Player: {
+ *       fieldOrder: ['id', 'name', 'score'],
+ *       id: 'felt252',
+ *       name: 'string',
+ *       score: 'u32'
+ *     }
+ *   }
+ * };
+ *
+ * // A ParsedEntity might look like:
+ * const parsedEntity: ParsedEntity<typeof schema> = {
+ *   entityId: '0x123',
+ *   models: {
+ *     world: {
+ *       Player: {
+ *         id: '0x123',
+ *         name: 'Alice',
+ *         score: 100
+ *       }
+ *     }
+ *   }
+ * };
  */
 export type ParsedEntity<T extends SchemaType> = {
     entityId: string;
