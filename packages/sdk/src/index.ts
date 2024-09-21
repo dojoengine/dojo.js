@@ -5,7 +5,13 @@ import { getEventMessages } from "./getEventMessages";
 import { subscribeEntityQuery } from "./subscribeEntityQuery";
 import { subscribeEventQuery } from "./subscribeEventQuery";
 import { SchemaType, SDK, UnionOfModelData } from "./types";
-import { Account, StarknetDomain, TypedData } from "starknet";
+import {
+    Account,
+    Signature,
+    StarknetDomain,
+    TypedData,
+    WeierstrassSignatureType,
+} from "starknet";
 
 export * from "./types";
 
@@ -107,12 +113,9 @@ export async function init<T extends SchemaType>(
          * Generates typed data for any user-defined message.
          *
          * @template M - The message type defined by the schema models.
-         * @param {string} name - The name of the domain.
-         * @param {string} version - The version of the domain.
-         * @param {string} chainId - The chain ID.
-         * @param {string} revision - The revision of the domain.
          * @param {string} primaryType - The primary type of the message.
          * @param {M} message - The user-defined message content, must be part of the schema models.
+         * @param {StarknetDomain} [domain] - The domain object. If not provided, uses the default domain from options.
          * @returns {TypedData} - The generated typed data.
          */
         generateTypedData: <M extends UnionOfModelData<T>>(
@@ -133,29 +136,39 @@ export async function init<T extends SchemaType>(
                         typeof message[key] === "bigint" ||
                         typeof message[key] === "number"
                             ? "felt"
-                            : "string", // Adjust types as needed
+                            : "string",
                 })),
             },
             primaryType,
             domain,
             message,
         }),
+
+        /**
+         * Sends a signed message.
+         *
+         * @param {TypedData} data - The typed data to be signed and sent.
+         * @param {Account} account - The account used to sign the message.
+         * @returns {Promise<void>} - A promise that resolves when the message is sent successfully.
+         * @throws {Error} If the message sending fails.
+         */
         sendMessage: async (
             data: TypedData,
             account: Account
         ): Promise<void> => {
             try {
                 // Sign the typed data
-                const signature: any = await account.signMessage(data);
+                const signature: Signature = await account.signMessage(data);
 
                 // Stringify typed data for publishing
                 const dataString = JSON.stringify(data);
-
                 // Publish the signed message
-                await client.publishMessage(dataString, [
-                    signature.r,
-                    signature.s,
-                ]);
+                await client.publishMessage(
+                    dataString,
+                    Array.isArray(signature)
+                        ? signature
+                        : [signature.r.toString(), signature.s.toString()]
+                );
             } catch (error) {
                 console.error("Failed to send message:", error);
                 throw error;
