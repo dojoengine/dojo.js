@@ -1,7 +1,7 @@
 // packages/sdk/src/types.ts
 
 import * as torii from "@dojoengine/torii-client";
-import { Account, TypedData } from "starknet";
+import { Account, StarknetDomain, TypedData } from "starknet";
 
 /**
  * Utility type to ensure at least one property is present
@@ -331,12 +331,9 @@ export interface SDK<T extends SchemaType> {
         options?: { logging?: boolean }
     ) => Promise<StandardizedQueryResult<T>>;
     generateTypedData: <M extends UnionOfModelData<T>>(
-        name: string,
-        version: string,
-        chainId: string,
-        revision: string,
         primaryType: string,
-        message: M
+        message: M,
+        domain?: StarknetDomain
     ) => TypedData;
     sendMessage: (data: TypedData, account: Account) => Promise<void>;
 }

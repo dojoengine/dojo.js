@@ -5,9 +5,14 @@ import { getEventMessages } from "./getEventMessages";
 import { subscribeEntityQuery } from "./subscribeEntityQuery";
 import { subscribeEventQuery } from "./subscribeEventQuery";
 import { SchemaType, SDK, UnionOfModelData } from "./types";
-import { Account, TypedData } from "starknet";
+import { Account, StarknetDomain, TypedData } from "starknet";
 
 export * from "./types";
+
+interface SDKConfig {
+    client: torii.ClientConfig;
+    domain: StarknetDomain;
+}
 
 /**
  * Creates a new Torii client instance.
@@ -30,10 +35,10 @@ export async function createClient(
  * @returns {Promise<SDK<T>>} - A promise that resolves to the initialized SDK.
  */
 export async function init<T extends SchemaType>(
-    options: torii.ClientConfig,
+    options: SDKConfig,
     schema: T
 ): Promise<SDK<T>> {
-    const client = await createClient(options);
+    const client = await createClient(options.client);
 
     return {
         client,
@@ -111,12 +116,9 @@ export async function init<T extends SchemaType>(
          * @returns {TypedData} - The generated typed data.
          */
         generateTypedData: <M extends UnionOfModelData<T>>(
-            name: string,
-            version: string,
-            chainId: string,
-            revision: string,
             primaryType: string,
-            message: M
+            message: M,
+            domain: StarknetDomain = options.domain
         ): TypedData => ({
             types: {
                 StarknetDomain: [
@@ -135,12 +137,7 @@ export async function init<T extends SchemaType>(
                 })),
             },
             primaryType,
-            domain: {
-                name,
-                version,
-                chainId,
-                revision,
-            },
+            domain,
             message,
         }),
         sendMessage: async (

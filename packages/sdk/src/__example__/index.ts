@@ -70,10 +70,18 @@ export const schema: MockSchemaType = {
 async function exampleUsage() {
     const db = await init<MockSchemaType>(
         {
-            rpcUrl: "your-rpc-url",
-            toriiUrl: "your-torii-url",
-            relayUrl: "your-relay-url",
-            worldAddress: "your-world-address",
+            client: {
+                rpcUrl: "your-rpc-url",
+                toriiUrl: "your-torii-url",
+                relayUrl: "your-relay-url",
+                worldAddress: "your-world-address",
+            },
+            domain: {
+                name: "Example",
+                version: "1.0",
+                chainId: "your-chain-id",
+                revision: "1",
+            },
         },
         schema
     );
@@ -85,14 +93,7 @@ async function exampleUsage() {
         score: 100,
     };
 
-    const typedData = db.generateTypedData(
-        "GameDomain",
-        "1.0",
-        "chain-1",
-        "rev-1",
-        "Player",
-        playerMessage
-    );
+    const typedData = db.generateTypedData("Player", playerMessage);
 
     // Incorrect usage: TypeScript will throw an error as 'unknownField' is not part of the Player model
     const invalidMessage = {
@@ -103,10 +104,6 @@ async function exampleUsage() {
     };
 
     const invalidTypedData = db.generateTypedData(
-        "GameDomain",
-        "1.0",
-        "chain-1",
-        "rev-1",
         "Player",
         invalidMessage // TypeScript Error
     );
