@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import ThemeSwitchButton from "@/components/theme-switch"
+import { WalletAccount } from "./wallet-account"
 export default function Header() {
   return (
 
@@ -153,6 +154,7 @@ export default function Header() {
       </Drawer>
       <div className="flex items-center gap-2">
         <ThemeSwitchButton />
+        <WalletAccount />
         <Button
           variant="outline"
           className="ml-auto gap-1.5 text-sm"

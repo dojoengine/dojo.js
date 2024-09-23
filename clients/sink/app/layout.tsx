@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 import Sidebar from "@/components/sidebar";
 import Header from "@/components/header";
+import { StarknetProvider } from "@/components/starknet-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,15 +36,17 @@ export default function RootLayout({
           geistSans.variable, geistMono.variable, "antialiased"
         )}
       >
-        <TooltipProvider delayDuration={400}>
-          <div className="grid h-screen w-full pl-[53px]">
-            <Sidebar />
-            <div className="flex flex-col">
-              <Header />
-              {children}
+        <StarknetProvider>
+          <TooltipProvider delayDuration={400}>
+            <div className="grid h-screen w-full pl-[53px]">
+              <Sidebar />
+              <div className="flex flex-col">
+                <Header />
+                {children}
+              </div>
             </div>
-          </div>
-        </TooltipProvider>
+          </TooltipProvider>
+        </StarknetProvider>
       </body>
     </html>
   );
