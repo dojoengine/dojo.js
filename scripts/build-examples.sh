@@ -10,4 +10,5 @@ pnpm run build-threejs
 pnpm run build-react-pwa-app
 pnpm run build-vanilla-phaser
 pnpm run build-vue-app
+pnpm run build-react-nextjs
 
