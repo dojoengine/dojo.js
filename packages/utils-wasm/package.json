@@ -26,6 +26,7 @@
     "devDependencies": {
         "tsup": "^8.0.1",
         "typescript": "^5.5.4",
-        "wasm-pack": "^0.12.1"
+        "wasm-pack": "^0.12.1",
+        "vitest": "^2.1.1"
     }
 }
