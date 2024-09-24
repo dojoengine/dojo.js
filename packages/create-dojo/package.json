@@ -15,7 +15,8 @@
     
     "scripts": {
         "dev": "tsup --watch",
-        "build": "tsup --dts-resolve"
+        "build": "tsup --dts-resolve",
+        "test": "vitest run --coverage"
     },
     "dependencies": {
         "@inquirer/prompts": "^3.3.0",

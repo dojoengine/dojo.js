@@ -8,7 +8,8 @@
     "type": "module",
     "scripts": {
         "build-wasm": "cd crate && ./build.sh",
-        "build": "npm run build-wasm && tsc"
+        "build": "npm run build-wasm && tsc",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "files": [
         "./pkg/utils_wasm_bg.wasm",
