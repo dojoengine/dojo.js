@@ -6,10 +6,12 @@ import https from "https";
 import { input, select } from "@inquirer/prompts";
 
 const templates = [
-  { value: "react-app", description: "React app using Dojo" },
-  { value: "react-phaser-example", description: "React/Phaser app using Dojo" },
-  { value: "react-pwa-app", description: "React Progressive Web Apps using Dojo" },
-  { value: "react-threejs", description: "React Threejs using Dojo" },
+  { value: "example-vite-react-sdk", description: "React app using Dojo SDK" },
+  { value: "example-vite-react-phaser-recs", description: "React/Phaser app using Dojo RECS" },
+  { value: "example-vite-react-pwa-recs", description: "React Progressive Web App using Dojo RECS" },
+  { value: "example-vite-react-threejs-recs", description: "React Three.js app using Dojo RECS" },
+  { value: "example-vite-react-sdk", description: "Basic react app using the sdk" },
+  { value: "example-vue-app-recs", description: "Basic vite app using RECS" },
 ];
 
 async function init(projectName: string, cwd: string, template: string) {
@@ -26,7 +28,7 @@ async function init(projectName: string, cwd: string, template: string) {
   console.log(`Downloading ${template} into client directory...`);
   const cloneResult = spawn.sync("npx", [
     "degit",
-    `dojoengine/dojo.js/clients/react/${template}`,
+    `dojoengine/dojo.js/examples/${template}`,
     clientPath,
   ], { stdio: "inherit" });
 
