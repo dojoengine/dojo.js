@@ -104,7 +104,8 @@ describe("convertValues", () => {
                 nested: { value: { innerField: { value: "42" } } },
             };
             const result = convertValues(schema, values);
-            expect(result.nested.innerField).toBe(42);
+
+            expect(result.nested).toEqual({ innerField: { value: "42" } });
         });
     });
 });

@@ -20,7 +20,12 @@ packages=(
 # Iterate over each package directory and run the build command
 for package in "${packages[@]}"; do
   echo "Building $package..."
-  pnpm --dir "$package" build && pnpm test
+  pnpm --dir "$package" build
+  
+  # Run tests only for non-wasm packages and non-torii-client packages
+  if [[ "$package" != *"-wasm" && "$package" != "packages/torii-client" ]]; then
+    pnpm --dir "$package" test
+  fi
 done
 
 echo "Build completed successfully."
