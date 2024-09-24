@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import ThemeSwitchButton from "@/components/theme-switch"
-import { WalletAccount } from "./wallet-account"
+import WalletAccount from "./wallet-account"
 export default function Header() {
   return (
 

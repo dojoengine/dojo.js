@@ -6,7 +6,7 @@ function shortAddress(address: string): string {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
-export function WalletAccount() {
+export default function WalletAccount() {
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   if (undefined === address) {

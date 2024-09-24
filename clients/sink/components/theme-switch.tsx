@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 
-const ThemeSwitchButton = () => {
+export default function ThemeSwitchButton() {
   const [theme, setTheme] = useState('light');
 
   useEffect(() => {
@@ -32,6 +32,4 @@ const ThemeSwitchButton = () => {
       <Moon className="h-4 w-4" />
     </div>
   );
-};
-
-export default ThemeSwitchButton;
+}

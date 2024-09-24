@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 
 import Sidebar from "@/components/sidebar";
 import Header from "@/components/header";
-import { StarknetProvider } from "@/components/starknet-provider";
+import StarknetProvider from "@/components/starknet-provider";
+import DojoProvider from "@/dojo/provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -37,15 +38,17 @@ export default function RootLayout({
         )}
       >
         <StarknetProvider>
-          <TooltipProvider delayDuration={400}>
-            <div className="grid h-screen w-full pl-[53px]">
-              <Sidebar />
-              <div className="flex flex-col">
-                <Header />
-                {children}
+          <DojoProvider>
+            <TooltipProvider delayDuration={400}>
+              <div className="grid h-screen w-full pl-[53px]">
+                <Sidebar />
+                <div className="flex flex-col">
+                  <Header />
+                  {children}
+                </div>
               </div>
-            </div>
-          </TooltipProvider>
+            </TooltipProvider>
+          </DojoProvider>
         </StarknetProvider>
       </body>
     </html>

@@ -2,19 +2,21 @@
 
 import type { PropsWithChildren } from "react";
 import CartridgeConnector from "@cartridge/connector";
-import { mainnet } from "@starknet-react/chains";
+import { Chain, mainnet } from "@starknet-react/chains";
 import {
   argent,
   braavos,
-  nethermindProvider,
+  jsonRpcProvider,
   StarknetConfig,
   useInjectedConnectors,
   voyager,
 } from "@starknet-react/core";
 
-export function StarknetProvider({ children }: PropsWithChildren) {
-  const provider = nethermindProvider({
-    apiKey: "KZvWx3liaWO5LFZqYYZ5iS9dWlvgmH7caKH7bARF6Uw6U0jqvRvOu8BjFOVvFxWX",
+export default function StarknetProvider({ children }: PropsWithChildren) {
+  const provider = jsonRpcProvider({
+    rpc: (
+      chain: Chain
+    ) => ({ nodeUrl: "http://localhost:5050" })
   });
   const { connectors: injectedConnectors } = useInjectedConnectors({
     recommended: [argent(), braavos()],
@@ -28,7 +30,9 @@ export function StarknetProvider({ children }: PropsWithChildren) {
       provider={provider}
       connectors={[
         new CartridgeConnector({
-          rpc: "https://api.cartridge.gg/x/starknet/mainnet",
+          rpc: "http://localhost:5050",
+          url: "http://localhost:3001",
+
         }),
         ...injectedConnectors,
       ]}
