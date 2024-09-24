@@ -71,12 +71,18 @@ describe("BurnerManager", () => {
             },
         });
 
+        // Mock the provider.getChainId() method
+        burnerManager.provider.getChainId = vi.fn().mockResolvedValue("0x1");
+
         // Initialize BurnerManager with the mocked storage
         await burnerManager.init();
-        expect(Storage.get).toHaveBeenCalledWith("burners_KATANA");
+        expect(Storage.get).toHaveBeenCalledWith("burners_1");
     });
 
     it("generateKeysAndAddress", async () => {
+        // Mock the provider.getChainId() method
+        burnerManager.provider.getChainId = vi.fn().mockResolvedValue("0x1");
+
         await burnerManager.init();
 
         const wallet1_index0 = {

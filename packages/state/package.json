@@ -8,7 +8,7 @@
     "type": "module",
     "scripts": {
         "build": "tsup --dts-resolve",
-        "test": "vitest"
+        "test": "vitest run"
     },
     "exports": {
         ".": {
