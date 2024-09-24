@@ -11,12 +11,13 @@ import {
   useInjectedConnectors,
   voyager,
 } from "@starknet-react/core";
+import { env, getRpcUrl } from "@/env";
 
 export default function StarknetProvider({ children }: PropsWithChildren) {
   const provider = jsonRpcProvider({
     rpc: (
       chain: Chain
-    ) => ({ nodeUrl: "http://localhost:5050" })
+    ) => ({ nodeUrl: getRpcUrl() })
   });
   const { connectors: injectedConnectors } = useInjectedConnectors({
     recommended: [argent(), braavos()],
@@ -30,8 +31,8 @@ export default function StarknetProvider({ children }: PropsWithChildren) {
       provider={provider}
       connectors={[
         new CartridgeConnector({
-          rpc: "http://localhost:5050",
-          url: "http://localhost:3001",
+          url: env.NEXT_PUBLIC_CONTROLLER_URL,
+          rpc: env.NEXT_PUBLIC_CONTROLLER_RPC,
 
         }),
         ...injectedConnectors,

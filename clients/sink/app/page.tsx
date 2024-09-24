@@ -9,40 +9,31 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useDojoDb } from "@/dojo/provider"
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { OnchainDashSchemaType } from "@/dojo/models"
 import { SDK } from "@dojoengine/sdk"
-import { useContractWrite } from "@starknet-react/core"
 import { useForm } from "react-hook-form"
+import { Subscription } from "@dojoengine/torii-client"
+import GlobalCounter from "@/components/global-counter"
+import CallerCounter from "@/components/caller-counter"
 
 export default function Home() {
+  const [subscription, setSubscription] = useState<Subscription>()
   const { register, handleSubmit } = useForm();
-  const { write: incrementCallerCounter } = useContractWrite({
-    calls: [{
-      contractAddress: "0x474cd7db48e8cc15b5d1c5151f6c423a7fe3818116fefd987c7780a4756522f",
-      entrypoint: "increment_caller_counter",
-      calldata: []
-    }]
-  });
-  const { write: incrementGlobalCounter } = useContractWrite({
-    calls: [{
-      contractAddress: "0x474cd7db48e8cc15b5d1c5151f6c423a7fe3818116fefd987c7780a4756522f",
-      entrypoint: "increment_global_counter",
-      calldata: []
-    }]
-  });
 
   const db = useDojoDb();
   useEffect(() => {
     async function getEntities(db: SDK<OnchainDashSchemaType>) {
-      await db.getEntities(
+      const sub = await db.subscribeEntityQuery(
         {
           world: {
-            global: {
-              $: {},
+            global_counter: {
+              $: {
+              },
             },
-            caller: {
-              $: {}
+            caller_counter: {
+              $: {
+              }
             }
           },
         },
@@ -55,27 +46,26 @@ export default function Home() {
             return;
           }
           if (response.data) {
-            console.log(
-              "Queried todos and goals:",
-              response.data.map((a) => a.models)
-            );
+            console.log(response.data)
           }
         }
       );
+      setSubscription(sub)
     }
 
-    if (db) {
+    if (db && !subscription) {
       getEntities(db)
     }
 
-  }, [db])
+    return () => {
+      if (subscription) {
+        if (subscription.free) {
+          subscription.free();
+        }
+      }
+    }
+  }, [db, subscription])
 
-  const handleCallerClick = useCallback(async () => {
-    incrementCallerCounter();
-  }, [incrementCallerCounter]);
-  const handleGlobalClick = useCallback(async () => {
-    incrementGlobalCounter();
-  }, [incrementGlobalCounter]);
 
   const publish = useCallback(async (data) => {
     console.log("publish", data)
@@ -94,28 +84,8 @@ export default function Home() {
             <div className="grid gap-3">
             </div>
           </fieldset>
-          <fieldset className="grid gap-6 rounded-lg border p-4">
-            <legend className="-ml-1 px-1 text-sm font-medium">
-              Per wallet counter
-            </legend>
-            <div className="grid gap-3">
-              Count : 0
-            </div>
-            <div className="grid gap-3">
-              <Button variant="outline" className="rounded-lg" onClick={handleCallerClick}>Click me !</Button>
-            </div>
-          </fieldset>
-          <fieldset className="grid gap-6 rounded-lg border p-4">
-            <legend className="-ml-1 px-1 text-sm font-medium">
-              Global counter
-            </legend>
-            <div className="grid gap-3">
-              Count : 0
-            </div>
-            <div className="grid gap-3">
-              <Button variant="outline" className="rounded-lg" onClick={handleGlobalClick}>Click me !</Button>
-            </div>
-          </fieldset>
+          <CallerCounter />
+          <GlobalCounter />
           <fieldset className="grid gap-6 rounded-lg border p-4">
             <legend className="-ml-1 px-1 text-sm font-medium">
               Stats

@@ -3,6 +3,7 @@
 import { OnchainDashSchemaType, schema } from "./models";
 import { createContext, useContext, useEffect, useState } from "react";
 import type { SDK } from "@dojoengine/sdk";
+import { env, getRpcUrl } from "@/env";
 
 export function useDojoDb() {
   return useContext(DojoContext);
@@ -21,10 +22,10 @@ export default function DojoProvider({ children }: React.PropsWithChildren<DojoP
         init<OnchainDashSchemaType>(
           {
             client: {
-              rpcUrl: "http://localhost:5050",
-              toriiUrl: "http://localhost:8080",
+              rpcUrl: getRpcUrl(),
+              toriiUrl: env.NEXT_PUBLIC_TORII_URL,
               relayUrl: "",
-              worldAddress: "0x474cd7db48e8cc15b5d1c5151f6c423a7fe3818116fefd987c7780a4756522f",
+              worldAddress: "0x6dd367f5e11f11e0502cb2c4db7ae9bb6d8b5a4a431750bed7bec88b218e12",
             },
             domain: {
               name: "OnChainDash",
