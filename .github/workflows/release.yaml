@@ -25,10 +25,10 @@ jobs:
                   git config user.name "${{ github.actor }}"
                   git config user.email "${{ github.actor }}@users.noreply.github.com"
 
-            - name: "Setup npm"
+            - name: "Setup npm for npmjs"
               run: |
-                  npm set @ponderingdemocritus:registry=https://npm.pkg.github.com/dojoengine
-                  npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
+                  npm config set registry https://registry.npmjs.org/
+                  echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
             - name: Install Protobuf Compiler
               run: sudo apt-get install -y protobuf-compiler
