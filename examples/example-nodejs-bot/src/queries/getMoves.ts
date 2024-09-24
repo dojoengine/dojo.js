@@ -9,16 +9,16 @@ export const getTransations = async () => {
                 .fetch(process.env.DISCORD_CHANNEL_ID || "")
                 .then((channel) => {
                     if (channel?.isTextBased()) {
-                        channel.send({
-                            embeds: [
-                                {
-                                    color: 0x00ff3c,
-                                    title: "Transactions",
-                                    description: "new transactions",
-                                    timestamp: new Date().toISOString(),
-                                },
-                            ],
-                        });
+                        // channel({
+                        //     embeds: [
+                        //         {
+                        //             color: 0x00ff3c,
+                        //             title: "Transactions",
+                        //             description: "new transactions",
+                        //             timestamp: new Date().toISOString(),
+                        //         },
+                        //     ],
+                        // });
                     }
                 });
         });

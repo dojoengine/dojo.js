@@ -3,11 +3,22 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-# Build commands for each example
-pnpm run build-phaser
-pnpm run build-react-app
-pnpm run build-threejs
-pnpm run build-react-pwa-app
-pnpm run build-vanilla-phaser
-pnpm run build-vue-app
+# Define an array of example directories
+examples=(
+  "examples/example-nodejs-bot"
+  "examples/example-vanillajs-phaser-recs"
+  "examples/example-vite-react-app-recs"
+  "examples/example-vite-react-phaser-recs"
+  "examples/example-vite-react-pwa-recs"
+  "examples/example-vite-react-sdk"
+  "examples/example-vite-react-threejs-recs"
+  "examples/example-vue-app-recs"
+)
 
+# Iterate over each example directory and run the build command
+for example in "${examples[@]}"; do
+  echo "Building in $example..."
+  cd "$example"
+  pnpm run build
+  cd ../../
+done

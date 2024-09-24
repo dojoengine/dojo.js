@@ -5,7 +5,7 @@ import "./App.css";
 import { init, ParsedEntity } from "@dojoengine/sdk";
 
 import { dojoConfig } from "../dojoConfig.ts";
-import { Direction, Schema, schema } from "./bindings.ts";
+import { Schema, schema } from "./bindings.ts";
 
 const db = await init<Schema>(
     {

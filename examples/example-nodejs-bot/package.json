@@ -1,5 +1,5 @@
 {
-    "name": "torii-bo",
+    "name": "torii-bot",
     "module": "index.ts",
     "type": "module",
     "main": "dist/src/server.js",
@@ -18,9 +18,9 @@
     "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@pinecone-database/pinecone": "^1.1.2",
-        "@sapphire/decorators": "^6.0.2",
-        "@sapphire/framework": "^4.6.0",
-        "discord.js": "^14.13.0",
+        "@sapphire/decorators": "^6.1.0",
+        "@sapphire/framework": "^5.2.1",
+        "discord.js": "^14.16.2",
         "express": "^4.18.2",
         "graphql-tag": "^2.12.6",
         "langchain": "^0.0.200",
@@ -32,6 +32,7 @@
     "scripts": {
         "build": "tsc",
         "serve": "tsc && node dist/node/torii-bot/src/index.js",
-        "codegen": "graphql-codegen"
+        "codegen": "graphql-codegen",
+        "test": "echo \"Error: no test specified\""
     }
 }

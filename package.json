@@ -1,32 +1,20 @@
 {
     "name": "dojo.js",
     "scripts": {
-        "build-core": "pnpm --dir packages/core build",
-        "build-create-burner": "pnpm --dir packages/create-burner build",
-        "build-create-dojo": "pnpm --dir packages/create-dojo build",
-        "build-utils": "pnpm --dir packages/utils build",
-        "build-torii-client": "pnpm --dir packages/torii-client build",
-        "build-torii-wasm": "pnpm --dir packages/torii-wasm build",
-        "build-react": "pnpm --dir packages/react build",
-        "build-state": "pnpm --dir packages/state build",
-        "build-utils-wasm": "pnpm --dir packages/utils-wasm build",
-        "build-phaser": "pnpm --dir examples/clients/react/react-phaser-example build",
-        "build-react-app": "pnpm --dir examples/clients/react/react-app build",
-        "build-threejs": "pnpm --dir examples/clients/react/react-threejs build",
-        "build-react-pwa-app": "pnpm --dir examples/clients/react/react-pwa-app build",
-        "build-vue-app": "pnpm --dir examples/clients/vue/vue-app build",
-        "build-vanilla-phaser": "pnpm --dir examples/clients/vanilla/phaser build",
         "build": "bash ./scripts/build-packages.sh",
         "build-examples": "bash ./scripts/build-examples.sh",
-        "test-create-burner": "pnpm --dir packages/create-burner test",
-        "test-core": "pnpm --dir packages/core test",
-        "test": "pnpm run test-core && pnpm run test-create-burner",
         "clean": "bash ./scripts/clean.sh",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
         "release": "pnpm build && pnpm prettier && npx lerna publish --no-private --force-publish",
         "docs": "npx typedoc --out docs",
         "prepare": "husky install"
+    },
+    "dependencies": {
+        "@commitlint/cli": "^18.4.4",
+        "@commitlint/config-conventional": "^18.4.4",
+        "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+        "react": "^18.2.0"
     },
     "devDependencies": {
         "husky": "^9.0.11",
@@ -36,11 +24,5 @@
         "typedoc": "^0.26.7",
         "typedoc-material-theme": "^1.1.0",
         "typedoc-plugin-coverage": "^3.3.0"
-    },
-    "dependencies": {
-        "@commitlint/cli": "^18.4.4",
-        "@commitlint/config-conventional": "^18.4.4",
-        "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
-        "react": "^18.2.0"
     }
 }
