@@ -7,7 +7,7 @@
         "moduleDetection": "force",
         "allowImportingTsExtensions": true,
         "noEmit": true,
-       
+
         "strict": true,
         "downlevelIteration": true,
         "skipLibCheck": true,
@@ -18,7 +18,7 @@
         "isolatedModules": false,
         "baseUrl": ".",
         "paths": {
-          "@/*": ["./*"]
+            "@/*": ["./*"]
         }
     },
     "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],

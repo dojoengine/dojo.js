@@ -5,8 +5,7 @@ packages/torii-client/pkg
 packages/torii-wasm/pkg/
 packages/utils-wasm/pkg/
 
-examples/dojo-starter
-packages/create-dojo
+worlds/dojo-starter
 
 # ignore lock files
 **/*-lock.yaml
