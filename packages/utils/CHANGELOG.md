@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.12](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2024-09-25)
+
+
+### Features
+
+* prettier ([6a5e8e9](https://github.com/dojoengine/dojo.js/commit/6a5e8e98389b6bd7d04a92cfa158d776c99bd915))
+
+
+
+
+
 ## 0.6.124 (2024-04-24)
 
 **Note:** Version bump only for package @dojoengine/utils

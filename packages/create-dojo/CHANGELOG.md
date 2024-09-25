@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.12](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2024-09-25)
+
+
+### Bug Fixes
+
+* package versions ([922fb99](https://github.com/dojoengine/dojo.js/commit/922fb99246f3a63259c80b5004f5280a1cf86f71))
+* prettier ([e3000bc](https://github.com/dojoengine/dojo.js/commit/e3000bc7e8f4cd5959e8e241f95e086ef3de6f82))
+
+
+### Features
+
+* add callback ([63d297c](https://github.com/dojoengine/dojo.js/commit/63d297cac3ecdf68cdc0ecc24be87f7ba999db0f))
+* clean up package builds ([e6fa40d](https://github.com/dojoengine/dojo.js/commit/e6fa40de7488cae7910596642b28fce9ffcfca71))
+* fix create-dojo ([b99ba00](https://github.com/dojoengine/dojo.js/commit/b99ba00f1aa631e732dd1c1892abf29ece19a70f))
+* fix create-dojo ([69964b7](https://github.com/dojoengine/dojo.js/commit/69964b79bc918548ca11aae684d2759b94ce47ba))
+* fix query types ([5ab108d](https://github.com/dojoengine/dojo.js/commit/5ab108d0a14580ff908b98bc0e743ce671a5e848))
+* subscription ([7b58cd2](https://github.com/dojoengine/dojo.js/commit/7b58cd2ea42fc1076406aab7a05730f81328ca8f))
+
+
+
+
+
 ## 0.6.124 (2024-04-24)
 
 **Note:** Version bump only for package @dojoengine/create-dojo

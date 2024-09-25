@@ -3,6 +3,82 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.12](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2024-09-25)
+
+
+### Bug Fixes
+
+* .... ([41a0bf0](https://github.com/dojoengine/dojo.js/commit/41a0bf09dc6b70adc2be8c456d4acd77339ff94f))
+* bot versioning ([2e74225](https://github.com/dojoengine/dojo.js/commit/2e74225bd7ca854502298b395b5a60722513d753))
+* bump lerna ([49afac9](https://github.com/dojoengine/dojo.js/commit/49afac9da1aa3ce49fa43042496ff52a641f7c74))
+* burner tests ([b86c415](https://github.com/dojoengine/dojo.js/commit/b86c4157fe48cb2ed14da25c3943bb965e3ce3d2))
+* ci ([52743fa](https://github.com/dojoengine/dojo.js/commit/52743faa6d0e329b212d479e5dc0c678b9c26c54))
+* lockfile ([e4368f5](https://github.com/dojoengine/dojo.js/commit/e4368f51cb3506517ea94252741d7e5d0159a38d))
+* package versions ([922fb99](https://github.com/dojoengine/dojo.js/commit/922fb99246f3a63259c80b5004f5280a1cf86f71))
+* prettier ([e3000bc](https://github.com/dojoengine/dojo.js/commit/e3000bc7e8f4cd5959e8e241f95e086ef3de6f82))
+* refactor queries ([f1b0d97](https://github.com/dojoengine/dojo.js/commit/f1b0d973353bbb1c84835aa71e8196812d28a3c0))
+* release yaml ([09eaeac](https://github.com/dojoengine/dojo.js/commit/09eaeac4dddb085c3db1a3ff4920bb9694024436))
+* remove examples from CI ([b7fe164](https://github.com/dojoengine/dojo.js/commit/b7fe16435f743c04353d190dc5a2c48280881958))
+* separate model name and namespace on components generator ([cc672c5](https://github.com/dojoengine/dojo.js/commit/cc672c5444ee7ffa7c1a5e13f29366cbc9bed818))
+* sub ([1318341](https://github.com/dojoengine/dojo.js/commit/1318341e484004eaccb07949fda819b3d0219cd7))
+* submodule ([55ed064](https://github.com/dojoengine/dojo.js/commit/55ed06425bfa575038ec017c2cd11949cca2da24))
+* tests ([5cec278](https://github.com/dojoengine/dojo.js/commit/5cec2786d036d6185bf5c09a984acdab5dd5321b))
+* tests ([5314a67](https://github.com/dojoengine/dojo.js/commit/5314a67ae124263f823f55ee09233abe61e34526))
+* tests for sdk ([82465cb](https://github.com/dojoengine/dojo.js/commit/82465cbe71e21611263187c0bec080a2d9284730))
+
+
+### Features
+
+* add callback ([63d297c](https://github.com/dojoengine/dojo.js/commit/63d297cac3ecdf68cdc0ecc24be87f7ba999db0f))
+* add example, fix clauses, enable namespaces ([a8dc7c1](https://github.com/dojoengine/dojo.js/commit/a8dc7c14929b872debaf720027d1eabc4efe6716))
+* add in continue fetching ([c8eef83](https://github.com/dojoengine/dojo.js/commit/c8eef83eb76748b24733c282a06f0a4867df766d))
+* add return types ([ae875c8](https://github.com/dojoengine/dojo.js/commit/ae875c87d44d95bc03f762dd51998d3df38f930d))
+* add some tests ([e31754a](https://github.com/dojoengine/dojo.js/commit/e31754a3f0461539819da4e4a15097fe1a2ac3fa))
+* add subscribe and event query ([de370ab](https://github.com/dojoengine/dojo.js/commit/de370abedf98a83e6453cda4eda7e9f2782f1a42))
+* add zustand typed store ([5b0170a](https://github.com/dojoengine/dojo.js/commit/5b0170acc163e12d131e934e81c903ef3ea501a3))
+* and or ([896fc0a](https://github.com/dojoengine/dojo.js/commit/896fc0a33f2f1cc8a00be528e536e5d2d86194f9))
+* app work ([ffc6c29](https://github.com/dojoengine/dojo.js/commit/ffc6c2937d4604432dc8fa3df1d9cb358b8ca44c))
+* bump docs ([9d90ca3](https://github.com/dojoengine/dojo.js/commit/9d90ca325f7700cbf16fc9e91d4c254541da3c98))
+* change format of return ([d053a0e](https://github.com/dojoengine/dojo.js/commit/d053a0eb8b167ebf5e0981e671901486b369e4a7))
+* clean up function ([8b3d67c](https://github.com/dojoengine/dojo.js/commit/8b3d67cdecaea821802013a22b27fa987540437d))
+* clean up package builds ([e6fa40d](https://github.com/dojoengine/dojo.js/commit/e6fa40de7488cae7910596642b28fce9ffcfca71))
+* cleanup examples ([903b915](https://github.com/dojoengine/dojo.js/commit/903b915186753a0e7094454c427233516f4816f1))
+* docs ([768ca12](https://github.com/dojoengine/dojo.js/commit/768ca12674b6732991f270fbd3980196b03d5e00))
+* docs ([0abea55](https://github.com/dojoengine/dojo.js/commit/0abea55b1faa26346601bc296af29b43dfbad0a3))
+* example ([4effc6b](https://github.com/dojoengine/dojo.js/commit/4effc6bb6c5536b25233d13d813d4a70360c07ed))
+* examples ([e83bfde](https://github.com/dojoengine/dojo.js/commit/e83bfde160b125ea573cb813ba34c13b6a9d3742))
+* finish complex composite clauses ([8157364](https://github.com/dojoengine/dojo.js/commit/8157364935473b34950f395bfb5419a9ed195c30))
+* fix create-dojo ([b99ba00](https://github.com/dojoengine/dojo.js/commit/b99ba00f1aa631e732dd1c1892abf29ece19a70f))
+* fix create-dojo ([69964b7](https://github.com/dojoengine/dojo.js/commit/69964b79bc918548ca11aae684d2759b94ce47ba))
+* fix query types ([5ab108d](https://github.com/dojoengine/dojo.js/commit/5ab108d0a14580ff908b98bc0e743ce671a5e848))
+* fix tests and nested namespaces ([b10a4b4](https://github.com/dojoengine/dojo.js/commit/b10a4b4be0e3a164d141f2856c1a8f56c91415e8))
+* implement where clause ([7a86365](https://github.com/dojoengine/dojo.js/commit/7a8636534d7f3c9e8318b767829390b1cc0a24b0))
+* improve execute type ([ca37b53](https://github.com/dojoengine/dojo.js/commit/ca37b53e7404ab212806be829f3e20a9a7d1ebd3))
+* improve types ([0d0ab89](https://github.com/dojoengine/dojo.js/commit/0d0ab899c0d866b6627a6a04c7b1c1eba872d340))
+* init ([65cf745](https://github.com/dojoengine/dojo.js/commit/65cf74571377a76f124e01cc11d23f5ff165f1e1))
+* nested composite claues ([9e69c3b](https://github.com/dojoengine/dojo.js/commit/9e69c3b8d602f71e3f48002b84b0faa086991fb1))
+* prettier ([6a5e8e9](https://github.com/dojoengine/dojo.js/commit/6a5e8e98389b6bd7d04a92cfa158d776c99bd915))
+* renaming ([cf7387b](https://github.com/dojoengine/dojo.js/commit/cf7387b476b390274080a2dc5bcef37d74cda2a6))
+* restructure' ([5459960](https://github.com/dojoengine/dojo.js/commit/54599601a1af0806401dbad9685558fb931383c4))
+* revert ci ([46e6fc3](https://github.com/dojoengine/dojo.js/commit/46e6fc3613553aa2858b09269987cbbfe93ebb93))
+* sdk example ([eb0fc22](https://github.com/dojoengine/dojo.js/commit/eb0fc22a84201deaa95b2a35bce28474067a20d6))
+* simplify signing ([379c581](https://github.com/dojoengine/dojo.js/commit/379c581a4741f3e8226163087c73f7833d9e39ea))
+* submodule ([b85f225](https://github.com/dojoengine/dojo.js/commit/b85f2255e3417d080e9c3d03f547f6b1b69a30fd))
+* subscription ([7b58cd2](https://github.com/dojoengine/dojo.js/commit/7b58cd2ea42fc1076406aab7a05730f81328ca8f))
+* support nested ([ee9a44b](https://github.com/dojoengine/dojo.js/commit/ee9a44b52c04bf7ba0b671d0802d96e22a10cbce))
+* tests, docs ([ed0d9a5](https://github.com/dojoengine/dojo.js/commit/ed0d9a51fba9bb40782a66e645572ff34b4a4b48))
+* tests: ([6880087](https://github.com/dojoengine/dojo.js/commit/68800875e020cbabc4816a21cfc27a09904f19d3))
+* typed execute based off abi: ([27f5b4f](https://github.com/dojoengine/dojo.js/commit/27f5b4ffe18c241539b7eabc2044c941d482cc33))
+* types ([6c193a7](https://github.com/dojoengine/dojo.js/commit/6c193a7de1574733b0890219c66df2b024dccfdf))
+* types ([fc221a1](https://github.com/dojoengine/dojo.js/commit/fc221a13387cf22f4518c592c37ef7358a0da424))
+* types and readme prepping for more contributions ([87e08cc](https://github.com/dojoengine/dojo.js/commit/87e08ccecf34e09fe8744e0c861c63698d07d943))
+* update examplee ([b373dd0](https://github.com/dojoengine/dojo.js/commit/b373dd0e4eebb65ce43fc0490d1bb139b8728b9c))
+* working complex query ([c4c6d0c](https://github.com/dojoengine/dojo.js/commit/c4c6d0c1e424dcac4acb63a83fd3c27f2cda1b48))
+
+
+
+
+
 ## 0.7.0 (2024-06-14)
 
 Version 7 has breaking changes and will only work correctly with Dojo v7.

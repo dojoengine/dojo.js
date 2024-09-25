@@ -1,7 +1,7 @@
 {
     "name": "torii-bot",
     "module": "index.ts",
-    "version": "0.0.0",
+    "version": "1.0.0-alpha.12",
     "type": "module",
     "main": "dist/src/server.js",
     "devDependencies": {

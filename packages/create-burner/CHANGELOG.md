@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.12](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2024-09-25)
+
+
+### Bug Fixes
+
+* burner tests ([b86c415](https://github.com/dojoengine/dojo.js/commit/b86c4157fe48cb2ed14da25c3943bb965e3ce3d2))
+* tests ([5cec278](https://github.com/dojoengine/dojo.js/commit/5cec2786d036d6185bf5c09a984acdab5dd5321b))
+
+
+### Features
+
+* bump docs ([9d90ca3](https://github.com/dojoengine/dojo.js/commit/9d90ca325f7700cbf16fc9e91d4c254541da3c98))
+* prettier ([6a5e8e9](https://github.com/dojoengine/dojo.js/commit/6a5e8e98389b6bd7d04a92cfa158d776c99bd915))
+* restructure' ([5459960](https://github.com/dojoengine/dojo.js/commit/54599601a1af0806401dbad9685558fb931383c4))
+
+
+
+
+
 ## 0.6.124 (2024-04-24)
 
 **Note:** Version bump only for package @dojoengine/create-burner
