@@ -1,32 +1,9 @@
 import { useEffect, useState } from "react";
-
 import "./App.css";
+import { ParsedEntity, SDK } from "@dojoengine/sdk";
+import { Schema } from "./bindings.ts";
 
-import { init, ParsedEntity } from "@dojoengine/sdk";
-
-import { dojoConfig } from "../dojoConfig.ts";
-import { Schema, schema } from "./bindings.ts";
-
-const db = await init<Schema>(
-    {
-        client: {
-            rpcUrl: dojoConfig.rpcUrl,
-            toriiUrl: dojoConfig.toriiUrl,
-            relayUrl: dojoConfig.relayUrl,
-            worldAddress:
-                "0x5d475a9221f6cbf1a016b12400a01b9a89935069aecd57e9876fcb2a7bb29da",
-        },
-        domain: {
-            name: "Example",
-            version: "1.0",
-            chainId: "your-chain-id",
-            revision: "1",
-        },
-    },
-    schema
-);
-
-function App() {
+function App({ db }: { db: SDK<Schema> }) {
     const [entities, setEntities] = useState<ParsedEntity<Schema>[]>([]);
 
     useEffect(() => {
@@ -37,13 +14,7 @@ function App() {
                 {
                     dojo_starter: {
                         Moves: {
-                            $: {
-                                where: {
-                                    player: {
-                                        $is: "0x3628a39cc6bd2347e79967e9458ac41ab65bac6949f2aa311b311aff0d7334d",
-                                    },
-                                },
-                            },
+                            $: {},
                         },
                     },
                 },
@@ -81,7 +52,9 @@ function App() {
                 unsubscribe();
             }
         };
-    }, []);
+    }, [db]);
+
+    console.log("entities:");
 
     useEffect(() => {
         const fetchEntities = async () => {
@@ -129,7 +102,7 @@ function App() {
         };
 
         fetchEntities();
-    }, []);
+    }, [db]);
 
     return (
         <div>
