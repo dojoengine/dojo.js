@@ -1,12 +1,6 @@
 {
     "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-    "version": "1.0.0-alpha.13",
+    "version": "1.0.0-alpha.11",
     "packages": ["packages/*"],
-    "npmClient": "pnpm",
-    "command": {
-        "publish": {
-            "conventionalCommits": true,
-            "yes": true
-        }
-    }
+    "npmClient": "pnpm"
 }
