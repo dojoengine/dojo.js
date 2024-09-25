@@ -24,7 +24,6 @@ jobs:
             - run: |
                   cd worlds/dojo-starter
                   /home/runner/.config/.dojo/bin/sozo build
-                  /home/runner/.config/.dojo/bin/sozo migrate plan
                   /home/runner/.config/.dojo/bin/sozo test
 
             - name: "Setup npm"
