@@ -1,3 +1,9 @@
 [submodule "dojo-starter"]
 	path = worlds/dojo-starter
 	url = https://github.com/dojoengine/dojo-starter
+[submodule "onchain-dash"]
+	path = worlds/onchain-dash
+	url = https://github.com/MartianGreed/onchain-dash
+[submodule "worlds/onchain-dash"]
+	path = worlds/onchain-dash
+	url = https://github.com/MartianGreed/onchain-dash
