@@ -507,14 +507,14 @@ importers:
   examples/example-vite-react-sdk:
     dependencies:
       '@dojoengine/core':
-        specifier: 1.0.0-alpha.12
-        version: 1.0.0-alpha.12(starknet@6.11.0(encoding@0.1.13))(typescript@5.6.2)
+        specifier: 1.0.0-alpha.14
+        version: 1.0.0-alpha.14(starknet@6.11.0(encoding@0.1.13))(typescript@5.6.2)
       '@dojoengine/sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
       '@dojoengine/torii-wasm':
-        specifier: 1.0.0-alpha.12
-        version: 1.0.0-alpha.12
+        specifier: 1.0.0-alpha.14
+        version: 1.0.0-alpha.14
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1995,8 +1995,8 @@ packages:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
 
-  '@dojoengine/core@1.0.0-alpha.12':
-    resolution: {integrity: sha512-KuinebMRPrsGebpQqW8oXVYRaCiUOdngjr4vN6WaWkUcyvFRfeJqzCemQdgqtOwvZZKjo6UIQNvYWPsuzjcxnA==}
+  '@dojoengine/core@1.0.0-alpha.14':
+    resolution: {integrity: sha512-wWleoZ3v9V72t5m2u8rfTc1a4B1xoFMXvfwEy3rDanuIph392Buo5huYnskbmzs1qInNPygl/5zX8wyctprmyw==}
     hasBin: true
     peerDependencies:
       starknet: 6.11.0
@@ -2004,8 +2004,8 @@ packages:
   '@dojoengine/recs@2.0.13':
     resolution: {integrity: sha512-Cgz4Unlnk2FSDoFTYKrJexX/KiSYPMFMxftxQkC+9LUKS5yNGkgFQM7xu4/L1HvpDAenL7NjUmH6ynRAS7Iifw==}
 
-  '@dojoengine/torii-wasm@1.0.0-alpha.12':
-    resolution: {integrity: sha512-GiPlaJkSqjpCzN42xv6F0zv1UJLUcIthiwU8LQYU82DCVqKkODvd/ad0YH00PQ2pB/ILEiMvoJQUQXP108yFqQ==}
+  '@dojoengine/torii-wasm@1.0.0-alpha.14':
+    resolution: {integrity: sha512-FABJsR/cIPLX+4vbR4rs2idwukwHgMV5xA55Gj6xX3IcaYj8wv1SokJGvV9vr+I8lc9qQ1JXpOAAGNQDOuu7pQ==}
 
   '@emnapi/core@1.2.0':
     resolution: {integrity: sha512-E7Vgw78I93we4ZWdYCb4DGAwRROGkMIXk7/y87UmANR+J6qsWusmC3gLt0H+O0KOt5e6O38U8oJamgbudrES/w==}
@@ -12609,7 +12609,7 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@dojoengine/core@1.0.0-alpha.12(starknet@6.11.0(encoding@0.1.13))(typescript@5.6.2)':
+  '@dojoengine/core@1.0.0-alpha.14(starknet@6.11.0(encoding@0.1.13))(typescript@5.6.2)':
     dependencies:
       '@dojoengine/recs': 2.0.13(typescript@5.6.2)(zod@3.23.8)
       starknet: 6.11.0(encoding@0.1.13)
@@ -12631,7 +12631,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@dojoengine/torii-wasm@1.0.0-alpha.12': {}
+  '@dojoengine/torii-wasm@1.0.0-alpha.14': {}
 
   '@emnapi/core@1.2.0':
     dependencies:
