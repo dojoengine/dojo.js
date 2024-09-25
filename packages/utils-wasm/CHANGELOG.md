@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.13](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.13) (2024-09-25)
+
+
+### Bug Fixes
+
+* package versions ([922fb99](https://github.com/dojoengine/dojo.js/commit/922fb99246f3a63259c80b5004f5280a1cf86f71))
+
+
+### Features
+
+* clean up package builds ([e6fa40d](https://github.com/dojoengine/dojo.js/commit/e6fa40de7488cae7910596642b28fce9ffcfca71))
+* prettier ([6a5e8e9](https://github.com/dojoengine/dojo.js/commit/6a5e8e98389b6bd7d04a92cfa158d776c99bd915))
+
+
+
+
+
 # [1.0.0-alpha.12](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2024-09-25)
 
 

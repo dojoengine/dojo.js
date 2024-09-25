@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.13](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.13) (2024-09-25)
+
+
+### Bug Fixes
+
+* separate model name and namespace on components generator ([cc672c5](https://github.com/dojoengine/dojo.js/commit/cc672c5444ee7ffa7c1a5e13f29366cbc9bed818))
+
+
+### Features
+
+* prettier ([6a5e8e9](https://github.com/dojoengine/dojo.js/commit/6a5e8e98389b6bd7d04a92cfa158d776c99bd915))
+
+
+
+
+
 # [1.0.0-alpha.12](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2024-09-25)
 
 

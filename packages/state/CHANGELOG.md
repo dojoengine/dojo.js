@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.13](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.13) (2024-09-25)
+
+
+### Bug Fixes
+
+* tests ([5cec278](https://github.com/dojoengine/dojo.js/commit/5cec2786d036d6185bf5c09a984acdab5dd5321b))
+* tests ([5314a67](https://github.com/dojoengine/dojo.js/commit/5314a67ae124263f823f55ee09233abe61e34526))
+
+
+### Features
+
+* add zustand typed store ([5b0170a](https://github.com/dojoengine/dojo.js/commit/5b0170acc163e12d131e934e81c903ef3ea501a3))
+* bump docs ([9d90ca3](https://github.com/dojoengine/dojo.js/commit/9d90ca325f7700cbf16fc9e91d4c254541da3c98))
+* prettier ([6a5e8e9](https://github.com/dojoengine/dojo.js/commit/6a5e8e98389b6bd7d04a92cfa158d776c99bd915))
+
+
+
+
+
 # [1.0.0-alpha.12](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2024-09-25)
 
 
