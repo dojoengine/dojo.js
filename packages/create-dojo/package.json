@@ -12,14 +12,12 @@
     },
     "exports": "./dist/index.js",
     "bin": "./dist/index.js",
-    
     "scripts": {
         "dev": "tsup --watch",
-        "build": "tsup --dts-resolve",
-        "test": "vitest run --coverage"
+        "build": "tsup --dts-resolve"
     },
     "dependencies": {
-        "@inquirer/prompts": "^3.3.0",
+        "@inquirer/prompts": "^3.3.2",
         "@types/fs-extra": "^11.0.4",
         "@types/prompts": "^2.4.9",
         "commander": "^12.1.0",
@@ -30,8 +28,8 @@
     },
     "devDependencies": {
         "@types/cross-spawn": "^6.0.6",
-        "tsup": "^8.0.1",
-        "typescript": "^5.5.4",
+        "tsup": "^8.3.0",
+        "typescript": "^5.6.2",
         "vitest": "^2.1.1"
     }
 }
