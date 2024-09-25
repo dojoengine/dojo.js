@@ -5,13 +5,7 @@ import { getEventMessages } from "./getEventMessages";
 import { subscribeEntityQuery } from "./subscribeEntityQuery";
 import { subscribeEventQuery } from "./subscribeEventQuery";
 import { SchemaType, SDK, UnionOfModelData } from "./types";
-import {
-    Account,
-    Signature,
-    StarknetDomain,
-    TypedData,
-    WeierstrassSignatureType,
-} from "starknet";
+import { Account, Signature, StarknetDomain, TypedData } from "starknet";
 
 export * from "./types";
 

@@ -9,11 +9,19 @@ import { Schema, schema } from "./bindings.ts";
 
 const db = await init<Schema>(
     {
-        rpcUrl: dojoConfig.rpcUrl,
-        toriiUrl: dojoConfig.toriiUrl,
-        relayUrl: dojoConfig.relayUrl,
-        worldAddress:
-            "0x5d475a9221f6cbf1a016b12400a01b9a89935069aecd57e9876fcb2a7bb29da",
+        client: {
+            rpcUrl: dojoConfig.rpcUrl,
+            toriiUrl: dojoConfig.toriiUrl,
+            relayUrl: dojoConfig.relayUrl,
+            worldAddress:
+                "0x5d475a9221f6cbf1a016b12400a01b9a89935069aecd57e9876fcb2a7bb29da",
+        },
+        domain: {
+            name: "Example",
+            version: "1.0",
+            chainId: "your-chain-id",
+            revision: "1",
+        },
     },
     schema
 );

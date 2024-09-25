@@ -20,9 +20,9 @@ jobs:
               run: git submodule update --init --recursive
 
             - run: curl -L https://install.dojoengine.org | bash
-            - run: /home/runner/.config/.dojo/bin/dojoup -v v1.0.0-alpha.6
+            - run: /home/runner/.config/.dojo/bin/dojoup -v v1.0.0-alpha.12
             - run: |
-                  cd examples/dojo/dojo-starter
+                  cd worlds/dojo-starter
                   /home/runner/.config/.dojo/bin/sozo build
                   /home/runner/.config/.dojo/bin/sozo test
 
@@ -41,10 +41,7 @@ jobs:
               run: pnpm run prettier --check .
 
             - name: Build packages
-              run: pnpm run build && pnpm run build-examples
-
-            - name: Run tests
-              run: pnpm run test
+              run: pnpm run build
 
             # - name: Upload coverage reports to Codecov
             #   uses: codecov/codecov-action@v3

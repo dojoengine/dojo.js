@@ -1,0 +1,57 @@
+name: Release
+
+on:
+    workflow_dispatch:
+        inputs:
+            release_type:
+                description: "Type of release (prerelease, prepatch, patch, minor, preminor, major)"
+                required: true
+                default: "patch"
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - uses: pnpm/action-setup@v3
+              with:
+                  version: 8
+
+            - name: Configure Git
+              run: |
+                  git config user.name "${{ github.actor }}"
+                  git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+            - name: "Setup npm for npmjs"
+              run: |
+                  npm config set registry https://registry.npmjs.org/
+                  echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+            - name: Install Protobuf Compiler
+              run: sudo apt-get install -y protobuf-compiler
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Build packages
+              run: pnpm run build
+
+            - name: Tag and Publish Packages
+              run: |
+                  npx lerna version ${{ github.event.inputs.release_type }} --conventional-commits --yes --no-private --force-publish
+                  npx lerna publish from-git --yes --dist-tag ${{ github.event.inputs.release_type == 'preminor' && 'next' || 'latest' }}
+
+            - name: Generate Changelog
+              run: |
+                  npx lerna-changelog > CHANGELOG.md
+
+            - name: Commit and Push Changelog
+              run: |
+                  git add CHANGELOG.md
+                  git commit -m "chore(release): update changelog [skip ci]"
+                  git push origin HEAD:${{ github.ref }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
