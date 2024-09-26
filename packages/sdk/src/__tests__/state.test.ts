@@ -1,9 +1,7 @@
 import { createDojoStore } from "../state/zustand";
-import { ParsedEntity, SchemaType } from "../types";
-import { Patch } from "immer";
-import { describe, expect, it, beforeEach, test, vi } from "vitest";
+import { ParsedEntity } from "../types";
+import { describe, expect, beforeEach, test, vi } from "vitest";
 import {
-    schema,
     MockSchemaType,
     PlayerModel,
     GameModel,
