@@ -10,13 +10,17 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@dojoengine/core": "1.0.0-alpha.12",
+        "@dojoengine/core": "workspace:*",
         "@dojoengine/sdk": "workspace:*",
-        "@dojoengine/torii-wasm": "1.0.0-alpha.12",
+        "@dojoengine/torii-wasm": "workspace:*",
+        "@types/uuid": "^10.0.0",
+        "immer": "^10.1.1",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
+        "uuid": "^10.0.0",
         "vite-plugin-top-level-await": "^1.4.4",
-        "vite-plugin-wasm": "^3.3.0"
+        "vite-plugin-wasm": "^3.3.0",
+        "zustand": "^4.5.5"
     },
     "devDependencies": {
         "@eslint/js": "^9.11.1",
