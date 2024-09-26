@@ -5,11 +5,11 @@ import { Schema } from "./bindings.ts";
 
 import { v4 as uuidv4 } from "uuid";
 
-export const useGameState = createDojoStore<Schema>();
+export const useDojoStore = createDojoStore<Schema>();
 
 function App({ db }: { db: SDK<Schema> }) {
-    const state = useGameState((state) => state);
-    const entities = useGameState((state) => state.entities);
+    const state = useDojoStore((state) => state);
+    const entities = useDojoStore((state) => state.entities);
 
     useEffect(() => {
         let unsubscribe: (() => void) | undefined;
