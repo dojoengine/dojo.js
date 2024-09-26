@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import "./App.css";
-import { SDK } from "@dojoengine/sdk";
+import { SDK, createDojoStore } from "@dojoengine/sdk";
 import { Schema } from "./bindings.ts";
-import { useGameState } from "./state.ts";
 
 import { v4 as uuidv4 } from "uuid";
+
+export const useGameState = createDojoStore<Schema>();
 
 function App({ db }: { db: SDK<Schema> }) {
     const state = useGameState((state) => state);
@@ -126,9 +127,11 @@ function App({ db }: { db: SDK<Schema> }) {
                         Player:{" "}
                         {entity.models.dojo_starter.Position?.player ?? "N/A"}
                         <br />
-                        X: {entity.models.dojo_starter.Position?.vec.x ?? "N/A"}
+                        X:{" "}
+                        {entity.models.dojo_starter.Position?.vec?.x ?? "N/A"}
                         <br />
-                        Y: {entity.models.dojo_starter.Position?.vec.y ?? "N/A"}
+                        Y:{" "}
+                        {entity.models.dojo_starter.Position?.vec?.y ?? "N/A"}
                     </p>
                     <h3>Moves</h3>
                     <p>

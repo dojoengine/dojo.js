@@ -8,6 +8,7 @@ import { SchemaType, SDK, UnionOfModelData } from "./types";
 import { Account, Signature, StarknetDomain, TypedData } from "starknet";
 
 export * from "./types";
+export * from "./state";
 
 interface SDKConfig {
     client: torii.ClientConfig;

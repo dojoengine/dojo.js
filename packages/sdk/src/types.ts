@@ -226,7 +226,9 @@ export type ParsedEntity<T extends SchemaType> = {
     entityId: string;
     models: {
         [K in keyof T]: {
-            [M in keyof T[K]]?: T[K][M];
+            [M in keyof T[K]]?: T[K][M] extends object
+                ? Partial<T[K][M]>
+                : T[K][M];
         };
     };
 };
