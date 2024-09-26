@@ -40,6 +40,14 @@ interface GameState<T extends SchemaType> {
         predicate: (entity: ParsedEntity<T> | undefined) => boolean,
         timeout?: number
     ) => Promise<ParsedEntity<T> | undefined>;
+    getEntity: (entityId: string) => ParsedEntity<T> | undefined;
+    getEntities: (
+        filter?: (entity: ParsedEntity<T>) => boolean
+    ) => ParsedEntity<T>[];
+    getEntitiesByModel: (
+        namespace: keyof T,
+        model: keyof T[keyof T]
+    ) => ParsedEntity<T>[];
 }
 
 /**
@@ -142,6 +150,23 @@ export function createDojoStore<T extends SchemaType>() {
                             }, timeout);
                         }
                     );
+                },
+                // Implementing query layer methods
+                getEntity: (entityId: string) => {
+                    return get().entities[entityId];
+                },
+
+                getEntities: (
+                    filter?: (entity: ParsedEntity<T>) => boolean
+                ) => {
+                    const allEntities = Object.values(get().entities);
+                    return filter ? allEntities.filter(filter) : allEntities;
+                },
+
+                getEntitiesByModel: (namespace, model) => {
+                    return get().getEntities((entity) => {
+                        return !!entity.models[namespace]?.[model];
+                    });
                 },
             }))
         )
