@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
-import { ParsedEntity, SDK } from "@dojoengine/sdk";
+import { SDK, createDojoStore } from "@dojoengine/sdk";
 import { Schema } from "./bindings.ts";
 
+import { v4 as uuidv4 } from "uuid";
+
+export const useDojoStore = createDojoStore<Schema>();
+
 function App({ db }: { db: SDK<Schema> }) {
-    const [entities, setEntities] = useState<ParsedEntity<Schema>[]>([]);
+    const state = useDojoStore((state) => state);
+    const entities = useDojoStore((state) => state.entities);
 
     useEffect(() => {
         let unsubscribe: (() => void) | undefined;
@@ -28,15 +33,7 @@ function App({ db }: { db: SDK<Schema> }) {
                         response.data &&
                         response.data[0].entityId !== "0x0"
                     ) {
-                        console.log(response.data);
-                        setEntities((prevEntities) => {
-                            return prevEntities.map((entity) => {
-                                const newEntity = response.data?.find(
-                                    (e) => e.entityId === entity.entityId
-                                );
-                                return newEntity ? newEntity : entity;
-                            });
-                        });
+                        state.setEntities(response.data);
                     }
                 },
                 { logging: true }
@@ -53,8 +50,6 @@ function App({ db }: { db: SDK<Schema> }) {
             }
         };
     }, [db]);
-
-    console.log("entities:");
 
     useEffect(() => {
         const fetchEntities = async () => {
@@ -76,23 +71,7 @@ function App({ db }: { db: SDK<Schema> }) {
                             return;
                         }
                         if (resp.data) {
-                            console.log(resp.data);
-                            setEntities((prevEntities) => {
-                                const updatedEntities = [...prevEntities];
-                                resp.data?.forEach((newEntity) => {
-                                    const index = updatedEntities.findIndex(
-                                        (entity) =>
-                                            entity.entityId ===
-                                            newEntity.entityId
-                                    );
-                                    if (index !== -1) {
-                                        updatedEntities[index] = newEntity;
-                                    } else {
-                                        updatedEntities.push(newEntity);
-                                    }
-                                });
-                                return updatedEntities;
-                            });
+                            state.setEntities(resp.data);
                         }
                     }
                 );
@@ -104,20 +83,55 @@ function App({ db }: { db: SDK<Schema> }) {
         fetchEntities();
     }, [db]);
 
+    const optimisticUpdate = async () => {
+        const entityId =
+            "0x571368d35c8fe136adf81eecf96a72859c43de7efd8fdd3d6f0d17e308df984";
+
+        const transactionId = uuidv4();
+
+        state.applyOptimisticUpdate(transactionId, (draft) => {
+            draft.entities[entityId].models.dojo_starter.Moves!.remaining = 10;
+        });
+
+        try {
+            // Wait for the entity to be updated before full resolving the transaction. Reverts if the condition is not met.
+            const updatedEntity = await state.waitForEntityChange(
+                entityId,
+                (entity) => {
+                    // Define your specific condition here
+                    return entity?.models.dojo_starter.Moves?.can_move === true;
+                }
+            );
+
+            console.log("Entity has been updated to active:", updatedEntity);
+
+            console.log("Updating entities...");
+        } catch (error) {
+            console.error("Error updating entities:", error);
+            state.revertOptimisticUpdate(transactionId);
+        } finally {
+            console.log("Updating entities...");
+            state.confirmTransaction(transactionId);
+        }
+    };
+
     return (
         <div>
             <h1>Game State</h1>
-            {entities.map((entity) => (
-                <div key={entity.entityId}>
-                    <h2>Entity {entity.entityId}</h2>
+            <button onClick={optimisticUpdate}>update</button>
+            {Object.entries(entities).map(([entityId, entity]) => (
+                <div key={entityId}>
+                    <h2>Entity {entityId}</h2>
                     <h3>Position</h3>
                     <p>
                         Player:{" "}
                         {entity.models.dojo_starter.Position?.player ?? "N/A"}
                         <br />
-                        X: {entity.models.dojo_starter.Position?.vec.x ?? "N/A"}
+                        X:{" "}
+                        {entity.models.dojo_starter.Position?.vec?.x ?? "N/A"}
                         <br />
-                        Y: {entity.models.dojo_starter.Position?.vec.y ?? "N/A"}
+                        Y:{" "}
+                        {entity.models.dojo_starter.Position?.vec?.y ?? "N/A"}
                     </p>
                     <h3>Moves</h3>
                     <p>

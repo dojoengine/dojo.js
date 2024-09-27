@@ -23,6 +23,12 @@ export interface ItemModel {
     durability: number;
 }
 
+export interface GalaxyModel {
+    fieldOrder: string[];
+    id: string;
+    name: string;
+}
+
 export interface MockSchemaType extends SchemaType {
     world: {
         player: PlayerModel;
@@ -30,11 +36,7 @@ export interface MockSchemaType extends SchemaType {
         item: ItemModel;
     };
     universe: {
-        galaxy: {
-            fieldOrder: string[];
-            id: string;
-            name: string;
-        };
+        galaxy: GalaxyModel;
     };
 }
 
