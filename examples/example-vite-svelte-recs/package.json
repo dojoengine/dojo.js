@@ -19,12 +19,12 @@
     "vite": "^5.4.1"
   },
   "dependencies": {
-    "@dojoengine/core": "1.0.0-alpha.12",
-    "@dojoengine/create-burner": "1.0.0-alpha.12",
+    "@dojoengine/core": "workspace:*",
+    "@dojoengine/create-burner": "workspace:*",
     "@dojoengine/recs": "^2.0.13",
-    "@dojoengine/state": "1.0.0-alpha.12",
-    "@dojoengine/torii-client": "1.0.0-alpha.12",
-    "@dojoengine/utils": "1.0.0-alpha.12",
+    "@dojoengine/state": "workspace:*",
+    "@dojoengine/torii-client": "workspace:*",
+    "@dojoengine/utils": "workspace:*",
     "@latticexyz/utils": "^2.1.1",
     "starknet": "^6.11.0",
     "vite-plugin-top-level-await": "^1.4.4",
