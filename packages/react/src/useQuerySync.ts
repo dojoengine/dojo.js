@@ -2,6 +2,7 @@ import { useCallback, useEffect } from "react";
 import { Component, Metadata, Schema } from "@dojoengine/recs";
 import { getSyncEntities } from "@dojoengine/state";
 import {
+    Clause,
     EntityKeysClause,
     Subscription,
     ToriiClient,
@@ -30,13 +31,15 @@ import {
 export function useQuerySync<S extends Schema>(
     toriiClient: ToriiClient,
     components: Component<S, Metadata, undefined>[],
-    entityKeyClause: EntityKeysClause[]
+    entityKeyClause: EntityKeysClause[],
+    clause?: Clause | undefined
 ) {
     const setupSync = useCallback(async () => {
         try {
             return await getSyncEntities(
                 toriiClient,
                 components,
+                clause,
                 entityKeyClause
             );
         } catch (error) {

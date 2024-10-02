@@ -43,10 +43,11 @@ import { convertValues } from "../utils";
 export const getSyncEntities = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
+    clause: Clause | undefined,
     entityKeyClause: EntityKeysClause[],
     limit: number = 100
 ) => {
-    await getEntities(client, components, limit);
+    await getEntities(client, clause, components, limit);
     return await syncEntities(client, components, entityKeyClause);
 };
 
@@ -103,21 +104,22 @@ export const getSyncEvents = async <S extends Schema>(
  */
 export const getEntities = async <S extends Schema>(
     client: ToriiClient,
+    clause: Clause | undefined,
     components: Component<S, Metadata, undefined>[],
     limit: number = 100
 ) => {
-    let cursor = 0;
+    let offset = 0;
     let continueFetching = true;
 
     while (continueFetching) {
-        const entities = await client.getAllEntities(limit, cursor);
+        const entities = await client.getEntities({ limit, offset, clause });
 
         setEntities(entities, components);
 
         if (Object.keys(entities).length < limit) {
             continueFetching = false;
         } else {
-            cursor += limit;
+            offset += limit;
         }
     }
 };
