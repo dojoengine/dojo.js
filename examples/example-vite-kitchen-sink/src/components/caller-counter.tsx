@@ -10,7 +10,8 @@ import { dojoConfig } from "@/dojo.config";
 
 export default function CallerCounter() {
   const [count, setCount] = useState(0);
-  const [sub, setSub] = useState<Subscription>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [sub, setSub] = useState<Subscription | null>(null);
   const { address } = useAccount();
   const { write: incrementCallerCounter } = useContractWrite({
     calls: [{
@@ -22,7 +23,8 @@ export default function CallerCounter() {
 
   const handleCallerClick = useCallback(async () => {
     incrementCallerCounter();
-  }, [incrementCallerCounter]);
+    setIsLoading(true);
+  }, [incrementCallerCounter, setIsLoading]);
 
   const db = useDojoDb();
   useEffect(() => {
@@ -31,13 +33,17 @@ export default function CallerCounter() {
         onchain_dash: {
           CallerCounter: { $: { where: { caller: { $eq: ensureStarkFelt(address) } } } }
         }
-      }, ({ data, error }) => { });
+      }, () => { });
       const counter = entity.pop();
       if (!counter) {
         return 0;
       }
-      const count = parseInt(counter.models.onchain_dash.CallerCounter.counter, 16);
-      return count;
+      const count = counter.models.onchain_dash?.CallerCounter?.counter
+      if (undefined === count) {
+        return 0;
+      }
+
+      return parseInt(count.toString(), 16);
     }
     if (address && db) {
       getEntity(db, address).then(setCount).catch(console.error)
@@ -47,6 +53,7 @@ export default function CallerCounter() {
   useEffect(() => {
     async function subscribeToEntityUpdates(db: SDK<OnchainDashSchemaType>, address: string) {
       const sub = await db.subscribeEntityQuery({
+        // @ts-expect-error $eq is working there
         onchain_dash: { CallerCounter: { $: { where: { caller: { $eq: ensureStarkFelt(address) } } } } }
       }, ({ data, error }) => {
         if (data) {
@@ -57,8 +64,13 @@ export default function CallerCounter() {
           if (entity.models.onchain_dash?.CallerCounter?.counter === undefined) {
             return
           }
-          const count = parseInt(entity.models.onchain_dash?.CallerCounter?.counter, 16);
-          setCount(count);
+          const count = entity.models.onchain_dash?.CallerCounter?.counter;
+          if (undefined === count) {
+            return 0;
+          }
+
+          setIsLoading(false);
+          setCount(parseInt(count.toString(), 16));
           return;
         }
         if (error) {
@@ -85,7 +97,7 @@ export default function CallerCounter() {
         Count : {count}
       </div>
       <div className="grid gap-3">
-        <Button variant="outline" className="rounded-lg" onClick={handleCallerClick}>Click me !</Button>
+        <Button variant="outline" className="rounded-lg" loading={isLoading} onClick={handleCallerClick}>Click me !</Button>
       </div>
     </fieldset>
 

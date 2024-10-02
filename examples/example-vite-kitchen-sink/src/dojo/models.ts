@@ -18,6 +18,12 @@ export interface Theme {
   caller: string;
   timestamp: number;
 }
+export interface Message {
+  fieldOrder: string[];
+  identity: string;
+  content: string;
+  timestamp: number;
+}
 
 export enum AvailableTheme {
   Light,
@@ -25,7 +31,7 @@ export enum AvailableTheme {
   Dojo,
 }
 
-export const AvailableThemeClassMap = {
+export const AvailableThemeClassMap: Record<number, string> = {
   0: 'light',
   1: 'dark',
   2: 'dojo'
@@ -35,7 +41,8 @@ export interface OnchainDashSchemaType extends SchemaType {
   onchain_dash: {
     GlobalCounter: GlobalCounter;
     CallerCounter: CallerCounter;
-    Theme: Theme
+    Theme: Theme;
+    Message: Message;
   };
 }
 
@@ -57,7 +64,13 @@ export const schema: OnchainDashSchemaType = {
       value: AvailableTheme.Light,
       caller: "",
       timestamp: 0,
-    }
+    },
+    Message: {
+      fieldOrder: ["identity", "content", "timestamp"],
+      identity: "",
+      content: "",
+      timestamp: 0,
+    },
   },
 };
 

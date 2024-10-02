@@ -9,7 +9,8 @@ import { dojoConfig } from "@/dojo.config";
 
 export default function GlobalCOunter() {
   const [count, setCount] = useState(0);
-  const [sub, setSub] = useState<Subscription>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [sub, setSub] = useState<Subscription | null>(null);
   const { write: incrementGlobalCounter } = useContractWrite({
     calls: [{
       contractAddress: dojoConfig.manifest.contracts[0].address,
@@ -19,7 +20,8 @@ export default function GlobalCOunter() {
   });
   const handleGlobalClick = useCallback(async () => {
     incrementGlobalCounter();
-  }, [incrementGlobalCounter]);
+    setIsLoading(true);
+  }, [incrementGlobalCounter, setIsLoading]);
 
   const db = useDojoDb();
 
@@ -35,8 +37,11 @@ export default function GlobalCOunter() {
       if (!counter) {
         return 0;
       }
-      const count = parseInt(counter.models.onchain_dash.GlobalCounter.counter, 16);
-      return count;
+      const count = counter.models.onchain_dash?.GlobalCounter?.counter;
+      if (undefined === count) {
+        return 0;
+      }
+      return parseInt(count.toString(), 16);
     }
 
     if (db) {
@@ -47,6 +52,7 @@ export default function GlobalCOunter() {
   useEffect(() => {
     async function subscribeToEntityUpdates(db: SDK<OnchainDashSchemaType>) {
       const sub = await db.subscribeEntityQuery({
+        // @ts-expect-error $eq is working there
         onchain_dash: { GlobalCounter: { $: { where: { global_counter_key: { $eq: 9999999 } } } } }
       }, ({ data, error }) => {
         if (data) {
@@ -57,8 +63,13 @@ export default function GlobalCOunter() {
           if (entity.models.onchain_dash?.GlobalCounter?.counter === undefined) {
             return
           }
-          const count = parseInt(entity.models.onchain_dash?.GlobalCounter?.counter, 16);
-          setCount(count);
+          const count = entity.models.onchain_dash?.GlobalCounter?.counter;
+          if (undefined === count) {
+            return 0;
+          }
+          const value = parseInt(count.toString(), 16);
+          setCount(value);
+          setIsLoading(false);
           return;
         }
         if (error) {
@@ -75,7 +86,7 @@ export default function GlobalCOunter() {
         sub.free();
       }
     };
-  }, [db, sub]);
+  }, [db, sub, setIsLoading]);
 
   return (
     <fieldset className="grid gap-6 rounded-lg border p-4">
@@ -86,7 +97,7 @@ export default function GlobalCOunter() {
         Count : {count}
       </div>
       <div className="grid gap-3">
-        <Button variant="outline" className="rounded-lg" onClick={handleGlobalClick}>Click me !</Button>
+        <Button variant="outline" className="rounded-lg" loading={isLoading} onClick={handleGlobalClick}>Click me !</Button>
       </div>
     </fieldset>
   )

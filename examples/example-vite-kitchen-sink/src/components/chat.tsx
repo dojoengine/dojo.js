@@ -9,7 +9,7 @@ import { useDojoDb } from "@/dojo/provider";
 import { useAccount } from "@starknet-react/core";
 import { toValidAscii } from "@/lib/utils";
 import { SDK } from "@dojoengine/sdk";
-import { OnchainDashSchemaType } from "@/dojo/models";
+import { Message, OnchainDashSchemaType } from "@/dojo/models";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { shortAddress } from "@/lib/utils";
 
@@ -19,15 +19,19 @@ interface MessageItem {
   timestamp: number;
 }
 
+interface FormValues {
+  message: string;
+}
+
 export default function Chat() {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<FormValues>();
   const { account } = useAccount();
   const [messages, setMessages] = useState<MessageItem[]>([]);
-  const [sub, setSub] = useState<Subscription>(null);
+  const [sub, setSub] = useState<Subscription | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const db = useDojoDb();
-  const publish = useCallback(async (data) => {
+  const publish = useCallback(async (data: FormValues) => {
     if (!account || !db) return;
 
     const asciiMessage = toValidAscii(data.message);
@@ -36,7 +40,7 @@ export default function Chat() {
       const signature = await account.signMessage(msg);
 
       try {
-        await db.client.publishMessage(JSON.stringify(msg), signature);
+        await db.client.publishMessage(JSON.stringify(msg), signature as string[]);
         reset();
       } catch (error) {
         console.error("failed to publish message:", error);
@@ -50,11 +54,13 @@ export default function Chat() {
     async function getEntity(db: SDK<OnchainDashSchemaType>) {
       const entity = await db.getEntities({
         onchain_dash: { Message: { $: {} } }
-      }, ({ data, error }) => { });
+      }, () => { });
 
-      return entity.map(e => e.models.onchain_dash.Message).filter(Boolean).sort((a, b) => parseInt(a.timestamp, 16) < parseInt(b.timestamp, 16) ? -1 : 1);
+      // @ts-expect-error a & b are not undefined as they are filtered out with `filer(Boolean)`
+      return entity.map(e => e.models.onchain_dash.Message).filter(Boolean).sort((a: Message, b: Message): number => parseInt(a.timestamp.toString(), 16) < parseInt(b.timestamp.toString(), 16) ? -1 : 1);
     }
     if (db && messages.length === 0 && sub === null) {
+      // @ts-expect-error ts is getting drunk there
       getEntity(db).then(setMessages).catch(console.error)
     }
   }, [db, messages, sub])
@@ -63,7 +69,7 @@ export default function Chat() {
     async function subscribeToEntityUpdates(db: SDK<OnchainDashSchemaType>) {
       const sub = await db.subscribeEntityQuery({
         onchain_dash: { Message: { $: {} } }
-      }, ({ data, error }) => {
+      }, ({ data }) => {
         if (data) {
           const entity = data.pop();
           if (!entity) {
@@ -83,7 +89,7 @@ export default function Chat() {
     }
   }, [db, sub, setMessages]);
 
-  const handleKeyPress = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = useCallback((e: KeyboardEvent<HTMLFormElement>) => {
     if (e.key !== 'Enter') {
       return;
     }

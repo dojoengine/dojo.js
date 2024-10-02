@@ -10,6 +10,26 @@ import {
   voyager,
 } from "@starknet-react/core";
 import { env, getRpcUrl } from "@/env";
+import { dojoConfig } from "@/dojo.config";
+
+const cartridge = new CartridgeConnector({
+  url: env.VITE_CONTROLLER_URL,
+  rpc: env.VITE_CONTROLLER_RPC,
+  policies: [
+    {
+      target: dojoConfig.manifest.contracts[0].address,
+      method: 'increment_caller_counter',
+    },
+    {
+      target: dojoConfig.manifest.contracts[0].address,
+      method: 'increment_global_counter',
+    },
+    {
+      target: dojoConfig.manifest.contracts[0].address,
+      method: 'change_theme',
+    },
+  ]
+});
 
 export default function StarknetProvider({ children }: PropsWithChildren) {
   const provider = jsonRpcProvider({
@@ -17,23 +37,13 @@ export default function StarknetProvider({ children }: PropsWithChildren) {
       chain: Chain
     ) => ({ nodeUrl: getRpcUrl() })
   });
-  const { connectors: injectedConnectors } = useInjectedConnectors({
-    recommended: [argent(), braavos()],
-    includeRecommended: "onlyIfNoConnectors",
-    order: "alphabetical",
-  });
 
   return (
     <StarknetConfig
       chains={[mainnet]}
       provider={provider}
       connectors={[
-        new CartridgeConnector({
-          url: env.VITE_CONTROLLER_URL,
-          rpc: env.VITE_CONTROLLER_RPC,
-
-        }),
-        ...injectedConnectors,
+        cartridge,
       ]}
       explorer={voyager}
       autoConnect

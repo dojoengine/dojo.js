@@ -11,6 +11,7 @@ export const env = createEnv({
     VITE_TORII_URL: z.string(),
     VITE_RELAY_URL: z.string(),
   },
+  // @ts-expect-error this is included by vite
   runtimeEnv: import.meta.env,
 });
 

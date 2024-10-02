@@ -19,53 +19,61 @@ import {
 import { dojoConfig } from "@/dojo.config";
 
 interface ThemeState {
-  current: AvailableTheme | null;
-  next: AvailableTheme | null;
+  current: string | null;
+  next: string | null;
 }
 
 export default function ThemeSwitchButton() {
-  const [theme, setTheme] = useState<ThemeState>({ current: AvailableTheme.Light, next: null });
+  const [theme, setTheme] = useState<ThemeState>({ current: AvailableThemeClassMap[AvailableTheme.Light], next: null });
+  const [isLoading, setIsLoading] = useState(false);
   const [entityId, setEntityId] = useState<string | null>(null);
   const { address } = useAccount();
-  const [sub, setSub] = useState<Subscription>(null);
+  const [sub, setSub] = useState<Subscription | null>(null);
   const { writeAsync } = useContractWrite({
     calls: []
   });
 
 
   const handleChangeTheme = useCallback(async (theme: AvailableTheme) => {
+    setIsLoading(true);
     await writeAsync({
       calls: [{
         contractAddress: dojoConfig.manifest.contracts[0].address,
         entrypoint: "change_theme",
-        calldata: [parseInt(theme, 10)]
+        calldata: [theme]
       }]
     })
   }, [writeAsync]);
 
   const db = useDojoDb();
   useEffect(() => {
-    async function getEntity(db: SDK<OnchainDashSchemaType>) {
+    async function getEntity(db: SDK<OnchainDashSchemaType>): Promise<AvailableTheme> {
       const entity = await db.getEntities({
         onchain_dash: {
           Theme: { $: { where: { theme_key: { $eq: 9999999 } } } },
         }
-      }, ({ data, error }) => { });
+      }, () => { });
       const counter = entity.pop();
       if (!counter) {
         return AvailableTheme.Light;
       }
 
+      const theme = counter.models?.onchain_dash?.Theme?.value;
       setEntityId(counter.entityId);
-      return AvailableTheme[counter.models.onchain_dash.Theme.value];
+      if (undefined === theme) {
+        return AvailableTheme.Light;
+      }
+      // @ts-expect-error this resooves to enum value
+      return AvailableTheme[theme];
     }
     if (db) {
-      getEntity(db).then((th) => setTheme({ current: AvailableThemeClassMap[th], next: AvailableThemeClassMap[th] })).catch(console.error)
+      getEntity(db).then((th: AvailableTheme) => setTheme({ current: AvailableThemeClassMap[th], next: AvailableThemeClassMap[th] })).catch(console.error)
     }
   }, [address, db, setEntityId])
 
   useEffect(() => {
     async function subscribeToEntityUpdates(db: SDK<OnchainDashSchemaType>) {
+      // @ts-expect-error we should be able to use ['entityId'] here
       const sub = await db.subscribeEntityQuery([entityId], ({ data, error }) => {
         if (data) {
           const entity = data.pop();
@@ -75,8 +83,12 @@ export default function ThemeSwitchButton() {
           if (entity.models.onchain_dash?.Theme?.value === undefined) {
             return AvailableTheme.Light;
           }
+          const theme = entity.models?.onchain_dash?.Theme?.value;
 
-          setTheme({ current: AvailableThemeClassMap[entity.models.onchain_dash.Theme.value], next: AvailableThemeClassMap[entity.models.onchain_dash.Theme.value] });
+          const at = AvailableTheme[theme];
+          // @ts-expect-error this resooves to enum value
+          setTheme({ current: AvailableThemeClassMap[at], next: AvailableThemeClassMap[at] });
+          setIsLoading(false);
           return AvailableTheme[entity.models.onchain_dash.Theme.value];
         }
         if (error) {
@@ -101,7 +113,7 @@ export default function ThemeSwitchButton() {
     <div className="ml-auto flex items-center space-x-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline">Theme</Button>
+          <Button variant="outline" loading={isLoading}>Theme</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>Change theme on chain</DropdownMenuLabel>
