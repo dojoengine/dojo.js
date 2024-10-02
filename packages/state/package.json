@@ -1,7 +1,7 @@
 {
     "name": "@dojoengine/state",
     "version": "1.0.0-alpha.16",
-    "description": "dojo: State syncing for dojo games. Currently supports RECS.",
+    "description": "dojo: State syncing for dojo games",
     "author": "dojo",
     "license": "MIT",
     "main": "dist/index.js",
@@ -26,8 +26,6 @@
     "dependencies": {
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/torii-client": "workspace:*",
-        "@latticexyz/utils": "^2.2.8",
-        "vitest": "^1.6.0",
-        "zustand": "^4.5.5"
+        "vitest": "^1.6.0"
     }
 }

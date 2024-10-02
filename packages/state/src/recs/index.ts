@@ -19,86 +19,94 @@ import { convertValues } from "../utils";
  * Fetches and synchronizes entities with their components. This is useful for initializing the world state.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
- * @param entityKeyClause - An array of entities to synchronize.
+ * @param clause - An optional clause to filter entities.
+ * @param entityKeyClause - An array of entity key clauses to synchronize.
  * @param limit - The maximum number of entities to fetch per request (default: 100).
- * @returns A promise that resolves when synchronization is complete.
+ * @param logging - Whether to log debug information (default: true).
+ * @returns A promise that resolves to a subscription for entity updates.
  *
  * @example
  * // Fetch all entities and their components
  * const components = createClientComponents({ contractComponents });
- * await getSyncEntities(client, components, undefined);
+ * const subscription = await getSyncEntities(client, components);
  *
  * @example
- * // Fetch all entities and their components via a query
+ * // Fetch filtered entities and their components
  * const components = createClientComponents({ contractComponents });
- * await getSyncEntities(client, components, entityKeyClause);
+ * const clause = { ... }; // Define your filter clause
+ * const entityKeyClause = [ ... ]; // Define your entity key clauses
+ * const subscription = await getSyncEntities(client, components, clause, entityKeyClause);
  *
- * This function fetches all entities and their components from the client, then
- * synchronizes the entities with the specified components. It uses the provided
- * EntityKeysClause (if any) to filter entities and the specified components to
- * determine which data to retrieve. The function continues fetching until all
- * matching entities have been retrieved, using the 'limit' parameter to control
- * the batch size of each request.
+ * This function fetches entities and their components from the client, then
+ * sets up a subscription for entity updates. It uses the provided clause (if any)
+ * to filter entities and the specified components to determine which data to retrieve.
+ * The function fetches entities in batches, controlled by the 'limit' parameter,
+ * and then establishes a real-time subscription for future updates.
  */
 export const getSyncEntities = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     clause: Clause | undefined,
     entityKeyClause: EntityKeysClause[],
-    limit: number = 100
+    limit: number = 100,
+    logging: boolean = true
 ) => {
-    await getEntities(client, clause, components, limit);
-    return await syncEntities(client, components, entityKeyClause);
+    if (logging) console.log("Starting getSyncEntities");
+    await getEntities(client, clause, components, limit, logging);
+    return await syncEntities(client, components, entityKeyClause, logging);
 };
-
 /**
- * Fetches and synchronizes events with their models. This is useful for initializing the world state with event data.
+ * Fetches and synchronizes events with their components. This is useful for initializing the world state with event data.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
  * @param clause - An optional clause to filter events.
- * @param entityKeyClause - An array of entities to synchronize.
+ * @param entityKeyClause - An array of entity key clauses to synchronize.
  * @param limit - The maximum number of events to fetch per request (default: 100).
- * @returns A promise that resolves when synchronization is complete.
+ * @param logging - Whether to log debug information (default: false).
+ * @returns A promise that resolves to a subscription for event updates.
  *
  * @example
  * // Fetch all events and their components
  * const components = createClientComponents({ contractComponents });
- * await getSyncEvents(client, components, undefined, entityKeyClause);
+ * const subscription = await getSyncEvents(client, components, undefined, entityKeyClause);
  *
  * @example
- * // Fetch all events and their components via a query
+ * // Fetch filtered events and their components
  * const components = createClientComponents({ contractComponents });
- * await getSyncEvents(client, components, clause, entityKeyClause);
+ * const clause = { ... }; // Define your filter clause
+ * const entityKeyClause = [ ... ]; // Define your entity key clauses
+ * const subscription = await getSyncEvents(client, components, clause, entityKeyClause);
  *
- * This function fetches all events and their components from the client, then
- * synchronizes the events with the specified components. It uses the provided
- * Clause (if any) to filter events and the specified components to determine
- * which data to retrieve. The function continues fetching until all matching
- * events have been retrieved, using the 'limit' parameter to control the batch
- * size of each request.
+ * This function fetches events and their components from the client, then
+ * sets up a subscription for event updates. It uses the provided clause (if any)
+ * to filter events and the specified components to determine which data to retrieve.
+ * The function fetches events in batches, controlled by the 'limit' parameter,
+ * and then establishes a real-time subscription for future updates.
  */
 export const getSyncEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     clause: Clause | undefined,
     entityKeyClause: EntityKeysClause[],
-    limit: number = 100
+    limit: number = 100,
+    logging: boolean = false
 ) => {
-    // Fetch events from the client
-    await getEvents(client, components, limit, clause);
-    // Synchronize the fetched events with the specified components
-    return await syncEvents(client, components, entityKeyClause);
+    if (logging) console.log("Starting getSyncEvents");
+    await getEvents(client, components, limit, clause, logging);
+    return await syncEvents(client, components, entityKeyClause, logging);
 };
 
 /**
  * Fetches all entities and their components from the client.
  * @param client - The client instance for API communication.
+ * @param clause - An optional clause to filter entities.
  * @param components - An array of component definitions.
  * @param limit - The maximum number of entities to fetch per request (default: 100).
+ * @param logging - Whether to log debug information (default: false).
  *
  * @example
  * const components = createClientComponents({ contractComponents });
- * await getEntities(client, components, 100);
+ * await getEntities(client, undefined, components, 100);
  *
  * This function performs paginated queries to fetch all entities and their components.
  */
@@ -106,15 +114,19 @@ export const getEntities = async <S extends Schema>(
     client: ToriiClient,
     clause: Clause | undefined,
     components: Component<S, Metadata, undefined>[],
-    limit: number = 100
+    limit: number = 100,
+    logging: boolean = false
 ) => {
+    if (logging) console.log("Starting getEntities");
     let offset = 0;
     let continueFetching = true;
 
     while (continueFetching) {
         const entities = await client.getEntities({ limit, offset, clause });
 
-        setEntities(entities, components);
+        if (logging) console.log(`Fetched ${entities} entities`);
+
+        setEntities(entities, components, logging);
 
         if (Object.keys(entities).length < limit) {
             continueFetching = false;
@@ -130,76 +142,66 @@ export const getEntities = async <S extends Schema>(
  * @param components - An array of component definitions.
  * @param limit - The maximum number of event messages to fetch per request (default: 100).
  * @param clause - An optional clause to filter event messages.
+ * @param logging - Whether to log debug information (default: false).
  */
 export const getEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     limit: number = 100,
-    clause: Clause | undefined
+    clause: Clause | undefined,
+    logging: boolean = false
 ) => {
-    let offset = 0; // Initialize the offset for pagination
-    let continueFetching = true; // Flag to control the fetching loop
+    if (logging) console.log("Starting getEvents");
+    let offset = 0;
+    let continueFetching = true;
 
     while (continueFetching) {
-        // Fetch event messages from the client with the specified limit and offset
         const entities = await client.getEventMessages({
             limit,
             offset,
             clause,
         });
 
-        console.log("entities", entities); // Log the fetched entities for debugging
+        if (logging) console.log("entities", entities);
 
-        // Synchronize the fetched entities with the specified components
-        setEntities(entities, components);
+        setEntities(entities, components, logging);
 
-        // Check if the number of fetched entities is less than the limit
         if (Object.keys(entities).length < limit) {
-            continueFetching = false; // Stop fetching if fewer entities are returned
+            continueFetching = false;
         } else {
-            offset += limit; // Increment the offset for the next batch
+            offset += limit;
         }
     }
 };
 
 /**
- * Fetches entities and their components from the client based on specified criteria, helping to reduce the loading time when the entities are fetched.
+ * Fetches entities and their components from the client based on specified criteria.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions to fetch.
- * @param entityKeyClause - An optional EntityKeysClause to filter entities by their keys.
+ * @param entityKeyClause - An EntityKeysClause to filter entities by their keys.
  * @param patternMatching - The pattern matching strategy for entity keys (default: "FixedLen").
  * @param limit - The maximum number of entities to fetch per request (default: 1000).
- *
- * @example
- * const components = createClientComponents({ contractComponents });
- * await getEntitiesQuery(client, components, undefined, "FixedLen", 1000);
- * return await syncEntities(toriiClient, components as any, []);
+ * @param logging - Whether to log debug information (default: false).
  *
  * @example
  * const components = createClientComponents({ contractComponents });
  * await getEntitiesQuery(client, components, { Keys: { keys: ["0x1"], models: ["Position"] } }, "FixedLen", 1000);
- * return await syncEntities(toriiClient, components as any, []);
- *
- * @example
- * const components = createClientComponents({ contractComponents });
- * await getEntitiesQuery(client, components, { HashedKeys: ["0x1"] }, "FixedLen", 1000);
- * return await syncEntities(toriiClient, components as any, []);
  *
  * This function performs paginated queries to fetch all matching entities and their
- * components. It uses the provided EntityKeysClause (if any) to filter entities and
- * the specified components to determine which data to retrieve. The function continues
- * fetching until all matching entities have been retrieved, using the 'limit' parameter
- * to control the batch size of each request.
+ * components. It uses the provided EntityKeysClause to filter entities and
+ * the specified components to determine which data to retrieve.
  *
- * Note: Make sure to synchronize the entities by calling the syncEntities method
+ * Note: Make sure to synchronize the entities by calling the syncEntities method after this.
  */
 export const getEntitiesQuery = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause,
     patternMatching: PatternMatching = "FixedLen",
-    limit: number = 1000
+    limit: number = 1000,
+    logging: boolean = true
 ) => {
+    if (logging) console.log("Starting getEntitiesQuery");
     let cursor = 0;
     let continueFetching = true;
 
@@ -227,7 +229,11 @@ export const getEntitiesQuery = async <S extends Schema>(
     });
 
     while (continueFetching) {
-        setEntities(fetchedEntities, components);
+        if (logging)
+            console.log(
+                `Fetched ${Object.keys(fetchedEntities).length} entities`
+            );
+        setEntities(fetchedEntities, components, logging);
 
         if (Object.keys(fetchedEntities).length < limit) {
             continueFetching = false;
@@ -241,23 +247,26 @@ export const getEntitiesQuery = async <S extends Schema>(
  * Sets up a subscription to sync entity updates.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
- * @param entityKeyClause - An optional EntityKeysClause to filter entities.
+ * @param entityKeyClause - An array of EntityKeysClause to filter entities.
+ * @param logging - Whether to log debug information (default: true).
  * @returns A promise that resolves with the subscription handler.
- * The handler can be used to cancel the subscription when needed.
  * @example
- * const sync = await getSyncEntities(client, components, entityKeyClause);
+ * const sync = await syncEntities(client, components, entityKeyClause);
  * // later...
  * sync.cancel(); // cancel the subscription
  */
 export const syncEntities = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
-    entityKeyClause: EntityKeysClause[]
+    entityKeyClause: EntityKeysClause[],
+    logging: boolean = true
 ) => {
+    if (logging) console.log("Starting syncEntities");
     return await client.onEntityUpdated(
         entityKeyClause,
         (fetchedEntities: any, data: any) => {
-            setEntities({ [fetchedEntities]: data }, components);
+            if (logging) console.log("Entity updated", fetchedEntities);
+            setEntities({ [fetchedEntities]: data }, components, logging);
         }
     );
 };
@@ -266,9 +275,9 @@ export const syncEntities = async <S extends Schema>(
  * Sets up a subscription to sync event messages.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
- * @param entityKeyClause - An optional EntityKeysClause to filter entities.
+ * @param entityKeyClause - An array of EntityKeysClause to filter entities.
+ * @param logging - Whether to log debug information (default: false).
  * @returns A promise that resolves with the subscription handler.
- * The handler can be used to cancel the subscription when needed.
  * @example
  * const sync = await syncEvents(client, components, entityKeyClause);
  * // later...
@@ -277,28 +286,31 @@ export const syncEntities = async <S extends Schema>(
 export const syncEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
-    entityKeyClause: EntityKeysClause[]
+    entityKeyClause: EntityKeysClause[],
+    logging: boolean = false
 ) => {
+    if (logging) console.log("Starting syncEvents");
     return await client.onEventMessageUpdated(
         entityKeyClause,
         (fetchedEntities: any, data: any) => {
-            // Log the fetched entities and data for debugging purposes
-            console.log("fetchedEntities", data);
-            // Update the local state with the fetched entities and their data
-            setEntities({ [fetchedEntities]: data }, components);
+            if (logging) console.log("Event message updated", fetchedEntities);
+            setEntities({ [fetchedEntities]: data }, components, logging);
         }
     );
 };
 
 /**
  * Updates the components of entities in the local state.
- * @param entities - An array of entities with their updated component data.
+ * @param entities - An object of entities with their updated component data.
  * @param components - An array of component definitions.
+ * @param logging - Whether to log debug information (default: false).
  */
 export const setEntities = async <S extends Schema>(
     entities: any,
-    components: Component<S, Metadata, undefined>[]
+    components: Component<S, Metadata, undefined>[],
+    logging: boolean = false
 ) => {
+    if (logging) console.log(entities);
     for (let key in entities) {
         if (!Object.hasOwn(entities, key)) {
             continue;
@@ -326,6 +338,10 @@ export const setEntities = async <S extends Schema>(
                             entities[key][componentName]
                         ) as ComponentValue
                     );
+                    if (logging)
+                        console.log(
+                            `Set component ${recsComponent.metadata?.name} on ${key}`
+                        );
                 } catch (error) {
                     console.warn(
                         `Failed to set component ${recsComponent.metadata?.name} on ${key}`,

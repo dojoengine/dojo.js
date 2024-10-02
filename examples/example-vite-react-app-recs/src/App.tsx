@@ -5,7 +5,6 @@ import { useComponentValue, useQuerySync } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 
-import { Direction } from "./dojo/typescript/models.gen";
 import { useDojo } from "./dojo/useDojo";
 
 enum DirectionEnum {
@@ -44,10 +43,6 @@ function App() {
     const moves = useComponentValue(Moves, entityId);
     const directions = useComponentValue(DirectionsAvailable, entityId);
 
-    const moved = useComponentValue(Moved, entityId);
-
-    console.log("moved", moved);
-
     const handleRestoreBurners = async () => {
         try {
             await account?.applyFromClipboard();
@@ -78,14 +73,17 @@ function App() {
             <button onClick={() => account?.create()}>
                 {account?.isDeploying ? "deploying burner" : "create burner"}
             </button>
+
             {account && account?.list().length > 0 && (
                 <button onClick={async () => await account?.copyToClipboard()}>
                     Save Burners to Clipboard
                 </button>
             )}
+
             <button onClick={handleRestoreBurners}>
                 Restore Burners from Clipboard
             </button>
+
             {clipboardStatus.message && (
                 <div className={clipboardStatus.isError ? "error" : "success"}>
                     {clipboardStatus.message}
