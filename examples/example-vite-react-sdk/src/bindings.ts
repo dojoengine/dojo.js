@@ -39,10 +39,10 @@ type Schema = {
     };
 };
 
-enum ModelStrings {
-    Moves = "eternum-Moves",
-    DirectionsAvailable = "eternum-DirectionsAvailable",
-    Position = "eternum-Position",
+enum Models {
+    Moves = "dojo_starter-Moves",
+    DirectionsAvailable = "dojo_starter-DirectionsAvailable",
+    Position = "dojo_starter-Position",
 }
 
 const schema: Schema = {
@@ -67,12 +67,5 @@ const schema: Schema = {
     },
 };
 
-export type {
-    Schema,
-    Moves,
-    DirectionsAvailable,
-    Position,
-    Vec2,
-    ModelStrings,
-};
+export type { Schema, Moves, DirectionsAvailable, Position, Vec2, Models };
 export { Direction, schema };
