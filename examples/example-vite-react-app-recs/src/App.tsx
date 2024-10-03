@@ -1,28 +1,17 @@
-import "./App.css";
-
 import { useEffect, useState } from "react";
 import { useComponentValue, useQuerySync } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 
-import { Direction } from "./dojo/typescript/models.gen";
 import { useDojo } from "./dojo/useDojo";
-
-enum DirectionEnum {
-    None = "0",
-    Left = "Left",
-    Right = "Right",
-    Up = "Up",
-    Down = "Down",
-}
 
 function App() {
     const {
         setup: {
-            systemCalls: { spawn, move },
-            clientComponents: { Position, Moves, DirectionsAvailable, Moved },
+            clientComponents: { Position, Moves },
             toriiClient,
             contractComponents,
+            client,
         },
         account,
     } = useDojo();
@@ -42,11 +31,6 @@ function App() {
     // get current component values
     const position = useComponentValue(Position, entityId);
     const moves = useComponentValue(Moves, entityId);
-    const directions = useComponentValue(DirectionsAvailable, entityId);
-
-    const moved = useComponentValue(Moved, entityId);
-
-    console.log("moved", moved);
 
     const handleRestoreBurners = async () => {
         try {
@@ -74,121 +58,181 @@ function App() {
     }, [clipboardStatus.message]);
 
     return (
-        <>
-            <button onClick={() => account?.create()}>
-                {account?.isDeploying ? "deploying burner" : "create burner"}
-            </button>
-            {account && account?.list().length > 0 && (
-                <button onClick={async () => await account?.copyToClipboard()}>
-                    Save Burners to Clipboard
-                </button>
-            )}
-            <button onClick={handleRestoreBurners}>
-                Restore Burners from Clipboard
-            </button>
-            {clipboardStatus.message && (
-                <div className={clipboardStatus.isError ? "error" : "success"}>
-                    {clipboardStatus.message}
-                </div>
-            )}
+        <div className="bg-gray-900 text-white h-screen">
+            <div className="container mx-auto p-4 sm:p-6 lg:p-10 ">
+                <div className="my-4">
+                    <h3 className="text-3xl">Dojo + Recs + Tailwind</h3>
 
-            <div className="card">
-                <div>{`burners deployed: ${account.count}`}</div>
-                <div>
-                    select signer:{" "}
-                    <select
-                        value={account ? account.account.address : ""}
-                        onChange={(e) => account.select(e.target.value)}
+                    <p className="text-sm sm:text-base mt-2">
+                        This is a simple example of using Dojo, Recs, and
+                        Tailwind CSS in a React application.
+                    </p>
+
+                    <div>
+                        Read the{" "}
+                        <a
+                            className="text-red-200"
+                            href="https://book.dojoengine.org/"
+                        >
+                            book
+                        </a>
+                    </div>
+                </div>
+                <div className="flex flex-wrap gap-2 sm:gap-4">
+                    <button
+                        className="px-3 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white text-sm sm:text-base rounded-md hover:bg-blue-700 transition-colors duration-300"
+                        onClick={() => account?.create()}
                     >
-                        {account?.list().map((account, index) => {
-                            return (
+                        {account?.isDeploying
+                            ? "Deploying Burner..."
+                            : "Create Burner"}
+                    </button>
+                    {account && account?.list().length > 0 && (
+                        <button
+                            className="px-3 py-1 sm:px-4 sm:py-2 bg-green-600 text-white text-sm sm:text-base rounded-md hover:bg-green-700 transition-colors duration-300"
+                            onClick={async () =>
+                                await account?.copyToClipboard()
+                            }
+                        >
+                            Save Burners to Clipboard
+                        </button>
+                    )}
+                    <button
+                        className="px-3 py-1 sm:px-4 sm:py-2 bg-yellow-600 text-white text-sm sm:text-base rounded-md hover:bg-yellow-700 transition-colors duration-300"
+                        onClick={handleRestoreBurners}
+                    >
+                        Restore Burners from Clipboard
+                    </button>
+                    {clipboardStatus.message && (
+                        <div
+                            className={`mt-2 px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md ${
+                                clipboardStatus.isError
+                                    ? "bg-red-800 text-red-200"
+                                    : "bg-green-800 text-green-200"
+                            }`}
+                        >
+                            {clipboardStatus.message}
+                        </div>
+                    )}
+                </div>
+
+                <div className="bg-gray-800 shadow-md rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 w-full sm:w-96 my-4 sm:my-8">
+                    <div className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">{`Burners Deployed: ${account.count}`}</div>
+                    <div className="mb-3 sm:mb-4">
+                        <label
+                            htmlFor="signer-select"
+                            className="block text-xs sm:text-sm font-medium text-gray-300 mb-1 sm:mb-2"
+                        >
+                            Select Signer:
+                        </label>
+                        <select
+                            id="signer-select"
+                            className="w-full px-2 py-1 sm:px-3 sm:py-2 text-sm sm:text-base text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={account ? account.account.address : ""}
+                            onChange={(e) => account.select(e.target.value)}
+                        >
+                            {account?.list().map((account, index) => (
                                 <option value={account.address} key={index}>
                                     {account.address}
                                 </option>
-                            );
-                        })}
-                    </select>
-                </div>
-                <div>
-                    <button onClick={() => account.clear()}>
-                        Clear burners
-                    </button>
-                    <p>
-                        You will need to Authorise the contracts before you can
-                        use a burner. See readme.
-                    </p>
-                </div>
-            </div>
-
-            <div className="card">
-                <button onClick={() => spawn(account.account)}>Spawn</button>
-                <div>
-                    Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}
-                </div>
-                <div>
-                    Position:{" "}
-                    {position
-                        ? `${position?.vec.x}, ${position?.vec.y}`
-                        : "Need to Spawn"}
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <button
+                            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 text-sm sm:text-base rounded transition duration-300 ease-in-out"
+                            onClick={() => account.clear()}
+                        >
+                            Clear Burners
+                        </button>
+                    </div>
                 </div>
 
-                <div>{moves && moves.last_direction}</div>
-
-                <div>
-                    <div>Available Positions</div>
-                    {directions?.directions.map((a: any, index: any) => (
-                        <div key={index} className="">
-                            {a}
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
+                    <div className="grid grid-cols-3 gap-2 w-full sm:w-48 h-48 bg-gray-700 p-4 rounded-lg shadow-inner">
+                        <div className="col-start-2">
+                            <button
+                                className="h-10 w-10 sm:h-12 sm:w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-xl sm:text-2xl font-bold text-gray-200"
+                                onClick={async () =>
+                                    await client.actions.spawn({
+                                        account: account.account,
+                                    })
+                                }
+                            >
+                                +
+                            </button>
                         </div>
-                    ))}
-                </div>
-            </div>
+                        <div className="col-span-3 text-center text-sm sm:text-base">
+                            Moves Left:{" "}
+                            {moves ? `${moves.remaining}` : "Need to Spawn"}
+                        </div>
+                        <div className="col-span-3 text-center text-sm sm:text-base">
+                            {position
+                                ? `x: ${position?.vec.x}, y: ${position?.vec.y}`
+                                : "Need to Spawn"}
+                        </div>
+                        <div className="col-span-3 text-center text-sm sm:text-base">
+                            {moves && moves.last_direction}
+                        </div>
+                    </div>
 
-            <div className="card">
-                <div>
-                    <button
-                        onClick={() =>
-                            position && position.vec.y > 0
-                                ? move(account.account, {
-                                      type: DirectionEnum.Up,
-                                  })
-                                : console.log("Reach the borders of the world.")
-                        }
-                    >
-                        Move Up
-                    </button>
-                </div>
-                <div>
-                    <button
-                        onClick={() =>
-                            position && position.vec.x > 0
-                                ? move(account.account, {
-                                      type: DirectionEnum.Left,
-                                  })
-                                : console.log("Reach the borders of the world.")
-                        }
-                    >
-                        Move Left
-                    </button>
-                    <button
-                        onClick={() =>
-                            move(account.account, { type: DirectionEnum.Right })
-                        }
-                    >
-                        Move Right
-                    </button>
-                </div>
-                <div>
-                    <button
-                        onClick={() =>
-                            move(account.account, { type: DirectionEnum.Down })
-                        }
-                    >
-                        Move Down
-                    </button>
+                    <div className="grid grid-cols-3 gap-2 w-full sm:w-48 h-48 bg-gray-700 p-4 rounded-lg shadow-inner">
+                        {[
+                            {
+                                direction: "Up" as const,
+                                label: "↑",
+                                col: "col-start-2",
+                            },
+                            {
+                                direction: "Left" as const,
+                                label: "←",
+                                col: "col-start-1",
+                            },
+                            {
+                                direction: "Right" as const,
+                                label: "→",
+                                col: "col-start-3",
+                            },
+                            {
+                                direction: "Down" as const,
+                                label: "↓",
+                                col: "col-start-2",
+                            },
+                        ].map(({ direction, label, col }) => (
+                            <button
+                                className={`${col} h-10 w-10 sm:h-12 sm:w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-xl sm:text-2xl font-bold text-gray-200`}
+                                key={direction}
+                                onClick={async () => {
+                                    const condition =
+                                        (direction === "Up" &&
+                                            position?.vec.y > 0) ||
+                                        (direction === "Left" &&
+                                            position?.vec.x > 0) ||
+                                        direction === "Right" ||
+                                        direction === "Down";
+
+                                    if (!condition) {
+                                        console.log(
+                                            "Reached the borders of the world."
+                                        );
+                                    } else {
+                                        await client.actions.move({
+                                            account: account.account,
+                                            direction: { type: direction },
+                                        });
+                                    }
+                                }}
+                            >
+                                {label}
+                            </button>
+                        ))}
+                    </div>
+                    <div>
+                        Yes, blazingly fast! Every action here is a transaction.
+                    </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

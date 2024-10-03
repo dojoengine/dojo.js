@@ -19,7 +19,9 @@ export const DojoProvider = ({
     value: SetupResult;
 }) => {
     const currentValue = useContext(DojoContext);
-    if (currentValue) throw new Error("DojoProvider can only be used once");
+    if (currentValue) {
+        throw new Error("DojoProvider can only be used once");
+    }
 
     const {
         config: { masterAddress, masterPrivateKey },
@@ -38,23 +40,7 @@ export const DojoProvider = ({
         [masterAddress, masterPrivateKey, dojoProvider.provider]
     );
 
-    const {
-        create,
-        list,
-        get,
-        select,
-        deselect,
-        remove,
-        clear,
-        account,
-        isDeploying,
-        count,
-        copyToClipboard,
-        applyFromClipboard,
-        checkIsDeployed,
-    } = useBurnerManager({
-        burnerManager,
-    });
+    const burnerManagerData = useBurnerManager({ burnerManager });
 
     return (
         <DojoContext.Provider
@@ -62,19 +48,8 @@ export const DojoProvider = ({
                 ...value,
                 masterAccount,
                 account: {
-                    create,
-                    list,
-                    get,
-                    select,
-                    deselect,
-                    remove,
-                    clear,
-                    account: account ? account : masterAccount,
-                    isDeploying,
-                    count,
-                    copyToClipboard,
-                    applyFromClipboard,
-                    checkIsDeployed,
+                    ...burnerManagerData,
+                    account: burnerManagerData.account || masterAccount,
                 },
             }}
         >
