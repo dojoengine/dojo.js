@@ -13,7 +13,7 @@ import { world } from "./world";
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
 export async function setup({ ...config }: DojoConfig) {
-    // torii client
+    // Initialize Torii client for interacting with the Dojo network
     const toriiClient = await torii.createClient({
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
@@ -21,15 +21,16 @@ export async function setup({ ...config }: DojoConfig) {
         worldAddress: config.manifest.world.address || "",
     });
 
-    // create contract components
+    // Define contract components based on the world configuration
     const contractComponents = defineContractComponents(world);
 
-    // create client components
+    // Create client-side components that mirror the contract components
     const clientComponents = createClientComponents({ contractComponents });
 
-    // create dojo provider
+    // Initialize the Dojo provider with the manifest and RPC URL
     const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl);
 
+    // Set up event synchronization between the client and the Dojo network
     const eventSync = getSyncEvents(
         toriiClient,
         contractComponents as any,
@@ -37,10 +38,10 @@ export async function setup({ ...config }: DojoConfig) {
         []
     );
 
-    // setup world
+    // Set up the world client for interacting with smart contracts
     const client = await setupWorld(dojoProvider);
 
-    // create burner manager
+    // Initialize the burner account manager
     const burnerManager = new BurnerManager({
         masterAccount: new Account(
             {
@@ -54,15 +55,17 @@ export async function setup({ ...config }: DojoConfig) {
         feeTokenAddress: config.feeTokenAddress,
     });
 
+    // Initialize burner accounts and create one if none exist
     try {
         await burnerManager.init();
         if (burnerManager.list().length === 0) {
             await burnerManager.create();
         }
     } catch (e) {
-        console.error(e);
+        console.error("Failed to initialize or create burner account:", e);
     }
 
+    // Return an object with all necessary components and functions for the Dojo application
     return {
         client,
         clientComponents,

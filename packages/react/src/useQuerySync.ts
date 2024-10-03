@@ -12,19 +12,15 @@ import {
  * Synchronizes entities with their components.
  * @param toriiClient - The client instance for API communication.
  * @param components - An array of component definitions.
- * @param models - An array of models to synchronize.
- * @param keys - An array of keys to synchronize.
- * @param patternMatching - The pattern matching strategy to use (default: "VariableLen").
+ * @param entityKeyClause - An array of EntityKeysClause objects for subscribing to specifying entity keys.
+ * @param clause - Optional clause for filtering fetched entities.
  *
  * @example
  *
  * useQuerySync(toriiClient, contractComponents, [
  *     {
- *         Keys: {
- *             keys: [BigInt(account?.account.address).toString()],
- *             models: ["Position", "Moves", "DirectionsAvailable"],
- *             pattern_matching: "FixedLen",
- *         },
+ *         keys: [BigInt(account?.account.address).toString()],
+ *         models: ["Position", "Moves", "DirectionsAvailable"],
  *     },
  * ]);
  */
