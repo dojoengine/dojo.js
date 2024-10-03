@@ -1,15 +1,25 @@
-import { useEffect } from "react";
-import "./App.css";
+import { useEffect, useMemo } from "react";
 import { SDK, createDojoStore } from "@dojoengine/sdk";
 import { Schema } from "./bindings.ts";
 
-import { v4 as uuidv4 } from "uuid";
+import { useDojo } from "./useDojo.tsx";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { addAddressPadding } from "starknet";
 
 export const useDojoStore = createDojoStore<Schema>();
 
 function App({ db }: { db: SDK<Schema> }) {
+    const {
+        account,
+        setup: { client },
+    } = useDojo();
     const state = useDojoStore((state) => state);
     const entities = useDojoStore((state) => state.entities);
+
+    const entityId = useMemo(
+        () => getEntityIdFromKeys([BigInt(account?.account.address)]),
+        [account?.account.address]
+    );
 
     useEffect(() => {
         let unsubscribe: (() => void) | undefined;
@@ -19,7 +29,15 @@ function App({ db }: { db: SDK<Schema> }) {
                 {
                     dojo_starter: {
                         Moves: {
-                            $: {},
+                            $: {
+                                where: {
+                                    player: {
+                                        $is: addAddressPadding(
+                                            account.account.address
+                                        ),
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -49,7 +67,7 @@ function App({ db }: { db: SDK<Schema> }) {
                 unsubscribe();
             }
         };
-    }, [db]);
+    }, [db, account?.account.address]);
 
     useEffect(() => {
         const fetchEntities = async () => {
@@ -57,8 +75,16 @@ function App({ db }: { db: SDK<Schema> }) {
                 await db.getEntities(
                     {
                         dojo_starter: {
-                            Position: {
-                                $: {},
+                            Moves: {
+                                $: {
+                                    where: {
+                                        player: {
+                                            $eq: addAddressPadding(
+                                                account.account.address
+                                            ),
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
@@ -81,74 +107,217 @@ function App({ db }: { db: SDK<Schema> }) {
         };
 
         fetchEntities();
-    }, [db]);
+    }, [db, account?.account.address]);
 
-    const optimisticUpdate = async () => {
-        const entityId =
-            "0x571368d35c8fe136adf81eecf96a72859c43de7efd8fdd3d6f0d17e308df984";
+    const position = useMemo(() => {
+        return entities[entityId]?.models?.dojo_starter.Position;
+    }, [entities]);
 
-        const transactionId = uuidv4();
-
-        state.applyOptimisticUpdate(transactionId, (draft) => {
-            draft.entities[entityId].models.dojo_starter.Moves!.remaining = 10;
-        });
-
-        try {
-            // Wait for the entity to be updated before full resolving the transaction. Reverts if the condition is not met.
-            const updatedEntity = await state.waitForEntityChange(
-                entityId,
-                (entity) => {
-                    // Define your specific condition here
-                    return entity?.models.dojo_starter.Moves?.can_move === true;
-                }
-            );
-
-            console.log("Entity has been updated to active:", updatedEntity);
-
-            console.log("Updating entities...");
-        } catch (error) {
-            console.error("Error updating entities:", error);
-            state.revertOptimisticUpdate(transactionId);
-        } finally {
-            console.log("Updating entities...");
-            state.confirmTransaction(transactionId);
-        }
-    };
+    const moves = useMemo(() => {
+        return entities[entityId]?.models?.dojo_starter.Moves;
+    }, [entities]);
 
     return (
-        <div>
-            <h1>Game State</h1>
-            <button onClick={optimisticUpdate}>update</button>
-            {Object.entries(entities).map(([entityId, entity]) => (
-                <div key={entityId}>
-                    <h2>Entity {entityId}</h2>
-                    <h3>Position</h3>
-                    <p>
-                        Player:{" "}
-                        {entity.models.dojo_starter.Position?.player ?? "N/A"}
-                        <br />
-                        X:{" "}
-                        {entity.models.dojo_starter.Position?.vec?.x ?? "N/A"}
-                        <br />
-                        Y:{" "}
-                        {entity.models.dojo_starter.Position?.vec?.y ?? "N/A"}
-                    </p>
-                    <h3>Moves</h3>
-                    <p>
-                        <br />
-                        Can Move:{" "}
-                        {entity.models.dojo_starter.Moves?.can_move?.toString() ??
-                            "N/A"}
-                        <br />
-                        Last Direction:{" "}
-                        {entity.models.dojo_starter.Moves?.last_direction ??
-                            "N/A"}
-                        <br />
-                        Remaining:{" "}
-                        {entity.models.dojo_starter.Moves?.remaining ?? "N/A"}
-                    </p>
+        <div className="bg-black min-h-screen w-full p-4 sm:p-8">
+            <div className="max-w-7xl mx-auto">
+                <button
+                    className="mb-4 px-4 py-2 bg-blue-600 text-white text-sm sm:text-base rounded-md hover:bg-blue-700 transition-colors duration-300"
+                    onClick={() => account?.create()}
+                >
+                    {account?.isDeploying
+                        ? "Deploying Burner..."
+                        : "Create Burner"}
+                </button>
+
+                <div className="bg-gray-800 shadow-md rounded-lg p-4 sm:p-6 mb-6 w-full max-w-md">
+                    <div className="text-lg sm:text-xl font-semibold mb-4 text-white">{`Burners Deployed: ${account.count}`}</div>
+                    <div className="mb-4">
+                        <label
+                            htmlFor="signer-select"
+                            className="block text-sm font-medium text-gray-300 mb-2"
+                        >
+                            Select Signer:
+                        </label>
+                        <select
+                            id="signer-select"
+                            className="w-full px-3 py-2 text-base text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={account ? account.account.address : ""}
+                            onChange={(e) => account.select(e.target.value)}
+                        >
+                            {account?.list().map((account, index) => (
+                                <option value={account.address} key={index}>
+                                    {account.address}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <button
+                        className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 text-base rounded transition duration-300 ease-in-out"
+                        onClick={() => account.clear()}
+                    >
+                        Clear Burners
+                    </button>
                 </div>
-            ))}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div className="bg-gray-700 p-4 rounded-lg shadow-inner">
+                        <div className="grid grid-cols-3 gap-2 w-full h-48">
+                            <div className="col-start-2">
+                                <button
+                                    className="h-12 w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-2xl font-bold text-gray-200"
+                                    onClick={async () =>
+                                        await client.actions.spawn({
+                                            account: account.account,
+                                        })
+                                    }
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <div className="col-span-3 text-center text-base text-white">
+                                Moves Left:{" "}
+                                {moves ? `${moves.remaining}` : "Need to Spawn"}
+                            </div>
+                            <div className="col-span-3 text-center text-base text-white">
+                                {position
+                                    ? `x: ${position?.vec?.x}, y: ${position?.vec?.y}`
+                                    : "Need to Spawn"}
+                            </div>
+                            <div className="col-span-3 text-center text-base text-white">
+                                {moves && moves.last_direction}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-gray-700 p-4 rounded-lg shadow-inner">
+                        <div className="grid grid-cols-3 gap-2 w-full h-48">
+                            {[
+                                {
+                                    direction: "Up" as const,
+                                    label: "↑",
+                                    col: "col-start-2",
+                                },
+                                {
+                                    direction: "Left" as const,
+                                    label: "←",
+                                    col: "col-start-1",
+                                },
+                                {
+                                    direction: "Right" as const,
+                                    label: "→",
+                                    col: "col-start-3",
+                                },
+                                {
+                                    direction: "Down" as const,
+                                    label: "↓",
+                                    col: "col-start-2",
+                                },
+                            ].map(({ direction, label, col }) => (
+                                <button
+                                    className={`${col} h-12 w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-2xl font-bold text-gray-200`}
+                                    key={direction}
+                                    onClick={async () => {
+                                        const condition =
+                                            (direction === "Up" &&
+                                                position?.vec?.y !==
+                                                    undefined &&
+                                                position.vec.y > 0) ||
+                                            (direction === "Left" &&
+                                                position?.vec?.x !==
+                                                    undefined &&
+                                                position.vec.x > 0) ||
+                                            direction === "Right" ||
+                                            direction === "Down";
+
+                                        if (!condition) {
+                                            console.log(
+                                                "Reached the borders of the world."
+                                            );
+                                        } else {
+                                            await client.actions.move({
+                                                account: account.account,
+                                                direction: { type: direction },
+                                            });
+                                        }
+                                    }}
+                                >
+                                    {label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-8 overflow-x-auto">
+                    <table className="w-full border-collapse border border-gray-700">
+                        <thead>
+                            <tr className="bg-gray-800 text-white">
+                                <th className="border border-gray-700 p-2">
+                                    Entity ID
+                                </th>
+                                <th className="border border-gray-700 p-2">
+                                    Player
+                                </th>
+                                <th className="border border-gray-700 p-2">
+                                    Position X
+                                </th>
+                                <th className="border border-gray-700 p-2">
+                                    Position Y
+                                </th>
+                                <th className="border border-gray-700 p-2">
+                                    Can Move
+                                </th>
+                                <th className="border border-gray-700 p-2">
+                                    Last Direction
+                                </th>
+                                <th className="border border-gray-700 p-2">
+                                    Remaining Moves
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Object.entries(entities).map(
+                                ([entityId, entity]) => {
+                                    const position =
+                                        entity.models.dojo_starter.Position;
+                                    const moves =
+                                        entity.models.dojo_starter.Moves;
+
+                                    return (
+                                        <tr
+                                            key={entityId}
+                                            className="text-gray-300"
+                                        >
+                                            <td className="border border-gray-700 p-2">
+                                                {entityId}
+                                            </td>
+                                            <td className="border border-gray-700 p-2">
+                                                {position?.player ?? "N/A"}
+                                            </td>
+                                            <td className="border border-gray-700 p-2">
+                                                {position?.vec?.x ?? "N/A"}
+                                            </td>
+                                            <td className="border border-gray-700 p-2">
+                                                {position?.vec?.y ?? "N/A"}
+                                            </td>
+                                            <td className="border border-gray-700 p-2">
+                                                {moves?.can_move?.toString() ??
+                                                    "N/A"}
+                                            </td>
+                                            <td className="border border-gray-700 p-2">
+                                                {moves?.last_direction ?? "N/A"}
+                                            </td>
+                                            <td className="border border-gray-700 p-2">
+                                                {moves?.remaining ?? "N/A"}
+                                            </td>
+                                        </tr>
+                                    );
+                                }
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 }
