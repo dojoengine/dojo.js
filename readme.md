@@ -95,7 +95,11 @@ sozo build
 sozo migrate apply
 # From your frontend project directory
 DOJO_MANIFEST_PATH=../relative/path/to/contracts/Scarb.toml sozo build --typescript --bindings-output=./dojo/gen
+```
 
+**Note**: If you can't migrate worlds running `sozo migrate apply` be sure to comment out `world_address` in the corresponding `worlds/${world}/dojo_dev.toml`
+
+```bash
 # Run Torii
 torii --world 0xb4079627ebab1cd3cf9fd075dda1ad2454a7a448bf659591f259efa2519b18 --allowed-origins "*"
 ```

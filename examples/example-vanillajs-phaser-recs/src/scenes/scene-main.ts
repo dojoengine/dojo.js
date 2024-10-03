@@ -85,7 +85,7 @@ export default class SceneMain extends Scene {
         return chunk;
     }
 
-    update() {
+    async update() {
         if (this.followPoint === null || this.followPoint === undefined) {
             throw new Error("failed to initialize followPoint");
         }
@@ -135,25 +135,28 @@ export default class SceneMain extends Scene {
         if (null !== this.keyW && this.keyW.isDown) {
             this.followPoint.y -= this.cameraSpeed;
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
-            this.dojo.systemCalls.move(this.dojo.account, Direction.Up);
+            await this.dojo.systemCalls.move(this.dojo.account, Direction.Up);
             return;
         }
         if (null !== this.keyS && this.keyS.isDown) {
             this.followPoint.y += this.cameraSpeed;
+            await this.dojo.systemCalls.move(this.dojo.account, Direction.Down);
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
-            this.dojo.systemCalls.move(this.dojo.account, Direction.Down);
             return;
         }
         if (null !== this.keyA && this.keyA.isDown) {
             this.followPoint.x -= this.cameraSpeed;
+            await this.dojo.systemCalls.move(this.dojo.account, Direction.Left);
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
-            this.dojo.systemCalls.move(this.dojo.account, Direction.Left);
             return;
         }
         if (null !== this.keyD && this.keyD.isDown) {
             this.followPoint.x += this.cameraSpeed;
+            await this.dojo.systemCalls.move(
+                this.dojo.account,
+                Direction.Right
+            );
             this.cameras.main.centerOn(this.followPoint.x, this.followPoint.y);
-            this.dojo.systemCalls.move(this.dojo.account, Direction.Right);
             return;
         }
 
