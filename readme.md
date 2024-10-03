@@ -1,35 +1,64 @@
 <div align="center">
   <img src="./media/dojo-mark-full-dark.svg" height="128">
-  <h1>Dojo: The Provable Game Engine</h1>
-  <p><strong>Dojo is a community driven open-source, Provable Game Engine, providing a comprehensive toolkit for building verifiable games and autonomous worlds.</strong></p>
-  <a href="https://twitter.com/dojostarknet"><img src="https://img.shields.io/twitter/follow/dojostarknet?style=social"/></a>
-  <a href="https://github.com/dojoengine/dojo"><img src="https://img.shields.io/github/stars/dojoengine/dojo?style=social"/></a>
-  <a href="https://discord.gg/PwDa2mKhR4"><img src="https://img.shields.io/badge/join-discord-blue?logo=discord&logoColor=white" alt="Discord"></a>
-  <a href="https://t.me/dojoengine"><img src="https://img.shields.io/badge/join-telegram-blue?logo=telegram" alt="Telegram"></a>
-  <img src="https://img.shields.io/github/actions/workflow/status/dojoengine/dojo/ci.yml?branch=main" alt="CI Status">
-</div>
+
+<a href="https://twitter.com/dojostarknet"><img src="https://img.shields.io/twitter/follow/dojostarknet?style=social"/></a>
+<a href="https://github.com/dojoengine/dojo"><img src="https://img.shields.io/github/stars/dojoengine/dojo?style=social"/></a>
+<br/>
+<a href="https://discord.gg/PwDa2mKhR4"><img src="https://img.shields.io/badge/join-discord-blue?logo=discord&logoColor=white" alt="Discord"></a>
+<a href="https://t.me/dojoengine"><img src="https://img.shields.io/badge/join-telegram-blue?logo=telegram" alt="Telegram"></a>
+<img src="https://img.shields.io/github/actions/workflow/status/dojoengine/dojo/ci.yml?branch=main" alt="CI Status">
 
 </div>
+<h2>
+  Dojo simplifies <span>provable</span> and
+    onchain application development
+</h2>
 
-Dojo.js is the official JavaScript SDK for interacting with Dojo worlds. It is currently a work in progress (WIP), and we are actively seeking contributors.
+If you are not familiar with Dojo, then you should read the [book](https://book.dojoengine.org/) first.
 
-[Read the full dojo documentation](https://book.dojoengine.org)
+### Quick start in 5 minutes
 
----
-
-Bootstrap a dojo world like so. You will need [dojo](https://github.com/dojoengine/dojo) installed.
+Start a new react app with (You will need [dojo](https://github.com/dojoengine/dojo) installed):
 
 ```bash
-npx @dojoengine/create-dojo
+npx @dojoengine/create-dojo start -t example-vite-react-sdk
 ```
 
-### Dojo.js Examples
+> This command initializes a new directory with the template alongside the `dojo-starter` Cairo app. It offers a streamlined way to explore Dojo from end to end, providing a comprehensive overview of its capabilities. Additionally, this setup serves as an excellent foundation for building the next big thing.
 
--   [React-app](./examples/clients/react/react-app) - A vite react app example using Dojo
--   [React-phaser](./examples/clients/react/react-phaser-example) - A vite phaser react app using Dojo
--   [Torii-bot](./examples/clients/node/torii-bot) - A small discord bot for interacting with Torii
--   [vue-app](./examples/clients/vue/vue-app) - A vite vue app example using Dojo
--   [Vanilla-phaser](./examples/clients/vanilla/phaser) - A vanilla phaser example using Dojo
+#### Then
+
+1. **Terminal 1: Start the local Katana node**
+
+    ```bash
+    cd dojo-starter
+    katana --disable-fee --allowed-origins "*"
+    ```
+
+2. **Terminal 2: Build and migrate the Dojo starter**
+
+    ```bash
+    cd dojo-starter
+    sozo build && sozo migrate
+
+    # Start Torii indexer - world address can be found in the print out of migrate
+    torii --world <WORLD_ADDRESS> --allowed-origins "*"
+    ```
+
+3. **Terminal 3: Launch the frontend application**
+    ```bash
+    cd client
+    pnpm install
+    pnpm dev
+    ```
+
+> Note: Run each step in a separate terminal window to keep all processes running simultaneously.
+
+### The Packages
+
+Dojo.js is modulrised into small packages to keep it light. Choose all or one when working.
+
+-   [Core](./packages/core/) : Dojo provider for an interface into your world
 
 ## Contributing to dojo.js
 
