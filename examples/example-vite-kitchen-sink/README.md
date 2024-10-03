@@ -14,7 +14,7 @@ In one terminal window, start katana (the sequencer). If you want to use sepolia
 
 ```bash
 katana --disable-fee --allowed-origins "*"
-``` 
+```
 
 In another terminal window, start torii server
 
@@ -22,8 +22,8 @@ In another terminal window, start torii server
 # with katana
 torii --world 0x6dd367f5e11f11e0502cb2c4db7ae9bb6d8b5a4a431750bed7bec88b218e12 --allowed-origins "*"
 # with mainnet|sepolia
-torii --world 0x6dd367f5e11f11e0502cb2c4db7ae9bb6d8b5a4a431750bed7bec88b218e12 --allowed-origins "*" --rpc "https://rpc.nethermind.io/(mainnet|sepolia)-juno?apikey={apikey}" -s 204922 
-``` 
+torii --world 0x6dd367f5e11f11e0502cb2c4db7ae9bb6d8b5a4a431750bed7bec88b218e12 --allowed-origins "*" --rpc "https://rpc.nethermind.io/(mainnet|sepolia)-juno?apikey={apikey}" -s 204922
+```
 
 Then, start the development server:
 
@@ -45,5 +45,5 @@ sozo migrate apply
 
 ### Notes
 
-- you main want to update `actions` contract address in `src/components/caller-counter.tsx` & `src/components/global-counter.tsx` which is hardcoded in those files.
-- if you want to have braavos & argent wallet working, you need to deploy classes and deploy your wallet manually.
+-   you main want to update `actions` contract address in `src/components/caller-counter.tsx` & `src/components/global-counter.tsx` which is hardcoded in those files.
+-   if you want to have braavos & argent wallet working, you need to deploy classes and deploy your wallet manually.

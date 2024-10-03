@@ -13,33 +13,33 @@ import { dojoConfig } from "@/dojo.config";
 import { DojoContext } from "@/dojo/provider";
 
 async function main() {
-  const db = await init<OnchainDashSchemaType>(
-    {
-      client: {
-        rpcUrl: getRpcUrl(),
-        toriiUrl: env.VITE_TORII_URL,
-        relayUrl: env.VITE_RELAY_URL,
-        worldAddress: dojoConfig.manifest.world.address,
-      },
-      domain: {
-        name: "OnChainDash",
-        revision: "1",
-        chainId: "1",
-        version: "1",
-      },
-    },
-    schema
-  );
+    const db = await init<OnchainDashSchemaType>(
+        {
+            client: {
+                rpcUrl: getRpcUrl(),
+                toriiUrl: env.VITE_TORII_URL,
+                relayUrl: env.VITE_RELAY_URL,
+                worldAddress: dojoConfig.manifest.world.address,
+            },
+            domain: {
+                name: "OnChainDash",
+                revision: "1",
+                chainId: "1",
+                version: "1",
+            },
+        },
+        schema
+    );
 
-  createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-      <DojoContext.Provider value={db}>
-        <RootLayout>
-          <Home />
-        </RootLayout >
-      </DojoContext.Provider>
-    </StrictMode >
-  );
+    createRoot(document.getElementById("root")!).render(
+        <StrictMode>
+            <DojoContext.Provider value={db}>
+                <RootLayout>
+                    <Home />
+                </RootLayout>
+            </DojoContext.Provider>
+        </StrictMode>
+    );
 }
 
 main();
