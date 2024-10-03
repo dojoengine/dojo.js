@@ -13,6 +13,14 @@ const templates = [
         description: "React app using Dojo SDK",
     },
     {
+        value: "example-vite-kitchen-sink",
+        description: "Vite app with a variety of Dojo features",
+    },
+    {
+        value: "example-vanillajs-phaser-recs",
+        description: "Vanilla JS/Phaser app using Dojo RECS",
+    },
+    {
         value: "example-vite-react-phaser-recs",
         description: "React/Phaser app using Dojo RECS",
     },
@@ -23,10 +31,6 @@ const templates = [
     {
         value: "example-vite-react-threejs-recs",
         description: "React Three.js app using Dojo RECS",
-    },
-    {
-        value: "example-vite-react-sdk",
-        description: "Basic react app using the sdk",
     },
     { value: "example-vue-app-recs", description: "Basic vite app using RECS" },
 ];

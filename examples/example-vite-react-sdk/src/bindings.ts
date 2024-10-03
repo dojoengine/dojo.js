@@ -39,6 +39,12 @@ type Schema = {
     };
 };
 
+enum ModelStrings {
+    Moves = "eternum-Moves",
+    DirectionsAvailable = "eternum-DirectionsAvailable",
+    Position = "eternum-Position",
+}
+
 const schema: Schema = {
     dojo_starter: {
         Moves: {
@@ -61,5 +67,12 @@ const schema: Schema = {
     },
 };
 
-export type { Schema, Moves, DirectionsAvailable, Position, Vec2 };
+export type {
+    Schema,
+    Moves,
+    DirectionsAvailable,
+    Position,
+    Vec2,
+    ModelStrings,
+};
 export { Direction, schema };

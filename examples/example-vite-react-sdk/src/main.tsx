@@ -8,7 +8,7 @@ import { init } from "@dojoengine/sdk";
 import { Schema, schema } from "./bindings.ts";
 import { dojoConfig } from "../dojoConfig.ts";
 import { DojoContextProvider } from "./DojoContext.tsx";
-import { setupBurner } from "./setupBurner.tsx";
+import { setupBurnerManager } from "@dojoengine/create-burner";
 
 async function main() {
     const db = await init<Schema>(
@@ -29,11 +29,11 @@ async function main() {
         schema
     );
 
-    const burnerManager = await setupBurner(dojoConfig);
-
     createRoot(document.getElementById("root")!).render(
         <StrictMode>
-            <DojoContextProvider burnerManager={burnerManager}>
+            <DojoContextProvider
+                burnerManager={await setupBurnerManager(dojoConfig)}
+            >
                 <App db={db} />
             </DojoContextProvider>
         </StrictMode>
