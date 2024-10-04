@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { SDK, createDojoStore } from "@dojoengine/sdk";
-import { Models, Schema } from "./bindings.ts";
-
-import { useDojo } from "./useDojo.tsx";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { addAddressPadding } from "starknet";
+
+import { Models, Schema } from "./bindings.ts";
+import { useDojo } from "./useDojo.tsx";
 import useModel from "./useModel.tsx";
 
 export const useDojoStore = createDojoStore<Schema>();

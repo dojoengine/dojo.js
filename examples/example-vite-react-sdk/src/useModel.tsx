@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useDojoStore } from "./App";
 import { Schema } from "./bindings";
 
@@ -13,15 +12,15 @@ function useModel<N extends keyof Schema, M extends keyof Schema[N] & string>(
     entityId: string,
     model: `${N}-${M}`
 ): Schema[N][M] | undefined {
-    const entities = useDojoStore((state) => state.entities);
-
-    // Split the model string to extract namespace and modelName
     const [namespace, modelName] = model.split("-") as [N, M];
 
-    const modelData = useMemo(() => {
-        const data = entities[entityId]?.models?.[namespace]?.[modelName];
-        return data as Schema[N][M] | undefined;
-    }, [entities, entityId, namespace, modelName]);
+    // Select only the specific model data for the given entityId
+    const modelData = useDojoStore(
+        (state) =>
+            state.entities[entityId]?.models?.[namespace]?.[modelName] as
+                | Schema[N][M]
+                | undefined
+    );
 
     return modelData;
 }
