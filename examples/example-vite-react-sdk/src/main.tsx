@@ -20,9 +20,9 @@ async function main() {
                 worldAddress: dojoConfig.manifest.world.address,
             },
             domain: {
-                name: "Example",
+                name: "WORLD_NAME",
                 version: "1.0",
-                chainId: "your-chain-id",
+                chainId: "KATANA",
                 revision: "1",
             },
         },
