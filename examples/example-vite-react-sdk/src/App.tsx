@@ -1,10 +1,11 @@
 import { useEffect, useMemo } from "react";
 import { SDK, createDojoStore } from "@dojoengine/sdk";
-import { Schema } from "./bindings.ts";
+import { Models, Schema } from "./bindings.ts";
 
 import { useDojo } from "./useDojo.tsx";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { addAddressPadding } from "starknet";
+import useModel from "./useModel.tsx";
 
 export const useDojoStore = createDojoStore<Schema>();
 
@@ -109,13 +110,8 @@ function App({ db }: { db: SDK<Schema> }) {
         fetchEntities();
     }, [db, account?.account.address]);
 
-    const position = useMemo(() => {
-        return entities[entityId]?.models?.dojo_starter.Position;
-    }, [entities]);
-
-    const moves = useMemo(() => {
-        return entities[entityId]?.models?.dojo_starter.Moves;
-    }, [entities]);
+    const moves = useModel(entityId, Models.Moves);
+    const position = useModel(entityId, Models.Position);
 
     return (
         <div className="bg-black min-h-screen w-full p-4 sm:p-8">
