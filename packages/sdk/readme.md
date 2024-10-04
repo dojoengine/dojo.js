@@ -87,13 +87,53 @@ This approach ensures that your code remains in sync with your Dojo world defini
 ```typescript
 import { init, SchemaType } from "@dojoengine/sdk";
 
+enum Direction {
+    None,
+    Up,
+    Down,
+    Left,
+    Right,
+}
+
+interface Moves {
+    fieldOrder: string[];
+    player: string;
+    last_direction: Direction;
+    can_move: boolean;
+}
+interface DirectionAvailable {
+    fieldOrder: string[];
+    player: string;
+    direction: Direction[];
+}
+interface Pos {
+    x: number;
+    y: number;
+}
+interface Position {
+    fieldOrder: string[];
+    player: string;
+    vec: Pos;
+}
+
+interface MockSchemaType {
+    dojo_starter: {
+        Moves: Moves;
+        DirectionAvailable: DirectionAvailable;
+        Position: Position;
+    };
+}
+
 // Generate with sozo or define Schema
 const schema: Schema = {
+    // this should match namespace define in dojo
     dojo_starter: {
+        // this has to match model names
         Moves: {
             fieldOrder: ["player", "remaining", "last_direction", "can_move"],
             player: "",
             remaining: 0,
+            // properties have to match too.
             last_direction: Direction.None,
             can_move: false,
         },
@@ -147,14 +187,14 @@ Both query types enable filtering based on `entityIds` and specific model proper
 
     -   Supports a variety of operators for more advanced filtering:
 
-    | Operator | Description              |
-    | -------- | ------------------------ |
-    | `$eq`    | Equal to                 |
-    | `$neq`   | Not equal to             |
-    | `$gt`    | Greater than             |
-    | `$gte`   | Greater than or equal to |
-    | `$lt`    | Less than                |
-    | `$lte`   | Less than or equal to    |
+                        | Operator | Description              |
+                        | -------- | ------------------------ |
+                        | `$eq`    | Equal to                 |
+                        | `$neq`   | Not equal to             |
+                        | `$gt`    | Greater than             |
+                        | `$gte`   | Greater than or equal to |
+                        | `$lt`    | Less than                |
+                        | `$lte`   | Less than or equal to    |
 
     -   You combine queries with 'AND' with 'OR' from deep queries. See [Advanced Usage](#advanced-usage).
 
@@ -167,7 +207,9 @@ Note: `$eq` is for exact matching. Other operators (`$gt`, `$lt`, etc.) are avai
 ```typescript
 const entities = await sdk.getEntities(
     {
+        // this is namespace to query models in
         world: {
+            // this is model name
             player: {
                 $: { where: { id: { $eq: "1" }, name: { $eq: "Alice" } } },
             },
@@ -196,7 +238,9 @@ Key points:
 ```typescript
 const subscription = await sdk.subscribeEntityQuery(
     {
+        // this is namespace to query models in
         world: {
+            // this is model name
             item: {
                 $: {
                     where: {
@@ -222,7 +266,14 @@ subscription.unsubscribe();
 
 ## Sending Signed Messages
 
+**NOTE**: If you want messages to be actually sent and broadcasted to all of your torii client instance,
+you'll have to properly set `relayUrl` in the `init` function.
+`relayUrl` is a _multiaddr_ format which looks like something like this when deployed on slot: `/dns4/api.cartridge.gg/tcp/443/x-parity-wss/%2Fx%2Fonchain-dash%2Ftorii%2Fwss`
+
 ```typescript
+// onchain_dash-Message is a composition of the ${namespace}-${Model} type you want to sign.
+// Here we take example of a chat because we don't want to load up those messages onchain
+// But keep in mind this could be any models defined in your cairo code
 const msg = db.generateTypedData("onchain_dash-Message", {
     identity: account?.address,
     content: toValidAscii(data.message),
