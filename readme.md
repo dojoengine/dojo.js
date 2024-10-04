@@ -63,13 +63,14 @@ npx @dojoengine/create-dojo start -t example-vite-react-sdk
 
 ### Dojo SDK
 
-Dojo.js provides an instant and easy way to interface with your world you can simply create a client. It exposes a familiar like query language to subscribe to and fetch entities.
+Dojo.js provides an instant and easy way to interface with your world you can simply create a client. It exposes a familiar like query language to subscribe to and fetch entities. [Read the SDK full documentation](./packages/sdk/readme.md)
 
 ```
 pnpm i @dojoengine/sdk
 ```
 
-> To see a full example see the [example-vite-react-sdk](./examples//example-vite-react-sdk/)
+> Basic example: [example-vite-react-sdk](./examples/example-vite-react-sdk/)
+> More complex: [example-vite-react-sdk](./examples/example-vite-kitchen-sink/)
 
 ```js
 // Create client with your parameters
