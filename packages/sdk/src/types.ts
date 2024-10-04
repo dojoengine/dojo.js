@@ -82,11 +82,16 @@ export type QueryOptions = {
 };
 
 /**
+ * Logical operators for combining multiple conditions
+ */
+export type LogicalOperator = "AND" | "OR";
+
+/**
  * Recursively defines the conditions for the `where` clause.
  */
 export type WhereCondition<TModel> =
     | {
-          [key in torii.LogicalOperator]?: Array<WhereCondition<TModel>>;
+          [key in LogicalOperator]?: Array<WhereCondition<TModel>>;
       }
     | {
           [P in keyof TModel]?: {
