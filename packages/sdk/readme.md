@@ -1,15 +1,32 @@
-# Dojo SDK: Type-Safe Onchain State
+# Dojo SDK: Build onchain faster
 
-The Dojo SDK offers a powerful and intuitive way to interact with your onchain state. It provides a seamless experience for fetching and subscribing to data, supporting both simple and complex queries.
+The Dojo SDK provides a powerful, intuitive interface for interacting with onchain state. It streamlines data fetching and subscriptions, supporting both simple and complex queries.
+
+## Table of Contents
+
+-   [Installation](#installation)
+-   [Usage](#usage)
+    -   [Initializing the SDK](#initializing-the-sdk)
+    -   [Understanding Queries](#understanding-queries)
+    -   [Querying Entities](#querying-entities)
+    -   [Subscribing to Entity Changes](#subscribing-to-entity-changes)
+    -   [Sending Signed Messages](#sending-signed-messages)
+    -   [Using with Zustand](#using-with-zustand)
+    -   [Optimistic Client Rendering](#optimistic-client-rendering)
+-   [Advanced Usage](#advanced-usage)
+    -   [Complex Queries](#complex-queries)
+-   [Troubleshooting](#troubleshooting)
 
 ## Key Features
 
 -   **Type Safety**: Leverage TypeScript for robust, error-resistant code.
--   **Intuitive Query Syntax**: Write queries that feel natural, similar to popular ORMs.
--   **Flexible Subscriptions**: Easily subscribe to specific state changes in your Dojo world.
--   **Built in support for signed messages**: Sign off-chain state and send to torii.
+-   **Intuitive query syntax**: Write queries that feel natural, similar to popular ORMs.
+-   **Flexible subscriptions**: Easily subscribe to specific state changes in your Dojo world.
+-   **Signed messages**: Sign off-chain state and send to torii.
+-   **Automatic Zustand Support**: Drop in zustand state management
+-   **Optimistic Client Rendering**: Set state before a transaction has resolved to improve user experiences
 
-## Understand Entities and Models
+### Understand Entities and Models
 
 -   Entities are uniquely identified by Keys defined in associated models
 -   Entities can have multiple models, representing complex game states
@@ -43,7 +60,9 @@ const subscription = await sdk.subscribeEntityQuery(
 subscription.unsubscribe();
 ```
 
-## 🚀 Getting Started
+# Usage
+
+## 🚀 Installation
 
 ```bash
 npm install @dojoengine/sdk
@@ -63,7 +82,7 @@ To take advantage of this type safety (You will need [dojo](https://github.com/d
 
 This approach ensures that your code remains in sync with your Dojo world definition, catching potential issues early in the development process.
 
-## Usage
+## Initializing the SDK
 
 ```typescript
 import { init, SchemaType } from "@dojoengine/sdk";
@@ -113,7 +132,7 @@ const db = await init<MockSchemaType>(
 // Voila! Now you have a typed interface
 ```
 
-## Query Explanation
+## Understanding Queries
 
 The SDK utilizes two primary types of queries to interact with the Dojo Engine:
 
@@ -125,22 +144,54 @@ Both query types enable filtering based on `entityIds` and specific model proper
 -   **`SubscriptionQueryType`**:
     -   Supports only the `$is` operator for exact matches.
 -   **`QueryType`**:
-    -   Supports a variety of operators including `$eq`, `$neq`, `$gt`, `$gte`, `$lt`, and `$lte` for more advanced filtering.
 
-## Examples
+    -   Supports a variety of operators for more advanced filtering:
 
-### Subscribing to Entity Updates
+    | Operator | Description              |
+    | -------- | ------------------------ |
+    | `$eq`    | Equal to                 |
+    | `$neq`   | Not equal to             |
+    | `$gt`    | Greater than             |
+    | `$gte`   | Greater than or equal to |
+    | `$lt`    | Less than                |
+    | `$lte`   | Less than or equal to    |
 
-This example demonstrates how to subscribe to entity updates in the `world` namespace, specifically for the `item` model. It filters for items where the type is "sword" and the durability is 5. This subscription will trigger the callback function whenever an item matching these criteria is updated, created, or deleted.
+    -   You combine queries with 'AND' with 'OR' from deep queries. See [Advanced Usage](#advanced-usage).
+
+## Querying Entities
+
+This example fetches `player` entities from the `world` namespace where `id` is "1" and `name` is "Alice", demonstrating multiple conditions in a query.
+
+Note: `$eq` is for exact matching. Other operators (`$gt`, `$lt`, etc.) are available for complex queries.
+
+```typescript
+const entities = await sdk.getEntities(
+    {
+        world: {
+            player: {
+                $: { where: { id: { $eq: "1" }, name: { $eq: "Alice" } } },
+            },
+        },
+    },
+    (response) => {
+        if (response.data) {
+            console.log("Fetched entities:", response.data);
+        } else if (response.error) {
+            console.error("Fetch error:", response.error);
+        }
+    }
+);
+```
+
+## Subscribing To Entity Changes
+
+This example subscribes to `item` model updates in the `world` namespace, filtering for swords with durability 5. The callback triggers on matching item changes.
 
 Key points:
 
--   Namespace: `world`
--   Model: `item`
--   Conditions:
-    -   type: "sword"
-    -   durability: 5
--   Uses `$is` operator for exact matching in subscriptions
+-   Namespace: `world`, Model: `item`
+-   Conditions: type "sword", durability 5
+-   Uses `$is` for exact matching
 
 ```typescript
 const subscription = await sdk.subscribeEntityQuery(
@@ -169,18 +220,112 @@ const subscription = await sdk.subscribeEntityQuery(
 subscription.unsubscribe();
 ```
 
-### Fetching Entities
+## Sending Signed Messages
 
-This example demonstrates fetching entities from the `world` namespace, specifically the `player` model. It retrieves players where the `id` equals "1" and the `name` equals "Alice". This showcases how to use multiple conditions in a query to precisely filter entities.
+```typescript
+const msg = db.generateTypedData("onchain_dash-Message", {
+    identity: account?.address,
+    content: toValidAscii(data.message),
+    timestamp: Date.now(),
+});
 
-Note: The `$eq` operator is used for exact matching. Other operators like `$gt` (greater than), `$lt` (less than), etc., are available for more complex queries.
+try {
+    const signature = await account.signMessage(msg);
+
+    try {
+        await db.client.publishMessage(
+            JSON.stringify(msg),
+            signature as string[]
+        );
+        reset();
+    } catch (error) {
+        console.error("failed to publish message:", error);
+    }
+} catch (error) {
+    console.error("failed to sign message:", error);
+}
+```
+
+## Using With Zustand
+
+This module takes the `Schema` and outputs a typed store you can use around your app. See example [here](../../examples/example-vite-react-sdk/).
+
+1. Import the module
+
+```typescript
+import { createDojoStore } from "@dojoengine/sdk";
+
+// import this outside of components
+export const useDojoStore = createDojoStore<Schema>();
+
+...
+
+// Using in your app
+const state = useDojoStore((state) => state);
+const entities = useDojoStore((state) => state.entities);
+
+...
+
+// Adding to a callback
+const subscription = await sdk.subscribeEntityQuery(
+    {
+        world: {
+            item: {
+                $: {
+                    where: {
+                        type: { $is: "sword" },
+                        durability: { $is: 5 },
+                    },
+                },
+            },
+        },
+    },
+    (response) => {
+        if (response.error) {
+            console.error("Error setting up entity sync:", response.error);
+        } else if (response.data && response.data[0].entityId !== "0x0") {
+            // You just need to do this!
+            state.setEntities(response.data);
+        }
+    }
+);
+```
+
+## Optimistic Client Rendering
+
+<!-- TODO -->
+
+# Advanced Usage
+
+Create complex 'AND' with 'OR' statements to narrow in on what you want to fetch.
+
+## Complex Queries
 
 ```typescript
 const entities = await sdk.getEntities(
     {
         world: {
             player: {
-                $: { where: { id: { $eq: "1" }, name: { $eq: "Alice" } } },
+                $: {
+                    where: {
+                        AND: [
+                            { score: { $gt: 100 } },
+                            {
+                                OR: [
+                                    { name: { $eq: "Alice" } },
+                                    { name: { $eq: "Bob" } },
+                                ],
+                            },
+                        ],
+                    },
+                },
+            },
+            item: {
+                $: {
+                    where: {
+                        AND: [{ durability: { $lt: 50 } }],
+                    },
+                },
             },
         },
     },
@@ -193,3 +338,5 @@ const entities = await sdk.getEntities(
     }
 );
 ```
+
+## Troubleshooting
