@@ -1,6 +1,19 @@
 {
-    "plugin": ["typedoc-material-theme", "typedoc-plugin-coverage"],
-    "themeColor": "#cb9820",
+    "plugin": [
+        "@typhonjs-typedoc/typedoc-theme-dmt",
+        "typedoc-plugin-coverage"
+    ],
+    "dmtLinksService": {
+        "Discord": "<URL>",
+        "GitHub": "<URL>",
+        "BitBucket": "<URL>",
+        "GitLab": "<URL>",
+        "NPM": "<URL>"
+    },
+    "dmtSettings": {
+        "animation": true // When true theme animation is enabled.
+    },
+    "theme": "default-modern",
     "$schema": "https://typedoc.org/schema.json",
     "name": "dojo.js docs",
     "entryPoints": [

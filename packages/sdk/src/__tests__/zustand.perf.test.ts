@@ -1,9 +1,8 @@
 import { createDojoStore } from "../state/zustand";
-import { ParsedEntity, SchemaType } from "../types";
-import { describe, it, beforeEach, expect } from "vitest";
+import { ParsedEntity } from "../types";
+import { describe, it, beforeEach } from "vitest";
 import Benchmark from "benchmark";
 import {
-    schema,
     MockSchemaType,
     PlayerModel,
     GameModel,
@@ -79,7 +78,7 @@ describe("Zustand Store Performance Tests", () => {
             .on("cycle", (event: any) => {
                 console.log(String(event.target));
             })
-            .on("complete", function () {
+            .on("complete", function (this: any) {
                 console.log("Fastest is " + this.filter("fastest").map("name"));
             })
             .run({ async: false });
@@ -112,7 +111,7 @@ describe("Zustand Store Performance Tests", () => {
             .on("cycle", (event: any) => {
                 console.log(String(event.target));
             })
-            .on("complete", function () {
+            .on("complete", function (this: any) {
                 console.log("Fastest is " + this.filter("fastest").map("name"));
             })
             .run({ async: false });
@@ -137,7 +136,7 @@ describe("Zustand Store Performance Tests", () => {
             .on("cycle", (event: any) => {
                 console.log(String(event.target));
             })
-            .on("complete", function () {
+            .on("complete", function (this: any) {
                 console.log("Fastest is " + this.filter("fastest").map("name"));
             })
             .run({ async: false });
@@ -161,7 +160,7 @@ describe("Zustand Store Performance Tests", () => {
             .on("cycle", (event: any) => {
                 console.log(String(event.target));
             })
-            .on("complete", function () {
+            .on("complete", function (this: any) {
                 console.log("Fastest is " + this.filter("fastest").map("name"));
             })
             .run({ async: false });
