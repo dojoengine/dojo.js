@@ -1,0 +1,46 @@
+name: "typedoc"
+
+on:
+    push:
+        branches: [main]
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: pnpm/action-setup@v2
+              with:
+                  version: 8
+
+            - name: Install Protobuf Compiler
+              run: sudo apt-get install -y protobuf-compiler
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Build dependencies
+              run: pnpm run build
+
+            - name: Build docs
+              run: pnpm run docs
+
+            - uses: actions/upload-pages-artifact@v2
+              with:
+                  path: ./docs
+    deploy:
+        runs-on: ubuntu-latest
+        environment:
+            name: githubs
+            url: ${{ steps.deployment.outputs.page_url }}
+        needs: build
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              # https://github.com/actions/deploy-pages
+              uses: actions/deploy-pages@v2
