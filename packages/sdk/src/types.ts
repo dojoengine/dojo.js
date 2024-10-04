@@ -2,7 +2,6 @@
 
 import * as torii from "@dojoengine/torii-client";
 import { Account, StarknetDomain, TypedData } from "starknet";
-import { AccountInterface, RpcProvider } from "starknet";
 
 /**
  * Utility type to ensure at least one property is present
@@ -83,16 +82,11 @@ export type QueryOptions = {
 };
 
 /**
- * Logical operators for combining multiple conditions
- */
-export type LogicalOperator = "AND" | "OR";
-
-/**
  * Recursively defines the conditions for the `where` clause.
  */
 export type WhereCondition<TModel> =
     | {
-          [key in LogicalOperator]?: Array<WhereCondition<TModel>>;
+          [key in torii.LogicalOperator]?: Array<WhereCondition<TModel>>;
       }
     | {
           [P in keyof TModel]?: {
@@ -341,81 +335,20 @@ export interface SDK<T extends SchemaType> {
     sendMessage: (data: TypedData, account: Account) => Promise<void>;
 }
 
-export type BurnerStorage = {
-    [address: string]: BurnerRecord;
-};
+/**
+ * Configuration interface for the SDK.
+ */
+export interface SDKConfig {
+    /**
+     * Configuration for the Torii client.
+     * This includes settings such as the endpoint URL, authentication details, etc.
+     */
+    client: torii.ClientConfig;
 
-export type BurnerRecord = {
-    chainId: string;
-    privateKey: string;
-    publicKey: string;
-    deployTx: string;
-    masterAccount: string;
-    active: boolean;
-    accountIndex?: number;
-    metadata?: any;
-};
-
-export type Burner = {
-    address: string;
-    active: boolean;
-    masterAccount?: string;
-    accountIndex?: number;
-};
-
-export interface BurnerManagerOptions {
-    masterAccount: Account;
-    accountClassHash: string;
-    feeTokenAddress: string;
-    rpcProvider: RpcProvider;
+    /**
+     * The Starknet domain configuration.
+     * This is used for generating typed data and signing messages.
+     * It typically includes details like the chain ID, name, and version.
+     */
+    domain: StarknetDomain;
 }
-
-export interface BurnerAccount {
-    create: (options?: BurnerCreateOptions) => void;
-    list: () => Burner[];
-    get: (address: string) => AccountInterface;
-    remove: (address: string) => void;
-    account: Account;
-    select: (address: string) => void;
-    deselect: () => void;
-    isDeploying: boolean;
-    clear: () => void;
-    count: number;
-    copyToClipboard: () => Promise<void>;
-    applyFromClipboard: () => Promise<void>;
-    getActiveAccount?: () => Account | null;
-    generateAddressFromSeed?: (options?: BurnerCreateOptions) => string;
-    checkIsDeployed: (address: string, deployTx?: string) => Promise<boolean>;
-}
-
-export interface BurnerCreateOptions {
-    secret?: string;
-    index?: number;
-    metadata?: any;
-    prefundedAmount?: string;
-    maxFee?: number;
-}
-
-export interface BurnerKeys {
-    privateKey: string;
-    publicKey: string;
-    address: string;
-}
-
-export type Predeployed = Burner & { name?: string };
-
-export type PredeployedStorage = {
-    [address: string]: PredeployedAccount;
-};
-
-export interface PredeployedManagerOptions {
-    rpcProvider: RpcProvider;
-    predeployedAccounts: PredeployedAccount[];
-}
-
-export type PredeployedAccount = {
-    name?: string;
-    address: string;
-    privateKey: string;
-    active: boolean;
-};

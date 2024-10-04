@@ -1,16 +1,8 @@
 // packages/sdk/src/convertQuerytoClause.ts
 
 import * as torii from "@dojoengine/torii-client";
-import {
-    QueryType,
-    SchemaType,
-    LogicalOperator,
-    SubscriptionQueryType,
-} from "./types";
-import {
-    convertQueryToEntityKeyClauses,
-    convertQueryToKeysClause,
-} from "./convertQueryToEntityKeyClauses";
+import { QueryType, SchemaType, SubscriptionQueryType } from "./types";
+import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses";
 
 /**
  * Converts a query object into a Torii clause.
