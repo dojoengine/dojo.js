@@ -1,12 +1,76 @@
-# Dojo SDK: Unleash Type-Safe Game Development
+# Dojo SDK: Build onchain faster
 
-Supercharge your Dojo Engine projects with our TypeScript SDK. Build, query, and interact with your game world using the power of static typing.
+The Dojo SDK provides a powerful, intuitive interface for interacting with onchain state. It streamlines data fetching and subscriptions, supporting both simple and complex queries.
 
-## 🚀 Type Safety on Steroids
+## Table of Contents
+
+-   [Installation](#installation)
+-   [Usage](#usage)
+    -   [Initializing the SDK](#initializing-the-sdk)
+    -   [Understanding Queries](#understanding-queries)
+    -   [Querying Entities](#querying-entities)
+    -   [Subscribing to Entity Changes](#subscribing-to-entity-changes)
+    -   [Sending Signed Messages](#sending-signed-messages)
+    -   [Using with Zustand](#using-with-zustand)
+    -   [Optimistic Client Rendering](#optimistic-client-rendering)
+-   [Advanced Usage](#advanced-usage)
+    -   [Complex Queries](#complex-queries)
+-   [Troubleshooting](#troubleshooting)
+
+## Key Features
+
+-   **Type Safety**: Leverage TypeScript for robust, error-resistant code.
+-   **Intuitive query syntax**: Write queries that feel natural, similar to popular ORMs.
+-   **Flexible subscriptions**: Easily subscribe to specific state changes in your Dojo world.
+-   **Signed messages**: Sign off-chain state and send to torii.
+-   **Automatic Zustand Support**: Drop in zustand state management
+-   **Optimistic Client Rendering**: Set state before a transaction has resolved to improve user experiences
+
+### Understand Entities and Models
+
+-   Entities are uniquely identified by Keys defined in associated models
+-   Entities can have multiple models, representing complex game states
+-   When a subscription or query returns data - it returns the updated Entity and changed models.
+
+## Example: Subscribing to Specific Model States
+
+Here's a concise example demonstrating how to subscribe to the `item` model in the `world` namespace, specifically filtering for items with a durability of 2:
+
+```typescript
+const subscription = await sdk.subscribeEntityQuery(
+    world: {
+        item: {
+            $: {
+                where: { durability: { $is: 2 } },
+            },
+        },
+    },
+    (response) => {
+        if (response.data) {
+            // return data - pipe into any state management!
+            console.log("Updated entities:", response.data);
+        } else if (response.error) {
+            // return error
+            console.error("Subscription error:", response.error);
+        }
+    }
+);
+
+// Later, to unsubscribe
+subscription.unsubscribe();
+```
+
+# Usage
+
+## 🚀 Installation
+
+```bash
+npm install @dojoengine/sdk
+```
 
 Generate TypeScript types directly from your world schema:
 
-To take advantage of this type safety:
+To take advantage of this type safety (You will need [dojo](https://github.com/dojoengine/dojo) installed):
 
 1. Generate the TypeScript types for your world:
 
@@ -14,59 +78,133 @@ To take advantage of this type safety:
     sozo build --typescript-v2
     ```
 
-2. Import and use these types when initializing the SDK and constructing queries.
+2. You will import these and pass into the sdk init function to give your app type.
 
 This approach ensures that your code remains in sync with your Dojo world definition, catching potential issues early in the development process.
 
-## Installation
-
-```bash
-npm install @dojoengine/sdk
-```
-
-## Usage
+## Initializing the SDK
 
 ```typescript
 import { init, SchemaType } from "@dojoengine/sdk";
 
-// Define your schema
-const schema: SchemaType = {
-    // Your schema definition here
+// Generate with sozo or define Schema
+const schema: Schema = {
+    dojo_starter: {
+        Moves: {
+            fieldOrder: ["player", "remaining", "last_direction", "can_move"],
+            player: "",
+            remaining: 0,
+            last_direction: Direction.None,
+            can_move: false,
+        },
+        DirectionsAvailable: {
+            fieldOrder: ["player", "directions"],
+            player: "",
+            directions: [],
+        },
+        Position: {
+            fieldOrder: ["player", "vec"],
+            player: "",
+            vec: { x: 0, y: 0 },
+        },
+    },
 };
 
 // Initialize the SDK
-const sdk = await init(
+const db = await init<MockSchemaType>(
     {
-        rpcUrl: "http://localhost:8080",
-        // Other config options
+        client: {
+            rpcUrl: "your-rpc-url",
+            toriiUrl: "your-torii-url",
+            relayUrl: "your-relay-url",
+            worldAddress: "your-world-address",
+        },
+        domain: {
+            name: "Example",
+            version: "1.0",
+            chainId: "your-chain-id",
+            revision: "1",
+        },
     },
     schema
 );
 
-// Use the SDK methods
+// Voila! Now you have a typed interface
 ```
 
-## Key Functions
+## Understanding Queries
 
--   `createClient(config)`: Creates a Torii client.
--   `init(options, schema)`: Initializes the SDK with the given configuration and schema.
+The SDK utilizes two primary types of queries to interact with the Dojo Engine:
 
-## SDK Methods
+1. **`SubscriptionQueryType`**: Used for real-time subscriptions to entity and event updates.
+2. **`QueryType`**: Used for fetching entities and event messages with more flexible filtering options.
 
--   `subscribeEntityQuery`: Subscribe to entity updates.
--   `subscribeEventQuery`: Subscribe to event updates.
--   `getEntities`: Fetch entities based on a query.
--   `getEventMessages`: Fetch event messages based on a query.
+Both query types enable filtering based on `entityIds` and specific model properties. The key difference lies in the operators supported within the `where` clause:
 
-## Examples
+-   **`SubscriptionQueryType`**:
+    -   Supports only the `$is` operator for exact matches.
+-   **`QueryType`**:
 
-### Subscribing to Entity Updates
+    -   Supports a variety of operators for more advanced filtering:
+
+    | Operator | Description              |
+    | -------- | ------------------------ |
+    | `$eq`    | Equal to                 |
+    | `$neq`   | Not equal to             |
+    | `$gt`    | Greater than             |
+    | `$gte`   | Greater than or equal to |
+    | `$lt`    | Less than                |
+    | `$lte`   | Less than or equal to    |
+
+    -   You combine queries with 'AND' with 'OR' from deep queries. See [Advanced Usage](#advanced-usage).
+
+## Querying Entities
+
+This example fetches `player` entities from the `world` namespace where `id` is "1" and `name` is "Alice", demonstrating multiple conditions in a query.
+
+Note: `$eq` is for exact matching. Other operators (`$gt`, `$lt`, etc.) are available for complex queries.
+
+```typescript
+const entities = await sdk.getEntities(
+    {
+        world: {
+            player: {
+                $: { where: { id: { $eq: "1" }, name: { $eq: "Alice" } } },
+            },
+        },
+    },
+    (response) => {
+        if (response.data) {
+            console.log("Fetched entities:", response.data);
+        } else if (response.error) {
+            console.error("Fetch error:", response.error);
+        }
+    }
+);
+```
+
+## Subscribing To Entity Changes
+
+This example subscribes to `item` model updates in the `world` namespace, filtering for swords with durability 5. The callback triggers on matching item changes.
+
+Key points:
+
+-   Namespace: `world`, Model: `item`
+-   Conditions: type "sword", durability 5
+-   Uses `$is` for exact matching
 
 ```typescript
 const subscription = await sdk.subscribeEntityQuery(
     {
-        Player: {
-            position: [{ $: { where: { x: { $gt: 10 } } } }],
+        world: {
+            item: {
+                $: {
+                    where: {
+                        type: { $is: "sword" },
+                        durability: { $is: 5 },
+                    },
+                },
+            },
         },
     },
     (response) => {
@@ -82,13 +220,113 @@ const subscription = await sdk.subscribeEntityQuery(
 subscription.unsubscribe();
 ```
 
-### Fetching Entities
+## Sending Signed Messages
+
+```typescript
+const msg = db.generateTypedData("onchain_dash-Message", {
+    identity: account?.address,
+    content: toValidAscii(data.message),
+    timestamp: Date.now(),
+});
+
+try {
+    const signature = await account.signMessage(msg);
+
+    try {
+        await db.client.publishMessage(
+            JSON.stringify(msg),
+            signature as string[]
+        );
+        reset();
+    } catch (error) {
+        console.error("failed to publish message:", error);
+    }
+} catch (error) {
+    console.error("failed to sign message:", error);
+}
+```
+
+## Using With Zustand
+
+This module takes the `Schema` and outputs a typed store you can use around your app. See example [here](../../examples/example-vite-react-sdk/).
+
+1. Import the module
+
+```typescript
+import { createDojoStore } from "@dojoengine/sdk";
+
+// import this outside of components
+export const useDojoStore = createDojoStore<Schema>();
+
+...
+
+// Using in your app
+const state = useDojoStore((state) => state);
+const entities = useDojoStore((state) => state.entities);
+
+...
+
+// Adding to a callback
+const subscription = await sdk.subscribeEntityQuery(
+    {
+        world: {
+            item: {
+                $: {
+                    where: {
+                        type: { $is: "sword" },
+                        durability: { $is: 5 },
+                    },
+                },
+            },
+        },
+    },
+    (response) => {
+        if (response.error) {
+            console.error("Error setting up entity sync:", response.error);
+        } else if (response.data && response.data[0].entityId !== "0x0") {
+            // You just need to do this!
+            state.setEntities(response.data);
+        }
+    }
+);
+```
+
+## Optimistic Client Rendering
+
+<!-- TODO -->
+
+# Advanced Usage
+
+Create complex 'AND' with 'OR' statements to narrow in on what you want to fetch.
+
+## Complex Queries
 
 ```typescript
 const entities = await sdk.getEntities(
     {
-        Player: {
-            health: [{ $: { where: { value: { $gte: 50 } } } }],
+        world: {
+            player: {
+                $: {
+                    where: {
+                        AND: [
+                            { score: { $gt: 100 } },
+                            {
+                                OR: [
+                                    { name: { $eq: "Alice" } },
+                                    { name: { $eq: "Bob" } },
+                                ],
+                            },
+                        ],
+                    },
+                },
+            },
+            item: {
+                $: {
+                    where: {
+                        AND: [{ durability: { $lt: 50 } }],
+                    },
+                },
+            },
         },
     },
     (response) => {
@@ -97,44 +335,8 @@ const entities = await sdk.getEntities(
         } else if (response.error) {
             console.error("Fetch error:", response.error);
         }
-    },
-    10, // limit
-    0 // offset
+    }
 );
 ```
 
-## Query Explanation
-
-@types.ts
-
-The SDK uses two main types of queries:
-
-1. `SubscriptionQueryType`: Used for subscriptions (entity and event).
-2. `QueryType`: Used for fetching entities and event messages.
-
-Both query types allow you to filter data based on entity IDs and specific model properties. The main difference is in the `where` clause:
-
--   `SubscriptionQueryType` only supports the `$is` operator for exact matches.
--   `QueryType` supports additional operators like `$eq`, `$neq`, `$gt`, `$gte`, `$lt`, and `$lte` for more complex filtering.
-
-Example of a subscription query:
-
-```typescript
-{
-    Player: {
-        position: [{ $: { where: { x: { $is: 5 } } } }];
-    }
-}
-```
-
-Example of a fetch query:
-
-```typescript
-{
-    Player: {
-        health: [{ $: { where: { value: { $gte: 50, $lt: 100 } } } }];
-    }
-}
-```
-
-These query structures allow you to efficiently filter and retrieve the data you need from the Dojo Engine.
+## Troubleshooting

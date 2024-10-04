@@ -1,19 +1,14 @@
 import * as torii from "@dojoengine/torii-client";
+import { Account, Signature, StarknetDomain, TypedData } from "starknet";
 
 import { getEntities } from "./getEntities";
 import { getEventMessages } from "./getEventMessages";
 import { subscribeEntityQuery } from "./subscribeEntityQuery";
 import { subscribeEventQuery } from "./subscribeEventQuery";
-import { SchemaType, SDK, UnionOfModelData } from "./types";
-import { Account, Signature, StarknetDomain, TypedData } from "starknet";
+import { SchemaType, SDK, SDKConfig, UnionOfModelData } from "./types";
 
 export * from "./types";
 export * from "./state";
-
-interface SDKConfig {
-    client: torii.ClientConfig;
-    domain: StarknetDomain;
-}
 
 /**
  * Creates a new Torii client instance.

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Command } from "commander";
 import path from "path";
 import { promises as fs } from "fs";
@@ -11,6 +13,14 @@ const templates = [
         description: "React app using Dojo SDK",
     },
     {
+        value: "example-vite-kitchen-sink",
+        description: "Vite app with a variety of Dojo features",
+    },
+    {
+        value: "example-vanillajs-phaser-recs",
+        description: "Vanilla JS/Phaser app using Dojo RECS",
+    },
+    {
         value: "example-vite-react-phaser-recs",
         description: "React/Phaser app using Dojo RECS",
     },
@@ -21,10 +31,6 @@ const templates = [
     {
         value: "example-vite-react-threejs-recs",
         description: "React Three.js app using Dojo RECS",
-    },
-    {
-        value: "example-vite-react-sdk",
-        description: "Basic react app using the sdk",
     },
     { value: "example-vue-app-recs", description: "Basic vite app using RECS" },
 ];
@@ -53,6 +59,21 @@ async function init(projectName: string, cwd: string, template: string) {
 
     // Rewrite package.json in client directory
     await rewritePackageJson(projectName, clientPath);
+
+    console.log(`Cloning dojo-starter repository...`);
+    const gitCloneResult = spawn.sync(
+        "git",
+        [
+            "clone",
+            "https://github.com/dojoengine/dojo-starter.git",
+            dojoStarterPath,
+        ],
+        { stdio: "inherit" }
+    );
+
+    if (gitCloneResult.status !== 0) {
+        throw new Error(`Failed to clone dojo-starter repository.`);
+    }
 
     // Clone dojo-starter
     console.log(`Downloading dojo-starter...`);
@@ -120,14 +141,31 @@ export const start = new Command()
     .name("start")
     .description("initialize a new project with a selected template")
     .option("-c, --cwd <cwd>", "the working directory", process.cwd())
+    .option("-t, --template <template>", "specify the template to use")
     .action(async (options) => {
         try {
             const cwd = path.resolve(options.cwd);
+            let template: string;
 
-            const template = await select({
-                message: "Select a template",
-                choices: templates,
-            });
+            if (options.template) {
+                const selectedTemplate = templates.find(
+                    (tpl) => tpl.value === options.template
+                );
+                if (!selectedTemplate) {
+                    console.error(
+                        `Template "${options.template}" not found. Available templates are: ${templates
+                            .map((tpl) => tpl.value)
+                            .join(", ")}`
+                    );
+                    process.exit(1);
+                }
+                template = selectedTemplate.value;
+            } else {
+                template = await select({
+                    message: "Select a template",
+                    choices: templates,
+                });
+            }
 
             const projectName = await input({
                 message: "Project name ",
