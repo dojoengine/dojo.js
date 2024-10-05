@@ -6,6 +6,7 @@ import { addAddressPadding } from "starknet";
 import { Models, Schema } from "./bindings.ts";
 import { useDojo } from "./useDojo.tsx";
 import useModel from "./useModel.tsx";
+import { useSystemCalls } from "./useSystemCalls.ts";
 
 export const useDojoStore = createDojoStore<Schema>();
 
@@ -16,6 +17,8 @@ function App({ db }: { db: SDK<Schema> }) {
     } = useDojo();
     const state = useDojoStore((state) => state);
     const entities = useDojoStore((state) => state.entities);
+
+    const { spawn } = useSystemCalls();
 
     const entityId = useMemo(
         () => getEntityIdFromKeys([BigInt(account?.account.address)]),
@@ -161,11 +164,7 @@ function App({ db }: { db: SDK<Schema> }) {
                             <div className="col-start-2">
                                 <button
                                     className="h-12 w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-2xl font-bold text-gray-200"
-                                    onClick={async () =>
-                                        await client.actions.spawn({
-                                            account: account.account,
-                                        })
-                                    }
+                                    onClick={async () => await spawn()}
                                 >
                                     +
                                 </button>
