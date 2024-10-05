@@ -344,7 +344,79 @@ const subscription = await sdk.subscribeEntityQuery(
 
 ## Optimistic Client Rendering
 
-<!-- TODO -->
+We use [immer](https://immerjs.github.io/immer/) for efficient optimistic rendering. This allows instant client-side entity state updates while awaiting blockchain confirmation.
+
+The process:
+
+1. Update entity state optimistically.
+2. Wait for condition (e.g., a specific state change).
+3. Resolve update, providing immediate user feedback.
+
+This ensures a responsive user experience while maintaining blockchain data integrity.
+
+See our [example project](../../examples/example-vite-react-sdk/src/useSystemCalls.ts) for a real-world implementation.
+
+Note: You will need to have a subscription running in order for the update to resolve.
+
+```typescript
+export const useSystemCalls = () => {
+    const state = useDojoStore((state) => state);
+
+    const {
+        setup: { client },
+        account: { account },
+    } = useDojo();
+
+    const generateEntityId = () => {
+        return getEntityIdFromKeys([BigInt(account?.address)]);
+    };
+
+    const spawn = async () => {
+        // Generate a unique entity ID
+        const entityId = generateEntityId();
+
+        // Generate a unique transaction ID
+        const transactionId = uuidv4();
+
+        // The value to update
+        const remainingMoves = 100;
+
+        // Apply an optimistic update to the state
+        // this uses immer drafts to update the state
+        state.applyOptimisticUpdate(
+            transactionId,
+            (draft) =>
+                (draft.entities[entityId].models.dojo_starter.Moves!.remaining =
+                    remainingMoves)
+        );
+
+        try {
+            // Execute the spawn action
+            await client.actions.spawn({ account });
+
+            // Wait for the entity to be updated with the new state
+            await state.waitForEntityChange(entityId, (entity) => {
+                return (
+                    entity?.models?.dojo_starter?.Moves?.remaining ===
+                    remainingMoves
+                );
+            });
+        } catch (error) {
+            // Revert the optimistic update if an error occurs
+            state.revertOptimisticUpdate(transactionId);
+            console.error("Error executing spawn:", error);
+            throw error;
+        } finally {
+            // Confirm the transaction if successful
+            state.confirmTransaction(transactionId);
+        }
+    };
+
+    return {
+        spawn,
+    };
+};
+```
 
 # Advanced Usage
 

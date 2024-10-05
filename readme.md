@@ -20,7 +20,7 @@ If you are not familiar with Dojo, then you should read the [book](https://book.
 
 -   [Quick start in 5 minutes](#quick-start-in-5-minutes)
 -   [Dojo SDK](#dojo-sdk)
--   [Examples](#examples)
+-   [Examples](#all-examples)
 -   [All Packages](#all-packages)
 
 ## Quick start in 5 minutes
@@ -70,7 +70,7 @@ pnpm i @dojoengine/sdk
 ```
 
 > Basic example: [example-vite-react-sdk](./examples/example-vite-react-sdk/)
-> More complex: [example-vite-react-sdk](./examples/example-vite-kitchen-sink/)
+> More complex: [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/)
 
 ```js
 // Create client with your parameters
@@ -153,13 +153,13 @@ Spin any of these examples locally
 npx @dojoengine/create-dojo start
 ```
 
--   [example-vite-react-sdk](./examples/example-vite-react-sdk/): A React application using Vite and the Dojo SDK
--   [example-vite-react-phaser-recs](./examples/example-vite-react-phaser-recs/): A React application using Vite and the Dojo SDK
--   [example-vite-react-pwa-recs](./examples/example-vite-react-pwa-recs/): A React application using Vite and the Dojo SDK
--   [example-vite-react-threejs-recs](./examples/example-vite-react-threejs-recs/): A React application using Vite and the Dojo SDK
--   [example-vue-app-recs](./examples/example-vue-app-recs/): A React application using Vite and the Dojo SDK
--   [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/): A React application using Vite and the Dojo SDK
--   [example-nodejs-bot](./examples/example-nodejs-bot/): A React application using Vite and the Dojo SDK
+-   [example-vite-react-sdk](./examples/example-vite-react-sdk/)
+-   [example-vite-react-phaser-recs](./examples/example-vite-react-phaser-recs/)
+-   [example-vite-react-pwa-recs](./examples/example-vite-react-pwa-recs/)
+-   [example-vite-react-threejs-recs](./examples/example-vite-react-threejs-recs/)
+-   [example-vue-app-recs](./examples/example-vue-app-recs/)
+-   [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/)
+-   [example-nodejs-bot](./examples/example-nodejs-bot/)
 
 ## Contributing to dojo.js
 
