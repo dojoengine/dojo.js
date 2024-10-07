@@ -11,7 +11,7 @@ import { DojoContextProvider } from "./DojoContext.tsx";
 import { setupBurnerManager } from "@dojoengine/create-burner";
 
 async function main() {
-    const db = await init<Schema>(
+    const sdk = await init<Schema>(
         {
             client: {
                 rpcUrl: dojoConfig.rpcUrl,
@@ -34,7 +34,7 @@ async function main() {
             <DojoContextProvider
                 burnerManager={await setupBurnerManager(dojoConfig)}
             >
-                <App db={db} />
+                <App sdk={sdk} />
             </DojoContextProvider>
         </StrictMode>
     );
