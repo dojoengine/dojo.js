@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { Command } from "commander";
 import path from "path";
 import { promises as fs } from "fs";

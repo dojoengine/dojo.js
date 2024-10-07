@@ -55,9 +55,6 @@ const subscription = await sdk.subscribeEntityQuery(
         }
     }
 );
-
-// Later, to unsubscribe
-subscription.unsubscribe();
 ```
 
 # Usage
@@ -259,9 +256,6 @@ const subscription = await sdk.subscribeEntityQuery(
         }
     }
 );
-
-// Later, to unsubscribe
-subscription.unsubscribe();
 ```
 
 ## Sending Signed Messages
@@ -274,7 +268,7 @@ you'll have to properly set `relayUrl` in the `init` function.
 // onchain_dash-Message is a composition of the ${namespace}-${Model} type you want to sign.
 // Here we take example of a chat because we don't want to load up those messages onchain
 // But keep in mind this could be any models defined in your cairo code
-const msg = db.generateTypedData("onchain_dash-Message", {
+const msg = sdk.generateTypedData("onchain_dash-Message", {
     identity: account?.address,
     content: toValidAscii(data.message),
     timestamp: Date.now(),

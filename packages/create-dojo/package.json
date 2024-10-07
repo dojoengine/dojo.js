@@ -10,6 +10,9 @@
     "publishConfig": {
         "access": "public"
     },
+    "files": [
+        "dist"
+    ],
     "exports": "./dist/index.js",
     "bin": "./dist/index.js",
     "scripts": {

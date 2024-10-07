@@ -10,7 +10,7 @@ import { useSystemCalls } from "./useSystemCalls.ts";
 
 export const useDojoStore = createDojoStore<Schema>();
 
-function App({ db }: { db: SDK<Schema> }) {
+function App({ sdk }: { sdk: SDK<Schema> }) {
     const {
         account,
         setup: { client },
@@ -29,7 +29,7 @@ function App({ db }: { db: SDK<Schema> }) {
         let unsubscribe: (() => void) | undefined;
 
         const subscribe = async () => {
-            const subscription = await db.subscribeEntityQuery(
+            const subscription = await sdk.subscribeEntityQuery(
                 {
                     dojo_starter: {
                         Moves: {
@@ -71,12 +71,12 @@ function App({ db }: { db: SDK<Schema> }) {
                 unsubscribe();
             }
         };
-    }, [db, account?.account.address]);
+    }, [sdk, account?.account.address]);
 
     useEffect(() => {
         const fetchEntities = async () => {
             try {
-                await db.getEntities(
+                await sdk.getEntities(
                     {
                         dojo_starter: {
                             Moves: {
@@ -111,7 +111,7 @@ function App({ db }: { db: SDK<Schema> }) {
         };
 
         fetchEntities();
-    }, [db, account?.account.address]);
+    }, [sdk, account?.account.address]);
 
     const moves = useModel(entityId, Models.Moves);
     const position = useModel(entityId, Models.Position);
