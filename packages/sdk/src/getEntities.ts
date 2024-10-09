@@ -36,9 +36,10 @@ export async function getEntities<T extends SchemaType>(
     }) => void,
     limit: number = 100, // Default limit
     offset: number = 0, // Default offset
-    options?: { logging?: boolean } // Logging option
+    options?: { logging?: boolean }, // Logging option
+    defaultOperator: "And" | "Or" = "And"
 ): Promise<StandardizedQueryResult<T>> {
-    const clause = convertQueryToClause(query, schema);
+    const clause = convertQueryToClause(query, schema, defaultOperator);
 
     let cursor = offset;
     let continueFetching = true;

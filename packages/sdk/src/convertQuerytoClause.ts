@@ -14,7 +14,8 @@ import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses
  */
 export function convertQueryToClause<T extends SchemaType>(
     query: QueryType<T>,
-    schema: T
+    schema: T,
+    defaultOperator: "And" | "Or" = "And"
 ): torii.Clause | undefined {
     const clauses: torii.Clause[] = [];
 
@@ -33,7 +34,7 @@ export function convertQueryToClause<T extends SchemaType>(
     if (clauses.length > 1) {
         return {
             Composite: {
-                operator: "And",
+                operator: defaultOperator,
                 clauses: clauses,
             },
         };
