@@ -60,7 +60,7 @@ export async function init<T extends SchemaType>(
             subscribeEventQuery(client, query, schema, callback, options),
         /**
          * Fetches entities based on the provided query.
-         *
+         * @param {string} defaultOperator - The operator used for the query. Default is And
          * @param {SubscriptionQueryType<T>} query - The query object used to filter entities.
          * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
          * @param {number} [limit=100] - The maximum number of entities to fetch per request. Default is 100.
@@ -68,8 +68,16 @@ export async function init<T extends SchemaType>(
          * @param {{ logging?: boolean }} [options] - Optional settings.
          * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
          */
-        getEntities: (query, callback, limit, offset, options) =>
+        getEntities: (
+            defaultOperator,
+            query,
+            callback,
+            limit,
+            offset,
+            options
+        ) =>
             getEntities(
+                defaultOperator,
                 client,
                 query,
                 schema,

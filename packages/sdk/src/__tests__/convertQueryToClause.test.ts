@@ -23,7 +23,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query, schema);
+        const result = convertQueryToClause(query, "And", schema);
 
         expect(result).toEqual({
             Composite: {
@@ -62,7 +62,7 @@ describe("convertQueryToClause", () => {
             world: {},
         };
 
-        const result = convertQueryToClause(query, schema);
+        const result = convertQueryToClause(query, "And", schema);
 
         expect(result).toEqual(undefined);
     });
@@ -77,7 +77,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query, schema);
+        const result = convertQueryToClause(query, "And", schema);
 
         expect(result).toEqual({
             Composite: {
@@ -132,7 +132,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query, schema);
+        const result = convertQueryToClause(query, "And", schema);
 
         // Updated expectation to match the actual output
         expect(result).toEqual({
@@ -176,6 +176,43 @@ describe("convertQueryToClause", () => {
                             member: "durability",
                             operator: "Lt",
                             value: { Primitive: { U32: 50 } },
+                        },
+                    },
+                ],
+            },
+        });
+    });
+
+    it("should convert multiple model queries using or operator", () => {
+        const query: QueryType<MockSchemaType> = {
+            world: {
+                player: { $: { where: { id: { $eq: "1" } } } },
+                game: {
+                    $: { where: { status: { $eq: "active" } } },
+                },
+            },
+        };
+
+        const result = convertQueryToClause(query, "Or", schema);
+
+        expect(result).toEqual({
+            Composite: {
+                operator: "Or",
+                clauses: [
+                    {
+                        Member: {
+                            model: "world-player",
+                            member: "id",
+                            operator: "Eq",
+                            value: { String: "1" },
+                        },
+                    },
+                    {
+                        Member: {
+                            model: "world-game",
+                            member: "status",
+                            operator: "Eq",
+                            value: { String: "active" },
                         },
                     },
                 ],

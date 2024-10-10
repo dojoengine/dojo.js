@@ -142,6 +142,7 @@ async function exampleUsage() {
     // Example usage of getEntities with where clause
     try {
         const entities = await db.getEntities(
+            "And",
             {
                 world: {
                     item: {
