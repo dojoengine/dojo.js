@@ -9,13 +9,14 @@ import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses
  *
  * @template T - The schema type.
  * @param {QueryType<T>} query - The query object to convert.
+ * @param {string} defaultOperator - The operator used for the query. Default is And
  * @param {T} schema - The schema providing field order information.
  * @returns {torii.Clause | undefined} - The resulting Torii clause or undefined.
  */
 export function convertQueryToClause<T extends SchemaType>(
     query: QueryType<T>,
-    schema: T,
-    defaultOperator: "And" | "Or" = "And"
+    defaultOperator: "And" | "Or" = "And",
+    schema: T
 ): torii.Clause | undefined {
     const clauses: torii.Clause[] = [];
 

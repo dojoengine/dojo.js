@@ -23,7 +23,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query, schema);
+        const result = convertQueryToClause(query, "And", schema);
 
         expect(result).toEqual({
             Composite: {
@@ -62,7 +62,7 @@ describe("convertQueryToClause", () => {
             world: {},
         };
 
-        const result = convertQueryToClause(query, schema);
+        const result = convertQueryToClause(query, "And", schema);
 
         expect(result).toEqual(undefined);
     });
@@ -77,7 +77,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query, schema);
+        const result = convertQueryToClause(query, "And", schema);
 
         expect(result).toEqual({
             Composite: {
@@ -132,7 +132,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query, schema);
+        const result = convertQueryToClause(query, "And", schema);
 
         // Updated expectation to match the actual output
         expect(result).toEqual({
@@ -193,7 +193,7 @@ describe("convertQueryToClause", () => {
             },
         };
 
-        const result = convertQueryToClause(query, schema, "Or");
+        const result = convertQueryToClause(query, "Or", schema);
 
         expect(result).toEqual({
             Composite: {
