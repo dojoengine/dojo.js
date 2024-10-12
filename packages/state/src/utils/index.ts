@@ -2,13 +2,10 @@ import { Type as RecsType, Schema } from "@dojoengine/recs";
 
 export function convertValues(schema: Schema, values: any) {
     return Object.keys(schema).reduce<any>((acc, key) => {
-        if (!acc) {
-            acc = {};
-        }
         const schemaType = schema[key];
         const value = values[key];
 
-        if (value === null || value === undefined) {
+        if (value == null) {
             acc[key] = value;
             return acc;
         }
@@ -20,27 +17,7 @@ export function convertValues(schema: Schema, values: any) {
 
         switch (schemaType) {
             case RecsType.StringArray:
-                if (value.type === "array" && value.value.length === 0) {
-                    acc[key] = [];
-                } else if (
-                    value.type === "array" &&
-                    value.value[0].type === "enum"
-                ) {
-                    acc[key] = value.value.map(
-                        (item: any) => item.value.option
-                    );
-                } else {
-                    acc[key] = value.value.map((a: any) => {
-                        try {
-                            return BigInt(a.value);
-                        } catch (error) {
-                            console.warn(
-                                `Failed to convert ${a.value} to BigInt. Using string value instead.`
-                            );
-                            return a.value;
-                        }
-                    });
-                }
+                acc[key] = handleStringArray(value);
                 break;
 
             case RecsType.String:
@@ -48,15 +25,7 @@ export function convertValues(schema: Schema, values: any) {
                 break;
 
             case RecsType.BigInt:
-                try {
-                    acc[key] = BigInt(value.value);
-                } catch (error) {
-                    console.warn(
-                        `Failed to convert ${value.value} to BigInt. Using string value instead.`
-                    );
-
-                    acc[key] = BigInt(`0x${value.value}`);
-                }
+                acc[key] = handleBigInt(value.value);
                 break;
 
             case RecsType.Boolean:
@@ -68,26 +37,73 @@ export function convertValues(schema: Schema, values: any) {
                 break;
 
             default:
-                if (typeof schemaType === "object" && value.type === "struct") {
-                    if (value.value instanceof Map) {
-                        const structValues = Object.fromEntries(value.value);
-                        acc[key] = convertValues(schemaType, structValues);
-                    } else {
-                        acc[key] = convertValues(schemaType, value.value);
-                    }
-                } else if (
-                    Array.isArray(schemaType) &&
-                    value.type === "array"
-                ) {
-                    acc[key] = value.value.map((item: any) =>
-                        convertValues(schemaType[0], item)
-                    );
-                } else {
-                    acc[key] = value.value;
-                }
+                acc[key] = handleDefault(schemaType, value);
                 break;
         }
 
         return acc;
     }, {});
+}
+
+function handleStringArray(value: any) {
+    if (value.type === "array" && value.value.length === 0) {
+        return [];
+    }
+    if (value.type === "array" && value.value[0]?.type === "enum") {
+        return value.value.map((item: any) => item.value.option);
+    }
+    return value.value.map((a: any) => {
+        try {
+            return BigInt(a.value);
+        } catch (error) {
+            console.warn(
+                `Failed to convert ${a.value} to BigInt. Using string value instead.`
+            );
+            return a.value;
+        }
+    });
+}
+
+function handleBigInt(value: string | bigint) {
+    if (typeof value === "bigint") {
+        return value;
+    }
+    try {
+        return BigInt(value);
+    } catch (error) {
+        console.warn(
+            `Failed to convert ${value} to BigInt. Attempting hexadecimal conversion.`
+        );
+        try {
+            return BigInt(`0x${value}`);
+        } catch (hexError) {
+            console.warn(
+                `Failed to convert 0x${value} to BigInt. Using string value instead.`
+            );
+            return value;
+        }
+    }
+}
+
+function handleDefault(schemaType: any, value: any) {
+    if (typeof schemaType === "object" && value.type === "struct") {
+        if (value.value instanceof Map) {
+            const structValues = Object.fromEntries(value.value);
+            return convertValues(schemaType, structValues);
+        } else if (typeof value.value === "object") {
+            // Handle cases where value.value might already be a plain object
+            return convertValues(schemaType, value.value);
+        } else {
+            console.warn(
+                `Expected value.value to be a Map or object for struct type, got ${typeof value.value}.`
+            );
+            return value.value;
+        }
+    }
+    if (Array.isArray(schemaType) && value.type === "array") {
+        return value.value.map((item: any) =>
+            convertValues(schemaType[0], item)
+        );
+    }
+    return value.value;
 }

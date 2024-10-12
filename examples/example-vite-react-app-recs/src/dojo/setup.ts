@@ -1,6 +1,6 @@
 import { DojoConfig, DojoProvider } from "@dojoengine/core";
 import { BurnerManager } from "@dojoengine/create-burner";
-import { getSyncEvents } from "@dojoengine/state";
+import { getSyncEntities, getSyncEvents } from "@dojoengine/state";
 import * as torii from "@dojoengine/torii-client";
 import { Account, ArraySignatureType } from "starknet";
 
@@ -23,6 +23,15 @@ export async function setup({ ...config }: DojoConfig) {
 
     // Define contract components based on the world configuration
     const contractComponents = defineContractComponents(world);
+
+    const getSync = await getSyncEntities(
+        toriiClient,
+        contractComponents as any,
+        undefined,
+        [],
+        3000,
+        true
+    );
 
     // Create client-side components that mirror the contract components
     const clientComponents = createClientComponents({ contractComponents });
@@ -79,5 +88,6 @@ export async function setup({ ...config }: DojoConfig) {
         burnerManager,
         toriiClient,
         eventSync,
+        getSync,
     };
 }
