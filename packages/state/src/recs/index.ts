@@ -49,7 +49,7 @@ export const getSyncEntities = async <S extends Schema>(
     clause: Clause | undefined,
     entityKeyClause: EntityKeysClause[],
     limit: number = 100,
-    logging: boolean = true
+    logging: boolean = false
 ) => {
     if (logging) console.log("Starting getSyncEntities");
     await getEntities(client, clause, components, limit, logging);
@@ -199,7 +199,7 @@ export const getEntitiesQuery = async <S extends Schema>(
     entityKeyClause: EntityKeysClause,
     patternMatching: PatternMatching = "FixedLen",
     limit: number = 1000,
-    logging: boolean = true
+    logging: boolean = false
 ) => {
     if (logging) console.log("Starting getEntitiesQuery");
     let cursor = 0;
@@ -310,7 +310,8 @@ export const setEntities = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     logging: boolean = false
 ) => {
-    if (logging) console.log(entities);
+    if (logging) console.log("Entities to set:", entities);
+
     for (let key in entities) {
         if (!Object.hasOwn(entities, key)) {
             continue;
@@ -330,14 +331,32 @@ export const setEntities = async <S extends Schema>(
 
             if (recsComponent) {
                 try {
-                    setComponent(
-                        recsComponent,
-                        key as Entity,
-                        convertValues(
-                            recsComponent.schema,
-                            entities[key][componentName]
-                        ) as ComponentValue
-                    );
+                    const rawValue = entities[key][componentName];
+                    if (logging)
+                        console.log(
+                            `Raw value for ${componentName} on ${key}:`,
+                            rawValue
+                        );
+
+                    const convertedValue = convertValues(
+                        recsComponent.schema,
+                        rawValue
+                    ) as ComponentValue;
+
+                    if (logging)
+                        console.log(
+                            `Converted value for ${componentName} on ${key}:`,
+                            convertedValue
+                        );
+
+                    if (!convertedValue) {
+                        console.error(
+                            `convertValues returned undefined or invalid for ${componentName} on ${key}`
+                        );
+                    }
+
+                    setComponent(recsComponent, key as Entity, convertedValue);
+
                     if (logging)
                         console.log(
                             `Set component ${recsComponent.metadata?.name} on ${key}`
@@ -348,6 +367,10 @@ export const setEntities = async <S extends Schema>(
                         error
                     );
                 }
+            } else {
+                console.warn(
+                    `Component ${componentName} not found in provided components.`
+                );
             }
         }
     }
