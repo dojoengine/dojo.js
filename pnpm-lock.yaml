@@ -1284,8 +1284,8 @@ importers:
   packages/torii-client:
     dependencies:
       '@dojoengine/torii-wasm':
-        specifier: 1.0.0-alpha.20
-        version: 1.0.0-alpha.20
+        specifier: workspace:*
+        version: link:../torii-wasm
     devDependencies:
       tsup:
         specifier: ^8.3.0
@@ -2154,9 +2154,6 @@ packages:
 
   '@dojoengine/recs@2.0.13':
     resolution: {integrity: sha512-Cgz4Unlnk2FSDoFTYKrJexX/KiSYPMFMxftxQkC+9LUKS5yNGkgFQM7xu4/L1HvpDAenL7NjUmH6ynRAS7Iifw==}
-
-  '@dojoengine/torii-wasm@1.0.0-alpha.20':
-    resolution: {integrity: sha512-Ry/uyzyZ+8+BiSGniNzw49s8ksPRfWhd5gyWAhJH50vzNOmApjddN8XWII9+NTm6R/1/yEb7G5U2D8W7vAcGvQ==}
 
   '@emnapi/core@1.3.1':
     resolution: {integrity: sha512-pVGjBIt1Y6gg3EJN8jTcfpP/+uuRksIo055oE/OBkDNcjZqVbfkWCksG1Jp4yZnj3iKWyWX8fdG/j6UDYPbFog==}
@@ -13436,8 +13433,6 @@ snapshots:
       - typescript
       - utf-8-validate
       - zod
-
-  '@dojoengine/torii-wasm@1.0.0-alpha.20': {}
 
   '@emnapi/core@1.3.1':
     dependencies:
