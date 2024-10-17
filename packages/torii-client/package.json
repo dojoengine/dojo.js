@@ -17,7 +17,7 @@
         }
     },
     "dependencies": {
-        "@dojoengine/torii-wasm": "workspace:*"
+        "@dojoengine/torii-wasm": "1.0.0-alpha.20"
     },
     "devDependencies": {
         "tsup": "^8.3.0",
