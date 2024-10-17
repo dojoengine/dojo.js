@@ -122,7 +122,12 @@ export const getEntities = async <S extends Schema>(
     let continueFetching = true;
 
     while (continueFetching) {
-        const entities = await client.getEntities({ limit, offset, clause });
+        const entities = await client.getEntities({
+            limit,
+            offset,
+            clause,
+            dont_include_hashed_keys: true,
+        });
 
         if (logging) console.log(`Fetched ${entities} entities`);
 
@@ -160,6 +165,7 @@ export const getEvents = async <S extends Schema>(
             limit,
             offset,
             clause,
+            dont_include_hashed_keys: true,
         });
 
         if (logging) console.log("entities", entities);
@@ -226,6 +232,7 @@ export const getEntitiesQuery = async <S extends Schema>(
         limit,
         offset: cursor,
         clause: clause || undefined,
+        dont_include_hashed_keys: true,
     });
 
     while (continueFetching) {

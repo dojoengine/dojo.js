@@ -25,7 +25,7 @@
     },
     "dependencies": {
         "@dojoengine/recs": "2.0.13",
-        "@dojoengine/torii-client": "1.0.0-alpha.20",
+        "@dojoengine/torii-client": "workspace:*",
         "vitest": "^1.6.0"
     }
 }
