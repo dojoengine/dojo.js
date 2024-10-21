@@ -51,7 +51,7 @@ export const getSyncEntities = async <S extends Schema>(
     limit: number = 100,
     logging: boolean = false
 ) => {
-    if (logging) console.log("Starting getSyncEntities");
+    if (logging) console.log("Starting getSyncEntities ", clause);
     await getEntities(client, clause, components, limit, logging);
     return await syncEntities(client, components, entityKeyClause, logging);
 };
@@ -126,8 +126,10 @@ export const getEntities = async <S extends Schema>(
             limit,
             offset,
             clause,
-            dont_include_hashed_keys: true,
+            dont_include_hashed_keys: false,
         });
+
+        console.log("entities", entities);
 
         if (logging) console.log(`Fetched ${entities} entities`);
 
@@ -165,7 +167,7 @@ export const getEvents = async <S extends Schema>(
             limit,
             offset,
             clause,
-            dont_include_hashed_keys: true,
+            dont_include_hashed_keys: false,
         });
 
         if (logging) console.log("entities", entities);
@@ -232,14 +234,15 @@ export const getEntitiesQuery = async <S extends Schema>(
         limit,
         offset: cursor,
         clause: clause || undefined,
-        dont_include_hashed_keys: true,
+        dont_include_hashed_keys: false,
     });
 
     while (continueFetching) {
         if (logging)
             console.log(
-                `Fetched ${Object.keys(fetchedEntities).length} entities`
+                `Fetched ${Object.keys(fetchedEntities).length} entities ${cursor}`
             );
+
         setEntities(fetchedEntities, components, logging);
 
         if (Object.keys(fetchedEntities).length < limit) {
@@ -273,6 +276,7 @@ export const syncEntities = async <S extends Schema>(
         entityKeyClause,
         (fetchedEntities: any, data: any) => {
             if (logging) console.log("Entity updated", fetchedEntities);
+
             setEntities({ [fetchedEntities]: data }, components, logging);
         }
     );
@@ -301,6 +305,7 @@ export const syncEvents = async <S extends Schema>(
         entityKeyClause,
         (fetchedEntities: any, data: any) => {
             if (logging) console.log("Event message updated", fetchedEntities);
+
             setEntities({ [fetchedEntities]: data }, components, logging);
         }
     );
@@ -317,6 +322,16 @@ export const setEntities = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     logging: boolean = false
 ) => {
+    if (
+        Object.keys(entities).length === 0 ||
+        (Object.keys(entities).length === 1 &&
+            entities["0x0"] &&
+            Object.keys(entities["0x0"]).length === 0)
+    ) {
+        console.warn("No entities to set");
+        return;
+    }
+
     if (logging) console.log("Entities to set:", entities);
 
     for (let key in entities) {
