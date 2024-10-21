@@ -46,7 +46,7 @@ npx @dojoengine/create-dojo start -t example-vite-react-sdk
 
     ```bash
     cd dojo-starter
-    sozo build && sozo migrate
+    sozo build && sozo migrate apply
 
     # Start Torii indexer - world address can be found in the print out of migrate
     torii --world <WORLD_ADDRESS> --allowed-origins "*"

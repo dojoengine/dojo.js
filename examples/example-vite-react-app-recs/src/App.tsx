@@ -16,6 +16,8 @@ function App() {
         account,
     } = useDojo();
 
+    // sync the contract components to the local state
+    // this fetches the entities from the world and updates the local state
     useQuerySync(toriiClient, contractComponents as any, []);
 
     const [clipboardStatus, setClipboardStatus] = useState({
