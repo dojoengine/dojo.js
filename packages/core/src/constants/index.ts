@@ -2,10 +2,10 @@ export const LOCAL_KATANA = "http://localhost:5050";
 export const LOCAL_RELAY = "";
 export const LOCAL_TORII = "http://0.0.0.0:8080";
 export const KATANA_PREFUNDED_ADDRESS =
-    "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca";
+    "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec";
 export const KATANA_PREFUNDED_PRIVATE_KEY =
-    "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a";
+    "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec";
 export const KATANA_CLASS_HASH =
-    "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c";
+    "0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59e704249e51adf2";
 export const KATANA_ETH_CONTRACT_ADDRESS =
     "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
