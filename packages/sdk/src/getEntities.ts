@@ -8,6 +8,7 @@ import { QueryType, SchemaType, StandardizedQueryResult } from "./types";
  * Fetches entities from the Torii client based on the provided query.
  *
  * @template T - The schema type.
+ * @param {string} defaultOperator - The operator used for the query. Default is And
  * @param {torii.ToriiClient} client - The Torii client instance used to fetch entities.
  * @param {QueryType<T>} query - The query object used to filter entities.
  * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
@@ -27,6 +28,7 @@ import { QueryType, SchemaType, StandardizedQueryResult } from "./types";
  * }, 100, 0, { logging: true });
  */
 export async function getEntities<T extends SchemaType>(
+    defaultOperator: "And" | "Or" = "And",
     client: torii.ToriiClient,
     query: QueryType<T>,
     schema: T,
@@ -38,7 +40,7 @@ export async function getEntities<T extends SchemaType>(
     offset: number = 0, // Default offset
     options?: { logging?: boolean } // Logging option
 ): Promise<StandardizedQueryResult<T>> {
-    const clause = convertQueryToClause(query, schema);
+    const clause = convertQueryToClause(query, defaultOperator, schema);
 
     let cursor = offset;
     let continueFetching = true;
