@@ -33,7 +33,7 @@ export function convertQueryToClause<T extends SchemaType>(
     if (clauses.length > 1) {
         return {
             Composite: {
-                operator: "And",
+                operator: "Or",
                 clauses: clauses,
             },
         };
@@ -158,8 +158,8 @@ function buildWhereClause(
 ): torii.Clause | undefined {
     // Define logical operator mapping
     const logicalOperators: Record<string, torii.LogicalOperator> = {
-        AND: "And",
-        OR: "Or",
+        And: "And",
+        Or: "Or",
     };
 
     // Check for logical operators first
@@ -299,6 +299,7 @@ function convertToPrimitive(value: any): torii.MemberValue {
  * @throws {Error} - If the operator is unsupported.
  */
 function convertOperator(operator: string): torii.ComparisonOperator {
+    console.log(operator);
     switch (operator) {
         case "$eq":
             return "Eq";

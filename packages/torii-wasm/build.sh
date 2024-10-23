@@ -4,7 +4,7 @@
 set -ex
 
 # Clone the repository
-git clone --depth 1 --branch grpc-update https://github.com/dojoengine/dojo.c dojo.c
+git clone --depth 1 https://github.com/dojoengine/dojo.c dojo.c
 cd dojo.c
 
 # Build for web (browser)

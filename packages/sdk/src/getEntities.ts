@@ -49,7 +49,7 @@ export async function getEntities<T extends SchemaType>(
             limit: limit,
             offset: cursor,
             clause,
-            dont_include_hashed_keys: query.entityIds ? false : true,
+            dont_include_hashed_keys: false,
         };
 
         try {

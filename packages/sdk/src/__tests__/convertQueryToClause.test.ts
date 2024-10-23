@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { MockSchemaType, schema } from "../__example__/index";
 import { convertQueryToClause } from "../convertQuerytoClause";
-import { QueryType } from "../types";
+import { QueryType, SchemaType } from "../types";
 
 describe("convertQueryToClause", () => {
     it("should convert a single model query with conditions", () => {
@@ -27,7 +27,7 @@ describe("convertQueryToClause", () => {
 
         expect(result).toEqual({
             Composite: {
-                operator: "And",
+                operator: "Or",
                 clauses: [
                     {
                         Member: {
@@ -81,7 +81,7 @@ describe("convertQueryToClause", () => {
 
         expect(result).toEqual({
             Composite: {
-                operator: "And",
+                operator: "Or",
                 clauses: [
                     {
                         Member: {
@@ -110,10 +110,10 @@ describe("convertQueryToClause", () => {
                 player: {
                     $: {
                         where: {
-                            AND: [
+                            And: [
                                 { score: { $gt: 100 } },
                                 {
-                                    OR: [
+                                    Or: [
                                         { name: { $eq: "Alice" } },
                                         { name: { $eq: "Bob" } },
                                     ],
@@ -125,7 +125,7 @@ describe("convertQueryToClause", () => {
                 item: {
                     $: {
                         where: {
-                            AND: [{ durability: { $lt: 50 } }],
+                            And: [{ durability: { $lt: 50 } }],
                         },
                     },
                 },
@@ -134,10 +134,12 @@ describe("convertQueryToClause", () => {
 
         const result = convertQueryToClause(query, schema);
 
+        console.log("result", result);
+
         // Updated expectation to match the actual output
         expect(result).toEqual({
             Composite: {
-                operator: "And",
+                operator: "Or",
                 clauses: [
                     {
                         Member: {
