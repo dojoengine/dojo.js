@@ -49,7 +49,7 @@ export async function getEventMessages<T extends SchemaType>(
             limit: limit,
             offset: cursor,
             clause,
-            dont_include_hashed_keys: true,
+            dont_include_hashed_keys: false,
         };
 
         try {

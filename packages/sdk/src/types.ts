@@ -84,14 +84,13 @@ export type QueryOptions = {
 /**
  * Logical operators for combining multiple conditions
  */
-export type LogicalOperator = "AND" | "OR";
 
 /**
  * Recursively defines the conditions for the `where` clause.
  */
 export type WhereCondition<TModel> =
     | {
-          [key in LogicalOperator]?: Array<WhereCondition<TModel>>;
+          [key in torii.LogicalOperator]?: Array<WhereCondition<TModel>>;
       }
     | {
           [P in keyof TModel]?: {
@@ -156,12 +155,14 @@ export type SubscriptionQueryType<T extends SchemaType> = {
     };
 };
 
-/**
- * QueryType for queries, using QueryWhereOptions
- */
-export type QueryType<T extends SchemaType> = {
+export type BaseQueryType = {
     entityIds?: string[];
-} & {
+};
+
+/**
+ * Query type with model conditions
+ */
+export type ModelQueryType<T extends SchemaType> = {
     [K in keyof T]?: {
         [L in keyof T[K]]?:
             | AtLeastOne<{
@@ -170,6 +171,11 @@ export type QueryType<T extends SchemaType> = {
             | string[];
     };
 };
+
+/**
+ * Combined QueryType using union of base and model types
+ */
+export type QueryType<T extends SchemaType> = BaseQueryType | ModelQueryType<T>;
 
 /**
  * Result of a query
