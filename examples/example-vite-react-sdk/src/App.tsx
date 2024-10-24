@@ -43,6 +43,17 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                                 },
                             },
                         },
+                        Position: {
+                            $: {
+                                where: {
+                                    player: {
+                                        $is: addAddressPadding(
+                                            account.account.address
+                                        ),
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
                 (response) => {
@@ -55,7 +66,8 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                         response.data &&
                         response.data[0].entityId !== "0x0"
                     ) {
-                        state.setEntities(response.data);
+                        console.log("subscribed", response.data[0]);
+                        state.updateEntity(response.data[0]);
                     }
                 },
                 { logging: true }
@@ -212,28 +224,10 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                                     className={`${col} h-12 w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-2xl font-bold text-gray-200`}
                                     key={direction}
                                     onClick={async () => {
-                                        const condition =
-                                            (direction === "Up" &&
-                                                position?.vec?.y !==
-                                                    undefined &&
-                                                position.vec.y > 0) ||
-                                            (direction === "Left" &&
-                                                position?.vec?.x !==
-                                                    undefined &&
-                                                position.vec.x > 0) ||
-                                            direction === "Right" ||
-                                            direction === "Down";
-
-                                        if (!condition) {
-                                            console.log(
-                                                "Reached the borders of the world."
-                                            );
-                                        } else {
-                                            await client.actions.move({
-                                                account: account.account,
-                                                direction: { type: direction },
-                                            });
-                                        }
+                                        await client.actions.move({
+                                            account: account.account,
+                                            direction: { type: direction },
+                                        });
                                     }}
                                 >
                                     {label}
