@@ -27,12 +27,12 @@ export const useSystemCalls = () => {
 
         // Apply an optimistic update to the state
         // this uses immer drafts to update the state
-        state.applyOptimisticUpdate(
-            transactionId,
-            (draft) =>
-                (draft.entities[entityId].models.dojo_starter.Moves!.remaining =
-                    remainingMoves)
-        );
+        state.applyOptimisticUpdate(transactionId, (draft) => {
+            if (draft.entities[entityId]?.models?.dojo_starter?.Moves) {
+                draft.entities[entityId].models.dojo_starter.Moves.remaining =
+                    remainingMoves;
+            }
+        });
 
         try {
             // Execute the spawn action from the client
