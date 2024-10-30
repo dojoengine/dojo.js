@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/create-dojo",
-    "version": "1.0.0-alpha.24",
+    "version": "1.0.0-alpha.25",
     "description": "dojo: scaffolding dojo projects via npx",
     "author": "dojo",
     "module": "index.ts",
