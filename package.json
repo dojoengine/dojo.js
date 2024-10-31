@@ -10,19 +10,16 @@
         "docs": "npx typedoc --out docs",
         "prepare": "husky install"
     },
-    "dependencies": {
-        "@commitlint/cli": "^18.4.4",
-        "@commitlint/config-conventional": "^18.4.4",
-        "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
-        "react": "^18.2.0"
-    },
     "devDependencies": {
-        "husky": "^9.0.11",
+        "husky": "^9.1.6",
         "lerna": "^8.1.5",
         "prettier": "^3.3.3",
         "tsup": "^8.1.0",
         "typedoc": "^0.26.7",
-        "typedoc-material-theme": "^1.1.0",
-        "typedoc-plugin-coverage": "^3.3.0"
+        "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.1",
+        "typedoc-plugin-coverage": "^3.3.0",
+        "@commitlint/cli": "^18.4.4",
+        "@commitlint/config-conventional": "^18.4.4",
+        "@ianvs/prettier-plugin-sort-imports": "^4.3.1"
     }
 }

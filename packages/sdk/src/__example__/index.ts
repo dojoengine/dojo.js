@@ -1,5 +1,6 @@
 // EXAMPLE FOR NOW
 
+import * as torii from "@dojoengine/torii-client";
 import { init } from "..";
 import { SchemaType } from "../types";
 

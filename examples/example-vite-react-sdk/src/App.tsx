@@ -1,20 +1,24 @@
 import { useEffect, useMemo } from "react";
 import { SDK, createDojoStore } from "@dojoengine/sdk";
-import { Schema } from "./bindings.ts";
-
-import { useDojo } from "./useDojo.tsx";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { addAddressPadding } from "starknet";
 
+import { Models, Schema } from "./bindings.ts";
+import { useDojo } from "./useDojo.tsx";
+import useModel from "./useModel.tsx";
+import { useSystemCalls } from "./useSystemCalls.ts";
+
 export const useDojoStore = createDojoStore<Schema>();
 
-function App({ db }: { db: SDK<Schema> }) {
+function App({ sdk }: { sdk: SDK<Schema> }) {
     const {
         account,
         setup: { client },
     } = useDojo();
     const state = useDojoStore((state) => state);
     const entities = useDojoStore((state) => state.entities);
+
+    const { spawn } = useSystemCalls();
 
     const entityId = useMemo(
         () => getEntityIdFromKeys([BigInt(account?.account.address)]),
@@ -25,10 +29,21 @@ function App({ db }: { db: SDK<Schema> }) {
         let unsubscribe: (() => void) | undefined;
 
         const subscribe = async () => {
-            const subscription = await db.subscribeEntityQuery(
+            const subscription = await sdk.subscribeEntityQuery(
                 {
                     dojo_starter: {
                         Moves: {
+                            $: {
+                                where: {
+                                    player: {
+                                        $is: addAddressPadding(
+                                            account.account.address
+                                        ),
+                                    },
+                                },
+                            },
+                        },
+                        Position: {
                             $: {
                                 where: {
                                     player: {
@@ -51,7 +66,8 @@ function App({ db }: { db: SDK<Schema> }) {
                         response.data &&
                         response.data[0].entityId !== "0x0"
                     ) {
-                        state.setEntities(response.data);
+                        console.log("subscribed", response.data[0]);
+                        state.updateEntity(response.data[0]);
                     }
                 },
                 { logging: true }
@@ -67,12 +83,12 @@ function App({ db }: { db: SDK<Schema> }) {
                 unsubscribe();
             }
         };
-    }, [db, account?.account.address]);
+    }, [sdk, account?.account.address]);
 
     useEffect(() => {
         const fetchEntities = async () => {
             try {
-                await db.getEntities(
+                await sdk.getEntities(
                     {
                         dojo_starter: {
                             Moves: {
@@ -107,15 +123,10 @@ function App({ db }: { db: SDK<Schema> }) {
         };
 
         fetchEntities();
-    }, [db, account?.account.address]);
+    }, [sdk, account?.account.address]);
 
-    const position = useMemo(() => {
-        return entities[entityId]?.models?.dojo_starter.Position;
-    }, [entities]);
-
-    const moves = useMemo(() => {
-        return entities[entityId]?.models?.dojo_starter.Moves;
-    }, [entities]);
+    const moves = useModel(entityId, Models.Moves);
+    const position = useModel(entityId, Models.Position);
 
     return (
         <div className="bg-black min-h-screen w-full p-4 sm:p-8">
@@ -165,11 +176,7 @@ function App({ db }: { db: SDK<Schema> }) {
                             <div className="col-start-2">
                                 <button
                                     className="h-12 w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-2xl font-bold text-gray-200"
-                                    onClick={async () =>
-                                        await client.actions.spawn({
-                                            account: account.account,
-                                        })
-                                    }
+                                    onClick={async () => await spawn()}
                                 >
                                     +
                                 </button>
@@ -217,28 +224,10 @@ function App({ db }: { db: SDK<Schema> }) {
                                     className={`${col} h-12 w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-2xl font-bold text-gray-200`}
                                     key={direction}
                                     onClick={async () => {
-                                        const condition =
-                                            (direction === "Up" &&
-                                                position?.vec?.y !==
-                                                    undefined &&
-                                                position.vec.y > 0) ||
-                                            (direction === "Left" &&
-                                                position?.vec?.x !==
-                                                    undefined &&
-                                                position.vec.x > 0) ||
-                                            direction === "Right" ||
-                                            direction === "Down";
-
-                                        if (!condition) {
-                                            console.log(
-                                                "Reached the borders of the world."
-                                            );
-                                        } else {
-                                            await client.actions.move({
-                                                account: account.account,
-                                                direction: { type: direction },
-                                            });
-                                        }
+                                        await client.actions.move({
+                                            account: account.account,
+                                            direction: { type: direction },
+                                        });
                                     }}
                                 >
                                     {label}

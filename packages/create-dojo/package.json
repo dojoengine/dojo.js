@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/create-dojo",
-    "version": "1.0.0-alpha.16",
+    "version": "1.0.0-alpha.26",
     "description": "dojo: scaffolding dojo projects via npx",
     "author": "dojo",
     "module": "index.ts",
@@ -10,6 +10,9 @@
     "publishConfig": {
         "access": "public"
     },
+    "files": [
+        "dist"
+    ],
     "exports": "./dist/index.js",
     "bin": "./dist/index.js",
     "scripts": {

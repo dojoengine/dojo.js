@@ -7,7 +7,7 @@ export const BurnerContext = createContext<BurnerManagerOptions | null>(null);
 /**
  * Props for the BurnerProvider component {@link BurnerProvider}
  */
-interface BurnerProviderProps {
+export interface BurnerProviderProps {
     children: ReactNode;
     initOptions: BurnerManagerOptions;
 }

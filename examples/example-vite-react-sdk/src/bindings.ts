@@ -39,6 +39,12 @@ type Schema = {
     };
 };
 
+enum Models {
+    Moves = "dojo_starter-Moves",
+    DirectionsAvailable = "dojo_starter-DirectionsAvailable",
+    Position = "dojo_starter-Position",
+}
+
 const schema: Schema = {
     dojo_starter: {
         Moves: {
@@ -62,4 +68,4 @@ const schema: Schema = {
 };
 
 export type { Schema, Moves, DirectionsAvailable, Position, Vec2 };
-export { Direction, schema };
+export { Direction, schema, Models };

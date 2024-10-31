@@ -8,10 +8,10 @@ import { init } from "@dojoengine/sdk";
 import { Schema, schema } from "./bindings.ts";
 import { dojoConfig } from "../dojoConfig.ts";
 import { DojoContextProvider } from "./DojoContext.tsx";
-import { setupBurner } from "./setupBurner.tsx";
+import { setupBurnerManager } from "@dojoengine/create-burner";
 
 async function main() {
-    const db = await init<Schema>(
+    const sdk = await init<Schema>(
         {
             client: {
                 rpcUrl: dojoConfig.rpcUrl,
@@ -20,21 +20,21 @@ async function main() {
                 worldAddress: dojoConfig.manifest.world.address,
             },
             domain: {
-                name: "Example",
+                name: "WORLD_NAME",
                 version: "1.0",
-                chainId: "your-chain-id",
+                chainId: "KATANA",
                 revision: "1",
             },
         },
         schema
     );
 
-    const burnerManager = await setupBurner(dojoConfig);
-
     createRoot(document.getElementById("root")!).render(
         <StrictMode>
-            <DojoContextProvider burnerManager={burnerManager}>
-                <App db={db} />
+            <DojoContextProvider
+                burnerManager={await setupBurnerManager(dojoConfig)}
+            >
+                <App sdk={sdk} />
             </DojoContextProvider>
         </StrictMode>
     );

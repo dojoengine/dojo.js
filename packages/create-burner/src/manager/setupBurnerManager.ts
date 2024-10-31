@@ -1,8 +1,8 @@
 import { DojoConfig } from "@dojoengine/core";
-import { BurnerManager } from "@dojoengine/create-burner";
 import { Account, RpcProvider } from "starknet";
+import { BurnerManager } from "..";
 
-export const setupBurner = async (config: DojoConfig) => {
+export const setupBurnerManager = async (config: DojoConfig) => {
     const burnerManager = new BurnerManager({
         masterAccount: new Account(
             {

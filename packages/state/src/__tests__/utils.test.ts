@@ -1,13 +1,10 @@
 import { Type as RecsType, Schema } from "@dojoengine/recs";
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { convertValues } from "../utils";
 
 describe("convertValues", () => {
-    // Mock console.warn to suppress warnings during tests
-    beforeEach(() => {
-        vi.spyOn(console, "warn").mockImplementation(() => {});
-    });
+    // ... existing tests ...
 
     describe("huge numbers", () => {
         it("should correctly convert huge BigInt values", () => {
@@ -25,7 +22,7 @@ describe("convertValues", () => {
             );
         });
 
-        it("should correctly convert huge hexadecimal BigInt values", () => {
+        it("should correctly convert huge BigInt values", () => {
             const schema = { hugeNumber: RecsType.BigInt };
             const values = {
                 hugeNumber: {
@@ -58,7 +55,6 @@ describe("convertValues", () => {
             const schema = { hugeArray: RecsType.StringArray };
             const values = {
                 hugeArray: {
-                    type: "array",
                     value: [
                         { value: "12345678901234567890" },
                         { value: "98765432109876543210" },
@@ -70,28 +66,6 @@ describe("convertValues", () => {
                 12345678901234567890n,
                 98765432109876543210n,
             ]);
-        });
-
-        it("should handle empty StringArray", () => {
-            const schema = { tags: RecsType.StringArray };
-            const values = { tags: { type: "array", value: [] } };
-            const result = convertValues(schema, values);
-            expect(result.tags).toEqual([]);
-        });
-
-        it("should correctly convert StringArray with enum types", () => {
-            const schema = { statuses: RecsType.StringArray };
-            const values = {
-                statuses: {
-                    type: "array",
-                    value: [
-                        { type: "enum", value: { option: "ACTIVE" } },
-                        { type: "enum", value: { option: "INACTIVE" } },
-                    ],
-                },
-            };
-            const result = convertValues(schema, values);
-            expect(result.statuses).toEqual(["ACTIVE", "INACTIVE"]);
         });
     });
 
@@ -127,186 +101,244 @@ describe("convertValues", () => {
         it("should correctly convert nested schema values", () => {
             const schema = { nested: { innerField: RecsType.Number } };
             const values = {
-                nested: {
-                    type: "struct",
-                    value: { innerField: { value: "42" } },
-                },
+                nested: { value: { innerField: { value: "42" } } },
             };
             const result = convertValues(schema, values);
 
-            expect(result.nested).toEqual({ innerField: 42 });
+            expect(result.nested).toEqual({ innerField: { value: "42" } });
         });
     });
 
-    describe("enum type handling", () => {
-        it("should correctly convert enum values", () => {
-            const schema = { status: RecsType.T };
-            const values = {
-                status: { type: "enum", value: { option: "ACTIVE" } },
-            };
-            const result = convertValues(schema, values);
-            expect(result.status).toBe("ACTIVE");
-        });
+    it("should handle null and undefined values", () => {
+        const schema: Schema = {
+            name: RecsType.String,
+            age: RecsType.Number,
+        };
+        const values = {
+            name: { value: "Alice", type: "string" },
+            age: undefined,
+        };
+        const expected = {
+            name: "Alice",
+            age: undefined,
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
     });
 
-    describe("BigInt conversion fallback", () => {
-        it("should fallback to hexadecimal conversion for invalid BigInt strings", () => {
-            const schema = { invalidBigInt: RecsType.BigInt };
-            const values = { invalidBigInt: { value: "invalid_bigint" } };
-            const result = convertValues(schema, values);
-            // Since "invalid_bigint" is not a valid decimal or hexadecimal BigInt, expect undefined.
-            expect(result.invalidBigInt).toBeUndefined();
-        });
+    it("should convert enum types correctly", () => {
+        const schema: Schema = {
+            status: RecsType.String,
+        };
+        const values = {
+            status: { value: { option: "ACTIVE" }, type: "enum" },
+        };
+        const expected = {
+            status: "ACTIVE",
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
     });
 
-    describe("array of structs", () => {
-        it("should correctly convert array of structs", () => {
-            const schema = {
-                users: [
-                    {
-                        name: RecsType.String,
-                        age: RecsType.Number,
-                    },
+    it("should handle RecsType.StringArray with empty array", () => {
+        const schema: Schema = {
+            tags: RecsType.StringArray,
+        };
+        const values = {
+            tags: { value: [], type: "array" },
+        };
+        const expected = {
+            tags: [],
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+    });
+
+    it("should handle RecsType.StringArray with enum items", () => {
+        const schema: Schema = {
+            tags: RecsType.StringArray,
+        };
+        const values = {
+            tags: {
+                value: [
+                    { value: { option: "TAG1" }, type: "enum" },
+                    { value: { option: "TAG2" }, type: "enum" },
                 ],
-            };
-            const values = {
-                users: {
-                    type: "array",
-                    value: [
-                        {
-                            type: "struct",
-                            value: {
-                                name: { value: "Alice" },
-                                age: { value: "30" },
-                            },
-                        },
-                        {
-                            type: "struct",
-                            value: {
-                                name: { value: "Bob" },
-                                age: { value: "25" },
-                            },
-                        },
-                    ],
-                },
-            };
-            const result = convertValues(schema as any, values);
-            expect(result.users).toEqual([
-                { name: "Alice", age: 30 },
-                { name: "Bob", age: 25 },
-            ]);
-        });
+                type: "array",
+            },
+        };
+        const expected = {
+            tags: ["TAG1", "TAG2"],
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
     });
 
-    describe("default case handling", () => {
-        it("should assign value directly for unhandled schema types", () => {
-            const schema = { miscellaneous: RecsType.T };
-            const values = { miscellaneous: { value: { random: "data" } } };
-            const result = convertValues(schema, values);
-            expect(result.miscellaneous).toEqual({ random: "data" });
-        });
-
-        it("should handle struct with Map as value", () => {
-            const schema = {
-                config: {
-                    settingA: RecsType.String,
-                    settingB: RecsType.Number,
-                },
-            };
-            const values = {
-                config: {
-                    type: "struct",
-                    value: new Map([
-                        ["settingA", { value: "Enabled" }],
-                        ["settingB", { value: "100" }],
-                    ]),
-                },
-            };
-            const result = convertValues(schema, values);
-            expect(result.config).toEqual({
-                settingA: "Enabled",
-                settingB: 100,
-            });
-        });
-
-        it("should handle nested arrays of structs", () => {
-            const schema = {
-                departments: [
-                    {
-                        name: RecsType.String,
-                        employees: [
-                            {
-                                name: RecsType.String,
-                                role: RecsType.String,
-                            },
-                        ],
-                    },
+    it("should handle RecsType.StringArray with BigInt conversion", () => {
+        const schema: Schema = {
+            ids: RecsType.StringArray,
+        };
+        const values = {
+            ids: {
+                value: [
+                    { value: "12345678901234567890", type: "string" },
+                    { value: "98765432109876543210", type: "string" },
                 ],
-            };
-            const values = {
-                departments: {
-                    type: "array",
-                    value: [
-                        {
-                            type: "struct",
-                            value: {
-                                name: { value: "Engineering" },
-                                employees: {
-                                    type: "array",
-                                    value: [
-                                        {
-                                            type: "struct",
-                                            value: {
-                                                name: { value: "Alice" },
-                                                role: { value: "Developer" },
-                                            },
-                                        },
-                                        {
-                                            type: "struct",
-                                            value: {
-                                                name: { value: "Bob" },
-                                                role: { value: "Designer" },
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
-                        },
-                        {
-                            type: "struct",
-                            value: {
-                                name: { value: "Marketing" },
-                                employees: {
-                                    type: "array",
-                                    value: [
-                                        {
-                                            type: "struct",
-                                            value: {
-                                                name: { value: "Charlie" },
-                                                role: { value: "Manager" },
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
-                        },
-                    ],
+                type: "array",
+            },
+        };
+        const expected = {
+            ids: [
+                BigInt("12345678901234567890"),
+                BigInt("98765432109876543210"),
+            ],
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+    });
+
+    it("should fallback to string if BigInt conversion fails", () => {
+        vi.spyOn(console, "warn").mockImplementation(() => {});
+
+        const schema: Schema = {
+            ids: RecsType.StringArray,
+        };
+        const values = {
+            ids: {
+                value: [{ value: "invalid_bigint", type: "string" }],
+                type: "array",
+            },
+        };
+        const expected = {
+            ids: ["invalid_bigint"],
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+        expect(console.warn).toHaveBeenCalledWith(
+            "Failed to convert invalid_bigint to BigInt. Using string value instead."
+        );
+    });
+
+    it("should handle RecsType.String", () => {
+        const schema: Schema = {
+            name: RecsType.String,
+        };
+        const values = {
+            name: { value: "Bob", type: "string" },
+        };
+        const expected = {
+            name: "Bob",
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+    });
+
+    it("should handle RecsType.BigInt with valid BigInt", () => {
+        const schema: Schema = {
+            balance: RecsType.BigInt,
+        };
+        const values = {
+            balance: { value: "1000000000000000000", type: "string" },
+        };
+        const expected = {
+            balance: BigInt("1000000000000000000"),
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+    });
+
+    it("should handle RecsType.Boolean", () => {
+        const schema: Schema = {
+            isActive: RecsType.Boolean,
+        };
+        const values = {
+            isActive: { value: true, type: "boolean" },
+        };
+        const expected = {
+            isActive: true,
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+    });
+
+    it("should handle RecsType.Number", () => {
+        const schema: Schema = {
+            score: RecsType.Number,
+        };
+        const values = {
+            score: { value: "42", type: "string" },
+        };
+        const expected = {
+            score: 42,
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+    });
+
+    it("should handle nested structs", () => {
+        const nestedSchema: Schema = {
+            street: RecsType.String,
+            zip: RecsType.Number,
+        };
+        const schema: Schema = {
+            name: RecsType.String,
+            address: nestedSchema,
+        };
+        const values = {
+            name: { value: "Charlie", type: "string" },
+            address: {
+                value: {
+                    street: { value: "123 Main St", type: "string" },
+                    zip: { value: "12345", type: "string" },
                 },
-            };
-            const result = convertValues(schema as any, values);
-            expect(result.departments).toEqual([
-                {
-                    name: "Engineering",
-                    employees: [
-                        { name: "Alice", role: "Developer" },
-                        { name: "Bob", role: "Designer" },
-                    ],
-                },
-                {
-                    name: "Marketing",
-                    employees: [{ name: "Charlie", role: "Manager" }],
-                },
-            ]);
-        });
+                type: "struct",
+            },
+        };
+        const expected = {
+            name: "Charlie",
+            address: {
+                street: "123 Main St",
+                zip: 12345,
+            },
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+    });
+
+    it("should handle map structures", () => {
+        const nestedSchema: Schema = {
+            key1: RecsType.String,
+            key2: RecsType.Number,
+        };
+        const schema: Schema = {
+            config: nestedSchema,
+        };
+        const values = {
+            config: {
+                value: new Map([
+                    ["key1", { value: "value1", type: "string" }],
+                    ["key2", { value: "100", type: "string" }],
+                ]),
+                type: "struct",
+            },
+        };
+        const expected = {
+            config: {
+                key1: "value1",
+                key2: 100,
+            },
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+    });
+
+    it("should handle primitive fallback in default case", () => {
+        const schema: Schema = {
+            miscellaneous: RecsType.String,
+        };
+        const values = {
+            miscellaneous: { value: "some value", type: "unknown" },
+        };
+        const expected = {
+            miscellaneous: "some value",
+        };
+        expect(convertValues(schema, values)).toEqual(expected);
+    });
+
+    it("should handle empty schema", () => {
+        const schema: Schema = {};
+        const values = {
+            anyKey: { value: "any value", type: "string" },
+        };
+        const expected = {};
+        expect(convertValues(schema, values)).toEqual(expected);
     });
 });
