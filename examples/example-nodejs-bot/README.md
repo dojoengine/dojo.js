@@ -18,19 +18,19 @@ Features:
 ### Developing
 
 ```bash
-bun install
+pnpm install
 ```
 
 ### Terminal 1 - Serve the Bot
 
 ```bash
-bun run serve
+pnpm serve
 ```
 
 ### Terminal 2 - Build and Watch
 
 ```bash
-bun run build --watch
+pnpm build --watch
 ```
 
 Now, try running it on your server. Remember to restart your bot after making changes.
@@ -46,7 +46,7 @@ You can access the GraphQL dashboard by navigating to [http://0.0.0.0:8080/graph
 Add your GraphQL schema to `src/graphql/schema.graphql`, then run
 
 ```bash
-bun run codegen
+pnpm codegen
 ```
 
 Now you can access the sdk in your app like:

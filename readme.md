@@ -230,7 +230,7 @@ To run the examples, you'll need to set up three terminal windows:
 3. Run Torii (indexer) with the world address and allowed origins:
 
     ```bash
-    torii --world 0xc82dfe2cb4f8a90dba1e88dfa24578aeb1c19152d51e3c7cf413be6d65d9e --allowed-origins "*"
+    torii --world <WORLD_ADDRESS> --allowed-origins "*"
     ```
 
     Note: The world address may change. Ensure you're using the correct address from your migration output.

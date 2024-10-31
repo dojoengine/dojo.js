@@ -31,7 +31,4 @@ export default setup(dojoConfig)
         game.scene.add("MainScene", new SceneMain(dojo));
         return game;
     })
-    .catch((e) => {
-        console.error(e);
-        return;
-    });
+    .catch(console.error);
