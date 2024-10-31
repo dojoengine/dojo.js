@@ -13,6 +13,7 @@ examples=(
   "examples/example-vite-react-sdk"
   "examples/example-vite-react-threejs-recs"
   "examples/example-vue-app-recs"
+  "examples/example-vite-svelte-recs"
 )
 
 # Iterate over each example directory and run the build command

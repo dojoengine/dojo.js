@@ -1,0 +1,33 @@
+{
+    "name": "svelte-starter",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"
+    },
+    "devDependencies": {
+        "@sveltejs/vite-plugin-svelte": "^3.1.1",
+        "@tsconfig/svelte": "^5.0.4",
+        "svelte": "^4.2.18",
+        "svelte-check": "^3.8.5",
+        "tslib": "^2.6.3",
+        "typescript": "^5.5.3",
+        "vite": "^5.4.1"
+    },
+    "dependencies": {
+        "@dojoengine/core": "workspace:*",
+        "@dojoengine/create-burner": "workspace:*",
+        "@dojoengine/recs": "^2.0.13",
+        "@dojoengine/state": "workspace:*",
+        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/utils": "workspace:*",
+        "@latticexyz/utils": "^2.1.1",
+        "starknet": "^6.11.0",
+        "vite-plugin-top-level-await": "^1.4.4",
+        "vite-plugin-wasm": "^3.3.0"
+    }
+}
