@@ -30,6 +30,14 @@ const templates = [
         value: "example-vite-react-threejs-recs",
         description: "React Three.js app using Dojo RECS",
     },
+    {
+        value: "example-vite-react-sdk",
+        description: "Basic react app using the sdk",
+    },
+    {
+        value: "example-vite-svelte-recs",
+        description: "Basic svelte app using Dojo RECS",
+    },
     { value: "example-vue-app-recs", description: "Basic vite app using RECS" },
 ];
 
