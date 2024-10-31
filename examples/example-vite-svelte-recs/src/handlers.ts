@@ -11,14 +11,14 @@ export function handleBurnerChange(event: Event) {
     accountStore.set(burnerManager.getActiveAccount());
 }
 
-export async function handleNewBurner(event: Event) {
+export async function handleNewBurner() {
     burnerManager = get(dojoStore).burnerManager;
     await burnerManager.create();
     burnerStore.set(burnerManager.list());
     accountStore.set(burnerManager.getActiveAccount());
 }
 
-export function handleClearBurners(event: Event) {
+export function handleClearBurners() {
     burnerManager = get(dojoStore).burnerManager;
     burnerManager.clear();
     burnerStore.set(burnerManager.list());

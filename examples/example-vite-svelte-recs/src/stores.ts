@@ -1,4 +1,4 @@
-import { writable, derived } from "svelte/store";
+import { writable } from "svelte/store";
 import { type SetupResult } from "./dojo/setup";
 import { Account } from "starknet";
 import { type Burner } from "@dojoengine/create-burner";
