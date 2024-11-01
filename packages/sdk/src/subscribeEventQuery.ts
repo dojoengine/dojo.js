@@ -40,6 +40,7 @@ export async function subscribeEventQuery<T extends SchemaType>(
 ): Promise<torii.Subscription> {
     return client.onEventMessageUpdated(
         convertQueryToEntityKeyClauses(query, schema),
+        true,
         (entityId: string, entityData: any) => {
             try {
                 if (callback) {
