@@ -163,12 +163,15 @@ export const getEvents = async <S extends Schema>(
     let continueFetching = true;
 
     while (continueFetching) {
-        const entities = await client.getEventMessages({
-            limit,
-            offset,
-            clause,
-            dont_include_hashed_keys: false,
-        });
+        const entities = await client.getEventMessages(
+            {
+                limit,
+                offset,
+                clause,
+                dont_include_hashed_keys: false,
+            },
+            true
+        );
 
         if (logging) console.log("entities", entities);
 
@@ -303,6 +306,7 @@ export const syncEvents = async <S extends Schema>(
     if (logging) console.log("Starting syncEvents");
     return await client.onEventMessageUpdated(
         entityKeyClause,
+        true,
         (fetchedEntities: any, data: any) => {
             if (logging) console.log("Event message updated", fetchedEntities);
 
