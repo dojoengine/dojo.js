@@ -1,4 +1,4 @@
-import manifest from "../../worlds/dojo-starter/manifests/dev/deployment/manifest.json";
+import manifest from "../../worlds/dojo-starter/manifest_dev.json";
 import { createDojoConfig } from "@dojoengine/core";
 
 export const dojoConfig = createDojoConfig({
