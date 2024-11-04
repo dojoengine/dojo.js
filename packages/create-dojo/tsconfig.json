@@ -5,8 +5,8 @@
         "target": "esnext",
         "moduleResolution": "node",
         "moduleDetection": "force",
-        "outDir": "./dist",
-        "noEmit": false,
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
 
         "strict": true,
         "downlevelIteration": true,

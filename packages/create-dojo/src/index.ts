@@ -9,7 +9,7 @@ process.on("SIGINT", () => process.exit(0));
 process.on("SIGTERM", () => process.exit(0));
 
 async function main() {
-    const packageInfo = await getPackageInfo();
+    const packageInfo = getPackageInfo();
 
     const program = new Command()
         .name("@dojoengine")
