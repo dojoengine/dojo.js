@@ -3,6 +3,13 @@ import { useDojoStore } from "./App";
 import { useDojo } from "./useDojo";
 import { v4 as uuidv4 } from "uuid";
 
+/**
+ * Custom hook to handle system calls and state management in the Dojo application.
+ * Provides functionality for spawning entities and managing optimistic updates.
+ * 
+ * @returns An object containing system call functions:
+ *   - spawn: Function to spawn a new entity with initial moves
+ */
 export const useSystemCalls = () => {
     const state = useDojoStore((state) => state);
 
@@ -11,10 +18,19 @@ export const useSystemCalls = () => {
         account: { account },
     } = useDojo();
 
+    /**
+     * Generates a unique entity ID based on the current account address.
+     * @returns {string} The generated entity ID
+     */
     const generateEntityId = () => {
         return getEntityIdFromKeys([BigInt(account?.address)]);
     };
 
+    /**
+     * Spawns a new entity with initial moves and handles optimistic updates.
+     * @returns {Promise<void>}
+     * @throws {Error} If the spawn action fails
+     */
     const spawn = async () => {
         // Generate a unique entity ID
         const entityId = generateEntityId();

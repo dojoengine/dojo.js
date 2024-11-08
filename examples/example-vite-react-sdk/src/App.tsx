@@ -8,8 +8,17 @@ import { useDojo } from "./useDojo.tsx";
 import useModel from "./useModel.tsx";
 import { useSystemCalls } from "./useSystemCalls.ts";
 
+/**
+ * Global store for managing Dojo game state.
+ */
 export const useDojoStore = createDojoStore<Schema>();
 
+/**
+ * Main application component that provides game functionality and UI.
+ * Handles entity subscriptions, state management, and user interactions.
+ * 
+ * @param props.sdk - The Dojo SDK instance configured with the game schema
+ */
 function App({ sdk }: { sdk: SDK<Schema> }) {
     const {
         account,
