@@ -1,23 +1,46 @@
+/**
+ * Interface representing a player's movement capabilities and state.
+ */
 interface Moves {
+    /** Order of fields in the model */
     fieldOrder: string[];
+    /** Player identifier */
     player: string;
+    /** Number of moves remaining */
     remaining: number;
+    /** Last direction moved */
     last_direction: Direction;
+    /** Whether the player can currently move */
     can_move: boolean;
 }
 
+/**
+ * Interface representing available movement directions for a player.
+ */
 interface DirectionsAvailable {
+    /** Order of fields in the model */
     fieldOrder: string[];
+    /** Player identifier */
     player: string;
+    /** List of available directions */
     directions: Direction[];
 }
 
+/**
+ * Interface representing a player's position in the game world.
+ */
 interface Position {
+    /** Order of fields in the model */
     fieldOrder: string[];
+    /** Player identifier */
     player: string;
+    /** 2D vector representing position */
     vec: Vec2;
 }
 
+/**
+ * Enum representing possible movement directions.
+ */
 enum Direction {
     None = "0",
     Left = "1",
@@ -26,11 +49,19 @@ enum Direction {
     Down = "4",
 }
 
+/**
+ * Interface representing a 2D vector.
+ */
 interface Vec2 {
+    /** X coordinate */
     x: number;
+    /** Y coordinate */
     y: number;
 }
 
+/**
+ * Type representing the complete schema of game models.
+ */
 type Schema = {
     dojo_starter: {
         Moves: Moves;
@@ -39,6 +70,9 @@ type Schema = {
     };
 };
 
+/**
+ * Enum representing model identifiers in the format "namespace-modelName".
+ */
 enum Models {
     Moves = "dojo_starter-Moves",
     DirectionsAvailable = "dojo_starter-DirectionsAvailable",

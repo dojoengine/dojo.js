@@ -8,10 +8,10 @@ import { Schema } from "./bindings";
  * @param model - The model to retrieve, specified as a string in the format "namespace-modelName".
  * @returns The model structure if found, otherwise undefined.
  */
-function useModel<N extends keyof Schema, M extends keyof Schema[N] & string>(
-    entityId: string,
-    model: `${N}-${M}`
-): Schema[N][M] | undefined {
+function useModel<
+    N extends keyof Schema,
+    M extends keyof Schema[N] & string
+>(entityId: string, model: `${N}-${M}`): Schema[N][M] | undefined {
     const [namespace, modelName] = model.split("-") as [N, M];
 
     // Select only the specific model data for the given entityId
