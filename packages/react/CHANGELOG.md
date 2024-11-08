@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.29](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.28...v1.0.0-alpha.29) (2024-11-08)
+
+**Note:** Version bump only for package @dojoengine/react
+
+
+
+
+
 ## 0.6.124 (2024-04-24)
 
 **Note:** Version bump only for package @dojoengine/react

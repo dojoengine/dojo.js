@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.29](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.28...v1.0.0-alpha.29) (2024-11-08)
+
+
+### Bug Fixes
+
+* ignore ([55658c8](https://github.com/dojoengine/dojo.js/commit/55658c8f2b1856be75bd507a1de11c68c0be9654))
+* key ([a98d2be](https://github.com/dojoengine/dojo.js/commit/a98d2beb106da17982dd6f18b0db536eaadf9338))
+* prettier ([13e0e6c](https://github.com/dojoengine/dojo.js/commit/13e0e6cf8a490f83e964b797e1f2a57057a95fec))
+* token value ([4b2efcf](https://github.com/dojoengine/dojo.js/commit/4b2efcf4fc4ed2a4c5179cebef27ab9377ebe662))
+
+
+### Features
+
+* add openhands ([2be91e5](https://github.com/dojoengine/dojo.js/commit/2be91e551537f437ba43143883631e2e67fc6fa9))
+* allow passing historical as a parameter ([a2e0cef](https://github.com/dojoengine/dojo.js/commit/a2e0cef17bc974f0be66f5b581da99c6cb62f761))
+
+
+
+
+
 ## 0.7.0 (2024-06-14)
 
 Version 7 has breaking changes and will only work correctly with Dojo v7.
