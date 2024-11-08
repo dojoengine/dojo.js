@@ -44,9 +44,9 @@ jobs:
                   npx lerna version ${{ github.event.inputs.release_type }} --conventional-commits --yes --no-private --force-publish
                   npx lerna publish from-git --yes --dist-tag ${{ github.event.inputs.release_type == 'preminor' && 'next' || 'latest' }}
 
-            - name: Generate Changelog
+            - name: Generate Changelog with standard-version
               run: |
-                  npx lerna-changelog > CHANGELOG.md
+                  npx standard-version --tag-prefix v --commit-all
 
             - name: Commit and Push Changelog
               run: |
@@ -55,3 +55,14 @@ jobs:
                   git push origin HEAD:${{ github.ref }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+            - name: Create GitHub Release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ steps.tag_publish.outputs.TAG }}
+                  release_name: Release ${{ steps.tag_publish.outputs.TAG }}
+                  body_path: CHANGELOG.md
+                  draft: false
+                  prerelease: ${{ contains(github.event.inputs.release_type, 'pre') }}
