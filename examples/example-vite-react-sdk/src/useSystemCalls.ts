@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 /**
  * Custom hook to handle system calls and state management in the Dojo application.
  * Provides functionality for spawning entities and managing optimistic updates.
- * 
+ *
  * @returns An object containing system call functions:
  *   - spawn: Function to spawn a new entity with initial moves
  */

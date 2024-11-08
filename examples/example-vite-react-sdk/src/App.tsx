@@ -16,7 +16,7 @@ export const useDojoStore = createDojoStore<Schema>();
 /**
  * Main application component that provides game functionality and UI.
  * Handles entity subscriptions, state management, and user interactions.
- * 
+ *
  * @param props.sdk - The Dojo SDK instance configured with the game schema
  */
 function App({ sdk }: { sdk: SDK<Schema> }) {

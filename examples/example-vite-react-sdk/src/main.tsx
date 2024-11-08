@@ -13,7 +13,7 @@ import { setupBurnerManager } from "@dojoengine/create-burner";
 /**
  * Initializes and bootstraps the Dojo application.
  * Sets up the SDK, burner manager, and renders the root component.
- * 
+ *
  * @throws {Error} If initialization fails
  */
 async function main() {

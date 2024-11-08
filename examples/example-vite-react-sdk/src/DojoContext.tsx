@@ -28,7 +28,7 @@ export const DojoContext = createContext<DojoContextType | null>(null);
 
 /**
  * Provider component that makes Dojo context available to child components.
- * 
+ *
  * @param props.children - Child components that will have access to the Dojo context
  * @param props.burnerManager - Instance of BurnerManager for handling burner accounts
  * @throws {Error} If DojoProvider is used more than once in the component tree
