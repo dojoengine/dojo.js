@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.30](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.29...v1.0.0-alpha.30) (2024-11-09)
+
+
+### Bug Fixes
+
+* formatting ([c28c5dd](https://github.com/dojoengine/dojo.js/commit/c28c5dd1721cf136cff3a805ecc5c4d07c69529d))
+* remove ([de13d64](https://github.com/dojoengine/dojo.js/commit/de13d641ab0e4a33e8a4b6d4b10ecb23efa0983d))
+
+
+### Features
+
+* docs ([1bf47fa](https://github.com/dojoengine/dojo.js/commit/1bf47fae3afef5ab7f02f9ed288141e735ab2788))
+* improve release ([83654cc](https://github.com/dojoengine/dojo.js/commit/83654ccc59f856e54ab83ec2b5720ebec97650a3))
+
+
+
+
+
 # [1.0.0-alpha.29](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.28...v1.0.0-alpha.29) (2024-11-08)
 
 
