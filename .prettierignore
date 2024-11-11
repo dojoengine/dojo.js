@@ -5,6 +5,9 @@ packages/torii-client/pkg
 packages/torii-wasm/pkg/
 packages/utils-wasm/pkg/
 
+packages/create-burner/coverage
+packages/core/coverage
+
 worlds/dojo-starter
 
 # ignore lock files

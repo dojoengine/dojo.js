@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.30...v1.0.0) (2024-11-11)
+
+**Note:** Version bump only for package @dojoengine/state
+
+
+
+
+
+# [1.0.0-alpha.30](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.29...v1.0.0-alpha.30) (2024-11-09)
+
+**Note:** Version bump only for package @dojoengine/state
+
+
+
+
+
+# [1.0.0-alpha.29](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.28...v1.0.0-alpha.29) (2024-11-08)
+
+
+### Features
+
+* allow passing historical as a parameter ([a2e0cef](https://github.com/dojoengine/dojo.js/commit/a2e0cef17bc974f0be66f5b581da99c6cb62f761))
+
+
+
+
+
 ## 0.6.124 (2024-04-24)
 
 **Note:** Version bump only for package @dojoengine/state

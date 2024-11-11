@@ -53,7 +53,7 @@ export async function getEventMessages<T extends SchemaType>(
         };
 
         try {
-            const entities = await client.getEventMessages(toriiQuery);
+            const entities = await client.getEventMessages(toriiQuery, true);
 
             if (options?.logging) {
                 console.log(`Fetched entities at offset ${cursor}:`, entities);

@@ -224,7 +224,7 @@ To run the examples, you'll need to set up three terminal windows:
 
     ```bash
     sozo build
-    sozo migrate apply
+    sozo migrate
     ```
 
 3. Run Torii (indexer) with the world address and allowed origins:

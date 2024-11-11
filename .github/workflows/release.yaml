@@ -40,18 +40,18 @@ jobs:
               run: pnpm run build
 
             - name: Tag and Publish Packages
+              id: tag_publish
               run: |
                   npx lerna version ${{ github.event.inputs.release_type }} --conventional-commits --yes --no-private --force-publish
                   npx lerna publish from-git --yes --dist-tag ${{ github.event.inputs.release_type == 'preminor' && 'next' || 'latest' }}
 
-            - name: Generate Changelog
-              run: |
-                  npx lerna-changelog > CHANGELOG.md
-
-            - name: Commit and Push Changelog
-              run: |
-                  git add CHANGELOG.md
-                  git commit -m "chore(release): update changelog [skip ci]"
-                  git push origin HEAD:${{ github.ref }}
+            - name: Create GitHub Release
+              uses: actions/create-release@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ steps.tag_publish.outputs.TAG }}
+                  release_name: Release ${{ steps.tag_publish.outputs.TAG }}
+                  body_path: CHANGELOG.md
+                  draft: false
+                  prerelease: ${{ contains(github.event.inputs.release_type, 'pre') }}

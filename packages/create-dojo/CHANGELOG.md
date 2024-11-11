@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.30...v1.0.0) (2024-11-11)
+
+**Note:** Version bump only for package @dojoengine/create-dojo
+
+
+
+
+
+# [1.0.0-alpha.30](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.29...v1.0.0-alpha.30) (2024-11-09)
+
+**Note:** Version bump only for package @dojoengine/create-dojo
+
+
+
+
+
+# [1.0.0-alpha.29](https://github.com/dojoengine/dojo.js/compare/v1.0.0-alpha.28...v1.0.0-alpha.29) (2024-11-08)
+
+**Note:** Version bump only for package @dojoengine/create-dojo
+
+
+
+
+
 ## 0.6.124 (2024-04-24)
 
 **Note:** Version bump only for package @dojoengine/create-dojo

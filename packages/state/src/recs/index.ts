@@ -63,6 +63,7 @@ export const getSyncEntities = async <S extends Schema>(
  * @param entityKeyClause - An array of entity key clauses to synchronize.
  * @param limit - The maximum number of events to fetch per request (default: 100).
  * @param logging - Whether to log debug information (default: false).
+ * @param historical - Whether to fetch and subscribe to historical events (default: true).
  * @returns A promise that resolves to a subscription for event updates.
  *
  * @example
@@ -89,11 +90,18 @@ export const getSyncEvents = async <S extends Schema>(
     clause: Clause | undefined,
     entityKeyClause: EntityKeysClause[],
     limit: number = 100,
-    logging: boolean = false
+    logging: boolean = false,
+    historical: boolean = true
 ) => {
     if (logging) console.log("Starting getSyncEvents");
-    await getEvents(client, components, limit, clause, logging);
-    return await syncEvents(client, components, entityKeyClause, logging);
+    await getEvents(client, components, limit, clause, logging, historical);
+    return await syncEvents(
+        client,
+        components,
+        entityKeyClause,
+        logging,
+        historical
+    );
 };
 
 /**
@@ -150,25 +158,30 @@ export const getEntities = async <S extends Schema>(
  * @param limit - The maximum number of event messages to fetch per request (default: 100).
  * @param clause - An optional clause to filter event messages.
  * @param logging - Whether to log debug information (default: false).
+ * @param historical - Whether to fetch historical events (default: true).
  */
 export const getEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     limit: number = 100,
     clause: Clause | undefined,
-    logging: boolean = false
+    logging: boolean = false,
+    historical: boolean = true
 ) => {
     if (logging) console.log("Starting getEvents");
     let offset = 0;
     let continueFetching = true;
 
     while (continueFetching) {
-        const entities = await client.getEventMessages({
-            limit,
-            offset,
-            clause,
-            dont_include_hashed_keys: false,
-        });
+        const entities = await client.getEventMessages(
+            {
+                limit,
+                offset,
+                clause,
+                dont_include_hashed_keys: false,
+            },
+            historical
+        );
 
         if (logging) console.log("entities", entities);
 
@@ -288,6 +301,7 @@ export const syncEntities = async <S extends Schema>(
  * @param components - An array of component definitions.
  * @param entityKeyClause - An array of EntityKeysClause to filter entities.
  * @param logging - Whether to log debug information (default: false).
+ * @param historical - Whether to sync to historical events (default: true).
  * @returns A promise that resolves with the subscription handler.
  * @example
  * const sync = await syncEvents(client, components, entityKeyClause);
@@ -298,11 +312,13 @@ export const syncEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause[],
-    logging: boolean = false
+    logging: boolean = false,
+    historical: boolean = true
 ) => {
     if (logging) console.log("Starting syncEvents");
     return await client.onEventMessageUpdated(
         entityKeyClause,
+        historical,
         (fetchedEntities: any, data: any) => {
             if (logging) console.log("Event message updated", fetchedEntities);
 
