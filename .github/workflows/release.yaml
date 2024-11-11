@@ -45,13 +45,27 @@ jobs:
                   npx lerna version ${{ github.event.inputs.release_type }} --conventional-commits --yes --no-private --force-publish
                   npx lerna publish from-git --yes --dist-tag ${{ github.event.inputs.release_type == 'preminor' && 'next' || 'latest' }}
 
+            - name: Get Version Tag
+              id: get_tag
+              run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+
+            - name: Generate Release Body
+              id: release_body
+              run: |
+                  if [ -f CHANGELOG.md ]; then
+                    echo "body=$(cat CHANGELOG.md)" >> $GITHUB_OUTPUT
+                  else
+                    echo "body=No changelog provided for this release." >> $GITHUB_OUTPUT
+                  fi
+
             - name: Create GitHub Release
               uses: actions/create-release@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
               with:
-                  tag_name: ${{ steps.tag_publish.outputs.TAG }}
-                  release_name: Release ${{ steps.tag_publish.outputs.TAG }}
+                  tag_name: ${{ steps.get_tag.outputs.TAG }}
+                  release_name: Release
                   body_path: CHANGELOG.md
                   draft: false
-                  prerelease: ${{ contains(github.event.inputs.release_type, 'pre') }}
+                  prerelease: false
