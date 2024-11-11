@@ -45,18 +45,6 @@ jobs:
                   npx lerna version ${{ github.event.inputs.release_type }} --conventional-commits --yes --no-private --force-publish
                   npx lerna publish from-git --yes --dist-tag ${{ github.event.inputs.release_type == 'preminor' && 'next' || 'latest' }}
 
-            - name: Generate Changelog with standard-version
-              run: |
-                  npx standard-version --tag-prefix v --commit-all
-
-            - name: Commit and Push Changelog
-              run: |
-                  git add CHANGELOG.md
-                  git commit -m "chore(release): update changelog [skip ci]"
-                  git push origin HEAD:${{ github.ref }}
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-
             - name: Create GitHub Release
               uses: actions/create-release@v1
               env:
