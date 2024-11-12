@@ -19,13 +19,22 @@ import { KEYCHAIN_URL, POLICIES, REDIRECT_URI, RPC_URL } from "./config.ts";
  * @throws {Error} If initialization fails
  */
 async function main() {
+    const {
+        rpcUrl,
+        toriiUrl,
+        relayUrl,
+        manifest: {
+            world: { address: worldAddress },
+        },
+    } = dojoConfig;
+
     const sdk = await init<Schema>(
         {
             client: {
-                rpcUrl: dojoConfig.rpcUrl,
-                toriiUrl: dojoConfig.toriiUrl,
-                relayUrl: dojoConfig.relayUrl,
-                worldAddress: dojoConfig.manifest.world.address,
+                rpcUrl,
+                toriiUrl,
+                relayUrl,
+                worldAddress,
             },
             domain: {
                 name: "WORLD_NAME",
