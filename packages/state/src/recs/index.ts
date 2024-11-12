@@ -63,7 +63,7 @@ export const getSyncEntities = async <S extends Schema>(
  * @param entityKeyClause - An array of entity key clauses to synchronize.
  * @param limit - The maximum number of events to fetch per request (default: 100).
  * @param logging - Whether to log debug information (default: false).
- * @param historical - Whether to fetch and subscribe to historical events (default: true).
+ * @param historical - Whether to fetch and subscribe to historical events (default: false).
  * @returns A promise that resolves to a subscription for event updates.
  *
  * @example
@@ -158,7 +158,7 @@ export const getEntities = async <S extends Schema>(
  * @param limit - The maximum number of event messages to fetch per request (default: 100).
  * @param clause - An optional clause to filter event messages.
  * @param logging - Whether to log debug information (default: false).
- * @param historical - Whether to fetch historical events (default: true).
+ * @param historical - Whether to fetch historical events (default: false).
  */
 export const getEvents = async <S extends Schema>(
     client: ToriiClient,
@@ -166,7 +166,7 @@ export const getEvents = async <S extends Schema>(
     limit: number = 100,
     clause: Clause | undefined,
     logging: boolean = false,
-    historical: boolean = true
+    historical: boolean = false
 ) => {
     if (logging) console.log("Starting getEvents");
     let offset = 0;
@@ -187,7 +187,7 @@ export const getEvents = async <S extends Schema>(
 
         setEntities(entities, components, logging);
 
-        if (Object.keys(entities).length < limit) {
+        if (Object.keys(entities).length === 0) {
             continueFetching = false;
         } else {
             offset += limit;
@@ -301,7 +301,7 @@ export const syncEntities = async <S extends Schema>(
  * @param components - An array of component definitions.
  * @param entityKeyClause - An array of EntityKeysClause to filter entities.
  * @param logging - Whether to log debug information (default: false).
- * @param historical - Whether to sync to historical events (default: true).
+ * @param historical - Whether to sync to historical events (default: false).
  * @returns A promise that resolves with the subscription handler.
  * @example
  * const sync = await syncEvents(client, components, entityKeyClause);
@@ -313,7 +313,7 @@ export const syncEvents = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause[],
     logging: boolean = false,
-    historical: boolean = true
+    historical: boolean = false
 ) => {
     if (logging) console.log("Starting syncEvents");
     return await client.onEventMessageUpdated(
