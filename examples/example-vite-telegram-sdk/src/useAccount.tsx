@@ -6,30 +6,14 @@ import React, {
     useMemo,
 } from "react";
 import {
-    useCloudStorage,
     useLaunchParams,
-    useMiniApp,
-    useUtils,
+    cloudStorage,
+    miniApp,
+    openLink,
 } from "@telegram-apps/sdk-react";
-import * as Dojo from "@dojoengine/torii-wasm";
+import * as Dojo from "@dojoengine/torii-client";
 import encodeUrl from "encodeurl";
-import { CartridgeSessionAccount } from "./lib/account-wasm";
-
-const RPC_URL = "https://api.cartridge.gg/x/starknet/mainnet";
-const KEYCHAIN_URL = "https://x.cartridge.gg";
-const POLICIES = [
-    {
-        target: "0x70fc96f845e393c732a468b6b6b54d876bd1a29e41a026e8b13579bf98eec8f",
-        method: "attack",
-        description: "Attack the beast",
-    },
-    {
-        target: "0x70fc96f845e393c732a468b6b6b54d876bd1a29e41a026e8b13579bf98eec8f",
-        method: "claim",
-        description: "Claim your tokens",
-    },
-];
-const REDIRECT_URI = "https://t.me/hitthingbot/hitthing";
+import { CartridgeSessionAccount } from "@cartridge/account-wasm/session";
 
 interface AccountStorage {
     username: string;
@@ -45,140 +29,164 @@ interface SessionSigner {
 }
 
 interface AccountContextType {
-    accountStorage: AccountStorage | undefined;
-    sessionSigner: SessionSigner | undefined;
-    account: CartridgeSessionAccount | undefined;
+    accountStorage?: AccountStorage;
+    sessionSigner?: SessionSigner;
+    account?: CartridgeSessionAccount;
     openConnectionPage: () => void;
     clearSession: () => void;
-    address: string | undefined;
-    username: string | undefined;
+    address?: string;
+    username?: string;
+    keychainUrl?: string;
+    redirectUri?: string;
+    policies?: { target: string; method: string; description: string }[];
+    rpcUrl?: string;
+    network?: string;
 }
+
+interface AccountProviderProps {
+    children: React.ReactNode;
+    keychainUrl: string;
+    policies: { target: string; method: string; description: string }[];
+    redirectUri: string;
+    rpcUrl: string;
+    network?: string;
+}
+
 const AccountContext = createContext<AccountContextType | undefined>(undefined);
 
-// AccountProvider component that manages account state and session handling
-export const AccountProvider: React.FC<{ children: React.ReactNode }> = ({
+export const AccountProvider: React.FC<AccountProviderProps> = ({
     children,
+    keychainUrl,
+    policies,
+    redirectUri,
+    rpcUrl,
+    network,
 }) => {
-    // Get Telegram Mini App launch parameters and utilities
     const { initData } = useLaunchParams();
-    const storage = useCloudStorage();
-    const utils = useUtils();
-    const miniApp = useMiniApp();
-
-    // State for storing account and session information
     const [accountStorage, setAccountStorage] = useState<AccountStorage>();
     const [sessionSigner, setSessionSigner] = useState<SessionSigner>();
 
-    // Effect to initialize session signer and load stored account data
     useEffect(() => {
-        // Try to load existing session signer from storage
-        storage.get("sessionSigner").then((signer) => {
-            if (signer) {
-                return setSessionSigner(JSON.parse(signer) as SessionSigner);
+        const initializeSession = async () => {
+            const keys = await cloudStorage.getKeys();
+
+            if (keys.includes("sessionSigner")) {
+                const signer = await cloudStorage.getItem("sessionSigner");
+                setSessionSigner(JSON.parse(signer) as SessionSigner);
+                return;
             }
 
-            // If no signer exists, create new key pair
             const privateKey = Dojo.signingKeyNew();
             const publicKey = Dojo.verifyingKeyNew(privateKey);
-
             const newSigner = { privateKey, publicKey };
-            storage.set("sessionSigner", JSON.stringify(newSigner));
+
+            await cloudStorage.setItem(
+                "sessionSigner",
+                JSON.stringify(newSigner)
+            );
             setSessionSigner(newSigner);
-        });
+        };
 
-        // Load stored account data if it exists
-        storage.get("account").then((account) => {
-            if (account) {
-                const parsedAccount = JSON.parse(account) as AccountStorage;
-                // Validate required account fields
-                if (
-                    !parsedAccount.address ||
-                    !parsedAccount.ownerGuid ||
-                    !parsedAccount.expiresAt
-                ) {
-                    return storage.delete("account");
-                }
-                setAccountStorage(parsedAccount);
+        const loadStoredAccount = async () => {
+            const account = await cloudStorage.getItem("account");
+            if (!account) return;
+
+            const parsedAccount = JSON.parse(account) as AccountStorage;
+            if (
+                !parsedAccount.address ||
+                !parsedAccount.ownerGuid ||
+                !parsedAccount.expiresAt
+            ) {
+                await cloudStorage.deleteItem("account");
+                return;
             }
-        });
-    }, [storage]);
 
-    // Effect to handle account data from Mini App launch parameters
+            setAccountStorage(parsedAccount);
+        };
+
+        initializeSession();
+        loadStoredAccount();
+    }, []);
+
     useEffect(() => {
         if (!initData?.startParam) return;
 
-        // Parse and store account data from launch parameters
         const cartridgeAccount = JSON.parse(
             atob(initData.startParam)
         ) as AccountStorage;
-        storage.set("account", JSON.stringify(cartridgeAccount));
+        cloudStorage.setItem("account", JSON.stringify(cartridgeAccount));
         setAccountStorage(cartridgeAccount);
-    }, [initData, storage]);
+    }, [initData]);
 
-    // Create CartridgeSessionAccount instance when account and signer are available
     const account = useMemo(() => {
         if (!accountStorage || !sessionSigner) return;
 
         return CartridgeSessionAccount.new_as_registered(
-            RPC_URL,
+            rpcUrl,
             sessionSigner.privateKey,
             accountStorage.address,
             accountStorage.ownerGuid,
-            Dojo.cairoShortStringToFelt("SN_MAINNET"),
+            network
+                ? Dojo.cairoShortStringToFelt(network)
+                : Dojo.cairoShortStringToFelt("SN_MAINNET"),
             {
                 expiresAt: Number(accountStorage.expiresAt),
-                policies: POLICIES,
+                policies,
             }
         );
     }, [accountStorage, sessionSigner]);
 
-    // Function to open connection page for account setup
-    const openConnectionPage = () => {
-        // Create new signer if none exists
+    const openConnectionPage = async () => {
         if (!sessionSigner) {
             const privateKey = Dojo.signingKeyNew();
             const publicKey = Dojo.verifyingKeyNew(privateKey);
-
             const newSigner = { privateKey, publicKey };
-            storage.set("sessionSigner", JSON.stringify(newSigner));
+
+            await cloudStorage.setItem(
+                "sessionSigner",
+                JSON.stringify(newSigner)
+            );
             setSessionSigner(newSigner);
             return;
         }
 
-        // Open keychain URL with session parameters
-        utils.openLink(
-            encodeUrl(
-                `${KEYCHAIN_URL}/session?public_key=${
-                    sessionSigner.publicKey
-                }&redirect_uri=${REDIRECT_URI}&redirect_query_name=startapp&policies=${JSON.stringify(
-                    POLICIES
-                )}&rpc_url=${RPC_URL}`
-            )
+        const url = encodeUrl(
+            `${keychainUrl}/session?public_key=${sessionSigner.publicKey}` +
+                `&redirect_uri=${redirectUri}&redirect_query_name=startapp` +
+                `&policies=${JSON.stringify(policies)}&rpc_url=${rpcUrl}`
         );
+
+        openLink(url, {
+            tryInstantView: false,
+        });
         miniApp.close();
     };
 
-    // Function to clear current session data
-    const clearSession = () => {
-        storage.delete("sessionSigner");
-        storage.delete("account");
+    const clearSession = async () => {
+        await Promise.all([
+            cloudStorage.deleteItem("sessionSigner"),
+            cloudStorage.deleteItem("account"),
+        ]);
         setSessionSigner(undefined);
         setAccountStorage(undefined);
     };
 
-    // Context value containing account state and functions
-    const value = {
-        accountStorage,
-        sessionSigner,
-        account,
-        openConnectionPage,
-        clearSession,
-        address: accountStorage?.address,
-        username: accountStorage?.username,
-    };
-
     return (
-        <AccountContext.Provider value={value}>
+        <AccountContext.Provider
+            value={{
+                accountStorage,
+                sessionSigner,
+                account,
+                openConnectionPage,
+                clearSession,
+                address: accountStorage?.address,
+                username: accountStorage?.username,
+                keychainUrl,
+                redirectUri,
+                policies,
+                rpcUrl,
+            }}
+        >
             {children}
         </AccountContext.Provider>
     );
@@ -186,7 +194,7 @@ export const AccountProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useAccount = () => {
     const context = useContext(AccountContext);
-    if (context === undefined) {
+    if (!context) {
         throw new Error("useAccount must be used within an AccountProvider");
     }
     return context;

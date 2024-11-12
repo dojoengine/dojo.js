@@ -992,6 +992,9 @@ importers:
 
   examples/example-vite-telegram-sdk:
     dependencies:
+      '@cartridge/account-wasm':
+        specifier: 0.5.0-alpha.1
+        version: 0.5.0-alpha.1
       '@dojoengine/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -2169,6 +2172,9 @@ packages:
 
   '@cartridge/account-wasm@0.3.46':
     resolution: {integrity: sha512-XK/1yE0U/4v9UXelkOEmW1DNbFXikWnifm9aZQ9JfT2SrNcOM3DTMHQZXMbL217RzxM7yE8KqDVVGwN0//Ya7Q==}
+
+  '@cartridge/account-wasm@0.5.0-alpha.1':
+    resolution: {integrity: sha512-Mb7AZh0vJbDWwaZHQ12MN3tggh63QNqTfrb90WtfoKuzdObXYSOwjcttPJwaT79wAvUIsPcOYo5RbAoxGVWWnA==}
 
   '@cartridge/connector@0.3.46':
     resolution: {integrity: sha512-iYfYdp6gaFJ8sKSFE4DpdVQJZj1tMroaeES76nC6U5aVQM8uz8OLtFB2AdNx/VO5QoGBB+6YbHyFffRCuVeaOg==}
@@ -13509,6 +13515,8 @@ snapshots:
   '@canvas/image-data@1.0.0': {}
 
   '@cartridge/account-wasm@0.3.46': {}
+
+  '@cartridge/account-wasm@0.5.0-alpha.1': {}
 
   '@cartridge/connector@0.3.46(encoding@0.1.13)(get-starknet-core@4.0.0)(react@18.3.1)':
     dependencies:

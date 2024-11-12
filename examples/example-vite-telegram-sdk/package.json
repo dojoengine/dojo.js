@@ -10,6 +10,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@cartridge/account-wasm": "0.5.0-alpha.1",
         "@dojoengine/core": "workspace:*",
         "@dojoengine/create-burner": "workspace:*",
         "@dojoengine/sdk": "workspace:*",
