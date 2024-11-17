@@ -66,26 +66,17 @@ async function init(projectName: string, cwd: string, template: string) {
     // Rewrite package.json in client directory
     await rewritePackageJson(projectName, clientPath);
 
-    console.log(`Cloning dojo-starter repository...`);
-    const gitCloneResult = spawn.sync(
-        "git",
-        [
-            "clone",
-            "https://github.com/dojoengine/dojo-starter.git",
-            dojoStarterPath,
-        ],
+    // Clone dojo-starter
+    console.log(`Downloading dojo-starter...`);
+    const starterCloneResult = spawn.sync(
+        "npx",
+        ["degit", `dojoengine/dojo-starter`, dojoStarterPath],
         { stdio: "inherit" }
     );
 
-    if (gitCloneResult.status !== 0) {
+    if (starterCloneResult.status !== 0) {
         throw new Error(`Failed to clone dojo-starter repository.`);
     }
-
-    // Clone dojo-starter
-    console.log(`Downloading dojo-starter...`);
-    spawn.sync("npx", ["degit", `dojoengine/dojo-starter`, dojoStarterPath], {
-        stdio: "inherit",
-    });
 
     console.log(`Project initialized at ${projectPath}`);
     console.log("Congrats! Your new project has been set up successfully.\n");
