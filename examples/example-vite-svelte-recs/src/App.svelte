@@ -4,7 +4,7 @@
         componentValueStore,
         type ComponentStore,
     } from "./dojo/componentValueStore";
-    import { dojoStore, accountStore, burnerStore } from "./stores";
+    import { dojo, account, burners } from "./stores";
     import { Account } from "starknet";
     import { type Burner } from "@dojoengine/create-burner";
     import {
@@ -13,27 +13,23 @@
         handleClearBurners,
     } from "./handlers";
 
-    let entityId: Entity;
-    let account: Account;
     let position: ComponentStore;
     let moves: ComponentStore;
-    let burners: Burner[];
 
-    $: ({ clientComponents, torii, burnerManager, client } = $dojoStore);
-    $: if ($accountStore) account = $accountStore;
+    const { clientComponents, torii, burnerManager, client } = $dojo;
 
-    $: if (torii && account)
-        entityId = torii.poseidonHash([account.address]) as Entity;
+    const signer = $account;
 
-    $: if (dojoStore)
+    if (signer && torii) {
+        const entityId = torii.poseidonHash([signer!.address]) as Entity;
         position = componentValueStore(clientComponents.Position, entityId);
-    $: if (dojoStore)
         moves = componentValueStore(clientComponents.Moves, entityId);
-    $: if ($burnerStore) burners = $burnerStore;
+    }
+
 </script>
 
 <main>
-    {#if $dojoStore}
+    {#if $dojo}
         <p>Setup completed</p>
     {:else}
         <p>Setting up...</p>
@@ -44,11 +40,11 @@
     </button>
 
     <div class="card">
-        <div>{`burners deployed: ${burners.length}`}</div>
+        <div>{`burners deployed: ${$burners.length}`}</div>
         <div>
             select signer:{" "}
             <select on:change={handleBurnerChange}>
-                {#each burners as burner}
+                {#each $burners as burner}
                     <option value={burner.address}>
                         {burner.address}
                     </option>
@@ -61,7 +57,7 @@
     </div>
 
     <div class="card">
-        <button on:click={() => client.actions.spawn({ account })}>Spawn</button
+        <button on:click={() => client.actions.spawn({ account: signer! })}>Spawn</button
         >
         <div>
             Moves Left: {moves ? `${$moves?.remaining}` : "Need to Spawn"}
@@ -82,7 +78,7 @@
                 on:click={() =>
                     position && $position.vec.y > 0
                         ? client.actions.move({
-                              account,
+                              account: signer!,
                               direction: { type: "Up" },
                           })
                         : console.log("Reach the borders of the world.")}
@@ -95,7 +91,7 @@
                 on:click={() =>
                     position && $position.vec.x > 0
                         ? client.actions.move({
-                              account,
+                              account: signer!,
                               direction: { type: "Left" },
                           })
                         : console.log("Reach the borders of the world.")}
@@ -105,7 +101,7 @@
             <button
                 on:click={() =>
                     client.actions.move({
-                        account,
+                        account: signer!,
                         direction: { type: "Right" },
                     })}
             >
@@ -116,7 +112,7 @@
             <button
                 on:click={() =>
                     client.actions.move({
-                        account,
+                        account: signer!,
                         direction: { type: "Down" },
                     })}
             >

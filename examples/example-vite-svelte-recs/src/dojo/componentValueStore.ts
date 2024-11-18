@@ -11,7 +11,7 @@ import type {
     Entity,
     Schema,
 } from "@dojoengine/recs";
-import { dojoStore } from "../stores";
+import { dojo } from "../stores";
 
 export type ComponentStore = ReturnType<typeof componentValueStore>;
 
@@ -20,9 +20,7 @@ export function componentValueStore<S extends Schema>(
     entityId: Entity | undefined,
     defaultValue?: ComponentValue<S>
 ) {
-    let entityStore = derived(dojoStore, ($store) =>
-        $store ? entityId : undefined
-    );
+    let entityStore = derived(dojo, ($dojo) => ($dojo ? entityId : undefined));
 
     return derived(
         entityStore,
