@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { QueryBuilder } from "../queryBuilder";
+import { MockSchemaType } from "../__example__/index";
 
 describe("QueryBuilder", () => {
     it("should be implemented", () => {
@@ -8,7 +9,7 @@ describe("QueryBuilder", () => {
     });
 
     it("should work with example", () => {
-        const query = new QueryBuilder()
+        const query = new QueryBuilder<MockSchemaType>()
             .namespace("world", (n) =>
                 n.entity("player", (e) => e.eq("id", "1").eq("name", "Alice"))
             )

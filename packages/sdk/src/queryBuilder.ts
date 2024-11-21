@@ -1,4 +1,12 @@
-import { QueryType, SchemaType } from "./types";
+import { QueryType, SchemaType, SubscriptionQueryType } from "./types";
+
+type NestedKeyOf<ObjectType extends object> = {
+    [Key in keyof ObjectType &
+        (string | number)]: ObjectType[Key] extends object
+        ? `${Key}` | `${Key}.${NestedKeyOf<ObjectType[Key]>}`
+        : `${Key}`;
+}[keyof ObjectType & (string | number)];
+
 export class QueryBuilder<T extends SchemaType> {
     namespaces: Map<string, Namespace<T>>;
 
@@ -7,16 +15,16 @@ export class QueryBuilder<T extends SchemaType> {
     }
 
     public namespace(
-        name: string,
+        name: keyof T,
         cb: (ns: Namespace<T>) => void
     ): Namespace<T> {
-        const ns = new Namespace(this, name);
-        this.namespaces.set(name, ns);
+        const ns = new Namespace(this);
+        this.namespaces.set(name as string, ns);
         cb(ns);
         return ns;
     }
 
-    public build(): QueryType<T> {
+    public build(): SubscriptionQueryType<T> {
         const qt: Record<
             string,
             Record<
@@ -43,25 +51,22 @@ export class QueryBuilder<T extends SchemaType> {
                 };
             }
         }
-        return qt as QueryType<T>;
+        return qt as SubscriptionQueryType<T>;
     }
 }
 
 class Namespace<T extends SchemaType> {
     entities: Map<string, QueryEntity<T>>;
 
-    constructor(
-        private parent: QueryBuilder<T>,
-        private name: string
-    ) {
+    constructor(private parent: QueryBuilder<T>) {
         this.entities = new Map<string, QueryEntity<T>>();
     }
 
     public entity(
-        name: string,
+        name: NestedKeyOf<T>,
         cb: (entity: QueryEntity<T>) => void
     ): QueryEntity<T> {
-        const entity = new QueryEntity(this, name);
+        const entity = new QueryEntity(this);
         this.entities.set(name, entity);
         cb(entity);
         return entity;
@@ -71,53 +76,58 @@ class Namespace<T extends SchemaType> {
         return this.parent.namespace(ns, cb);
     }
 
-    public build(): QueryType<T> {
+    public build(): SubscriptionQueryType<T> {
         return this.parent.build();
     }
 }
 
 class QueryEntity<T extends SchemaType> {
-    constraints: Map<string, Constraint<T>>;
+    constraints: Map<string, Constraint>;
 
-    constructor(
-        private parent: Namespace<T>,
-        private name: string
-    ) {
-        this.constraints = new Map<string, Constraint<T>>();
+    constructor(private parent: Namespace<T>) {
+        this.constraints = new Map<string, Constraint>();
+    }
+    public entity(
+        name: NestedKeyOf<T>,
+        cb: (entity: QueryEntity<T>) => void
+    ): QueryEntity<T> {
+        return this.parent.entity(name, cb);
     }
 
     public is(field: string, value: any): QueryEntity<T> {
-        this.constraints.set(field, new Constraint(this, Operator.is, value));
-        return this;
+        return this.addConstraint(field, value, Operator.is);
     }
 
     public eq(field: string, value: any): QueryEntity<T> {
-        this.constraints.set(field, new Constraint(this, Operator.eq, value));
-        return this;
+        return this.addConstraint(field, value, Operator.eq);
     }
 
     public neq(field: string, value: any): QueryEntity<T> {
-        this.constraints.set(field, new Constraint(this, Operator.neq, value));
-        return this;
+        return this.addConstraint(field, value, Operator.neq);
     }
 
     public gt(field: string, value: any): QueryEntity<T> {
-        this.constraints.set(field, new Constraint(this, Operator.gt, value));
-        return this;
+        return this.addConstraint(field, value, Operator.gt);
     }
 
     public gte(field: string, value: any): QueryEntity<T> {
-        this.constraints.set(field, new Constraint(this, Operator.gte, value));
-        return this;
+        return this.addConstraint(field, value, Operator.gte);
     }
 
     public lt(field: string, value: any): QueryEntity<T> {
-        this.constraints.set(field, new Constraint(this, Operator.lt, value));
-        return this;
+        return this.addConstraint(field, value, Operator.lt);
     }
 
     public lte(field: string, value: any): QueryEntity<T> {
-        this.constraints.set(field, new Constraint(this, Operator.lte, value));
+        return this.addConstraint(field, value, Operator.lte);
+    }
+
+    private addConstraint(
+        field: string,
+        value: any,
+        op: Operator
+    ): QueryEntity<T> {
+        this.constraints.set(field, new Constraint(op, value));
         return this;
     }
 
@@ -126,9 +136,8 @@ class QueryEntity<T extends SchemaType> {
     }
 }
 
-class Constraint<T extends SchemaType> {
+class Constraint {
     constructor(
-        private parent: QueryEntity<T>,
         private _operator: Operator,
         private _value: any
     ) {}
