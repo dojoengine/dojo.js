@@ -52,6 +52,7 @@ export function convertQueryToClause<T extends SchemaType>(
         return clauses[0];
     }
 
+    // If there are no clauses, return undefined
     return undefined;
 }
 
