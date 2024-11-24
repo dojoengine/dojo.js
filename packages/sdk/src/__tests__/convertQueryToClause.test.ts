@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { MockSchemaType, schema } from "../__example__/index";
 import { convertQueryToClause } from "../convertQuerytoClause";
-import { QueryType, SchemaType } from "../types";
+import { QueryType } from "../types";
 
 describe("convertQueryToClause", () => {
     it("should convert a single model query with conditions", () => {
@@ -134,39 +134,44 @@ describe("convertQueryToClause", () => {
 
         const result = convertQueryToClause(query, schema);
 
-        console.log("result", result);
-
         // Updated expectation to match the actual output
         expect(result).toEqual({
             Composite: {
                 operator: "Or",
                 clauses: [
                     {
-                        Member: {
-                            model: "world-player",
-                            member: "score",
-                            operator: "Gt",
-                            value: { Primitive: { U32: 100 } },
-                        },
-                    },
-                    {
                         Composite: {
-                            operator: "Or",
+                            operator: "And",
                             clauses: [
                                 {
                                     Member: {
                                         model: "world-player",
-                                        member: "name",
-                                        operator: "Eq",
-                                        value: { String: "Alice" },
+                                        member: "score",
+                                        operator: "Gt",
+                                        value: { Primitive: { U32: 100 } },
                                     },
                                 },
                                 {
-                                    Member: {
-                                        model: "world-player",
-                                        member: "name",
-                                        operator: "Eq",
-                                        value: { String: "Bob" },
+                                    Composite: {
+                                        operator: "Or",
+                                        clauses: [
+                                            {
+                                                Member: {
+                                                    model: "world-player",
+                                                    member: "name",
+                                                    operator: "Eq",
+                                                    value: { String: "Alice" },
+                                                },
+                                            },
+                                            {
+                                                Member: {
+                                                    model: "world-player",
+                                                    member: "name",
+                                                    operator: "Eq",
+                                                    value: { String: "Bob" },
+                                                },
+                                            },
+                                        ],
                                     },
                                 },
                             ],
@@ -178,6 +183,79 @@ describe("convertQueryToClause", () => {
                             member: "durability",
                             operator: "Lt",
                             value: { Primitive: { U32: 50 } },
+                        },
+                    },
+                ],
+            },
+        });
+    });
+
+    it("should handle top level AND conditions", () => {
+        const query: QueryType<MockSchemaType> = {
+            world: {
+                player: {
+                    $: {
+                        where: {
+                            And: [
+                                { score: { $gt: 100 } },
+                                { name: { $eq: "Alice" } },
+                                {
+                                    Or: [
+                                        { name: { $eq: "Bob" } },
+                                        { name: { $eq: "Charlie" } },
+                                    ],
+                                },
+                            ],
+                        },
+                    },
+                },
+            },
+        };
+
+        const result = convertQueryToClause(query, schema);
+
+        // Updated expectation to match the actual output
+        expect(result).toEqual({
+            Composite: {
+                operator: "And",
+                clauses: [
+                    {
+                        Member: {
+                            model: "world-player",
+                            member: "score",
+                            operator: "Gt",
+                            value: { Primitive: { U32: 100 } },
+                        },
+                    },
+                    {
+                        Member: {
+                            model: "world-player",
+                            member: "name",
+                            operator: "Eq",
+                            value: { String: "Alice" },
+                        },
+                    },
+                    {
+                        Composite: {
+                            operator: "Or",
+                            clauses: [
+                                {
+                                    Member: {
+                                        model: "world-player",
+                                        member: "name",
+                                        operator: "Eq",
+                                        value: { String: "Bob" },
+                                    },
+                                },
+                                {
+                                    Member: {
+                                        model: "world-player",
+                                        member: "name",
+                                        operator: "Eq",
+                                        value: { String: "Charlie" },
+                                    },
+                                },
+                            ],
                         },
                     },
                 ],

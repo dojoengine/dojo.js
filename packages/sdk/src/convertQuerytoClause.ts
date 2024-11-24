@@ -17,23 +17,33 @@ export function convertQueryToClause<T extends SchemaType>(
     schema: T
 ): torii.Clause | undefined {
     const clauses: torii.Clause[] = [];
+    let hasOnlyAndCondition = true;
 
     for (const [namespace, models] of Object.entries(query)) {
-        if (namespace === "entityIds") continue; // Skip entityIds
+        if (namespace === "entityIds") continue;
 
         if (models && typeof models === "object") {
             const modelClauses = processModels(namespace, models, schema);
             if (modelClauses.length > 0) {
+                if (
+                    !modelClauses.every(
+                        (clause) =>
+                            clause &&
+                            "Composite" in clause &&
+                            clause.Composite.operator === "And"
+                    )
+                ) {
+                    hasOnlyAndCondition = false;
+                }
                 clauses.push(...modelClauses);
             }
         }
     }
 
-    // If there are clauses, combine them under a single Composite clause
     if (clauses.length > 1) {
         return {
             Composite: {
-                operator: "Or",
+                operator: hasOnlyAndCondition ? "And" : "Or",
                 clauses: clauses,
             },
         };
@@ -41,7 +51,6 @@ export function convertQueryToClause<T extends SchemaType>(
         return clauses[0];
     }
 
-    // If there are no clauses, return undefined
     return undefined;
 }
 
@@ -73,7 +82,6 @@ function processModels<T extends SchemaType>(
             ) {
                 const whereClause = conditions.where;
                 if (whereClause && typeof whereClause === "object") {
-                    // Iterate over each member in the whereClause to handle $is
                     for (const [member, memberConditions] of Object.entries(
                         whereClause
                     )) {
@@ -82,7 +90,6 @@ function processModels<T extends SchemaType>(
                             memberConditions !== null &&
                             "$is" in memberConditions
                         ) {
-                            // Convert $is to EntityKeysClause
                             const isClauses = convertQueryToEntityKeyClauses(
                                 {
                                     [namespace]: {
@@ -103,7 +110,6 @@ function processModels<T extends SchemaType>(
                             );
                             clauses.push(...(isClauses as any));
 
-                            // Remove $is from memberConditions to prevent further processing
                             const { $is, ...remainingConditions } =
                                 memberConditions;
                             (whereClause as Record<string, unknown>)[member] =
@@ -111,27 +117,20 @@ function processModels<T extends SchemaType>(
                         }
                     }
 
-                    // After handling all $is, build the remaining whereClause
                     const clause = buildWhereClause(
                         namespaceModel,
                         whereClause
                     );
                     if (clause) {
-                        if (
-                            "Composite" in clause &&
-                            clause.Composite.operator === "And"
-                        ) {
-                            // If the composite operator is "And", flatten the clauses
-                            clauses.push(...clause.Composite.clauses);
+                        if (Array.isArray(clause)) {
+                            clauses.push(...clause);
                         } else {
-                            // Otherwise, keep the composite as is to preserve logical structure
                             clauses.push(clause);
                         }
                     }
                 }
             }
         } else {
-            // Handle the case where there are no conditions
             clauses.push({
                 Keys: {
                     keys: [undefined],
@@ -150,13 +149,12 @@ function processModels<T extends SchemaType>(
  *
  * @param {string} namespaceModel - The namespaced model identifier.
  * @param {Record<string, any>} where - The where clause conditions.
- * @returns {torii.Clause | undefined} - The constructed Torii clause or undefined.
+ * @returns {torii.Clause | torii.Clause[] | undefined} - The constructed Torii clause or undefined.
  */
 function buildWhereClause(
     namespaceModel: string,
     where: Record<string, any>
-): torii.Clause | undefined {
-    // Define logical operator mapping
+): torii.Clause | torii.Clause[] | undefined {
     const logicalOperators: Record<string, torii.LogicalOperator> = {
         And: "And",
         Or: "Or",
@@ -167,21 +165,24 @@ function buildWhereClause(
     const logicalKey = keys.find((key) => key in logicalOperators);
 
     if (logicalKey) {
+        // Handle explicit And/Or conditions
         const operator = logicalOperators[logicalKey];
         const conditions = where[logicalKey] as Array<Record<string, any>>;
 
         const subClauses: torii.Clause[] = [];
-
         for (const condition of conditions) {
             const clause = buildWhereClause(namespaceModel, condition);
             if (clause) {
-                subClauses.push(clause);
+                if (Array.isArray(clause)) {
+                    subClauses.push(...clause);
+                } else {
+                    subClauses.push(clause);
+                }
             }
         }
 
-        if (subClauses.length === 1) {
-            return subClauses[0];
-        }
+        if (subClauses.length === 0) return undefined;
+        if (subClauses.length === 1) return subClauses[0];
 
         return {
             Composite: {
@@ -196,73 +197,25 @@ function buildWhereClause(
 
     for (const [member, memberValue] of Object.entries(where)) {
         if (typeof memberValue === "object" && memberValue !== null) {
-            const memberKeys = Object.keys(memberValue);
-            // Check if memberValue contains logical operators
-            const memberLogicalKey = memberKeys.find(
-                (key) => key in logicalOperators
-            );
-            if (memberLogicalKey) {
-                const operator = logicalOperators[memberLogicalKey];
-                const conditions = memberValue[memberLogicalKey] as Array<
-                    Record<string, any>
-                >;
-
-                const nestedClauses: torii.Clause[] = [];
-                for (const condition of conditions) {
-                    const clause = buildWhereClause(namespaceModel, condition);
-                    if (clause) {
-                        nestedClauses.push(clause);
-                    }
-                }
-
-                if (nestedClauses.length === 1) {
-                    memberClauses.push(nestedClauses[0]);
-                } else {
-                    memberClauses.push({
-                        Composite: {
-                            operator: operator,
-                            clauses: nestedClauses,
-                        },
-                    });
-                }
-            } else {
-                // Process operators like $eq, $gt, etc
-                for (const [op, val] of Object.entries(memberValue)) {
-                    memberClauses.push({
-                        Member: {
-                            model: namespaceModel,
-                            member,
-                            operator: convertOperator(op),
-                            value: convertToPrimitive(val),
-                        },
-                    });
-                }
+            for (const [op, val] of Object.entries(memberValue)) {
+                if (!op.startsWith("$")) continue;
+                memberClauses.push({
+                    Member: {
+                        model: namespaceModel,
+                        member,
+                        operator: convertOperator(op),
+                        value: convertToPrimitive(val),
+                    },
+                });
             }
-        } else {
-            // Assume equality condition
-            memberClauses.push({
-                Member: {
-                    model: namespaceModel,
-                    member,
-                    operator: "Eq",
-                    value: convertToPrimitive(memberValue),
-                },
-            });
         }
     }
 
-    if (memberClauses.length === 1) {
-        return memberClauses[0];
-    } else if (memberClauses.length > 1) {
-        return {
-            Composite: {
-                operator: "And",
-                clauses: memberClauses,
-            },
-        };
-    }
+    if (memberClauses.length === 0) return undefined;
+    if (memberClauses.length === 1) return memberClauses[0];
 
-    return undefined;
+    // Return array of Member clauses directly
+    return memberClauses;
 }
 
 /**
