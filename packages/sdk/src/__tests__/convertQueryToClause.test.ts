@@ -198,11 +198,11 @@ describe("convertQueryToClause", () => {
                         where: {
                             And: [
                                 { score: { $gt: 100 } },
-                                { name: { $eq: "Alice" } },
+                                { name: { $eq: "Charlie" } },
                                 {
                                     Or: [
+                                        { name: { $eq: "Alice" } },
                                         { name: { $eq: "Bob" } },
-                                        { name: { $eq: "Charlie" } },
                                     ],
                                 },
                             ],
@@ -232,7 +232,7 @@ describe("convertQueryToClause", () => {
                             model: "world-player",
                             member: "name",
                             operator: "Eq",
-                            value: { String: "Alice" },
+                            value: { String: "Charlie" },
                         },
                     },
                     {
@@ -244,7 +244,7 @@ describe("convertQueryToClause", () => {
                                         model: "world-player",
                                         member: "name",
                                         operator: "Eq",
-                                        value: { String: "Bob" },
+                                        value: { String: "Alice" },
                                     },
                                 },
                                 {
@@ -252,7 +252,7 @@ describe("convertQueryToClause", () => {
                                         model: "world-player",
                                         member: "name",
                                         operator: "Eq",
-                                        value: { String: "Charlie" },
+                                        value: { String: "Bob" },
                                     },
                                 },
                             ],
