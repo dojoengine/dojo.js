@@ -119,9 +119,9 @@ function processModels<T extends SchemaType>(
                     if (clause) {
                         if (
                             "Composite" in clause &&
-                            clause.Composite.operator === "And"
+                            clause.Composite.operator === "Or"
                         ) {
-                            // If the composite operator is "And", flatten the clauses
+                            // If the composite operator is "Or", flatten the clauses
                             clauses.push(...clause.Composite.clauses);
                         } else {
                             // Otherwise, keep the composite as is to preserve logical structure
@@ -255,6 +255,7 @@ function buildWhereClause(
         return memberClauses[0];
     } else if (memberClauses.length > 1) {
         return {
+            // conditions in member clause should be treated as "And" Conditions by default
             Composite: {
                 operator: "And",
                 clauses: memberClauses,
@@ -299,7 +300,6 @@ function convertToPrimitive(value: any): torii.MemberValue {
  * @throws {Error} - If the operator is unsupported.
  */
 function convertOperator(operator: string): torii.ComparisonOperator {
-    console.log(operator);
     switch (operator) {
         case "$eq":
             return "Eq";
