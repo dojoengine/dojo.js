@@ -20,7 +20,7 @@ export function convertQueryToClause<T extends SchemaType>(
     let hasOnlyAndCondition = true;
 
     for (const [namespace, models] of Object.entries(query)) {
-        if (namespace === "entityIds") continue;
+        if (namespace === "entityIds") continue; // Skip entityIds;
 
         if (models && typeof models === "object") {
             const modelClauses = processModels(namespace, models, schema);
@@ -40,6 +40,7 @@ export function convertQueryToClause<T extends SchemaType>(
         }
     }
 
+    // If there are multiple clauses, wrap them in a Composite clause
     if (clauses.length > 1) {
         return {
             Composite: {
@@ -90,6 +91,7 @@ function processModels<T extends SchemaType>(
                             memberConditions !== null &&
                             "$is" in memberConditions
                         ) {
+                            // Convert $is to EntityKeysClause
                             const isClauses = convertQueryToEntityKeyClauses(
                                 {
                                     [namespace]: {
@@ -110,6 +112,7 @@ function processModels<T extends SchemaType>(
                             );
                             clauses.push(...(isClauses as any));
 
+                            // Remove $is from the where clause
                             const { $is, ...remainingConditions } =
                                 memberConditions;
                             (whereClause as Record<string, unknown>)[member] =
@@ -117,6 +120,7 @@ function processModels<T extends SchemaType>(
                         }
                     }
 
+                    // After handling all $is, build the remaining whereClause
                     const clause = buildWhereClause(
                         namespaceModel,
                         whereClause
@@ -131,6 +135,7 @@ function processModels<T extends SchemaType>(
                 }
             }
         } else {
+            // Handle the case where there are no conditions
             clauses.push({
                 Keys: {
                     keys: [undefined],
