@@ -252,7 +252,6 @@ function convertToPrimitive(value: any): torii.MemberValue {
  * @throws {Error} - If the operator is unsupported.
  */
 function convertOperator(operator: string): torii.ComparisonOperator {
-    console.log(operator);
     switch (operator) {
         case "$eq":
             return "Eq";
