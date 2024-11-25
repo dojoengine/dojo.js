@@ -44,12 +44,12 @@ const templates = [
 async function init(projectName: string, cwd: string, template: string) {
     const projectPath = path.join(cwd, projectName);
     const clientPath = path.join(projectPath, "client");
-    const dojoStarterPath = path.join(projectPath, "dojo-starter");
+    const contractPath = path.join(projectPath, "contract");
 
     // Create project directories
     await fs.mkdir(projectPath, { recursive: true });
     await fs.mkdir(clientPath, { recursive: true });
-    await fs.mkdir(dojoStarterPath, { recursive: true });
+    await fs.mkdir(contractPath, { recursive: true });
 
     // Clone template into client directory
     console.log(`Downloading ${template} into client directory...`);
@@ -66,26 +66,21 @@ async function init(projectName: string, cwd: string, template: string) {
     // Rewrite package.json in client directory
     await rewritePackageJson(projectName, clientPath);
 
-    console.log(`Cloning dojo-starter repository...`);
-    const gitCloneResult = spawn.sync(
-        "git",
-        [
-            "clone",
-            "https://github.com/dojoengine/dojo-starter.git",
-            dojoStarterPath,
-        ],
-        { stdio: "inherit" }
-    );
-
-    if (gitCloneResult.status !== 0) {
-        throw new Error(`Failed to clone dojo-starter repository.`);
-    }
+    // Update dojoConfig.ts imports
+    await rewriteDojoConfigFile(clientPath);
 
     // Clone dojo-starter
     console.log(`Downloading dojo-starter...`);
-    spawn.sync("npx", ["degit", `dojoengine/dojo-starter`, dojoStarterPath], {
-        stdio: "inherit",
-    });
+    const contractRes = spawn.sync(
+        "npx",
+        ["degit", `dojoengine/dojo-starter`, contractPath],
+        {
+            stdio: "inherit",
+        }
+    );
+    if (contractRes.status !== 0) {
+        throw new Error(`Failed to clone template: ${template}`);
+    }
 
     console.log(`Project initialized at ${projectPath}`);
     console.log("Congrats! Your new project has been set up successfully.\n");
@@ -114,6 +109,24 @@ async function rewritePackageJson(projectName: string, clientPath: string) {
     }
 
     await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+}
+
+async function rewriteDojoConfigFile(clientPath: string) {
+    const dojoConfigPath = path.join(clientPath, "dojoConfig.ts");
+
+    try {
+        let content = await fs.readFile(dojoConfigPath, "utf-8");
+
+        // Update relative imports to account for new directory structure
+        content = content.replace(
+            /from ['"]\.{0,2}\/.*manifest(?:_dev)?\.json['"]/g,
+            'from "../contract/target/dev/manifest.json"'
+        );
+
+        await fs.writeFile(dojoConfigPath, content, "utf-8");
+    } catch (error) {
+        console.warn(`Warning: Could not update dojoConfig.ts: ${error}`);
+    }
 }
 
 async function getLatestVersion(): Promise<string> {
