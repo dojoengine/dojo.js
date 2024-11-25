@@ -9,7 +9,7 @@ import "./app/globals.css";
 import { init } from "@dojoengine/sdk";
 import { OnchainDashSchemaType, schema } from "@/dojo/models";
 import { env, getRpcUrl } from "@/env";
-import { dojoConfig } from "@/dojo.config";
+import { dojoConfig } from "../dojoConfig";
 import { DojoContext } from "@/dojo/provider";
 
 async function main() {
