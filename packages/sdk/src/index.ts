@@ -41,34 +41,26 @@ export async function init<T extends SchemaType>(
         /**
          * Subscribes to entity queries.
          *
-         * @param {SubscriptionQueryType<T>} query - The query object used to filter entities.
-         * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
-         * @param {{ logging?: boolean }} [options] - Optional settings.
+         * @param {SubscribeParams<T>} params - Parameters object
          * @returns {Promise<void>} - A promise that resolves when the subscription is set up.
          */
-        subscribeEntityQuery: (query, callback, options) =>
+        subscribeEntityQuery: ({ query, callback, options }) =>
             subscribeEntityQuery(client, query, schema, callback, options),
         /**
          * Subscribes to event queries.
          *
-         * @param {SubscriptionQueryType<T>} query - The query object used to filter events.
-         * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
-         * @param {{ logging?: boolean }} [options] - Optional settings.
+         * @param {SubscribeParams<T>} params - Parameters object
          * @returns {Promise<void>} - A promise that resolves when the subscription is set up.
          */
-        subscribeEventQuery: (query, callback, options) =>
+        subscribeEventQuery: ({ query, callback, options }) =>
             subscribeEventQuery(client, query, schema, callback, options),
         /**
          * Fetches entities based on the provided query.
          *
-         * @param {SubscriptionQueryType<T>} query - The query object used to filter entities.
-         * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
-         * @param {number} [limit=100] - The maximum number of entities to fetch per request. Default is 100.
-         * @param {number} [offset=0] - The offset to start fetching entities from. Default is 0.
-         * @param {{ logging?: boolean }} [options] - Optional settings.
+         * @param {GetParams<T>} params - Parameters object
          * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
          */
-        getEntities: (query, callback, limit, offset, options) =>
+        getEntities: ({ query, callback, limit, offset, options }) =>
             getEntities(
                 client,
                 query,
@@ -81,14 +73,10 @@ export async function init<T extends SchemaType>(
         /**
          * Fetches event messages based on the provided query.
          *
-         * @param {SubscriptionQueryType<T>} query - The query object used to filter event messages.
-         * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
-         * @param {number} [limit=100] - The maximum number of event messages to fetch per request. Default is 100.
-         * @param {number} [offset=0] - The offset to start fetching event messages from. Default is 0.
-         * @param {{ logging?: boolean }} [options] - Optional settings.
+         * @param {GetParams<T>} params - Parameters object
          * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
          */
-        getEventMessages: (query, callback, limit, offset, options) =>
+        getEventMessages: ({ query, callback, limit, offset, options }) =>
             getEventMessages(
                 client,
                 query,
@@ -139,12 +127,14 @@ export async function init<T extends SchemaType>(
          *
          * @param {TypedData} data - The typed data to be signed and sent.
          * @param {Account} account - The account used to sign the message.
+         * @param {boolean} [isSessionSignature=false] - Whether the signature is a session signature.
          * @returns {Promise<void>} - A promise that resolves when the message is sent successfully.
          * @throws {Error} If the message sending fails.
          */
         sendMessage: async (
             data: TypedData,
-            account: Account
+            account: Account,
+            isSessionSignature: boolean = false
         ): Promise<void> => {
             try {
                 // Sign the typed data
@@ -157,7 +147,8 @@ export async function init<T extends SchemaType>(
                     dataString,
                     Array.isArray(signature)
                         ? signature
-                        : [signature.r.toString(), signature.s.toString()]
+                        : [signature.r.toString(), signature.s.toString()],
+                    isSessionSignature
                 );
             } catch (error) {
                 console.error("Failed to send message:", error);

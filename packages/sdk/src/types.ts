@@ -263,80 +263,43 @@ export interface SDK<T extends SchemaType> {
      * Subscribes to entity updates based on the provided query and invokes the callback with the updated data.
      *
      * @template T - The schema type.
-     * @param {SubscriptionQueryType<T>} [query] - The subscription query to filter the entities.
-     * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
+     * @param {SubscribeParams<T>} params - Parameters object
      * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
      */
     subscribeEntityQuery: (
-        query: SubscriptionQueryType<T>,
-        callback: (response: {
-            data?: StandardizedQueryResult<T>;
-            error?: Error;
-        }) => void,
-        options?: { logging?: boolean }
+        params: SubscribeParams<T>
     ) => Promise<torii.Subscription>;
 
     /**
      * Subscribes to event messages based on the provided query and invokes the callback with the updated data.
      *
      * @template T - The schema type.
-     * @param {SubscriptionQueryType<T>} [query] - The subscription query to filter the events.
+     * @param {SubscribeParams<T>} params - Parameters object
      * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
      * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
      */
     subscribeEventQuery: (
-        query: SubscriptionQueryType<T>,
-        callback: (response: {
-            data?: StandardizedQueryResult<T>;
-            error?: Error;
-        }) => void,
-        options?: { logging?: boolean }
+        params: SubscribeParams<T>
     ) => Promise<torii.Subscription>;
 
     /**
      * Fetches entities from the Torii client based on the provided query.
      *
      * @template T - The schema type.
-     * @param {QueryType<T>} query - The query object used to filter entities.
-     * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
-     * @param {number} [limit=100] - The maximum number of entities to fetch per request. Default is 100.
-     * @param {number} [offset=0] - The offset to start fetching entities from. Default is 0.
-     * @param {{ logging?: boolean }} [options] - Optional settings.
-     * @param {boolean} [options.logging] - If true, enables logging of the fetching process. Default is false.
+     * @param {GetParams<T>} params - Parameters object
      * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
      */
-    getEntities: (
-        query: QueryType<T>,
-        callback: (response: {
-            data?: StandardizedQueryResult<T>;
-            error?: Error;
-        }) => void,
-        limit?: number,
-        offset?: number,
-        options?: { logging?: boolean }
-    ) => Promise<StandardizedQueryResult<T>>;
+    getEntities: (params: GetParams<T>) => Promise<StandardizedQueryResult<T>>;
 
     /**
      * Fetches event messages from the Torii client based on the provided query.
      *
      * @template T - The schema type.
-     * @param {QueryType<T>} query - The query object used to filter event messages.
-     * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} callback - The callback function to handle the response.
-     * @param {number} [limit=100] - The maximum number of event messages to fetch per request. Default is 100.
-     * @param {number} [offset=0] - The offset to start fetching event messages from. Default is 0.
-     * @param {{ logging?: boolean }} [options] - Optional settings.
-     * @param {boolean} [options.logging] - If true, enables logging of the fetching process. Default is false.
+     * @param {GetParams<T>} params - Parameters object
      * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
      */
     getEventMessages: (
-        query: QueryType<T>,
-        callback: (response: {
-            data?: StandardizedQueryResult<T>;
-            error?: Error;
-        }) => void,
-        limit?: number,
-        offset?: number,
-        options?: { logging?: boolean }
+        params: GetParams<T>
     ) => Promise<StandardizedQueryResult<T>>;
     generateTypedData: <M extends UnionOfModelData<T>>(
         primaryType: string,
@@ -362,4 +325,37 @@ export interface SDKConfig {
      * It typically includes details like the chain ID, name, and version.
      */
     domain: StarknetDomain;
+}
+
+export interface SDKFunctionOptions {
+    // If true, enables logging of the fetching process. Default is false.
+    logging?: boolean;
+}
+
+export interface SubscribeParams<T extends SchemaType> {
+    // Query object used to filter entities.
+    query: SubscriptionQueryType<T>;
+    // The callback function to handle the response.
+    callback: (response: {
+        data?: StandardizedQueryResult<T>;
+        error?: Error;
+    }) => void;
+    // Optional settings.
+    options?: SDKFunctionOptions;
+}
+
+export interface GetParams<T extends SchemaType> {
+    // The query object used to filter entities.
+    query: QueryType<T>;
+    // The callback function to handle the response.
+    callback: (response: {
+        data?: StandardizedQueryResult<T>;
+        error?: Error;
+    }) => void;
+    // The maximum number of entities to fetch per request. Default is 100.
+    limit?: number;
+    // The offset to start fetching entities from. Default is 0.
+    offset?: number;
+    // Optional settings.
+    options?: SDKFunctionOptions;
 }
