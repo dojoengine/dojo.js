@@ -156,5 +156,30 @@ export async function init<T extends SchemaType>(
                 throw error;
             }
         },
+
+        /**
+         * @param {(string)[]} contract_addresses
+         * @returns {Promise<Tokens>}
+         */
+        getTokens: async (
+            contract_addresses: string[]
+        ): Promise<torii.Tokens> => {
+            return await client.getTokens(contract_addresses);
+        },
+
+        /**
+         * @param {(string)[]} account_addresses
+         * @param {(string)[]} contract_addresses
+         * @returns {Promise<TokenBalances>}
+         */
+        getTokenBalances: async (
+            account_addresses: string[],
+            contract_addresses: string[]
+        ): Promise<torii.TokenBalances> => {
+            return await client.getTokenBalances(
+                account_addresses,
+                contract_addresses
+            );
+        },
     };
 }
