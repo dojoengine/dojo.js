@@ -307,6 +307,20 @@ export interface SDK<T extends SchemaType> {
         domain?: StarknetDomain
     ) => TypedData;
     sendMessage: (data: TypedData, account: Account) => Promise<void>;
+    /**
+     * @param {string[]} contract_addresses
+     * @returns {Promise<torii.Tokens>}
+     */
+    getTokens(contract_addresses: string[]): Promise<torii.Tokens>;
+    /**
+     * @param {string[]} account_addresses
+     * @param {string[]} contract_addresses
+     * @returns {Promise<torii.TokenBalances>}
+     */
+    getTokenBalances(
+        account_addresses: string[],
+        contract_addresses: string[]
+    ): Promise<torii.TokenBalances>;
 }
 
 /**
