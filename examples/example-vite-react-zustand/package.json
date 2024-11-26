@@ -1,0 +1,27 @@
+{
+    "name": "example-vite-react-zustand",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "vite"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "typescript": "^5.7.2",
+        "vite": "^6.0.0",
+        "vite-plugin-top-level-await": "^1.4.4",
+        "vite-plugin-wasm": "^3.3.0",
+        "vite-preset-react": "^2.3.0"
+    },
+    "dependencies": {
+        "@dojoengine/core": "workspace:*",
+        "@dojoengine/sdk": "workspace:*",
+        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/torii-wasm": "workspace:*",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1"
+    }
+}
