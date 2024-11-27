@@ -2,7 +2,7 @@
 // Import the necessary types from the recs SDK
 // generate again with `sozo build --typescript`
 import { DojoProvider } from "@dojoengine/core";
-import { Account, byteArray } from "starknet";
+import { Account } from "starknet";
 
 export type IClient = Awaited<ReturnType<typeof client>>;
 

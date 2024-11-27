@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { SDK, createDojoStore } from "@dojoengine/sdk";
+import { QueryBuilder, SDK, createDojoStore } from "@dojoengine/sdk";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { addAddressPadding } from "starknet";
 
@@ -38,34 +38,25 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
         let unsubscribe: (() => void) | undefined;
 
         const subscribe = async () => {
-            const subscription = await sdk.subscribeEntityQuery(
-                {
-                    dojo_starter: {
-                        Moves: {
-                            $: {
-                                where: {
-                                    player: {
-                                        $is: addAddressPadding(
-                                            account.account.address
-                                        ),
-                                    },
-                                },
-                            },
-                        },
-                        Position: {
-                            $: {
-                                where: {
-                                    player: {
-                                        $is: addAddressPadding(
-                                            account.account.address
-                                        ),
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-                (response) => {
+            const subscription = await sdk.subscribeEntityQuery({
+                query: new QueryBuilder<Schema>()
+                    .namespace("dojo_starter", (n) =>
+                        n
+                            .entity("Moves", (e) =>
+                                e.eq(
+                                    "player",
+                                    addAddressPadding(account.account.address)
+                                )
+                            )
+                            .entity("Position", (e) =>
+                                e.is(
+                                    "player",
+                                    addAddressPadding(account.account.address)
+                                )
+                            )
+                    )
+                    .build(),
+                callback: (response) => {
                     if (response.error) {
                         console.error(
                             "Error setting up entity sync:",
@@ -79,8 +70,7 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                         state.updateEntity(response.data[0]);
                     }
                 },
-                { logging: true }
-            );
+            });
 
             unsubscribe = () => subscription.cancel();
         };
@@ -97,23 +87,18 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
     useEffect(() => {
         const fetchEntities = async () => {
             try {
-                await sdk.getEntities(
-                    {
-                        dojo_starter: {
-                            Moves: {
-                                $: {
-                                    where: {
-                                        player: {
-                                            $eq: addAddressPadding(
-                                                account.account.address
-                                            ),
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    (resp) => {
+                await sdk.getEntities({
+                    query: new QueryBuilder<Schema>()
+                        .namespace("dojo_starter", (n) =>
+                            n.entity("Moves", (e) =>
+                                e.eq(
+                                    "player",
+                                    addAddressPadding(account.account.address)
+                                )
+                            )
+                        )
+                        .build(),
+                    callback: (resp) => {
                         if (resp.error) {
                             console.error(
                                 "resp.error.message:",
@@ -124,8 +109,8 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                         if (resp.data) {
                             state.setEntities(resp.data);
                         }
-                    }
-                );
+                    },
+                });
             } catch (error) {
                 console.error("Error querying entities:", error);
             }

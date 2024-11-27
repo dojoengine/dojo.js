@@ -1,11 +1,8 @@
 import { QueryType, SchemaType, SubscriptionQueryType } from "./types";
 
-type NestedKeyOf<ObjectType extends object> = {
-    [Key in keyof ObjectType &
-        (string | number)]: ObjectType[Key] extends object
-        ? `${Key}` | `${Key}.${NestedKeyOf<ObjectType[Key]>}`
-        : `${Key}`;
-}[keyof ObjectType & (string | number)];
+type FirstLevelKeys<ObjectType> = ObjectType extends object
+    ? keyof ObjectType & (string | number)
+    : never;
 
 export class QueryBuilder<T extends SchemaType> {
     namespaces: Map<string, Namespace<T>>;
@@ -63,11 +60,11 @@ class Namespace<T extends SchemaType> {
     }
 
     public entity(
-        name: NestedKeyOf<T>,
+        name: FirstLevelKeys<T[keyof T & string]>,
         cb: (entity: QueryEntity<T>) => void
     ): QueryEntity<T> {
         const entity = new QueryEntity(this);
-        this.entities.set(name, entity);
+        this.entities.set(name as string, entity);
         cb(entity);
         return entity;
     }
@@ -88,46 +85,67 @@ class QueryEntity<T extends SchemaType> {
         this.constraints = new Map<string, Constraint>();
     }
     public entity(
-        name: NestedKeyOf<T>,
+        name: FirstLevelKeys<T[keyof T & string]>,
         cb: (entity: QueryEntity<T>) => void
     ): QueryEntity<T> {
         return this.parent.entity(name, cb);
     }
 
-    public is(field: string, value: any): QueryEntity<T> {
+    public is(
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
+        value: any
+    ): QueryEntity<T> {
         return this.addConstraint(field, value, Operator.is);
     }
 
-    public eq(field: string, value: any): QueryEntity<T> {
+    public eq(
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
+        value: any
+    ): QueryEntity<T> {
         return this.addConstraint(field, value, Operator.eq);
     }
 
-    public neq(field: string, value: any): QueryEntity<T> {
+    public neq(
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
+        value: any
+    ): QueryEntity<T> {
         return this.addConstraint(field, value, Operator.neq);
     }
 
-    public gt(field: string, value: any): QueryEntity<T> {
+    public gt(
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
+        value: any
+    ): QueryEntity<T> {
         return this.addConstraint(field, value, Operator.gt);
     }
 
-    public gte(field: string, value: any): QueryEntity<T> {
+    public gte(
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
+        value: any
+    ): QueryEntity<T> {
         return this.addConstraint(field, value, Operator.gte);
     }
 
-    public lt(field: string, value: any): QueryEntity<T> {
+    public lt(
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
+        value: any
+    ): QueryEntity<T> {
         return this.addConstraint(field, value, Operator.lt);
     }
 
-    public lte(field: string, value: any): QueryEntity<T> {
+    public lte(
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
+        value: any
+    ): QueryEntity<T> {
         return this.addConstraint(field, value, Operator.lte);
     }
 
     private addConstraint(
-        field: string,
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
         value: any,
         op: Operator
     ): QueryEntity<T> {
-        this.constraints.set(field, new Constraint(op, value));
+        this.constraints.set(field as string, new Constraint(op, value));
         return this;
     }
 

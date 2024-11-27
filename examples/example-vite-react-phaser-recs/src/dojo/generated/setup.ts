@@ -5,16 +5,8 @@ import { createSystemCalls } from "../createSystemCalls";
 import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { setupWorld } from "./generated";
-import {
-    DojoConfig,
-    DojoProvider,
-    createModelTypedData,
-} from "@dojoengine/core";
-import {
-    ArraySignatureType,
-    TypedData,
-    WeierstrassSignatureType,
-} from "starknet";
+import { DojoConfig, DojoProvider } from "@dojoengine/core";
+import { ArraySignatureType } from "starknet";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -37,6 +29,7 @@ export async function setup({ ...config }: DojoConfig) {
     const sync = await getSyncEntities(
         toriiClient,
         contractComponents as any,
+        undefined,
         []
     );
 
@@ -53,8 +46,16 @@ export async function setup({ ...config }: DojoConfig) {
             contractComponents,
             clientComponents
         ),
-        publish: (typedData: string, signature: ArraySignatureType) => {
-            toriiClient.publishMessage(typedData, signature);
+        publish: (
+            typedData: string,
+            signature: ArraySignatureType,
+            isSessionSignature = false
+        ) => {
+            toriiClient.publishMessage(
+                typedData,
+                signature,
+                isSessionSignature
+            );
         },
         config,
         sync,
