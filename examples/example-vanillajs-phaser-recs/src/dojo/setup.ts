@@ -53,8 +53,8 @@ export async function setup({ ...config }: Config) {
         sync = await getSyncEntities(
             toriiClient,
             contractModels as any,
-            [],
-            1000
+            undefined,
+            []
         );
     } catch (e) {
         console.error("Failed to fetch sync:", e);
