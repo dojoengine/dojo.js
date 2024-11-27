@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/dojoengine/dojo.js/compare/v1.0.1...v1.0.2) (2024-11-27)
+
+
+### Bug Fixes
+
+* release build issue with sdk + querybuilder type ([25d3363](https://github.com/dojoengine/dojo.js/commit/25d33639b7bc699d082d038b835c15da31c08783))
+
+
+### Features
+
+* build examples on ci ([c76c74b](https://github.com/dojoengine/dojo.js/commit/c76c74b354572371f189a881b35ede49eb4c9502))
+
+
+
+
+
 ## [1.0.1](https://github.com/dojoengine/dojo.js/compare/v1.0.0...v1.0.1) (2024-11-26)
 
 
