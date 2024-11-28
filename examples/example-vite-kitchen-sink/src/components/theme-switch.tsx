@@ -20,7 +20,7 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown";
-import { dojoConfig } from "@/dojo.config";
+import { dojoConfig } from "@/../dojoConfig";
 
 interface ThemeState {
     current: string | null;
