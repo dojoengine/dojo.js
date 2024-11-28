@@ -35,14 +35,29 @@ export const useSystemCalls = () => {
             await state.waitForEntityChange(
                 entityId,
                 (entity) => {
+                    // Log the current state of the entity for debugging purposes
                     console.log("Entity state:", entity);
+
+                    // Defensive checks to ensure the entity and its structure are valid
+                    if (!entity) {
+                        console.warn("Entity not found");
+                        return false;
+                    }
+                    if (!entity.models?.dojo_starter?.Moves) {
+                        console.warn(
+                            "Entity does not have the expected model structure"
+                        );
+                        return false;
+                    }
+
+                    // Check if the remaining moves have been updated as expected
                     return (
-                        entity?.models?.dojo_starter?.Moves?.remaining ===
+                        entity.models.dojo_starter.Moves.remaining ===
                         remainingMoves
                     );
                 },
-                10000
-            ); // Increased timeout to 10000ms
+                10000 // Increased timeout to 10000ms
+            );
         } catch (error) {
             state.revertOptimisticUpdate(transactionId);
             console.error("Error executing spawn:", error);
