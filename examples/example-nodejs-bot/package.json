@@ -32,7 +32,7 @@
     },
     "scripts": {
         "build": "tsc",
-        "serve": "tsc && node dist/node/torii-bot/src/index.js",
+        "serve": "tsc && node dist/src/index.js",
         "codegen": "graphql-codegen",
         "test": "echo \"Error: no test specified\""
     }

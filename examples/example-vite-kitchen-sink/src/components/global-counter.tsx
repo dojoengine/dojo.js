@@ -5,7 +5,7 @@ import { useDojoDb } from "@/dojo/provider";
 import { SDK } from "@dojoengine/sdk";
 import { OnchainDashSchemaType } from "@/dojo/models";
 import { Subscription } from "@dojoengine/torii-wasm";
-import { dojoConfig } from "@/dojo.config";
+import { dojoConfig } from "@/../dojoConfig";
 
 export default function GlobalCOunter() {
     const [count, setCount] = useState(0);

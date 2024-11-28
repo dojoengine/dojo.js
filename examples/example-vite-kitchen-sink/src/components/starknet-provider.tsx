@@ -1,16 +1,9 @@
 import type { PropsWithChildren } from "react";
 import CartridgeConnector from "@cartridge/connector";
 import { Chain, mainnet } from "@starknet-react/chains";
-import {
-    argent,
-    braavos,
-    jsonRpcProvider,
-    StarknetConfig,
-    useInjectedConnectors,
-    voyager,
-} from "@starknet-react/core";
+import { jsonRpcProvider, StarknetConfig, voyager } from "@starknet-react/core";
 import { env, getRpcUrl } from "@/env";
-import { dojoConfig } from "@/dojo.config";
+import { dojoConfig } from "@/../dojoConfig";
 
 const cartridge = new CartridgeConnector({
     url: env.VITE_CONTROLLER_URL,

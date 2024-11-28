@@ -6,7 +6,7 @@ import { ensureStarkFelt } from "@/lib/utils";
 import { SDK } from "@dojoengine/sdk";
 import { OnchainDashSchemaType } from "@/dojo/models";
 import { Subscription } from "@dojoengine/torii-wasm";
-import { dojoConfig } from "@/dojo.config";
+import { dojoConfig } from "@/../dojoConfig";
 
 export default function CallerCounter() {
     const [count, setCount] = useState(0);
