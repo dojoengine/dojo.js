@@ -56,8 +56,7 @@ export const useSystemCalls = () => {
                   },
                 };
                 draft.entities[entityId] = newEntity;
-            }
-            if (draft.entities[entityId]?.models?.dojo_starter?.Moves) {
+            } else if (draft.entities[entityId]?.models?.dojo_starter?.Moves) {
                 draft.entities[entityId].models.dojo_starter.Moves.remaining =
                     remainingMoves;
             }
