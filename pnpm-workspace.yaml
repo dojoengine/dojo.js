@@ -1,3 +1,9 @@
 packages:
     - "packages/*"
     - "examples/**"
+
+catalog:
+    starknet: ^6.11.0
+    get-starknet-core: ^4.0.0
+    "@starknet-react/core": ^3.0.0
+    "@starknet-react/chains": ^2.9.0

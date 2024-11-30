@@ -12,8 +12,9 @@
     },
     "license": "MIT",
     "peerDependencies": {
+        "get-starknet-core": "catalog:*",
         "react": "^18.2.0",
-        "starknet": "6.11.0",
+        "starknet": "catalog:*",
         "type-fest": "^2.14.0"
     },
     "exports": {
@@ -41,7 +42,6 @@
         "@latticexyz/utils": "^2.2.8",
         "encoding": "^0.1.13",
         "fast-deep-equal": "^3.1.3",
-        "get-starknet-core": "^3.3.3",
         "js-cookie": "^3.0.5",
         "rxjs": "7.5.5",
         "zustand": "^4.5.5"
