@@ -274,18 +274,20 @@ function buildWhereClause(
  * @throws {Error} - If the value type is unsupported.
  */
 function convertToPrimitive(value: any): torii.MemberValue {
-    if (typeof value === "number") {
-        return { Primitive: { U32: value } };
-    } else if (typeof value === "boolean") {
-        return { Primitive: { Bool: value } };
-    } else if (typeof value === "bigint") {
-        return {
+    const primitiveHandlers: Record<string, torii.MemberValue> = {
+        number: { Primitive: { U32: value } },
+        boolean: { Primitive: { Bool: value } },
+        bigint: {
             Primitive: {
                 Felt252: torii.cairoShortStringToFelt(value.toString()),
             },
-        };
-    } else if (typeof value === "string") {
-        return { String: value };
+        },
+        string: { String: value },
+    };
+
+    const elementType = typeof value;
+    if (Object.hasOwn(primitiveHandlers, elementType)) {
+        return primitiveHandlers[elementType];
     }
 
     // Add more type conversions as needed

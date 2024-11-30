@@ -34,4 +34,28 @@ describe("QueryBuilder", () => {
 
         expect(query).toStrictEqual(expected);
     });
+
+    it("should work with logical operators", () => {
+        const query = new QueryBuilder<MockSchemaType>()
+            .namespace("world", (n) =>
+                n.entity("player", (e) => e.eq("id", "1").eq("name", "Alice"))
+            )
+            .build();
+        const expected = {
+            world: {
+                player: {
+                    $: {
+                        where: {
+                            And: [
+                                { id: { $eq: "1" } },
+                                { name: { $eq: "Alice" } },
+                            ],
+                        },
+                    },
+                },
+            },
+        };
+
+        expect(query).toStrictEqual(expected);
+    });
 });
