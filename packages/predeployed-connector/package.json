@@ -31,8 +31,8 @@
         "vitest": "^1.6.0"
     },
     "peerDependencies": {
-        "@starknet-react/core": "2.9.0",
-        "starknet": "6.11.0"
+        "@starknet-react/core": "catalog:",
+        "starknet": "catalog:"
     },
     "repository": {
         "type": "git",

@@ -14,13 +14,7 @@
         "dev": "vite",
         "format": "prettier --write ."
     },
-    "exports": {
-        ".": {
-            "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
-        },
-        "./package.json": "./package.json"
-    },
+    "./package.json": "./package.json",
     "devDependencies": {
         "@rollup/plugin-commonjs": "^28.0.0",
         "@vitest/coverage-v8": "^1.6.0",
@@ -35,7 +29,7 @@
         "vitest": "^1.6.0"
     },
     "peerDependencies": {
-        "starknet": "6.11.0"
+        "starknet": "catalog:"
     },
     "dependencies": {
         "@dojoengine/torii-client": "workspace:*",

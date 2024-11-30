@@ -13,7 +13,7 @@
     "license": "MIT",
     "peerDependencies": {
         "react": "^18.2.0",
-        "starknet": "6.11.0",
+        "starknet": "catalog:",
         "type-fest": "^2.14.0"
     },
     "exports": {
