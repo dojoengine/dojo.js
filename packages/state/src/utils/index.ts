@@ -11,7 +11,7 @@ export function convertValues(schema: Schema, values: any) {
         }
 
         if (value.type === "enum") {
-            if (value.type_name.includes("Option")) {
+            if (value.type_name && value.type_name.includes("Option")) {
                 if (value.value.option === "None") {
                     acc[key] = null;
                     return acc;
