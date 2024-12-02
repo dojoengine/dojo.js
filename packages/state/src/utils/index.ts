@@ -2,8 +2,8 @@ import { Type as RecsType, Schema } from "@dojoengine/recs";
 
 export function convertValues(schema: Schema, values: any) {
     return Object.keys(schema).reduce<any>((acc, key) => {
-        const schemaType = schema[key];
-        const value = values[key];
+        let schemaType = schema[key];
+        let value = values[key];
 
         if (value == null) {
             acc[key] = value;
@@ -11,8 +11,18 @@ export function convertValues(schema: Schema, values: any) {
         }
 
         if (value.type === "enum") {
-            acc[key] = value.value.option;
-            return acc;
+            if (value.type_name && value.type_name.includes("Option")) {
+                if (value.value.option === "None") {
+                    acc[key] = null;
+                    return acc;
+                } else {
+                    schemaType = mapOptionalToRealType(schemaType);
+                    value = value.value.value;
+                }
+            } else {
+                acc[key] = value.value.option;
+                return acc;
+            }
         }
 
         switch (schemaType) {
@@ -43,6 +53,31 @@ export function convertValues(schema: Schema, values: any) {
 
         return acc;
     }, {});
+}
+
+function mapOptionalToRealType(schemaType: any) {
+    switch (schemaType) {
+        case RecsType.OptionalNumber:
+            return RecsType.Number;
+        case RecsType.OptionalBigInt:
+            return RecsType.BigInt;
+        case RecsType.OptionalString:
+            return RecsType.String;
+        case RecsType.OptionalNumberArray:
+            return RecsType.NumberArray;
+        case RecsType.OptionalBigIntArray:
+            return RecsType.BigIntArray;
+        case RecsType.OptionalStringArray:
+            return RecsType.StringArray;
+        case RecsType.OptionalEntity:
+            return RecsType.Entity;
+        case RecsType.OptionalEntityArray:
+            return RecsType.EntityArray;
+        case RecsType.OptionalT:
+            return RecsType.T;
+        default:
+            return schemaType;
+    }
 }
 
 function handleStringArray(value: any) {
