@@ -44,7 +44,7 @@ const templates = [
 async function init(projectName: string, cwd: string, template: string) {
     const projectPath = path.join(cwd, projectName);
     const clientPath = path.join(projectPath, "client");
-    const contractPath = path.join(projectPath, "contract");
+    const contractPath = path.join(projectPath, "contracts");
 
     // Create project directories
     await fs.mkdir(projectPath, { recursive: true });
@@ -120,7 +120,7 @@ async function rewriteDojoConfigFile(clientPath: string) {
         // Update relative imports to account for new directory structure
         content = content.replace(
             /from ['"]\.{0,2}\/.*manifest(?:_dev)?\.json['"]/g,
-            'from "../contract/target/dev/manifest.json"'
+            'from "../contract/manifest_dev.json"'
         );
 
         await fs.writeFile(dojoConfigPath, content, "utf-8");
