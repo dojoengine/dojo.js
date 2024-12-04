@@ -104,6 +104,7 @@ describe("createDojoStore", () => {
                 initialGalaxy,
             ]);
         const state = useStore.getState();
+        expect(state.getEntities()).toHaveLength(4);
         expect(state.entities["player1"]).toEqual(initialPlayer);
         expect(state.entities["game1"]).toEqual(initialGame);
         expect(state.entities["item1"]).toEqual(initialItem);
@@ -124,12 +125,14 @@ describe("createDojoStore", () => {
             },
         });
         const state = useStore.getState();
+        expect(state.getEntities()).toHaveLength(1);
         expect(state.entities["player1"].models.world?.player?.name).toEqual(
             "Bob"
         );
     });
 
-    test("updateEntity should not add a new entity if entityId does not exist", () => {
+    test("updateEntity should add a new entity if entityId does not exist", () => {
+        useStore.getState().setEntities([initialPlayer]);
         useStore.getState().updateEntity({
             entityId: "nonexistent",
             models: {
@@ -142,7 +145,10 @@ describe("createDojoStore", () => {
             },
         });
         const state = useStore.getState();
-        expect(state.entities["nonexistent"]).toBeUndefined();
+        expect(state.getEntities()).toHaveLength(2);
+        expect(
+            state.entities["nonexistent"].models.world?.player?.name
+        ).toEqual("Charlie");
     });
 
     test("applyOptimisticUpdate should apply updates and add to pendingTransactions", () => {
