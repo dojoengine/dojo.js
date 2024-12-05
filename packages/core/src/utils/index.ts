@@ -1,4 +1,4 @@
-import { Call, TypedData } from "starknet";
+import { Call, CallData, TypedData } from "starknet";
 
 import { DojoCall } from "../types";
 
@@ -42,7 +42,7 @@ export const parseDojoCall = (
 
         return {
             contractAddress: contract.address,
-            calldata: call.calldata,
+            calldata: CallData.compile(call.calldata),
             entrypoint: call.entrypoint,
         };
     } else {
