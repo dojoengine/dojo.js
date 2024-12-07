@@ -64,6 +64,7 @@ export const getSyncEntities = async <S extends Schema>(
  * @param limit - The maximum number of events to fetch per request (default: 100).
  * @param logging - Whether to log debug information (default: false).
  * @param historical - Whether to fetch and subscribe to historical events (default: false).
+ * @param callback - An optional callback function to be called after fetching events.
  * @returns A promise that resolves to a subscription for event updates.
  *
  * @example
@@ -91,17 +92,20 @@ export const getSyncEvents = async <S extends Schema>(
     entityKeyClause: EntityKeysClause[],
     limit: number = 100,
     logging: boolean = false,
-    historical: boolean = true
+    historical: boolean = true,
+    callback?: () => void
 ) => {
     if (logging) console.log("Starting getSyncEvents");
-    await getEvents(client, components, limit, clause, logging, historical);
-    return await syncEvents(
+    await getEvents(
         client,
         components,
-        entityKeyClause,
+        limit,
+        clause,
         logging,
-        historical
+        historical,
+        callback
     );
+    return await syncEvents(client, components, entityKeyClause, logging);
 };
 
 /**
@@ -159,6 +163,7 @@ export const getEntities = async <S extends Schema>(
  * @param clause - An optional clause to filter event messages.
  * @param logging - Whether to log debug information (default: false).
  * @param historical - Whether to fetch historical events (default: false).
+ * @param callback - An optional callback function to be called after fetching events.
  */
 export const getEvents = async <S extends Schema>(
     client: ToriiClient,
@@ -166,7 +171,8 @@ export const getEvents = async <S extends Schema>(
     limit: number = 100,
     clause: Clause | undefined,
     logging: boolean = false,
-    historical: boolean = false
+    historical: boolean = false,
+    callback?: () => void
 ) => {
     if (logging) console.log("Starting getEvents");
     let offset = 0;
@@ -193,6 +199,8 @@ export const getEvents = async <S extends Schema>(
             offset += limit;
         }
     }
+
+    callback && callback();
 };
 
 /**
