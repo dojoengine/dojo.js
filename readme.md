@@ -18,10 +18,10 @@ If you are not familiar with Dojo, then you should read the [book](https://book.
 
 ## Table of Contents
 
--   [Quick start in 5 minutes](#quick-start-in-5-minutes)
--   [Dojo SDK](#dojo-sdk)
--   [Examples](#all-examples)
--   [All Packages](#all-packages)
+- [Quick start in 5 minutes](#quick-start-in-5-minutes)
+- [Dojo SDK](#dojo-sdk)
+- [Examples](#all-examples)
+- [All Packages](#all-packages)
 
 ## Quick start in 5 minutes
 
@@ -130,20 +130,20 @@ Dojo.js is modularized into small packages to keep it light.
 
 Getting started, we recommend using the SDK package, which will provide you with a simple interface to work with:
 
--   [SDK](./packages/create-burner/): Clean abstraction incorporating other packages and providing the best way to get started
+- [SDK](./packages/create-burner/): Clean abstraction incorporating other packages and providing the best way to get started
 
 [Read the SDK full documentation](./packages/sdk/readme.md)
 
 Other packages:
 
--   [core](./packages/core/): Dojo provider for an interface into your world
--   [create Burner](./packages/create-burner/): Create burners for local development fast
--   [react](./packages/create-burner/): React package of hooks for working with Dojo
--   [state](./packages/create-burner/): State package for compatible state managers (Currently RECS)
--   [torii-client](./packages/create-burner/): Client package for working with Torii WASM. This package exports all the types needed to build with torii-client.
--   [torii-wasm](./packages/create-burner/): WASM build
--   [utils](./packages/create-burner/): Helpful utils for working with Dojo apps
--   [utils-wasm](./packages/create-burner/): WASM utils for working with Dojo apps
+- [core](./packages/core/): Dojo provider for an interface into your world
+- [create Burner](./packages/create-burner/): Create burners for local development fast
+- [react](./packages/create-burner/): React package of hooks for working with Dojo
+- [state](./packages/create-burner/): State package for compatible state managers (Currently RECS)
+- [torii-client](./packages/create-burner/): Client package for working with Torii WASM. This package exports all the types needed to build with torii-client.
+- [torii-wasm](./packages/create-burner/): WASM build
+- [utils](./packages/create-burner/): Helpful utils for working with Dojo apps
+- [utils-wasm](./packages/create-burner/): WASM utils for working with Dojo apps
 
 ## All Examples
 
@@ -153,13 +153,13 @@ Spin any of these examples locally
 npx @dojoengine/create-dojo start
 ```
 
--   [example-vite-react-sdk](./examples/example-vite-react-sdk/)
--   [example-vite-react-phaser-recs](./examples/example-vite-react-phaser-recs/)
--   [example-vite-react-pwa-recs](./examples/example-vite-react-pwa-recs/)
--   [example-vite-react-threejs-recs](./examples/example-vite-react-threejs-recs/)
--   [example-vue-app-recs](./examples/example-vue-app-recs/)
--   [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/)
--   [example-nodejs-bot](./examples/example-nodejs-bot/)
+- [example-vite-react-sdk](./examples/example-vite-react-sdk/)
+- [example-vite-react-phaser-recs](./examples/example-vite-react-phaser-recs/)
+- [example-vite-react-pwa-recs](./examples/example-vite-react-pwa-recs/)
+- [example-vite-react-threejs-recs](./examples/example-vite-react-threejs-recs/)
+- [example-vue-app-recs](./examples/example-vue-app-recs/)
+- [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/)
+- [example-nodejs-bot](./examples/example-nodejs-bot/)
 
 ## Contributing to dojo.js
 
@@ -184,13 +184,13 @@ Dojo.js is a work in progress. We welcome contributions! Here's how you can get 
 
 Before running examples, you need to build the packages:
 
--   Build all packages:
+- Build all packages:
 
     ```bash
     pnpm run build
     ```
 
--   Watch for changes (development mode):
+- Watch for changes (development mode):
     ```bash
     pnpm run build --watch
     ```
