@@ -182,8 +182,6 @@ function createClauseFromWhere(
         }
     });
 
-    console.log("fieldOrder", keys);
-
     return {
         Keys: {
             keys: keys,
