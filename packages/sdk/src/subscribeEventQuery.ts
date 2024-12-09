@@ -36,11 +36,12 @@ export async function subscribeEventQuery<T extends SchemaType>(
         data?: StandardizedQueryResult<T>;
         error?: Error;
     }) => void,
-    options?: { logging?: boolean }
+    options?: { logging?: boolean },
+    historical?: boolean
 ): Promise<torii.Subscription> {
     return client.onEventMessageUpdated(
         convertQueryToEntityKeyClauses(query, schema),
-        true,
+        historical ?? true,
         (entityId: string, entityData: any) => {
             try {
                 if (callback) {
