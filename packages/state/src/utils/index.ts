@@ -91,9 +91,6 @@ function handleStringArray(value: any) {
         try {
             return BigInt(a.value);
         } catch (error) {
-            console.warn(
-                `Failed to convert ${a.value} to BigInt. Using string value instead.`
-            );
             return a.value;
         }
     });
