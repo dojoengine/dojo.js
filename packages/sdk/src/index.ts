@@ -53,8 +53,15 @@ export async function init<T extends SchemaType>(
          * @param {SubscribeParams<T>} params - Parameters object
          * @returns {Promise<void>} - A promise that resolves when the subscription is set up.
          */
-        subscribeEventQuery: ({ query, callback, options }) =>
-            subscribeEventQuery(client, query, schema, callback, options),
+        subscribeEventQuery: ({ query, callback, options, historical }) =>
+            subscribeEventQuery(
+                client,
+                query,
+                schema,
+                callback,
+                options,
+                historical
+            ),
         /**
          * Fetches entities based on the provided query.
          *
@@ -77,7 +84,14 @@ export async function init<T extends SchemaType>(
          * @param {GetParams<T>} params - Parameters object
          * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
          */
-        getEventMessages: ({ query, callback, limit, offset, options }) =>
+        getEventMessages: ({
+            query,
+            callback,
+            limit,
+            offset,
+            options,
+            historical,
+        }) =>
             getEventMessages(
                 client,
                 query,
@@ -85,7 +99,8 @@ export async function init<T extends SchemaType>(
                 callback,
                 limit,
                 offset,
-                options
+                options,
+                historical
             ),
 
         /**
