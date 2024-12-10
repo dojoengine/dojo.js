@@ -1,31 +1,31 @@
 {
-    "name": "@dojoengine/state",
-    "version": "1.0.2",
-    "description": "dojo: State syncing for dojo games",
-    "author": "dojo",
-    "license": "MIT",
-    "main": "dist/index.js",
-    "type": "module",
-    "scripts": {
-        "build": "tsup --dts-resolve",
-        "test": "vitest run"
-    },
-    "exports": {
-        ".": {
-            "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
-        }
-    },
-    "devDependencies": {
-        "tsup": "^8.3.0",
-        "typescript": "^5.6.2"
-    },
-    "peerDependencies": {
-        "starknet": "6.11.0"
-    },
-    "dependencies": {
-        "@dojoengine/recs": "2.0.13",
-        "@dojoengine/torii-client": "workspace:*",
-        "vitest": "^1.6.0"
+  "name": "@dojoengine/state",
+  "version": "1.0.2",
+  "description": "dojo: State syncing for dojo games",
+  "author": "dojo",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsup --dts-resolve",
+    "test": "vitest run"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
+  },
+  "devDependencies": {
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.2"
+  },
+  "peerDependencies": {
+    "starknet": "catalog:"
+  },
+  "dependencies": {
+    "@dojoengine/recs": "2.0.13",
+    "@dojoengine/torii-client": "workspace:*",
+    "vitest": "^1.6.0"
+  }
 }
