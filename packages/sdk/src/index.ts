@@ -61,12 +61,22 @@ export async function init<T extends SchemaType>(
          * @param {GetParams<T>} params - Parameters object
          * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
          */
-        getEntities: ({ query, callback, limit, offset, options }) =>
+        getEntities: ({
+            query,
+            callback,
+            orderBy,
+            entityModels,
+            limit,
+            offset,
+            options,
+        }) =>
             getEntities(
                 client,
                 query,
                 schema,
                 callback,
+                orderBy,
+                entityModels,
                 limit,
                 offset,
                 options
@@ -77,12 +87,22 @@ export async function init<T extends SchemaType>(
          * @param {GetParams<T>} params - Parameters object
          * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
          */
-        getEventMessages: ({ query, callback, limit, offset, options }) =>
+        getEventMessages: ({
+            query,
+            callback,
+            orderBy,
+            entityModels,
+            limit,
+            offset,
+            options,
+        }) =>
             getEventMessages(
                 client,
                 query,
                 schema,
                 callback,
+                orderBy,
+                entityModels,
                 limit,
                 offset,
                 options

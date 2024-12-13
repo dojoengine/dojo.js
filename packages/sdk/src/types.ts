@@ -366,6 +366,10 @@ export interface GetParams<T extends SchemaType> {
         data?: StandardizedQueryResult<T>;
         error?: Error;
     }) => void;
+    // The order to sort the entities by.
+    orderBy?: torii.OrderBy[];
+    // The models to whitelist for fetching. Leave this empty to fetch all models.
+    entityModels?: string[];
     // The maximum number of entities to fetch per request. Default is 100.
     limit?: number;
     // The offset to start fetching entities from. Default is 0.
