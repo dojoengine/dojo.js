@@ -128,14 +128,12 @@ export async function init<T extends SchemaType>(
          *
          * @param {TypedData} data - The typed data to be signed and sent.
          * @param {Account} account - The account used to sign the message.
-         * @param {boolean} [isSessionSignature=false] - Whether the signature is a session signature.
          * @returns {Promise<void>} - A promise that resolves when the message is sent successfully.
          * @throws {Error} If the message sending fails.
          */
         sendMessage: async (
             data: TypedData,
-            account: Account,
-            isSessionSignature: boolean = false
+            account: Account
         ): Promise<void> => {
             try {
                 // Sign the typed data
@@ -148,8 +146,7 @@ export async function init<T extends SchemaType>(
                     dataString,
                     Array.isArray(signature)
                         ? signature
-                        : [signature.r.toString(), signature.s.toString()],
-                    isSessionSignature
+                        : [signature.r.toString(), signature.s.toString()]
                 );
             } catch (error) {
                 console.error("Failed to send message:", error);
