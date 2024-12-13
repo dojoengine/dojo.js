@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/core",
-    "version": "1.0.3-alpha.1",
+    "version": "1.0.3-alpha.2",
     "description": "dojo: Core package for interacting with dojo worlds. Execution client and other helpful functions",
     "author": "dojo",
     "license": "MIT",
