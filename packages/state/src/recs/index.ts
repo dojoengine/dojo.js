@@ -8,12 +8,12 @@ import {
 } from "@dojoengine/recs";
 import {
     Clause,
+    Entities,
     EntityKeysClause,
     OrderBy,
     PatternMatching,
     ToriiClient,
 } from "@dojoengine/torii-client";
-
 import { convertValues } from "../utils";
 
 /**
@@ -144,11 +144,20 @@ export const getEntities = async <S extends Schema>(
     orderBy: OrderBy[] = [],
     entityModels: string[] = [],
     limit: number = 100,
-    logging: boolean = false
+    logging: boolean = false,
+    {
+        dbConnection,
+        timestampCacheKey,
+    }: { dbConnection: IDBDatabase | undefined; timestampCacheKey: string } = {
+        dbConnection: undefined,
+        timestampCacheKey: "",
+    }
 ) => {
     if (logging) console.log("Starting getEntities");
     let offset = 0;
     let continueFetching = true;
+
+    const time = dbConnection ? getCache(timestampCacheKey) : 0;
 
     while (continueFetching) {
         const entities = await client.getEntities({
@@ -158,11 +167,14 @@ export const getEntities = async <S extends Schema>(
             order_by: orderBy,
             entity_models: entityModels,
             dont_include_hashed_keys: false,
+            internal_updated_at: time,
         });
 
-        console.log("entities", entities);
+        if (dbConnection) {
+            await insertEntitiesInDB(dbConnection, entities);
+        }
 
-        if (logging) console.log(`Fetched ${entities} entities`);
+        if (logging) console.log(`Fetched entities`, entities);
 
         setEntities(entities, components, logging);
 
@@ -171,6 +183,11 @@ export const getEntities = async <S extends Schema>(
         } else {
             offset += limit;
         }
+    }
+
+    if (dbConnection) {
+        const currentTime = Math.floor(Date.now() / 1000);
+        setCache(currentTime, timestampCacheKey);
     }
 };
 
@@ -209,6 +226,7 @@ export const getEvents = async <S extends Schema>(
                 order_by: orderBy,
                 entity_models: entityModels,
                 dont_include_hashed_keys: false,
+                internal_updated_at: 0,
             },
             historical
         );
@@ -284,6 +302,7 @@ export const getEntitiesQuery = async <S extends Schema>(
         order_by: orderBy,
         entity_models: entityModels,
         dont_include_hashed_keys: false,
+        internal_updated_at: 0,
     });
 
     while (continueFetching) {
@@ -449,3 +468,53 @@ export const setEntities = async <S extends Schema>(
         }
     }
 };
+
+const setCache = (time: number, timestampCacheKey: string) => {
+    const timeString = Math.floor(time).toString();
+    localStorage.setItem(timestampCacheKey, timeString);
+};
+
+const getCache = (timestampCacheKey: string) => {
+    return Number(localStorage.getItem(timestampCacheKey) || 0);
+};
+
+async function insertEntitiesInDB(
+    db: IDBDatabase,
+    entities: Entities
+): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(["entities"], "readwrite");
+        const store = transaction.objectStore("entities");
+
+        let completed = 0;
+        let error: Error | null = null;
+
+        // Handle transaction completion
+        transaction.oncomplete = () => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve();
+            }
+        };
+
+        transaction.onerror = () => {
+            reject(transaction.error);
+        };
+
+        // Store each entity
+        for (const [entityId, data] of Object.entries(entities)) {
+            const entityData = {
+                id: entityId,
+                ...data,
+            };
+
+            const request = store.put(entityData);
+            completed++;
+
+            request.onerror = () => {
+                error = request.error;
+            };
+        }
+    });
+}
