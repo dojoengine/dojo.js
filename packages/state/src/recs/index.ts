@@ -158,7 +158,6 @@ export const getEntities = async <S extends Schema>(
             order_by: orderBy,
             entity_models: entityModels,
             dont_include_hashed_keys: false,
-            order_by: [],
         });
 
         if (logging) console.log("entities", entities);
@@ -210,7 +209,6 @@ export const getEvents = async <S extends Schema>(
                 order_by: orderBy,
                 entity_models: entityModels,
                 dont_include_hashed_keys: false,
-                order_by: [],
             },
             historical
         );
@@ -286,7 +284,6 @@ export const getEntitiesQuery = async <S extends Schema>(
         order_by: orderBy,
         entity_models: entityModels,
         dont_include_hashed_keys: false,
-        order_by: [],
     });
 
     while (continueFetching) {
