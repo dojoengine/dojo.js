@@ -61,12 +61,22 @@ export async function init<T extends SchemaType>(
          * @param {GetParams<T>} params - Parameters object
          * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
          */
-        getEntities: ({ query, callback, limit, offset, options }) =>
+        getEntities: ({
+            query,
+            callback,
+            orderBy,
+            entityModels,
+            limit,
+            offset,
+            options,
+        }) =>
             getEntities(
                 client,
                 query,
                 schema,
                 callback,
+                orderBy,
+                entityModels,
                 limit,
                 offset,
                 options
@@ -77,12 +87,22 @@ export async function init<T extends SchemaType>(
          * @param {GetParams<T>} params - Parameters object
          * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
          */
-        getEventMessages: ({ query, callback, limit, offset, options }) =>
+        getEventMessages: ({
+            query,
+            callback,
+            orderBy,
+            entityModels,
+            limit,
+            offset,
+            options,
+        }) =>
             getEventMessages(
                 client,
                 query,
                 schema,
                 callback,
+                orderBy,
+                entityModels,
                 limit,
                 offset,
                 options
@@ -128,14 +148,12 @@ export async function init<T extends SchemaType>(
          *
          * @param {TypedData} data - The typed data to be signed and sent.
          * @param {Account} account - The account used to sign the message.
-         * @param {boolean} [isSessionSignature=false] - Whether the signature is a session signature.
          * @returns {Promise<void>} - A promise that resolves when the message is sent successfully.
          * @throws {Error} If the message sending fails.
          */
         sendMessage: async (
             data: TypedData,
-            account: Account,
-            _isSessionSignature: boolean = false
+            account: Account
         ): Promise<void> => {
             try {
                 // Sign the typed data

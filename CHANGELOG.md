@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/dojoengine/dojo.js/compare/v1.0.3-alpha.2...v1.0.3) (2024-12-14)
+
+
+### Bug Fixes
+
+* build examples ([fec888c](https://github.com/dojoengine/dojo.js/commit/fec888c5428b1e821e42b34213ec4337d129c667))
+* create dojo contract manifest path ([a6fb293](https://github.com/dojoengine/dojo.js/commit/a6fb29322468a71df4621877f74ec280ce004be8))
+* dojo-starter dojo version ([09a4237](https://github.com/dojoengine/dojo.js/commit/09a423728cde10af06d47f38a72a712e0b6134ff))
+
+
+### Features
+
+* add order_by and entity_models to sdk ([0c9cf79](https://github.com/dojoengine/dojo.js/commit/0c9cf7913bc5b50bd907f56f3c60e169ef43ecce))
+* upgrade to torii v1.0.7 ([5966fcc](https://github.com/dojoengine/dojo.js/commit/5966fcc072b02ec49bba4770031bc4fd760ee14a))
+
+
+
+
+
 ## [1.0.2](https://github.com/dojoengine/dojo.js/compare/v1.0.1...v1.0.2) (2024-11-27)
 
 

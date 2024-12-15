@@ -9,6 +9,7 @@ import {
 import {
     Clause,
     EntityKeysClause,
+    OrderBy,
     PatternMatching,
     ToriiClient,
 } from "@dojoengine/torii-client";
@@ -48,11 +49,21 @@ export const getSyncEntities = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     clause: Clause | undefined,
     entityKeyClause: EntityKeysClause[],
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 100,
     logging: boolean = false
 ) => {
     if (logging) console.log("Starting getSyncEntities ", clause);
-    await getEntities(client, clause, components, limit, logging);
+    await getEntities(
+        client,
+        clause,
+        components,
+        orderBy,
+        entityModels,
+        limit,
+        logging
+    );
     return await syncEntities(client, components, entityKeyClause, logging);
 };
 /**
@@ -90,6 +101,8 @@ export const getSyncEvents = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     clause: Clause | undefined,
     entityKeyClause: EntityKeysClause[],
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 100,
     logging: boolean = false,
     historical: boolean = true,
@@ -99,6 +112,8 @@ export const getSyncEvents = async <S extends Schema>(
     await getEvents(
         client,
         components,
+        orderBy,
+        entityModels,
         limit,
         clause,
         logging,
@@ -126,6 +141,8 @@ export const getEntities = async <S extends Schema>(
     client: ToriiClient,
     clause: Clause | undefined,
     components: Component<S, Metadata, undefined>[],
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 100,
     logging: boolean = false
 ) => {
@@ -138,6 +155,8 @@ export const getEntities = async <S extends Schema>(
             limit,
             offset,
             clause,
+            order_by: orderBy,
+            entity_models: entityModels,
             dont_include_hashed_keys: false,
             order_by: [],
         });
@@ -157,7 +176,8 @@ export const getEntities = async <S extends Schema>(
 };
 
 /**
- * Fetches event messages from the client and synchronizes them with the specified components.
+ * Fetches event messages from the client and synchronizes them with t
+ * he specified components.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
  * @param limit - The maximum number of event messages to fetch per request (default: 100).
@@ -169,6 +189,8 @@ export const getEntities = async <S extends Schema>(
 export const getEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 100,
     clause: Clause | undefined,
     logging: boolean = false,
@@ -185,6 +207,8 @@ export const getEvents = async <S extends Schema>(
                 limit,
                 offset,
                 clause,
+                order_by: orderBy,
+                entity_models: entityModels,
                 dont_include_hashed_keys: false,
                 order_by: [],
             },
@@ -229,6 +253,8 @@ export const getEntitiesQuery = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause,
     patternMatching: PatternMatching = "FixedLen",
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 1000,
     logging: boolean = false
 ) => {
@@ -257,6 +283,8 @@ export const getEntitiesQuery = async <S extends Schema>(
         limit,
         offset: cursor,
         clause: clause || undefined,
+        order_by: orderBy,
+        entity_models: entityModels,
         dont_include_hashed_keys: false,
         order_by: [],
     });

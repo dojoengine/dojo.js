@@ -29,6 +29,8 @@ export async function setup({ ...config }: DojoConfig) {
         contractComponents as any,
         undefined,
         [],
+        [],
+        [],
         3000,
         true
     );
@@ -36,7 +38,8 @@ export async function setup({ ...config }: DojoConfig) {
     // Create client-side components that mirror the contract components
     const clientComponents = createClientComponents({ contractComponents });
 
-    // Initialize the Dojo provider with the manifest and RPC URL
+    // Initialize the Dojo provider with t
+    // he manifest and RPC URL
     const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl);
 
     // Set up event synchronization between the client and the Dojo network
@@ -44,6 +47,8 @@ export async function setup({ ...config }: DojoConfig) {
         toriiClient,
         contractComponents as any,
         undefined,
+        [],
+        [],
         []
     );
 
@@ -80,16 +85,8 @@ export async function setup({ ...config }: DojoConfig) {
         clientComponents,
         contractComponents,
         systemCalls: createSystemCalls({ client }, clientComponents, world),
-        publish: (
-            typedData: string,
-            signature: ArraySignatureType,
-            isSessionSignature = false
-        ) => {
-            toriiClient.publishMessage(
-                typedData,
-                signature,
-                isSessionSignature
-            );
+        publish: (typedData: string, signature: ArraySignatureType) => {
+            toriiClient.publishMessage(typedData, signature);
         },
         config,
         dojoProvider,

@@ -1,10 +1,16 @@
 import { Type as RecsType, Schema } from "@dojoengine/recs";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { convertValues } from "../utils";
 
 describe("convertValues", () => {
     // ... existing tests ...
+    const consoleSpy = vi
+        .spyOn(console, "warn")
+        .mockImplementation(() => undefined);
+    afterEach(() => {
+        consoleSpy.mockReset();
+    });
 
     describe("huge numbers", () => {
         it("should correctly convert huge BigInt values", () => {
@@ -193,8 +199,6 @@ describe("convertValues", () => {
     });
 
     it("should fallback to string if BigInt conversion fails", () => {
-        vi.spyOn(console, "warn").mockImplementation(() => {});
-
         const schema: Schema = {
             ids: RecsType.StringArray,
         };
