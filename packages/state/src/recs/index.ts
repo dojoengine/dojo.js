@@ -14,7 +14,6 @@ import {
     PatternMatching,
     ToriiClient,
 } from "@dojoengine/torii-client";
-
 import { convertValues } from "../utils";
 
 /**
@@ -158,7 +157,8 @@ export const getEntities = async <S extends Schema>(
     let offset = 0;
     let continueFetching = true;
 
-    let time = getCache(timestampCacheKey);
+    const time = dbConnection ? getCache(timestampCacheKey) : 0;
+
     while (continueFetching) {
         const entities = await client.getEntities({
             limit,
@@ -174,7 +174,7 @@ export const getEntities = async <S extends Schema>(
             await insertEntitiesInDB(dbConnection, entities);
         }
 
-        if (logging) console.log(`Fetched ${entities} entities`);
+        if (logging) console.log(`Fetched entities`, entities);
 
         setEntities(entities, components, logging);
 
@@ -184,8 +184,11 @@ export const getEntities = async <S extends Schema>(
             offset += limit;
         }
     }
-    const currentTime = Math.floor(Date.now() / 1000);
-    setCache(currentTime, timestampCacheKey);
+
+    if (dbConnection) {
+        const currentTime = Math.floor(Date.now() / 1000);
+        setCache(currentTime, timestampCacheKey);
+    }
 };
 
 /**
