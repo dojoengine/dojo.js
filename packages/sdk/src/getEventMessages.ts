@@ -34,6 +34,8 @@ export async function getEventMessages<T extends SchemaType>(
         data?: StandardizedQueryResult<T>;
         error?: Error;
     }) => void,
+    orderBy: torii.OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 100, // Default limit
     offset: number = 0, // Default offset
     options?: { logging?: boolean } // Logging option
@@ -46,8 +48,10 @@ export async function getEventMessages<T extends SchemaType>(
 
     while (continueFetching) {
         const toriiQuery: torii.Query = {
-            limit: limit,
+            limit,
             offset: cursor,
+            order_by: orderBy,
+            entity_models: entityModels,
             clause,
             dont_include_hashed_keys: false,
             order_by: [],

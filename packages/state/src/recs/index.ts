@@ -8,11 +8,12 @@ import {
 } from "@dojoengine/recs";
 import {
     Clause,
+    Entities,
     EntityKeysClause,
+    OrderBy,
     PatternMatching,
     ToriiClient,
 } from "@dojoengine/torii-client";
-
 import { convertValues } from "../utils";
 
 /**
@@ -48,11 +49,21 @@ export const getSyncEntities = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     clause: Clause | undefined,
     entityKeyClause: EntityKeysClause[],
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 100,
     logging: boolean = false
 ) => {
     if (logging) console.log("Starting getSyncEntities ", clause);
-    await getEntities(client, clause, components, limit, logging);
+    await getEntities(
+        client,
+        clause,
+        components,
+        orderBy,
+        entityModels,
+        limit,
+        logging
+    );
     return await syncEntities(client, components, entityKeyClause, logging);
 };
 /**
@@ -90,6 +101,8 @@ export const getSyncEvents = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     clause: Clause | undefined,
     entityKeyClause: EntityKeysClause[],
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 100,
     logging: boolean = false,
     historical: boolean = true,
@@ -99,6 +112,8 @@ export const getSyncEvents = async <S extends Schema>(
     await getEvents(
         client,
         components,
+        orderBy,
+        entityModels,
         limit,
         clause,
         logging,
@@ -126,25 +141,40 @@ export const getEntities = async <S extends Schema>(
     client: ToriiClient,
     clause: Clause | undefined,
     components: Component<S, Metadata, undefined>[],
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 100,
-    logging: boolean = false
+    logging: boolean = false,
+    {
+        dbConnection,
+        timestampCacheKey,
+    }: { dbConnection: IDBDatabase | undefined; timestampCacheKey: string } = {
+        dbConnection: undefined,
+        timestampCacheKey: "",
+    }
 ) => {
     if (logging) console.log("Starting getEntities");
     let offset = 0;
     let continueFetching = true;
+
+    const time = dbConnection ? getCache(timestampCacheKey) : 0;
 
     while (continueFetching) {
         const entities = await client.getEntities({
             limit,
             offset,
             clause,
+            order_by: orderBy,
+            entity_models: entityModels,
             dont_include_hashed_keys: false,
-            order_by: [],
+            internal_updated_at: time,
         });
 
-        if (logging) console.log("entities", entities);
+        if (dbConnection) {
+            await insertEntitiesInDB(dbConnection, entities);
+        }
 
-        if (logging) console.log(`Fetched ${entities} entities`);
+        if (logging) console.log(`Fetched entities`, entities);
 
         setEntities(entities, components, logging);
 
@@ -154,10 +184,16 @@ export const getEntities = async <S extends Schema>(
             offset += limit;
         }
     }
+
+    if (dbConnection) {
+        const currentTime = Math.floor(Date.now() / 1000);
+        setCache(currentTime, timestampCacheKey);
+    }
 };
 
 /**
- * Fetches event messages from the client and synchronizes them with the specified components.
+ * Fetches event messages from the client and synchronizes them with t
+ * he specified components.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
  * @param limit - The maximum number of event messages to fetch per request (default: 100).
@@ -169,6 +205,8 @@ export const getEntities = async <S extends Schema>(
 export const getEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 100,
     clause: Clause | undefined,
     logging: boolean = false,
@@ -185,8 +223,10 @@ export const getEvents = async <S extends Schema>(
                 limit,
                 offset,
                 clause,
+                order_by: orderBy,
+                entity_models: entityModels,
                 dont_include_hashed_keys: false,
-                order_by: [],
+                internal_updated_at: 0,
             },
             historical
         );
@@ -229,6 +269,8 @@ export const getEntitiesQuery = async <S extends Schema>(
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause,
     patternMatching: PatternMatching = "FixedLen",
+    orderBy: OrderBy[] = [],
+    entityModels: string[] = [],
     limit: number = 1000,
     logging: boolean = false
 ) => {
@@ -257,8 +299,10 @@ export const getEntitiesQuery = async <S extends Schema>(
         limit,
         offset: cursor,
         clause: clause || undefined,
+        order_by: orderBy,
+        entity_models: entityModels,
         dont_include_hashed_keys: false,
-        order_by: [],
+        internal_updated_at: 0,
     });
 
     while (continueFetching) {
@@ -425,3 +469,53 @@ export const setEntities = async <S extends Schema>(
         }
     }
 };
+
+const setCache = (time: number, timestampCacheKey: string) => {
+    const timeString = Math.floor(time).toString();
+    localStorage.setItem(timestampCacheKey, timeString);
+};
+
+const getCache = (timestampCacheKey: string) => {
+    return Number(localStorage.getItem(timestampCacheKey) || 0);
+};
+
+async function insertEntitiesInDB(
+    db: IDBDatabase,
+    entities: Entities
+): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(["entities"], "readwrite");
+        const store = transaction.objectStore("entities");
+
+        let completed = 0;
+        let error: Error | null = null;
+
+        // Handle transaction completion
+        transaction.oncomplete = () => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve();
+            }
+        };
+
+        transaction.onerror = () => {
+            reject(transaction.error);
+        };
+
+        // Store each entity
+        for (const [entityId, data] of Object.entries(entities)) {
+            const entityData = {
+                id: entityId,
+                ...data,
+            };
+
+            const request = store.put(entityData);
+            completed++;
+
+            request.onerror = () => {
+                error = request.error;
+            };
+        }
+    });
+}
