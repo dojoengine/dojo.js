@@ -50,6 +50,7 @@ export async function getEventMessages<T extends SchemaType>(
             offset: cursor,
             clause,
             dont_include_hashed_keys: false,
+            order_by: [],
         };
 
         try {

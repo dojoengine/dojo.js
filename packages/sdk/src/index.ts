@@ -135,7 +135,7 @@ export async function init<T extends SchemaType>(
         sendMessage: async (
             data: TypedData,
             account: Account,
-            isSessionSignature: boolean = false
+            _isSessionSignature: boolean = false
         ): Promise<void> => {
             try {
                 // Sign the typed data
@@ -148,8 +148,7 @@ export async function init<T extends SchemaType>(
                     dataString,
                     Array.isArray(signature)
                         ? signature
-                        : [signature.r.toString(), signature.s.toString()],
-                    isSessionSignature
+                        : [signature.r.toString(), signature.s.toString()]
                 );
             } catch (error) {
                 console.error("Failed to send message:", error);

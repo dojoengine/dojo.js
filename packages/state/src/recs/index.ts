@@ -139,9 +139,10 @@ export const getEntities = async <S extends Schema>(
             offset,
             clause,
             dont_include_hashed_keys: false,
+            order_by: [],
         });
 
-        console.log("entities", entities);
+        if (logging) console.log("entities", entities);
 
         if (logging) console.log(`Fetched ${entities} entities`);
 
@@ -185,6 +186,7 @@ export const getEvents = async <S extends Schema>(
                 offset,
                 clause,
                 dont_include_hashed_keys: false,
+                order_by: [],
             },
             historical
         );
@@ -256,6 +258,7 @@ export const getEntitiesQuery = async <S extends Schema>(
         offset: cursor,
         clause: clause || undefined,
         dont_include_hashed_keys: false,
+        order_by: [],
     });
 
     while (continueFetching) {
@@ -414,9 +417,10 @@ export const setEntities = async <S extends Schema>(
                     );
                 }
             } else {
-                console.warn(
-                    `Component ${componentName} not found in provided components.`
-                );
+                if (logging)
+                    console.warn(
+                        `Component ${componentName} not found in provided components.`
+                    );
             }
         }
     }
