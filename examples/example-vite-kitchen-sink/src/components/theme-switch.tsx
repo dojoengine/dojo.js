@@ -62,16 +62,16 @@ export default function ThemeSwitchButton() {
         async function getEntity(
             db: SDK<OnchainDashSchemaType>
         ): Promise<AvailableTheme> {
-            const entity = await db.getEntities(
-                {
+            const entity = await db.getEntities({
+                query: {
                     onchain_dash: {
                         Theme: {
                             $: { where: { theme_key: { $eq: 9999999 } } },
                         },
                     },
                 },
-                () => {}
-            );
+                callback: () => {},
+            });
             const counter = entity.pop();
             if (!counter) {
                 return AvailableTheme.Light;
@@ -101,10 +101,10 @@ export default function ThemeSwitchButton() {
         async function subscribeToEntityUpdates(
             db: SDK<OnchainDashSchemaType>
         ) {
-            // @ts-expect-error we should be able to use ['entityId'] here
-            const sub = await db.subscribeEntityQuery(
-                [entityId],
-                ({ data, error }) => {
+            const sub = await db.subscribeEntityQuery({
+                // @ts-expect-error we should be able to use ['entityId'] here
+                query: [entityId],
+                callback: ({ data, error }) => {
                     if (data) {
                         const entity = data.pop();
                         if (!entity) {
@@ -132,8 +132,8 @@ export default function ThemeSwitchButton() {
                     if (error) {
                         throw error;
                     }
-                }
-            );
+                },
+            });
             setSub(sub);
         }
         if (entityId && db && sub === null) {

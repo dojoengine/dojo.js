@@ -62,12 +62,12 @@ export default function Chat() {
 
     useEffect(() => {
         async function getEntity(db: SDK<OnchainDashSchemaType>) {
-            const entity = await db.getEntities(
-                {
+            const entity = await db.getEntities({
+                query: {
                     onchain_dash: { Message: { $: {} } },
                 },
-                () => {}
-            );
+                callback: () => {},
+            });
 
             // @ts-expect-error a & b are not undefined as they are filtered out with `filer(Boolean)`
             return entity
@@ -90,11 +90,11 @@ export default function Chat() {
         async function subscribeToEntityUpdates(
             db: SDK<OnchainDashSchemaType>
         ) {
-            const sub = await db.subscribeEntityQuery(
-                {
+            const sub = await db.subscribeEntityQuery({
+                query: {
                     onchain_dash: { Message: { $: {} } },
                 },
-                ({ data }) => {
+                callback: ({ data }) => {
                     if (data) {
                         const entity = data.pop();
                         if (!entity) {
@@ -106,8 +106,8 @@ export default function Chat() {
                         }
                         setMessages((prevMessages) => [...prevMessages, msg]);
                     }
-                }
-            );
+                },
+            });
             setSub(sub);
         }
         if (db && sub === null) {
