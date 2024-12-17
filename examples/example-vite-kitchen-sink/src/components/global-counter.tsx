@@ -29,8 +29,8 @@ export default function GlobalCOunter() {
 
     useEffect(() => {
         async function getEntity(db: SDK<OnchainDashSchemaType>) {
-            const entity = await db.getEntities(
-                {
+            const entity = await db.getEntities({
+                query: {
                     onchain_dash: {
                         GlobalCounter: {
                             $: {
@@ -39,8 +39,8 @@ export default function GlobalCOunter() {
                         },
                     },
                 },
-                ({ data, error }) => {}
-            );
+                callback: ({ data, error }) => {},
+            });
 
             const counter = entity.pop();
             if (!counter) {
@@ -62,8 +62,8 @@ export default function GlobalCOunter() {
         async function subscribeToEntityUpdates(
             db: SDK<OnchainDashSchemaType>
         ) {
-            const sub = await db.subscribeEntityQuery(
-                {
+            const sub = await db.subscribeEntityQuery({
+                query: {
                     // @ts-expect-error $eq is working there
                     onchain_dash: {
                         GlobalCounter: {
@@ -73,7 +73,7 @@ export default function GlobalCOunter() {
                         },
                     },
                 },
-                ({ data, error }) => {
+                callback: ({ data, error }) => {
                     if (data) {
                         const entity = data.pop();
                         if (!entity) {
@@ -98,8 +98,8 @@ export default function GlobalCOunter() {
                     if (error) {
                         throw error;
                     }
-                }
-            );
+                },
+            });
             setSub(sub);
         }
         if (db && sub === null) {
