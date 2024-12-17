@@ -54,7 +54,7 @@ export async function getEntities<T extends SchemaType>(
             entity_models: entityModels,
             clause,
             dont_include_hashed_keys: false,
-            internal_updated_at: 0,
+            entity_updated_after: 0,
         };
 
         try {

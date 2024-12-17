@@ -167,7 +167,7 @@ export const getEntities = async <S extends Schema>(
             order_by: orderBy,
             entity_models: entityModels,
             dont_include_hashed_keys: false,
-            internal_updated_at: time,
+            entity_updated_after: time,
         });
 
         if (dbConnection) {
@@ -226,7 +226,7 @@ export const getEvents = async <S extends Schema>(
                 order_by: orderBy,
                 entity_models: entityModels,
                 dont_include_hashed_keys: false,
-                internal_updated_at: 0,
+                entity_updated_after: 0,
             },
             historical
         );
@@ -302,7 +302,7 @@ export const getEntitiesQuery = async <S extends Schema>(
         order_by: orderBy,
         entity_models: entityModels,
         dont_include_hashed_keys: false,
-        internal_updated_at: 0,
+        entity_updated_after: 0,
     });
 
     while (continueFetching) {
