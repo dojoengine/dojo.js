@@ -3,11 +3,7 @@ import { Moon, Sun } from "lucide-react";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { useAccount, useContractWrite } from "@starknet-react/core";
 import { SDK } from "@dojoengine/sdk";
-import {
-    OnchainDashSchemaType,
-    AvailableTheme,
-    AvailableThemeClassMap,
-} from "@/dojo/models";
+import { SchemaType, AvailableTheme } from "@/typescript/models.gen";
 import { useDojoDb } from "@/dojo/provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,11 +17,17 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown";
 import { dojoConfig } from "@/../dojoConfig";
+import { CairoCustomEnum } from "starknet";
 
 interface ThemeState {
     current: string | null;
     next: string | null;
 }
+const AvailableThemeClassMap = {
+    [AvailableTheme.Light]: "light",
+    [AvailableTheme.Dark]: "dark",
+    [AvailableTheme.Dojo]: "dojo",
+};
 
 export default function ThemeSwitchButton() {
     const [theme, setTheme] = useState<ThemeState>({
@@ -34,50 +36,39 @@ export default function ThemeSwitchButton() {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [entityId, setEntityId] = useState<string | null>(null);
-    const { address } = useAccount();
+    const { address, account } = useAccount();
     const [sub, setSub] = useState<Subscription | null>(null);
-    const { writeAsync } = useContractWrite({
-        calls: [],
-    });
+    const { db, actions } = useDojoDb();
 
     const handleChangeTheme = useCallback(
         async (theme: AvailableTheme) => {
             setIsLoading(true);
-            await writeAsync({
-                calls: [
-                    {
-                        contractAddress:
-                            dojoConfig.manifest.contracts[0].address,
-                        entrypoint: "change_theme",
-                        calldata: [theme],
-                    },
-                ],
-            });
+            actions?.actions.changeTheme(
+                account,
+                new CairoCustomEnum({ Predefined: theme })
+            );
         },
-        [writeAsync]
+        [actions, account]
     );
 
-    const db = useDojoDb();
     useEffect(() => {
-        async function getEntity(
-            db: SDK<OnchainDashSchemaType>
-        ): Promise<AvailableTheme> {
-            const entity = await db.getEntities(
-                {
+        async function getEntity(db: SDK<SchemaType>): Promise<AvailableTheme> {
+            const entity = await db.getEntities({
+                query: {
                     onchain_dash: {
                         Theme: {
                             $: { where: { theme_key: { $eq: 9999999 } } },
                         },
                     },
                 },
-                () => {}
-            );
+                callback: () => {},
+            });
             const counter = entity.pop();
             if (!counter) {
                 return AvailableTheme.Light;
             }
 
-            const theme = counter.models?.onchain_dash?.Theme?.value;
+            const theme = counter.models?.onchain_dash?.Theme?.value.unwrap();
             setEntityId(counter.entityId);
             if (undefined === theme) {
                 return AvailableTheme.Light;
@@ -98,13 +89,11 @@ export default function ThemeSwitchButton() {
     }, [address, db, setEntityId]);
 
     useEffect(() => {
-        async function subscribeToEntityUpdates(
-            db: SDK<OnchainDashSchemaType>
-        ) {
-            // @ts-expect-error we should be able to use ['entityId'] here
-            const sub = await db.subscribeEntityQuery(
-                [entityId],
-                ({ data, error }) => {
+        async function subscribeToEntityUpdates(db: SDK<SchemaType>) {
+            const sub = await db.subscribeEntityQuery({
+                // @ts-expect-error we should be able to use ['entityId'] here
+                query: [entityId],
+                callback: ({ data, error }) => {
                     if (data) {
                         const entity = data.pop();
                         if (!entity) {
@@ -116,7 +105,8 @@ export default function ThemeSwitchButton() {
                         ) {
                             return AvailableTheme.Light;
                         }
-                        const theme = entity.models?.onchain_dash?.Theme?.value;
+                        const theme =
+                            entity.models?.onchain_dash?.Theme?.value.unwrap();
 
                         const at = AvailableTheme[theme];
                         // @ts-expect-error this resooves to enum value
@@ -132,8 +122,8 @@ export default function ThemeSwitchButton() {
                     if (error) {
                         throw error;
                     }
-                }
-            );
+                },
+            });
             setSub(sub);
         }
         if (entityId && db && sub === null) {

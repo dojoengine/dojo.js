@@ -1,52 +1,52 @@
 name: ci
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-    check:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: oven-sh/setup-bun@v1
-            - uses: pnpm/action-setup@v3
-              with:
-                  version: 9.4.0
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9.4.0
 
-            - name: Update Submodules
-              run: git submodule update --init --recursive
+      - name: Update Submodules
+        run: git submodule update --init --recursive
 
-            - run: curl -L https://install.dojoengine.org | bash
-            - run: /home/runner/.config/.dojo/bin/dojoup -v v1.0.2
-            - run: |
-                  cd worlds/dojo-starter
-                  /home/runner/.config/.dojo/bin/sozo build
-                  /home/runner/.config/.dojo/bin/sozo test
+      - run: curl -L https://install.dojoengine.org | bash
+      - run: /home/runner/.config/.dojo/bin/dojoup -v v1.0.8
+      - run: |
+          cd worlds/dojo-starter
+          /home/runner/.config/.dojo/bin/sozo build
+          /home/runner/.config/.dojo/bin/sozo test
 
-            - name: "Setup npm"
-              run: |
-                  npm set @ponderingdemocritus:registry=https://npm.pkg.github.com/dojoengine
-                  npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
+      - name: "Setup npm"
+        run: |
+          npm set @ponderingdemocritus:registry=https://npm.pkg.github.com/dojoengine
+          npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
 
-            - name: Install Protobuf Compiler
-              run: sudo apt-get install -y protobuf-compiler
+      - name: Install Protobuf Compiler
+        run: sudo apt-get install -y protobuf-compiler
 
-            - name: Install dependencies
-              run: pnpm i
+      - name: Install dependencies
+        run: pnpm i
 
-            - name: Run Prettier
-              run: pnpm run prettier --check .
+      - name: Run Prettier
+        run: pnpm run prettier --check .
 
-            - name: Build packages
-              run: pnpm run build
+      - name: Build packages
+        run: pnpm run build
 
-            - name: Build examples
-              run: pnpm run build-examples
+      - name: Build examples
+        run: pnpm run build-examples
 
-            # - name: Upload coverage reports to Codecov
-            #   uses: codecov/codecov-action@v3
-            #   env:
-            #       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      # - name: Upload coverage reports to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   env:
+      #       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

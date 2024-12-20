@@ -11,6 +11,8 @@ import { OnchainDashSchemaType, schema } from "@/dojo/models";
 import { env, getRpcUrl } from "@/env";
 import { dojoConfig } from "../dojoConfig";
 import { DojoContext } from "@/dojo/provider";
+import { DojoProvider } from "@dojoengine/core";
+import { setupWorld } from "./typescript/contracts.gen";
 
 async function main() {
     const db = await init<OnchainDashSchemaType>(
@@ -30,10 +32,12 @@ async function main() {
         },
         schema
     );
+    const provider = new DojoProvider(dojoConfig.manifest, getRpcUrl());
+    const actions = setupWorld(provider);
 
     createRoot(document.getElementById("root")!).render(
         <StrictMode>
-            <DojoContext.Provider value={db}>
+            <DojoContext.Provider value={{ db, provider, actions }}>
                 <RootLayout>
                     <Home />
                 </RootLayout>

@@ -28,14 +28,14 @@ export default function CallerCounter() {
         setIsLoading(true);
     }, [incrementCallerCounter, setIsLoading]);
 
-    const db = useDojoDb();
+    const { db } = useDojoDb();
     useEffect(() => {
         async function getEntity(
             db: SDK<OnchainDashSchemaType>,
             address: string
         ) {
-            const entity = await db.getEntities(
-                {
+            const entity = await db.getEntities({
+                query: {
                     onchain_dash: {
                         CallerCounter: {
                             $: {
@@ -46,8 +46,8 @@ export default function CallerCounter() {
                         },
                     },
                 },
-                () => {}
-            );
+                callback: () => {},
+            });
             const counter = entity.pop();
             if (!counter) {
                 return 0;
@@ -69,9 +69,9 @@ export default function CallerCounter() {
             db: SDK<OnchainDashSchemaType>,
             address: string
         ) {
-            const sub = await db.subscribeEntityQuery(
-                {
-                    // @ts-expect-error $eq is working there
+            const sub = await db.subscribeEntityQuery({
+                // @ts-expect-error $eq is working there
+                query: {
                     onchain_dash: {
                         CallerCounter: {
                             $: {
@@ -82,7 +82,7 @@ export default function CallerCounter() {
                         },
                     },
                 },
-                ({ data, error }) => {
+                callback: ({ data, error }) => {
                     if (data) {
                         const entity = data.pop();
                         if (!entity) {
@@ -107,8 +107,8 @@ export default function CallerCounter() {
                     if (error) {
                         throw error;
                     }
-                }
-            );
+                },
+            });
             setSub(sub);
         }
         if (address && db && sub === null) {

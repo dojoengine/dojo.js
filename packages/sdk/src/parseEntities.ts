@@ -1,6 +1,7 @@
 import * as torii from "@dojoengine/torii-client";
 
 import { ParsedEntity, SchemaType, StandardizedQueryResult } from "./types";
+import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
 
 /**
  * Parses a collection of entities into a standardized query result format.
@@ -72,15 +73,63 @@ export function parseEntities<T extends SchemaType>(
 function parseValue(value: torii.Ty): any {
     switch (value.type) {
         case "primitive":
-            return value.value;
+            return parsePrimitive(value);
         case "struct":
             return parseStruct(
                 value.value as Record<string, torii.Ty> | Map<string, torii.Ty>
             );
         case "enum":
-            return (value.value as torii.EnumValue).option;
+            // Handling Options
+            if ("Some" === (value.value as torii.EnumValue).option) {
+                return new CairoOption(
+                    CairoOptionVariant.Some,
+                    parseValue((value.value as torii.EnumValue).value)
+                );
+            } else if ("None" === (value.value as torii.EnumValue).option) {
+                return new CairoOption(CairoOptionVariant.None);
+            }
+
+            // Handling simple enum as default case
+            // Handling CairoCustomEnum for more complex types
+            return parseCustomEnum(value);
         case "array":
             return (value.value as torii.Ty[]).map(parseValue);
+        default:
+            return value.value;
+    }
+}
+
+/**
+ * Parses a value identified as enum either returns a single string matching enum value
+ * or CairoCustomEnum matching more complex cairo types
+ *
+ * @param {torii.Ty} value - The value to parse.
+ * @returns {CairoCustomEnum | string} - The parsed value.
+ */
+function parseCustomEnum(value: torii.Ty): CairoCustomEnum | string {
+    // enum is a simple enum
+    if ((value.value as torii.EnumValue).value.type === "tuple") {
+        // we keep retrocompatibility
+        return (value.value as torii.EnumValue).option;
+    }
+
+    return new CairoCustomEnum({
+        [(value.value as torii.EnumValue).option]: parseValue(
+            (value.value as torii.EnumValue).value
+        ),
+    });
+}
+
+/**
+ * Parses a value based on its primitive type.
+ *
+ * @param {torii.Ty} value - The value to parse.
+ * @returns {any} - The parsed value.
+ */
+function parsePrimitive(value: torii.Ty): any {
+    switch (value.type_name) {
+        case "u64":
+            return parseInt(value.value as string, 16);
         default:
             return value.value;
     }

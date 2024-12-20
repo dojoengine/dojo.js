@@ -4,6 +4,10 @@ import { Chain, mainnet } from "@starknet-react/chains";
 import { jsonRpcProvider, StarknetConfig, voyager } from "@starknet-react/core";
 import { env, getRpcUrl } from "@/env";
 import { dojoConfig } from "@/../dojoConfig";
+import {
+    predeployedAccounts,
+    PredeployedAccountsConnector,
+} from "@dojoengine/predeployed-connector";
 
 const cartridge = new CartridgeConnector({
     url: env.VITE_CONTROLLER_URL,
@@ -24,6 +28,13 @@ const cartridge = new CartridgeConnector({
     ],
 });
 
+let pa: PredeployedAccountsConnector[] = [];
+predeployedAccounts({
+    rpc: env.VITE_CONTROLLER_RPC,
+    id: "katana",
+    name: "Katana",
+}).then((p) => (pa = p));
+
 export default function StarknetProvider({ children }: PropsWithChildren) {
     const provider = jsonRpcProvider({
         rpc: (chain: Chain) => ({ nodeUrl: getRpcUrl() }),
@@ -33,7 +44,7 @@ export default function StarknetProvider({ children }: PropsWithChildren) {
         <StarknetConfig
             chains={[mainnet]}
             provider={provider}
-            connectors={[cartridge]}
+            connectors={[cartridge, ...pa]}
             explorer={voyager}
             autoConnect
         >
