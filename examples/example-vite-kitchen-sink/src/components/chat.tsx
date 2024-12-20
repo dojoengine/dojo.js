@@ -30,7 +30,7 @@ export default function Chat() {
     const [sub, setSub] = useState<Subscription | null>(null);
     const formRef = useRef<HTMLFormElement>(null);
 
-    const db = useDojoDb();
+    const { db } = useDojoDb();
     const publish = useCallback(
         async (data: FormValues) => {
             if (!account || !db) return;

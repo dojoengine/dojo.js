@@ -25,7 +25,7 @@ export default function GlobalCOunter() {
         setIsLoading(true);
     }, [incrementGlobalCounter, setIsLoading]);
 
-    const db = useDojoDb();
+    const { db } = useDojoDb();
 
     useEffect(() => {
         async function getEntity(db: SDK<OnchainDashSchemaType>) {

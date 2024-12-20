@@ -12,6 +12,7 @@
         "@cartridge/connector": "^0.3.46",
         "@dojoengine/core": "workspace:*",
         "@dojoengine/sdk": "workspace:*",
+        "@dojoengine/predeployed-connector": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/torii-wasm": "workspace:*",
         "@radix-ui/react-dialog": "^1.1.1",

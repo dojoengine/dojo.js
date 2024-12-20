@@ -1,4 +1,5 @@
 import type { SchemaType } from "@dojoengine/sdk";
+import { CairoOption, CairoOptionVariant } from "starknet";
 
 export interface GlobalCounter {
     fieldOrder: string[];
@@ -9,6 +10,7 @@ export interface CallerCounter {
     fieldOrder: string[];
     counter: number;
     caller: string;
+    timestamp: CairoOption<number>;
 }
 export interface Theme {
     fieldOrder: string[];
@@ -56,6 +58,7 @@ export const schema: OnchainDashSchemaType = {
             fieldOrder: ["counter", "caller"],
             counter: 0,
             caller: "",
+            timestamp: new CairoOption(CairoOptionVariant.None),
         },
         Theme: {
             fieldOrder: ["theme_key", "value", "caller", "timestamp"],

@@ -1,0 +1,58 @@
+{
+    "name": "@dojoengine/predeployed-connector",
+    "version": "1.0.4-alpha.3.1.2",
+    "description": "Dojo SDK: Build onchain and provable apps faster",
+    "author": "Dojo Team",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "type": "module",
+    "scripts": {
+        "build": "tsup --dts-resolve",
+        "test": "vitest run --config ./vitest.config.ts",
+        "coverage": "vitest run --coverage",
+        "lint": "eslint . --ext .ts,.tsx",
+        "format": "prettier --write ."
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./package.json": "./package.json"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^28.0.0",
+        "@vitest/coverage-v8": "^1.6.0",
+        "eslint": "^8.57.1",
+        "prettier": "^2.8.8",
+        "tsup": "^8.3.0",
+        "typescript": "^5.6.2",
+        "vite": "^3.2.11",
+        "vitest": "^1.6.0"
+    },
+    "peerDependencies": {
+        "@starknet-react/core": "2.9.0",
+        "starknet": "6.11.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dojoengine/sdk.git"
+    },
+    "bugs": {
+        "url": "https://github.com/dojoengine/sdk/issues"
+    },
+    "homepage": "https://github.com/dojoengine/sdk#readme",
+    "keywords": [
+        "dojo",
+        "sdk",
+        "engine",
+        "typescript",
+        "torii"
+    ],
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "dependencies": {
+        "@starknet-io/types-js": "^0.7.10"
+    }
+}

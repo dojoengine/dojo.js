@@ -28,7 +28,7 @@ export default function CallerCounter() {
         setIsLoading(true);
     }, [incrementCallerCounter, setIsLoading]);
 
-    const db = useDojoDb();
+    const { db } = useDojoDb();
     useEffect(() => {
         async function getEntity(
             db: SDK<OnchainDashSchemaType>,

@@ -15,13 +15,14 @@ packages=(
   "packages/utils"
   "packages/react"
   "packages/sdk"
+  "packages/predeployed-connector"
 )
 
 # Iterate over each package directory and run the build command
 for package in "${packages[@]}"; do
   echo "Building $package..."
   pnpm --dir "$package" build
-  
+
   # Run tests only for non-wasm packages, non-torii-client packages, and create-dojo
   if [[ "$package" != *"-wasm" && "$package" != "packages/torii-client" && "$package" != "packages/create-dojo" ]]; then
     pnpm --dir "$package" test
