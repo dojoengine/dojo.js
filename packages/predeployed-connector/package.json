@@ -8,6 +8,7 @@
     "type": "module",
     "scripts": {
         "build": "tsup --dts-resolve",
+        "test": "vitest run --passWithNoTests --config ./vitest.config.ts",
         "coverage": "vitest run --coverage",
         "lint": "eslint . --ext .ts,.tsx",
         "format": "prettier --write ."
