@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/dojoengine/sdk/compare/v1.0.4-alpha.3.1.2...v1.0.4) (2024-12-21)
+
+
+### Features
+
+* parseEntities, cairocustomenum support ([60b46c6](https://github.com/dojoengine/sdk/commit/60b46c672fc2bfd51a9eb3aa5a51cb834c828ce5))
+
+
+
+
+
 ## [1.0.3](https://github.com/dojoengine/sdk/compare/v1.0.3-alpha.2...v1.0.3) (2024-12-14)
 
 
