@@ -45,5 +45,5 @@ sozo migrate apply
 
 ### Notes
 
-- you main want to update `actions` contract address in `src/components/caller-counter.tsx` & `src/components/global-counter.tsx` which is hardcoded in those files.
-- if you want to have braavos & argent wallet working, you need to deploy classes and deploy your wallet manually.
+-   you main want to update `actions` contract address in `src/components/caller-counter.tsx` & `src/components/global-counter.tsx` which is hardcoded in those files.
+-   if you want to have braavos & argent wallet working, you need to deploy classes and deploy your wallet manually.

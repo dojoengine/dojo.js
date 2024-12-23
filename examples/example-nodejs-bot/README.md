@@ -4,10 +4,10 @@ A Discord bot for interacting with your Dojo world via Torii.
 
 Features:
 
-- Poll a Torii for information.
-- Expose a slash command for reading Torii state.
-- Easy to extend with new commands.
-- GraphQL codegen for Torii models.
+-   Poll a Torii for information.
+-   Expose a slash command for reading Torii state.
+-   Easy to extend with new commands.
+-   GraphQL codegen for Torii models.
 
 ---
 
