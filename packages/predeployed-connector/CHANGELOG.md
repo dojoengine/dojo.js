@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.6](https://github.com/dojoengine/sdk/compare/v1.0.5...v1.0.6) (2024-12-23)
+
+**Note:** Version bump only for package @dojoengine/predeployed-connector
+
+
+
+
+
 ## [1.0.4](https://github.com/dojoengine/sdk/compare/v1.0.4-alpha.3.1.2...v1.0.4) (2024-12-21)
 
 
