@@ -20,9 +20,13 @@ jobs:
         run: git submodule update --init --recursive
 
       - run: curl -L https://install.dojoengine.org | bash
-      - run: /home/runner/.config/.dojo/bin/dojoup -v v1.0.8
+      - run: /home/runner/.config/.dojo/bin/dojoup -v v1.0.9
       - run: |
           cd worlds/dojo-starter
+          /home/runner/.config/.dojo/bin/sozo build
+          /home/runner/.config/.dojo/bin/sozo test
+      - run: |
+          cd worlds/onchain-dash
           /home/runner/.config/.dojo/bin/sozo build
           /home/runner/.config/.dojo/bin/sozo test
 
