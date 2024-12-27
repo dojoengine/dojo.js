@@ -321,6 +321,42 @@ export interface SDK<T extends SchemaType> {
         account_addresses: string[],
         contract_addresses: string[]
     ): Promise<torii.TokenBalances>;
+
+    /**
+     * Subscribes to token balance updates
+     *
+     * # Parameters
+     * @param {string[]} contract_addresses - Array of contract addresses to filter (empty for all)
+     * @param {string[]} account_addresses - Array of account addresses to filter (empty for all)
+     * @param {Funtion} callback - JavaScript function to call on updates
+     *
+     * # Returns
+     * Result containing subscription handle or error
+     * @returns torii.Subscription
+     */
+    onTokenBalanceUpdated: (
+        contract_addresses: string[],
+        account_addresses: string[],
+        callback: Function
+    ) => torii.Subscription;
+
+    /**
+     * Updates an existing token balance subscription
+     *
+     * # Parameters
+     * @param {torii.Subscription} subscription - Existing subscription to update
+     * @param {string[]} contract_addresses - New array of contract addresses to filter
+     * @param {string[]} account_addresses - New array of account addresses to filter
+     *
+     * # Returns
+     * Result containing unit or error
+     * @returns {Promise<void>}
+     */
+    updateTokenBalanceSubscription: (
+        subscription: torii.Subscription,
+        contract_addresses: string[],
+        account_addresses: string[]
+    ) => Promise<void>;
 }
 
 /**

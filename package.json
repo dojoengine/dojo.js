@@ -4,8 +4,8 @@
     "build": "bash ./scripts/build-packages.sh",
     "build-examples": "bash ./scripts/build-examples.sh",
     "clean": "bash ./scripts/clean.sh",
-    "prettier-check": "npx prettier --check {packages,examples}",
-    "prettier": "npx prettier --write {packages,examples}",
+    "prettier-check": "pnpx prettier --check {packages,examples}",
+    "prettier": "pnpx prettier --write {packages,examples}",
     "release": "pnpm build && pnpm prettier && npx lerna publish --no-private --force-publish",
     "docs": "npx typedoc --out docs",
     "prepare": "husky install"
