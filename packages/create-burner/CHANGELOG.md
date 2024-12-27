@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7](https://github.com/dojoengine/dojo.js/compare/v1.0.6...v1.0.7) (2024-12-27)
+
+
+### Features
+
+* bump dojo v1.0.9 ([32db06c](https://github.com/dojoengine/dojo.js/commit/32db06cf32348b6b2d150e86817326f9fb35ce45))
+
+
+
+
+
 ## [1.0.6](https://github.com/dojoengine/dojo.js/compare/v1.0.5...v1.0.6) (2024-12-23)
 
 **Note:** Version bump only for package @dojoengine/create-burner
