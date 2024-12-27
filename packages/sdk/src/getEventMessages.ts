@@ -38,7 +38,8 @@ export async function getEventMessages<T extends SchemaType>(
     entityModels: string[] = [],
     limit: number = 100, // Default limit
     offset: number = 0, // Default offset
-    options?: { logging?: boolean } // Logging option
+    options?: { logging?: boolean }, // Logging option
+    historical?: boolean
 ): Promise<StandardizedQueryResult<T>> {
     const clause = convertQueryToClause(query, schema);
 
@@ -58,7 +59,10 @@ export async function getEventMessages<T extends SchemaType>(
         };
 
         try {
-            const entities = await client.getEventMessages(toriiQuery, true);
+            const entities = await client.getEventMessages(
+                toriiQuery,
+                historical ?? true
+            );
 
             if (options?.logging) {
                 console.log(`Fetched entities at offset ${cursor}:`, entities);

@@ -392,6 +392,8 @@ export interface SubscribeParams<T extends SchemaType> {
     }) => void;
     // Optional settings.
     options?: SDKFunctionOptions;
+    // historical events
+    historical?: boolean;
 }
 
 export interface GetParams<T extends SchemaType> {
@@ -412,4 +414,6 @@ export interface GetParams<T extends SchemaType> {
     offset?: number;
     // Optional settings.
     options?: SDKFunctionOptions;
+    // historical events
+    historical?: boolean;
 }
