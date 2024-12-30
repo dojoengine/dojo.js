@@ -27,7 +27,9 @@
         "cross-spawn": "^7.0.3",
         "fs-extra": "^11.2.0",
         "prompts": "^2.4.2",
-        "type-fest": "^4.26.1"
+        "type-fest": "^4.26.1",
+        "js-yaml": "^4.1.0",
+        "node-fetch": "^2.6.9"
     },
     "devDependencies": {
         "@types/cross-spawn": "^6.0.6",

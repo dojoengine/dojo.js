@@ -4,6 +4,7 @@ import { promises as fs } from "fs";
 import spawn from "cross-spawn";
 import https from "https";
 import { input, select } from "@inquirer/prompts";
+import { getCatalogVersions } from "../utils/get-package-info";
 
 const templates = [
     {
@@ -96,19 +97,59 @@ async function rewritePackageJson(projectName: string, clientPath: string) {
     const packageJsonPath = path.join(clientPath, "package.json");
     const packageJson = JSON.parse(await fs.readFile(packageJsonPath, "utf-8"));
     const latestVersion = await getLatestVersion();
+    const catalogVersion = await getCatalogVersions();
 
     packageJson.name = projectName;
 
-    for (let dep of Object.keys(packageJson.dependencies)) {
-        if (
-            dep.startsWith("@dojoengine") &&
-            packageJson.dependencies[dep].startsWith("workspace:")
-        ) {
-            packageJson.dependencies[dep] = latestVersion;
+    const updatedPackageJson = {
+        ...packageJson,
+        dependencies: updateDependencies(
+            packageJson.dependencies,
+            latestVersion,
+            catalogVersion
+        ),
+        devDependencies: updateDependencies(
+            packageJson.devDependencies,
+            latestVersion,
+            catalogVersion
+        ),
+        peerDependencies: updateDependencies(
+            packageJson.peerDependencies,
+            latestVersion,
+            catalogVersion
+        ),
+    };
+
+    await fs.writeFile(
+        packageJsonPath,
+        JSON.stringify(updatedPackageJson, null, 2)
+    );
+}
+
+function updateDependencies(
+    deps: Record<string, string> | undefined,
+    latestVersion: string,
+    catalogVersions: Record<string, string>
+) {
+    if (!deps) return deps;
+
+    const updated = { ...deps };
+    for (const [name, version] of Object.entries(deps)) {
+        if (version.startsWith("workspace:")) {
+            // Find the actual version from root package.json
+            updated[name] = latestVersion;
+        } else if (version.startsWith("catalog:")) {
+            // Find the version from catalog
+            const actualVersion = catalogVersions[name];
+            if (!actualVersion) {
+                throw new Error(
+                    `failed to get version for package ${name} from catalog`
+                );
+            }
+            updated[name] = actualVersion;
         }
     }
-
-    await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    return updated;
 }
 
 async function rewriteDojoConfigFile(clientPath: string) {
