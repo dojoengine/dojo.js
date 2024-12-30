@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/dojocontext.tsx","./src/bindings.ts","./src/contracts.gen.ts","./src/main.tsx","./src/usedojo.tsx","./src/usemodel.tsx","./src/usesystemcalls.ts","./src/vite-env.d.ts"],"version":"5.6.3"}
+{"root":["./src/app.tsx","./src/dojocontext.tsx","./src/bindings.ts","./src/contracts.gen.ts","./src/main.tsx","./src/usedojo.tsx","./src/usemodel.tsx","./src/usesystemcalls.ts","./src/vite-env.d.ts"],"version":"5.7.2"}
