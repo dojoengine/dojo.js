@@ -313,6 +313,10 @@ function convertOperator(operator: string): torii.ComparisonOperator {
             return "Lt";
         case "$lte":
             return "Lte";
+        case "$in":
+            return "In";
+        case "$nin":
+            return "NotIn";
         default:
             throw new Error(`Unsupported operator: ${operator}`);
     }

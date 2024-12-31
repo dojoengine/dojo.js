@@ -140,6 +140,20 @@ class QueryEntity<T extends SchemaType> {
         return this.addConstraint(field, value, Operator.lte);
     }
 
+    public in(
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
+        value: any
+    ): QueryEntity<T> {
+        return this.addConstraint(field, value, Operator.in);
+    }
+
+    public notIn(
+        field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
+        value: any
+    ): QueryEntity<T> {
+        return this.addConstraint(field, value, Operator.nin);
+    }
+
     private addConstraint(
         field: FirstLevelKeys<T[keyof T & string][keyof T[keyof T & string]]>,
         value: any,
@@ -177,4 +191,6 @@ enum Operator {
     gte = "$gte",
     lt = "$lt",
     lte = "$lte",
+    in = "$in",
+    nin = "$nin",
 }
