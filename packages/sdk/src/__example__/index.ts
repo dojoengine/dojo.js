@@ -115,20 +115,23 @@ async function exampleUsage() {
         n.entity("player", (e) => e.eq("name", "Alice"))
     );
 
-    db.subscribeEntityQuery(query.build(), (resp) => {
-        if (resp.error) {
-            console.error(
-                "Error querying todos and goals:",
-                resp.error.message
-            );
-            return;
-        }
-        if (resp.data) {
-            console.log(
-                "Queried todos and goals:",
-                resp.data.map((a) => a.models.world)
-            );
-        }
+    db.subscribeEntityQuery({
+        query: query.build(),
+        callback: (resp) => {
+            if (resp.error) {
+                console.error(
+                    "Error querying todos and goals:",
+                    resp.error.message
+                );
+                return;
+            }
+            if (resp.data) {
+                console.log(
+                    "Queried todos and goals:",
+                    resp.data.map((a) => a.models.world)
+                );
+            }
+        },
     });
     // Example usage of getEntities with where clause
     try {
@@ -139,20 +142,23 @@ async function exampleUsage() {
                 )
                 .entity("game", (e) => e.eq("status", "completed"))
         );
-        const entities = await db.getEntities(eq.build(), (resp) => {
-            if (resp.error) {
-                console.error(
-                    "Error querying completed important todos:",
-                    resp.error.message
-                );
-                return;
-            }
-            if (resp.data) {
-                console.log(
-                    "Completed important todos:",
-                    resp.data.map((a) => a.models)
-                );
-            }
+        const entities = await db.getEntities({
+            query: eq.build(),
+            callback: (resp) => {
+                if (resp.error) {
+                    console.error(
+                        "Error querying completed important todos:",
+                        resp.error.message
+                    );
+                    return;
+                }
+                if (resp.data) {
+                    console.log(
+                        "Completed important todos:",
+                        resp.data.map((a) => a.models)
+                    );
+                }
+            },
         });
         console.log("Queried entities:", entities);
     } catch (error) {
