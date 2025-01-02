@@ -222,7 +222,7 @@ describe("parseEntities", () => {
         };
         const res = parseEntities(toriiResult);
         const expected = new CairoOption(CairoOptionVariant.Some, 1734537235);
-        expect(res[0].models.onchain_dash.CallerCounter.timestamp).toEqual(
+        expect(res[0]?.models?.onchain_dash?.CallerCounter?.timestamp).toEqual(
             expected
         );
     });
@@ -276,7 +276,7 @@ describe("parseEntities", () => {
         };
         const res = parseEntities<SchemaType>(toriiResult);
         const expected = new CairoCustomEnum({ Predefined: "Dojo" });
-        expect(res[0].models.onchain_dash.Theme.value).toEqual(expected);
+        expect(res[0]?.models?.onchain_dash?.Theme?.value).toEqual(expected);
     });
 
     it("should parse enum with nested struct", () => {
@@ -333,6 +333,6 @@ describe("parseEntities", () => {
                     "0x0000000000000000000000000000000000000000637573746f6d5f636c617373",
             },
         });
-        expect(res[0].models.onchain_dash.Theme.value).toEqual(expected);
+        expect(res[0]?.models?.onchain_dash?.Theme?.value).toEqual(expected);
     });
 });
