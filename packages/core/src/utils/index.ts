@@ -42,7 +42,10 @@ export const parseDojoCall = (
 
         return {
             contractAddress: contract.address,
-            calldata: CallData.compile(call.calldata),
+            calldata: new CallData(contract.abi).compile(
+                call.entrypoint,
+                call.calldata
+            ),
             entrypoint: call.entrypoint,
         };
     } else {
