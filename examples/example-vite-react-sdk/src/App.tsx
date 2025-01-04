@@ -1,17 +1,29 @@
 import { useEffect, useMemo } from "react";
 import { QueryBuilder, SDK, createDojoStore } from "@dojoengine/sdk";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { addAddressPadding } from "starknet";
+import {
+    AccountInterface,
+    addAddressPadding,
+    CairoOption,
+    CairoOptionVariant,
+} from "starknet";
 
-import { Models, Schema } from "./bindings.ts";
+import {
+    Direction,
+    ModelsMapping,
+    SchemaType,
+} from "./typescript/models.gen.ts";
 import { useDojo } from "./useDojo.tsx";
 import useModel from "./useModel.tsx";
 import { useSystemCalls } from "./useSystemCalls.ts";
+import { useAccount, useConnect } from "@starknet-react/core";
+import { WalletAccount } from "./wallet-account.tsx";
+import { HistoricalEvents } from "./historical-events.tsx";
 
 /**
  * Global store for managing Dojo game state.
  */
-export const useDojoStore = createDojoStore<Schema>();
+export const useDojoStore = createDojoStore<SchemaType>();
 
 /**
  * Main application component that provides game functionality and UI.
@@ -19,39 +31,41 @@ export const useDojoStore = createDojoStore<Schema>();
  *
  * @param props.sdk - The Dojo SDK instance configured with the game schema
  */
-function App({ sdk }: { sdk: SDK<Schema> }) {
+function App({ sdk }: { sdk: SDK<SchemaType> }) {
     const {
-        account,
         setup: { client },
     } = useDojo();
+    const { account } = useAccount();
     const state = useDojoStore((state) => state);
     const entities = useDojoStore((state) => state.entities);
 
     const { spawn } = useSystemCalls();
 
-    const entityId = useMemo(
-        () => getEntityIdFromKeys([BigInt(account?.account.address)]),
-        [account?.account.address]
-    );
+    const entityId = useMemo(() => {
+        if (account) {
+            return getEntityIdFromKeys([BigInt(account.address)]);
+        }
+        return BigInt(0);
+    }, [account]);
 
     useEffect(() => {
         let unsubscribe: (() => void) | undefined;
 
-        const subscribe = async () => {
+        const subscribe = async (account: AccountInterface) => {
             const subscription = await sdk.subscribeEntityQuery({
-                query: new QueryBuilder<Schema>()
+                query: new QueryBuilder<SchemaType>()
                     .namespace("dojo_starter", (n) =>
                         n
                             .entity("Moves", (e) =>
                                 e.eq(
                                     "player",
-                                    addAddressPadding(account.account.address)
+                                    addAddressPadding(account.address)
                                 )
                             )
                             .entity("Position", (e) =>
                                 e.is(
                                     "player",
-                                    addAddressPadding(account.account.address)
+                                    addAddressPadding(account.address)
                                 )
                             )
                     )
@@ -66,7 +80,6 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                         response.data &&
                         response.data[0].entityId !== "0x0"
                     ) {
-                        console.log("subscribed", response.data[0]);
                         state.updateEntity(response.data[0]);
                     }
                 },
@@ -75,25 +88,27 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
             unsubscribe = () => subscription.cancel();
         };
 
-        subscribe();
+        if (account) {
+            subscribe(account);
+        }
 
         return () => {
             if (unsubscribe) {
                 unsubscribe();
             }
         };
-    }, [sdk, account?.account.address]);
+    }, [sdk, account]);
 
     useEffect(() => {
-        const fetchEntities = async () => {
+        const fetchEntities = async (account: AccountInterface) => {
             try {
                 await sdk.getEntities({
-                    query: new QueryBuilder<Schema>()
+                    query: new QueryBuilder<SchemaType>()
                         .namespace("dojo_starter", (n) =>
                             n.entity("Moves", (e) =>
                                 e.eq(
                                     "player",
-                                    addAddressPadding(account.account.address)
+                                    addAddressPadding(account.address)
                                 )
                             )
                         )
@@ -116,53 +131,18 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
             }
         };
 
-        fetchEntities();
-    }, [sdk, account?.account.address]);
+        if (account) {
+            fetchEntities(account);
+        }
+    }, [sdk, account]);
 
-    const moves = useModel(entityId, Models.Moves);
-    const position = useModel(entityId, Models.Position);
+    const moves = useModel(entityId as string, ModelsMapping.Moves);
+    const position = useModel(entityId as string, ModelsMapping.Position);
 
     return (
         <div className="bg-black min-h-screen w-full p-4 sm:p-8">
             <div className="max-w-7xl mx-auto">
-                <button
-                    className="mb-4 px-4 py-2 bg-blue-600 text-white text-sm sm:text-base rounded-md hover:bg-blue-700 transition-colors duration-300"
-                    onClick={() => account?.create()}
-                >
-                    {account?.isDeploying
-                        ? "Deploying Burner..."
-                        : "Create Burner"}
-                </button>
-
-                <div className="bg-gray-800 shadow-md rounded-lg p-4 sm:p-6 mb-6 w-full max-w-md">
-                    <div className="text-lg sm:text-xl font-semibold mb-4 text-white">{`Burners Deployed: ${account.count}`}</div>
-                    <div className="mb-4">
-                        <label
-                            htmlFor="signer-select"
-                            className="block text-sm font-medium text-gray-300 mb-2"
-                        >
-                            Select Signer:
-                        </label>
-                        <select
-                            id="signer-select"
-                            className="w-full px-3 py-2 text-base text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={account ? account.account.address : ""}
-                            onChange={(e) => account.select(e.target.value)}
-                        >
-                            {account?.list().map((account, index) => (
-                                <option value={account.address} key={index}>
-                                    {account.address}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <button
-                        className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 text-base rounded transition duration-300 ease-in-out"
-                        onClick={() => account.clear()}
-                    >
-                        Clear Burners
-                    </button>
-                </div>
+                <WalletAccount />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                     <div className="bg-gray-700 p-4 rounded-lg shadow-inner">
@@ -185,7 +165,9 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                                     : "Need to Spawn"}
                             </div>
                             <div className="col-span-3 text-center text-base text-white">
-                                {moves && moves.last_direction}
+                                {moves && moves.last_direction.isSome()
+                                    ? moves.last_direction.unwrap()
+                                    : ""}
                             </div>
                         </div>
                     </div>
@@ -194,22 +176,22 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                         <div className="grid grid-cols-3 gap-2 w-full h-48">
                             {[
                                 {
-                                    direction: "Up" as const,
+                                    direction: Direction.Up,
                                     label: "↑",
                                     col: "col-start-2",
                                 },
                                 {
-                                    direction: "Left" as const,
+                                    direction: Direction.Left,
                                     label: "←",
                                     col: "col-start-1",
                                 },
                                 {
-                                    direction: "Right" as const,
+                                    direction: Direction.Right,
                                     label: "→",
                                     col: "col-start-3",
                                 },
                                 {
-                                    direction: "Down" as const,
+                                    direction: Direction.Down,
                                     label: "↓",
                                     col: "col-start-2",
                                 },
@@ -218,10 +200,10 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                                     className={`${col} h-12 w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-2xl font-bold text-gray-200`}
                                     key={direction}
                                     onClick={async () => {
-                                        await client.actions.move({
-                                            account: account.account,
-                                            direction: { type: direction },
-                                        });
+                                        await client.actions.move(
+                                            account!,
+                                            direction
+                                        );
                                     }}
                                 >
                                     {label}
@@ -265,6 +247,10 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                                         entity.models.dojo_starter.Position;
                                     const moves =
                                         entity.models.dojo_starter.Moves;
+                                    const lastDirection =
+                                        moves?.last_direction.isSome()
+                                            ? moves.last_direction.unwrap()
+                                            : "N/A";
 
                                     return (
                                         <tr
@@ -288,7 +274,7 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                                                     "N/A"}
                                             </td>
                                             <td className="border border-gray-700 p-2">
-                                                {moves?.last_direction ?? "N/A"}
+                                                {lastDirection}
                                             </td>
                                             <td className="border border-gray-700 p-2">
                                                 {moves?.remaining ?? "N/A"}
@@ -300,6 +286,9 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                         </tbody>
                     </table>
                 </div>
+
+                {/* // Here sdk is passed as props but this can be done via contexts */}
+                <HistoricalEvents sdk={sdk} />
             </div>
         </div>
     );

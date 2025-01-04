@@ -19,7 +19,16 @@ export function convertQueryToClause<T extends SchemaType>(
     const clauses: torii.Clause[] = [];
 
     for (const [namespace, models] of Object.entries(query)) {
-        if (namespace === "entityIds") continue; // Skip entityIds
+        if (namespace === "entityIds") {
+            return {
+                // match every models that has at least input keys as key
+                Keys: {
+                    keys: [...models],
+                    pattern_matching: "VariableLen",
+                    models: [],
+                },
+            };
+        }
 
         if (models && typeof models === "object") {
             const modelClauses = processModels(namespace, models, schema);

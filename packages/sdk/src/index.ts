@@ -92,7 +92,7 @@ export async function init<T extends SchemaType>(
          * Fetches event messages based on the provided query.
          *
          * @param {GetParams<T>} params - Parameters object
-         * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
+         * @returns {Promise<StandardizedQueryResult<T> | StandardizedQueryResult<T>[]>} - A promise that resolves to the standardized query result.
          */
         getEventMessages: ({
             query,

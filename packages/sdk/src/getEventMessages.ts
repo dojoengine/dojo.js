@@ -2,7 +2,13 @@ import * as torii from "@dojoengine/torii-client";
 
 import { convertQueryToClause } from "./convertQuerytoClause";
 import { parseEntities } from "./parseEntities";
-import { QueryType, SchemaType, StandardizedQueryResult } from "./types";
+import {
+    ParsedEntity,
+    QueryType,
+    SchemaType,
+    StandardizedQueryResult,
+} from "./types";
+import { parseHistoricalEvents } from "./parseHistoricalEvents";
 
 /**
  * Fetches event messages from the Torii client based on the provided query.
@@ -31,7 +37,7 @@ export async function getEventMessages<T extends SchemaType>(
     query: QueryType<T>,
     schema: T,
     callback: (response: {
-        data?: StandardizedQueryResult<T>;
+        data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
         error?: Error;
     }) => void,
     orderBy: torii.OrderBy[] = [],
@@ -40,8 +46,9 @@ export async function getEventMessages<T extends SchemaType>(
     offset: number = 0, // Default offset
     options?: { logging?: boolean }, // Logging option
     historical?: boolean
-): Promise<StandardizedQueryResult<T>> {
+): Promise<StandardizedQueryResult<T> | StandardizedQueryResult<T>[]> {
     const clause = convertQueryToClause(query, schema);
+    const isHistorical = !!historical;
 
     let cursor = offset;
     let continueFetching = true;
@@ -54,14 +61,14 @@ export async function getEventMessages<T extends SchemaType>(
             order_by: orderBy,
             entity_models: entityModels,
             clause,
-            dont_include_hashed_keys: false,
+            dont_include_hashed_keys: true,
             entity_updated_after: 0,
         };
 
         try {
             const entities = await client.getEventMessages(
                 toriiQuery,
-                historical ?? true
+                isHistorical
             );
 
             if (options?.logging) {
@@ -70,7 +77,9 @@ export async function getEventMessages<T extends SchemaType>(
 
             Object.assign(allEntities, entities);
 
-            const parsedEntities = parseEntities<T>(allEntities);
+            const parsedEntities = isHistorical
+                ? parseHistoricalEvents<T>(allEntities, options)
+                : parseEntities<T>(allEntities, options);
 
             callback({ data: parsedEntities });
 
@@ -91,5 +100,8 @@ export async function getEventMessages<T extends SchemaType>(
     if (options?.logging) {
         console.log("All fetched entities:", allEntities);
     }
-    return parseEntities<T>(allEntities);
+
+    return isHistorical
+        ? parseHistoricalEvents<T>(allEntities, options)
+        : parseEntities<T>(allEntities, options);
 }

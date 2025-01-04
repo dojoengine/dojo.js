@@ -5,10 +5,11 @@ import App from "./App.tsx";
 
 import "./index.css";
 import { init } from "@dojoengine/sdk";
-import { Schema, schema } from "./bindings.ts";
+import { SchemaType, schema } from "./typescript/models.gen.ts";
 import { dojoConfig } from "../dojoConfig.ts";
 import { DojoContextProvider } from "./DojoContext.tsx";
 import { setupBurnerManager } from "@dojoengine/create-burner";
+import StarknetProvider from "./starknet-provider.tsx";
 
 /**
  * Initializes and bootstraps the Dojo application.
@@ -17,7 +18,7 @@ import { setupBurnerManager } from "@dojoengine/create-burner";
  * @throws {Error} If initialization fails
  */
 async function main() {
-    const sdk = await init<Schema>(
+    const sdk = await init<SchemaType>(
         {
             client: {
                 rpcUrl: dojoConfig.rpcUrl,
@@ -40,7 +41,9 @@ async function main() {
             <DojoContextProvider
                 burnerManager={await setupBurnerManager(dojoConfig)}
             >
-                <App sdk={sdk} />
+                <StarknetProvider>
+                    <App sdk={sdk} />
+                </StarknetProvider>
             </DojoContextProvider>
         </StrictMode>
     );

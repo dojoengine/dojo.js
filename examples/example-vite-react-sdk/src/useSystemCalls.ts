@@ -2,6 +2,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojoStore } from "./App";
 import { useDojo } from "./useDojo";
 import { v4 as uuidv4 } from "uuid";
+import { useAccount } from "@starknet-react/core";
 
 /**
  * Custom hook to handle system calls and state management in the Dojo application.
@@ -15,15 +16,15 @@ export const useSystemCalls = () => {
 
     const {
         setup: { client },
-        account: { account },
     } = useDojo();
+    const { account } = useAccount();
 
     /**
      * Generates a unique entity ID based on the current account address.
      * @returns {string} The generated entity ID
      */
     const generateEntityId = () => {
-        return getEntityIdFromKeys([BigInt(account?.address)]);
+        return getEntityIdFromKeys([BigInt(account!.address)]);
     };
 
     /**
@@ -52,7 +53,7 @@ export const useSystemCalls = () => {
 
         try {
             // Execute the spawn action from the client
-            await client.actions.spawn({ account });
+            await client.actions.spawn(account!);
 
             // Wait for the entity to be updated with the new state
             await state.waitForEntityChange(entityId, (entity) => {
