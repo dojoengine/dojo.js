@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/dojoengine/dojo.js/compare/v1.0.7...v1.0.8) (2025-01-06)
+
+
+### Bug Fixes
+
+* compile calldata using abi ([3341a7a](https://github.com/dojoengine/dojo.js/commit/3341a7a5f3b8af1172a12624f82bac77adbe0304))
+
+
+### Features
+
+* upgrade starknet peerDependency ([9c60112](https://github.com/dojoengine/dojo.js/commit/9c6011275c7213d68175a0dd51275caae55e2e61))
+
+
+
+
+
 ## [1.0.7](https://github.com/dojoengine/dojo.js/compare/v1.0.6...v1.0.7) (2024-12-27)
 
 **Note:** Version bump only for package @dojoengine/core

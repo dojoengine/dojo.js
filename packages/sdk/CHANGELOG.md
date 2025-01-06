@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/dojoengine/sdk/compare/v1.0.7...v1.0.8) (2025-01-06)
+
+
+### Bug Fixes
+
+* added historical option for event getters ([ff2adef](https://github.com/dojoengine/sdk/commit/ff2adeff1c628be8a8c9966cee55c9270f26a8b9))
+* build-examples ([ffc30b4](https://github.com/dojoengine/sdk/commit/ffc30b41671fd29c7e230635ab6c254c198f6c60))
+* support in operator ([b9cb6be](https://github.com/dojoengine/sdk/commit/b9cb6be14e56750e0aefdd42f6b35a1197761710))
+* typedoc ([5d2c518](https://github.com/dojoengine/sdk/commit/5d2c518f1dcb1013af03364c23ed74de3f13c352))
+* typedoc ci ([a7cb74b](https://github.com/dojoengine/sdk/commit/a7cb74b1b62ee09b08fb9815c08a668955654f3f))
+
+
+### Features
+
+* fix react-sdk example + predeployed connector + historical events ([50cc19e](https://github.com/dojoengine/sdk/commit/50cc19ea944c5712e5df6062e4b73e472c21e877))
+* upgrade starknet peerDependency ([9c60112](https://github.com/dojoengine/sdk/commit/9c6011275c7213d68175a0dd51275caae55e2e61))
+
+
+
+
+
 ## [1.0.7](https://github.com/dojoengine/sdk/compare/v1.0.6...v1.0.7) (2024-12-27)
 
 

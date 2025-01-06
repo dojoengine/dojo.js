@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/dojoengine/dojo.js/compare/v1.0.7...v1.0.8) (2025-01-06)
+
+
+### Bug Fixes
+
+* added historical option for event getters ([ff2adef](https://github.com/dojoengine/dojo.js/commit/ff2adeff1c628be8a8c9966cee55c9270f26a8b9))
+* build-examples ([ffc30b4](https://github.com/dojoengine/dojo.js/commit/ffc30b41671fd29c7e230635ab6c254c198f6c60))
+* compile calldata using abi ([3341a7a](https://github.com/dojoengine/dojo.js/commit/3341a7a5f3b8af1172a12624f82bac77adbe0304))
+* create-dojo update catalog versions ([33821e5](https://github.com/dojoengine/dojo.js/commit/33821e5be04b503f7eba92323b7c31d2ebee9b9e))
+* dojo-starter dojo version ([dd0ea9f](https://github.com/dojoengine/dojo.js/commit/dd0ea9f6902bf6391b938a857153bb4f7437abc1))
+* github actions pnpm version ([3b6067b](https://github.com/dojoengine/dojo.js/commit/3b6067b13882c6e1535ae358fc4ce07291e3222f))
+* support in operator ([b9cb6be](https://github.com/dojoengine/dojo.js/commit/b9cb6be14e56750e0aefdd42f6b35a1197761710))
+* typedoc ([5d2c518](https://github.com/dojoengine/dojo.js/commit/5d2c518f1dcb1013af03364c23ed74de3f13c352))
+* typedoc ci ([a7cb74b](https://github.com/dojoengine/dojo.js/commit/a7cb74b1b62ee09b08fb9815c08a668955654f3f))
+
+
+### Features
+
+* fix react-sdk example + predeployed connector + historical events ([50cc19e](https://github.com/dojoengine/dojo.js/commit/50cc19ea944c5712e5df6062e4b73e472c21e877))
+* require typedoc job to pass before merging to main ([f41c7a3](https://github.com/dojoengine/dojo.js/commit/f41c7a316940e4bbfdffbd784edd117a2c0344c4))
+* update dojo-starter version ([8dd2ca0](https://github.com/dojoengine/dojo.js/commit/8dd2ca07b77bbc34ff6eeb14596abf52df19a0e9))
+* upgrade starknet peerDependency ([9c60112](https://github.com/dojoengine/dojo.js/commit/9c6011275c7213d68175a0dd51275caae55e2e61))
+
+
+
+
+
 ## [1.0.7](https://github.com/dojoengine/dojo.js/compare/v1.0.6...v1.0.7) (2024-12-27)
 
 

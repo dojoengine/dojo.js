@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/create-dojo",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "dojo: scaffolding dojo projects via npx",
     "author": "dojo",
     "module": "index.ts",
@@ -26,10 +26,10 @@
         "commander": "^12.1.0",
         "cross-spawn": "^7.0.3",
         "fs-extra": "^11.2.0",
-        "prompts": "^2.4.2",
-        "type-fest": "^4.26.1",
         "js-yaml": "^4.1.0",
-        "node-fetch": "^2.6.9"
+        "node-fetch": "^2.6.9",
+        "prompts": "^2.4.2",
+        "type-fest": "^4.26.1"
     },
     "devDependencies": {
         "@types/cross-spawn": "^6.0.6",

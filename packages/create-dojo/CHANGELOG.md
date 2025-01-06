@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/dojoengine/dojo.js/compare/v1.0.7...v1.0.8) (2025-01-06)
+
+
+### Bug Fixes
+
+* create-dojo update catalog versions ([33821e5](https://github.com/dojoengine/dojo.js/commit/33821e5be04b503f7eba92323b7c31d2ebee9b9e))
+
+
+
+
+
 ## [1.0.7](https://github.com/dojoengine/dojo.js/compare/v1.0.6...v1.0.7) (2024-12-27)
 
 **Note:** Version bump only for package @dojoengine/create-dojo
