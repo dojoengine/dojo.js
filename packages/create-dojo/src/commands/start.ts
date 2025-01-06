@@ -16,6 +16,10 @@ const templates = [
         description: "Vite app with a variety of Dojo features",
     },
     {
+        value: "example-vite-react-sql",
+        description: "Demonstrates how Torii sql endpoint works.",
+    },
+    {
         value: "example-vanillajs-phaser-recs",
         description: "Vanilla JS/Phaser app using Dojo RECS",
     },

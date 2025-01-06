@@ -14,6 +14,7 @@ examples=(
   "examples/example-vite-react-threejs-recs"
   "examples/example-vue-app-recs"
   "examples/example-vite-svelte-recs"
+  "examples/example-vite-react-sql"
 )
 
 # Iterate over each example directory and run the build command
@@ -23,3 +24,4 @@ for example in "${examples[@]}"; do
   pnpm run build
   cd ../../
 done
+
