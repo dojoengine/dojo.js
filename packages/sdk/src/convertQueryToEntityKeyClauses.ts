@@ -22,8 +22,9 @@ export function convertQueryToEntityKeyClauses<T extends SchemaType>(
 
     const { entityIds, ...namespaces } = query;
 
-    if (entityIds && entityIds.length > 0) {
-        clauses.push({ HashedKeys: entityIds });
+    if (entityIds && entityIds.length && (entityIds.length as number) > 0) {
+        clauses.push({ HashedKeys: entityIds as string[] });
+        return clauses;
     }
 
     clauses.push(...convertQueryToKeysClause(namespaces, schema));
