@@ -143,17 +143,17 @@ export interface QueryWhereOptions<TModel> extends QueryOptions {
  * - An object containing at least one SubscriptionWhereOptions condition to filter the subscription results.
  * - Alternatively, an array of strings representing specific values to subscribe to.
  */
-export type SubscriptionQueryType<T extends SchemaType> = {
-    entityIds?: string[];
-} & {
-    [K in keyof T]?: {
-        [L in keyof T[K]]?:
-            | AtLeastOne<{
-                  $: SubscriptionWhereOptions<T[K][L]>;
-              }>
-            | string[];
-    };
-};
+export type SubscriptionQueryType<T extends SchemaType> =
+    | BaseQueryType
+    | {
+          [K in keyof T]?: {
+              [L in keyof T[K]]?:
+                  | AtLeastOne<{
+                        $: SubscriptionWhereOptions<T[K][L]>;
+                    }>
+                  | string[];
+          };
+      };
 
 export type BaseQueryType = {
     entityIds?: string[];

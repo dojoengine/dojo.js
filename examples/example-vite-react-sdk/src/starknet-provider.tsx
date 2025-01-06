@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import { Chain, mainnet } from "@starknet-react/chains";
+import { mainnet } from "@starknet-react/chains";
 import { jsonRpcProvider, StarknetConfig, voyager } from "@starknet-react/core";
 import { dojoConfig } from "../dojoConfig";
 import {
@@ -16,7 +16,7 @@ predeployedAccounts({
 
 export default function StarknetProvider({ children }: PropsWithChildren) {
     const provider = jsonRpcProvider({
-        rpc: (chain: Chain) => ({ nodeUrl: dojoConfig.rpcUrl as string }),
+        rpc: () => ({ nodeUrl: dojoConfig.rpcUrl as string }),
     });
 
     return (

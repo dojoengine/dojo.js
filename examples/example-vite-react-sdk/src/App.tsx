@@ -1,12 +1,12 @@
 import { useEffect, useMemo } from "react";
-import { QueryBuilder, SDK, createDojoStore } from "@dojoengine/sdk";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 import {
-    AccountInterface,
-    addAddressPadding,
-    CairoOption,
-    CairoOptionVariant,
-} from "starknet";
+    ParsedEntity,
+    QueryBuilder,
+    SDK,
+    createDojoStore,
+} from "@dojoengine/sdk";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { AccountInterface, addAddressPadding } from "starknet";
 
 import {
     Direction,
@@ -16,7 +16,7 @@ import {
 import { useDojo } from "./useDojo.tsx";
 import useModel from "./useModel.tsx";
 import { useSystemCalls } from "./useSystemCalls.ts";
-import { useAccount, useConnect } from "@starknet-react/core";
+import { useAccount } from "@starknet-react/core";
 import { WalletAccount } from "./wallet-account.tsx";
 import { HistoricalEvents } from "./historical-events.tsx";
 
@@ -70,17 +70,14 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                             )
                     )
                     .build(),
-                callback: (response) => {
-                    if (response.error) {
-                        console.error(
-                            "Error setting up entity sync:",
-                            response.error
-                        );
+                callback: ({ error, data }) => {
+                    if (error) {
+                        console.error("Error setting up entity sync:", error);
                     } else if (
-                        response.data &&
-                        response.data[0].entityId !== "0x0"
+                        data &&
+                        (data[0] as ParsedEntity<SchemaType>).entityId !== "0x0"
                     ) {
-                        state.updateEntity(response.data[0]);
+                        state.updateEntity(data[0] as ParsedEntity<SchemaType>);
                     }
                 },
             });
@@ -122,7 +119,9 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                             return;
                         }
                         if (resp.data) {
-                            state.setEntities(resp.data);
+                            state.setEntities(
+                                resp.data as ParsedEntity<SchemaType>[]
+                            );
                         }
                     },
                 });
@@ -248,8 +247,8 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                                     const moves =
                                         entity.models.dojo_starter.Moves;
                                     const lastDirection =
-                                        moves?.last_direction.isSome()
-                                            ? moves.last_direction.unwrap()
+                                        moves?.last_direction?.isSome()
+                                            ? moves.last_direction?.unwrap()
                                             : "N/A";
 
                                     return (
@@ -264,10 +263,12 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                                                 {position?.player ?? "N/A"}
                                             </td>
                                             <td className="border border-gray-700 p-2">
-                                                {position?.vec?.x ?? "N/A"}
+                                                {position?.vec?.x.toString() ??
+                                                    "N/A"}
                                             </td>
                                             <td className="border border-gray-700 p-2">
-                                                {position?.vec?.y ?? "N/A"}
+                                                {position?.vec?.y.toString() ??
+                                                    "N/A"}
                                             </td>
                                             <td className="border border-gray-700 p-2">
                                                 {moves?.can_move?.toString() ??
@@ -277,7 +278,8 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                                                 {lastDirection}
                                             </td>
                                             <td className="border border-gray-700 p-2">
-                                                {moves?.remaining ?? "N/A"}
+                                                {moves?.remaining?.toString() ??
+                                                    "N/A"}
                                             </td>
                                         </tr>
                                     );

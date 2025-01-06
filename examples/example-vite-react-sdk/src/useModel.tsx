@@ -18,9 +18,9 @@ function useModel<
     // Select only the specific model data for the given entityId
     const modelData = useDojoStore(
         (state) =>
-            state.entities[entityId]?.models?.[namespace]?.[modelName] as
-                | SchemaType[N][M]
-                | undefined
+            state.entities[entityId.toString()]?.models?.[namespace]?.[
+                modelName
+            ] as SchemaType[N][M] | undefined
     );
 
     return modelData;

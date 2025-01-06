@@ -1,13 +1,14 @@
-import { SDK } from "@dojoengine/sdk";
+import { ParsedEntity, SDK } from "@dojoengine/sdk";
 import { useAccount } from "@starknet-react/core";
 import { SchemaType } from "./typescript/models.gen";
 import { AccountInterface, addAddressPadding } from "starknet";
 import { useEffect, useState } from "react";
+import { Subscription } from "@dojoengine/torii-client";
 
 export function HistoricalEvents({ sdk }: { sdk: SDK<SchemaType> }) {
     const { account } = useAccount();
-    const [events, setEvents] = useState([]);
-    const [unsubscribe, setSubscription] = useState(null);
+    const [events, setEvents] = useState<ParsedEntity<SchemaType>[][]>([]);
+    const [subscription, setSubscription] = useState<Subscription | null>(null);
 
     useEffect(() => {
         async function getHistoricalEvents(account: AccountInterface) {
@@ -24,6 +25,7 @@ export function HistoricalEvents({ sdk }: { sdk: SDK<SchemaType> }) {
                     callback: () => {},
                     historical: true,
                 });
+                // @ts-expect-error FIX: type here
                 setEvents(e);
             } catch (error) {
                 setEvents([]);
@@ -34,7 +36,7 @@ export function HistoricalEvents({ sdk }: { sdk: SDK<SchemaType> }) {
         if (account) {
             getHistoricalEvents(account);
         }
-    }, [account, setEvents]);
+    }, [account, setEvents, sdk]);
 
     useEffect(() => {
         async function subscribeHistoricalEvent(account: AccountInterface) {
@@ -48,16 +50,16 @@ export function HistoricalEvents({ sdk }: { sdk: SDK<SchemaType> }) {
                     //   }
                     // },
                     query: { entityIds: [addAddressPadding(account.address)] },
-                    callback: (resp, error) => {
-                        console.log(resp, error);
+                    callback: ({ data, error }) => {
+                        console.log(data, error);
                     },
                     historical: true,
                 });
                 setSubscription(s);
             } catch (error) {
                 setEvents([]);
-                if (unsubscribe) {
-                    unsubscribe();
+                if (subscription) {
+                    subscription.free();
                 }
                 console.error(error);
             }
@@ -78,20 +80,20 @@ export function HistoricalEvents({ sdk }: { sdk: SDK<SchemaType> }) {
     return (
         <div className="mt-6">
             <h2 className="text-white">Player Events :</h2>
-            {events.map((e, key) => {
+            {events.map((e: ParsedEntity<SchemaType>[], key) => {
                 return <Event event={e[0]} key={key} />;
             })}
         </div>
     );
 }
-function Event({ event }) {
+function Event({ event }: { event: ParsedEntity<SchemaType> }) {
     if (!event) return null;
     const player = event.models?.dojo_starter?.Moved?.player;
     const direction = event.models?.dojo_starter?.Moved?.direction;
 
     return (
         <div className="text-white flex gap-3">
-            <div>{event.entityId}</div>
+            <div>{event.entityId.toString()}</div>
             <div>
                 <div>Player: {player}</div>
                 <div>Direction: {direction}</div>
