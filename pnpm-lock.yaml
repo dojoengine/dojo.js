@@ -13,8 +13,8 @@ catalogs:
       specifier: ^3.6.2
       version: 3.6.2
     starknet:
-      specifier: ^6.11.0
-      version: 6.11.0
+      specifier: ^6.20.0
+      version: 6.20.3
 
 importers:
 
@@ -152,7 +152,7 @@ importers:
         version: 3.60.0-beta.14
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
     devDependencies:
       typescript:
         specifier: ^5.6.2
@@ -216,7 +216,7 @@ importers:
         version: 3.1.0
       '@starknet-react/core':
         specifier: 'catalog:'
-        version: 3.6.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.11.0(encoding@0.1.13))(typescript@5.7.2)
+        version: 3.6.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.20.3(encoding@0.1.13))(typescript@5.7.2)
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.7.2)(zod@3.24.1)
@@ -252,7 +252,7 @@ importers:
         version: 7.54.2(react@18.3.1)
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       tailwind-merge:
         specifier: ^2.5.2
         version: 2.6.0
@@ -358,7 +358,7 @@ importers:
         version: 7.8.1
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       vite-plugin-top-level-await:
         specifier: ^1.4.4
         version: 1.4.4(@swc/helpers@0.5.5)(rollup@4.29.1)(vite@4.5.5(@types/node@20.17.10)(terser@5.37.0))
@@ -485,7 +485,7 @@ importers:
         version: 4.0.3
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       styled-components:
         specifier: ^6.1.13
         version: 6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -606,7 +606,7 @@ importers:
         version: 7.8.1
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       vite-plugin-top-level-await:
         specifier: ^1.4.4
         version: 1.4.4(@swc/helpers@0.5.5)(rollup@2.79.2)(vite@4.5.5(@types/node@20.17.10)(terser@5.37.0))
@@ -691,7 +691,7 @@ importers:
         version: 3.1.0
       '@starknet-react/core':
         specifier: 'catalog:'
-        version: 3.6.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.11.0(encoding@0.1.13))(typescript@5.7.2)
+        version: 3.6.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.20.3(encoding@0.1.13))(typescript@5.7.2)
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
@@ -706,7 +706,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
@@ -872,7 +872,7 @@ importers:
         version: 7.8.1
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       tailwind-merge:
         specifier: ^2.5.2
         version: 2.6.0
@@ -987,7 +987,7 @@ importers:
         version: 2.2.14
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       vite-plugin-top-level-await:
         specifier: ^1.4.4
         version: 1.4.4(@swc/helpers@0.5.5)(rollup@4.29.1)(vite@5.4.11(@types/node@20.17.10)(terser@5.37.0))
@@ -1045,7 +1045,7 @@ importers:
         version: 2.2.14
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       vite-plugin-top-level-await:
         specifier: ^1.4.4
         version: 1.4.4(@swc/helpers@0.5.5)(rollup@4.29.1)(vite@5.4.11(@types/node@20.17.10)(terser@5.37.0))
@@ -1076,7 +1076,7 @@ importers:
         version: 2.0.13(typescript@5.7.2)(zod@3.24.1)
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       zod:
         specifier: ^3.23.8
         version: 3.24.1
@@ -1110,13 +1110,13 @@ importers:
         version: 1.6.0
       '@starknet-react/core':
         specifier: 2.3.0
-        version: 2.3.0(get-starknet-core@3.3.4(starknet@6.11.0(encoding@0.1.13)))(react@18.3.1)(starknet@6.11.0(encoding@0.1.13))
+        version: 2.3.0(get-starknet-core@3.3.4(starknet@6.20.3(encoding@0.1.13)))(react@18.3.1)(starknet@6.20.3(encoding@0.1.13))
       encoding:
         specifier: ^0.1.13
         version: 0.1.13
       get-starknet-core:
         specifier: ^3.3.3
-        version: 3.3.4(starknet@6.11.0(encoding@0.1.13))
+        version: 3.3.4(starknet@6.20.3(encoding@0.1.13))
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -1128,7 +1128,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -1226,10 +1226,10 @@ importers:
         version: 0.7.10
       '@starknet-react/core':
         specifier: 'catalog:'
-        version: 3.6.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.11.0(encoding@0.1.13))(typescript@5.7.2)
+        version: 3.6.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.20.3(encoding@0.1.13))(typescript@5.7.2)
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^28.0.0
@@ -1281,7 +1281,7 @@ importers:
         version: 3.1.3
       get-starknet-core:
         specifier: ^3.3.3
-        version: 3.3.4(starknet@6.11.0(encoding@0.1.13))
+        version: 3.3.4(starknet@6.20.3(encoding@0.1.13))
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -1293,7 +1293,7 @@ importers:
         version: 7.5.5
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       type-fest:
         specifier: ^2.14.0
         version: 2.19.0
@@ -1339,7 +1339,7 @@ importers:
         version: 10.1.1
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       zustand:
         specifier: ^4.5.5
         version: 4.5.5(@types/react@18.3.18)(immer@10.1.1)(react@18.3.1)
@@ -1388,7 +1388,7 @@ importers:
         version: link:../torii-client
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
       vitest:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@20.17.10)(jsdom@24.1.3)(terser@5.37.0)
@@ -1441,7 +1441,7 @@ importers:
         version: 0.2.3
       starknet:
         specifier: 'catalog:'
-        version: 6.11.0(encoding@0.1.13)
+        version: 6.20.3(encoding@0.1.13)
     devDependencies:
       '@types/elliptic':
         specifier: ^6.4.18
@@ -3620,9 +3620,6 @@ packages:
   '@noble/curves@1.3.0':
     resolution: {integrity: sha512-t01iSXPuN+Eqzb4eBX0S5oubSqXbK/xXa1Ne18Hj8f9pStxztHCE2gfboSp/dZRLSqfuLpRK2nDXDK+W9puocA==}
 
-  '@noble/curves@1.4.2':
-    resolution: {integrity: sha512-TavHr8qycMChk8UwMld0ZDRvatedkzWfH8IiaeGCfymOP5i0hSCozz9vHOL0nkwk7HRMlFnAiKpS2jrUmSybcw==}
-
   '@noble/curves@1.6.0':
     resolution: {integrity: sha512-TlaHRXDehJuRNR9TfZDNQ45mMEd5dwUwmicsafcIX4SsNiqnCHKjE/1alYPd/lDRVhxdhUAlv8uEhMCI5zjIJQ==}
     engines: {node: ^14.21.3 || >=16}
@@ -3640,10 +3637,6 @@ packages:
 
   '@noble/hashes@1.3.3':
     resolution: {integrity: sha512-V7/fPHgl+jsVPXqqeOzT8egNj2iBIVt+ECeMMG8TdcnTikP3oaBtUVqpT/gYCR68aEBJSF+XbYUxStjbFMqIIA==}
-    engines: {node: '>= 16'}
-
-  '@noble/hashes@1.4.0':
-    resolution: {integrity: sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==}
     engines: {node: '>= 16'}
 
   '@noble/hashes@1.5.0':
@@ -11263,8 +11256,8 @@ packages:
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
 
-  starknet@6.11.0:
-    resolution: {integrity: sha512-u50KrGDi9fbu1Ogu7ynwF/tSeFlp3mzOg1/Y5x50tYFICImo3OfY4lOz9OtYDk404HK4eUujKkhov9tG7GAKlg==}
+  starknet@6.20.3:
+    resolution: {integrity: sha512-RjVYLyCMGwABQCOYatDv8g9Cd1AQaF1202G+76WEK4ExZ+pPO5XDoP3e749u/rVYkn125U+DegcJ0yIwbgN2eA==}
 
   stats-gl@2.4.2:
     resolution: {integrity: sha512-g5O9B0hm9CvnM36+v7SFl39T7hmAlv541tU81ME8YeSb3i1CIP5/QdDeSB3A0la0bKNHpxpwxOVRo2wFTYEosQ==}
@@ -12062,9 +12055,6 @@ packages:
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
-
-  url-join@4.0.1:
-    resolution: {integrity: sha512-jk1+QP6ZJqyOiuEI9AEWQfju/nB2Pw466kbA0LEZljHwKeMgd9WrAEgEGxjPDD2+TNbbb37rTyhEfrCXfuKXnA==}
 
   url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
@@ -13596,8 +13586,8 @@ snapshots:
   '@cartridge/connector@0.3.46(encoding@0.1.13)(react@18.3.1)':
     dependencies:
       '@cartridge/controller': 0.3.46(encoding@0.1.13)
-      '@starknet-react/core': 2.3.0(get-starknet-core@3.3.4(starknet@6.11.0(encoding@0.1.13)))(react@18.3.1)(starknet@6.11.0(encoding@0.1.13))
-      starknet: 6.11.0(encoding@0.1.13)
+      '@starknet-react/core': 2.3.0(get-starknet-core@3.3.4(starknet@6.20.3(encoding@0.1.13)))(react@18.3.1)(starknet@6.20.3(encoding@0.1.13))
+      starknet: 6.20.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
       - get-starknet-core
@@ -13611,7 +13601,7 @@ snapshots:
       cbor-x: 1.6.0
       fast-deep-equal: 3.1.3
       query-string: 7.1.3
-      starknet: 6.11.0(encoding@0.1.13)
+      starknet: 6.20.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
@@ -15562,10 +15552,6 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.3.3
 
-  '@noble/curves@1.4.2':
-    dependencies:
-      '@noble/hashes': 1.4.0
-
   '@noble/curves@1.6.0':
     dependencies:
       '@noble/hashes': 1.5.0
@@ -15579,8 +15565,6 @@ snapshots:
   '@noble/hashes@1.3.2': {}
 
   '@noble/hashes@1.3.3': {}
-
-  '@noble/hashes@1.4.0': {}
 
   '@noble/hashes@1.5.0': {}
 
@@ -16971,18 +16955,18 @@ snapshots:
 
   '@starknet-react/chains@3.1.0': {}
 
-  '@starknet-react/core@2.3.0(get-starknet-core@3.3.4(starknet@6.11.0(encoding@0.1.13)))(react@18.3.1)(starknet@6.11.0(encoding@0.1.13))':
+  '@starknet-react/core@2.3.0(get-starknet-core@3.3.4(starknet@6.20.3(encoding@0.1.13)))(react@18.3.1)(starknet@6.20.3(encoding@0.1.13))':
     dependencies:
       '@starknet-react/chains': 0.1.7
       '@tanstack/react-query': 5.62.10(react@18.3.1)
       eventemitter3: 5.0.1
-      get-starknet-core: 3.3.4(starknet@6.11.0(encoding@0.1.13))
+      get-starknet-core: 3.3.4(starknet@6.20.3(encoding@0.1.13))
       immutable: 4.3.7
       react: 18.3.1
-      starknet: 6.11.0(encoding@0.1.13)
+      starknet: 6.20.3(encoding@0.1.13)
       zod: 3.24.1
 
-  '@starknet-react/core@3.6.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.11.0(encoding@0.1.13))(typescript@5.7.2)':
+  '@starknet-react/core@3.6.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.20.3(encoding@0.1.13))(typescript@5.7.2)':
     dependencies:
       '@starknet-io/types-js': 0.7.10
       '@starknet-react/chains': 3.1.0
@@ -16990,7 +16974,7 @@ snapshots:
       eventemitter3: 5.0.1
       get-starknet-core: 4.0.0
       react: 18.3.1
-      starknet: 6.11.0(encoding@0.1.13)
+      starknet: 6.20.3(encoding@0.1.13)
       viem: 2.21.19(typescript@5.7.2)(zod@3.24.1)
       zod: 3.24.1
     transitivePeerDependencies:
@@ -21115,10 +21099,10 @@ snapshots:
 
   get-port@5.1.1: {}
 
-  get-starknet-core@3.3.4(starknet@6.11.0(encoding@0.1.13)):
+  get-starknet-core@3.3.4(starknet@6.20.3(encoding@0.1.13)):
     dependencies:
       '@module-federation/runtime': 0.1.21
-      starknet: 6.11.0(encoding@0.1.13)
+      starknet: 6.20.3(encoding@0.1.13)
 
   get-starknet-core@4.0.0:
     dependencies:
@@ -24416,21 +24400,19 @@ snapshots:
 
   stackback@0.0.2: {}
 
-  starknet@6.11.0(encoding@0.1.13):
+  starknet@6.20.3(encoding@0.1.13):
     dependencies:
-      '@noble/curves': 1.4.2
-      '@noble/hashes': 1.6.1
+      '@noble/curves': 1.3.0
+      '@noble/hashes': 1.3.3
       '@scure/base': 1.1.9
       '@scure/starknet': 1.0.0
       abi-wan-kanabi: 2.2.4
       fetch-cookie: 3.1.0
-      get-starknet-core: 4.0.0
       isomorphic-fetch: 3.0.0(encoding@0.1.13)
       lossless-json: 4.0.2
       pako: 2.1.0
       starknet-types-07: '@starknet-io/types-js@0.7.10'
       ts-mixer: 6.0.4
-      url-join: 4.0.1
     transitivePeerDependencies:
       - encoding
 
@@ -25276,8 +25258,6 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
-
-  url-join@4.0.1: {}
 
   url-parse@1.5.10:
     dependencies:
