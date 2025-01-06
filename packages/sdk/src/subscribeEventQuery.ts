@@ -7,6 +7,7 @@ import {
     StandardizedQueryResult,
     SubscriptionQueryType,
 } from "./types";
+import { parseHistoricalEvents } from "./parseHistoricalEvents";
 
 /**
  * Subscribes to event messages based on the provided query and invokes the callback with the updated data.
@@ -33,21 +34,23 @@ export async function subscribeEventQuery<T extends SchemaType>(
     query: SubscriptionQueryType<T>,
     schema: T,
     callback?: (response: {
-        data?: StandardizedQueryResult<T>;
+        data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
         error?: Error;
     }) => void,
     options?: { logging?: boolean },
     historical?: boolean
 ): Promise<torii.Subscription> {
+    const isHistorical = !!historical;
     return client.onEventMessageUpdated(
         convertQueryToEntityKeyClauses(query, schema),
-        historical ?? true,
+        isHistorical,
         (entityId: string, entityData: any) => {
             try {
                 if (callback) {
-                    const parsedData = parseEntities<T>({
-                        [entityId]: entityData,
-                    });
+                    const data = { [entityId]: entityData };
+                    const parsedData = isHistorical
+                        ? parseHistoricalEvents<T>(data, options)
+                        : parseEntities<T>(data, options);
                     if (options?.logging) {
                         console.log("Parsed entity data:", parsedData);
                     }

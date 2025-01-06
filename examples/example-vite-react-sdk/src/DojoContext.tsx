@@ -7,7 +7,7 @@ import {
 import { Account } from "starknet";
 import { dojoConfig } from "../dojoConfig";
 import { DojoProvider } from "@dojoengine/core";
-import { client } from "./contracts.gen";
+import { setupWorld } from "./typescript/contracts.gen";
 
 /**
  * Interface defining the shape of the Dojo context.
@@ -16,7 +16,7 @@ interface DojoContextType {
     /** The master account used for administrative operations */
     masterAccount: Account;
     /** The Dojo client instance */
-    client: ReturnType<typeof client>;
+    client: ReturnType<typeof setupWorld>;
     /** The current burner account information */
     account: BurnerAccount;
 }
@@ -58,7 +58,7 @@ export const DojoContextProvider = ({
                 dojoConfig.masterPrivateKey,
                 "1"
             ),
-        []
+        [dojoProvider.provider]
     );
 
     const burnerManagerData = useBurnerManager({ burnerManager });
@@ -67,7 +67,7 @@ export const DojoContextProvider = ({
         <DojoContext.Provider
             value={{
                 masterAccount,
-                client: client(dojoProvider),
+                client: setupWorld(dojoProvider),
                 account: {
                     ...burnerManagerData,
                     account: burnerManagerData.account || masterAccount,

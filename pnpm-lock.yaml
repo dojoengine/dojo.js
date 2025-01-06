@@ -671,6 +671,9 @@ importers:
       '@dojoengine/create-burner':
         specifier: workspace:*
         version: link:../../packages/create-burner
+      '@dojoengine/predeployed-connector':
+        specifier: workspace:*
+        version: link:../../packages/predeployed-connector
       '@dojoengine/sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
@@ -683,6 +686,12 @@ importers:
       '@dojoengine/utils':
         specifier: workspace:*
         version: link:../../packages/utils
+      '@starknet-react/chains':
+        specifier: 'catalog:'
+        version: 3.1.0
+      '@starknet-react/core':
+        specifier: 'catalog:'
+        version: 3.6.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.11.0(encoding@0.1.13))(typescript@5.7.2)
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
@@ -25730,8 +25739,8 @@ snapshots:
 
   webauthn-p256@0.0.10:
     dependencies:
-      '@noble/curves': 1.6.0
-      '@noble/hashes': 1.5.0
+      '@noble/curves': 1.7.0
+      '@noble/hashes': 1.6.1
 
   webgl-constants@1.1.1: {}
 

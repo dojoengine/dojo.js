@@ -143,17 +143,17 @@ export interface QueryWhereOptions<TModel> extends QueryOptions {
  * - An object containing at least one SubscriptionWhereOptions condition to filter the subscription results.
  * - Alternatively, an array of strings representing specific values to subscribe to.
  */
-export type SubscriptionQueryType<T extends SchemaType> = {
-    entityIds?: string[];
-} & {
-    [K in keyof T]?: {
-        [L in keyof T[K]]?:
-            | AtLeastOne<{
-                  $: SubscriptionWhereOptions<T[K][L]>;
-              }>
-            | string[];
-    };
-};
+export type SubscriptionQueryType<T extends SchemaType> =
+    | BaseQueryType
+    | {
+          [K in keyof T]?: {
+              [L in keyof T[K]]?:
+                  | AtLeastOne<{
+                        $: SubscriptionWhereOptions<T[K][L]>;
+                    }>
+                  | string[];
+          };
+      };
 
 export type BaseQueryType = {
     entityIds?: string[];
@@ -300,7 +300,7 @@ export interface SDK<T extends SchemaType> {
      */
     getEventMessages: (
         params: GetParams<T>
-    ) => Promise<StandardizedQueryResult<T>>;
+    ) => Promise<StandardizedQueryResult<T> | StandardizedQueryResult<T>[]>;
     generateTypedData: <M extends UnionOfModelData<T>>(
         primaryType: string,
         message: M,
@@ -387,7 +387,7 @@ export interface SubscribeParams<T extends SchemaType> {
     query: SubscriptionQueryType<T>;
     // The callback function to handle the response.
     callback: (response: {
-        data?: StandardizedQueryResult<T>;
+        data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
         error?: Error;
     }) => void;
     // Optional settings.
@@ -401,7 +401,7 @@ export interface GetParams<T extends SchemaType> {
     query: QueryType<T>;
     // The callback function to handle the response.
     callback: (response: {
-        data?: StandardizedQueryResult<T>;
+        data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
         error?: Error;
     }) => void;
     // The order to sort the entities by.

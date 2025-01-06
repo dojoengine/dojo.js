@@ -12,10 +12,13 @@
     "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@dojoengine/create-burner": "workspace:*",
+        "@dojoengine/predeployed-connector": "workspace:*",
         "@dojoengine/sdk": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/torii-wasm": "workspace:*",
         "@dojoengine/utils": "workspace:*",
+        "@starknet-react/chains": "catalog:",
+        "@starknet-react/core": "catalog:",
         "@types/uuid": "^10.0.0",
         "immer": "^10.1.1",
         "react": "^18.3.1",
