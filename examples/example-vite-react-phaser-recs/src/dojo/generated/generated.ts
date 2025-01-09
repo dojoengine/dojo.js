@@ -1,4 +1,4 @@
-import { Account, AccountInterface } from "starknet";
+import { Account, AccountInterface, CairoCustomEnum } from "starknet";
 import { DojoProvider } from "@dojoengine/core";
 import { Direction } from "../utils";
 
@@ -13,7 +13,7 @@ export interface IWorld {
 
 export interface MoveProps {
     account: Account | AccountInterface;
-    direction: Direction;
+    direction: CairoCustomEnum;
 }
 
 const handleError = (action: string, error: unknown) => {

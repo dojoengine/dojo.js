@@ -2,6 +2,18 @@ import { useContext } from "react";
 import { BigNumberish } from "starknet";
 import { SchemaType } from "../types";
 import { DojoContext, DojoContextType } from "./provider";
+import { create } from "zustand";
+import { createDojoStoreFactory } from "../state/zustand";
+
+/**
+ * Factory function to create a React Zustand store based on a given SchemaType.
+ *
+ * @template T - The schema type.
+ * @returns A Zustand hook tailored to the provided schema.
+ */
+export function createDojoStore<T extends SchemaType>() {
+    return createDojoStoreFactory<T>(create);
+}
 
 /**
  * Custom hook to retrieve a specific model for a given entityId within a specified namespace.
@@ -17,10 +29,8 @@ export function useModel<
     Schema extends SchemaType,
 >(entityId: BigNumberish, model: `${N}-${M}`): SchemaType[N][M] | undefined {
     const [namespace, modelName] = model.split("-") as [N, M];
-    const { useDojoStore } = useContext(DojoContext) as DojoContextType<
-        Client,
-        Schema
-    >;
+    const { useDojoStore } =
+        useContext<DojoContextType<Client, Schema>>(DojoContext);
 
     // Select only the specific model data for the given entityId
     const modelData = useDojoStore(
@@ -37,5 +47,5 @@ export function useDojoSDK<
     Client extends (...args: any) => any,
     Schema extends SchemaType,
 >(): DojoContextType<Client, Schema> {
-    return useContext(DojoContext);
+    return useContext<DojoContextType<Client, Schema>>(DojoContext);
 }

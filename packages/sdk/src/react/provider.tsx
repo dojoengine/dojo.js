@@ -1,7 +1,8 @@
 import { ReactNode, useContext, createContext } from "react";
 import { SchemaType, SDK } from "../types";
 import { DojoConfig, DojoProvider } from "@dojoengine/core";
-import { createDojoStore } from "../state";
+import { createDojoStore } from "./hooks";
+import { DojoStore } from "../state";
 
 /**
  * Interface defining the shape of the Dojo context.
@@ -19,7 +20,7 @@ export interface DojoContextType<
     /** The Dojo provider */
     provider: DojoProvider;
     /** The dojo zustand store */
-    useDojoStore: ReturnType<typeof createDojoStore<Schema>>;
+    useDojoStore: DojoStore<Schema>;
 }
 
 /**
