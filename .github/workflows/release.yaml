@@ -18,7 +18,7 @@ jobs:
 
       - uses: pnpm/action-setup@v3
         with:
-          version: 9.8.0
+          version: 10.0.0
 
       - name: Configure Git
         run: |
@@ -39,33 +39,11 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
-      - name: Tag and Publish Packages
-        id: tag_publish
-        run: |
-          pnpx lerna version ${{ github.event.inputs.release_type }} --conventional-commits --yes --no-private --force-publish --ignore-scripts
-          pnpx lerna publish from-git --yes --dist-tag ${{ github.event.inputs.release_type == 'preminor' && 'next' || 'latest' }}
-
-      - name: Get Version Tag
-        id: get_tag
-        run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
-
-      - name: Generate Release Body
-        id: release_body
-        run: |
-          if [ -f CHANGELOG.md ]; then
-            echo "body=$(cat CHANGELOG.md)" >> $GITHUB_OUTPUT
-          else
-            echo "body=No changelog provided for this release." >> $GITHUB_OUTPUT
-          fi
-
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
-        with:
-          tag_name: ${{ steps.get_tag.outputs.TAG }}
-          release_name: Release
-          body_path: CHANGELOG.md
-          draft: false
-          prerelease: false
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
