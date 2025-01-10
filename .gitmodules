@@ -1,12 +1,16 @@
 [submodule "dojo-starter"]
 	path = worlds/dojo-starter
 	url = https://github.com/dojoengine/dojo-starter
+  ignore = dirty
 [submodule "onchain-dash"]
 	path = worlds/onchain-dash
 	url = https://github.com/MartianGreed/onchain-dash
+  ignore = dirty
 [submodule "worlds/onchain-dash"]
 	path = worlds/onchain-dash
 	url = https://github.com/MartianGreed/onchain-dash
+  ignore = dirty
 [submodule "worlds/dojo-starter"]
 	path = worlds/dojo-starter
 	url = https://github.com/dojoengine/dojo-starter
+  ignore = dirty
