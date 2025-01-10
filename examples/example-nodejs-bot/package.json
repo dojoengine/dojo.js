@@ -1,5 +1,5 @@
 {
-    "name": "torii-bot",
+    "name": "example-nodejs-bot",
     "module": "index.ts",
     "version": "0.0.0",
     "type": "module",

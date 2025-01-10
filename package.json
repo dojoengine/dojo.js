@@ -6,20 +6,23 @@
     "clean": "bash ./scripts/clean.sh",
     "prettier-check": "pnpx prettier --check packages examples",
     "prettier": "pnpx prettier --write packages examples",
-    "release": "pnpm build && pnpm prettier && npx lerna publish --no-private --force-publish",
+    "release": "pnpm prettier && pnpm build && pnpm -F './packages/**' publish -r --force",
     "docs": "npx typedoc --out docs",
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@commitlint/cli": "^18.4.4",
+    "@commitlint/config-conventional": "^18.4.4",
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+    "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.1",
     "husky": "^9.1.7",
     "lerna": "^8.1.9",
     "prettier": "^3.3.3",
     "tsup": "^8.1.0",
     "typedoc": "^0.26.7",
-    "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.1",
-    "typedoc-plugin-coverage": "^3.3.0",
-    "@commitlint/cli": "^18.4.4",
-    "@commitlint/config-conventional": "^18.4.4",
-    "@ianvs/prettier-plugin-sort-imports": "^4.3.1"
+    "typedoc-plugin-coverage": "^3.3.0"
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.27.11"
   }
 }
