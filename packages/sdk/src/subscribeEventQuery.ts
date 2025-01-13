@@ -2,11 +2,7 @@ import * as torii from "@dojoengine/torii-client";
 
 import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses";
 import { parseEntities } from "./parseEntities";
-import {
-    SchemaType,
-    StandardizedQueryResult,
-    SubscriptionQueryType,
-} from "./types";
+import { SchemaType, StandardizedQueryResult, SubscribeParams } from "./types";
 import { parseHistoricalEvents } from "./parseHistoricalEvents";
 
 /**
@@ -29,26 +25,25 @@ import { parseHistoricalEvents } from "./parseHistoricalEvents";
  *     }
  * }, { logging: true });
  */
-export async function subscribeEventQuery<T extends SchemaType>(
-    client: torii.ToriiClient,
-    query: SubscriptionQueryType<T>,
-    schema: T,
-    callback?: (response: {
-        data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
-        error?: Error;
-    }) => void,
-    options?: { logging?: boolean },
-    historical?: boolean
-): Promise<torii.Subscription> {
-    const isHistorical = !!historical;
+export async function subscribeEventQuery<T extends SchemaType>({
+    client,
+    schema,
+    query,
+    callback,
+    options = { logging: false },
+    historical = true,
+}: SubscribeParams<T> & {
+    client: torii.ToriiClient;
+    schema: T;
+}): Promise<torii.Subscription> {
     return client.onEventMessageUpdated(
         convertQueryToEntityKeyClauses(query, schema),
-        isHistorical,
+        historical,
         (entityId: string, entityData: any) => {
             try {
                 if (callback) {
                     const data = { [entityId]: entityData };
-                    const parsedData = isHistorical
+                    const parsedData = historical
                         ? parseHistoricalEvents<T>(data, options)
                         : parseEntities<T>(data, options);
                     if (options?.logging) {

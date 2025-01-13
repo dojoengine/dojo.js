@@ -416,4 +416,8 @@ export interface GetParams<T extends SchemaType> {
     options?: SDKFunctionOptions;
     // historical events
     historical?: boolean;
+    // hashed keys on events
+    dontIncludeHashedKeys?: boolean;
+    // entity updated after
+    entityUpdatedAfter?: number;
 }

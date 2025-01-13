@@ -2,12 +2,7 @@ import * as torii from "@dojoengine/torii-client";
 
 import { convertQueryToClause } from "./convertQuerytoClause";
 import { parseEntities } from "./parseEntities";
-import {
-    ParsedEntity,
-    QueryType,
-    SchemaType,
-    StandardizedQueryResult,
-} from "./types";
+import { GetParams, SchemaType, StandardizedQueryResult } from "./types";
 import { parseHistoricalEvents } from "./parseHistoricalEvents";
 
 /**
@@ -32,23 +27,24 @@ import { parseHistoricalEvents } from "./parseHistoricalEvents";
  *     }
  * }, 100, 0, { logging: true });
  */
-export async function getEventMessages<T extends SchemaType>(
-    client: torii.ToriiClient,
-    query: QueryType<T>,
-    schema: T,
-    callback: (response: {
-        data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
-        error?: Error;
-    }) => void,
-    orderBy: torii.OrderBy[] = [],
-    entityModels: string[] = [],
-    limit: number = 100, // Default limit
-    offset: number = 0, // Default offset
-    options?: { logging?: boolean }, // Logging option
-    historical?: boolean
-): Promise<StandardizedQueryResult<T> | StandardizedQueryResult<T>[]> {
+export async function getEventMessages<T extends SchemaType>({
+    client,
+    schema,
+    query,
+    callback,
+    orderBy = [],
+    entityModels = [],
+    limit = 100, // Default limit
+    offset = 0, // Default offset
+    options = { logging: false }, // Logging option
+    historical = true,
+    dontIncludeHashedKeys = true,
+    entityUpdatedAfter = 0,
+}: GetParams<T> & {
+    client: torii.ToriiClient;
+    schema: T;
+}): Promise<StandardizedQueryResult<T> | StandardizedQueryResult<T>[]> {
     const clause = convertQueryToClause(query, schema);
-    const isHistorical = !!historical;
 
     let cursor = offset;
     let continueFetching = true;
@@ -61,14 +57,14 @@ export async function getEventMessages<T extends SchemaType>(
             order_by: orderBy,
             entity_models: entityModels,
             clause,
-            dont_include_hashed_keys: true,
-            entity_updated_after: 0,
+            dont_include_hashed_keys: dontIncludeHashedKeys,
+            entity_updated_after: entityUpdatedAfter,
         };
 
         try {
             const entities = await client.getEventMessages(
                 toriiQuery,
-                isHistorical
+                historical
             );
 
             if (options?.logging) {
@@ -77,7 +73,7 @@ export async function getEventMessages<T extends SchemaType>(
 
             Object.assign(allEntities, entities);
 
-            const parsedEntities = isHistorical
+            const parsedEntities = historical
                 ? parseHistoricalEvents<T>(allEntities, options)
                 : parseEntities<T>(allEntities, options);
 
@@ -101,7 +97,7 @@ export async function getEventMessages<T extends SchemaType>(
         console.log("All fetched entities:", allEntities);
     }
 
-    return isHistorical
+    return historical
         ? parseHistoricalEvents<T>(allEntities, options)
         : parseEntities<T>(allEntities, options);
 }

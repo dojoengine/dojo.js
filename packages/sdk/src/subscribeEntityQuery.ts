@@ -2,11 +2,7 @@ import * as torii from "@dojoengine/torii-client";
 
 import { convertQueryToEntityKeyClauses } from "./convertQueryToEntityKeyClauses";
 import { parseEntities } from "./parseEntities";
-import {
-    SchemaType,
-    StandardizedQueryResult,
-    SubscriptionQueryType,
-} from "./types";
+import { SchemaType, StandardizedQueryResult, SubscribeParams } from "./types";
 
 /**
  * Subscribes to entity updates based on the provided query and invokes the callback with the updated data.
@@ -28,16 +24,16 @@ import {
  *     }
  * }, { logging: true });
  */
-export async function subscribeEntityQuery<T extends SchemaType>(
-    client: torii.ToriiClient,
-    query: SubscriptionQueryType<T>,
-    schema: T,
-    callback?: (response: {
-        data?: StandardizedQueryResult<T>;
-        error?: Error;
-    }) => void,
-    options?: { logging?: boolean }
-): Promise<torii.Subscription> {
+export async function subscribeEntityQuery<T extends SchemaType>({
+    client,
+    schema,
+    query,
+    callback,
+    options = { logging: false },
+}: SubscribeParams<T> & {
+    client: torii.ToriiClient;
+    schema: T;
+}): Promise<torii.Subscription> {
     if (options?.logging) {
         console.log("Query:", query);
         console.log(
