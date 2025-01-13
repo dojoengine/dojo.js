@@ -42,9 +42,9 @@
     "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@scure/bip32": "^1.5.0",
-        "@starknet-react/core": "2.3.0",
+        "@starknet-react/core": "catalog:",
         "encoding": "^0.1.13",
-        "get-starknet-core": "^3.3.3",
+        "get-starknet-core": "catalog:",
         "js-cookie": "^3.0.5"
     }
 }

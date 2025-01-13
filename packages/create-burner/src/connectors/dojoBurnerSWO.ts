@@ -1,4 +1,4 @@
-import { IStarknetWindowObject } from "get-starknet-core";
+import { StarknetWindowObject } from "get-starknet-core";
 import { AccountInterface, RpcProvider } from "starknet";
 
 import { BurnerManager } from "..";
@@ -8,7 +8,7 @@ const ID = "dojoburner";
 const NAME = "Dojo Burner";
 const VERSION = "0.0.1";
 
-export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject {
+export class DojoBurnerStarknetWindowObject implements StarknetWindowObject {
     id = ID;
     name = NAME;
     icon = katanaIcon;
