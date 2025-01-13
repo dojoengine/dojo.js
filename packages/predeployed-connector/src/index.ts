@@ -21,8 +21,16 @@ import {
 
 class PredeployedAccountsChannel extends RpcChannel {
     async getPredeployedAccounts() {
-        // @ts-ignore
-        return await this.fetchEndpoint("dev_predeployedAccounts");
+        try {
+            // @ts-ignore
+            return await this.fetchEndpoint("dev_predeployedAccounts");
+        } catch (error) {
+            console.warn(
+                "Failed to get `dev_predeployedAccounts` endpoint",
+                error
+            );
+            return [];
+        }
     }
 }
 
