@@ -1,4 +1,5 @@
 import { Connector } from "@starknet-react/core";
+import { StarknetWindowObject } from "get-starknet-core";
 import { Account, AccountInterface, shortString } from "starknet";
 
 import { katanaIcon } from "./icons";
@@ -16,12 +17,8 @@ interface BurnerConnectorOptions {
 /** Non exported types from @starknet-react/core*/
 
 /** Connector icons, as base64 encoded svg. */
-type ConnectorIcons = {
-    /** Dark-mode icon. */
-    dark?: string;
-    /** Light-mode icon. */
-    light?: string;
-};
+type ConnectorIcons = StarknetWindowObject["icon"];
+
 /** Connector data. */
 type ConnectorData = {
     /** Connector account. */
@@ -103,5 +100,17 @@ export class BurnerConnector extends Connector {
                 dark: katanaIcon,
             }
         );
+    }
+
+    async request(call: any) {
+        switch (call.type) {
+            case "wallet_requestAccounts": {
+                return [this._account.address];
+            }
+            default:
+                throw new Error(
+                    `BurnerConnector: request not implemented [${call.type}]`
+                );
+        }
     }
 }

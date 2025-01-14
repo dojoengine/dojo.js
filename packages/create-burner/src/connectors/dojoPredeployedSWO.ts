@@ -1,4 +1,4 @@
-import { IStarknetWindowObject } from "get-starknet-core";
+import { StarknetWindowObject } from "get-starknet-core";
 import { AccountInterface, RpcProvider } from "starknet";
 
 import { PredeployedManager } from "..";
@@ -9,7 +9,7 @@ const NAME = "Dojo Predeployed";
 const VERSION = "0.0.1";
 
 export class DojoPredeployedStarknetWindowObject
-    implements IStarknetWindowObject
+    implements StarknetWindowObject
 {
     id = ID;
     name = NAME;

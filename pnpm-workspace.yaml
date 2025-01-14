@@ -4,6 +4,6 @@ packages:
 
 catalog:
   starknet: 6.21.0
-  get-starknet-core: ^3.3.4
+  get-starknet-core: ^4.0.0
   "@starknet-react/core": ^3.6.2
   "@starknet-react/chains": ^3.1.0
