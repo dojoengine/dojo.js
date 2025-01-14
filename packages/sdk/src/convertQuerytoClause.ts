@@ -295,6 +295,8 @@ function convertToPrimitive(value: any): torii.MemberValue {
         };
     } else if (typeof value === "string") {
         return { String: value };
+    } else if (Array.isArray(value)) {
+        return { List: value.map((item) => convertToPrimitive(item)) };
     }
 
     // Add more type conversions as needed

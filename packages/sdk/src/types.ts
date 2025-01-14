@@ -101,6 +101,8 @@ export type WhereCondition<TModel> =
               $gte?: TModel[P];
               $lt?: TModel[P];
               $lte?: TModel[P];
+              $in?: TModel[P][];
+              $nin?: TModel[P][];
           };
       };
 
