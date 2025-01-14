@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { useContractWrite } from "@starknet-react/core";
+import { useSendTransaction } from "@starknet-react/core";
 import { useDojoDb } from "@/dojo/provider";
-import { SDK } from "@dojoengine/sdk";
-import { OnchainDashSchemaType } from "@/dojo/models";
+import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { dojoConfig } from "@/../dojoConfig";
+import { SchemaType } from "@/typescript/models.gen";
+import { addAddressPadding } from "starknet";
 
 export default function GlobalCOunter() {
     const [count, setCount] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [sub, setSub] = useState<Subscription | null>(null);
-    const { write: incrementGlobalCounter } = useContractWrite({
+    const { send: incrementGlobalCounter } = useSendTransaction({
         calls: [
             {
                 contractAddress: dojoConfig.manifest.contracts[0].address,
@@ -28,21 +29,19 @@ export default function GlobalCOunter() {
     const { db } = useDojoDb();
 
     useEffect(() => {
-        async function getEntity(db: SDK<OnchainDashSchemaType>) {
+        async function getEntity(db: SDK<SchemaType>) {
             const entity = await db.getEntities({
-                query: {
-                    onchain_dash: {
-                        GlobalCounter: {
-                            $: {
-                                where: { global_counter_key: { $eq: 9999999 } },
-                            },
-                        },
-                    },
-                },
+                query: new QueryBuilder<SchemaType>()
+                    .namespace("onchain_dash", (n) =>
+                        n.entity("GlobalCounter", (e) =>
+                            e.eq("global_counter_key", 9999999)
+                        )
+                    )
+                    .build(),
                 callback: ({ data, error }) => {},
             });
 
-            const counter = entity.pop();
+            const counter = entity.pop() as ParsedEntity<SchemaType>;
             if (!counter) {
                 return 0;
             }
@@ -59,23 +58,18 @@ export default function GlobalCOunter() {
     }, [db]);
 
     useEffect(() => {
-        async function subscribeToEntityUpdates(
-            db: SDK<OnchainDashSchemaType>
-        ) {
+        async function subscribeToEntityUpdates(db: SDK<SchemaType>) {
             const sub = await db.subscribeEntityQuery({
-                query: {
-                    // @ts-expect-error $eq is working there
-                    onchain_dash: {
-                        GlobalCounter: {
-                            $: {
-                                where: { global_counter_key: { $eq: 9999999 } },
-                            },
-                        },
-                    },
-                },
+                query: new QueryBuilder<SchemaType>()
+                    .namespace("onchain_dash", (n) =>
+                        n.entity("GlobalCounter", (e) =>
+                            e.eq("global_counter_key", 9999999)
+                        )
+                    )
+                    .build(),
                 callback: ({ data, error }) => {
                     if (data) {
-                        const entity = data.pop();
+                        const entity = data.pop() as ParsedEntity<SchemaType>;
                         if (!entity) {
                             return;
                         }

@@ -167,6 +167,7 @@ export default function Sidebar() {
                                         >
                                             <div className="absolute left-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-xs bg-background">
                                                 <img
+                                                    // @ts-expect-error this is working
                                                     src={connector.icon.dark}
                                                     className="size-5"
                                                     alt={`${connector.name}`}

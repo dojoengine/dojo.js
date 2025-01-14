@@ -1,32 +1,37 @@
 import type { SchemaType as ISchemaType } from "@dojoengine/sdk";
 
-import { CairoOption, CairoOptionVariant, BigNumberish } from "starknet";
+import {
+    CairoCustomEnum,
+    CairoOption,
+    CairoOptionVariant,
+    BigNumberish,
+} from "starknet";
 
 type WithFieldOrder<T> = T & { fieldOrder: string[] };
 
 // Type definition for `dojo_starter::models::DirectionsAvailable` struct
 export interface DirectionsAvailable {
     player: string;
-    directions: Array<Direction>;
+    directions: Array<DirectionEnum>;
 }
 
 // Type definition for `dojo_starter::models::DirectionsAvailableValue` struct
 export interface DirectionsAvailableValue {
-    directions: Array<Direction>;
+    directions: Array<DirectionEnum>;
 }
 
 // Type definition for `dojo_starter::models::Moves` struct
 export interface Moves {
     player: string;
     remaining: BigNumberish;
-    last_direction: CairoOption<Direction>;
+    last_direction: CairoOption<DirectionEnum>;
     can_move: boolean;
 }
 
 // Type definition for `dojo_starter::models::MovesValue` struct
 export interface MovesValue {
     remaining: BigNumberish;
-    last_direction: CairoOption<Direction>;
+    last_direction: CairoOption<DirectionEnum>;
     can_move: boolean;
 }
 
@@ -50,21 +55,22 @@ export interface Vec2 {
 // Type definition for `dojo_starter::systems::actions::actions::Moved` struct
 export interface Moved {
     player: string;
-    direction: Direction;
+    direction: DirectionEnum;
 }
 
 // Type definition for `dojo_starter::systems::actions::actions::MovedValue` struct
 export interface MovedValue {
-    direction: Direction;
+    direction: DirectionEnum;
 }
 
 // Type definition for `dojo_starter::models::Direction` enum
-export enum Direction {
-    Left,
-    Right,
-    Up,
-    Down,
-}
+export type Direction = {
+    Left: string;
+    Right: string;
+    Up: string;
+    Down: string;
+};
+export type DirectionEnum = CairoCustomEnum;
 
 export interface SchemaType extends ISchemaType {
     dojo_starter: {
@@ -84,11 +90,25 @@ export const schema: SchemaType = {
         DirectionsAvailable: {
             fieldOrder: ["player", "directions"],
             player: "",
-            directions: [Direction.Left],
+            directions: [
+                new CairoCustomEnum({
+                    Left: "",
+                    Right: undefined,
+                    Up: undefined,
+                    Down: undefined,
+                }),
+            ],
         },
         DirectionsAvailableValue: {
             fieldOrder: ["directions"],
-            directions: [Direction.Left],
+            directions: [
+                new CairoCustomEnum({
+                    Left: "",
+                    Right: undefined,
+                    Up: undefined,
+                    Down: undefined,
+                }),
+            ],
         },
         Moves: {
             fieldOrder: ["player", "remaining", "last_direction", "can_move"],
@@ -120,11 +140,21 @@ export const schema: SchemaType = {
         Moved: {
             fieldOrder: ["player", "direction"],
             player: "",
-            direction: Direction.Left,
+            direction: new CairoCustomEnum({
+                Left: "",
+                Right: undefined,
+                Up: undefined,
+                Down: undefined,
+            }),
         },
         MovedValue: {
             fieldOrder: ["direction"],
-            direction: Direction.Left,
+            direction: new CairoCustomEnum({
+                Left: "",
+                Right: undefined,
+                Up: undefined,
+                Down: undefined,
+            }),
         },
     },
 };

@@ -7,15 +7,15 @@ import Home from "./app/page";
 import "./app/globals.css";
 
 import { init } from "@dojoengine/sdk";
-import { OnchainDashSchemaType, schema } from "@/dojo/models";
 import { env, getRpcUrl } from "@/env";
 import { dojoConfig } from "../dojoConfig";
 import { DojoContext } from "@/dojo/provider";
 import { DojoProvider } from "@dojoengine/core";
 import { setupWorld } from "./typescript/contracts.gen";
+import { SchemaType, schema } from "./typescript/models.gen";
 
 async function main() {
-    const db = await init<OnchainDashSchemaType>(
+    const db = await init<SchemaType>(
         {
             client: {
                 rpcUrl: getRpcUrl(),

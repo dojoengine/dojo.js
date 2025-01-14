@@ -1,10 +1,11 @@
 import { useModel } from "@/hooks/useModel";
 import { usePlayerActions } from "@/hooks/usePlayerActions";
-import { Direction, ModelsMapping } from "@/typescript/models.gen";
+import { ModelsMapping } from "@/typescript/models.gen";
 import { useAccount } from "@starknet-react/core";
 import { Button } from "../ui/button";
 import { useSystemCalls } from "@/hooks/useSystemCalls";
 import { cn } from "@/lib/utils";
+import { CairoCustomEnum } from "starknet";
 
 const containerClass = "min-h-[150px]";
 
@@ -36,25 +37,33 @@ export function PlayerActions() {
         <div className={cn(containerClass)}>
             <Button
                 variant="outline"
-                onClick={async () => await moveCallback(Direction.Left)}
+                onClick={async () =>
+                    await moveCallback(new CairoCustomEnum({ Left: "()" }))
+                }
             >
                 Left
             </Button>
             <Button
                 variant="outline"
-                onClick={async () => await moveCallback(Direction.Up)}
+                onClick={async () =>
+                    await moveCallback(new CairoCustomEnum({ Up: "()" }))
+                }
             >
                 Up
             </Button>
             <Button
                 variant="outline"
-                onClick={async () => await moveCallback(Direction.Down)}
+                onClick={async () =>
+                    await moveCallback(new CairoCustomEnum({ Down: "()" }))
+                }
             >
                 Down
             </Button>
             <Button
                 variant="outline"
-                onClick={async () => await moveCallback(Direction.Right)}
+                onClick={async () =>
+                    await moveCallback(new CairoCustomEnum({ Right: "()" }))
+                }
             >
                 Right
             </Button>

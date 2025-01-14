@@ -66,15 +66,16 @@ export interface ThemeValue {
 }
 
 // Type definition for `onchain_dash::models::AvailableTheme` enum
-export enum AvailableTheme {
-    Light,
-    Dark,
-    Dojo,
-}
+export type AvailableTheme = {
+    Light: string;
+    Dark: string;
+    Dojo: string;
+};
+export type AvailableThemeEnum = CairoCustomEnum;
 
 // Type definition for `onchain_dash::models::DashboardTheme` enum
 export type DashboardTheme = {
-    Predefined: AvailableTheme;
+    Predefined: AvailableThemeEnum;
     Custom: CustomTheme;
 };
 export type DashboardThemeEnum = CairoCustomEnum;
@@ -132,8 +133,12 @@ export const schema: SchemaType = {
             fieldOrder: ["theme_key", "value", "caller", "timestamp"],
             theme_key: 0,
             value: new CairoCustomEnum({
-                Predefined: AvailableTheme.Light,
-                custom: undefined,
+                Predefined: new CairoCustomEnum({
+                    Light: "",
+                    Dark: undefined,
+                    Dojo: undefined,
+                }),
+                Custom: undefined,
             }),
             caller: "",
             timestamp: 0,
@@ -141,8 +146,12 @@ export const schema: SchemaType = {
         ThemeValue: {
             fieldOrder: ["value", "caller", "timestamp"],
             value: new CairoCustomEnum({
-                Predefined: AvailableTheme.Light,
-                custom: undefined,
+                Predefined: new CairoCustomEnum({
+                    Light: "",
+                    Dark: undefined,
+                    Dojo: undefined,
+                }),
+                Custom: undefined,
             }),
             caller: "",
             timestamp: 0,

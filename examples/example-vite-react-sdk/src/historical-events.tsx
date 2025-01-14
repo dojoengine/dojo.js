@@ -96,6 +96,7 @@ function Event({ event }: { event: ParsedEntity<SchemaType> }) {
             <div>{event.entityId.toString()}</div>
             <div>
                 <div>Player: {player}</div>
+                {/* @ts-expect-error type is ok here */}
                 <div>Direction: {direction}</div>
             </div>
         </div>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Subscription } from "@dojoengine/torii-wasm";
-import { useAccount, useContractWrite } from "@starknet-react/core";
-import { SDK } from "@dojoengine/sdk";
-import { SchemaType, AvailableTheme } from "@/typescript/models.gen";
+import { useAccount } from "@starknet-react/core";
+import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
+import { SchemaType } from "@/typescript/models.gen";
 import { useDojoDb } from "@/dojo/provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,17 +16,26 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown";
-import { dojoConfig } from "@/../dojoConfig";
 import { CairoCustomEnum } from "starknet";
 
 interface ThemeState {
     current: string | null;
     next: string | null;
 }
+enum AvailableTheme {
+    Light,
+    Dark,
+    Dojo,
+}
 const AvailableThemeClassMap = {
     [AvailableTheme.Light]: "light",
     [AvailableTheme.Dark]: "dark",
     [AvailableTheme.Dojo]: "dojo",
+};
+const AvailableThemeEnumValues = {
+    [AvailableTheme.Light]: "Light",
+    [AvailableTheme.Dark]: "Dark",
+    [AvailableTheme.Dojo]: "Dojo",
 };
 
 export default function ThemeSwitchButton() {
@@ -44,8 +53,12 @@ export default function ThemeSwitchButton() {
         async (theme: AvailableTheme) => {
             setIsLoading(true);
             actions?.actions.changeTheme(
-                account,
-                new CairoCustomEnum({ Predefined: theme })
+                account!,
+                new CairoCustomEnum({
+                    Predefined: new CairoCustomEnum({
+                        [AvailableThemeEnumValues[theme]]: "()",
+                    }),
+                })
             );
         },
         [actions, account]
@@ -54,21 +67,19 @@ export default function ThemeSwitchButton() {
     useEffect(() => {
         async function getEntity(db: SDK<SchemaType>): Promise<AvailableTheme> {
             const entity = await db.getEntities({
-                query: {
-                    onchain_dash: {
-                        Theme: {
-                            $: { where: { theme_key: { $eq: 9999999 } } },
-                        },
-                    },
-                },
+                query: new QueryBuilder<SchemaType>()
+                    .namespace("onchain_dash", (n) =>
+                        n.entity("Theme", (e) => e.eq("theme_key", 9999999))
+                    )
+                    .build(),
                 callback: () => {},
             });
-            const counter = entity.pop();
+            const counter = entity.pop() as ParsedEntity<SchemaType>;
             if (!counter) {
                 return AvailableTheme.Light;
             }
 
-            const theme = counter.models?.onchain_dash?.Theme?.value.unwrap();
+            const theme = counter.models?.onchain_dash?.Theme?.value?.unwrap();
             setEntityId(counter.entityId);
             if (undefined === theme) {
                 return AvailableTheme.Light;
@@ -95,7 +106,7 @@ export default function ThemeSwitchButton() {
                 query: [entityId],
                 callback: ({ data, error }) => {
                     if (data) {
-                        const entity = data.pop();
+                        const entity = data.pop() as ParsedEntity<SchemaType>;
                         if (!entity) {
                             return AvailableTheme.Light;
                         }
@@ -109,14 +120,15 @@ export default function ThemeSwitchButton() {
                             entity.models?.onchain_dash?.Theme?.value.unwrap();
 
                         const at = AvailableTheme[theme];
-                        // @ts-expect-error this resooves to enum value
                         setTheme({
+                            // @ts-expect-error this is ok
                             current: AvailableThemeClassMap[at],
+                            // @ts-expect-error this is ok
                             next: AvailableThemeClassMap[at],
                         });
                         setIsLoading(false);
                         return AvailableTheme[
-                            entity.models.onchain_dash.Theme.value
+                            entity.models.onchain_dash.Theme.value.unwrap()
                         ];
                     }
                     if (error) {

@@ -1,7 +1,12 @@
 import type { PropsWithChildren } from "react";
 import CartridgeConnector from "@cartridge/connector";
 import { Chain, mainnet } from "@starknet-react/chains";
-import { jsonRpcProvider, StarknetConfig, voyager } from "@starknet-react/core";
+import {
+    Connector,
+    jsonRpcProvider,
+    StarknetConfig,
+    voyager,
+} from "@starknet-react/core";
 import { env, getRpcUrl } from "@/env";
 import { dojoConfig } from "@/../dojoConfig";
 import {
@@ -44,6 +49,7 @@ export default function StarknetProvider({ children }: PropsWithChildren) {
         <StarknetConfig
             chains={[mainnet]}
             provider={provider}
+            // @ts-expect-error this is ok
             connectors={[cartridge, ...pa]}
             explorer={voyager}
             autoConnect
