@@ -3,8 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import { useDojoStore } from "./useDojoStore";
 import { DojoContext } from "@/dojo-sdk-provider";
 import { useAccount } from "@starknet-react/core";
-import { BigNumberish } from "starknet";
-import { Direction } from "@/typescript/models.gen";
+import {
+    BigNumberish,
+    CairoCustomEnum,
+    CairoOption,
+    CairoOptionVariant,
+} from "starknet";
 
 export function useSystemCalls(entityId: BigNumberish) {
     const { account } = useAccount();
@@ -54,17 +58,18 @@ export function useSystemCalls(entityId: BigNumberish) {
     }, [state, account, client]);
 
     const move = useCallback(
-        async (direction: Direction) => {
+        async (direction: CairoCustomEnum) => {
             const transactionId = uuidv4();
             state.applyOptimisticUpdate(transactionId, (draft) => {
                 if (
                     draft.entities[entityId.toString()]?.models?.dojo_starter
                         ?.Moves
                 ) {
-                    // @ts-expect-error object is not undefined, I checked it just above bro
+                    // @ts-expect-error this is literrally the condition above calm down typescript
                     draft.entities[
                         entityId.toString()
-                    ].models.dojo_starter.Moves.last_direction = direction;
+                    ].models.dojo_starter.Moves.last_direction =
+                        new CairoOption(CairoOptionVariant.Some, direction);
                 }
             });
 
@@ -75,10 +80,9 @@ export function useSystemCalls(entityId: BigNumberish) {
                     (entity) => {
                         const result =
                             entity?.models?.dojo_starter?.Moves?.last_direction?.isSome() &&
-                            // TODO: handle proper conversion to enum in sdk enum Parsing
-                            // @ts-expect-error torii returns enum variant as string, so we have to make some weird type mapping here
+                            // @ts-expect-error inner enum is not hydrated there
                             entity?.models?.dojo_starter?.Moves?.last_direction
-                                ?.Some === Direction.toString(direction);
+                                ?.Some === direction.activeVariant();
                         // cast result to boolean
                         return !!result;
                     }

@@ -1,62 +1,10 @@
-import { DojoProvider } from "@dojoengine/core";
-import {
-    Account,
-    AccountInterface,
-    BigNumberish,
-    CairoOption,
-    CairoCustomEnum,
-    ByteArray,
-} from "starknet";
-import * as models from "./models.gen";
+import { DojoProvider, DojoCall } from "@dojoengine/core";
+import { Account, AccountInterface, CairoCustomEnum } from "starknet";
 
 export function setupWorld(provider: DojoProvider) {
-    const build_actions_incrementGlobalCounter_calldata = () => {
-        return {
-            contractName: "actions",
-            entrypoint: "increment_global_counter",
-            calldata: [],
-        };
-    };
-
-    const actions_incrementGlobalCounter = async (
-        snAccount: Account | AccountInterface
-    ) => {
-        try {
-            return await provider.execute(
-                snAccount,
-                build_actions_incrementGlobalCounter_calldata(),
-                "onchain_dash"
-            );
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    };
-
-    const build_actions_incrementCallerCounter_calldata = () => {
-        return {
-            contractName: "actions",
-            entrypoint: "increment_caller_counter",
-            calldata: [],
-        };
-    };
-
-    const actions_incrementCallerCounter = async (
-        snAccount: Account | AccountInterface
-    ) => {
-        try {
-            return await provider.execute(
-                snAccount,
-                build_actions_incrementCallerCounter_calldata(),
-                "onchain_dash"
-            );
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    };
-
-    const build_actions_changeTheme_calldata = (value: CairoCustomEnum) => {
+    const build_actions_changeTheme_calldata = (
+        value: CairoCustomEnum
+    ): DojoCall => {
         return {
             contractName: "actions",
             entrypoint: "change_theme",
@@ -80,16 +28,62 @@ export function setupWorld(provider: DojoProvider) {
         }
     };
 
+    const build_actions_incrementCallerCounter_calldata = (): DojoCall => {
+        return {
+            contractName: "actions",
+            entrypoint: "increment_caller_counter",
+            calldata: [],
+        };
+    };
+
+    const actions_incrementCallerCounter = async (
+        snAccount: Account | AccountInterface
+    ) => {
+        try {
+            return await provider.execute(
+                snAccount,
+                build_actions_incrementCallerCounter_calldata(),
+                "onchain_dash"
+            );
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const build_actions_incrementGlobalCounter_calldata = (): DojoCall => {
+        return {
+            contractName: "actions",
+            entrypoint: "increment_global_counter",
+            calldata: [],
+        };
+    };
+
+    const actions_incrementGlobalCounter = async (
+        snAccount: Account | AccountInterface
+    ) => {
+        try {
+            return await provider.execute(
+                snAccount,
+                build_actions_incrementGlobalCounter_calldata(),
+                "onchain_dash"
+            );
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
     return {
         actions: {
-            incrementGlobalCounter: actions_incrementGlobalCounter,
-            buildIncrementGlobalCounterCalldata:
-                build_actions_incrementGlobalCounter_calldata,
+            changeTheme: actions_changeTheme,
+            buildChangeThemeCalldata: build_actions_changeTheme_calldata,
             incrementCallerCounter: actions_incrementCallerCounter,
             buildIncrementCallerCounterCalldata:
                 build_actions_incrementCallerCounter_calldata,
-            changeTheme: actions_changeTheme,
-            buildChangeThemeCalldata: build_actions_changeTheme_calldata,
+            incrementGlobalCounter: actions_incrementGlobalCounter,
+            buildIncrementGlobalCounterCalldata:
+                build_actions_incrementGlobalCounter_calldata,
         },
     };
 }

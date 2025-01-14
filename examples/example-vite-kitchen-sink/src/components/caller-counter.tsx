@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { useAccount, useContractWrite } from "@starknet-react/core";
+import { useAccount, useSendTransaction } from "@starknet-react/core";
 import { useDojoDb } from "@/dojo/provider";
 import { ensureStarkFelt } from "@/lib/utils";
-import { SDK } from "@dojoengine/sdk";
-import { OnchainDashSchemaType } from "@/dojo/models";
+import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { dojoConfig } from "@/../dojoConfig";
+import { SchemaType } from "@/typescript/models.gen";
+import { addAddressPadding } from "starknet";
 
 export default function CallerCounter() {
     const [count, setCount] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [sub, setSub] = useState<Subscription | null>(null);
     const { address } = useAccount();
-    const { write: incrementCallerCounter } = useContractWrite({
+    const { send: incrementCallerCounter } = useSendTransaction({
         calls: [
             {
                 contractAddress: dojoConfig.manifest.contracts[0].address,
@@ -30,25 +31,18 @@ export default function CallerCounter() {
 
     const { db } = useDojoDb();
     useEffect(() => {
-        async function getEntity(
-            db: SDK<OnchainDashSchemaType>,
-            address: string
-        ) {
+        async function getEntity(db: SDK<SchemaType>, address: string) {
             const entity = await db.getEntities({
-                query: {
-                    onchain_dash: {
-                        CallerCounter: {
-                            $: {
-                                where: {
-                                    caller: { $eq: ensureStarkFelt(address) },
-                                },
-                            },
-                        },
-                    },
-                },
+                query: new QueryBuilder<SchemaType>()
+                    .namespace("onchain_dash", (n) =>
+                        n.entity("CallerCounter", (e) =>
+                            e.eq("caller", addAddressPadding(address))
+                        )
+                    )
+                    .build(),
                 callback: () => {},
             });
-            const counter = entity.pop();
+            const counter = entity.pop() as ParsedEntity<SchemaType>;
             if (!counter) {
                 return 0;
             }
@@ -66,25 +60,20 @@ export default function CallerCounter() {
 
     useEffect(() => {
         async function subscribeToEntityUpdates(
-            db: SDK<OnchainDashSchemaType>,
+            db: SDK<SchemaType>,
             address: string
         ) {
             const sub = await db.subscribeEntityQuery({
-                // @ts-expect-error $eq is working there
-                query: {
-                    onchain_dash: {
-                        CallerCounter: {
-                            $: {
-                                where: {
-                                    caller: { $eq: ensureStarkFelt(address) },
-                                },
-                            },
-                        },
-                    },
-                },
+                query: new QueryBuilder<SchemaType>()
+                    .namespace("onchain_dash", (n) =>
+                        n.entity("CallerCounter", (e) =>
+                            e.eq("caller", addAddressPadding(address))
+                        )
+                    )
+                    .build(),
                 callback: ({ data, error }) => {
                     if (data) {
-                        const entity = data.pop();
+                        const entity = data.pop() as ParsedEntity<SchemaType>;
                         if (!entity) {
                             return;
                         }

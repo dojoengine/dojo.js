@@ -8,10 +8,10 @@ import { useForm } from "react-hook-form";
 import { useDojoDb } from "@/dojo/provider";
 import { useAccount } from "@starknet-react/core";
 import { toValidAscii } from "@/lib/utils";
-import { SDK } from "@dojoengine/sdk";
-import { Message, OnchainDashSchemaType } from "@/dojo/models";
+import { ParsedEntity, SDK } from "@dojoengine/sdk";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { shortAddress } from "@/lib/utils";
+import { Message, SchemaType } from "@/typescript/models.gen";
 
 interface MessageItem {
     content: string;
@@ -61,7 +61,7 @@ export default function Chat() {
     );
 
     useEffect(() => {
-        async function getEntity(db: SDK<OnchainDashSchemaType>) {
+        async function getEntity(db: SDK<SchemaType>) {
             const entity = await db.getEntities({
                 query: {
                     onchain_dash: { Message: { $: {} } },
@@ -69,16 +69,18 @@ export default function Chat() {
                 callback: () => {},
             });
 
-            // @ts-expect-error a & b are not undefined as they are filtered out with `filer(Boolean)`
-            return entity
-                .map((e) => e.models.onchain_dash.Message)
-                .filter(Boolean)
-                .sort((a: Message, b: Message): number =>
-                    parseInt(a.timestamp.toString(), 16) <
-                    parseInt(b.timestamp.toString(), 16)
-                        ? -1
-                        : 1
-                );
+            return (
+                entity
+                    .map((e) => e.models.onchain_dash.Message)
+                    .filter(Boolean)
+                    // @ts-expect-error a & b are not undefined as they are filtered out with `filer(Boolean)`
+                    .sort((a: Message, b: Message): number =>
+                        parseInt(a.timestamp.toString(), 16) <
+                        parseInt(b.timestamp.toString(), 16)
+                            ? -1
+                            : 1
+                    )
+            );
         }
         if (db && messages.length === 0 && sub === null) {
             // @ts-expect-error ts is getting drunk there
@@ -87,16 +89,14 @@ export default function Chat() {
     }, [db, messages, sub]);
 
     useEffect(() => {
-        async function subscribeToEntityUpdates(
-            db: SDK<OnchainDashSchemaType>
-        ) {
+        async function subscribeToEntityUpdates(db: SDK<SchemaType>) {
             const sub = await db.subscribeEntityQuery({
                 query: {
                     onchain_dash: { Message: { $: {} } },
                 },
                 callback: ({ data }) => {
                     if (data) {
-                        const entity = data.pop();
+                        const entity = data.pop() as ParsedEntity<SchemaType>;
                         if (!entity) {
                             return;
                         }
@@ -104,7 +104,10 @@ export default function Chat() {
                         if (msg === undefined) {
                             return;
                         }
-                        setMessages((prevMessages) => [...prevMessages, msg]);
+                        setMessages((prevMessages) => [
+                            ...prevMessages,
+                            msg as MessageItem,
+                        ]);
                     }
                 },
             });

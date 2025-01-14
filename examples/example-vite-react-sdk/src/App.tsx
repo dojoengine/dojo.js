@@ -6,13 +6,9 @@ import {
     createDojoStore,
 } from "@dojoengine/sdk";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { AccountInterface, addAddressPadding } from "starknet";
+import { AccountInterface, addAddressPadding, CairoCustomEnum } from "starknet";
 
-import {
-    Direction,
-    ModelsMapping,
-    SchemaType,
-} from "./typescript/models.gen.ts";
+import { ModelsMapping, SchemaType } from "./typescript/models.gen.ts";
 import { useDojo } from "./useDojo.tsx";
 import useModel from "./useModel.tsx";
 import { useSystemCalls } from "./useSystemCalls.ts";
@@ -164,6 +160,7 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                                     : "Need to Spawn"}
                             </div>
                             <div className="col-span-3 text-center text-base text-white">
+                                {/* @ts-expect-error we have an option here so type is ok */}
                                 {moves && moves.last_direction.isSome()
                                     ? moves.last_direction.unwrap()
                                     : ""}
@@ -175,29 +172,37 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                         <div className="grid grid-cols-3 gap-2 w-full h-48">
                             {[
                                 {
-                                    direction: Direction.Up,
+                                    direction: new CairoCustomEnum({
+                                        Up: "()",
+                                    }),
                                     label: "↑",
                                     col: "col-start-2",
                                 },
                                 {
-                                    direction: Direction.Left,
+                                    direction: new CairoCustomEnum({
+                                        Left: "()",
+                                    }),
                                     label: "←",
                                     col: "col-start-1",
                                 },
                                 {
-                                    direction: Direction.Right,
+                                    direction: new CairoCustomEnum({
+                                        Right: "()",
+                                    }),
                                     label: "→",
                                     col: "col-start-3",
                                 },
                                 {
-                                    direction: Direction.Down,
+                                    direction: new CairoCustomEnum({
+                                        Down: "()",
+                                    }),
                                     label: "↓",
                                     col: "col-start-2",
                                 },
-                            ].map(({ direction, label, col }) => (
+                            ].map(({ direction, label, col }, idx) => (
                                 <button
                                     className={`${col} h-12 w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-2xl font-bold text-gray-200`}
-                                    key={direction}
+                                    key={idx}
                                     onClick={async () => {
                                         await client.actions.move(
                                             account!,
@@ -275,6 +280,7 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                                                     "N/A"}
                                             </td>
                                             <td className="border border-gray-700 p-2">
+                                                {/* @ts-expect-error we have an option here so type is ok */}
                                                 {lastDirection}
                                             </td>
                                             <td className="border border-gray-700 p-2">

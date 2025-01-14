@@ -1,8 +1,3 @@
-import { useDojoDb } from "@/dojo/provider";
-import { useEffect, useState } from "react";
-import { OnchainDashSchemaType } from "@/dojo/models";
-import { SDK } from "@dojoengine/sdk";
-import { Subscription } from "@dojoengine/torii-client";
 import GlobalCounter from "@/components/global-counter";
 import CallerCounter from "@/components/caller-counter";
 import Chat from "@/components/chat";

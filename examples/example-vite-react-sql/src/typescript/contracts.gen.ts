@@ -1,9 +1,10 @@
-import { DojoProvider } from "@dojoengine/core";
-import { Account, AccountInterface } from "starknet";
-import * as models from "./models.gen";
+import { DojoProvider, DojoCall } from "@dojoengine/core";
+import { Account, AccountInterface, CairoCustomEnum } from "starknet";
 
 export function setupWorld(provider: DojoProvider) {
-    const build_actions_move_calldata = (direction: models.Direction) => {
+    const build_actions_move_calldata = (
+        direction: CairoCustomEnum
+    ): DojoCall => {
         return {
             contractName: "actions",
             entrypoint: "move",
@@ -13,7 +14,7 @@ export function setupWorld(provider: DojoProvider) {
 
     const actions_move = async (
         snAccount: Account | AccountInterface,
-        direction: models.Direction
+        direction: CairoCustomEnum
     ) => {
         try {
             return await provider.execute(
@@ -27,7 +28,7 @@ export function setupWorld(provider: DojoProvider) {
         }
     };
 
-    const build_actions_spawn_calldata = () => {
+    const build_actions_spawn_calldata = (): DojoCall => {
         return {
             contractName: "actions",
             entrypoint: "spawn",

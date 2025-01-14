@@ -11,7 +11,7 @@ export function useDojoDb() {
 export interface DojoContextInterface {
     db?: SDK<SchemaType>;
     provider?: DojoProvider;
-    actions?: typeof setupWorld;
+    actions?: ReturnType<typeof setupWorld>;
 }
 
 export const DojoContext = createContext<DojoContextInterface>({
