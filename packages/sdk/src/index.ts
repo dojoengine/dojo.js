@@ -46,7 +46,7 @@ export async function init<T extends SchemaType>(
          * @returns {Promise<void>} - A promise that resolves when the subscription is set up.
          */
         subscribeEntityQuery: ({ query, callback, options }) =>
-            subscribeEntityQuery(client, query, schema, callback, options),
+            subscribeEntityQuery({ client, schema, query, callback, options }),
         /**
          * Subscribes to event queries.
          *
@@ -54,14 +54,14 @@ export async function init<T extends SchemaType>(
          * @returns {Promise<void>} - A promise that resolves when the subscription is set up.
          */
         subscribeEventQuery: ({ query, callback, options, historical }) =>
-            subscribeEventQuery(
+            subscribeEventQuery({
                 client,
-                query,
                 schema,
+                query,
                 callback,
                 options,
-                historical
-            ),
+                historical,
+            }),
         /**
          * Fetches entities based on the provided query.
          *
@@ -76,18 +76,22 @@ export async function init<T extends SchemaType>(
             limit,
             offset,
             options,
+            dontIncludeHashedKeys,
+            entityUpdatedAfter,
         }) =>
-            getEntities(
+            getEntities({
                 client,
-                query,
                 schema,
+                query,
                 callback,
                 orderBy,
                 entityModels,
                 limit,
                 offset,
-                options
-            ),
+                options,
+                dontIncludeHashedKeys,
+                entityUpdatedAfter,
+            }),
         /**
          * Fetches event messages based on the provided query.
          *
@@ -103,19 +107,23 @@ export async function init<T extends SchemaType>(
             offset,
             options,
             historical,
+            dontIncludeHashedKeys,
+            entityUpdatedAfter,
         }) =>
-            getEventMessages(
+            getEventMessages({
                 client,
-                query,
                 schema,
+                query,
                 callback,
                 orderBy,
                 entityModels,
                 limit,
                 offset,
                 options,
-                historical
-            ),
+                historical,
+                dontIncludeHashedKeys,
+                entityUpdatedAfter,
+            }),
 
         /**
          * Generates typed data for any user-defined message.

@@ -2,7 +2,7 @@ import * as torii from "@dojoengine/torii-client";
 
 import { convertQueryToClause } from "./convertQuerytoClause";
 import { parseEntities } from "./parseEntities";
-import { QueryType, SchemaType, StandardizedQueryResult } from "./types";
+import { GetParams, SchemaType, StandardizedQueryResult } from "./types";
 
 /**
  * Fetches entities from the Torii client based on the provided query.
@@ -26,20 +26,22 @@ import { QueryType, SchemaType, StandardizedQueryResult } from "./types";
  *     }
  * }, 100, 0, { logging: true });
  */
-export async function getEntities<T extends SchemaType>(
-    client: torii.ToriiClient,
-    query: QueryType<T>,
-    schema: T,
-    callback: (response: {
-        data?: StandardizedQueryResult<T>;
-        error?: Error;
-    }) => void,
-    orderBy: torii.OrderBy[] = [],
-    entityModels: string[] = [],
-    limit: number = 100, // Default limit
-    offset: number = 0, // Default offset
-    options?: { logging?: boolean } // Logging option
-): Promise<StandardizedQueryResult<T>> {
+export async function getEntities<T extends SchemaType>({
+    client,
+    schema,
+    query,
+    callback,
+    orderBy = [],
+    entityModels = [],
+    limit = 100, // Default limit
+    offset = 0, // Default offset
+    options = { logging: false }, // Logging option
+    dontIncludeHashedKeys = false,
+    entityUpdatedAfter = 0,
+}: GetParams<T> & {
+    client: torii.ToriiClient;
+    schema: T;
+}): Promise<StandardizedQueryResult<T>> {
     const clause = convertQueryToClause(query, schema);
 
     let cursor = offset;
@@ -53,8 +55,8 @@ export async function getEntities<T extends SchemaType>(
             order_by: orderBy,
             entity_models: entityModels,
             clause,
-            dont_include_hashed_keys: false,
-            entity_updated_after: 0,
+            dont_include_hashed_keys: dontIncludeHashedKeys,
+            entity_updated_after: entityUpdatedAfter,
         };
 
         try {
