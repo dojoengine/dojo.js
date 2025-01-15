@@ -3,12 +3,14 @@ import { createRoot } from "react-dom/client";
 
 import App from "./App.tsx";
 
-import "./index.css";
+// Dojo related imports
 import { init } from "@dojoengine/sdk";
+import { DojoSdkProvider } from "@dojoengine/sdk/react";
 import { SchemaType, schema } from "./typescript/models.gen.ts";
+import { setupWorld } from "./typescript/contracts.gen.ts";
+
+import "./index.css";
 import { dojoConfig } from "../dojoConfig.ts";
-import { DojoContextProvider } from "./DojoContext.tsx";
-import { setupBurnerManager } from "@dojoengine/create-burner";
 import StarknetProvider from "./starknet-provider.tsx";
 
 /**
@@ -38,13 +40,15 @@ async function main() {
 
     createRoot(document.getElementById("root")!).render(
         <StrictMode>
-            <DojoContextProvider
-                burnerManager={await setupBurnerManager(dojoConfig)}
+            <DojoSdkProvider
+                sdk={sdk}
+                dojoConfig={dojoConfig}
+                clientFn={setupWorld}
             >
                 <StarknetProvider>
-                    <App sdk={sdk} />
+                    <App />
                 </StarknetProvider>
-            </DojoContextProvider>
+            </DojoSdkProvider>
         </StrictMode>
     );
 }

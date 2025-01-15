@@ -1,4 +1,4 @@
-import { useQuery } from "@/hooks/useQuery";
+import { useToriiSQLQuery } from "@dojoengine/sdk/sql";
 
 type QueryResponse = Array<{
     totalEntities: string;
@@ -12,7 +12,10 @@ function formatFn(rows: QueryResponse): number {
 }
 
 export function TotalEntities() {
-    const { data: totalEntities } = useQuery(TOTAL_ENTITIES_QUERY, formatFn);
+    const { data: totalEntities } = useToriiSQLQuery(
+        TOTAL_ENTITIES_QUERY,
+        formatFn
+    );
     return (
         <div>
             Total player spawned :

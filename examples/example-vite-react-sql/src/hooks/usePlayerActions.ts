@@ -1,14 +1,15 @@
-import { DojoContext } from "@/dojo-sdk-provider";
-import { SchemaType } from "@/typescript/models.gen";
+import { useEffect, useMemo } from "react";
+
 import { ParsedEntity, QueryBuilder } from "@dojoengine/sdk";
+import { useDojoSDK } from "@dojoengine/sdk/react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { useContext, useEffect, useMemo } from "react";
+import { SchemaType } from "@/typescript/models.gen";
 import { addAddressPadding } from "starknet";
-import { useDojoStore } from "./useDojoStore";
 
 export function usePlayerActions(address: string | undefined) {
-    const { sdk } = useContext(DojoContext);
+    const { sdk, useDojoStore } = useDojoSDK();
     const state = useDojoStore((state) => state);
+
     const entityId = useMemo(() => {
         if (address) {
             return getEntityIdFromKeys([BigInt(address)]);

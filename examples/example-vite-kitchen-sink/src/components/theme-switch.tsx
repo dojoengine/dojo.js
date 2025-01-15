@@ -4,7 +4,6 @@ import { Subscription } from "@dojoengine/torii-wasm";
 import { useAccount } from "@starknet-react/core";
 import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
 import { SchemaType } from "@/typescript/models.gen";
-import { useDojoDb } from "@/dojo/provider";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -17,6 +16,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown";
 import { CairoCustomEnum } from "starknet";
+import { useDojoSDK } from "@dojoengine/sdk/react";
+import { setupWorld } from "@/typescript/contracts.gen";
 
 interface ThemeState {
     current: string | null;
@@ -47,7 +48,10 @@ export default function ThemeSwitchButton() {
     const [entityId, setEntityId] = useState<string | null>(null);
     const { address, account } = useAccount();
     const [sub, setSub] = useState<Subscription | null>(null);
-    const { db, actions } = useDojoDb();
+    const { sdk: db, client: actions } = useDojoSDK<
+        typeof setupWorld,
+        SchemaType
+    >();
 
     const handleChangeTheme = useCallback(
         async (theme: AvailableTheme) => {

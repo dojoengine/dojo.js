@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { useSendTransaction } from "@starknet-react/core";
-import { useDojoDb } from "@/dojo/provider";
 import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { dojoConfig } from "@/../dojoConfig";
 import { SchemaType } from "@/typescript/models.gen";
-import { addAddressPadding } from "starknet";
+import { useDojoSDK } from "@dojoengine/sdk/react";
+import { setupWorld } from "@/typescript/contracts.gen";
 
 export default function GlobalCOunter() {
     const [count, setCount] = useState(0);
@@ -26,7 +26,7 @@ export default function GlobalCOunter() {
         setIsLoading(true);
     }, [incrementGlobalCounter, setIsLoading]);
 
-    const { db } = useDojoDb();
+    const { sdk: db } = useDojoSDK<typeof setupWorld, SchemaType>();
 
     useEffect(() => {
         async function getEntity(db: SDK<SchemaType>) {

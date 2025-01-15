@@ -1,15 +1,18 @@
 import { createRoot } from "react-dom/client";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { init } from "@dojoengine/sdk";
-
-import "./index.css";
+import { StrictMode } from "react";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-import { StrictMode } from "react";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+
+// Dojo related imports
+import { init } from "@dojoengine/sdk";
+import { DojoSdkProvider } from "@dojoengine/sdk/react";
 import { schema, SchemaType } from "./typescript/models.gen";
 import { dojoConfig } from "../dojoConfig";
-import { DojoSdkProvider } from "./dojo-sdk-provider";
+import { setupWorld } from "./typescript/contracts.gen";
+
+import "./index.css";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -47,7 +50,11 @@ async function main() {
     );
     createRoot(document.getElementById("root")!).render(
         <StrictMode>
-            <DojoSdkProvider sdk={sdk}>
+            <DojoSdkProvider
+                sdk={sdk}
+                dojoConfig={dojoConfig}
+                clientFn={setupWorld}
+            >
                 <RouterProvider router={router} />
             </DojoSdkProvider>
         </StrictMode>

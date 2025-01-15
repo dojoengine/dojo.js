@@ -1,4 +1,4 @@
-import { useQuery } from "@/hooks/useQuery";
+import { useToriiSQLQuery } from "@dojoengine/sdk/sql";
 import {
     Accordion,
     AccordionContent,
@@ -46,7 +46,7 @@ function formatSchema(rows: Rows) {
 }
 
 export function Schema() {
-    const { data: schema } = useQuery(SCHEMA_QUERY, formatSchema);
+    const { data: schema } = useToriiSQLQuery(SCHEMA_QUERY, formatSchema);
     return (
         <div>
             <Accordion type="single" collapsible>

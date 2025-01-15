@@ -7,15 +7,15 @@ import Home from "./app/page";
 import "./app/globals.css";
 
 import { init } from "@dojoengine/sdk";
-import { env, getRpcUrl } from "@/env";
+import { DojoSdkProvider } from "@dojoengine/sdk/react";
 import { dojoConfig } from "../dojoConfig";
-import { DojoContext } from "@/dojo/provider";
-import { DojoProvider } from "@dojoengine/core";
 import { setupWorld } from "./typescript/contracts.gen";
 import { SchemaType, schema } from "./typescript/models.gen";
 
+import { env, getRpcUrl } from "@/env";
+
 async function main() {
-    const db = await init<SchemaType>(
+    const sdk = await init<SchemaType>(
         {
             client: {
                 rpcUrl: getRpcUrl(),
@@ -32,16 +32,18 @@ async function main() {
         },
         schema
     );
-    const provider = new DojoProvider(dojoConfig.manifest, getRpcUrl());
-    const actions = setupWorld(provider);
 
     createRoot(document.getElementById("root")!).render(
         <StrictMode>
-            <DojoContext.Provider value={{ db, provider, actions }}>
+            <DojoSdkProvider
+                sdk={sdk}
+                dojoConfig={dojoConfig}
+                clientFn={setupWorld}
+            >
                 <RootLayout>
                     <Home />
                 </RootLayout>
-            </DojoContext.Provider>
+            </DojoSdkProvider>
         </StrictMode>
     );
 }

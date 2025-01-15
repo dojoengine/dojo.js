@@ -5,6 +5,29 @@
     "author": "Dojo Team",
     "license": "MIT",
     "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        },
+        "./state": {
+            "types": "./dist/src/state.d.ts",
+            "import": "./dist/src/state.js",
+            "require": "./dist/src/state.cjs"
+        },
+        "./react": {
+            "types": "./dist/src/react.d.ts",
+            "import": "./dist/src/react.js",
+            "require": "./dist/src/react.cjs"
+        },
+        "./sql": {
+            "types": "./dist/src/sql.d.ts",
+            "import": "./dist/src/sql.js",
+            "require": "./dist/src/sql.cjs"
+        }
+    },
     "type": "module",
     "scripts": {
         "build": "tsup --dts-resolve",
@@ -29,9 +52,15 @@
         "vitest": "^1.6.0"
     },
     "peerDependencies": {
-        "starknet": "catalog:"
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "@tanstack/react-query": "^5.62.16",
+        "starknet": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:"
     },
     "dependencies": {
+        "@dojoengine/core": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
         "immer": "^10.1.1",
         "zustand": "^4.5.5"

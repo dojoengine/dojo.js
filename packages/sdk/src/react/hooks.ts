@@ -1,6 +1,7 @@
-import { SchemaType } from "@/typescript/models.gen";
+import { useContext } from "react";
 import { BigNumberish } from "starknet";
-import { useDojoStore } from "./useDojoStore";
+import { SchemaType } from "../types";
+import { DojoContext, DojoContextType } from "./provider";
 
 /**
  * Custom hook to retrieve a specific model for a given entityId within a specified namespace.
@@ -12,8 +13,14 @@ import { useDojoStore } from "./useDojoStore";
 export function useModel<
     N extends keyof SchemaType,
     M extends keyof SchemaType[N] & string,
+    Client extends (...args: any) => any,
+    Schema extends SchemaType,
 >(entityId: BigNumberish, model: `${N}-${M}`): SchemaType[N][M] | undefined {
     const [namespace, modelName] = model.split("-") as [N, M];
+    const { useDojoStore } = useContext(DojoContext) as DojoContextType<
+        Client,
+        Schema
+    >;
 
     // Select only the specific model data for the given entityId
     const modelData = useDojoStore(
@@ -24,4 +31,11 @@ export function useModel<
     );
 
     return modelData;
+}
+
+export function useDojoSDK<
+    Client extends (...args: any) => any,
+    Schema extends SchemaType,
+>(): DojoContextType<Client, Schema> {
+    return useContext(DojoContext);
 }

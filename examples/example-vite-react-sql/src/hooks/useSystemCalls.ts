@@ -1,7 +1,6 @@
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useDojoStore } from "./useDojoStore";
-import { DojoContext } from "@/dojo-sdk-provider";
+import { useDojoSDK } from "@dojoengine/sdk/react";
 import { useAccount } from "@starknet-react/core";
 import {
     BigNumberish,
@@ -12,7 +11,7 @@ import {
 
 export function useSystemCalls(entityId: BigNumberish) {
     const { account } = useAccount();
-    const { client } = useContext(DojoContext);
+    const { useDojoStore, client } = useDojoSDK();
     const state = useDojoStore((s) => s);
 
     const spawn = useCallback(async () => {
@@ -80,7 +79,6 @@ export function useSystemCalls(entityId: BigNumberish) {
                     (entity) => {
                         const result =
                             entity?.models?.dojo_starter?.Moves?.last_direction?.isSome() &&
-                            // @ts-expect-error inner enum is not hydrated there
                             entity?.models?.dojo_starter?.Moves?.last_direction
                                 ?.Some === direction.activeVariant();
                         // cast result to boolean

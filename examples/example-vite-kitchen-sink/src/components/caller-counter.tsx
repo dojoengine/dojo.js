@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
+
+import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
+import { useDojoSDK } from "@dojoengine/sdk/react";
+import { Subscription } from "@dojoengine/torii-wasm";
+import { SchemaType } from "@/typescript/models.gen";
+import { setupWorld } from "@/typescript/contracts.gen";
+import { dojoConfig } from "@/../dojoConfig";
+
+import { addAddressPadding } from "starknet";
 import { Button } from "./ui/button";
 import { useAccount, useSendTransaction } from "@starknet-react/core";
-import { useDojoDb } from "@/dojo/provider";
-import { ensureStarkFelt } from "@/lib/utils";
-import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
-import { Subscription } from "@dojoengine/torii-wasm";
-import { dojoConfig } from "@/../dojoConfig";
-import { SchemaType } from "@/typescript/models.gen";
-import { addAddressPadding } from "starknet";
 
 export default function CallerCounter() {
     const [count, setCount] = useState(0);
@@ -29,7 +31,7 @@ export default function CallerCounter() {
         setIsLoading(true);
     }, [incrementCallerCounter, setIsLoading]);
 
-    const { db } = useDojoDb();
+    const { sdk } = useDojoSDK<typeof setupWorld, SchemaType>();
     useEffect(() => {
         async function getEntity(db: SDK<SchemaType>, address: string) {
             const entity = await db.getEntities({
@@ -53,10 +55,10 @@ export default function CallerCounter() {
 
             return parseInt(count.toString(), 16);
         }
-        if (address && db) {
-            getEntity(db, address).then(setCount).catch(console.error);
+        if (address && sdk) {
+            getEntity(sdk, address).then(setCount).catch(console.error);
         }
-    }, [address, db]);
+    }, [address, sdk]);
 
     useEffect(() => {
         async function subscribeToEntityUpdates(
@@ -100,8 +102,8 @@ export default function CallerCounter() {
             });
             setSub(sub);
         }
-        if (address && db && sub === null) {
-            subscribeToEntityUpdates(db, address)
+        if (address && sdk && sub === null) {
+            subscribeToEntityUpdates(sdk, address)
                 .then(() => {})
                 .catch(console.error);
         }
@@ -110,7 +112,7 @@ export default function CallerCounter() {
                 sub.free();
             }
         };
-    }, [address, db, sub]);
+    }, [address, sdk, sub]);
     return (
         <fieldset className="grid gap-6 rounded-lg border p-4">
             <legend className="-ml-1 px-1 text-sm font-medium">

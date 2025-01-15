@@ -1,6 +1,8 @@
-import { useDojoStore } from "@/hooks/useDojoStore";
-import { useQuery } from "@/hooks/useQuery";
+import { SchemaType } from "@/typescript/models.gen";
+import { DojoContext } from "@dojoengine/sdk/react";
+import { useToriiSQLQuery } from "@dojoengine/sdk/sql";
 import { useQueryClient } from "@tanstack/react-query";
+import { useContext } from "react";
 
 type QueryResponse = Array<{
     count: number;
@@ -39,9 +41,10 @@ function formatFn(rows: QueryResponse): DirectionCount {
 
 export function DirectionCount() {
     // use queryClient to invalidateQuery when state is changing.
+    const { useDojoStore } = useContext(DojoContext);
     const queryClient = useQueryClient();
     useDojoStore.subscribe(
-        (s) => s.entities,
+        (s: SchemaType) => s.entities,
         () => {
             queryClient.invalidateQueries({
                 queryKey: [DIRECTION_COUNT_QUERY],
@@ -51,7 +54,7 @@ export function DirectionCount() {
 
     // use the isRefetching prop here so that react knows the state is changing and actually rerender compoentnt
     // @ts-expect-error it's ok if I dont use this variable compiler, react needs it
-    const { data: directions, isRefetching } = useQuery(
+    const { data: directions, isRefetching } = useToriiSQLQuery(
         DIRECTION_COUNT_QUERY,
         formatFn
     );
@@ -60,13 +63,13 @@ export function DirectionCount() {
         return (
             <div>
                 Player went :<br />
-                Left <b>{directions.Left}</b> times
+                Left <b>0</b> times
                 <br />
-                Up <b>{directions.Up}</b> times
+                Up <b>0</b> times
                 <br />
-                Down <b>{directions.Down}</b> times
+                Down <b>0</b> times
                 <br />
-                Right <b>{directions.Right}</b> times
+                Right <b>0</b> times
                 <br />
             </div>
         );
