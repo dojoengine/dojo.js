@@ -20,7 +20,7 @@ interface PendingTransaction {
     inversePatches: Patch[];
 }
 
-interface GameState<T extends SchemaType> {
+export interface GameState<T extends SchemaType> {
     entities: Record<string, ParsedEntity<T>>;
     pendingTransactions: Record<string, PendingTransaction>;
     setEntities: (entities: ParsedEntity<T>[]) => void;

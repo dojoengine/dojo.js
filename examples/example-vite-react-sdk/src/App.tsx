@@ -1,25 +1,14 @@
 import { useEffect, useMemo } from "react";
-import {
-    ParsedEntity,
-    QueryBuilder,
-    SDK,
-    createDojoStore,
-} from "@dojoengine/sdk";
+import { ParsedEntity, QueryBuilder } from "@dojoengine/sdk";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { AccountInterface, addAddressPadding, CairoCustomEnum } from "starknet";
 
 import { ModelsMapping, SchemaType } from "./typescript/models.gen.ts";
-import { useDojo } from "./useDojo.tsx";
-import useModel from "./useModel.tsx";
 import { useSystemCalls } from "./useSystemCalls.ts";
 import { useAccount } from "@starknet-react/core";
 import { WalletAccount } from "./wallet-account.tsx";
 import { HistoricalEvents } from "./historical-events.tsx";
-
-/**
- * Global store for managing Dojo game state.
- */
-export const useDojoStore = createDojoStore<SchemaType>();
+import { useDojoSDK, useModel } from "@dojoengine/sdk/react";
 
 /**
  * Main application component that provides game functionality and UI.
@@ -27,10 +16,8 @@ export const useDojoStore = createDojoStore<SchemaType>();
  *
  * @param props.sdk - The Dojo SDK instance configured with the game schema
  */
-function App({ sdk }: { sdk: SDK<SchemaType> }) {
-    const {
-        setup: { client },
-    } = useDojo();
+function App() {
+    const { useDojoStore, client, sdk } = useDojoSDK();
     const { account } = useAccount();
     const state = useDojoStore((state) => state);
     const entities = useDojoStore((state) => state.entities);
@@ -160,7 +147,6 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                                     : "Need to Spawn"}
                             </div>
                             <div className="col-span-3 text-center text-base text-white">
-                                {/* @ts-expect-error we have an option here so type is ok */}
                                 {moves && moves.last_direction.isSome()
                                     ? moves.last_direction.unwrap()
                                     : ""}
@@ -280,7 +266,6 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                                                     "N/A"}
                                             </td>
                                             <td className="border border-gray-700 p-2">
-                                                {/* @ts-expect-error we have an option here so type is ok */}
                                                 {lastDirection}
                                             </td>
                                             <td className="border border-gray-700 p-2">
@@ -296,7 +281,7 @@ function App({ sdk }: { sdk: SDK<SchemaType> }) {
                 </div>
 
                 {/* // Here sdk is passed as props but this can be done via contexts */}
-                <HistoricalEvents sdk={sdk} />
+                <HistoricalEvents />
             </div>
         </div>
     );

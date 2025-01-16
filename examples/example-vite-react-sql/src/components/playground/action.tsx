@@ -1,4 +1,4 @@
-import { useModel } from "@/hooks/useModel";
+import { useModel } from "@dojoengine/sdk/react";
 import { usePlayerActions } from "@/hooks/usePlayerActions";
 import { ModelsMapping } from "@/typescript/models.gen";
 import { useAccount } from "@starknet-react/core";

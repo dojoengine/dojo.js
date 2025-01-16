@@ -1,6 +1,6 @@
-export const LOCAL_KATANA = "http://localhost:5050";
-export const LOCAL_RELAY = "";
-export const LOCAL_TORII = "http://0.0.0.0:8080";
+export const LOCAL_KATANA = "http://127.0.0.1:5050";
+export const LOCAL_RELAY = "/ip4/127.0.0.1/tcp/9090";
+export const LOCAL_TORII = "http://127.0.0.1:8080";
 export const KATANA_PREFUNDED_ADDRESS =
     "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec";
 export const KATANA_PREFUNDED_PRIVATE_KEY =

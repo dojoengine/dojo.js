@@ -5,13 +5,14 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { useCallback, useEffect, useRef, useState, KeyboardEvent } from "react";
 import { useForm } from "react-hook-form";
-import { useDojoDb } from "@/dojo/provider";
 import { useAccount } from "@starknet-react/core";
 import { toValidAscii } from "@/lib/utils";
 import { ParsedEntity, SDK } from "@dojoengine/sdk";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { shortAddress } from "@/lib/utils";
 import { Message, SchemaType } from "@/typescript/models.gen";
+import { useDojoSDK } from "@dojoengine/sdk/react";
+import { setupWorld } from "@/typescript/contracts.gen";
 
 interface MessageItem {
     content: string;
@@ -30,7 +31,7 @@ export default function Chat() {
     const [sub, setSub] = useState<Subscription | null>(null);
     const formRef = useRef<HTMLFormElement>(null);
 
-    const { db } = useDojoDb();
+    const { sdk: db } = useDojoSDK<typeof setupWorld, SchemaType>();
     const publish = useCallback(
         async (data: FormValues) => {
             if (!account || !db) return;
