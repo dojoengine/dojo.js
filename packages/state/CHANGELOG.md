@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.0.10
+
+### Patch Changes
+
+- 84dd776: Updated packages to latest dojo version // accept and convert array by @rsodre // add missing params for query and subscription by @rsodre // update starknet-core-version by @rsodre
+- 42ab8cf: Add @dojoengine/sdk/state @dojoengine/sdk/react @dojoengine/sdk/sql // Moves hooks to sdk // Update examples
+- Updated dependencies [84dd776]
+- Updated dependencies [42ab8cf]
+    - @dojoengine/torii-client@1.0.10
+
 ## 1.0.9
 
 ### Patch Changes
