@@ -31,6 +31,26 @@ function App() {
         return BigInt(0);
     }, [account]);
 
+    // This is experimental feature.
+    // Use those queries if you want to be closer to how you should query your ecs system with torii
+    // useEffect(() => {
+    //   async function fetchToriiClause() {
+    //     const res = await sdk.client.getEntities(
+    //       new ToriiQueryBuilder()
+    //         .withClause(
+    //           new ClauseBuilder()
+    //             .keys([], [undefined], "VariableLen")
+    //             .build()
+    //         )
+    //         .withLimit(2)
+    //         .addOrderBy(ModelsMapping.Moves, "remaining", "Desc")
+    //         .build()
+    //     );
+    //     return res;
+    //   }
+    //   fetchToriiClause().then(console.log);
+    // });
+
     useEffect(() => {
         let unsubscribe: (() => void) | undefined;
 
@@ -248,7 +268,7 @@ function App() {
                                             className="text-gray-300"
                                         >
                                             <td className="border border-gray-700 p-2">
-                                                {entityId}
+                                                {addAddressPadding(entityId)}
                                             </td>
                                             <td className="border border-gray-700 p-2">
                                                 {position?.player ?? "N/A"}
