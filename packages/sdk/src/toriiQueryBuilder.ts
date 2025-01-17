@@ -1,7 +1,7 @@
 import { Clause, OrderBy, Query } from "@dojoengine/torii-client";
 import { SchemaType } from "./types";
 
-const defaultToriiOptions = {
+const defaultToriiOptions = () => ({
     limit: 100, // default limit
     offset: 0,
     clause: undefined,
@@ -9,7 +9,7 @@ const defaultToriiOptions = {
     order_by: [],
     entity_models: [],
     entity_updated_after: 0,
-};
+});
 
 type ToriiQueryBuilderOptions = Omit<Partial<Query>, "clause">;
 
@@ -17,7 +17,7 @@ export class ToriiQueryBuilder<T extends SchemaType> {
     private query: Query;
 
     constructor(options?: ToriiQueryBuilderOptions) {
-        this.query = { ...defaultToriiOptions, ...options };
+        this.query = { ...defaultToriiOptions(), ...options };
     }
 
     /**

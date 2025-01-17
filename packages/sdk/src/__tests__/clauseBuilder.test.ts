@@ -40,7 +40,7 @@ describe("ClauseBuilder", () => {
             expect(clause).toEqual({
                 Keys: {
                     keys: ["player1"],
-                    pattern_matching: "FixedLen" as PatternMatching,
+                    pattern_matching: "VariableLen" as PatternMatching,
                     models: ["dojo_starter-Moves"],
                 },
             });

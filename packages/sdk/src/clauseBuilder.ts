@@ -42,11 +42,11 @@ export class ClauseBuilder<T extends SchemaType> {
     keys(
         models: ModelPath<T, keyof T>[],
         keys: (string | undefined)[],
-        pattern: PatternMatching = "FixedLen"
+        pattern: PatternMatching = "VariableLen"
     ): ClauseBuilder<T> {
         this.clause = {
             Keys: {
-                keys,
+                keys: keys.length === 0 ? [undefined] : keys,
                 pattern_matching: pattern,
                 models,
             },

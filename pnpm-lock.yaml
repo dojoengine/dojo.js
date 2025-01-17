@@ -132,7 +132,7 @@ importers:
         version: 3.0.11
       bun-types:
         specifier: latest
-        version: 1.1.43
+        version: 1.1.45
       graphql:
         specifier: ^16.9.0
         version: 16.10.0
@@ -185,6 +185,37 @@ importers:
       vite-plugin-wasm:
         specifier: ^3.3.0
         version: 3.4.1(vite@5.4.11(@types/node@22.10.6)(terser@5.37.0))
+
+  examples/example-vite-experimental-sdk:
+    dependencies:
+      '@dojoengine/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@dojoengine/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
+      highlight.js:
+        specifier: ^11.11.1
+        version: 11.11.1
+      starknet:
+        specifier: 'catalog:'
+        version: 6.21.0(encoding@0.1.13)
+    devDependencies:
+      '@types/highlight.js':
+        specifier: ^10.1.0
+        version: 10.1.0
+      typescript:
+        specifier: ~5.6.3
+        version: 5.6.3
+      vite:
+        specifier: ^6.0.7
+        version: 6.0.7(@types/node@22.10.6)(jiti@2.4.2)(terser@5.37.0)(tsx@4.19.2)(yaml@2.7.0)
+      vite-plugin-top-level-await:
+        specifier: ^1.4.4
+        version: 1.4.4(@swc/helpers@0.5.5)(rollup@4.30.1)(vite@6.0.7(@types/node@22.10.6)(jiti@2.4.2)(terser@5.37.0)(tsx@4.19.2)(yaml@2.7.0))
+      vite-plugin-wasm:
+        specifier: ^3.4.1
+        version: 3.4.1(vite@6.0.7(@types/node@22.10.6)(jiti@2.4.2)(terser@5.37.0)(tsx@4.19.2)(yaml@2.7.0))
 
   examples/example-vite-kitchen-sink:
     dependencies:
@@ -843,7 +874,7 @@ importers:
         version: 2.1.1
       drizzle-orm:
         specifier: ^0.38.3
-        version: 0.38.3(@libsql/client@0.14.0)(@types/react@18.3.18)(bun-types@1.1.43)(react@18.3.1)
+        version: 0.38.3(@libsql/client@0.14.0)(@types/react@18.3.18)(bun-types@1.1.45)(react@18.3.1)
       lucide-react:
         specifier: ^0.469.0
         version: 0.469.0(react@18.3.1)
@@ -6294,6 +6325,10 @@ packages:
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
 
+  '@types/highlight.js@10.1.0':
+    resolution: {integrity: sha512-77hF2dGBsOgnvZll1vymYiNUtqJ8cJfXPD6GG/2M0aLRc29PkvB7Au6sIDjIEFcSICBhCh2+Pyq6WSRS7LUm6A==}
+    deprecated: This is a stub types definition. highlight.js provides its own type definitions, so you do not need this installed.
+
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
 
@@ -7292,8 +7327,8 @@ packages:
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
 
-  bun-types@1.1.43:
-    resolution: {integrity: sha512-W0wCtVH+bwFp7p3Zgs03CqxEDmXxEvmmUM/FBKgWIv9T8gyeotvIjIbHzuDScc2DphhRNtr7hJLCR5PspYL5qw==}
+  bun-types@1.1.45:
+    resolution: {integrity: sha512-8NT3BYwkyO8nzTG1k+q86VEvucw7s5W1fjRIGs0Y6/XNbTZn+mHEU39LFnuDLj4UmGCMpWCQtXUhLd6cko49Ww==}
 
   bundle-require@5.1.0:
     resolution: {integrity: sha512-3WrrOuZiyaaZPWiEt4G3+IffISVC9HYlWueJEBWED4ZH4aIAC2PnkdnuRrR94M+w6yGWn4AglWtJtBI8YqvgoA==}
@@ -9248,6 +9283,10 @@ packages:
 
   header-case@2.0.4:
     resolution: {integrity: sha512-H/vuk5TEEVZwrR0lp2zed9OCo1uAILMlx0JEMgC26rzyJJ3N1v6XkwHHXJQdR2doSjcGPM6OKPYoJgf0plJ11Q==}
+
+  highlight.js@11.11.1:
+    resolution: {integrity: sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==}
+    engines: {node: '>=12.0.0'}
 
   hls.js@1.5.18:
     resolution: {integrity: sha512-znxR+2jecWluu/0KOBqUcvVyAB5tLff10vjMGrpAlz1eFY+ZhF1bY3r82V+Bk7WJdk03iTjtja9KFFz5BrqjSA==}
@@ -13008,6 +13047,11 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
       typescript: '>=4.8.4 <5.8.0'
+
+  typescript@5.6.3:
+    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
 
   typescript@5.7.2:
     resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
@@ -19741,6 +19785,10 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
+  '@types/highlight.js@10.1.0':
+    dependencies:
+      highlight.js: 11.11.1
+
   '@types/http-errors@2.0.4': {}
 
   '@types/istanbul-lib-coverage@2.0.6': {}
@@ -21028,7 +21076,7 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
-  bun-types@1.1.43:
+  bun-types@1.1.45:
     dependencies:
       '@types/node': 20.12.14
       '@types/ws': 8.5.13
@@ -21904,11 +21952,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.3(@libsql/client@0.14.0)(@types/react@18.3.18)(bun-types@1.1.43)(react@18.3.1):
+  drizzle-orm@0.38.3(@libsql/client@0.14.0)(@types/react@18.3.18)(bun-types@1.1.45)(react@18.3.1):
     optionalDependencies:
       '@libsql/client': 0.14.0
       '@types/react': 18.3.18
-      bun-types: 1.1.43
+      bun-types: 1.1.45
       react: 18.3.1
 
   dset@3.1.4: {}
@@ -23419,6 +23467,8 @@ snapshots:
     dependencies:
       capital-case: 1.0.4
       tslib: 2.8.1
+
+  highlight.js@11.11.1: {}
 
   hls.js@1.5.18: {}
 
@@ -26808,8 +26858,8 @@ snapshots:
       picocolors: 1.1.1
       sade: 1.8.1
       svelte: 4.2.19
-      svelte-preprocess: 5.1.4(@babel/core@7.26.0)(postcss-load-config@4.0.2(postcss@8.5.1))(postcss@8.5.1)(svelte@4.2.19)(typescript@5.7.2)
-      typescript: 5.7.2
+      svelte-preprocess: 5.1.4(@babel/core@7.26.0)(postcss-load-config@4.0.2(postcss@8.5.1))(postcss@8.5.1)(svelte@4.2.19)(typescript@5.7.3)
+      typescript: 5.7.3
     transitivePeerDependencies:
       - '@babel/core'
       - coffeescript
@@ -26825,7 +26875,7 @@ snapshots:
     dependencies:
       svelte: 4.2.19
 
-  svelte-preprocess@5.1.4(@babel/core@7.26.0)(postcss-load-config@4.0.2(postcss@8.5.1))(postcss@8.5.1)(svelte@4.2.19)(typescript@5.7.2):
+  svelte-preprocess@5.1.4(@babel/core@7.26.0)(postcss-load-config@4.0.2(postcss@8.5.1))(postcss@8.5.1)(svelte@4.2.19)(typescript@5.7.3):
     dependencies:
       '@types/pug': 2.0.10
       detect-indent: 6.1.0
@@ -26837,7 +26887,7 @@ snapshots:
       '@babel/core': 7.26.0
       postcss: 8.5.1
       postcss-load-config: 4.0.2(postcss@8.5.1)
-      typescript: 5.7.2
+      typescript: 5.7.3
 
   svelte@4.2.19:
     dependencies:
@@ -27331,6 +27381,8 @@ snapshots:
       typescript: 5.7.2
     transitivePeerDependencies:
       - supports-color
+
+  typescript@5.6.3: {}
 
   typescript@5.7.2: {}
 
