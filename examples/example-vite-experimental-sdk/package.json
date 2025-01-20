@@ -1,0 +1,23 @@
+{
+    "name": "example-vite-experimental-sdk",
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@dojoengine/core": "workspace:*",
+        "@dojoengine/sdk": "workspace:*",
+        "highlight.js": "^11.11.1",
+        "starknet": "catalog:"
+    },
+    "devDependencies": {
+        "@types/highlight.js": "^10.1.0",
+        "typescript": "~5.6.3",
+        "vite": "^6.0.7",
+        "vite-plugin-top-level-await": "^1.4.4",
+        "vite-plugin-wasm": "^3.4.1"
+    }
+}

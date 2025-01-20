@@ -9,6 +9,8 @@ import { SchemaType, SDK, SDKConfig, UnionOfModelData } from "./types";
 
 export * from "./types";
 export * from "./queryBuilder";
+export * from "./clauseBuilder";
+export * from "./toriiQueryBuilder";
 
 /**
  * Creates a new Torii client instance.

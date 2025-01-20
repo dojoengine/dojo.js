@@ -9,5 +9,6 @@ export default defineConfig({
         "src/state": "src/state/index.ts",
         "src/react": "src/react/index.ts",
         "src/sql": "src/sql/index.ts",
+        "src/experimental": "src/experimental/index.ts",
     },
 });

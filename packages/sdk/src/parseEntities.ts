@@ -3,25 +3,15 @@ import * as torii from "@dojoengine/torii-client";
 import { ParsedEntity, SchemaType, StandardizedQueryResult } from "./types";
 import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
 
-/**
- * Parses a collection of entities into a standardized query result format.
- *
- * @template T - The schema type.
- * @param {torii.Entities} entities - The collection of entities to parse.
- * @param {{ logging?: boolean }} [options] - Optional settings for logging.
- * @returns {StandardizedQueryResult<T>} - The parsed entities in a standardized query result format.
- *
- * @example
- * const parsedResult = parseEntities(entities, { logging: true });
- * console.log(parsedResult);
- */
 export function parseEntities<T extends SchemaType>(
     entities: torii.Entities,
     options?: { logging?: boolean }
 ): StandardizedQueryResult<T> {
-    const result: StandardizedQueryResult<T> = [];
+    // @ts-ignore
+    const result: StandardizedQueryResult<T> = entities;
+    const entityIds = Object.keys(entities);
 
-    for (const entityId in entities) {
+    entityIds.forEach((entityId) => {
         const entityData = entities[entityId];
         const parsedEntity: ParsedEntity<T> = {
             entityId,
@@ -50,12 +40,13 @@ export function parseEntities<T extends SchemaType>(
             );
         }
 
-        result.push(parsedEntity);
+        result[entityId] = parsedEntity;
 
         if (options?.logging) {
             console.log(`Parsed entity:`, parsedEntity);
         }
-    }
+        return parsedEntity;
+    });
 
     if (options?.logging) {
         console.log("Parsed result:", result);
