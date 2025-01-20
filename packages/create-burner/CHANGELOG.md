@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.0.11
+
+### Patch Changes
+
+- 5f335d0: Added experimental ToriiQueryBuilder and ClauseBuilder to be closer to how we should query ECS through torii
+- Updated dependencies [5f335d0]
+    - @dojoengine/core@1.0.11
+
 ## 1.0.10
 
 ### Patch Changes
