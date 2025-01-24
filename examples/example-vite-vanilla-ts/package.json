@@ -1,0 +1,19 @@
+{
+    "name": "example-vite-vanilla-ts",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "node --experimental-transform-types --experimental-modules src/main.ts",
+        "build": "tsc"
+    },
+    "dependencies": {
+        "@dojoengine/core": "workspace:",
+        "@dojoengine/sdk": "workspace:",
+        "@dojoengine/torii-client": "workspace:",
+        "starknet": "catalog:"
+    },
+    "devDependencies": {
+        "typescript": "~5.6.2"
+    }
+}
