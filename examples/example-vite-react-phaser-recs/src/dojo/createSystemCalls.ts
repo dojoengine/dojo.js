@@ -1,6 +1,5 @@
-import { AccountInterface } from "starknet";
+import { AccountInterface, CairoCustomEnum } from "starknet";
 import { ClientComponents } from "./createClientComponents";
-import { Direction } from "./utils";
 import { ContractComponents } from "./generated/contractComponents";
 import type { IWorld } from "./generated/generated";
 
@@ -21,7 +20,10 @@ export function createSystemCalls(
         }
     };
 
-    const move = async (account: AccountInterface, direction: Direction) => {
+    const move = async (
+        account: AccountInterface,
+        direction: CairoCustomEnum
+    ) => {
         try {
             await client.actions.move({
                 account,

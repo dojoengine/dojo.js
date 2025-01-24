@@ -12,4 +12,7 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
+    build: {
+        target: "ES2022",
+    },
 });

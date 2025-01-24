@@ -32,7 +32,25 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                 entities,
                 client.onEntityUpdated(
                     intoEntityKeysClause<T>(query.clause, entities),
-                    callback
+                    (entityId: string, entityData: any) => {
+                        try {
+                            if (callback) {
+                                const parsedData = parseEntities<T>({
+                                    [entityId]: entityData,
+                                });
+                                callback({ data: parsedData });
+                            }
+                        } catch (error) {
+                            if (callback) {
+                                callback({
+                                    error:
+                                        error instanceof Error
+                                            ? error
+                                            : new Error(String(error)),
+                                });
+                            }
+                        }
+                    }
                 ),
             ];
         },
@@ -56,7 +74,26 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                 client.onEventMessageUpdated(
                     intoEntityKeysClause<T>(query.clause, events),
                     historical,
-                    callback
+                    (entityId: string, entityData: any) => {
+                        try {
+                            if (callback) {
+                                const data = { [entityId]: entityData };
+                                const parsedData = historical
+                                    ? parseHistoricalEvents<T>(data)
+                                    : parseEntities<T>(data);
+                                callback({ data: parsedData });
+                            }
+                        } catch (error) {
+                            if (callback) {
+                                callback({
+                                    error:
+                                        error instanceof Error
+                                            ? error
+                                            : new Error(String(error)),
+                                });
+                            }
+                        }
+                    }
                 ),
             ];
         },

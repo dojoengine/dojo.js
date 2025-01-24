@@ -1,5 +1,6 @@
 import { PhaserLayer } from "../createPhaserLayer";
 import { Direction } from "../../dojo/utils";
+import { CairoCustomEnum } from "starknet";
 
 export const controls = (layer: PhaserLayer) => {
     const {
@@ -15,56 +16,56 @@ export const controls = (layer: PhaserLayer) => {
     input.onKeyPress(
         (keys) => keys.has("W"),
         () => {
-            move(account, Direction.Up);
+            move(account, new CairoCustomEnum({ Up: "()" }));
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("A"),
         () => {
-            move(account, Direction.Left);
+            move(account, new CairoCustomEnum({ Left: "()" }));
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("S"),
         () => {
-            move(account, Direction.Down);
+            move(account, new CairoCustomEnum({ Down: "()" }));
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("D"),
         () => {
-            move(account, Direction.Right);
+            move(account, new CairoCustomEnum({ Right: "()" }));
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("UP"),
         () => {
-            move(account, Direction.Up);
+            move(account, new CairoCustomEnum({ Up: "()" }));
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("LEFT"),
         () => {
-            move(account, Direction.Left);
+            move(account, new CairoCustomEnum({ Left: "()" }));
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("DOWN"),
         () => {
-            move(account, Direction.Down);
+            move(account, new CairoCustomEnum({ Down: "()" }));
         }
     );
 
     input.onKeyPress(
         (keys) => keys.has("RIGHT"),
         () => {
-            move(account, Direction.Right);
+            move(account, new CairoCustomEnum({ Right: "()" }));
         }
     );
 };

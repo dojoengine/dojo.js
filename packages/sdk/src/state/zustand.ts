@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { createStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import {
     Draft,
@@ -11,44 +11,9 @@ import {
 import { enablePatches } from "immer";
 import { subscribeWithSelector } from "zustand/middleware";
 import { ParsedEntity, SchemaType } from "../types";
+import { GameState } from ".";
 
 enablePatches();
-
-interface PendingTransaction {
-    transactionId: string;
-    patches: Patch[];
-    inversePatches: Patch[];
-}
-
-export interface GameState<T extends SchemaType> {
-    entities: Record<string, ParsedEntity<T>>;
-    pendingTransactions: Record<string, PendingTransaction>;
-    setEntities: (entities: ParsedEntity<T>[]) => void;
-    updateEntity: (entity: Partial<ParsedEntity<T>>) => void;
-    applyOptimisticUpdate: (
-        transactionId: string,
-        updateFn: (draft: Draft<GameState<T>>) => void
-    ) => void;
-    revertOptimisticUpdate: (transactionId: string) => void;
-    confirmTransaction: (transactionId: string) => void;
-    subscribeToEntity: (
-        entityId: string,
-        listener: (entity: ParsedEntity<T> | undefined) => void
-    ) => () => void;
-    waitForEntityChange: (
-        entityId: string,
-        predicate: (entity: ParsedEntity<T> | undefined) => boolean,
-        timeout?: number
-    ) => Promise<ParsedEntity<T> | undefined>;
-    getEntity: (entityId: string) => ParsedEntity<T> | undefined;
-    getEntities: (
-        filter?: (entity: ParsedEntity<T>) => boolean
-    ) => ParsedEntity<T>[];
-    getEntitiesByModel: (
-        namespace: keyof T,
-        model: keyof T[keyof T]
-    ) => ParsedEntity<T>[];
-}
 
 /**
  * Factory function to create a Zustand store based on a given SchemaType.
@@ -56,8 +21,10 @@ export interface GameState<T extends SchemaType> {
  * @template T - The schema type.
  * @returns A Zustand hook tailored to the provided schema.
  */
-export function createDojoStore<T extends SchemaType>() {
-    const useStore = create<GameState<T>>()(
+export function createDojoStoreFactory<T extends SchemaType>(
+    storeCreatorFn: typeof createStore
+) {
+    const useStore = storeCreatorFn<GameState<T>>()(
         subscribeWithSelector(
             immer((set, get) => ({
                 entities: {},

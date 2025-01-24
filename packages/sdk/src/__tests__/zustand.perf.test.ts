@@ -1,4 +1,4 @@
-import { createDojoStore } from "../state/zustand";
+import { createDojoStore } from "../state";
 import { ParsedEntity } from "../types";
 import { describe, it, beforeEach } from "vitest";
 import Benchmark from "benchmark";
