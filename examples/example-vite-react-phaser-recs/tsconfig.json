@@ -17,13 +17,13 @@
         // "noUnusedLocals": true,
         // "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"]
+        }
     },
     "include": ["src"],
-    "baseUrl": ".",
-    "paths": {
-        "@/*": ["./src/*"]
-    },
     "references": [
         {
             "path": "./tsconfig.node.json"

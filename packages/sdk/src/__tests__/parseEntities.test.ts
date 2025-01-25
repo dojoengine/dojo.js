@@ -140,52 +140,50 @@ describe("parseEntities", () => {
 
         const result = parseEntities(mockEntities);
 
-        expect(result).toEqual({
-            "0x14c362c17947ef1d40152d6e3bedd859c98bebfad41f75ef3f26798556a4c85":
-                {
-                    entityId:
-                        "0x14c362c17947ef1d40152d6e3bedd859c98bebfad41f75ef3f26798556a4c85",
-                    models: {
-                        dojo_starter: {
-                            Position: {
-                                player: "0x7f7e355d3ae20c34de26c21b46612622f4e4012e7debc10f0300cf193a46366",
-                                vec: {
-                                    x: 6,
-                                    y: 10,
-                                },
+        expect(result).toEqual([
+            {
+                entityId:
+                    "0x14c362c17947ef1d40152d6e3bedd859c98bebfad41f75ef3f26798556a4c85",
+                models: {
+                    dojo_starter: {
+                        Position: {
+                            player: "0x7f7e355d3ae20c34de26c21b46612622f4e4012e7debc10f0300cf193a46366",
+                            vec: {
+                                x: 6,
+                                y: 10,
                             },
-                            Moves: {
-                                last_direction: "Left",
-                                remaining: 98,
-                                can_move: true,
-                                player: "0x7f7e355d3ae20c34de26c21b46612622f4e4012e7debc10f0300cf193a46366",
+                        },
+                        Moves: {
+                            last_direction: "Left",
+                            remaining: 98,
+                            can_move: true,
+                            player: "0x7f7e355d3ae20c34de26c21b46612622f4e4012e7debc10f0300cf193a46366",
+                        },
+                    },
+                },
+            },
+            {
+                entityId:
+                    "0x144c128b8ead7d0da39c6a150abbfdd38f572ba9418d3e36929eb6107b4ce4d",
+                models: {
+                    dojo_starter: {
+                        Moves: {
+                            last_direction: "Left",
+                            remaining: 99,
+                            can_move: true,
+                            player: "0x70c774f8d061323ada4e4924c12c894f39b5874b71147af254b3efae07e68c0",
+                        },
+                        Position: {
+                            player: "0x70c774f8d061323ada4e4924c12c894f39b5874b71147af254b3efae07e68c0",
+                            vec: {
+                                x: 6,
+                                y: 10,
                             },
                         },
                     },
                 },
-            "0x144c128b8ead7d0da39c6a150abbfdd38f572ba9418d3e36929eb6107b4ce4d":
-                {
-                    entityId:
-                        "0x144c128b8ead7d0da39c6a150abbfdd38f572ba9418d3e36929eb6107b4ce4d",
-                    models: {
-                        dojo_starter: {
-                            Moves: {
-                                last_direction: "Left",
-                                remaining: 99,
-                                can_move: true,
-                                player: "0x70c774f8d061323ada4e4924c12c894f39b5874b71147af254b3efae07e68c0",
-                            },
-                            Position: {
-                                player: "0x70c774f8d061323ada4e4924c12c894f39b5874b71147af254b3efae07e68c0",
-                                vec: {
-                                    x: 6,
-                                    y: 10,
-                                },
-                            },
-                        },
-                    },
-                },
-        });
+            },
+        ]);
     });
 
     it("should parse Options", () => {
@@ -224,12 +222,9 @@ describe("parseEntities", () => {
         };
         const res = parseEntities(toriiResult);
         const expected = new CairoOption(CairoOptionVariant.Some, 1734537235);
-        // @ts-ignore can be undefined
-        expect(
-            res[
-                "0x43ebbfee0476dcc36cae36dfa9b47935cc20c36cb4dc7d014076e5f875cf164"
-            ].models.onchain_dash.CallerCounter.timestamp
-        ).toEqual(expected);
+        expect(res[0]?.models?.onchain_dash?.CallerCounter?.timestamp).toEqual(
+            expected
+        );
     });
     it("should parse complex enums", () => {
         const toriiResult: torii.Entities = {
@@ -281,12 +276,7 @@ describe("parseEntities", () => {
         };
         const res = parseEntities<SchemaType>(toriiResult);
         const expected = new CairoCustomEnum({ Predefined: "Dojo" });
-        // @ts-ignore can be undefined
-        expect(
-            res[
-                "0x5248d30cafd7af5e7f9255ed9bef2bd7aa0f191669a4c1e3a03b8c64ea5a9d8"
-            ].models.onchain_dash.Theme.value
-        ).toEqual(expected);
+        expect(res[0]?.models?.onchain_dash?.Theme?.value).toEqual(expected);
     });
 
     it("should parse enum with nested struct", () => {
@@ -343,11 +333,6 @@ describe("parseEntities", () => {
                     "0x0000000000000000000000000000000000000000637573746f6d5f636c617373",
             },
         });
-        // @ts-ignore can be undefined
-        expect(
-            res[
-                "0x5248d30cafd7af5e7f9255ed9bef2bd7aa0f191669a4c1e3a03b8c64ea5a9d8"
-            ].models.onchain_dash.Theme.value
-        ).toEqual(expected);
+        expect(res[0]?.models?.onchain_dash?.Theme?.value).toEqual(expected);
     });
 });
