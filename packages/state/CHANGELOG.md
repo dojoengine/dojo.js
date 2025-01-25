@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.0.12
+
+### Patch Changes
+
+- b4dc1e2: parseEntities now returns Array<ParsedEntity<T>> instead of Record<string, ParsedEntity<T>>
+- Updated dependencies [b4dc1e2]
+    - @dojoengine/torii-client@1.0.12
+
 ## 1.0.11
 
 ### Patch Changes
