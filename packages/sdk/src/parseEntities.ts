@@ -8,7 +8,7 @@ export function parseEntities<T extends SchemaType>(
     options?: { logging?: boolean }
 ): StandardizedQueryResult<T> {
     // @ts-ignore
-    const result: StandardizedQueryResult<T> = entities;
+    const result: Record<string, ParsedEntity> = {};
     const entityIds = Object.keys(entities);
 
     entityIds.forEach((entityId) => {
@@ -52,7 +52,7 @@ export function parseEntities<T extends SchemaType>(
         console.log("Parsed result:", result);
     }
 
-    return result;
+    return Object.values(result);
 }
 
 /**

@@ -47,57 +47,39 @@ export async function getEventMessages<T extends SchemaType>({
     const clause = convertQueryToClause(query, schema);
 
     let cursor = offset;
-    let continueFetching = true;
-    let allEntities: torii.Entities = {};
 
-    while (continueFetching) {
-        const toriiQuery: torii.Query = {
-            limit,
-            offset: cursor,
-            order_by: orderBy,
-            entity_models: entityModels,
-            clause,
-            dont_include_hashed_keys: dontIncludeHashedKeys,
-            entity_updated_after: entityUpdatedAfter,
-        };
+    const toriiQuery: torii.Query = {
+        limit,
+        offset: cursor,
+        order_by: orderBy,
+        entity_models: entityModels,
+        clause,
+        dont_include_hashed_keys: dontIncludeHashedKeys,
+        entity_updated_after: entityUpdatedAfter,
+    };
 
-        try {
-            const entities = await client.getEventMessages(
-                toriiQuery,
-                historical
-            );
+    try {
+        const entities = await client.getEventMessages(toriiQuery, historical);
 
-            if (options?.logging) {
-                console.log(`Fetched entities at offset ${cursor}:`, entities);
-            }
-
-            Object.assign(allEntities, entities);
-
-            const parsedEntities = historical
-                ? parseHistoricalEvents<T>(allEntities, options)
-                : parseEntities<T>(allEntities, options);
-
-            callback({ data: parsedEntities });
-
-            if (Object.keys(entities).length < limit) {
-                continueFetching = false;
-            } else {
-                cursor += limit;
-            }
-        } catch (error) {
-            if (options?.logging) {
-                console.error("Error fetching entities:", error);
-            }
-            callback({ error: error as Error });
-            throw error;
+        if (options?.logging) {
+            console.log(`Fetched entities at offset ${cursor}:`, entities);
         }
-    }
 
-    if (options?.logging) {
-        console.log("All fetched entities:", allEntities);
-    }
+        const parsedEntities = historical
+            ? parseHistoricalEvents<T>(entities, options)
+            : parseEntities<T>(entities, options);
 
-    return historical
-        ? parseHistoricalEvents<T>(allEntities, options)
-        : parseEntities<T>(allEntities, options);
+        callback({ data: parsedEntities });
+
+        if (options?.logging) {
+            console.log("All fetched entities:", parsedEntities);
+        }
+        return parsedEntities;
+    } catch (error) {
+        if (options?.logging) {
+            console.error("Error fetching entities:", error);
+        }
+        callback({ error: error as Error });
+        throw error;
+    }
 }

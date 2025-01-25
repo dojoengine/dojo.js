@@ -45,50 +45,38 @@ export async function getEntities<T extends SchemaType>({
     const clause = convertQueryToClause(query, schema);
 
     let cursor = offset;
-    let continueFetching = true;
-    let allEntities: torii.Entities = {};
 
-    while (continueFetching) {
-        const toriiQuery: torii.Query = {
-            limit,
-            offset: cursor,
-            order_by: orderBy,
-            entity_models: entityModels,
-            clause,
-            dont_include_hashed_keys: dontIncludeHashedKeys,
-            entity_updated_after: entityUpdatedAfter,
-        };
+    const toriiQuery: torii.Query = {
+        limit,
+        offset: cursor,
+        order_by: orderBy,
+        entity_models: entityModels,
+        clause,
+        dont_include_hashed_keys: dontIncludeHashedKeys,
+        entity_updated_after: entityUpdatedAfter,
+    };
 
-        try {
-            const entities = await client.getEntities(toriiQuery);
+    try {
+        const entities = await client.getEntities(toriiQuery);
 
-            if (options?.logging) {
-                console.log("Clause", clause, "Query", query);
-                console.log(`Fetched entities at offset ${cursor}:`, entities);
-            }
-
-            Object.assign(allEntities, entities);
-
-            const parsedEntities = parseEntities<T>(allEntities);
-
-            callback({ data: parsedEntities });
-
-            if (Object.keys(entities).length < limit) {
-                continueFetching = false;
-            } else {
-                cursor += limit;
-            }
-        } catch (error) {
-            if (options?.logging) {
-                console.error("Error fetching entities:", error);
-            }
-            callback({ error: error as Error });
-            throw error;
+        if (options?.logging) {
+            console.log("Clause", clause, "Query", query);
+            console.log(`Fetched entities at offset ${cursor}:`, entities);
         }
-    }
 
-    if (options?.logging) {
-        console.log("All fetched entities:", allEntities);
+        const parsedEntities = parseEntities<T>(entities);
+
+        callback({ data: parsedEntities });
+
+        if (options?.logging) {
+            console.log("All fetched entities:", parsedEntities);
+        }
+        return parsedEntities;
+    } catch (error) {
+        if (options?.logging) {
+            console.error("Error fetching entities:", error);
+        }
+        callback({ error: error as Error });
+        throw error;
     }
-    return parseEntities<T>(allEntities);
 }
