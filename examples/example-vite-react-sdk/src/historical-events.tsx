@@ -9,7 +9,7 @@ import { useDojoSDK } from "@dojoengine/sdk/react";
 export function HistoricalEvents() {
     const { account } = useAccount();
     const { sdk } = useDojoSDK();
-    const [events, setEvents] = useState<ParsedEntity<SchemaType>[][]>([]);
+    const [events, setEvents] = useState<ParsedEntity<SchemaType>[]>([]);
     const [subscription, setSubscription] = useState<Subscription | null>(null);
 
     useEffect(() => {
@@ -82,8 +82,8 @@ export function HistoricalEvents() {
     return (
         <div className="mt-6">
             <h2 className="text-white">Player Events :</h2>
-            {events.map((e: ParsedEntity<SchemaType>[], key) => {
-                return <Event event={e[0]} key={key} />;
+            {events.map((e: ParsedEntity<SchemaType>, key) => {
+                return <Event event={e} key={key} />;
             })}
         </div>
     );
