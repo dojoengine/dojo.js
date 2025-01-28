@@ -1,6 +1,6 @@
 import * as torii from "@dojoengine/torii-client";
 
-import { ParsedEntity, SchemaType, StandardizedQueryResult } from "./types";
+import { SchemaType, StandardizedQueryResult } from "./types";
 import { parseEntities } from "./parseEntities";
 
 /**
@@ -18,25 +18,19 @@ import { parseEntities } from "./parseEntities";
 export function parseHistoricalEvents<T extends SchemaType>(
     entities: torii.Entities,
     options?: { logging?: boolean }
-): StandardizedQueryResult<T>[] {
+): StandardizedQueryResult<T> {
+    if (options?.logging) {
+        console.log("Raw historical events", entities);
+    }
+    console.log(entities);
     // Events come from torii flagged as "dojo_starter-Moved-idx"
-    let events: torii.Entities[] = [];
+    let events: StandardizedQueryResult<T> = [];
     for (const entityId in entities) {
         const entityData = entities[entityId];
-        const keys = Object.keys(entityData);
+        const keys = orderKeys(Object.keys(entityData));
 
-        //sort keys to preserve order given by torii
-        const sortedKeys = keys.sort((a, b) => {
-            // Extract the last number from each string using regex
-            const getLastNumber = (str: string) => {
-                const match = str.match(/-(\d+)$/);
-                return match ? parseInt(match[1]) : 0;
-            };
-
-            return getLastNumber(a) - getLastNumber(b);
-        });
-
-        for (const model of sortedKeys) {
+        for (const model of keys) {
+            console.log(model);
             const modelData = entityData[model];
             const modelNameSplit = model.split("-");
             modelNameSplit.pop();
@@ -44,9 +38,43 @@ export function parseHistoricalEvents<T extends SchemaType>(
             const modelName =
                 modelNameSplit.length > 1 ? modelNameSplit.join("-") : model;
 
-            events = [...events, { [entityId]: { [modelName]: modelData } }];
+            events.push(
+                ...parseEntities<T>(
+                    { [entityId]: { [modelName]: modelData } },
+                    options
+                )
+            );
         }
     }
+    if (options?.logging) {
+        console.log("Parsed historical events", events);
+    }
 
-    return events.map((e) => parseEntities<T>(e, options));
+    return events;
+}
+
+/**
+ * Torii entities comes in format:
+ * {
+ *    "entityId": {
+ *      "ns-Model-idx": {
+ *       ...toriiData
+ *      }
+ *    }
+ * }
+ *
+ * Object.keys returns keys but is not respecting defined keys order.
+ * Therefore, we need do sort keys before building up final parsedEntities array.
+ */
+export function orderKeys(keys: string[]) {
+    keys.sort((a, b) => {
+        // Extract the last number from each string using regex
+        const getLastNumber = (str: string) => {
+            const match = str.match(/-(\d+)$/);
+            return match ? parseInt(match[1]) : 0;
+        };
+
+        return getLastNumber(a) - getLastNumber(b);
+    });
+    return keys;
 }

@@ -68,7 +68,13 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                     "For subscription, you need to include entity ids"
                 );
             }
-            const events = parseEntities<T>(await client.getEntities(query));
+            const events = historical
+                ? parseHistoricalEvents<T>(
+                      await client.getEventMessages(query, historical)
+                  )
+                : parseEntities<T>(
+                      await client.getEventMessages(query, historical)
+                  );
             return [
                 events,
                 client.onEventMessageUpdated(
