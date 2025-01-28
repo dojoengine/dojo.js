@@ -2,7 +2,11 @@ import { Scene, GameObjects } from "phaser";
 import { DojoContext } from "../dojo/context";
 import { PredeployedAccountsConnector } from "@dojoengine/predeployed-connector";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { ClauseBuilder, ToriiQueryBuilder } from "@dojoengine/sdk";
+import {
+    ClauseBuilder,
+    ParsedEntity,
+    ToriiQueryBuilder,
+} from "@dojoengine/sdk";
 import { addAddressPadding } from "starknet";
 import { SchemaType } from "../typescript/models.gen";
 
@@ -50,9 +54,9 @@ export class MainMenu extends Scene {
                             .includeHashedKeys()
                             .build()
                     );
-                    this.ctx.store.setEntities([
-                        entities[Object.keys(entities)[0]],
-                    ]);
+                    this.ctx.store.setEntities(
+                        entities as ParsedEntity<SchemaType>[]
+                    );
 
                     this.scene.start("Game", { wallet, entityId, entities });
                 });

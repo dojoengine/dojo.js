@@ -29,6 +29,8 @@ export class DojoContext<Schema extends SchemaType> {
 
         // Select only the specific model data for the given entityId
         const entities = this.store.getEntity(entityId.toString());
-        return entities?.models?.[namespace]?.[modelName];
+        return entities?.models?.[namespace]?.[modelName] as
+            | SchemaType[N][M]
+            | undefined;
     }
 }

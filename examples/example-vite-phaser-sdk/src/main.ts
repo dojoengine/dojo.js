@@ -57,7 +57,7 @@ async function main() {
     const context = new DojoContext(sdk, dojoProvider, useDojoStore);
     const game = new Game(config);
     [Boot, Preloader, MainMenu, MainGame, GameOver].map((s) => {
-        game.scene.add(s, new s(context));
+        game.scene.add(s.toString(), new s(context));
     });
     return game;
 }

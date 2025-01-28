@@ -1,10 +1,9 @@
 import { Scene } from "phaser";
-import { DojoContext } from "../dojo/context";
 import { predeployedAccounts } from "@dojoengine/predeployed-connector";
 import { dojoConfig } from "../../dojoConfig";
 
 export class Preloader extends Scene {
-    constructor(private ctx: DojoContext) {
+    constructor() {
         super("Preloader");
     }
 

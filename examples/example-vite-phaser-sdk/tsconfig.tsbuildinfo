@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/vite-env.d.ts","./src/dojo/context.ts","./src/scenes/boot.ts","./src/scenes/game.ts","./src/scenes/gameover.ts","./src/scenes/mainmenu.ts","./src/scenes/preloader.ts","./src/typescript/contracts.gen.ts","./src/typescript/models.gen.ts"],"errors":true,"version":"5.7.2"}

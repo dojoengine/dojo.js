@@ -106,11 +106,11 @@ export const schema: SchemaType = {
         Position: {
             fieldOrder: ["player", "vec"],
             player: "",
-            vec: { fieldOrder: ["x", "y"], x: 0, y: 0 },
+            vec: { x: 0, y: 0 },
         },
         PositionValue: {
             fieldOrder: ["vec"],
-            vec: { fieldOrder: ["x", "y"], x: 0, y: 0 },
+            vec: { x: 0, y: 0 },
         },
         Vec2: {
             fieldOrder: ["x", "y"],

@@ -68,8 +68,12 @@ export class Game extends Scene {
                 )
                 .includeHashedKeys()
                 .build(),
-            ({ data }: { data: ParsedEntity<SchemaType> }) => {
-                this.ctx.store.updateEntity(data[Object.keys(data)[0]]);
+            ({ data }) => {
+                if (data) {
+                    this.ctx.store.updateEntity(
+                        data[0] as ParsedEntity<SchemaType>
+                    );
+                }
             }
         );
     }
@@ -112,47 +116,35 @@ export class Game extends Scene {
                 this.scene.start("MainMenu");
             });
 
-        this.keys = this.input.keyboard!.addKeys("W,A,S,D");
+        this.keys = this.input.keyboard!.addKeys("W,A,S,D") as MoveKeys;
 
-        this.keys.W.on(
-            "down",
-            async (event: typeof Phaser.Input.Keyboard.Events) => {
-                await this.ctx.client.actions.move(
-                    this.account,
-                    new CairoCustomEnum({ Up: "()" })
-                );
-            }
-        );
-        this.keys.S.on(
-            "down",
-            async (event: typeof Phaser.Input.Keyboard.Events) => {
-                await this.ctx.client.actions.move(
-                    this.account,
-                    new CairoCustomEnum({ Down: "()" })
-                );
-            }
-        );
-        this.keys.A.on(
-            "down",
-            async (event: typeof Phaser.Input.Keyboard.Events) => {
-                await this.ctx.client.actions.move(
-                    this.account,
-                    new CairoCustomEnum({ Left: "()" })
-                );
-            }
-        );
-        this.keys.D.on(
-            "down",
-            async (event: typeof Phaser.Input.Keyboard.Events) => {
-                await this.ctx.client.actions.move(
-                    this.account,
-                    new CairoCustomEnum({ Right: "()" })
-                );
-            }
-        );
+        this.keys.W.on("down", async () => {
+            await this.ctx.client.actions.move(
+                this.account,
+                new CairoCustomEnum({ Up: "()" })
+            );
+        });
+        this.keys.S.on("down", async () => {
+            await this.ctx.client.actions.move(
+                this.account,
+                new CairoCustomEnum({ Down: "()" })
+            );
+        });
+        this.keys.A.on("down", async () => {
+            await this.ctx.client.actions.move(
+                this.account,
+                new CairoCustomEnum({ Left: "()" })
+            );
+        });
+        this.keys.D.on("down", async () => {
+            await this.ctx.client.actions.move(
+                this.account,
+                new CairoCustomEnum({ Right: "()" })
+            );
+        });
     }
 
-    async update(time: number, delta: number): Promise<void> {
+    async update(): Promise<void> {
         const position = this.ctx.useModel(
             this.entityId,
             ModelsMapping.Position
