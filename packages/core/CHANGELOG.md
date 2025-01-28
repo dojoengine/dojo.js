@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.13
+
+### Patch Changes
+
+- 4fa350a: fix: createDojoStore have now proper types
+- 257d02a: Fix historical events ordering
+
 ## 1.0.12
 
 ### Patch Changes
