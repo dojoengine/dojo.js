@@ -1,12 +1,11 @@
 import { Scene } from "phaser";
-import { DojoContext } from "../dojo/context";
 
 export class GameOver extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     gameover_text: Phaser.GameObjects.Text;
 
-    constructor(private ctx: DojoContext) {
+    constructor() {
         super("GameOver");
     }
 
@@ -47,8 +46,4 @@ export class GameOver extends Scene {
         //
         // });
     }
-}
-
-function handleButtonClick() {
-    console.log(this);
 }

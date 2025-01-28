@@ -1,12 +1,6 @@
-import { createStore } from "zustand";
+import { type StateCreator, type StoreApi } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import {
-    Draft,
-    Patch,
-    WritableDraft,
-    applyPatches,
-    produceWithPatches,
-} from "immer";
+import { Draft, WritableDraft, applyPatches, produceWithPatches } from "immer";
 
 import { enablePatches } from "immer";
 import { subscribeWithSelector } from "zustand/middleware";
@@ -15,6 +9,17 @@ import { GameState } from ".";
 
 enablePatches();
 
+// Define middleware types
+type ImmerMiddleware = [["zustand/immer", never]];
+type SubscribeMiddleware = [["zustand/subscribeWithSelector", never]];
+type Middlewares = [...SubscribeMiddleware, ...ImmerMiddleware];
+
+type CreateStore = {
+    <T, Mos extends [...Middlewares]>(
+        initializer: StateCreator<T, [], Mos>
+    ): StoreApi<T>;
+};
+
 /**
  * Factory function to create a Zustand store based on a given SchemaType.
  *
@@ -22,9 +27,9 @@ enablePatches();
  * @returns A Zustand hook tailored to the provided schema.
  */
 export function createDojoStoreFactory<T extends SchemaType>(
-    storeCreatorFn: typeof createStore
+    storeCreatorFn: CreateStore
 ) {
-    const useStore = storeCreatorFn<GameState<T>>()(
+    const useStore = storeCreatorFn<GameState<T>, Middlewares>(
         subscribeWithSelector(
             immer((set, get) => ({
                 entities: {},
@@ -130,16 +135,14 @@ export function createDojoStoreFactory<T extends SchemaType>(
                 waitForEntityChange: (entityId, predicate, timeout = 6000) => {
                     return new Promise<ParsedEntity<T> | undefined>(
                         (resolve, reject) => {
-                            const unsubscribe = useStore.subscribe(
-                                (state) => state.entities[entityId],
-                                (entity) => {
-                                    if (predicate(entity)) {
-                                        clearTimeout(timer);
-                                        unsubscribe();
-                                        resolve(entity);
-                                    }
+                            const unsubscribe = useStore.subscribe((state) => {
+                                const entity = state.entities[entityId];
+                                if (predicate(entity)) {
+                                    clearTimeout(timer);
+                                    unsubscribe();
+                                    resolve(entity);
                                 }
-                            );
+                            });
 
                             const timer = setTimeout(() => {
                                 unsubscribe();

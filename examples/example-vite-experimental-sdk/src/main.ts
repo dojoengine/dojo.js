@@ -46,7 +46,7 @@ async function main() {
             .addOrderBy(ModelsMapping.Moves, "remaining", "Asc")
             .includeHashedKeys()
             .build(),
-        ({ data, error }: { data: any; error: Error }) => {
+        ({ data, error }) => {
             if (data) {
                 console.log(data);
             }

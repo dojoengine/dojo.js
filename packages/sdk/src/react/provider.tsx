@@ -2,7 +2,13 @@ import { ReactNode, useContext, createContext } from "react";
 import { SchemaType, SDK } from "../types";
 import { DojoConfig, DojoProvider } from "@dojoengine/core";
 import { createDojoStore } from "./hooks";
-import { DojoStore } from "../state";
+import { GameState } from "../state";
+
+// Define the hook type
+export type DojoStoreHook<T extends SchemaType> = <U>(
+    selector: (state: GameState<T>) => U,
+    equals?: (a: U, b: U) => boolean
+) => U;
 
 /**
  * Interface defining the shape of the Dojo context.
@@ -20,7 +26,7 @@ export interface DojoContextType<
     /** The Dojo provider */
     provider: DojoProvider;
     /** The dojo zustand store */
-    useDojoStore: DojoStore<Schema>;
+    useDojoStore: DojoStoreHook<Schema>;
 }
 
 /**

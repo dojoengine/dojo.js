@@ -1,8 +1,13 @@
 import * as torii from "@dojoengine/torii-client";
-import { SchemaType, SDKConfig } from "../types";
+import { SchemaType, SDKConfig, StandardizedQueryResult } from "../types";
 import { parseEntities } from "../parseEntities";
 import { parseHistoricalEvents } from "../parseHistoricalEvents";
 import { intoEntityKeysClause } from "./convertClauseToEntityKeysClause";
+
+export type ToriiSubscriptionCallback<T extends SchemaType> = (response: {
+    data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
+    error?: Error;
+}) => void;
 
 export async function init<T extends SchemaType>(options: SDKConfig) {
     const client = await torii.createClient(options.client);
@@ -17,7 +22,10 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                 ? parseHistoricalEvents(events)
                 : parseEntities(events);
         },
-        subscribeEntities: async (query: torii.Query, callback: Function) => {
+        subscribeEntities: async (
+            query: torii.Query,
+            callback: ToriiSubscriptionCallback<T>
+        ) => {
             if (
                 query.dont_include_hashed_keys &&
                 query.clause &&
@@ -56,7 +64,7 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
         },
         subscribeEvents: async (
             query: torii.Query,
-            callback: Function,
+            callback: ToriiSubscriptionCallback<T>,
             historical: boolean = false
         ) => {
             if (

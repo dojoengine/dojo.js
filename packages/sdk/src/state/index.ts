@@ -1,4 +1,4 @@
-import { StoreApi, UseBoundStore } from "zustand";
+import { StoreApi } from "zustand";
 
 import { createStore } from "zustand/vanilla";
 import { createDojoStoreFactory } from "./zustand";
@@ -42,9 +42,7 @@ export interface GameState<T extends SchemaType> {
 }
 
 // Define the store type
-export type DojoStore<T extends SchemaType> = UseBoundStore<
-    StoreApi<GameState<T>>
->;
+export type DojoStore<T extends SchemaType> = StoreApi<GameState<T>>;
 
 /**
  * Factory function to create a Vanilla Zustand store based on a given SchemaType.

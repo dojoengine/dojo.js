@@ -1,10 +1,7 @@
 import { Scene } from "phaser";
-import { DojoContext } from "../dojo/context";
-import { predeployedAccounts } from "../../../../packages/predeployed-connector/dist";
-import { dojoConfig } from "../../dojoConfig";
 
 export class Boot extends Scene {
-    constructor(private ctx: DojoContext) {
+    constructor() {
         super("Boot");
     }
 

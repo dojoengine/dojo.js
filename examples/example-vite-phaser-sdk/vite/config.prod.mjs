@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import topLevelAwait from "vite-plugin-top-level-await";
 
 import wasm from "vite-plugin-wasm";
 
@@ -44,5 +45,5 @@ export default defineConfig({
     server: {
         port: 5173,
     },
-    plugins: [phasermsg(), wasm()],
+    plugins: [phasermsg(), wasm(), topLevelAwait()],
 });
