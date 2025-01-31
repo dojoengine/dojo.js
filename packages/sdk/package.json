@@ -31,6 +31,11 @@
             "types": "./dist/src/experimental.d.ts",
             "import": "./dist/src/experimental.js",
             "require": "./dist/src/experimental.cjs"
+        },
+        "./types": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.d.ts",
+            "require": "./dist/index.d.ts"
         }
     },
     "type": "module",
