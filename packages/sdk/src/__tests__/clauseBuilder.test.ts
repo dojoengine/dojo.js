@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { ClauseBuilder } from "../clauseBuilder";
+import {
+    AndComposeClause,
+    ClauseBuilder,
+    MemberClause,
+    OrComposeClause,
+} from "../clauseBuilder";
 import {
     ComparisonOperator,
     LogicalOperator,
@@ -207,5 +212,149 @@ describe("ClauseBuilder", () => {
                 },
             });
         });
+    });
+
+    it("should handle complex composition", () => {
+        const clause = new ClauseBuilder()
+            .compose()
+            .and([
+                new ClauseBuilder()
+                    .compose()
+                    .and([
+                        new ClauseBuilder().where(
+                            "world-player",
+                            "score",
+                            "Gt",
+                            100
+                        ),
+                        new ClauseBuilder()
+                            .compose()
+                            .or([
+                                new ClauseBuilder().where(
+                                    "world-player",
+                                    "name",
+                                    "Eq",
+                                    "Bob"
+                                ),
+                                new ClauseBuilder().where(
+                                    "world-player",
+                                    "name",
+                                    "Eq",
+                                    "Alice"
+                                ),
+                            ]),
+                    ]),
+                new ClauseBuilder().where("world-item", "durability", "Lt", 50),
+            ])
+            .build();
+
+        expect(clause).toEqual({
+            Composite: {
+                operator: "And",
+                clauses: [
+                    {
+                        Composite: {
+                            operator: "And",
+                            clauses: [
+                                {
+                                    Member: {
+                                        model: "world-player",
+                                        member: "score",
+                                        operator: "Gt" as ComparisonOperator,
+                                        value: { Primitive: { U32: 100 } },
+                                    },
+                                },
+
+                                {
+                                    Composite: {
+                                        operator: "Or",
+                                        clauses: [
+                                            {
+                                                Member: {
+                                                    model: "world-player",
+                                                    member: "name",
+                                                    operator:
+                                                        "Eq" as ComparisonOperator,
+                                                    value: {
+                                                        String: "Bob",
+                                                    },
+                                                },
+                                            },
+
+                                            {
+                                                Member: {
+                                                    model: "world-player",
+                                                    member: "name",
+                                                    operator:
+                                                        "Eq" as ComparisonOperator,
+                                                    value: {
+                                                        String: "Alice",
+                                                    },
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        Member: {
+                            model: "world-item",
+                            member: "durability",
+                            operator: "Lt" as ComparisonOperator,
+                            value: { Primitive: { U32: 50 } },
+                        },
+                    },
+                ],
+            },
+        });
+    });
+    it("should be nice to use", () => {
+        const clause = new ClauseBuilder()
+            .compose()
+            .and([
+                new ClauseBuilder()
+                    .compose()
+                    .and([
+                        new ClauseBuilder().where(
+                            "world-player",
+                            "score",
+                            "Gt",
+                            100
+                        ),
+                        new ClauseBuilder()
+                            .compose()
+                            .or([
+                                new ClauseBuilder().where(
+                                    "world-player",
+                                    "name",
+                                    "Eq",
+                                    "Bob"
+                                ),
+                                new ClauseBuilder().where(
+                                    "world-player",
+                                    "name",
+                                    "Eq",
+                                    "Alice"
+                                ),
+                            ]),
+                    ]),
+                new ClauseBuilder().where("world-item", "durability", "Lt", 50),
+            ])
+            .build();
+
+        const nicerClause = AndComposeClause([
+            AndComposeClause([
+                MemberClause("world-player", "score", "Gt", 100),
+                OrComposeClause([
+                    MemberClause("world-player", "name", "Eq", "Bob"),
+                    MemberClause("world-player", "name", "Eq", "Alice"),
+                ]),
+            ]),
+            MemberClause("world-item", "durability", "Lt", 50),
+        ]).build();
+
+        expect(clause).toEqual(nicerClause);
     });
 });
