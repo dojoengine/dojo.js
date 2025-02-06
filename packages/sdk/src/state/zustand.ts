@@ -1,4 +1,4 @@
-import { type StateCreator, type StoreApi } from "zustand";
+import { UseBoundStore, type StateCreator, type StoreApi } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { Draft, WritableDraft, applyPatches, produceWithPatches } from "immer";
 
