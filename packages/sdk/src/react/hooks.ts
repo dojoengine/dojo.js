@@ -2,8 +2,9 @@ import { useContext } from "react";
 import { BigNumberish } from "starknet";
 import { SchemaType } from "../types";
 import { DojoContext, DojoContextType } from "./provider";
-import { create } from "zustand";
+import { create, StoreApi, UseBoundStore } from "zustand";
 import { createDojoStoreFactory } from "../state/zustand";
+import { GameState } from "../state";
 
 /**
  * Factory function to create a React Zustand store based on a given SchemaType.
@@ -12,7 +13,10 @@ import { createDojoStoreFactory } from "../state/zustand";
  * @returns A Zustand hook tailored to the provided schema.
  */
 export function createDojoStore<T extends SchemaType>() {
-    return createDojoStoreFactory<T>(create);
+    // hacktually until I find a proper type input to createDojoStoreFactory
+    return createDojoStoreFactory<T>(create) as unknown as UseBoundStore<
+        StoreApi<GameState<T>>
+    >;
 }
 
 /**
