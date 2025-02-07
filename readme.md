@@ -39,17 +39,17 @@ npx @dojoengine/create-dojo start -t example-vite-react-sdk
 
     ```bash
     cd dojo-starter
-    katana --disable-fee --allowed-origins "*"
+    katana --dev --dev.no-fee --http.cors_origins "*"
     ```
 
 2. **Terminal 2: Build and migrate the Dojo starter**
 
     ```bash
     cd dojo-starter
-    sozo build && sozo migrate apply
+    sozo build && sozo migrate
 
     # Start Torii indexer - world address can be found in the print out of migrate
-    torii --world <WORLD_ADDRESS> --allowed-origins "*"
+    torii --world <WORLD_ADDRESS> --http.cors_origins "*"
     ```
 
 3. **Terminal 3: Launch the frontend application**
@@ -209,7 +209,7 @@ To run the examples, you'll need to set up three terminal windows:
 
 2. Start Katana (local Starknet devnet) with fee disabled and all origins allowed:
     ```bash
-    katana --disable-fee --allowed-origins "*"
+    katana --dev.no-fee --http.cors_origins "*"
     ```
 
 **Terminal 2**: Build, migrate, and run Torii
@@ -230,7 +230,7 @@ To run the examples, you'll need to set up three terminal windows:
 3. Run Torii (indexer) with the world address and allowed origins:
 
     ```bash
-    torii --world <WORLD_ADDRESS> --allowed-origins "*"
+    torii --world <WORLD_ADDRESS> --http.cors_origins '*'
     ```
 
     Note: The world address may change. Ensure you're using the correct address from your migration output.
