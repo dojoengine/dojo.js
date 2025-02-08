@@ -2,6 +2,7 @@
 
 import * as torii from "@dojoengine/torii-client";
 import { Account, StarknetDomain, TypedData } from "starknet";
+import { ToriiQueryBuilder } from "./toriiQueryBuilder";
 
 /**
  * Utility type to ensure at least one property is present
@@ -250,6 +251,18 @@ export type UnionOfModelData<T extends SchemaType> = {
     }[keyof T[K]];
 }[keyof T];
 
+export type ToriiResponse<
+    T extends SchemaType,
+    Historical extends boolean,
+> = Historical extends true
+    ? StandardizedQueryResult<T>[]
+    : StandardizedQueryResult<T>;
+
+export type SubscribeResponse<
+    T extends SchemaType,
+    Historical extends boolean,
+> = [ToriiResponse<T, Historical>, torii.Subscription];
+
 /**
  * SDK interface for interacting with the DojoEngine.
  *
@@ -265,55 +278,61 @@ export interface SDK<T extends SchemaType> {
      * Subscribes to entity updates based on the provided query and invokes the callback with the updated data.
      *
      * @template T - The schema type.
-     * @param {SubscribeParams<T>} params - Parameters object
-     * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
+     * @param {SubscribeParams<T, false>} params - Parameters object
+     * @returns {Promise<SubscribeResponse<T, false>>} - A promise that resolves to a Torii subscription.
      */
     subscribeEntityQuery: (
-        params: SubscribeParams<T>
-    ) => Promise<torii.Subscription>;
+        params: SubscribeParams<T, false>
+    ) => Promise<SubscribeResponse<T, false>>;
 
     /**
      * Subscribes to event messages based on the provided query and invokes the callback with the updated data.
      *
      * @template T - The schema type.
-     * @param {SubscribeParams<T>} params - Parameters object
+     * @template Historical - Wether to include historical events or not.
+     * @param {SubscribeParams<T, Historical>} params - Parameters object
      * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
-     * @returns {Promise<torii.Subscription>} - A promise that resolves to a Torii subscription.
+     * @returns {Promise<SubscribeResponse<T, Historical>>} - A promise that resolves to a Torii subscription.
      */
-    subscribeEventQuery: (
-        params: SubscribeParams<T>
-    ) => Promise<torii.Subscription>;
+    subscribeEventQuery: <Historical extends boolean = false>(
+        params: SubscribeParams<T, Historical>
+    ) => Promise<SubscribeResponse<T, Historical>>;
 
     /**
      * Fetches entities from the Torii client based on the provided query.
      *
      * @template T - The schema type.
-     * @param {GetParams<T>} params - Parameters object
-     * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
+     * @param {GetParams<T, false>} params - Parameters object
+     * @returns {Promise<ToriiResponse<T, false>>} - A promise that resolves to the standardized query result.
      */
-    getEntities: (params: GetParams<T>) => Promise<StandardizedQueryResult<T>>;
+    getEntities: (params: GetParams<T>) => Promise<ToriiResponse<T, false>>;
 
     /**
      * Fetches event messages from the Torii client based on the provided query.
      *
      * @template T - The schema type.
-     * @param {GetParams<T>} params - Parameters object
-     * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
+     * @template Historical - Wether to include historical events or not.
+     * @param {GetParams<T, Historical>} params - Parameters object
+     * @returns {Promise<ToriiResponse<T, Historical>>} - A promise that resolves to the standardized query result.
      */
-    getEventMessages: (
-        params: GetParams<T>
-    ) => Promise<StandardizedQueryResult<T> | StandardizedQueryResult<T>[]>;
+    getEventMessages: <Historical extends boolean = false>(
+        params: GetParams<T, Historical>
+    ) => Promise<ToriiResponse<T, Historical>>;
+
     generateTypedData: <M extends UnionOfModelData<T>>(
         primaryType: string,
         message: M,
         domain?: StarknetDomain
     ) => TypedData;
+
     sendMessage: (data: TypedData, account: Account) => Promise<void>;
+
     /**
      * @param {string[]} contract_addresses
      * @returns {Promise<torii.Tokens>}
      */
     getTokens(contract_addresses: string[]): Promise<torii.Tokens>;
+
     /**
      * @param {string[]} account_addresses
      * @param {string[]} contract_addresses
@@ -377,6 +396,11 @@ export interface SDKConfig {
      * It typically includes details like the chain ID, name, and version.
      */
     domain: StarknetDomain;
+    /**
+     * Wether to include logger in queries and subscdription.
+     * Could be useful while debugging
+     */
+    withLogger?: boolean;
 }
 
 export interface SDKFunctionOptions {
@@ -384,42 +408,27 @@ export interface SDKFunctionOptions {
     logging?: boolean;
 }
 
-export interface SubscribeParams<T extends SchemaType> {
+export interface SubscribeParams<
+    T extends SchemaType,
+    Historical extends boolean = false,
+> {
     // Query object used to filter entities.
-    query: SubscriptionQueryType<T>;
+    query: ToriiQueryBuilder<T>;
     // The callback function to handle the response.
     callback: (response: {
-        data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
+        data?: ToriiResponse<T, Historical>;
         error?: Error;
     }) => void;
-    // Optional settings.
-    options?: SDKFunctionOptions;
     // historical events
-    historical?: boolean;
+    historical?: Historical;
 }
 
-export interface GetParams<T extends SchemaType> {
+export interface GetParams<
+    T extends SchemaType,
+    Historical extends boolean = false,
+> {
     // The query object used to filter entities.
-    query: QueryType<T>;
-    // The callback function to handle the response.
-    callback: (response: {
-        data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
-        error?: Error;
-    }) => void;
-    // The order to sort the entities by.
-    orderBy?: torii.OrderBy[];
-    // The models to whitelist for fetching. Leave this empty to fetch all models.
-    entityModels?: string[];
-    // The maximum number of entities to fetch per request. Default is 100.
-    limit?: number;
-    // The offset to start fetching entities from. Default is 0.
-    offset?: number;
-    // Optional settings.
-    options?: SDKFunctionOptions;
+    query: ToriiQueryBuilder<T>;
     // historical events
-    historical?: boolean;
-    // hashed keys on events
-    dontIncludeHashedKeys?: boolean;
-    // entity updated after
-    entityUpdatedAfter?: number;
+    historical?: Historical;
 }

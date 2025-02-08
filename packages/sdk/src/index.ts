@@ -1,11 +1,19 @@
 import * as torii from "@dojoengine/torii-client";
 import { Account, Signature, StarknetDomain, TypedData } from "starknet";
 
-import { getEntities } from "./getEntities";
-import { getEventMessages } from "./getEventMessages";
-import { subscribeEntityQuery } from "./subscribeEntityQuery";
-import { subscribeEventQuery } from "./subscribeEventQuery";
-import { SchemaType, SDK, SDKConfig, UnionOfModelData } from "./types";
+import {
+    GetParams,
+    SchemaType,
+    SDK,
+    SDKConfig,
+    SubscribeParams,
+    SubscribeResponse,
+    ToriiResponse,
+    UnionOfModelData,
+} from "./types";
+import { intoEntityKeysClause } from "./convertClauseToEntityKeysClause";
+import { parseEntities } from "./parseEntities";
+import { parseHistoricalEvents } from "./parseHistoricalEvents";
 
 export * from "./types";
 export * from "./queryBuilder";
@@ -29,12 +37,9 @@ export async function createClient(
  *
  * @template T - The schema type.
  * @param {torii.ClientConfig} options - The configuration object for the Torii client.
- * @param {T} schema - The schema object defining the structure of the data.
- * @returns {Promise<SDK<T>>} - A promise that resolves to the initialized SDK.
  */
 export async function init<T extends SchemaType>(
-    options: SDKConfig,
-    schema: T
+    options: SDKConfig
 ): Promise<SDK<T>> {
     const client = await createClient(options.client);
 
@@ -43,88 +48,146 @@ export async function init<T extends SchemaType>(
         /**
          * Subscribes to entity queries.
          *
-         * @param {SubscribeParams<T>} params - Parameters object
-         * @returns {Promise<void>} - A promise that resolves when the subscription is set up.
+         * @param {SubscribeParams<T, false>} params - Parameters object
+         * @returns {Promise<SubscribeResponse<T, false>>} - A promise that resolves when the subscription is set up.
          */
-        subscribeEntityQuery: ({ query, callback, options }) =>
-            subscribeEntityQuery({ client, schema, query, callback, options }),
+        subscribeEntityQuery: async ({ query, callback }) => {
+            const q = query.build();
+
+            if (
+                q.dont_include_hashed_keys &&
+                q.clause &&
+                !Object.hasOwn(q.clause, "Keys")
+            ) {
+                throw new Error(
+                    "For subscription, you need to include entity ids"
+                );
+            }
+            const entities = parseEntities<T>(await client.getEntities(q));
+            return [
+                entities,
+                client.onEntityUpdated(
+                    intoEntityKeysClause<T>(q.clause, entities),
+                    (entityId: string, entityData: any) => {
+                        try {
+                            if (callback) {
+                                const parsedData = parseEntities<T>({
+                                    [entityId]: entityData,
+                                });
+                                callback({ data: parsedData });
+                            }
+                        } catch (error) {
+                            if (callback) {
+                                callback({
+                                    error:
+                                        error instanceof Error
+                                            ? error
+                                            : new Error(String(error)),
+                                });
+                            }
+                        }
+                    }
+                ),
+            ];
+        },
         /**
          * Subscribes to event queries.
          *
-         * @param {SubscribeParams<T>} params - Parameters object
-         * @returns {Promise<void>} - A promise that resolves when the subscription is set up.
+         * @param {SubscribeParams<T, Historical>} params - Parameters object
+         * @returns {Promise<SubscribeResponse<T, Historical>>} - A promise that resolves when the subscription is set up.
          */
-        subscribeEventQuery: ({ query, callback, options, historical }) =>
-            subscribeEventQuery({
-                client,
-                schema,
-                query,
-                callback,
-                options,
-                historical,
-            }),
+        subscribeEventQuery: async <Historical extends boolean>({
+            query,
+            callback,
+            historical = false as Historical,
+        }: SubscribeParams<T, Historical>): Promise<
+            SubscribeResponse<T, Historical>
+        > => {
+            const q = query.build();
+            if (
+                q.dont_include_hashed_keys &&
+                q.clause &&
+                !Object.hasOwn(q.clause, "Keys")
+            ) {
+                throw new Error(
+                    "For subscription, you need to include entity ids"
+                );
+            }
+            const events = (
+                historical
+                    ? parseHistoricalEvents<T>(
+                          await client.getEventMessages(q, historical)
+                      )
+                    : parseEntities<T>(
+                          await client.getEventMessages(q, historical)
+                      )
+            ) as ToriiResponse<T, Historical>;
+            return [
+                events,
+                client.onEventMessageUpdated(
+                    // @ts-expect-error will fix
+                    intoEntityKeysClause<T>(q.clause, events),
+                    historical,
+                    (entityId: string, entityData: any) => {
+                        try {
+                            if (callback) {
+                                const data = { [entityId]: entityData };
+                                const parsedData = historical
+                                    ? parseHistoricalEvents<T>(data)
+                                    : parseEntities<T>(data);
+                                callback({
+                                    data: parsedData as ToriiResponse<
+                                        T,
+                                        Historical
+                                    >,
+                                });
+                            }
+                        } catch (error) {
+                            if (callback) {
+                                callback({
+                                    error:
+                                        error instanceof Error
+                                            ? error
+                                            : new Error(String(error)),
+                                });
+                            }
+                        }
+                    }
+                ),
+            ];
+        },
         /**
          * Fetches entities based on the provided query.
          *
-         * @param {GetParams<T>} params - Parameters object
-         * @returns {Promise<StandardizedQueryResult<T>>} - A promise that resolves to the standardized query result.
+         * @param {GetParams<T, false>} params - Parameters object
+         * @returns {Promise<ToriiResponse<T,false>>} - A promise that resolves to the standardized query result.
          */
-        getEntities: ({
-            query,
-            callback,
-            orderBy,
-            entityModels,
-            limit,
-            offset,
-            options,
-            dontIncludeHashedKeys,
-            entityUpdatedAfter,
-        }) =>
-            getEntities({
-                client,
-                schema,
-                query,
-                callback,
-                orderBy,
-                entityModels,
-                limit,
-                offset,
-                options,
-                dontIncludeHashedKeys,
-                entityUpdatedAfter,
-            }),
+        getEntities: async ({ query }) => {
+            const q = query.build();
+            return parseEntities(await client.getEntities(q));
+        },
         /**
          * Fetches event messages based on the provided query.
          *
-         * @param {GetParams<T>} params - Parameters object
-         * @returns {Promise<StandardizedQueryResult<T> | StandardizedQueryResult<T>[]>} - A promise that resolves to the standardized query result.
+         * @param {GetParams<T, Historical>} params - Parameters object
+         * @returns {Promise<ToriiResponse<T, Historical>} - A promise that resolves to the standardized query result.
          */
-        getEventMessages: ({
+        getEventMessages: async <Historical extends boolean>({
             query,
-            callback,
-            orderBy,
-            entityModels,
-            limit,
-            offset,
-            options,
             historical,
-            dontIncludeHashedKeys,
-            entityUpdatedAfter,
-        }) =>
-            getEventMessages({
-                client,
-                schema,
-                query,
-                callback,
-                orderBy,
-                entityModels,
-                limit,
-                offset,
-                options,
-                historical,
-                dontIncludeHashedKeys,
-                entityUpdatedAfter,
-            }),
+        }: GetParams<T, Historical>): Promise<ToriiResponse<T, Historical>> => {
+            const q = query.build();
+
+            const events = await client.getEventMessages(
+                q,
+                historical ? historical : false
+            );
+            return (
+                historical
+                    ? parseHistoricalEvents(events)
+                    : parseEntities(events)
+            ) as ToriiResponse<T, Historical>;
+        },
 
         /**
          * Generates typed data for any user-defined message.

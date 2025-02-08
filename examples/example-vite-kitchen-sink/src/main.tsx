@@ -10,28 +10,25 @@ import { init } from "@dojoengine/sdk";
 import { DojoSdkProvider } from "@dojoengine/sdk/react";
 import { dojoConfig } from "../dojoConfig";
 import { setupWorld } from "./typescript/contracts.gen";
-import { SchemaType, schema } from "./typescript/models.gen";
+import { SchemaType } from "./typescript/models.gen";
 
 import { env, getRpcUrl } from "@/env";
 
 async function main() {
-    const sdk = await init<SchemaType>(
-        {
-            client: {
-                rpcUrl: getRpcUrl(),
-                toriiUrl: env.VITE_TORII_URL,
-                relayUrl: env.VITE_RELAY_URL,
-                worldAddress: dojoConfig.manifest.world.address,
-            },
-            domain: {
-                name: "OnChainDash",
-                revision: "1",
-                chainId: "1",
-                version: "1",
-            },
+    const sdk = await init<SchemaType>({
+        client: {
+            rpcUrl: getRpcUrl(),
+            toriiUrl: env.VITE_TORII_URL,
+            relayUrl: env.VITE_RELAY_URL,
+            worldAddress: dojoConfig.manifest.world.address,
         },
-        schema
-    );
+        domain: {
+            name: "OnChainDash",
+            revision: "1",
+            chainId: "1",
+            version: "1",
+        },
+    });
 
     createRoot(document.getElementById("root")!).render(
         <StrictMode>

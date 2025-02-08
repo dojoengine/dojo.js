@@ -1,7 +1,13 @@
 // EXAMPLE FOR NOW
 
 import * as torii from "@dojoengine/torii-client";
-import { init, QueryBuilder } from "..";
+import {
+    AndComposeClause,
+    init,
+    MemberClause,
+    QueryBuilder,
+    ToriiQueryBuilder,
+} from "..";
 import { SchemaType } from "../types";
 
 export interface PlayerModel {
@@ -71,23 +77,20 @@ export const schema: MockSchemaType = {
 };
 
 async function exampleUsage() {
-    const db = await init<MockSchemaType>(
-        {
-            client: {
-                rpcUrl: "your-rpc-url",
-                toriiUrl: "your-torii-url",
-                relayUrl: "your-relay-url",
-                worldAddress: "your-world-address",
-            },
-            domain: {
-                name: "Example",
-                version: "1.0",
-                chainId: "your-chain-id",
-                revision: "1",
-            },
+    const db = await init<MockSchemaType>({
+        client: {
+            rpcUrl: "your-rpc-url",
+            toriiUrl: "your-torii-url",
+            relayUrl: "your-relay-url",
+            worldAddress: "your-world-address",
         },
-        schema
-    );
+        domain: {
+            name: "Example",
+            version: "1.0",
+            chainId: "your-chain-id",
+            revision: "1",
+        },
+    });
 
     // Correct usage: message conforms to the Player model
     const playerMessage = {
@@ -111,12 +114,13 @@ async function exampleUsage() {
         invalidMessage // TypeScript Error
     );
 
-    const query = new QueryBuilder<MockSchemaType>().namespace("world", (n) =>
-        n.entity("player", (e) => e.eq("name", "Alice"))
-    );
-
     db.subscribeEntityQuery({
-        query: query.build(),
+        // .includeHashedKeys to use Torii hashed keys that are used to subscribe to entity changes
+        query: new ToriiQueryBuilder()
+            .withClause(
+                MemberClause("world-player", "name", "Eq", "Alice").build()
+            )
+            .includeHashedKeys(),
         callback: (resp) => {
             if (resp.error) {
                 console.error(
@@ -135,30 +139,16 @@ async function exampleUsage() {
     });
     // Example usage of getEntities with where clause
     try {
-        const eq = new QueryBuilder<MockSchemaType>().namespace("world", (n) =>
-            n
-                .entity("item", (e) =>
-                    e.eq("type", "sword").lt("durability", 5)
-                )
-                .entity("game", (e) => e.eq("status", "completed"))
-        );
         const entities = await db.getEntities({
-            query: eq.build(),
-            callback: (resp) => {
-                if (resp.error) {
-                    console.error(
-                        "Error querying completed important todos:",
-                        resp.error.message
-                    );
-                    return;
-                }
-                if (resp.data) {
-                    console.log(
-                        "Completed important todos:",
-                        resp.data.map((a) => a.models)
-                    );
-                }
-            },
+            query: new ToriiQueryBuilder().withClause(
+                AndComposeClause([
+                    AndComposeClause([
+                        MemberClause("world-item", "type", "Eq", "sword"),
+                        MemberClause("world-item", "durability", "Lt", 5),
+                    ]),
+                    MemberClause("world-game", "status", "Eq", "completed"),
+                ]).build()
+            ),
         });
         console.log("Queried entities:", entities);
     } catch (error) {

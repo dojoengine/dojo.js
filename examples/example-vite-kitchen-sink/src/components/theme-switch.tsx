@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { useAccount } from "@starknet-react/core";
-import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
+import {
+    KeysClause,
+    ParsedEntity,
+    SDK,
+    ToriiQueryBuilder,
+} from "@dojoengine/sdk";
 import { SchemaType } from "@/typescript/models.gen";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,7 +51,7 @@ export default function ThemeSwitchButton() {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [entityId, setEntityId] = useState<string | null>(null);
-    const { address, account } = useAccount();
+    const { account } = useAccount();
     const [sub, setSub] = useState<Subscription | null>(null);
     const { sdk: db, client: actions } = useDojoSDK<
         typeof setupWorld,
@@ -69,45 +74,17 @@ export default function ThemeSwitchButton() {
     );
 
     useEffect(() => {
-        async function getEntity(db: SDK<SchemaType>): Promise<AvailableTheme> {
-            const entity = await db.getEntities({
-                query: new QueryBuilder<SchemaType>()
-                    .namespace("onchain_dash", (n) =>
-                        n.entity("Theme", (e) => e.eq("theme_key", 9999999))
-                    )
-                    .build(),
-                callback: () => {},
-            });
-            const counter = entity.pop() as ParsedEntity<SchemaType>;
-            if (!counter) {
-                return AvailableTheme.Light;
-            }
-
-            const theme = counter.models?.onchain_dash?.Theme?.value?.unwrap();
-            setEntityId(counter.entityId);
-            if (undefined === theme) {
-                return AvailableTheme.Light;
-            }
-            // @ts-expect-error this resooves to enum value
-            return AvailableTheme[theme];
-        }
-        if (db) {
-            getEntity(db)
-                .then((th: AvailableTheme) =>
-                    setTheme({
-                        current: AvailableThemeClassMap[th],
-                        next: AvailableThemeClassMap[th],
-                    })
-                )
-                .catch(console.error);
-        }
-    }, [address, db, setEntityId]);
-
-    useEffect(() => {
         async function subscribeToEntityUpdates(db: SDK<SchemaType>) {
-            const sub = await db.subscribeEntityQuery({
-                // @ts-expect-error we should be able to use ['entityId'] here
-                query: [entityId],
+            const [initialTheme, sub] = await db.subscribeEntityQuery({
+                query: new ToriiQueryBuilder()
+                    .withClause(
+                        KeysClause(
+                            ["onchain_dash-Theme"],
+                            ["9999999"],
+                            "FixedLen"
+                        ).build()
+                    )
+                    .includeHashedKeys(),
                 callback: ({ data, error }) => {
                     if (data) {
                         const entity = data.pop() as ParsedEntity<SchemaType>;
@@ -141,8 +118,25 @@ export default function ThemeSwitchButton() {
                 },
             });
             setSub(sub);
+
+            const theme =
+                initialTheme[0].models?.onchain_dash?.Theme?.value?.unwrap();
+            setEntityId(initialTheme[0].entityId);
+            let th = null;
+            if (undefined === theme) {
+                th = AvailableTheme.Light;
+            } else {
+                th = AvailableTheme[theme];
+            }
+
+            setTheme({
+                // @ts-expect-error this is ok
+                current: AvailableThemeClassMap[th] as string,
+                // @ts-expect-error this is ok
+                next: AvailableThemeClassMap[th] as string,
+            });
         }
-        if (entityId && db && sub === null) {
+        if (db && sub === null) {
             subscribeToEntityUpdates(db).then().catch(console.error);
         }
     }, [entityId, db, sub, theme]);

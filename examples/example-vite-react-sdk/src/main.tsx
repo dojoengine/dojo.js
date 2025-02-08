@@ -6,7 +6,7 @@ import App from "./App.tsx";
 // Dojo related imports
 import { init } from "@dojoengine/sdk";
 import { DojoSdkProvider } from "@dojoengine/sdk/react";
-import { SchemaType, schema } from "./typescript/models.gen.ts";
+import { SchemaType } from "./typescript/models.gen.ts";
 import { setupWorld } from "./typescript/contracts.gen.ts";
 
 import "./index.css";
@@ -20,23 +20,20 @@ import StarknetProvider from "./starknet-provider.tsx";
  * @throws {Error} If initialization fails
  */
 async function main() {
-    const sdk = await init<SchemaType>(
-        {
-            client: {
-                rpcUrl: dojoConfig.rpcUrl,
-                toriiUrl: dojoConfig.toriiUrl,
-                relayUrl: dojoConfig.relayUrl,
-                worldAddress: dojoConfig.manifest.world.address,
-            },
-            domain: {
-                name: "WORLD_NAME",
-                version: "1.0",
-                chainId: "KATANA",
-                revision: "1",
-            },
+    const sdk = await init<SchemaType>({
+        client: {
+            rpcUrl: dojoConfig.rpcUrl,
+            toriiUrl: dojoConfig.toriiUrl,
+            relayUrl: dojoConfig.relayUrl,
+            worldAddress: dojoConfig.manifest.world.address,
         },
-        schema
-    );
+        domain: {
+            name: "WORLD_NAME",
+            version: "1.0",
+            chainId: "KATANA",
+            revision: "1",
+        },
+    });
 
     createRoot(document.getElementById("root")!).render(
         <StrictMode>

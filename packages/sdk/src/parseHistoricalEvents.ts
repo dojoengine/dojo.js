@@ -22,7 +22,6 @@ export function parseHistoricalEvents<T extends SchemaType>(
     if (options?.logging) {
         console.log("Raw historical events", entities);
     }
-    console.log(entities);
     // Events come from torii flagged as "dojo_starter-Moved-idx"
     let events: StandardizedQueryResult<T> = [];
     for (const entityId in entities) {
@@ -30,7 +29,6 @@ export function parseHistoricalEvents<T extends SchemaType>(
         const keys = orderKeys(Object.keys(entityData));
 
         for (const model of keys) {
-            console.log(model);
             const modelData = entityData[model];
             const modelNameSplit = model.split("-");
             modelNameSplit.pop();
