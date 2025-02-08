@@ -17,6 +17,7 @@ examples=(
   "examples/example-vite-react-sql"
   "examples/example-vite-experimental-sdk"
   "examples/example-vite-phaser-sdk"
+  "examples/example-vite-grpc-playground"
 )
 
 # Iterate over each example directory and run the build command
