@@ -1,5 +1,21 @@
 # Change Log
 
+## 1.1.0
+
+### Minor Changes
+
+- 27d0342: Default to ToriiQueryBuilder for queries with Clause
+
+### Patch Changes
+
+- 395e450: fix: createStore now fit to either vanilla or react store
+- d030ace: fix: Add nested query test to match book + syntactic sugar
+- Updated dependencies [395e450]
+- Updated dependencies [d030ace]
+- Updated dependencies [27d0342]
+    - @dojoengine/core@1.1.0
+    - @dojoengine/torii-client@1.1.0
+
 ## 1.0.13
 
 ### Patch Changes

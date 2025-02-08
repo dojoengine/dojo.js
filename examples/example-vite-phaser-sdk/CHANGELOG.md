@@ -1,5 +1,23 @@
 # template-vite-ts
 
+## 1.4.0
+
+### Minor Changes
+
+- 27d0342: Default to ToriiQueryBuilder for queries with Clause
+
+### Patch Changes
+
+- 395e450: fix: createStore now fit to either vanilla or react store
+- Updated dependencies [395e450]
+- Updated dependencies [d030ace]
+- Updated dependencies [27d0342]
+    - @dojoengine/sdk@1.1.0
+    - @dojoengine/core@1.1.0
+    - @dojoengine/predeployed-connector@1.1.0
+    - @dojoengine/torii-client@1.1.0
+    - @dojoengine/utils@1.1.0
+
 ## 1.3.4
 
 ### Patch Changes
