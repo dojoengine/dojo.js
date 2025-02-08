@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from "react";
 
-import { ParsedEntity, QueryBuilder } from "@dojoengine/sdk";
+import { KeysClause, ParsedEntity, ToriiQueryBuilder } from "@dojoengine/sdk";
 import { useDojoSDK } from "@dojoengine/sdk/react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { SchemaType } from "@/typescript/models.gen";
+import { ModelsMapping, SchemaType } from "@/typescript/models.gen";
 import { addAddressPadding } from "starknet";
 
 export function usePlayerActions(address: string | undefined) {
@@ -21,18 +21,16 @@ export function usePlayerActions(address: string | undefined) {
         let unsubscribe: (() => void) | undefined;
 
         const subscribe = async (address: string) => {
-            const subscription = await sdk.subscribeEntityQuery({
-                query: new QueryBuilder<SchemaType>()
-                    .namespace("dojo_starter", (n) =>
-                        n
-                            .entity("Moves", (e) =>
-                                e.eq("player", addAddressPadding(address))
-                            )
-                            .entity("Position", (e) =>
-                                e.is("player", addAddressPadding(address))
-                            )
+            const [entities, subscription] = await sdk.subscribeEntityQuery({
+                query: new ToriiQueryBuilder()
+                    .withClause(
+                        KeysClause(
+                            [ModelsMapping.Moves, ModelsMapping.Position],
+                            [addAddressPadding(address)],
+                            "VariableLen"
+                        ).build()
                     )
-                    .build(),
+                    .includeHashedKeys(),
                 callback: ({ error, data }) => {
                     if (error) {
                         console.error("Error setting up entity sync:", error);
@@ -44,6 +42,7 @@ export function usePlayerActions(address: string | undefined) {
                     }
                 },
             });
+            state.setEntities(entities);
 
             unsubscribe = () => subscription.cancel();
         };
@@ -57,42 +56,6 @@ export function usePlayerActions(address: string | undefined) {
                 unsubscribe();
             }
         };
-    }, [sdk, address]);
-
-    useEffect(() => {
-        const fetchEntities = async (address: string) => {
-            try {
-                await sdk.getEntities({
-                    query: new QueryBuilder<SchemaType>()
-                        .namespace("dojo_starter", (n) =>
-                            n.entity("Moves", (e) =>
-                                e.eq("player", addAddressPadding(address))
-                            )
-                        )
-                        .build(),
-                    callback: (resp) => {
-                        if (resp.error) {
-                            console.error(
-                                "resp.error.message:",
-                                resp.error.message
-                            );
-                            return;
-                        }
-                        if (resp.data) {
-                            state.setEntities(
-                                resp.data as ParsedEntity<SchemaType>[]
-                            );
-                        }
-                    },
-                });
-            } catch (error) {
-                console.error("Error querying entities:", error);
-            }
-        };
-
-        if (address) {
-            fetchEntities(address);
-        }
     }, [sdk, address]);
 
     return entityId;

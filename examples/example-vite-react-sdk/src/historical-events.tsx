@@ -1,4 +1,4 @@
-import { ParsedEntity } from "@dojoengine/sdk";
+import { KeysClause, ParsedEntity, ToriiQueryBuilder } from "@dojoengine/sdk";
 import { useAccount } from "@starknet-react/core";
 import { SchemaType } from "./typescript/models.gen";
 import { AccountInterface, addAddressPadding } from "starknet";
@@ -13,50 +13,27 @@ export function HistoricalEvents() {
     const [subscription, setSubscription] = useState<Subscription | null>(null);
 
     useEffect(() => {
-        async function getHistoricalEvents(account: AccountInterface) {
-            try {
-                const e = await sdk.getEventMessages({
-                    // query: {
-                    //   event_messages_historical: {
-                    //     Moved: {
-                    //       $: { where: { player: { $eq: addAddressPadding(account.address) } } }
-                    //     }
-                    //   }
-                    // },
-                    query: { entityIds: [addAddressPadding(account.address)] },
-                    callback: () => {},
-                    historical: true,
-                });
-                // @ts-expect-error FIX: type here
-                setEvents(e);
-            } catch (error) {
-                setEvents([]);
-                console.error(error);
-            }
-        }
-
-        if (account) {
-            getHistoricalEvents(account);
-        }
-    }, [account, setEvents, sdk]);
-
-    useEffect(() => {
         async function subscribeHistoricalEvent(account: AccountInterface) {
             try {
-                const s = await sdk.subscribeEventQuery({
-                    // query: {
-                    //   event_messages_historical: {
-                    //     Moved: {
-                    //       $: { where: { player: { $eq: addAddressPadding(account.address) } } }
-                    //     }
-                    //   }
-                    // },
-                    query: { entityIds: [addAddressPadding(account.address)] },
+                const [e, s] = await sdk.subscribeEventQuery({
+                    query: new ToriiQueryBuilder().withClause(
+                        KeysClause(
+                            [],
+                            [addAddressPadding(account.address)],
+                            "VariableLen"
+                        ).build()
+                    ),
                     callback: ({ data, error }) => {
-                        console.log(data, error);
+                        if (data && data.length > 0) {
+                            console.log(data);
+                        }
+                        if (error) {
+                            console.error(error);
+                        }
                     },
                     historical: true,
                 });
+                setEvents(e as unknown as ParsedEntity<SchemaType>[]);
                 setSubscription(s);
             } catch (error) {
                 setEvents([]);
@@ -70,7 +47,7 @@ export function HistoricalEvents() {
         if (account) {
             subscribeHistoricalEvent(account);
         }
-    }, [account, setEvents]);
+    }, [account, setEvents, sdk]);
 
     if (!account) {
         return (

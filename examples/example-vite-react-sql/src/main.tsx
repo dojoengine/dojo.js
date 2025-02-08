@@ -8,7 +8,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 // Dojo related imports
 import { init } from "@dojoengine/sdk";
 import { DojoSdkProvider } from "@dojoengine/sdk/react";
-import { schema, SchemaType } from "./typescript/models.gen";
+import { SchemaType } from "./typescript/models.gen";
 import { dojoConfig } from "../dojoConfig";
 import { setupWorld } from "./typescript/contracts.gen";
 
@@ -31,23 +31,20 @@ declare module "@tanstack/react-router" {
  * @throws {Error} If initialization fails
  */
 async function main() {
-    const sdk = await init<SchemaType>(
-        {
-            client: {
-                rpcUrl: dojoConfig.rpcUrl,
-                toriiUrl: dojoConfig.toriiUrl,
-                relayUrl: dojoConfig.relayUrl,
-                worldAddress: dojoConfig.manifest.world.address,
-            },
-            domain: {
-                name: "WORLD_NAME",
-                version: "1.0",
-                chainId: "KATANA",
-                revision: "1",
-            },
+    const sdk = await init<SchemaType>({
+        client: {
+            rpcUrl: dojoConfig.rpcUrl,
+            toriiUrl: dojoConfig.toriiUrl,
+            relayUrl: dojoConfig.relayUrl,
+            worldAddress: dojoConfig.manifest.world.address,
         },
-        schema
-    );
+        domain: {
+            name: "WORLD_NAME",
+            version: "1.0",
+            chainId: "KATANA",
+            revision: "1",
+        },
+    });
     createRoot(document.getElementById("root")!).render(
         <StrictMode>
             <DojoSdkProvider

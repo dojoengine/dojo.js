@@ -2,7 +2,7 @@ import * as torii from "@dojoengine/torii-client";
 import { SchemaType, SDKConfig, StandardizedQueryResult } from "../types";
 import { parseEntities } from "../parseEntities";
 import { parseHistoricalEvents } from "../parseHistoricalEvents";
-import { intoEntityKeysClause } from "./convertClauseToEntityKeysClause";
+import { intoEntityKeysClause } from "../convertClauseToEntityKeysClause";
 
 export type ToriiSubscriptionCallback<T extends SchemaType> = (response: {
     data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];

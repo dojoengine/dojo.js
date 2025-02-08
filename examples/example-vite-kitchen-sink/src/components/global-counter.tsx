@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { useSendTransaction } from "@starknet-react/core";
-import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
+import {
+    KeysClause,
+    ParsedEntity,
+    SDK,
+    ToriiQueryBuilder,
+} from "@dojoengine/sdk";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { dojoConfig } from "@/../dojoConfig";
 import { SchemaType } from "@/typescript/models.gen";
@@ -29,44 +34,18 @@ export default function GlobalCOunter() {
     const { sdk: db } = useDojoSDK<typeof setupWorld, SchemaType>();
 
     useEffect(() => {
-        async function getEntity(db: SDK<SchemaType>) {
-            const entity = await db.getEntities({
-                query: new QueryBuilder<SchemaType>()
-                    .namespace("onchain_dash", (n) =>
-                        n.entity("GlobalCounter", (e) =>
-                            e.eq("global_counter_key", 9999999)
-                        )
-                    )
-                    .build(),
-                callback: ({ data, error }) => {},
-            });
-
-            const counter = entity.pop() as ParsedEntity<SchemaType>;
-            if (!counter) {
-                return 0;
-            }
-            const count = counter.models.onchain_dash?.GlobalCounter?.counter;
-            if (undefined === count) {
-                return 0;
-            }
-            return parseInt(count.toString(), 16);
-        }
-
-        if (db) {
-            getEntity(db).then(setCount).catch(console.error);
-        }
-    }, [db]);
-
-    useEffect(() => {
         async function subscribeToEntityUpdates(db: SDK<SchemaType>) {
-            const sub = await db.subscribeEntityQuery({
-                query: new QueryBuilder<SchemaType>()
-                    .namespace("onchain_dash", (n) =>
-                        n.entity("GlobalCounter", (e) =>
-                            e.eq("global_counter_key", 9999999)
-                        )
+            const [initialEntities, sub] = await db.subscribeEntityQuery({
+                // Here it is important to includeHashedKeys as subscription requires hasedKeys to query entityIds
+                query: new ToriiQueryBuilder()
+                    .withClause(
+                        KeysClause(
+                            ["onchain_dash-GlobalCounter"],
+                            ["9999999"],
+                            "VariableLen"
+                        ).build()
                     )
-                    .build(),
+                    .includeHashedKeys(),
                 callback: ({ data, error }) => {
                     if (data) {
                         const entity = data.pop() as ParsedEntity<SchemaType>;
@@ -95,6 +74,14 @@ export default function GlobalCOunter() {
                 },
             });
             setSub(sub);
+
+            const count =
+                initialEntities[0]?.models.onchain_dash?.GlobalCounter?.counter;
+            if (undefined === count) {
+                setCount(0);
+            } else {
+                setCount(parseInt(count.toString(), 16));
+            }
         }
         if (db && sub === null) {
             subscribeToEntityUpdates(db)

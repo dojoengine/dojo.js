@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from "react";
-import { ParsedEntity, QueryBuilder } from "@dojoengine/sdk";
+import { KeysClause, ToriiQueryBuilder } from "@dojoengine/sdk";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { AccountInterface, addAddressPadding, CairoCustomEnum } from "starknet";
 
-import { ModelsMapping, SchemaType } from "./typescript/models.gen.ts";
+import { ModelsMapping } from "./typescript/models.gen.ts";
 import { useSystemCalls } from "./useSystemCalls.ts";
 import { useAccount } from "@starknet-react/core";
 import { WalletAccount } from "./wallet-account.tsx";
@@ -55,35 +55,27 @@ function App() {
         let unsubscribe: (() => void) | undefined;
 
         const subscribe = async (account: AccountInterface) => {
-            const subscription = await sdk.subscribeEntityQuery({
-                query: new QueryBuilder<SchemaType>()
-                    .namespace("dojo_starter", (n) =>
-                        n
-                            .entity("Moves", (e) =>
-                                e.eq(
-                                    "player",
-                                    addAddressPadding(account.address)
-                                )
-                            )
-                            .entity("Position", (e) =>
-                                e.is(
-                                    "player",
-                                    addAddressPadding(account.address)
-                                )
-                            )
+            const [initialData, subscription] = await sdk.subscribeEntityQuery({
+                query: new ToriiQueryBuilder()
+                    .withClause(
+                        // Querying Moves and Position models that has at least [account.address] as key
+                        KeysClause(
+                            [ModelsMapping.Moves, ModelsMapping.Position],
+                            [addAddressPadding(account.address)],
+                            "VariableLen"
+                        ).build()
                     )
-                    .build(),
+                    .includeHashedKeys(),
                 callback: ({ error, data }) => {
                     if (error) {
                         console.error("Error setting up entity sync:", error);
-                    } else if (
-                        data &&
-                        (data[0] as ParsedEntity<SchemaType>).entityId !== "0x0"
-                    ) {
-                        state.updateEntity(data[0] as ParsedEntity<SchemaType>);
+                    } else if (data && data[0].entityId !== "0x0") {
+                        state.updateEntity(data[0]);
                     }
                 },
             });
+
+            state.setEntities(initialData);
 
             unsubscribe = () => subscription.cancel();
         };
@@ -97,46 +89,7 @@ function App() {
                 unsubscribe();
             }
         };
-    }, [sdk, account]);
-
-    useEffect(() => {
-        const fetchEntities = async (account: AccountInterface) => {
-            try {
-                await sdk.getEntities({
-                    query: new QueryBuilder<SchemaType>()
-                        .namespace("dojo_starter", (n) =>
-                            n.entity("Moves", (e) =>
-                                e.eq(
-                                    "player",
-                                    addAddressPadding(account.address)
-                                )
-                            )
-                        )
-                        .build(),
-                    callback: (resp) => {
-                        if (resp.error) {
-                            console.error(
-                                "resp.error.message:",
-                                resp.error.message
-                            );
-                            return;
-                        }
-                        if (resp.data) {
-                            state.setEntities(
-                                resp.data as ParsedEntity<SchemaType>[]
-                            );
-                        }
-                    },
-                });
-            } catch (error) {
-                console.error("Error querying entities:", error);
-            }
-        };
-
-        if (account) {
-            fetchEntities(account);
-        }
-    }, [sdk, account]);
+    }, [sdk, account, state]);
 
     const moves = useModel(entityId as string, ModelsMapping.Moves);
     const position = useModel(entityId as string, ModelsMapping.Position);

@@ -18,6 +18,8 @@ If you are not familiar with Dojo, then you should read the [book](https://book.
 
 ## Table of Contents
 
+- [Official documentation](https://www.dojoengine.org/client/sdk/javascript)
+
 - [Quick start in 5 minutes](#quick-start-in-5-minutes)
 - [Dojo SDK](#dojo-sdk)
 - [Examples](#all-examples)
@@ -39,7 +41,7 @@ npx @dojoengine/create-dojo start -t example-vite-react-sdk
 
     ```bash
     cd dojo-starter
-    katana --disable-fee --allowed-origins "*"
+    katana --dev --http.api dev,starknet --dev.no-fee --http.cors_origins '*'
     ```
 
 2. **Terminal 2: Build and migrate the Dojo starter**
@@ -49,7 +51,11 @@ npx @dojoengine/create-dojo start -t example-vite-react-sdk
     sozo build && sozo migrate apply
 
     # Start Torii indexer - world address can be found in the print out of migrate
-    torii --world <WORLD_ADDRESS> --allowed-origins "*"
+    torii --world <WORLD_ADDRESS> --http.cors_origins "*"
+
+    # If you want to index historical events
+    torii --world <WORLD_ADDRESS> --http.cors_origins "*" --events.historical dojo_starter.Moved
+
     ```
 
 3. **Terminal 3: Launch the frontend application**
@@ -73,11 +79,13 @@ pnpm i @dojoengine/sdk
 > More complex: [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/)
 
 ```js
+import { init } from "@dojoengine/sdk";
+
 // Create client with your parameters
 const db =
     (await init) <
     Schema >
-    ({
+    {
         // your config
         client: {
             rpcUrl: dojoConfig.rpcUrl,
@@ -92,35 +100,20 @@ const db =
             chainId: "your-chain-id",
             revision: "1",
         },
-    },
-    // typed schema
-    schema);
+    };
 
 // Query - fetch with a query then pipe into your state of choice
-await db.getEntities(
-    {
-        dojo_starter: {
-            Moves: {
-                $: {
-                    where: {
-                        player: {
-                            $eq: addAddressPadding(address),
-                        },
-                    },
-                },
-            },
-        },
-    },
-    (resp) => {
-        if (resp.error) {
-            console.error("resp.error.message:", resp.error.message);
-            return;
-        }
-        if (resp.data) {
-            // this uses a typed zustand store, but you can use whatever state you choose
-            state.setEntities(resp.data);
-        }
-    }
+const entities = await db.getEntities(
+    new ToriiQueryBuilder()
+        .withClause(
+            MemberClause(
+                "dojo_starter-Moves",
+                "player",
+                "Eq",
+                addAddressPadding(address)
+            ).build()
+        )
+        .build()
 );
 ```
 
@@ -140,6 +133,7 @@ Other packages:
 - [create Burner](./packages/create-burner/): Create burners for local development fast
 - [react](./packages/create-burner/): React package of hooks for working with Dojo
 - [state](./packages/create-burner/): State package for compatible state managers (Currently RECS)
+- [sdk](./packages/sdk/): Dojo.js sdk (wrapper around torii client)
 - [torii-client](./packages/create-burner/): Client package for working with Torii WASM. This package exports all the types needed to build with torii-client.
 - [torii-wasm](./packages/create-burner/): WASM build
 - [utils](./packages/create-burner/): Helpful utils for working with Dojo apps
@@ -154,11 +148,17 @@ npx @dojoengine/create-dojo start
 ```
 
 - [example-vite-react-sdk](./examples/example-vite-react-sdk/)
+- [example-vite-grpc-playground](./examples/example-vite-grpc-playground/)
+- [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/)
+- [example-vite-react-phaser-sdk](./examples/example-vite-react-phaser-sdk/)
+- [example-vite-react-app-sdk](./examples/example-vite-react-app-sdk/)
 - [example-vite-react-phaser-recs](./examples/example-vite-react-phaser-recs/)
 - [example-vite-react-pwa-recs](./examples/example-vite-react-pwa-recs/)
+- [example-vite-react-sdk](./examples/example-vite-react-sdk/)
+- [example-vite-react-sql](./examples/example-vite-react-sql/)
 - [example-vite-react-threejs-recs](./examples/example-vite-react-threejs-recs/)
+- [example-vanillajs-phaser-recs](./examples/example-vanillajs-phaser-recs/)
 - [example-vue-app-recs](./examples/example-vue-app-recs/)
-- [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/)
 - [example-nodejs-bot](./examples/example-nodejs-bot/)
 
 ## Contributing to dojo.js
@@ -191,6 +191,7 @@ Before running examples, you need to build the packages:
     ```
 
 - Watch for changes (development mode):
+
     ```bash
     pnpm run build --watch
     ```
@@ -208,8 +209,9 @@ To run the examples, you'll need to set up three terminal windows:
     ```
 
 2. Start Katana (local Starknet devnet) with fee disabled and all origins allowed:
+
     ```bash
-    katana --disable-fee --allowed-origins "*"
+    katana --dev --http.api dev,starknet --dev.no-fee --http.cors_origins '*'
     ```
 
 **Terminal 2**: Build, migrate, and run Torii
@@ -252,6 +254,7 @@ To run the examples, you'll need to set up three terminal windows:
     ```
 
 3. Start the development server:
+
     ```bash
     pnpm run dev
     ```
@@ -269,6 +272,7 @@ If you encounter issues on WSL:
     ```
 
 2. Run the Dojo creation command:
+
     ```bash
     npx @dojoengine/create-dojo
     ```

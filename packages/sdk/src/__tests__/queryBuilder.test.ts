@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { QueryBuilder } from "../queryBuilder";
 import { MockSchemaType } from "../__example__/index";
 
+/**
+ * @deprecated
+ */
 describe("QueryBuilder", () => {
     it("should be implemented", () => {
         const query = new QueryBuilder().build();

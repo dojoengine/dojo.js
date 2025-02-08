@@ -4,6 +4,9 @@ type FirstLevelKeys<ObjectType> = ObjectType extends object
     ? keyof ObjectType & (string | number)
     : never;
 
+/**
+ * @deprecated use ClauseBuilder instead
+ */
 export class QueryBuilder<T extends SchemaType> {
     namespaces: Map<string, Namespace<T>>;
 
@@ -52,6 +55,9 @@ export class QueryBuilder<T extends SchemaType> {
     }
 }
 
+/**
+ * @deprecated use ClauseBuilder instead
+ */
 class Namespace<T extends SchemaType> {
     entities: Map<string, QueryEntity<T>>;
 
@@ -78,6 +84,9 @@ class Namespace<T extends SchemaType> {
     }
 }
 
+/**
+ * @deprecated use ClauseBuilder instead
+ */
 class QueryEntity<T extends SchemaType> {
     constraints: Map<string, Constraint>;
 

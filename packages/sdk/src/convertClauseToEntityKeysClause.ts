@@ -1,9 +1,9 @@
 import { EntityKeysClause, Clause } from "@dojoengine/torii-client";
-import { SchemaType, StandardizedQueryResult } from "../types";
+import { SchemaType, ToriiResponse } from "./types";
 
 export function intoEntityKeysClause<T extends SchemaType>(
     clause: Clause | undefined,
-    initialData: StandardizedQueryResult<T> = []
+    initialData: ToriiResponse<T, false> = []
 ): EntityKeysClause[] {
     // We want to send over placeholder but this case is very unlikely to happen
     if (!clause) {

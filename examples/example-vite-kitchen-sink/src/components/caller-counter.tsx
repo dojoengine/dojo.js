@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { ParsedEntity, QueryBuilder, SDK } from "@dojoengine/sdk";
+import {
+    KeysClause,
+    ParsedEntity,
+    SDK,
+    ToriiQueryBuilder,
+} from "@dojoengine/sdk";
 import { useDojoSDK } from "@dojoengine/sdk/react";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { SchemaType } from "@/typescript/models.gen";
@@ -32,47 +37,22 @@ export default function CallerCounter() {
     }, [incrementCallerCounter, setIsLoading]);
 
     const { sdk } = useDojoSDK<typeof setupWorld, SchemaType>();
-    useEffect(() => {
-        async function getEntity(db: SDK<SchemaType>, address: string) {
-            const entity = await db.getEntities({
-                query: new QueryBuilder<SchemaType>()
-                    .namespace("onchain_dash", (n) =>
-                        n.entity("CallerCounter", (e) =>
-                            e.eq("caller", addAddressPadding(address))
-                        )
-                    )
-                    .build(),
-                callback: () => {},
-            });
-            const counter = entity.pop() as ParsedEntity<SchemaType>;
-            if (!counter) {
-                return 0;
-            }
-            const count = counter.models.onchain_dash?.CallerCounter?.counter;
-            if (undefined === count) {
-                return 0;
-            }
-
-            return parseInt(count.toString(), 16);
-        }
-        if (address && sdk) {
-            getEntity(sdk, address).then(setCount).catch(console.error);
-        }
-    }, [address, sdk]);
 
     useEffect(() => {
         async function subscribeToEntityUpdates(
             db: SDK<SchemaType>,
             address: string
         ) {
-            const sub = await db.subscribeEntityQuery({
-                query: new QueryBuilder<SchemaType>()
-                    .namespace("onchain_dash", (n) =>
-                        n.entity("CallerCounter", (e) =>
-                            e.eq("caller", addAddressPadding(address))
-                        )
+            const [initialEntities, sub] = await db.subscribeEntityQuery({
+                query: new ToriiQueryBuilder()
+                    .withClause(
+                        KeysClause(
+                            ["onchain_dash-CallerCounter"],
+                            [addAddressPadding(address)],
+                            "FixedLen"
+                        ).build()
                     )
-                    .build(),
+                    .includeHashedKeys(),
                 callback: ({ data, error }) => {
                     if (data) {
                         const entity = data.pop() as ParsedEntity<SchemaType>;
@@ -101,6 +81,13 @@ export default function CallerCounter() {
                 },
             });
             setSub(sub);
+            const count =
+                initialEntities[0]?.models.onchain_dash?.CallerCounter?.counter;
+            if (!count) {
+                setCount(0);
+            } else {
+                setCount(parseInt(count.toString(), 16));
+            }
         }
         if (address && sdk && sub === null) {
             subscribeToEntityUpdates(sdk, address)

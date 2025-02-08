@@ -7,7 +7,12 @@ import { useCallback, useEffect, useRef, useState, KeyboardEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useAccount } from "@starknet-react/core";
 import { toValidAscii } from "@/lib/utils";
-import { ParsedEntity, SDK } from "@dojoengine/sdk";
+import {
+    KeysClause,
+    ParsedEntity,
+    SDK,
+    ToriiQueryBuilder,
+} from "@dojoengine/sdk";
 import { Subscription } from "@dojoengine/torii-wasm";
 import { shortAddress } from "@/lib/utils";
 import { Message, SchemaType } from "@/typescript/models.gen";
@@ -62,39 +67,17 @@ export default function Chat() {
     );
 
     useEffect(() => {
-        async function getEntity(db: SDK<SchemaType>) {
-            const entity = await db.getEntities({
-                query: {
-                    onchain_dash: { Message: { $: {} } },
-                },
-                callback: () => {},
-            });
-
-            return (
-                entity
-                    .map((e) => e.models.onchain_dash.Message)
-                    .filter(Boolean)
-                    // @ts-expect-error a & b are not undefined as they are filtered out with `filer(Boolean)`
-                    .sort((a: Message, b: Message): number =>
-                        parseInt(a.timestamp.toString(), 16) <
-                        parseInt(b.timestamp.toString(), 16)
-                            ? -1
-                            : 1
-                    )
-            );
-        }
-        if (db && messages.length === 0 && sub === null) {
-            // @ts-expect-error ts is getting drunk there
-            getEntity(db).then(setMessages).catch(console.error);
-        }
-    }, [db, messages, sub]);
-
-    useEffect(() => {
         async function subscribeToEntityUpdates(db: SDK<SchemaType>) {
-            const sub = await db.subscribeEntityQuery({
-                query: {
-                    onchain_dash: { Message: { $: {} } },
-                },
+            const [initialMessages, sub] = await db.subscribeEntityQuery({
+                query: new ToriiQueryBuilder()
+                    .withClause(
+                        KeysClause(
+                            ["onchain_dash-Message"],
+                            [undefined],
+                            "FixedLen"
+                        ).build()
+                    )
+                    .includeHashedKeys(),
                 callback: ({ data }) => {
                     if (data) {
                         const entity = data.pop() as ParsedEntity<SchemaType>;
@@ -113,6 +96,18 @@ export default function Chat() {
                 },
             });
             setSub(sub);
+
+            setMessages(
+                initialMessages
+                    .map((e) => e.models.onchain_dash.Message as MessageItem)
+                    .filter(Boolean)
+                    .sort((a: Message, b: Message): number =>
+                        parseInt(a.timestamp.toString(), 16) <
+                        parseInt(b.timestamp.toString(), 16)
+                            ? -1
+                            : 1
+                    )
+            );
         }
         if (db && sub === null) {
             subscribeToEntityUpdates(db).then().catch(console.error);
