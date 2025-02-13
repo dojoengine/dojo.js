@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.1.1
+
+### Patch Changes
+
+- ded4be2: feat: remove field order and bump torii-client
+- Updated dependencies [ded4be2]
+    - @dojoengine/torii-client@1.1.1
+
 ## 1.1.0
 
 ### Minor Changes

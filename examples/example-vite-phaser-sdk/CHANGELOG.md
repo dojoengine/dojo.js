@@ -1,5 +1,17 @@
 # template-vite-ts
 
+## 1.4.1
+
+### Patch Changes
+
+- ded4be2: feat: remove field order and bump torii-client
+- Updated dependencies [ded4be2]
+    - @dojoengine/sdk@1.1.1
+    - @dojoengine/core@1.1.1
+    - @dojoengine/predeployed-connector@1.1.1
+    - @dojoengine/torii-client@1.1.1
+    - @dojoengine/utils@1.1.1
+
 ## 1.4.0
 
 ### Minor Changes
