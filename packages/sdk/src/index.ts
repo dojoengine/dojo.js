@@ -327,5 +327,64 @@ export async function init<T extends SchemaType>(
                 account_addresses
             );
         },
+
+        /**
+         * Updates an existing entity subscription
+         *
+         * # Parameters
+         * @param {torii.Subscription} subscription - Existing subscription to update
+         * @param {torii.EntityKeysClause[]} clauses - New array of key clauses for filtering
+         *
+         * # Returns
+         * Result containing unit or error
+         * @returns {Promise<void>}
+         */
+        updateEntitySubscription: async (
+            subscription: torii.Subscription,
+            clauses: torii.EntityKeysClause[]
+        ): Promise<void> => {
+            return await client.updateEntitySubscription(subscription, clauses);
+        },
+
+        /**
+         * Updates an existing event message subscription
+         *
+         * # Parameters
+         * @param {torii.Subscription} subscription - Existing subscription to update
+         * @param {torii.EntityKeysClause[]} clauses - New array of key clauses for filtering
+         * @param {boolean} historical - Whether to include historical messages
+         *
+         * # Returns
+         * Result containing unit or error
+         * @returns {Promise<void>}
+         */
+        updateEventMessageSubscription: async (
+            subscription: torii.Subscription,
+            clauses: torii.EntityKeysClause[],
+            historical: boolean
+        ): Promise<void> => {
+            return await client.updateEventMessageSubscription(
+                subscription,
+                clauses,
+                historical
+            );
+        },
+
+        /**
+         * Gets controllers along with their usernames for the given contract addresses
+         *
+         * # Parameters
+         * @param {string[]} contract_addresses - Array of contract addresses as hex strings. If empty, all
+         *   controllers will be returned.
+         *
+         * # Returns
+         * Result containing controllers or error
+         * @returns {Promise<torii.Controllers>}
+         */
+        getControllers: async (
+            contract_addresses: string[]
+        ): Promise<torii.Controllers> => {
+            return await client.getControllers(contract_addresses);
+        },
     };
 }

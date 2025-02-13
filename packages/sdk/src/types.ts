@@ -373,6 +373,55 @@ export interface SDK<T extends SchemaType> {
         contract_addresses: string[],
         account_addresses: string[]
     ) => Promise<void>;
+
+    /**
+     * Updates an existing entity subscription
+     *
+     * # Parameters
+     * @param {torii.Subscription} subscription - Existing subscription to update
+     * @param {torii.EntityKeysClause[]} clauses - New array of key clauses for filtering
+     *
+     * # Returns
+     * Result containing unit or error
+     * @returns {Promise<void>}
+     */
+    updateEntitySubscription: (
+        subscription: torii.Subscription,
+        clauses: torii.EntityKeysClause[]
+    ) => Promise<void>;
+
+    /**
+     * Updates an existing event message subscription
+     *
+     * # Parameters
+     * @param {torii.Subscription} subscription - Existing subscription to update
+     * @param {torii.EntityKeysClause[]} clauses - New array of key clauses for filtering
+     * @param {boolean} historical - Whether to include historical messages
+     *
+     * # Returns
+     * Result containing unit or error
+     * @returns {Promise<void>}
+     */
+    updateEventMessageSubscription: (
+        subscription: torii.Subscription,
+        clauses: torii.EntityKeysClause[],
+        historical: boolean
+    ) => Promise<void>;
+
+    /**
+     * Gets controllers along with their usernames for the given contract addresses
+     *
+     * # Parameters
+     * @param {string[]} contract_addresses - Array of contract addresses as hex strings. If empty, all
+     *   controllers will be returned.
+     *
+     * # Returns
+     * Result containing controllers or error
+     * @returns {Promise<torii.Controllers>}
+     */
+    getControllers: (
+        contract_addresses: string[]
+    ) => Promise<torii.Controllers>;
 }
 
 /**
