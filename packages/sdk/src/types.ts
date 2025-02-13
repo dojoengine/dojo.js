@@ -62,11 +62,6 @@ export type SchemaType = {
          */
         [model: string]: {
             /**
-             * fieldOrder: An array of strings representing the order of fields in the model.
-             * This is crucial for maintaining consistent field ordering across your application.
-             */
-            fieldOrder: string[];
-            /**
              * Dynamic fields of the model.
              * These can be of any type, typically representing the properties of your model.
              */
