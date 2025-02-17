@@ -257,26 +257,31 @@ export async function init<T extends SchemaType>(
 
         /**
          * @param {(string)[]} contract_addresses
+         * @param {string[]} token_ids
          * @returns {Promise<Tokens>}
          */
         getTokens: async (
-            contract_addresses: string[]
+            contract_addresses: string[],
+            token_ids: string[]
         ): Promise<torii.Tokens> => {
-            return await client.getTokens(contract_addresses);
+            return await client.getTokens(contract_addresses, token_ids);
         },
 
         /**
          * @param {(string)[]} account_addresses
          * @param {(string)[]} contract_addresses
+         * @param {string[]} token_ids
          * @returns {Promise<TokenBalances>}
          */
         getTokenBalances: async (
             account_addresses: string[],
-            contract_addresses: string[]
+            contract_addresses: string[],
+            token_ids: string[]
         ): Promise<torii.TokenBalances> => {
             return await client.getTokenBalances(
                 account_addresses,
-                contract_addresses
+                contract_addresses,
+                token_ids
             );
         },
 
@@ -286,6 +291,7 @@ export async function init<T extends SchemaType>(
          * # Parameters
          * @param {string[]} contract_addresses - Array of contract addresses to filter (empty for all)
          * @param {string[]} account_addresses - Array of account addresses to filter (empty for all)
+         * @param {string[]} token_ids - Array of token ids to filter (empty for all)
          * @param {Funtion} callback - JavaScript function to call on updates
          *
          * # Returns
@@ -295,11 +301,13 @@ export async function init<T extends SchemaType>(
         onTokenBalanceUpdated: (
             contract_addresses: string[],
             account_addresses: string[],
+            token_ids: string[],
             callback: Function
         ): torii.Subscription => {
             return client.onTokenBalanceUpdated(
                 contract_addresses,
                 account_addresses,
+                token_ids,
                 callback
             );
         },
@@ -311,6 +319,7 @@ export async function init<T extends SchemaType>(
          * @param {torii.Subscription} subscription - Existing subscription to update
          * @param {string[]} contract_addresses - New array of contract addresses to filter
          * @param {string[]} account_addresses - New array of account addresses to filter
+         * @param {string[]} token_ids - New array of token ids to filter (empty for all)
          *
          * # Returns
          * Result containing unit or error
@@ -319,12 +328,14 @@ export async function init<T extends SchemaType>(
         updateTokenBalanceSubscription: async (
             subscription: torii.Subscription,
             contract_addresses: string[],
-            account_addresses: string[]
+            account_addresses: string[],
+            token_ids: string[]
         ): Promise<void> => {
             return await client.updateTokenBalanceSubscription(
                 subscription,
                 contract_addresses,
-                account_addresses
+                account_addresses,
+                token_ids
             );
         },
 
