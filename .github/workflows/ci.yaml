@@ -20,7 +20,10 @@ jobs:
         run: git submodule update --init --recursive
 
       - run: curl -L https://install.dojoengine.org | bash
-      - run: /home/runner/.config/.dojo/bin/dojoup -v v1.0.10
+      - uses: software-mansion/setup-scarb@v1
+        with:
+          scarb-version: "2.9.2"
+      - run: /home/runner/.config/.dojo/bin/dojoup -v v1.2.1
       - run: |
           cd worlds/dojo-starter
           /home/runner/.config/.dojo/bin/sozo build

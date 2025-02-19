@@ -1,15 +1,7 @@
-import {
-    createModelTypedData,
-    DojoConfig,
-    DojoProvider,
-} from "@dojoengine/core";
+import { DojoConfig, DojoProvider } from "@dojoengine/core";
 import { getSyncEntities } from "@dojoengine/state";
 import * as torii from "@dojoengine/torii-client";
-import {
-    ArraySignatureType,
-    TypedData,
-    WeierstrassSignatureType,
-} from "starknet";
+import { ArraySignatureType } from "starknet";
 
 import { createClientComponents } from "../createClientComponents";
 import { createSystemCalls } from "../createSystemCalls";
@@ -22,7 +14,6 @@ export type SetupResult = Awaited<ReturnType<typeof setup>>;
 export async function setup({ ...config }: DojoConfig) {
     // torii client
     const toriiClient = await torii.createClient({
-        rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
         relayUrl: "",
         worldAddress: config.manifest.world.address || "",
