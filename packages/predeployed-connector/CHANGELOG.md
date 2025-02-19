@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.1.2
+
+### Patch Changes
+
+- 9af1969: chore: bump dojo v1.2.1. Add token_ids to sdk
+
 ## 1.1.1
 
 ### Patch Changes
