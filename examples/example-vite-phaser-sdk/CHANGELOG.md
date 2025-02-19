@@ -1,5 +1,17 @@
 # template-vite-ts
 
+## 1.4.2
+
+### Patch Changes
+
+- 9af1969: chore: bump dojo v1.2.1. Add token_ids to sdk
+- Updated dependencies [9af1969]
+    - @dojoengine/core@1.1.2
+    - @dojoengine/predeployed-connector@1.1.2
+    - @dojoengine/sdk@1.1.2
+    - @dojoengine/torii-client@1.1.2
+    - @dojoengine/utils@1.1.2
+
 ## 1.4.1
 
 ### Patch Changes
