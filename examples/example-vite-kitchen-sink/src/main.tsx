@@ -12,12 +12,11 @@ import { dojoConfig } from "../dojoConfig";
 import { setupWorld } from "./typescript/contracts.gen";
 import { SchemaType } from "./typescript/models.gen";
 
-import { env, getRpcUrl } from "@/env";
+import { env } from "@/env";
 
 async function main() {
     const sdk = await init<SchemaType>({
         client: {
-            rpcUrl: getRpcUrl(),
             toriiUrl: env.VITE_TORII_URL,
             relayUrl: env.VITE_RELAY_URL,
             worldAddress: dojoConfig.manifest.world.address,

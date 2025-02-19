@@ -15,7 +15,6 @@ export type SetupResult = Awaited<ReturnType<typeof setup>>;
 export async function setup({ ...config }: DojoConfig) {
     // Initialize Torii client for interacting with the Dojo network
     const toriiClient = await torii.createClient({
-        rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
         relayUrl: "",
         worldAddress: config.manifest.world.address || "",

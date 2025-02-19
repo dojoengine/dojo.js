@@ -37,7 +37,6 @@ export const useDojoStore = createDojoStore<SchemaType>();
 async function main() {
     const sdk = await init<SchemaType>({
         client: {
-            rpcUrl: dojoConfig.rpcUrl,
             toriiUrl: dojoConfig.toriiUrl,
             relayUrl: dojoConfig.relayUrl,
             worldAddress: dojoConfig.manifest.world.address,

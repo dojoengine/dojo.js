@@ -324,18 +324,24 @@ export interface SDK<T extends SchemaType> {
 
     /**
      * @param {string[]} contract_addresses
+     * @param {string[]} token_ids
      * @returns {Promise<torii.Tokens>}
      */
-    getTokens(contract_addresses: string[]): Promise<torii.Tokens>;
+    getTokens(
+        contract_addresses: string[],
+        token_ids: string[]
+    ): Promise<torii.Tokens>;
 
     /**
      * @param {string[]} account_addresses
      * @param {string[]} contract_addresses
+     * @param {string[]} token_ids
      * @returns {Promise<torii.TokenBalances>}
      */
     getTokenBalances(
         account_addresses: string[],
-        contract_addresses: string[]
+        contract_addresses: string[],
+        token_ids: string[]
     ): Promise<torii.TokenBalances>;
 
     /**
@@ -344,6 +350,7 @@ export interface SDK<T extends SchemaType> {
      * # Parameters
      * @param {string[]} contract_addresses - Array of contract addresses to filter (empty for all)
      * @param {string[]} account_addresses - Array of account addresses to filter (empty for all)
+     * @param {string[]} token_ids - Array of token ids to filter (empty for all)
      * @param {Funtion} callback - JavaScript function to call on updates
      *
      * # Returns
@@ -353,6 +360,7 @@ export interface SDK<T extends SchemaType> {
     onTokenBalanceUpdated: (
         contract_addresses: string[],
         account_addresses: string[],
+        token_ids: string[],
         callback: Function
     ) => torii.Subscription;
 
@@ -363,6 +371,7 @@ export interface SDK<T extends SchemaType> {
      * @param {torii.Subscription} subscription - Existing subscription to update
      * @param {string[]} contract_addresses - New array of contract addresses to filter
      * @param {string[]} account_addresses - New array of account addresses to filter
+     * @param {string[]} token_ids - New array of token ids to filter
      *
      * # Returns
      * Result containing unit or error
@@ -371,7 +380,8 @@ export interface SDK<T extends SchemaType> {
     updateTokenBalanceSubscription: (
         subscription: torii.Subscription,
         contract_addresses: string[],
-        account_addresses: string[]
+        account_addresses: string[],
+        token_ids: string[]
     ) => Promise<void>;
 
     /**

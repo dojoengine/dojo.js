@@ -79,7 +79,6 @@ export const schema: MockSchemaType = {
 async function exampleUsage() {
     const db = await init<MockSchemaType>({
         client: {
-            rpcUrl: "your-rpc-url",
             toriiUrl: "your-torii-url",
             relayUrl: "your-relay-url",
             worldAddress: "your-world-address",
