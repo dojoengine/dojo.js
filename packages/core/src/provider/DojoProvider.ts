@@ -1,21 +1,21 @@
 import {
-    Account,
-    AccountInterface,
-    AllowArray,
-    ArgsOrCalldata,
-    Call,
-    CallContractResponse,
+    type Account,
+    type AccountInterface,
+    type AllowArray,
+    type ArgsOrCalldata,
+    type Call,
+    type CallContractResponse,
     Contract,
-    InvokeFunctionResponse,
-    Result,
+    type InvokeFunctionResponse,
+    type Result,
     RpcProvider,
     shortString,
-    UniversalDetails,
+    type UniversalDetails,
 } from "starknet";
 
 import { LOCAL_KATANA } from "../constants";
-import { ConsoleLogger, LogLevel } from "../logger/logger";
-import { DojoCall, WorldEntryPoints } from "../types";
+import { ConsoleLogger, type LogLevel } from "../logger/logger";
+import { type DojoCall, WorldEntryPoints } from "../types";
 import { getContractByName, parseDojoCall } from "../utils";
 import { Provider } from "./provider";
 

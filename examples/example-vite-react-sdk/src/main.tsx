@@ -6,7 +6,7 @@ import App from "./App.tsx";
 // Dojo related imports
 import { init } from "@dojoengine/sdk";
 import { DojoSdkProvider } from "@dojoengine/sdk/react";
-import { SchemaType } from "./typescript/models.gen.ts";
+import type { SchemaType } from "./typescript/models.gen.ts";
 import { setupWorld } from "./typescript/contracts.gen.ts";
 
 import "./index.css";
