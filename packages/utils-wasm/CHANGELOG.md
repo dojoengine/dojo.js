@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.1.3
+
+### Patch Changes
+
+- a4fc8e4: fix: predeployed warnings
+
 ## 1.1.2
 
 ### Patch Changes
