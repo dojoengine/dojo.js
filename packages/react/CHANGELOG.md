@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.1.3
+
+### Patch Changes
+
+- a4fc8e4: fix: predeployed warnings
+- Updated dependencies [a4fc8e4]
+    - @dojoengine/state@1.1.3
+    - @dojoengine/torii-client@1.1.3
+    - @dojoengine/utils@1.1.3
+
 ## 1.1.2
 
 ### Patch Changes
