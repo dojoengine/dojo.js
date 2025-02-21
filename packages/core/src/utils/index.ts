@@ -48,9 +48,9 @@ export const parseDojoCall = (
             ),
             entrypoint: call.entrypoint,
         };
-    } else {
-        return call;
     }
+
+    return call;
 };
 
 /**

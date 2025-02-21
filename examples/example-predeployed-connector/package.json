@@ -1,5 +1,5 @@
 {
-    "name": "example-vite-react-sdk",
+    "name": "example-predeployed-connector",
     "private": true,
     "version": "0.0.0",
     "type": "module",
@@ -11,38 +11,24 @@
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
-        "@dojoengine/create-burner": "workspace:*",
         "@dojoengine/predeployed-connector": "workspace:*",
         "@dojoengine/sdk": "workspace:*",
-        "@dojoengine/torii-client": "workspace:*",
-        "@dojoengine/torii-wasm": "workspace:*",
-        "@dojoengine/utils": "workspace:*",
         "@starknet-react/chains": "catalog:",
         "@starknet-react/core": "catalog:",
-        "@types/uuid": "^10.0.0",
-        "immer": "^10.1.1",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "starknet": "catalog:",
-        "uuid": "^10.0.0",
-        "vite-plugin-top-level-await": "^1.5.0",
-        "vite-plugin-wasm": "^3.4.1",
-        "zustand": "^4.5.6"
+        "react": "catalog:",
+        "react-dom": "catalog:"
     },
     "devDependencies": {
         "@eslint/js": "^9.20.0",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "@vitejs/plugin-react": "^4.3.4",
-        "autoprefixer": "^10.4.20",
         "eslint": "^9.20.1",
-        "eslint-plugin-react-hooks": "5.1.0-rc-fb9a90fa48-20240614",
+        "eslint-plugin-react-hooks": "^5.1.0",
         "eslint-plugin-react-refresh": "^0.4.19",
         "globals": "^15.15.0",
-        "postcss": "^8.5.3",
-        "tailwindcss": "^3.4.17",
-        "typescript": "^5.7.3",
+        "typescript": "~5.7.3",
         "typescript-eslint": "^8.24.1",
-        "vite": "^5.4.14"
+        "vite": "^6.1.1"
     }
 }

@@ -1,10 +1,15 @@
 import type { PropsWithChildren } from "react";
 import { mainnet } from "@starknet-react/chains";
-import { jsonRpcProvider, StarknetConfig, voyager } from "@starknet-react/core";
+import {
+    type Connector,
+    jsonRpcProvider,
+    StarknetConfig,
+    voyager,
+} from "@starknet-react/core";
 import { dojoConfig } from "../dojoConfig";
 import {
     predeployedAccounts,
-    PredeployedAccountsConnector,
+    type PredeployedAccountsConnector,
 } from "@dojoengine/predeployed-connector";
 
 let pa: PredeployedAccountsConnector[] = [];
@@ -23,7 +28,7 @@ export default function StarknetProvider({ children }: PropsWithChildren) {
         <StarknetConfig
             chains={[mainnet]}
             provider={provider}
-            connectors={pa}
+            connectors={pa as unknown as Connector[]}
             explorer={voyager}
             autoConnect
         >
