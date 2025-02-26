@@ -432,6 +432,26 @@ export interface SDK<T extends SchemaType> {
     getControllers: (
         contract_addresses: string[]
     ) => Promise<torii.Controllers>;
+
+    /**
+     * Convert torii clause into EntityKeysClause[];
+     *
+     * @param {query} query - ToriiQueryBuilder
+     * @returns [ToriiResponse<T,false>,torii.EntityKeysClause[]]
+     */
+    toriiQueryIntoHashedKeys: (
+        query: ToriiQueryBuilder<T>
+    ) => Promise<[ToriiResponse<T, false>, torii.EntityKeysClause[]]>;
+    /**
+     * Convert torii clause into EntityKeysClause[];
+     *
+     * @param {query} query - ToriiQueryBuilder
+     * @returns [ToriiResponse<T,false>,torii.EntityKeysClause[]]
+     */
+    toriiEventMessagesQueryIntoHashedKeys: <H extends boolean>(
+        query: ToriiQueryBuilder<T>,
+        historical: H
+    ) => Promise<[ToriiResponse<T, H>, torii.EntityKeysClause[]]>;
 }
 
 /**

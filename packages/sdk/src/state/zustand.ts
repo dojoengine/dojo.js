@@ -42,6 +42,66 @@ export function createDojoStoreFactory<T extends SchemaType>(
                         });
                     });
                 },
+                mergeEntities: (entities: ParsedEntity<T>[]) => {
+                    set((state: Draft<GameState<T>>) => {
+                        entities.forEach((entity) => {
+                            if (entity.entityId && entity.models) {
+                                const existingEntity =
+                                    state.entities[entity.entityId];
+
+                                if (existingEntity) {
+                                    // Create new models object without spread
+                                    const mergedModels: typeof existingEntity.models =
+                                        Object.assign(
+                                            {},
+                                            existingEntity.models
+                                        );
+
+                                    // Iterate through each namespace in the new models
+                                    Object.entries(entity.models).forEach(
+                                        ([namespace, namespaceModels]) => {
+                                            const typedNamespace =
+                                                namespace as keyof ParsedEntity<T>["models"];
+                                            if (
+                                                !(
+                                                    typedNamespace in
+                                                    mergedModels
+                                                )
+                                            ) {
+                                                mergedModels[
+                                                    typedNamespace as keyof typeof mergedModels
+                                                ] = {} as any;
+                                            }
+
+                                            mergedModels[
+                                                typedNamespace as keyof typeof mergedModels
+                                            ] = Object.assign(
+                                                {},
+                                                mergedModels[
+                                                    typedNamespace as keyof typeof mergedModels
+                                                ],
+                                                namespaceModels
+                                            );
+                                        }
+                                    );
+
+                                    // Update the entity
+                                    state.entities[entity.entityId] = {
+                                        ...existingEntity,
+                                        ...entity,
+                                        models: mergedModels,
+                                    };
+                                } else {
+                                    // Set new entity
+                                    state.entities[entity.entityId] =
+                                        entity as WritableDraft<
+                                            ParsedEntity<T>
+                                        >;
+                                }
+                            }
+                        });
+                    });
+                },
                 updateEntity: (entity: Partial<ParsedEntity<T>>) => {
                     set((state: Draft<GameState<T>>) => {
                         if (entity.entityId && entity.models) {

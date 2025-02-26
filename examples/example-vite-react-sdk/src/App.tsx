@@ -1,14 +1,18 @@
-import { useEffect, useMemo } from "react";
 import { KeysClause, ToriiQueryBuilder } from "@dojoengine/sdk";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { AccountInterface, addAddressPadding, CairoCustomEnum } from "starknet";
 
 import { ModelsMapping } from "./typescript/models.gen.ts";
 import { useSystemCalls } from "./useSystemCalls.ts";
 import { useAccount } from "@starknet-react/core";
 import { WalletAccount } from "./wallet-account.tsx";
 import { HistoricalEvents } from "./historical-events.tsx";
-import { useDojoSDK, useModel } from "@dojoengine/sdk/react";
+import {
+    useDojoSDK,
+    useEntityId,
+    useEntityQuery,
+    useModel,
+} from "@dojoengine/sdk/react";
+import { addAddressPadding, CairoCustomEnum } from "starknet";
+import { Events } from "./events.tsx";
 
 /**
  * Main application component that provides game functionality and UI.
@@ -17,79 +21,26 @@ import { useDojoSDK, useModel } from "@dojoengine/sdk/react";
  * @param props.sdk - The Dojo SDK instance configured with the game schema
  */
 function App() {
-    const { useDojoStore, client, sdk } = useDojoSDK();
+    const { useDojoStore, client } = useDojoSDK();
     const { account } = useAccount();
-    const state = useDojoStore((state) => state);
     const entities = useDojoStore((state) => state.entities);
 
     const { spawn } = useSystemCalls();
 
-    const entityId = useMemo(() => {
-        if (account) {
-            return getEntityIdFromKeys([BigInt(account.address)]);
-        }
-        return BigInt(0);
-    }, [account]);
+    const entityId = useEntityId(account?.address ?? "0");
 
-    // This is experimental feature.
-    // Use those queries if you want to be closer to how you should query your ecs system with torii
-    // useEffect(() => {
-    //   async function fetchToriiClause() {
-    //     const res = await sdk.client.getEntities(
-    //       new ToriiQueryBuilder()
-    //         .withClause(
-    //           new ClauseBuilder()
-    //             .keys([], [undefined], "VariableLen")
-    //             .build()
-    //         )
-    //         .withLimit(2)
-    //         .addOrderBy(ModelsMapping.Moves, "remaining", "Desc")
-    //         .build()
-    //     );
-    //     return res;
-    //   }
-    //   fetchToriiClause().then(console.log);
-    // });
-
-    useEffect(() => {
-        let unsubscribe: (() => void) | undefined;
-
-        const subscribe = async (account: AccountInterface) => {
-            const [initialData, subscription] = await sdk.subscribeEntityQuery({
-                query: new ToriiQueryBuilder()
-                    .withClause(
-                        // Querying Moves and Position models that has at least [account.address] as key
-                        KeysClause(
-                            [ModelsMapping.Moves, ModelsMapping.Position],
-                            [addAddressPadding(account.address)],
-                            "VariableLen"
-                        ).build()
-                    )
-                    .includeHashedKeys(),
-                callback: ({ error, data }) => {
-                    if (error) {
-                        console.error("Error setting up entity sync:", error);
-                    } else if (data && data[0].entityId !== "0x0") {
-                        state.updateEntity(data[0]);
-                    }
-                },
-            });
-
-            state.setEntities(initialData);
-
-            unsubscribe = () => subscription.cancel();
-        };
-
-        if (account) {
-            subscribe(account);
-        }
-
-        return () => {
-            if (unsubscribe) {
-                unsubscribe();
-            }
-        };
-    }, [sdk, account, state]);
+    useEntityQuery(
+        new ToriiQueryBuilder()
+            .withClause(
+                // Querying Moves and Position models that has at least [account.address] as key
+                KeysClause(
+                    [ModelsMapping.Moves, ModelsMapping.Position],
+                    [addAddressPadding(account?.address ?? "0")],
+                    "FixedLen"
+                ).build()
+            )
+            .includeHashedKeys()
+    );
 
     const moves = useModel(entityId as string, ModelsMapping.Moves);
     const position = useModel(entityId as string, ModelsMapping.Position);
@@ -253,6 +204,7 @@ function App() {
                     </table>
                 </div>
 
+                <Events />
                 {/* // Here sdk is passed as props but this can be done via contexts */}
                 <HistoricalEvents />
             </div>

@@ -14,6 +14,7 @@ import {
 import { intoEntityKeysClause } from "./convertClauseToEntityKeysClause";
 import { parseEntities } from "./parseEntities";
 import { parseHistoricalEvents } from "./parseHistoricalEvents";
+import { ToriiQueryBuilder } from "./toriiQueryBuilder";
 
 export * from "./types";
 export * from "./queryBuilder";
@@ -396,6 +397,45 @@ export async function init<T extends SchemaType>(
             contract_addresses: string[]
         ): Promise<torii.Controllers> => {
             return await client.getControllers(contract_addresses);
+        },
+        /**
+         * Convert torii clause into EntityKeysClause[];
+         *
+         * @param {query} query - ToriiQueryBuilder
+         * @returns [ToriiResponse<T,false>,torii.EntityKeysClause[]]
+         */
+        toriiQueryIntoHashedKeys: async (
+            query: ToriiQueryBuilder<T>
+        ): Promise<[ToriiResponse<T, false>, torii.EntityKeysClause[]]> => {
+            const q = query.build();
+            const entities = parseEntities<T>(await client.getEntities(q));
+            return [entities, intoEntityKeysClause<T>(q.clause, entities)];
+        },
+
+        /**
+         * Convert torii clause into EntityKeysClause[];
+         *
+         * @param {query} query - ToriiQueryBuilder
+         * @returns [ToriiResponse<T,false>,torii.EntityKeysClause[]]
+         */
+        toriiEventMessagesQueryIntoHashedKeys: async <H extends boolean>(
+            query: ToriiQueryBuilder<T>,
+            historical: H
+        ): Promise<[ToriiResponse<T, H>, torii.EntityKeysClause[]]> => {
+            const q = query.build();
+
+            const events = await client.getEventMessages(
+                q,
+                historical ? historical : false
+            );
+            return [
+                (historical
+                    ? parseHistoricalEvents(events)
+                    : parseEntities(events)) as ToriiResponse<T, H>,
+
+                // @ts-expect-error will fix
+                intoEntityKeysClause<T>(q.clause, events),
+            ];
         },
     };
 }
