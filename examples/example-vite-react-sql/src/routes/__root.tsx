@@ -21,6 +21,7 @@ function RootComponent() {
                         <div className="min-h-screen bg-background">
                             <Header />
                             <main className="container py-6 mx-auto my-0">
+                                {/* @ts-ignore */}
                                 <Outlet />
                             </main>
                         </div>

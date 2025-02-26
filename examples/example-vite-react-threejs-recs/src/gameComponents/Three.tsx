@@ -25,9 +25,11 @@ export const ThreeGrid = () => {
     const initialCameraPosition = new Vector3(0, 100.0, 100); // Desired initial position
 
     return (
+        // @ts-ignore
         <Canvas shadows>
             <CameraAdjuster position={initialCameraPosition} />
             <Stage shadows="contact" adjustCamera={false}>
+                {/* @ts-ignore */}
                 <OrbitControls makeDefault />
                 <ambientLight />
                 <directionalLight

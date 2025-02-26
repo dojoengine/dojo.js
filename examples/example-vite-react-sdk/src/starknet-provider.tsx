@@ -32,6 +32,7 @@ export default function StarknetProvider({ children }: PropsWithChildren) {
             explorer={voyager}
             autoConnect
         >
+            {/* @ts-ignore react version mismatch */}
             {children}
         </StarknetConfig>
     );

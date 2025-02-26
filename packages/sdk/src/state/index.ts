@@ -15,6 +15,7 @@ export interface GameState<T extends SchemaType> {
     entities: Record<string, ParsedEntity<T>>;
     pendingTransactions: Record<string, PendingTransaction>;
     setEntities: (entities: ParsedEntity<T>[]) => void;
+    mergeEntities: (entities: ParsedEntity<T>[]) => void;
     updateEntity: (entity: Partial<ParsedEntity<T>>) => void;
     applyOptimisticUpdate: (
         transactionId: string,

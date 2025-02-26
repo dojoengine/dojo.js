@@ -140,6 +140,7 @@ export const Player = (props: any) => {
 
     return (
         <>
+            {/* @ts-ignore */}
             <Cone
                 castShadow
                 key="player"
