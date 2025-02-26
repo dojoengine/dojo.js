@@ -1,5 +1,20 @@
 # template-vite-ts
 
+## 1.5.0
+
+### Minor Changes
+
+- a9ccef3: feat: add reusable sdk react hooks
+
+### Patch Changes
+
+- Updated dependencies [a9ccef3]
+    - @dojoengine/sdk@1.2.0
+    - @dojoengine/core@1.2.0
+    - @dojoengine/predeployed-connector@1.2.0
+    - @dojoengine/torii-client@1.2.0
+    - @dojoengine/utils@1.2.0
+
 ## 1.4.3
 
 ### Patch Changes
