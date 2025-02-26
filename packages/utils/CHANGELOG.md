@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.0
+
+### Minor Changes
+
+- a9ccef3: feat: add reusable sdk react hooks
+
 ## 1.1.3
 
 ### Patch Changes
