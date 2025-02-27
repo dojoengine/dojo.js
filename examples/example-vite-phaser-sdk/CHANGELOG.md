@@ -1,5 +1,19 @@
 # template-vite-ts
 
+## 1.5.1
+
+### Patch Changes
+
+- 1cd88c8: refactor sdk useEntityQuery,useEventQuery,useHistoricalEventsQuery
+- e2a4ea5: fix: zustand updateEntity and mergeEntities deeply merge objects
+- Updated dependencies [1cd88c8]
+- Updated dependencies [e2a4ea5]
+    - @dojoengine/sdk@1.2.1
+    - @dojoengine/core@1.2.1
+    - @dojoengine/predeployed-connector@1.2.1
+    - @dojoengine/torii-client@1.2.1
+    - @dojoengine/utils@1.2.1
+
 ## 1.5.0
 
 ### Minor Changes

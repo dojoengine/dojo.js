@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.1
+
+### Patch Changes
+
+- 1cd88c8: refactor sdk useEntityQuery,useEventQuery,useHistoricalEventsQuery
+- e2a4ea5: fix: zustand updateEntity and mergeEntities deeply merge objects
+
 ## 1.2.0
 
 ### Minor Changes
