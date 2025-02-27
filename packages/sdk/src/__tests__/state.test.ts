@@ -111,6 +111,20 @@ describe("createDojoStore", () => {
         expect(state.entities["galaxy1"]).toEqual(initialGalaxy);
     });
 
+    test("mergeEntities should merge entities to the store", () => {
+        useStore.getState().setEntities([initialPlayer]);
+        const updatedPlayer = {
+            entityId: "player1",
+            models: { world: { player: { score: 120 } }, universe: {} },
+        };
+        useStore.getState().mergeEntities([updatedPlayer]);
+        const state = useStore.getState();
+        expect(state.getEntities()).toHaveLength(1);
+        const player = state.entities["player1"];
+        expect(player.models.world?.player?.name).toEqual("Alice");
+        expect(player.models.world?.player?.score).toEqual(120);
+    });
+
     test("updateEntity should update an existing entity", () => {
         useStore.getState().setEntities([initialPlayer]);
         useStore.getState().updateEntity({
