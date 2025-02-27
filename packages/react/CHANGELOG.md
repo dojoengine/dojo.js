@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.2.2
+
+### Patch Changes
+
+- d8a9b0d: fix: recs `setEntities` now updates component if component exists
+- Updated dependencies [d8a9b0d]
+    - @dojoengine/state@1.2.2
+    - @dojoengine/torii-client@1.2.2
+    - @dojoengine/utils@1.2.2
+
 ## 1.2.1
 
 ### Patch Changes

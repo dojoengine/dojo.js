@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.2.2
+
+### Patch Changes
+
+- d8a9b0d: fix: recs `setEntities` now updates component if component exists
+- Updated dependencies [d8a9b0d]
+    - @dojoengine/core@1.2.2
+
 ## 1.2.1
 
 ### Patch Changes
