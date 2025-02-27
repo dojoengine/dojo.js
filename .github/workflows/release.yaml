@@ -20,6 +20,11 @@ jobs:
         with:
           version: 10.0.0
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
       - name: Configure Git
         run: |
           git config user.name "${{ github.actor }}"
@@ -36,15 +41,51 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          publish: pnpm release
-          setupGitUser: false
-          title: "feat: prepare release"
-          commit: "feat: prepare release"
-          createGithubReleases: true
+      - name: Version packages
+        id: changesets-version
+        run: |
+          # Apply version bump based on release type
+          pnpm exec changeset version ${{ github.event.inputs.release_type }}
+          
+          # Store the new version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Publish to npm
+        run: pnpm publish --no-git-checks
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "chore: release v${{ steps.changesets-version.outputs.new_version }}" || echo "No changes to commit"
+
+      - name: Create and push tag
+        run: |
+          git tag v${{ steps.changesets-version.outputs.new_version }}
+          git push origin v${{ steps.changesets-version.outputs.new_version }}
+          git push origin main
+
+      - name: Generate release notes
+        id: generate-notes
+        run: |
+          pnpm exec changeset changelog
+          RELEASE_NOTES=$(cat CHANGELOG.md | sed -n -e '/^## /{n;:a;n;/^## /q;p;ba}' | tr -d '\n')
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        with:
+          tag_name: v${{ steps.changesets-version.outputs.new_version }}
+          release_name: Release v${{ steps.changesets-version.outputs.new_version }}
+          body: ${{ steps.generate-notes.outputs.release_notes }}
+          draft: false
+          prerelease: false
