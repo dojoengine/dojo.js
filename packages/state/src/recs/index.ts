@@ -2,9 +2,12 @@ import {
     Component,
     ComponentValue,
     Entity,
+    getComponentValue,
+    hasComponent,
     Metadata,
     Schema,
     setComponent,
+    updateComponent,
 } from "@dojoengine/recs";
 import {
     Clause,
@@ -405,26 +408,23 @@ export const setEntities = async <S extends Schema>(
 
     if (logging) console.log("Entities to set:", entities);
 
-    for (let key in entities) {
+    for (const key in entities) {
         if (!Object.hasOwn(entities, key)) {
             continue;
         }
 
-        for (let componentName in entities[key]) {
+        for (const componentName in entities[key]) {
             if (!Object.hasOwn(entities[key], componentName)) {
                 continue;
             }
-            let recsComponent = Object.values(components).find(
-                (component) =>
-                    component.metadata?.namespace +
-                        "-" +
-                        component.metadata?.name ===
-                    componentName
+            const recsComponent = Object.values(components).find(
+                (component) => component.metadata?.name === componentName
             );
 
             if (recsComponent) {
                 try {
                     const rawValue = entities[key][componentName];
+
                     if (logging)
                         console.log(
                             `Raw value for ${componentName} on ${key}:`,
@@ -448,6 +448,19 @@ export const setEntities = async <S extends Schema>(
                         );
                     }
 
+                    if (hasComponent(recsComponent, key as Entity)) {
+                        updateComponent(
+                            recsComponent,
+                            key as Entity,
+                            convertedValue as Partial<ComponentValue>,
+                            getComponentValue(recsComponent, key as Entity)
+                        );
+                        if (logging)
+                            console.log(
+                                `Update component ${recsComponent.metadata?.name} on ${key}`
+                            );
+                        continue;
+                    }
                     setComponent(recsComponent, key as Entity, convertedValue);
 
                     if (logging)
