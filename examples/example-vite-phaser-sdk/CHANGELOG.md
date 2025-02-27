@@ -1,5 +1,17 @@
 # template-vite-ts
 
+## 1.5.2
+
+### Patch Changes
+
+- d8a9b0d: fix: recs `setEntities` now updates component if component exists
+- Updated dependencies [d8a9b0d]
+    - @dojoengine/core@1.2.2
+    - @dojoengine/predeployed-connector@1.2.2
+    - @dojoengine/sdk@1.2.2
+    - @dojoengine/torii-client@1.2.2
+    - @dojoengine/utils@1.2.2
+
 ## 1.5.1
 
 ### Patch Changes

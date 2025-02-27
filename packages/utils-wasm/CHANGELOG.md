@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.2
+
+### Patch Changes
+
+- d8a9b0d: fix: recs `setEntities` now updates component if component exists
+
 ## 1.2.1
 
 ### Patch Changes
