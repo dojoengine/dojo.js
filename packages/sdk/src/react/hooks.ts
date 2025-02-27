@@ -7,13 +7,19 @@ import {
     useState,
 } from "react";
 import type { BigNumberish } from "starknet";
-import { StandardizedQueryResult, type SchemaType } from "../types";
+import type {
+    StandardizedQueryResult,
+    SubscribeResponse,
+    ToriiResponse,
+    SchemaType,
+    SubscribeParams,
+} from "../types";
 import { DojoContext, type DojoContextType } from "./provider";
 import { create, type StoreApi, type UseBoundStore } from "zustand";
 import { createDojoStoreFactory } from "../state/zustand";
 import type { GameState } from "../state";
-import { ToriiQueryBuilder } from "../toriiQueryBuilder";
-import { Subscription } from "@dojoengine/torii-client";
+import type { ToriiQueryBuilder } from "../toriiQueryBuilder";
+import type { EntityKeysClause, Subscription } from "@dojoengine/torii-client";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 /**
@@ -89,205 +95,178 @@ export function useEntityId(...keys: BigNumberish[]): BigNumberish {
 }
 
 /**
- * Subscribe to entity changes. This hook fetches initial data from torii and subscribe to each entity change. Use `useModel` to access your data.
+ * Base hook factory for creating subscription hooks with shared logic
+ */
+function createSubscriptionHook<
+    Schema extends SchemaType,
+    Historical extends boolean = false,
+>(config: {
+    subscribeMethod: (
+        options: SubscribeParams<Schema, Historical>
+    ) => Promise<SubscribeResponse<Schema, Historical>>;
+    updateSubscriptionMethod: (
+        subscription: Subscription,
+        clause: any,
+        historical?: boolean
+    ) => Promise<void>;
+    queryToHashedKeysMethod: (
+        query: ToriiQueryBuilder<Schema>,
+        historical?: boolean
+    ) => Promise<[ToriiResponse<Schema, Historical>, EntityKeysClause[]]>;
+    processInitialData: (data: ToriiResponse<Schema, Historical>) => void;
+    processUpdateData: (data: any) => void;
+    getErrorPrefix: () => string;
+    historical: Historical;
+}) {
+    return function useSubscriptionHook(query: ToriiQueryBuilder<Schema>) {
+        // Subscription handle to update
+        const subscriptionRef = useRef<Subscription | null>(null);
+        // Handle to user input query
+        const fetchingRef = useRef<ToriiQueryBuilder<Schema> | null>(null);
+        // Async lock to sync with event loop
+        const isUpdating = useRef<boolean>(false);
+
+        const fetchData = useCallback(async () => {
+            // Wait until lock is released
+            while (isUpdating.current) {
+                await sleep(50);
+            }
+
+            // Lock function
+            isUpdating.current = true;
+
+            if (subscriptionRef.current) {
+                const [results, clause] = await config.queryToHashedKeysMethod(
+                    fetchingRef.current!,
+                    config.historical
+                );
+                await config.updateSubscriptionMethod(
+                    subscriptionRef.current,
+                    clause,
+                    config.historical
+                );
+                config.processInitialData(results);
+                return null;
+            }
+
+            const [initialData, subscription] = await config.subscribeMethod({
+                query: fetchingRef.current!,
+                callback: ({ data, error }) => {
+                    if (data) {
+                        config.processUpdateData(data);
+                    }
+                    if (error) {
+                        console.error(
+                            `${config.getErrorPrefix()} - error subscribing with query: `,
+                            query.toString()
+                        );
+                        console.error(error);
+                    }
+                },
+                historical: config.historical,
+            });
+
+            config.processInitialData(initialData);
+            return subscription;
+        }, [query]);
+
+        useEffect(() => {
+            if (!deepEqual(query, fetchingRef.current)) {
+                fetchingRef.current = query;
+
+                fetchData()
+                    .then((s) => {
+                        if (s !== null) {
+                            subscriptionRef.current = s;
+                        }
+                    })
+                    .catch((err) => {
+                        console.error(
+                            `${config.getErrorPrefix()} - error fetching data for query: `,
+                            JSON.stringify(query)
+                        );
+                        console.error(err);
+                    })
+                    .finally(() => {
+                        // Release lock
+                        isUpdating.current = false;
+                    });
+            }
+
+            return () => {
+                if (subscriptionRef.current) {
+                    // subscriptionRef.current?.cancel();
+                    // subscriptionRef.current = null;
+                }
+            };
+        }, [query, fetchData]);
+    };
+}
+
+/**
+ * Subscribe to entity changes. This hook fetches initial data from torii and subscribes to each entity change.
+ * Use `useModel` to access your data.
  *
  * @param query ToriiQuery
  */
 export function useEntityQuery<Schema extends SchemaType>(
     query: ToriiQueryBuilder<Schema>
 ) {
-    const { sdk, useDojoStore } = useDojoSDK();
+    const { sdk, useDojoStore } = useDojoSDK<() => any, Schema>();
     const state = useDojoStore((s) => s);
 
-    // Subscription handle to update. Avoid unecessary creating/cancelling subscriptions
-    const subscriptionRef = useRef<Subscription | null>(null);
-    // Handle to user input query.
-    const fetchingRef = useRef<ToriiQueryBuilder<Schema> | null>(null);
-    // Async lock to sync with event loop
-    const isUpdating = useRef<boolean>(false);
-
-    const fetchData = useCallback(async () => {
-        // Wait until lock is released
-        while (isUpdating.current) {
-            await sleep(50);
-        }
-
-        // Lock function
-        isUpdating.current = true;
-
-        if (subscriptionRef.current) {
-            const [entities, clause] = await sdk.toriiQueryIntoHashedKeys(
-                fetchingRef.current!
-            );
-            await sdk.updateEntitySubscription(subscriptionRef.current, clause);
-            state.mergeEntities(entities);
-            return null;
-        }
-
-        const [initialData, subscription] = await sdk.subscribeEntityQuery({
-            query: fetchingRef.current!,
-            callback: ({ data, error }) => {
-                if (data) {
-                    const entity = data.pop();
-                    if (entity && entity.entityId !== "0x0") {
-                        state.updateEntity(entity);
-                    }
-                }
-                if (error) {
-                    console.error(
-                        "Dojo.js - useEntityQuery - error subscribing to entity with query : ",
-                        query.toString()
-                    );
-                    console.error(error);
-                }
-            },
-        });
-
-        state.mergeEntities(initialData);
-
-        return subscription;
-    }, [query, subscriptionRef]);
-
-    useEffect(() => {
-        if (!deepEqual(query, fetchingRef.current)) {
-            fetchingRef.current = query;
-
-            fetchData()
-                .then((s) => {
-                    if (s !== null) {
-                        subscriptionRef.current = s;
-                    }
-                    // Important to release lock at this point.
-                    isUpdating.current = false;
-                })
-                .catch((err) => {
-                    console.error(
-                        "Dojo.js - useEntityQuery - error fetching entities for query ",
-                        JSON.stringify(query)
-                    );
-                    console.error(err);
-                })
-                .finally(() => {
-                    // Important to release lock at this point.
-                    isUpdating.current = false;
-                });
-        }
-
-        return () => {
-            if (subscriptionRef.current) {
-                // subscriptionRef.current?.cancel();
-                // subscriptionRef.current = null;
-                // setSub(null);
+    const useEntityQueryHook = createSubscriptionHook<Schema>({
+        subscribeMethod: (options) => sdk.subscribeEntityQuery(options),
+        updateSubscriptionMethod: (subscription, clause) =>
+            sdk.updateEntitySubscription(subscription, clause),
+        queryToHashedKeysMethod: (query) => sdk.toriiQueryIntoHashedKeys(query),
+        processInitialData: (data) => state.mergeEntities(data),
+        processUpdateData: (data) => {
+            const entity = data.pop();
+            if (entity && entity.entityId !== "0x0") {
+                state.updateEntity(entity);
             }
-        };
-    }, [query, subscriptionRef, fetchData]);
+        },
+        getErrorPrefix: () => "Dojo.js - useEntityQuery",
+        historical: false,
+    });
+
+    useEntityQueryHook(query);
 }
 
 /**
- * Subscribe to entity changes. This hook fetches initial data from torii and subscribe to each entity change. Use `useModel` to access your data.
+ * Subscribe to event changes. This hook fetches initial events from torii and subscribes to new events.
  *
  * @param query ToriiQuery
  */
 export function useEventQuery<Schema extends SchemaType>(
     query: ToriiQueryBuilder<Schema>
 ) {
-    const { sdk, useDojoStore } = useDojoSDK();
+    const { sdk, useDojoStore } = useDojoSDK<() => any, Schema>();
     const state = useDojoStore((s) => s);
 
-    // Subscription handle to update. Avoid unecessary creating/cancelling subscriptions
-    const subscriptionRef = useRef<Subscription | null>(null);
-    // Handle to user input query.
-    const fetchingRef = useRef<ToriiQueryBuilder<Schema> | null>(null);
-    // Async lock to sync with event loop
-    const isUpdating = useRef<boolean>(false);
-
-    const fetchData = useCallback(async () => {
-        // Wait until lock is released
-        while (isUpdating.current) {
-            await sleep(50);
-        }
-
-        // Lock function
-        isUpdating.current = true;
-
-        if (subscriptionRef.current) {
-            const [events, clause] =
-                await sdk.toriiEventMessagesQueryIntoHashedKeys(
-                    fetchingRef.current!,
-                    false
-                );
-            await sdk.updateEventMessageSubscription(
-                subscriptionRef.current,
-                clause,
-                false
-            );
-            state.mergeEntities(events);
-
-            return null;
-        }
-
-        const [initialData, subscription] = await sdk.subscribeEventQuery({
-            query: fetchingRef.current!,
-            callback: ({ data, error }) => {
-                if (data) {
-                    const event = data.pop();
-                    if (event && event.entityId !== "0x0") {
-                        state.updateEntity(event);
-                    }
-                }
-                if (error) {
-                    console.error(
-                        "Dojo.js - useEventQuery - error subscribing to events with query : ",
-                        query.toString()
-                    );
-                    console.error(error);
-                }
-            },
-            historical: false,
-        });
-
-        state.mergeEntities(initialData);
-
-        return subscription;
-    }, [query, subscriptionRef]);
-
-    useEffect(() => {
-        if (!deepEqual(query, fetchingRef.current)) {
-            fetchingRef.current = query;
-
-            fetchData()
-                .then((s) => {
-                    if (s !== null) {
-                        subscriptionRef.current = s;
-                    }
-                    // Important to release lock at this point.
-                    isUpdating.current = false;
-                })
-                .catch((err) => {
-                    console.error(
-                        "Dojo.js - useEventQuery - error fetching events for query ",
-                        JSON.stringify(query)
-                    );
-                    console.error(err);
-                })
-                .finally(() => {
-                    // Important to release lock at this point.
-                    isUpdating.current = false;
-                });
-        }
-
-        return () => {
-            if (subscriptionRef.current) {
-                // subscriptionRef.current?.cancel();
-                // subscriptionRef.current = null;
-                // setSub(null);
+    const useEventQueryHook = createSubscriptionHook<Schema>({
+        subscribeMethod: (options) => sdk.subscribeEventQuery(options),
+        updateSubscriptionMethod: (subscription, clause) =>
+            sdk.updateEventMessageSubscription(subscription, clause, false),
+        queryToHashedKeysMethod: (query) =>
+            sdk.toriiEventMessagesQueryIntoHashedKeys(query, false),
+        processInitialData: (data) => state.mergeEntities(data),
+        processUpdateData: (data) => {
+            const event = data.pop();
+            if (event && event.entityId !== "0x0") {
+                state.updateEntity(event);
             }
-        };
-    }, [query, subscriptionRef, fetchData]);
+        },
+        getErrorPrefix: () => "Dojo.js - useEventQuery",
+        historical: false,
+    });
+
+    useEventQueryHook(query);
 }
 
 /**
- * Subscribe to historical events changes. This hook fetches initial data from torii and subscribe to each entity change. Use `useModel` to access your data.
+ * Subscribe to historical events changes. This hook fetches initial data from torii and subscribes to entity changes.
  * You need to specify to torii which events has to be taken in account as historical events.
  *
  * @param query ToriiQuery
@@ -298,93 +277,24 @@ export function useHistoricalEventsQuery<Schema extends SchemaType>(
     const { sdk } = useDojoSDK<() => any, Schema>();
     const [events, setEvents] = useState<StandardizedQueryResult<Schema>[]>([]);
 
-    // Subscription handle to update. Avoid unecessary creating/cancelling subscriptions
-    const subscriptionRef = useRef<Subscription | null>(null);
-    // Handle to user input query.
-    const fetchingRef = useRef<ToriiQueryBuilder<Schema> | null>(null);
-    // Async lock to sync with event loop
-    const isUpdating = useRef<boolean>(false);
-
-    const fetchData = useCallback(async () => {
-        // Wait until lock is released
-        while (isUpdating.current) {
-            await sleep(50);
-        }
-
-        // Lock function
-        isUpdating.current = true;
-
-        if (subscriptionRef.current) {
-            const [events, clause] =
-                await sdk.toriiEventMessagesQueryIntoHashedKeys(
-                    fetchingRef.current!,
-                    true
-                );
-            await sdk.updateEventMessageSubscription(
-                subscriptionRef.current,
-                clause,
-                true
-            );
-            setEvents(events);
-            return null;
-        }
-
-        const [initialData, subscription] = await sdk.subscribeEventQuery({
-            query: fetchingRef.current!,
-            callback: ({ data, error }) => {
-                if (data) {
-                    const event = data.pop();
-                    if (event) {
-                        setEvents((ev) => [event, ...ev]);
-                    }
-                }
-                if (error) {
-                    console.error(
-                        "Dojo.js - useHistoricalEventsQuery - error subscribing to events with query : ",
-                        query.toString()
-                    );
-                    console.error(error);
-                }
-            },
-            historical: true,
-        });
-
-        setEvents(initialData);
-
-        return subscription;
-    }, [query, subscriptionRef]);
-
-    useEffect(() => {
-        if (!deepEqual(query, fetchingRef.current)) {
-            fetchingRef.current = query;
-
-            fetchData()
-                .then((s) => {
-                    if (s !== null) {
-                        subscriptionRef.current = s;
-                    }
-                })
-                .catch((err) => {
-                    console.error(
-                        "Dojo.js - useHistoricalEventsQuery - error fetching events for query ",
-                        JSON.stringify(query)
-                    );
-                    console.error(err);
-                })
-                .finally(() => {
-                    // Important to release lock at this point.
-                    isUpdating.current = false;
-                });
-        }
-
-        return () => {
-            if (subscriptionRef.current) {
-                // subscriptionRef.current?.cancel();
-                // subscriptionRef.current = null;
-                // setSub(null);
+    const useHistoricalEventsQueryHook = createSubscriptionHook<Schema, true>({
+        subscribeMethod: (options) => sdk.subscribeEventQuery(options),
+        updateSubscriptionMethod: (subscription, clause) =>
+            sdk.updateEventMessageSubscription(subscription, clause, true),
+        queryToHashedKeysMethod: (query) =>
+            sdk.toriiEventMessagesQueryIntoHashedKeys(query, true),
+        processInitialData: (data) => setEvents(data),
+        processUpdateData: (data) => {
+            const event = data.pop();
+            if (event) {
+                setEvents((ev) => [event, ...ev]);
             }
-        };
-    }, [query, subscriptionRef, fetchData]);
+        },
+        getErrorPrefix: () => "Dojo.js - useHistoricalEventsQuery",
+        historical: true,
+    });
+
+    useHistoricalEventsQueryHook(query);
 
     return events;
 }
