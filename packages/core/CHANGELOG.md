@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.3
+
+### Patch Changes
+
+- b94f26d: fix: recs component matching
+
 ## 1.2.2
 
 ### Patch Changes

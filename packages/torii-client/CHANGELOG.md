@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.2.3
+
+### Patch Changes
+
+- b94f26d: fix: recs component matching
+- Updated dependencies [b94f26d]
+    - @dojoengine/torii-wasm@1.2.3
+
 ## 1.2.2
 
 ### Patch Changes

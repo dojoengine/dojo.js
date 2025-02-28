@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.2.3
+
+### Patch Changes
+
+- b94f26d: fix: recs component matching
+- Updated dependencies [b94f26d]
+    - @dojoengine/state@1.2.3
+    - @dojoengine/torii-client@1.2.3
+    - @dojoengine/utils@1.2.3
+
 ## 1.2.2
 
 ### Patch Changes

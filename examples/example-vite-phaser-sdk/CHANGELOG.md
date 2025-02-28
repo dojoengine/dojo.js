@@ -1,5 +1,17 @@
 # template-vite-ts
 
+## 1.5.3
+
+### Patch Changes
+
+- b94f26d: fix: recs component matching
+- Updated dependencies [b94f26d]
+    - @dojoengine/core@1.2.3
+    - @dojoengine/predeployed-connector@1.2.3
+    - @dojoengine/sdk@1.2.3
+    - @dojoengine/torii-client@1.2.3
+    - @dojoengine/utils@1.2.3
+
 ## 1.5.2
 
 ### Patch Changes
