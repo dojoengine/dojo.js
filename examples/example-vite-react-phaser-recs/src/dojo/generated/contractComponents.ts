@@ -18,7 +18,8 @@ export function defineContractComponents(world: World) {
                 { player: RecsType.BigInt, directions: RecsType.StringArray },
                 {
                     metadata: {
-                        name: "dojo_starter-DirectionsAvailable",
+                        namespace: "dojo_starter",
+                        name: "DirectionsAvailable",
                         types: ["contractaddress"],
                         customTypes: ["Direction"],
                     },
@@ -36,7 +37,8 @@ export function defineContractComponents(world: World) {
                 },
                 {
                     metadata: {
-                        name: "dojo_starter-Moves",
+                        namespace: "dojo_starter",
+                        name: "Moves",
                         types: ["contractaddress", "u8", "enum", "bool"],
                         customTypes: ["Direction"],
                     },

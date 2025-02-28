@@ -418,7 +418,9 @@ export const setEntities = async <S extends Schema>(
                 continue;
             }
             const recsComponent = Object.values(components).find(
-                (component) => component.metadata?.name === componentName
+                (component) =>
+                    `${component.metadata?.namespace}-${component.metadata?.name}` ===
+                    componentName
             );
 
             if (recsComponent) {
