@@ -54,7 +54,8 @@ export function defineContractComponents(world: World) {
                 },
                 {
                     metadata: {
-                        name: "dojo_starter-Position",
+                        namespace: "dojo_starter",
+                        name: "Position",
                         types: ["contractaddress", "u32", "u32"],
                         customTypes: ["Vec2"],
                     },

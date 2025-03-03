@@ -348,4 +348,17 @@ describe("convertValues", () => {
         const expected = {};
         expect(convertValues(schema, values)).toEqual(expected);
     });
+    it("should not set value to undefined", () => {
+        const schema: Schema = {
+            name: RecsType.String,
+            age: RecsType.Number,
+        };
+        const values = {
+            name: { value: "Alice", type: "string" },
+        };
+        const expected = {
+            name: "Alice",
+        };
+        expect(convertValues(schema, values)).toStrictEqual(expected);
+    });
 });

@@ -5,6 +5,12 @@ export function convertValues(schema: Schema, values: any) {
         let schemaType = schema[key];
         let value = values[key];
 
+        // If key in values is not present, no need to set it to null
+        // so we return the accumulator as is
+        if (undefined === value) {
+            return acc;
+        }
+
         if (value == null) {
             acc[key] = value;
             return acc;
