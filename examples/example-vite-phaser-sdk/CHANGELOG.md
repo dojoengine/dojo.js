@@ -1,5 +1,17 @@
 # template-vite-ts
 
+## 1.5.4
+
+### Patch Changes
+
+- 28398be: fix: recs convertValues do not set to null
+- Updated dependencies [28398be]
+    - @dojoengine/core@1.2.4
+    - @dojoengine/predeployed-connector@1.2.4
+    - @dojoengine/sdk@1.2.4
+    - @dojoengine/torii-client@1.2.4
+    - @dojoengine/utils@1.2.4
+
 ## 1.5.3
 
 ### Patch Changes
