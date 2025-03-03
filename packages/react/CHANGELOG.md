@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.2.4
+
+### Patch Changes
+
+- 28398be: fix: recs convertValues do not set to null
+- Updated dependencies [28398be]
+    - @dojoengine/state@1.2.4
+    - @dojoengine/torii-client@1.2.4
+    - @dojoengine/utils@1.2.4
+
 ## 1.2.3
 
 ### Patch Changes

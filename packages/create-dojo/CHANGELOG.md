@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.4
+
+### Patch Changes
+
+- 28398be: fix: recs convertValues do not set to null
+
 ## 1.2.3
 
 ### Patch Changes
