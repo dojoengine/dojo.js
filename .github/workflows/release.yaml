@@ -46,6 +46,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Check for packages to be bumped
+        id: check-status
+        run: |
+          # Run changeset status and capture output
+          STATUS=$(pnpm changeset status)
+          echo "Changeset status:"
+          echo "$STATUS"
+          
+          # Count occurrences of "NO packages to be bumped"
+          COUNT=$(echo "$STATUS" | grep -c "NO packages to be bumped")
+          
+          if [ "$COUNT" -eq 3 ]; then
+            exit 1
+          fi
+
       - name: Version packages
         id: changesets-version
         run: |
