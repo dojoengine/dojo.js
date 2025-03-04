@@ -58,7 +58,7 @@ jobs:
           COUNT=$(echo "$STATUS" | grep -c "NO packages to be bumped")
           
           if [ "$COUNT" -eq 3 ]; then
-            exit 1
+            exit 0
           fi
 
       - name: Version packages
