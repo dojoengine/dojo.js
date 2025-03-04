@@ -54,13 +54,16 @@ jobs:
           echo "Changeset status:"
           echo "$STATUS"
           
-          # Count occurrences of "NO packages to be bumped"
-          COUNT=$(echo "$STATUS" | grep -c "NO packages to be bumped")
-          
-          if [ "$COUNT" -eq 3 ]; then
+          # Check if we have packages to bump
+          if echo "$STATUS" | grep -q "NO packages to be bumped at patch" && \
+             echo "$STATUS" | grep -q "NO packages to be bumped at minor" && \
+             echo "$STATUS" | grep -q "NO packages to be bumped at major"; then
+            echo "No packages need to be bumped at any level. Exiting workflow."
+            echo "has_changes=false" >> $GITHUB_OUTPUT
             exit 0
           else
-            echo "Packages need to be bumped. Exiting workflow."
+            echo "Found packages that need to be bumped. Continuing workflow."
+            echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Version packages
