@@ -50,7 +50,7 @@ jobs:
         id: changesets-version
         run: |
           # Apply version bump based on release type
-          pnpm exec changeset version ${{ github.event.inputs.release_type }}
+          pnpm changeset version
           
           # Store the new version
           NEW_VERSION=$(node -p "require('./package.json').version")
