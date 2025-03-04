@@ -59,6 +59,8 @@ jobs:
           
           if [ "$COUNT" -eq 3 ]; then
             exit 0
+          else
+            echo "Packages need to be bumped. Exiting workflow."
           fi
 
       - name: Version packages
