@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.2.5
+
+### Patch Changes
+
+- fbc6a2e: fix: changing release workflow
+- 691f1a3: fix: udpate package name + add build cache
+- Updated dependencies [fbc6a2e]
+- Updated dependencies [691f1a3]
+    - @dojoengine/torii-wasm@1.2.5
+
 ## 1.2.4
 
 ### Patch Changes

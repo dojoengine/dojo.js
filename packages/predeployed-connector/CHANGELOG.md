@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.5
+
+### Patch Changes
+
+- fbc6a2e: fix: changing release workflow
+- 691f1a3: fix: udpate package name + add build cache
+
 ## 1.2.4
 
 ### Patch Changes
