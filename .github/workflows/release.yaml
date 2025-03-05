@@ -1,4 +1,4 @@
-name: Release
+name: Publish packages and create tags
 
 on:
   workflow_dispatch:
@@ -72,22 +72,15 @@ jobs:
           # Apply version bump based on release type
           pnpm changeset version
           
-          # Store the new version
-          NEW_VERSION=$(node -p "require('./package.json').version")
-          echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
-          
           # If this is a dry run, revert the version changes
           if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
             echo "DRY RUN: Would version packages to ${NEW_VERSION}"
             git checkout -- .
           fi
 
-      - name: Build packages
-        run: pnpm build
-
       - name: Publish to npm
         if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: pnpm publish --no-git-checks
+        run: pnpm release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -95,58 +88,25 @@ jobs:
         if: ${{ github.event.inputs.dry_run == 'true' }}
         run: |
           echo "DRY RUN: Would publish the following packages to npm:"
-          echo "Version: ${{ steps.changesets-version.outputs.new_version }}"
-          pnpm publish --dry-run
+          pnpm release -- --dry-run
 
       - name: Commit changes
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           git add .
-          git commit -m "chore: release v${{ steps.changesets-version.outputs.new_version }}" || echo "No changes to commit"
+          git commit -m "chore: release || echo "No changes to commit"
+          git push origin main
 
       - name: Create and push tag
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
-          git tag v${{ steps.changesets-version.outputs.new_version }}
-          git push origin v${{ steps.changesets-version.outputs.new_version }}
-          git push origin main
+          pnpm changeset tag
+          git push --tags
 
       - name: Dry run - Show git changes
         if: ${{ github.event.inputs.dry_run == 'true' }}
         run: |
-          echo "DRY RUN: Would commit changes with message: chore: release v${{ steps.changesets-version.outputs.new_version }}"
-          echo "DRY RUN: Would create and push tag: v${{ steps.changesets-version.outputs.new_version }}"
+          TAGS=$(pnpm changeset tag)
+          echo "DRY RUN: Would commit changes with message: chore: release"
+          echo "DRY RUN: Would create and push tag: $TAGS"
           git status
-
-      - name: Generate release notes
-        id: generate-notes
-        run: |
-          pnpm exec changeset changelog
-          RELEASE_NOTES=$(cat CHANGELOG.md | sed -n -e '/^## /{n;:a;n;/^## /q;p;ba}' | tr -d '\n')
-          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
-          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          # If this is a dry run, revert the changelog changes
-          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
-            git checkout -- CHANGELOG.md
-          fi
-
-      - name: Create GitHub Release
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.changesets-version.outputs.new_version }}
-          release_name: Release v${{ steps.changesets-version.outputs.new_version }}
-          body: ${{ steps.generate-notes.outputs.release_notes }}
-          draft: false
-          prerelease: false
-
-      - name: Dry run - Show GitHub Release
-        if: ${{ github.event.inputs.dry_run == 'true' }}
-        run: |
-          echo "DRY RUN: Would create GitHub release with tag: v${{ steps.changesets-version.outputs.new_version }}"
-          echo "DRY RUN: Release notes would be:"
-          echo "${{ steps.generate-notes.outputs.release_notes }}"
