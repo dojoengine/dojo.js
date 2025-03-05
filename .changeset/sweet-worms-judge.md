@@ -1,5 +1,4 @@
 ---
-"template-vite-ts": patch
 "@dojoengine/core": patch
 "@dojoengine/create-burner": patch
 "@dojoengine/create-dojo": patch
