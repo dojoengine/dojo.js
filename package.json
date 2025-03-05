@@ -1,28 +1,29 @@
 {
-  "name": "dojo.js",
-  "scripts": {
-    "build": "bash ./scripts/build-packages.sh",
-    "build-examples": "bash ./scripts/build-examples.sh",
-    "clean": "bash ./scripts/clean.sh",
-    "prettier-check": "pnpx prettier --check packages examples",
-    "prettier": "pnpx prettier --write packages examples",
-    "release": "pnpm prettier && pnpm build && pnpm -F './packages/**' publish -r --force",
-    "docs": "npx typedoc --out docs",
-    "prepare": "husky install"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^18.6.1",
-    "@commitlint/config-conventional": "^18.6.3",
-    "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
-    "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.3",
-    "husky": "^9.1.7",
-    "lerna": "^8.1.9",
-    "prettier": "^3.4.2",
-    "tsup": "^8.3.5",
-    "typedoc": "^0.26.11",
-    "typedoc-plugin-coverage": "^3.4.1"
-  },
-  "dependencies": {
-    "@changesets/cli": "^2.27.11"
-  }
+    "name": "dojo.js",
+    "scripts": {
+        "build": "bash ./scripts/build-packages.sh",
+        "build-examples": "bash ./scripts/build-examples.sh",
+        "clean": "bash ./scripts/clean.sh",
+        "prettier-check": "pnpx prettier --check packages examples",
+        "prettier": "pnpx prettier --write packages examples",
+        "release": "pnpm prettier && pnpm build && pnpm -F './packages/**' publish -r --force",
+        "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run",
+        "docs": "npx typedoc --out docs",
+        "prepare": "husky install"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^18.6.1",
+        "@commitlint/config-conventional": "^18.6.3",
+        "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
+        "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.3",
+        "husky": "^9.1.7",
+        "lerna": "^8.1.9",
+        "prettier": "^3.4.2",
+        "tsup": "^8.3.5",
+        "typedoc": "^0.26.11",
+        "typedoc-plugin-coverage": "^3.4.1"
+    },
+    "dependencies": {
+        "@changesets/cli": "^2.27.11"
+    }
 }
