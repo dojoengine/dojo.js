@@ -123,7 +123,7 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           git add .
-          git commit -m "chore: release || echo "No changes to commit"
+          git commit -m "chore: release"
           git push origin main
 
       - name: Publish to npm
@@ -137,7 +137,6 @@ jobs:
         run: |
           echo "DRY RUN: Would publish the following packages to npm:"
           pnpm release:dry-run
-
 
       - name: Create and push tag
         if: ${{ github.event.inputs.dry_run != 'true' }}
