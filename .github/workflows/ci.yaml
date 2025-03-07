@@ -45,13 +45,13 @@ jobs:
         run: pnpm i
 
       - name: Run Prettier
-        run: pnpm run prettier --check .
+        run: pnpm run format:check --ui stream
 
       - name: Build packages
-        run: pnpm run build
+        run: pnpm run build:deps --ui stream
 
       - name: Build examples
-        run: pnpm run build-examples
+        run: pnpm run build --ui stream
 
       # - name: Upload coverage reports to Codecov
       #   uses: codecov/codecov-action@v3

@@ -2,8 +2,8 @@
     "name": "dojo.js",
     "packageManager": "pnpm@10.5.2",
     "scripts": {
-        "build": "bash ./scripts/build-packages.sh",
-        "build-examples": "bash ./scripts/build-examples.sh",
+        "build:deps": "turbo build:deps",
+        "build": "turbo build",
         "clean": "bash ./scripts/clean.sh",
         "prettier-check": "pnpx prettier --check packages examples",
         "format:check": "turbo format:check",
