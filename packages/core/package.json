@@ -7,7 +7,10 @@
     "main": "./dist/index.js",
     "type": "module",
     "scripts": {
-        "build": "tsup && cp -R bin dist/",
+        "build:deps": "tsup && cp -R bin dist/",
+        "build": "pnpm build:deps",
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
         "test": "vitest run --coverage"
     },
     "exports": {

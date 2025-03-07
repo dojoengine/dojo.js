@@ -5,8 +5,12 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview"
+        "build": "run-p type-check build-only",
+        "preview": "vite preview",
+        "build-only": "vite build",
+        "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
+        "format:check": "prettier --check .",
+        "format": "prettier --write ."
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",

@@ -7,8 +7,11 @@
     "main": "./pkg/web/dojo_c.js",
     "type": "module",
     "scripts": {
-        "build-wasm": "sh ./build.sh",
-        "build": "npm run build-wasm && tsc",
+        "build:wasm": "cd rust && RUSTFLAGS='-C target-feature=+atomics,+bulk-memory,+mutable-globals' wasm-pack build --target web && cd .. && cp -r rust/pkg/web . && cd rust && RUSTFLAGS='-C target-feature=+atomics,+bulk-memory,+mutable-globals' wasm-pack build --target nodejs && cd .. && cp -r rust/pkg/node .",
+        "build:deps": "tsup",
+        "build": "pnpm build:wasm && pnpm build:deps",
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "module": "./pkg/web/dojo_c.js",

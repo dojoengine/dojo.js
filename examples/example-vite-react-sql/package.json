@@ -8,7 +8,9 @@
         "dev": "vite",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "format:check": "prettier --check .",
+        "format": "prettier --write ."
     },
     "keywords": [],
     "author": "",

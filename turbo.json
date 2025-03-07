@@ -1,0 +1,30 @@
+{
+    "$schema": "./node_modules/turbo/schema.json",
+    "ui": "tui",
+    "tasks": {
+        "dev": {
+            "persistent": true,
+            "dependsOn": ["^build:deps"],
+            "outputs": ["dist/**"]
+        },
+        "build:wasm": {
+            "dependsOn": ["^build:wasm"],
+            "outputs": ["dist/**", "target/**", "pkg/**"]
+        },
+        "build:deps": {
+            "dependsOn": ["^build:deps", "^build:wasm"],
+            "outputs": ["dist/**", "target/**", "pkg/**"]
+        },
+        "build": {
+            "dependsOn": ["^build"],
+            "outputs": [".next/**", "!.next/cache/**"]
+        },
+        "check-types": {
+            "dependsOn": ["^check-types"]
+        },
+        "lint": {},
+        "lint:fix": {},
+        "format": {},
+        "format:check": {}
+    }
+}

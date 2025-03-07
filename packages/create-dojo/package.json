@@ -16,8 +16,10 @@
     "exports": "./dist/index.js",
     "bin": "./dist/index.js",
     "scripts": {
-        "dev": "tsup --watch",
-        "build": "tsup --dts-resolve"
+        "build:deps": "tsup --dts-resolve",
+        "build": "pnpm build:deps",
+        "format:check": "prettier --check .",
+        "format": "prettier --write ."
     },
     "dependencies": {
         "@inquirer/prompts": "^3.3.2",

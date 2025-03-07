@@ -7,8 +7,11 @@
     "main": "./pkg/utils_wasm.js",
     "type": "module",
     "scripts": {
-        "build-wasm": "cd crate && ./build.sh",
-        "build": "npm run build-wasm && tsc",
+        "build:wasm": "cd rust && wasm-pack build && cd .. && cp -r rust/pkg/web . && cp -r rust/pkg/node .",
+        "build:deps": "tsup",
+        "build": "pnpm build:wasm && pnpm build:deps",
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "files": [
