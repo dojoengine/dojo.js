@@ -11,7 +11,8 @@
         "build": "pnpm build:deps",
         "test": "vitest run",
         "format:check": "prettier --check .",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "docs": "typedoc"
     },
     "exports": {
         ".": {

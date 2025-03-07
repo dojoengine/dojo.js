@@ -25,6 +25,10 @@
         "lint": {},
         "lint:fix": {},
         "format": {},
-        "format:check": {}
+        "format:check": {},
+        "docs": {
+            "dependsOn": ["^docs"],
+            "outputs": ["docs/**"]
+        }
     }
 }

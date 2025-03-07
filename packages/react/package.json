@@ -11,7 +11,8 @@
         "build": "pnpm build:deps",
         "test": "echo \"Error: no test specified\"",
         "format:check": "prettier --check .",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "docs": "typedoc"
     },
     "license": "MIT",
     "peerDependencies": {

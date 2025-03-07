@@ -13,7 +13,8 @@
         "coverage": "vitest run --coverage",
         "lint": "eslint . --ext .ts,.tsx",
         "format:check": "prettier --check .",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "docs": "typedoc"
     },
     "exports": {
         ".": {

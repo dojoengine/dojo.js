@@ -11,7 +11,7 @@
         "format": "turbo format",
         "release": "pnpm prettier && pnpm build && pnpm -F './packages/**' publish -r --force",
         "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run",
-        "docs": "npx typedoc --out docs",
+        "docs": "turbo run docs --ui stream",
         "prepare": "husky install",
         "dev": "turbo dev --concurrency 15"
     },
@@ -26,7 +26,8 @@
         "tsup": "^8.3.5",
         "turbo": "^2.4.4",
         "typedoc": "^0.26.11",
-        "typedoc-plugin-coverage": "^3.4.1"
+        "typedoc-plugin-coverage": "^3.4.1",
+        "typedoc-plugin-missing-exports": "^3.1.0"
     },
     "dependencies": {
         "@changesets/cli": "^2.27.11"

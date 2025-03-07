@@ -12,7 +12,8 @@
         "test": "vitest run",
         "format:check": "prettier --check .",
         "format": "prettier --write .",
-        "coverage": "vitest run --coverage"
+        "coverage": "vitest run --coverage",
+        "docs": "typedoc"
     },
     "exports": {
         ".": {
