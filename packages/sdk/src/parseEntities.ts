@@ -21,7 +21,7 @@ export function parseEntities<T extends SchemaType>(
         for (const modelName in entityData) {
             const [schemaKey, modelKey] = modelName.split("-") as [
                 keyof T,
-                string,
+                string
             ];
 
             if (!schemaKey || !modelKey) {
