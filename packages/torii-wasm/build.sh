@@ -4,7 +4,9 @@
 set -ex
 
 # Clone the repository
-git clone --depth 1 https://github.com/dojoengine/dojo.c dojo.c
+if [ ! -d "dojo.c" ]; then
+  git clone https://github.com/dojoengine/dojo.c dojo.c
+fi
 cd dojo.c
 
 # Build for web (browser)

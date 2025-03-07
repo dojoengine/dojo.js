@@ -19,6 +19,16 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 10.0.0
+          
+      - name: Cache turbo
+        uses: actions/cache@v3
+        with:
+          path: |
+            .turbo
+            **/.turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Install Protobuf Compiler
         run: sudo apt-get install -y protobuf-compiler
@@ -27,7 +37,7 @@ jobs:
         run: pnpm install
 
       - name: Build dependencies
-        run: pnpm run build
+        run: pnpm run build:deps --ui stream
 
       - name: Build docs
         run: pnpm run docs
