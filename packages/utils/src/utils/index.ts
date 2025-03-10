@@ -1,14 +1,14 @@
 import {
-    Component,
-    Components,
-    ComponentValue,
-    Entity,
+    type Component,
+    type Components,
+    type ComponentValue,
+    type Entity,
     Type as RecsType,
-    Schema,
+    type Schema,
     setComponent,
 } from "@dojoengine/recs";
 import { poseidonHashMany } from "micro-starknet";
-import { byteArray, ByteArray } from "starknet";
+import { byteArray, type ByteArray } from "starknet";
 
 const STORE_SET_RECORD_EVENT_NAME =
     "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d";
@@ -183,9 +183,9 @@ function decodeComponentValues(
  * Converts a hexadecimal string to an ASCII string.
  */
 export function hexToAscii(hex: string): string {
-    var str = "";
-    for (var n = 2; n < hex.length; n += 2) {
-        str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+    let str = "";
+    for (let n = 2; n < hex.length; n += 2) {
+        str += String.fromCharCode(Number.parseInt(hex.substr(n, 2), 16));
     }
     return str;
 }

@@ -46,7 +46,7 @@ export function useModel<
     N extends keyof SchemaType,
     M extends keyof SchemaType[N] & string,
     Client extends (...args: any) => any,
-    Schema extends SchemaType,
+    Schema extends SchemaType
 >(entityId: BigNumberish, model: `${N}-${M}`): SchemaType[N][M] | undefined {
     const [namespace, modelName] = model.split("-") as [N, M];
     const { useDojoStore } =
@@ -72,7 +72,7 @@ export function useModel<
  */
 export function useDojoSDK<
     Client extends (...args: any) => any,
-    Schema extends SchemaType,
+    Schema extends SchemaType
 >(): DojoContextType<Client, Schema> {
     return useContext<DojoContextType<Client, Schema>>(DojoContext);
 }
@@ -99,7 +99,7 @@ export function useEntityId(...keys: BigNumberish[]): BigNumberish {
  */
 function createSubscriptionHook<
     Schema extends SchemaType,
-    Historical extends boolean = false,
+    Historical extends boolean = false
 >(config: {
     subscribeMethod: (
         options: SubscribeParams<Schema, Historical>

@@ -1,13 +1,6 @@
-// EXAMPLE FOR NOW
-
+// @ts-nocheck
 import * as torii from "@dojoengine/torii-client";
-import {
-    AndComposeClause,
-    init,
-    MemberClause,
-    QueryBuilder,
-    ToriiQueryBuilder,
-} from "..";
+import { AndComposeClause, init, MemberClause, ToriiQueryBuilder } from "..";
 import { SchemaType } from "../types";
 
 export interface PlayerModel {
@@ -101,16 +94,16 @@ async function exampleUsage() {
     const typedData = db.generateTypedData("Player", playerMessage);
 
     // Incorrect usage: TypeScript will throw an error as 'unknownField' is not part of the Player model
-    const invalidMessage = {
+    const _invalidMessage = {
         id: "0x123",
         name: "Alice",
         score: 100,
         unknownField: "Invalid",
     };
 
-    const invalidTypedData = db.generateTypedData(
+    const _invalidTypedData = db.generateTypedData(
         "Player",
-        invalidMessage // TypeScript Error
+        _invalidMessage // TypeScript Error
     );
 
     db.subscribeEntityQuery({

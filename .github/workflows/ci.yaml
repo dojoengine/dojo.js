@@ -16,6 +16,16 @@ jobs:
         with:
           version: 10.0.0
 
+      - name: Cache turbo
+        uses: actions/cache@v3
+        with:
+          path: |
+            .turbo
+            **/.turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Update Submodules
         run: git submodule update --init --recursive
 
@@ -45,13 +55,10 @@ jobs:
         run: pnpm i
 
       - name: Run Prettier
-        run: pnpm run prettier --check .
+        run: pnpm run format:check --ui stream
 
-      - name: Build packages
-        run: pnpm run build
-
-      - name: Build examples
-        run: pnpm run build-examples
+      - name: Build packages and examples
+        run: pnpm run build --ui stream
 
       # - name: Upload coverage reports to Codecov
       #   uses: codecov/codecov-action@v3

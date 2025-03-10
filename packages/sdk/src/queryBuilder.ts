@@ -178,10 +178,7 @@ class QueryEntity<T extends SchemaType> {
 }
 
 class Constraint {
-    constructor(
-        private _operator: Operator,
-        private _value: any
-    ) {}
+    constructor(private _operator: Operator, private _value: any) {}
 
     get operator(): string {
         return this._operator.toString();

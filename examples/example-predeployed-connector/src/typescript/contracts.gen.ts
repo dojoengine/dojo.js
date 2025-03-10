@@ -1,13 +1,5 @@
-import { DojoProvider, DojoCall } from "@dojoengine/core";
-import {
-    Account,
-    AccountInterface,
-    BigNumberish,
-    CairoOption,
-    CairoCustomEnum,
-    ByteArray,
-} from "starknet";
-import * as models from "./models.gen";
+import type { DojoProvider, DojoCall } from "@dojoengine/core";
+import type { Account, AccountInterface, CairoCustomEnum } from "starknet";
 
 export function setupWorld(provider: DojoProvider) {
     const build_actions_move_calldata = (

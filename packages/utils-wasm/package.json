@@ -7,8 +7,10 @@
     "main": "./pkg/utils_wasm.js",
     "type": "module",
     "scripts": {
-        "build-wasm": "cd crate && ./build.sh",
-        "build": "npm run build-wasm && tsc",
+        "build:wasm": "cd crate && sh ./build.sh",
+        "build": "pnpm build:wasm",
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "files": [

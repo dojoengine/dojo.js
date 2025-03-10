@@ -7,9 +7,13 @@
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
-        "build": "tsup --dts-resolve",
+        "build:deps": "tsup",
+        "build": "pnpm build:deps",
         "test": "vitest run",
-        "coverage": "vitest run --coverage"
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
+        "coverage": "vitest run --coverage",
+        "docs": "typedoc"
     },
     "exports": {
         ".": {

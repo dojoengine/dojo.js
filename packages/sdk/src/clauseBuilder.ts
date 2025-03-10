@@ -23,7 +23,7 @@ type ModelPath<T, K extends keyof T> = K extends string
 
 type GetModelType<
     T,
-    Path extends string,
+    Path extends string
 > = Path extends `${infer Namespace}-${infer Model}`
     ? Namespace extends keyof T
         ? Model extends keyof T[Namespace]
@@ -61,7 +61,7 @@ export function KeysClause<T extends SchemaType>(
 export function MemberClause<
     T extends SchemaType,
     Path extends ModelPath<T, keyof T>,
-    M extends keyof GetModelType<T, ModelPath<T, keyof T>>,
+    M extends keyof GetModelType<T, ModelPath<T, keyof T>>
 >(
     model: Path,
     member: M & string,
@@ -127,7 +127,7 @@ export class ClauseBuilder<T extends SchemaType> {
      */
     where<
         Path extends ModelPath<T, keyof T>,
-        M extends keyof GetModelType<T, Path>,
+        M extends keyof GetModelType<T, Path>
     >(
         model: Path,
         member: M & string,

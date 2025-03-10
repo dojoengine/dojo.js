@@ -16,8 +16,11 @@
     "exports": "./dist/index.js",
     "bin": "./dist/index.js",
     "scripts": {
-        "dev": "tsup --watch",
-        "build": "tsup --dts-resolve"
+        "build:deps": "tsup --dts-resolve",
+        "build": "pnpm build:deps",
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
+        "docs": "typedoc"
     },
     "dependencies": {
         "@inquirer/prompts": "^3.3.2",
@@ -27,12 +30,14 @@
         "cross-spawn": "^7.0.3",
         "fs-extra": "^11.2.0",
         "js-yaml": "^4.1.0",
-        "node-fetch": "^2.6.9",
+        "node-fetch": "^2.7.0",
         "prompts": "^2.4.2",
         "type-fest": "^4.26.1"
     },
     "devDependencies": {
         "@types/cross-spawn": "^6.0.6",
+        "@types/js-yaml": "^4.0.9",
+        "@types/node-fetch": "^2.6.12",
         "tsup": "^8.3.0",
         "typescript": "^5.6.2",
         "vitest": "^2.1.1"

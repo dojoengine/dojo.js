@@ -1,38 +1,24 @@
 {
     "plugin": [
         "@typhonjs-typedoc/typedoc-theme-dmt",
-        "typedoc-plugin-coverage"
+        "typedoc-plugin-coverage",
+        "typedoc-plugin-missing-exports"
     ],
-    "dmtLinksService": {
-        "Discord": "<URL>",
-        "GitHub": "<URL>",
-        "BitBucket": "<URL>",
-        "GitLab": "<URL>",
-        "NPM": "<URL>"
-    },
     "dmtSettings": {
         "animation": true // When true theme animation is enabled.
     },
     "theme": "default-modern",
     "$schema": "https://typedoc.org/schema.json",
     "name": "dojo.js docs",
-    "entryPoints": [
-        "./packages/sdk/src/index.ts",
-        "./packages/core/src/index.ts",
-        "./packages/react/src/index.ts",
-        "./packages/create-burner/src/index.ts",
-        "./packages/utils/src/index.ts",
-        "./packages/torii-client/src/index.ts"
-    ],
+    "entryPoints": ["packages/*"],
+    "entryPointStrategy": "packages",
+    "out": "docs",
     "sort": ["source-order"],
 
     "categorizeByGroup": true,
     "searchCategoryBoosts": {
         "Component": 2,
         "Model": 1.2
-    },
-    "searchGroupBoosts": {
-        "Classes": 1.5
     },
     "navigationLinks": {
         "Docs": "https://dojoengine.github.io/dojo.js",

@@ -7,8 +7,10 @@
     "main": "./pkg/web/dojo_c.js",
     "type": "module",
     "scripts": {
-        "build-wasm": "sh ./build.sh",
-        "build": "npm run build-wasm && tsc",
+        "build:wasm": "sh ./build.sh",
+        "build": "pnpm build:wasm",
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "module": "./pkg/web/dojo_c.js",

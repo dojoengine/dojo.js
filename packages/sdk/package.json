@@ -40,12 +40,13 @@
     },
     "type": "module",
     "scripts": {
-        "build": "tsup --dts-resolve",
+        "build:deps": "tsup --dts-resolve",
+        "build": "pnpm build:deps",
         "test": "vitest run --config ./vitest.config.ts",
         "coverage": "vitest run --coverage",
         "lint": "eslint . --ext .ts,.tsx",
-        "dev": "vite",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "docs": "typedoc"
     },
     "./package.json": "./package.json",
     "devDependencies": {

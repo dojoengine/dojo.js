@@ -9,7 +9,9 @@
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
         "codegen": "graphql-codegen",
-        "generate-pwa-assets": "pwa-assets-generator"
+        "generate-pwa-assets": "pwa-assets-generator",
+        "format:check": "prettier --check .",
+        "format": "prettier --write ."
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
