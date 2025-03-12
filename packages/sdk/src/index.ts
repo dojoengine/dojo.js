@@ -15,6 +15,7 @@ import { intoEntityKeysClause } from "./convertClauseToEntityKeysClause";
 import { parseEntities } from "./parseEntities";
 import { parseHistoricalEvents } from "./parseHistoricalEvents";
 import { ToriiQueryBuilder } from "./toriiQueryBuilder";
+import { generateTypedData } from "./generateTypedData";
 
 export * from "./types";
 export * from "./queryBuilder";
@@ -194,36 +195,18 @@ export async function init<T extends SchemaType>(
          * Generates typed data for any user-defined message.
          *
          * @template M - The message type defined by the schema models.
-         * @param {string} primaryType - The primary type of the message.
+         * @param {string} nsModel - Model name prefixed with namespace joined by a hyphen.
          * @param {M} message - The user-defined message content, must be part of the schema models.
          * @param {StarknetDomain} [domain] - The domain object. If not provided, uses the default domain from options.
          * @returns {TypedData} - The generated typed data.
          */
         generateTypedData: <M extends UnionOfModelData<T>>(
-            primaryType: string,
+            nsModel: string,
             message: M,
+            modelMapping?: Array<{ name: string; type: string }>,
             domain: StarknetDomain = options.domain
-        ): TypedData => ({
-            types: {
-                StarknetDomain: [
-                    { name: "name", type: "shortstring" },
-                    { name: "version", type: "shortstring" },
-                    { name: "chainId", type: "shortstring" },
-                    { name: "revision", type: "shortstring" },
-                ],
-                [primaryType]: Object.keys(message).map((key) => ({
-                    name: key,
-                    type:
-                        typeof message[key] === "bigint" ||
-                        typeof message[key] === "number"
-                            ? "felt"
-                            : "string",
-                })),
-            },
-            primaryType,
-            domain,
-            message,
-        }),
+        ): TypedData =>
+            generateTypedData(nsModel, message, domain, modelMapping),
 
         /**
          * Sends a signed message.
