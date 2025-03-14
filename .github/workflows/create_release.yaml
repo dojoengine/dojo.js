@@ -3,8 +3,8 @@ name: Create github release
 on:
   push:
     tags:
-      - v*
-      - *dojoengine/*@*
+      - "@dojoengine/*@*"
+      - "v*"
 
 permissions:
   contents: write
