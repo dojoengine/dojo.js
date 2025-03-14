@@ -3,8 +3,8 @@ name: Create github release
 on:
   push:
     tags:
-      - "@dojoengine/*@*"
-      - "v*"
+      - '@dojoengine/*@*'
+
   workflow_dispatch:
     inputs:
       tag:
@@ -22,9 +22,9 @@ jobs:
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
+          tag: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref_name }}
         run: |
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
-              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+              --title="${tag#v}" \
               --generate-notes
