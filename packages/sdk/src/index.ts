@@ -269,19 +269,19 @@ export async function init<T extends SchemaType>(
         },
 
         /**
-         * @param {(string)[]} account_addresses
          * @param {(string)[]} contract_addresses
+         * @param {(string)[]} account_addresses
          * @param {string[]} token_ids
          * @returns {Promise<TokenBalances>}
          */
         getTokenBalances: async (
-            account_addresses: string[],
             contract_addresses: string[],
+            account_addresses: string[],
             token_ids: string[]
         ): Promise<torii.TokenBalances> => {
             return await client.getTokenBalances(
-                account_addresses,
                 contract_addresses,
+                account_addresses,
                 token_ids
             );
         },
