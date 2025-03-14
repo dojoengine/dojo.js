@@ -39,7 +39,6 @@
         "styled-components": "^6.1.14",
         "tailwind-merge": "^2.6.0",
         "tailwindcss-animate": "^1.0.7",
-        "vite-plugin-top-level-await": "^1.4.4",
         "vite-plugin-wasm": "^3.4.1",
         "zustand": "^4.5.6"
     },
@@ -57,6 +56,7 @@
         "postcss": "^8.5.1",
         "tailwindcss": "^3.4.17",
         "typescript": "^5.7.3",
-        "vite": "^6.0.11"
+        "vite": "^6.0.11",
+        "vite-plugin-top-level-await": "^1.4.4"
     }
 }

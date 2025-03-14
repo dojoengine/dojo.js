@@ -16,7 +16,8 @@
         "svelte-check": "^3.8.5",
         "tslib": "^2.6.3",
         "typescript": "^5.5.3",
-        "vite": "^5.4.1"
+        "vite": "^5.4.1",
+        "vite-plugin-top-level-await": "^1.4.4"
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
@@ -27,7 +28,6 @@
         "@dojoengine/utils": "workspace:*",
         "@latticexyz/utils": "^2.1.1",
         "starknet": "catalog:",
-        "vite-plugin-top-level-await": "^1.4.4",
         "vite-plugin-wasm": "^3.3.0"
     }
 }
