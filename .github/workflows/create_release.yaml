@@ -5,6 +5,11 @@ on:
     tags:
       - "@dojoengine/*@*"
       - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Given github tag to create release for"
+        required: true
 
 permissions:
   contents: write
