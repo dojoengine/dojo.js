@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.2.6
+
+### Patch Changes
+
+- 7f48d18: fix: generateTypedData optimization
+- Updated dependencies [7f48d18]
+    - @dojoengine/torii-client@1.2.6
+
 ## 1.2.5
 
 ### Patch Changes
