@@ -76,7 +76,8 @@ function parseValue(value: torii.Ty): any {
                     CairoOptionVariant.Some,
                     parseValue((value.value as torii.EnumValue).value)
                 );
-            } else if ("None" === (value.value as torii.EnumValue).option) {
+            }
+            if ("None" === (value.value as torii.EnumValue).option) {
                 return new CairoOption(CairoOptionVariant.None);
             }
 

@@ -35,7 +35,11 @@ function App() {
                 // Querying Moves and Position models that has at least [account.address] as key
                 KeysClause(
                     [ModelsMapping.Moves, ModelsMapping.Position],
-                    [addAddressPadding(account?.address ?? "0")],
+                    [
+                        account?.address
+                            ? addAddressPadding(account.address)
+                            : undefined,
+                    ],
                     "FixedLen"
                 ).build()
             )

@@ -373,3 +373,82 @@ export function shortenHex(hexString: string, numDigits = 6) {
     const secondHalf = hexString.slice(-halfDigits);
     return `${firstHalf}...${secondHalf}`;
 }
+
+/**
+ * Get the default port for a given protocol
+ * @param {string} protocol - The protocol to get the default port for
+ * @returns {number} The default port
+ */
+function getDefaultPortForProtocol(protocol: string): number {
+    switch (protocol) {
+        case "https:":
+            return 443;
+        case "wss:":
+            return 443;
+        default:
+            return 80;
+    }
+}
+
+/**
+ * Converts a standard URI to multiaddr format
+ * Examples:
+ * - http://example.com → /dns4/example.com/tcp/80/http
+ * - https://example.com → /dns4/example.com/tcp/443/https
+ * - http://127.0.0.1:8080 → /ip4/127.0.0.1/tcp/8080/http
+ * - http://[::1]:8080 → /ip6/::1/tcp/8080/http
+ *
+ * @param {string} uri - The URI to convert (e.g., "http://example.com:8080/path")
+ * @returns {string} The multiaddr representation
+ */
+export function convertToRelayUri(uri: string): string {
+    try {
+        // Parse the URI
+        const url = new URL(uri);
+
+        // Determine default port based on protocol
+        const defaultPort = getDefaultPortForProtocol(url.protocol);
+        const port = url.port || defaultPort;
+        const protocol = url.protocol.replace(":", "");
+
+        // Handle IP addresses and domains
+        let addrType: string;
+        let hostname = url.hostname;
+
+        if (hostname.match(/^\d+\.\d+\.\d+\.\d+$/)) {
+            // IPv4 address
+            addrType = "ip4";
+        } else if (hostname.startsWith("[") && hostname.endsWith("]")) {
+            // IPv6 address in URL format [::1]
+            addrType = "ip6";
+            hostname = hostname.slice(1, -1);
+        } else if (hostname.includes(":")) {
+            // IPv6 address without brackets
+            addrType = "ip6";
+        } else {
+            // Domain name
+            addrType = "dns4";
+        }
+
+        // Construct the multiaddr
+        let multiaddr = `/${addrType}/${hostname}/tcp/${port}`;
+
+        // Append protocol if it's not http or https
+        if (!["http", "https"].includes(protocol)) {
+            // Replace wss with x-parity-wss
+            const protocolToAppend =
+                protocol === "wss" ? "x-parity-wss" : protocol;
+            multiaddr += `/${protocolToAppend}`;
+        }
+
+        // Add path if it exists and is not just "/"
+        if (url.pathname && url.pathname !== "/") {
+            multiaddr += `/${encodeURIComponent(url.pathname)}`;
+        }
+
+        return multiaddr;
+    } catch (error) {
+        console.error("Invalid URI:", error);
+        return "";
+    }
+}

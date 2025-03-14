@@ -3,6 +3,7 @@ import { SchemaType, SDKConfig, StandardizedQueryResult } from "../types";
 import { parseEntities } from "../parseEntities";
 import { parseHistoricalEvents } from "../parseHistoricalEvents";
 import { intoEntityKeysClause } from "../convertClauseToEntityKeysClause";
+import { defaultClientConfig } from "..";
 
 export type ToriiSubscriptionCallback<T extends SchemaType> = (response: {
     data?: StandardizedQueryResult<T> | StandardizedQueryResult<T>[];
@@ -10,7 +11,12 @@ export type ToriiSubscriptionCallback<T extends SchemaType> = (response: {
 }) => void;
 
 export async function init<T extends SchemaType>(options: SDKConfig) {
-    const client = await torii.createClient(options.client);
+    const clientConfig = {
+        ...defaultClientConfig,
+        ...options.client,
+    } as torii.ClientConfig;
+
+    const client = await torii.createClient(clientConfig);
 
     return {
         getEntities: async (query: torii.Query) => {
