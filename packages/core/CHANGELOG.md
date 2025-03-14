@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.7
+
+### Patch Changes
+
+- 811ae57: fix: cairo option and enum ignore in zustand merge
+
 ## 1.2.6
 
 ### Patch Changes

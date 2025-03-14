@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.2.7
+
+### Patch Changes
+
+- 811ae57: fix: cairo option and enum ignore in zustand merge
+- Updated dependencies [811ae57]
+    - @dojoengine/torii-client@1.2.7
+
 ## 1.2.6
 
 ### Patch Changes
