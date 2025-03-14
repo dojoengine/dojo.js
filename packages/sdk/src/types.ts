@@ -248,14 +248,14 @@ export type UnionOfModelData<T extends SchemaType> = {
 
 export type ToriiResponse<
     T extends SchemaType,
-    Historical extends boolean
+    Historical extends boolean,
 > = Historical extends true
     ? StandardizedQueryResult<T>[]
     : StandardizedQueryResult<T>;
 
 export type SubscribeResponse<
     T extends SchemaType,
-    Historical extends boolean
+    Historical extends boolean,
 > = [ToriiResponse<T, Historical>, torii.Subscription];
 
 /**
@@ -315,8 +315,9 @@ export interface SDK<T extends SchemaType> {
     ) => Promise<ToriiResponse<T, Historical>>;
 
     generateTypedData: <M extends UnionOfModelData<T>>(
-        primaryType: string,
+        nsModel: string,
         message: M,
+        modelMapping?: Array<{ name: string; type: string }>,
         domain?: StarknetDomain
     ) => TypedData;
 
@@ -484,7 +485,7 @@ export interface SDKFunctionOptions {
 
 export interface SubscribeParams<
     T extends SchemaType,
-    Historical extends boolean = false
+    Historical extends boolean = false,
 > {
     // Query object used to filter entities.
     query: ToriiQueryBuilder<T>;
@@ -499,7 +500,7 @@ export interface SubscribeParams<
 
 export interface GetParams<
     T extends SchemaType,
-    Historical extends boolean = false
+    Historical extends boolean = false,
 > {
     // The query object used to filter entities.
     query: ToriiQueryBuilder<T>;
