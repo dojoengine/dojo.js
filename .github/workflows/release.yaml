@@ -55,7 +55,7 @@ jobs:
           path: |
             **/dist
             **/.turbo
-          key: ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml', '**/*.ts', '**/*.tsx', '**/*.js', '**/tsconfig.json') }}
+          key: ${{ runner.os }}-build-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-build-
             
