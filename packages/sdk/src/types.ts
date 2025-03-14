@@ -340,8 +340,8 @@ export interface SDK<T extends SchemaType> {
      * @returns {Promise<torii.TokenBalances>}
      */
     getTokenBalances(
-        account_addresses: string[],
         contract_addresses: string[],
+        account_addresses: string[],
         token_ids: string[]
     ): Promise<torii.TokenBalances>;
 
