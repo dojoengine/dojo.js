@@ -9,7 +9,7 @@
         "prettier-check": "pnpx prettier --check packages examples",
         "format": "turbo format",
         "format:check": "turbo format:check",
-        "release": "pnpm build && pnpm -F './packages/**' publish -r --force --no-git-checks",
+        "release": "pnpm build:deps && pnpm -F './packages/**' publish -r --force --no-git-checks",
         "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run",
         "dev": "turbo watch dev --concurrency 15",
         "docs": "turbo run docs --ui stream"
