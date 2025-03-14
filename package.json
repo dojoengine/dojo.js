@@ -5,14 +5,12 @@
         "build:deps": "turbo build:deps",
         "build": "turbo build",
         "clean": "bash ./scripts/clean.sh",
-        "prettier-check": "pnpx prettier --check packages examples",
-        "format:check": "turbo format:check",
         "prettier": "pnpx prettier --write packages examples",
+        "prettier-check": "pnpx prettier --check packages examples",
         "format": "turbo format",
-        "release": "pnpm prettier && pnpm build && pnpm -F './packages/**' publish -r --force",
+        "format:check": "turbo format:check",
+        "release": "pnpm format && pnpm build && pnpm -F './packages/**' publish -r --force",
         "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run",
-        "docs": "turbo run docs --ui stream",
-        "prepare": "husky install",
         "dev": "turbo dev --concurrency 15"
     },
     "devDependencies": {
