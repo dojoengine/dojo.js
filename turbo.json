@@ -16,7 +16,7 @@
             "outputs": ["dist/**", "target/**", "pkg/**"]
         },
         "build": {
-            "dependsOn": ["^build"],
+            "dependsOn": ["^build", "^build:wasm", "^build:deps"],
             "outputs": [
                 ".next/**",
                 "!.next/cache/**",

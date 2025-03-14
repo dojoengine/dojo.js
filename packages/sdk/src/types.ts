@@ -455,6 +455,10 @@ export interface SDK<T extends SchemaType> {
     ) => Promise<[ToriiResponse<T, H>, torii.EntityKeysClause[]]>;
 }
 
+export type SDKClientConfig = Partial<
+    Omit<torii.ClientConfig, "worldAddress">
+> & { worldAddress: torii.ClientConfig["worldAddress"] };
+
 /**
  * Configuration interface for the SDK.
  */
@@ -463,7 +467,7 @@ export interface SDKConfig {
      * Configuration for the Torii client.
      * This includes settings such as the endpoint URL, authentication details, etc.
      */
-    client: torii.ClientConfig;
+    client: SDKClientConfig;
 
     /**
      * The Starknet domain configuration.

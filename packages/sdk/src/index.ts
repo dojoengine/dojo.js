@@ -1,7 +1,7 @@
 import * as torii from "@dojoengine/torii-client";
-import { Account, Signature, StarknetDomain, TypedData } from "starknet";
+import type { Account, Signature, StarknetDomain, TypedData } from "starknet";
 
-import {
+import type {
     GetParams,
     SchemaType,
     SDK,
@@ -14,7 +14,7 @@ import {
 import { intoEntityKeysClause } from "./convertClauseToEntityKeysClause";
 import { parseEntities } from "./parseEntities";
 import { parseHistoricalEvents } from "./parseHistoricalEvents";
-import { ToriiQueryBuilder } from "./toriiQueryBuilder";
+import type { ToriiQueryBuilder } from "./toriiQueryBuilder";
 import { generateTypedData } from "./generateTypedData";
 
 export * from "./types";
@@ -34,6 +34,11 @@ export async function createClient(
     return await torii.createClient(config);
 }
 
+export const defaultClientConfig: Partial<torii.ClientConfig> = {
+    toriiUrl: "http://localhost:8080",
+    relayUrl: "/ip4/127.0.0.1/tcp/9090",
+};
+
 /**
  * Initializes the SDK with the provided configuration and schema.
  *
@@ -43,7 +48,11 @@ export async function createClient(
 export async function init<T extends SchemaType>(
     options: SDKConfig
 ): Promise<SDK<T>> {
-    const client = await createClient(options.client);
+    const clientConfig = {
+        ...defaultClientConfig,
+        ...options.client,
+    } as torii.ClientConfig;
+    const client = await createClient(clientConfig);
 
     return {
         client,
@@ -137,6 +146,7 @@ export async function init<T extends SchemaType>(
                                 const parsedData = historical
                                     ? parseHistoricalEvents<T>(data)
                                     : parseEntities<T>(data);
+
                                 callback({
                                     data: parsedData as ToriiResponse<
                                         T,

@@ -11,7 +11,8 @@
         "format:check": "turbo format:check",
         "release": "pnpm build && pnpm -F './packages/**' publish -r --force --no-git-checks",
         "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run",
-        "dev": "turbo dev --concurrency 15"
+        "dev": "turbo watch dev --concurrency 15",
+        "docs": "turbo run docs --ui stream"
     },
     "devDependencies": {
         "@commitlint/cli": "^18.6.1",

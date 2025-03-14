@@ -64,6 +64,31 @@ export function useModel<
 }
 
 /**
+ * Custom hook to retrieve all entities that have a specific model.
+ *
+ * @param model - The model to retrieve, specified as a string in the format "namespace-modelName".
+ * @returns The model structure if found, otherwise undefined.
+ */
+export function useModels<
+    N extends keyof SchemaType,
+    M extends keyof SchemaType[N] & string,
+    Client extends (...args: any) => any,
+    Schema extends SchemaType
+>(model: `${N}-${M}`): { [entityId: string]: SchemaType[N][M] | undefined } {
+    const [namespace, modelName] = model.split("-") as [N, M];
+    const { useDojoStore } =
+        useContext<DojoContextType<Client, Schema>>(DojoContext);
+
+    const modelData = useDojoStore((state) =>
+        state.getEntitiesByModel(namespace, modelName).map((entity) => ({
+            [entity.entityId]: entity.models?.[namespace]?.[modelName],
+        }))
+    ) as unknown as { [entityId: string]: SchemaType[N][M] | undefined };
+
+    return modelData;
+}
+
+/**
  * Hook that exposes sdk features.
  *
  * @template Client Client function generated with `sozo build --typescript`
@@ -223,6 +248,7 @@ export function useEntityQuery<Schema extends SchemaType>(
         processInitialData: (data) => state.mergeEntities(data),
         processUpdateData: (data) => {
             const entity = data.pop();
+
             if (entity && entity.entityId !== "0x0") {
                 state.updateEntity(entity);
             }

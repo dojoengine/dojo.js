@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import {
     computeByteArrayHash,
+    convertToRelayUri,
     getComponentNameFromEvent,
     getSelectorFromTag,
     splitEventTag,
@@ -102,6 +103,27 @@ describe("utils", () => {
             "dojo_starter",
             "Position",
             "0x2ac8b4c190f7031b9fc44312e6b047a1dce0b3f2957c33a935ca7846a46dd5b"
+        );
+    });
+
+    it("should convert uri to multiaddr", () => {
+        expect(convertToRelayUri("http://localhost:8080")).toBe(
+            "/dns4/localhost/tcp/8080"
+        );
+        expect(convertToRelayUri("http://127.0.0.1:8080")).toBe(
+            "/ip4/127.0.0.1/tcp/8080"
+        );
+        expect(
+            convertToRelayUri(
+                "https://api.cartridge.gg/x/wordle-game/torii/wss"
+            )
+        ).toBe(
+            "/dns4/api.cartridge.gg/tcp/443/%2Fx%2Fwordle-game%2Ftorii%2Fwss"
+        );
+        expect(
+            convertToRelayUri("wss://api.cartridge.gg/x/wordle-game/torii/wss")
+        ).toBe(
+            "/dns4/api.cartridge.gg/tcp/443/x-parity-wss/%2Fx%2Fwordle-game%2Ftorii%2Fwss"
         );
     });
 });

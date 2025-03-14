@@ -6,6 +6,7 @@ import { enablePatches } from "immer";
 import { subscribeWithSelector } from "zustand/middleware";
 import { ParsedEntity, SchemaType } from "../types";
 import { GameState } from ".";
+import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
 
 enablePatches();
 
@@ -20,6 +21,122 @@ type CreateStore = {
     ): StoreApi<T>;
 };
 
+/**
+ * Check if a value is a CairoOption
+ * @param value - The value to check
+ * @returns True if the value is a CairoOption, false otherwise
+ */
+function isCairoOption(value: unknown): value is CairoOption<unknown> {
+    return value instanceof CairoOption;
+}
+
+/**
+ * Merge two CairoOption instances
+ * @param target - The target CairoOption
+ * @param source - The source CairoOption
+ * @returns A new CairoOption instance with the merged value
+ */
+function mergeCairoOption<T extends SchemaType>(
+    target: MergedModels<T>,
+    source: Partial<MergedModels<T>>
+): MergedModels<T> {
+    // If source is Some, prefer source's value
+    if (source instanceof CairoOption && source.isSome()) {
+        return new CairoOption(
+            CairoOptionVariant.Some,
+            source.unwrap()
+        ) as unknown as MergedModels<T>;
+    }
+
+    // If source is None or undefined, keep target
+    if (target instanceof CairoOption) {
+        if (target.isSome()) {
+            return new CairoOption(
+                CairoOptionVariant.Some,
+                target.unwrap()
+            ) as unknown as MergedModels<T>;
+        }
+        return new CairoOption(
+            CairoOptionVariant.None
+        ) as unknown as MergedModels<T>;
+    }
+
+    // This should not happen if both are CairoOption instances
+    return target as unknown as MergedModels<T>;
+}
+
+/**
+ * Check if a value is a CairoCustomEnum
+ * @param value - The value to check
+ * @returns True if the value is a CairoCustomEnum, false otherwise
+ */
+function isCairoCustomEnum(value: unknown): value is CairoCustomEnum {
+    return value instanceof CairoCustomEnum;
+}
+
+/**
+ * Merge two CairoCustomEnum instances
+ * @param target - The target CairoCustomEnum
+ * @param source - The source CairoCustomEnum
+ * @returns A new CairoCustomEnum instance with the merged value
+ */
+function mergeCairoCustomEnum<T extends SchemaType>(
+    target: MergedModels<T>,
+    source: Partial<MergedModels<T>>
+): MergedModels<T> {
+    if (!isCairoCustomEnum(target) || !isCairoCustomEnum(source)) {
+        return target;
+    }
+    // If source has an active variant, prefer it
+    const sourceActiveVariant = source.activeVariant();
+    const sourceValue = source.unwrap();
+
+    if (sourceActiveVariant && sourceValue !== undefined) {
+        // Create a new enum with source's active variant
+        const newEnumContent: Record<string, any> = {};
+
+        // Initialize all variants from target with undefined
+        for (const key in target.variant) {
+            newEnumContent[key] = undefined;
+        }
+
+        // Set the active variant from source
+        newEnumContent[sourceActiveVariant] = sourceValue;
+
+        return new CairoCustomEnum(
+            newEnumContent
+        ) as unknown as MergedModels<T>;
+    }
+
+    // If source doesn't have an active variant, keep target
+    const targetActiveVariant = target.activeVariant();
+    const targetValue = target.unwrap();
+
+    if (targetActiveVariant && targetValue !== undefined) {
+        const newEnumContent: Record<string, any> = {};
+
+        // Initialize all variants with undefined
+        for (const key in target.variant) {
+            newEnumContent[key] = undefined;
+        }
+
+        // Set the active variant from target
+        newEnumContent[targetActiveVariant] = targetValue;
+
+        return new CairoCustomEnum(
+            newEnumContent
+        ) as unknown as MergedModels<T>;
+    }
+
+    // Fallback if not both CairoCustomEnum
+    return target;
+}
+
+/**
+ * Merged models type
+ * @template T - The schema type
+ * @returns The merged models type
+ */
 type MergedModels<T extends SchemaType> =
     ParsedEntity<T>["models"][keyof ParsedEntity<T>["models"]];
 
@@ -27,8 +144,13 @@ function deepMerge<T extends SchemaType>(
     target: MergedModels<T>,
     source: Partial<MergedModels<T>>
 ): MergedModels<T> {
+    if (isCairoOption(target) && isCairoOption(source)) {
+        return mergeCairoOption(target, source);
+    }
+    if (isCairoCustomEnum(target) && isCairoCustomEnum(source)) {
+        return mergeCairoCustomEnum(target, source);
+    }
     const result = { ...target } as Record<string, any>;
-
     for (const key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
             if (
@@ -72,15 +194,15 @@ export function createDojoStoreFactory<T extends SchemaType>(
                 pendingTransactions: {},
                 setEntities: (entities: ParsedEntity<T>[]) => {
                     set((state: Draft<GameState<T>>) => {
-                        entities.forEach((entity) => {
+                        for (const entity of entities) {
                             state.entities[entity.entityId] =
                                 entity as WritableDraft<ParsedEntity<T>>;
-                        });
+                        }
                     });
                 },
                 mergeEntities: (entities: ParsedEntity<T>[]) => {
                     set((state: Draft<GameState<T>>) => {
-                        entities.forEach((entity) => {
+                        for (const entity of entities) {
                             if (entity.entityId && entity.models) {
                                 const existingEntity =
                                     state.entities[entity.entityId];
@@ -91,34 +213,37 @@ export function createDojoStoreFactory<T extends SchemaType>(
                                         entity as WritableDraft<
                                             ParsedEntity<T>
                                         >;
-                                    return;
+                                    continue;
                                 }
                                 // Create new models object without spread
                                 const mergedModels: typeof existingEntity.models =
                                     Object.assign({}, existingEntity.models);
 
                                 // Iterate through each namespace in the new models
-                                Object.entries(entity.models).forEach(
-                                    ([namespace, namespaceModels]) => {
-                                        const typedNamespace =
-                                            namespace as keyof ParsedEntity<T>["models"];
-                                        if (!(typedNamespace in mergedModels)) {
-                                            mergedModels[
-                                                typedNamespace as keyof typeof mergedModels
-                                            ] = {} as any;
-                                        }
-
-                                        // Use deep merge instead of Object.assign
+                                for (const [
+                                    namespace,
+                                    namespaceModels,
+                                ] of Object.entries(entity.models)) {
+                                    const typedNamespace =
+                                        namespace as keyof ParsedEntity<T>["models"];
+                                    if (!(typedNamespace in mergedModels)) {
+                                        // @ts-expect-error TODO: change to better type
                                         mergedModels[
                                             typedNamespace as keyof typeof mergedModels
-                                        ] = deepMerge(
-                                            mergedModels[
-                                                typedNamespace as keyof typeof mergedModels
-                                            ] as MergedModels<T>,
-                                            namespaceModels
-                                        ) as any;
+                                        ] = {} as Record<string, unknown>;
                                     }
-                                );
+
+                                    // Use deep merge instead of Object.assign
+                                    // @ts-expect-error TODO: change to better type
+                                    mergedModels[
+                                        typedNamespace as keyof typeof mergedModels
+                                    ] = deepMerge(
+                                        mergedModels[
+                                            typedNamespace as keyof typeof mergedModels
+                                        ] as MergedModels<T>,
+                                        namespaceModels
+                                    ) as MergedModels<T>;
+                                }
 
                                 // Update the entity
                                 state.entities[entity.entityId] = {
@@ -127,7 +252,7 @@ export function createDojoStoreFactory<T extends SchemaType>(
                                     models: mergedModels,
                                 };
                             }
-                        });
+                        }
                     });
                 },
                 updateEntity: (entity: Partial<ParsedEntity<T>>) => {
@@ -145,28 +270,30 @@ export function createDojoStoreFactory<T extends SchemaType>(
                             // Create new models object without spread
                             const mergedModels: typeof existingEntity.models =
                                 Object.assign({}, existingEntity.models);
-
                             // Iterate through each namespace in the new models
-                            Object.entries(entity.models).forEach(
-                                ([namespace, namespaceModels]) => {
-                                    const typedNamespace =
-                                        namespace as keyof ParsedEntity<T>["models"];
-                                    if (!(typedNamespace in mergedModels)) {
-                                        mergedModels[
-                                            typedNamespace as keyof typeof mergedModels
-                                        ] = {} as any;
-                                    }
-
+                            for (const [
+                                namespace,
+                                namespaceModels,
+                            ] of Object.entries(entity.models)) {
+                                const typedNamespace =
+                                    namespace as keyof ParsedEntity<T>["models"];
+                                if (!(typedNamespace in mergedModels)) {
+                                    // @ts-expect-error TODO: change to better type
                                     mergedModels[
                                         typedNamespace as keyof typeof mergedModels
-                                    ] = deepMerge(
-                                        mergedModels[
-                                            typedNamespace as keyof typeof mergedModels
-                                        ] as MergedModels<T>,
-                                        namespaceModels
-                                    ) as any;
+                                    ] = {} as Record<string, unknown>;
                                 }
-                            );
+
+                                // @ts-expect-error TODO: change to better type
+                                mergedModels[
+                                    typedNamespace as keyof typeof mergedModels
+                                ] = deepMerge(
+                                    mergedModels[
+                                        typedNamespace as keyof typeof mergedModels
+                                    ] as MergedModels<T>,
+                                    namespaceModels
+                                ) as MergedModels<T>;
+                            }
                             // Update the entity
                             state.entities[entity.entityId] = {
                                 ...existingEntity,
