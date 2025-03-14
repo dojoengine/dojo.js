@@ -137,9 +137,13 @@ jobs:
       - name: Commit changes
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
-          git add .
-          git commit -m "chore: release"
-          git push origin main
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git add .
+            git commit -m "chore: release"
+            git push origin main
+          fi
 
       - name: Publish to npm
         if: ${{ github.event.inputs.dry_run != 'true' }}
