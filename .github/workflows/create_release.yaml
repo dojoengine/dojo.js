@@ -11,9 +11,6 @@ on:
         description: "Given github tag to create release for"
         required: true
 
-permissions:
-  contents: write
-
 jobs:
   release:
     name: Release pushed tag
