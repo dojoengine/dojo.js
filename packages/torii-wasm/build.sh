@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Exit immediately if a command exits with a non-zero status
 set -ex
@@ -10,10 +10,10 @@ fi
 cd dojo.c
 
 # Build for web (browser)
-npx wasm-pack build --out-dir ../pkg/web --release
+pnpx wasm-pack build --out-dir ../pkg/web --release
 
 # Build for Node.js
-npx wasm-pack build --out-dir ../pkg/node --release --target nodejs
+pnpx wasm-pack build --out-dir ../pkg/node --release --target nodejs
 
 # Find and delete .gitignore files in the specified directories
 find ../pkg/node -name ".gitignore" -type f -delete
