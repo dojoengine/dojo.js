@@ -142,7 +142,7 @@ jobs:
           else
             git add .
             git commit -m "chore: release"
-            git push origin main
+            git push origin refs/heads/main:refs/heads/main
           fi
 
       - name: Publish to npm
