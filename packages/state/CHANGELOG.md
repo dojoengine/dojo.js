@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.3.0
+
+### Minor Changes
+
+- 5e23a94: chore: bump upgrade to dojo 1.3
+
+### Patch Changes
+
+- Updated dependencies [5e23a94]
+    - @dojoengine/torii-client@1.3.0
+
 ## 1.2.7
 
 ### Patch Changes
