@@ -66,7 +66,7 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            packages/torii-wasm/target
+            packages/torii-wasm/dojo.c/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('packages/torii-wasm/**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
