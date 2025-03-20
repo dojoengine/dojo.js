@@ -9,7 +9,8 @@
         },
         "build:wasm": {
             "dependsOn": ["^build:wasm"],
-            "outputs": ["dist/**", "target/**", "pkg/**"]
+            "outputs": ["dist/**", "target/**", "pkg/**"],
+            "inputs": ["dojo.c/**", "crates/**"]
         },
         "build:deps": {
             "dependsOn": ["^build:deps", "^build:wasm"],

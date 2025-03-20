@@ -12,8 +12,8 @@
         "test": "vitest run --passWithNoTests --config ./vitest.config.ts",
         "coverage": "vitest run --coverage",
         "lint": "eslint . --ext .ts,.tsx",
-        "format:check": "prettier --check .",
-        "format": "prettier --write .",
+        "format:check": "prettier --check {src,*.json,*.ts}",
+        "format": "prettier --write {src,*.json,*.ts}",
         "docs": "typedoc"
     },
     "exports": {
