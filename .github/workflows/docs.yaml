@@ -30,6 +30,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
+      - name: Update Submodules
+        run: git submodule update --init --recursive
+
       - name: Install Protobuf Compiler
         run: sudo apt-get install -y protobuf-compiler
 
