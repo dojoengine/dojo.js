@@ -88,7 +88,6 @@ const db =
     {
         // your config
         client: {
-            rpcUrl: dojoConfig.rpcUrl,
             toriiUrl: dojoConfig.toriiUrl,
             relayUrl: dojoConfig.relayUrl,
             worldAddress: dojoConfig.manifest.world.address,
@@ -172,6 +171,7 @@ Dojo.js is a work in progress. We welcome contributions! Here's how you can get 
     ```bash
     git clone https://github.com/dojoengine/dojo.js.git
     cd dojo.js
+    git submodule update --init --recursive
     ```
 
 2. Install dependencies:
@@ -193,12 +193,26 @@ Before running examples, you need to build the packages:
 - Watch for changes (development mode):
 
     ```bash
-    pnpm run build --watch
+    pnpm run dev
     ```
+- Try out a specific example : 
+
+    ```bash
+    pnpm run dev --filter example-vite-react-sdk
+    ```
+    
 
 ### Running The Examples
 
 To run the examples, you'll need to set up three terminal windows:
+
+**With docker**: 
+1. Navigate to the Dojo starter directory:
+
+    ```bash
+    cd worlds/dojo-starter
+    docker compose up
+    ```
 
 **Terminal 1**: Set up the Dojo starter environment
 
