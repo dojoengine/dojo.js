@@ -3,6 +3,8 @@ import type { Account, Signature, StarknetDomain, TypedData } from "starknet";
 
 import type {
     GetParams,
+    GetTokenBalanceRequest,
+    GetTokenRequest,
     SchemaType,
     SDK,
     SDKConfig,
@@ -10,7 +12,10 @@ import type {
     SubscribeResponse,
     ToriiResponse,
     UnionOfModelData,
+    SubscribeTokenBalanceRequest,
+    UpdateTokenBalanceSubscriptionRequest,
 } from "./types";
+
 import { intoEntityKeysClause } from "./convertClauseToEntityKeysClause";
 import { parseEntities } from "./parseEntities";
 import { parseHistoricalEvents } from "./parseHistoricalEvents";
@@ -254,11 +259,12 @@ export async function init<T extends SchemaType>(
          * @param {string[]} token_ids
          * @returns {Promise<Tokens>}
          */
-        getTokens: async (
-            contract_addresses: string[],
-            token_ids: string[]
-        ): Promise<torii.Tokens> => {
-            return await client.getTokens(contract_addresses, token_ids);
+        getTokens: async (request: GetTokenRequest): Promise<torii.Tokens> => {
+            const { contractAddresses, tokenIds } = request;
+            return await client.getTokens(
+                contractAddresses ?? [],
+                tokenIds ?? []
+            );
         },
 
         /**
@@ -268,14 +274,13 @@ export async function init<T extends SchemaType>(
          * @returns {Promise<TokenBalances>}
          */
         getTokenBalances: async (
-            contract_addresses: string[],
-            account_addresses: string[],
-            token_ids: string[]
+            request: GetTokenBalanceRequest
         ): Promise<torii.TokenBalances> => {
+            const { contractAddresses, accountAddresses, tokenIds } = request;
             return await client.getTokenBalances(
-                contract_addresses,
-                account_addresses,
-                token_ids
+                contractAddresses ?? [],
+                accountAddresses ?? [],
+                tokenIds ?? []
             );
         },
 
@@ -293,15 +298,14 @@ export async function init<T extends SchemaType>(
          * @returns torii.Subscription
          */
         onTokenBalanceUpdated: (
-            contract_addresses: string[],
-            account_addresses: string[],
-            token_ids: string[],
-            callback: Function
+            request: SubscribeTokenBalanceRequest
         ): torii.Subscription => {
+            const { contractAddresses, accountAddresses, tokenIds, callback } =
+                request;
             return client.onTokenBalanceUpdated(
-                contract_addresses,
-                account_addresses,
-                token_ids,
+                contractAddresses ?? [],
+                accountAddresses ?? [],
+                tokenIds ?? [],
                 callback
             );
         },
@@ -320,16 +324,19 @@ export async function init<T extends SchemaType>(
          * @returns {Promise<void>}
          */
         updateTokenBalanceSubscription: async (
-            subscription: torii.Subscription,
-            contract_addresses: string[],
-            account_addresses: string[],
-            token_ids: string[]
+            request: UpdateTokenBalanceSubscriptionRequest
         ): Promise<void> => {
+            const {
+                subscription,
+                contractAddresses,
+                accountAddresses,
+                tokenIds,
+            } = request;
             return await client.updateTokenBalanceSubscription(
                 subscription,
-                contract_addresses,
-                account_addresses,
-                token_ids
+                contractAddresses ?? [],
+                accountAddresses ?? [],
+                tokenIds ?? []
             );
         },
 

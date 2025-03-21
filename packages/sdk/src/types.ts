@@ -248,15 +248,38 @@ export type UnionOfModelData<T extends SchemaType> = {
 
 export type ToriiResponse<
     T extends SchemaType,
-    Historical extends boolean
+    Historical extends boolean,
 > = Historical extends true
     ? StandardizedQueryResult<T>[]
     : StandardizedQueryResult<T>;
 
 export type SubscribeResponse<
     T extends SchemaType,
-    Historical extends boolean
+    Historical extends boolean,
 > = [ToriiResponse<T, Historical>, torii.Subscription];
+
+export interface GetTokenRequest {
+    contractAddresses?: string[];
+    tokenIds?: string[];
+}
+
+export interface GetTokenBalanceRequest extends GetTokenRequest {
+    accountAddresses?: string[];
+}
+
+// ToriiResponse<T, Historical>
+type SubscriptionCallback<T> = (response: {
+    data?: T;
+    error?: Error;
+}) => void;
+
+export type SubscribeTokenBalanceRequest = GetTokenBalanceRequest & {
+    callback: SubscriptionCallback<torii.TokenBalance[]>;
+};
+
+export type UpdateTokenBalanceSubscriptionRequest = GetTokenBalanceRequest & {
+    subscription: torii.Subscription;
+};
 
 /**
  * SDK interface for interacting with the DojoEngine.
@@ -328,10 +351,7 @@ export interface SDK<T extends SchemaType> {
      * @param {string[]} token_ids
      * @returns {Promise<torii.Tokens>}
      */
-    getTokens(
-        contract_addresses: string[],
-        token_ids: string[]
-    ): Promise<torii.Tokens>;
+    getTokens(request: GetTokenRequest): Promise<torii.Tokens>;
 
     /**
      * @param {string[]} account_addresses
@@ -340,9 +360,7 @@ export interface SDK<T extends SchemaType> {
      * @returns {Promise<torii.TokenBalances>}
      */
     getTokenBalances(
-        contract_addresses: string[],
-        account_addresses: string[],
-        token_ids: string[]
+        request: GetTokenBalanceRequest
     ): Promise<torii.TokenBalances>;
 
     /**
@@ -359,10 +377,7 @@ export interface SDK<T extends SchemaType> {
      * @returns torii.Subscription
      */
     onTokenBalanceUpdated: (
-        contract_addresses: string[],
-        account_addresses: string[],
-        token_ids: string[],
-        callback: Function
+        request: SubscribeTokenBalanceRequest
     ) => torii.Subscription;
 
     /**
@@ -379,10 +394,7 @@ export interface SDK<T extends SchemaType> {
      * @returns {Promise<void>}
      */
     updateTokenBalanceSubscription: (
-        subscription: torii.Subscription,
-        contract_addresses: string[],
-        account_addresses: string[],
-        token_ids: string[]
+        request: UpdateTokenBalanceSubscriptionRequest
     ) => Promise<void>;
 
     /**
@@ -489,7 +501,7 @@ export interface SDKFunctionOptions {
 
 export interface SubscribeParams<
     T extends SchemaType,
-    Historical extends boolean = false
+    Historical extends boolean = false,
 > {
     // Query object used to filter entities.
     query: ToriiQueryBuilder<T>;
@@ -504,10 +516,11 @@ export interface SubscribeParams<
 
 export interface GetParams<
     T extends SchemaType,
-    Historical extends boolean = false
+    Historical extends boolean = false,
 > {
     // The query object used to filter entities.
     query: ToriiQueryBuilder<T>;
     // historical events
     historical?: Historical;
 }
+export { ToriiQueryBuilder };
