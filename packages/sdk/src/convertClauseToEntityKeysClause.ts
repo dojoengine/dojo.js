@@ -9,14 +9,16 @@ export function intoEntityKeysClause<T extends SchemaType>(
     if (!clause) {
         return [];
     }
+
+    // if we have keys clause, we can move forward to query those keys directly
+    if (Object.hasOwn(clause, "Keys")) {
+        return [clause as unknown as EntityKeysClause];
+    }
+
     // if we have initial wih query.dont_include_hash_keys = false
     // we can move forward to query those hashed keys directly
     if (initialData && initialData.length > 0) {
         return [{ HashedKeys: initialData.map((e) => e.entityId) }];
-    }
-
-    if (Object.hasOwn(clause, "Keys")) {
-        return [clause as unknown as EntityKeysClause];
     }
 
     // We want to avoid those kind of weird cases where we are guessing what data should be retrieved

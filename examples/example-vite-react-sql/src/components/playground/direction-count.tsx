@@ -1,8 +1,7 @@
 import { SchemaType } from "@/typescript/models.gen";
-import { DojoContext } from "@dojoengine/sdk/react";
+import { useDojoSDK } from "@dojoengine/sdk/react";
 import { useToriiSQLQuery } from "@dojoengine/sdk/sql";
 import { useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
 
 type QueryResponse = Array<{
     count: number;
@@ -41,8 +40,9 @@ function formatFn(rows: QueryResponse): DirectionCount {
 
 export function DirectionCount() {
     // use queryClient to invalidateQuery when state is changing.
-    const { useDojoStore } = useContext(DojoContext);
+    const { useDojoStore } = useDojoSDK();
     const queryClient = useQueryClient();
+    // @ts-expect-error it's ok if I dont use this variable compiler, react needs it
     useDojoStore.subscribe(
         (s: SchemaType) => s.entities,
         () => {

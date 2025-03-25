@@ -148,6 +148,7 @@ export const getEntities = async <S extends Schema>(
     entityModels: string[] = [],
     limit: number = 100,
     logging: boolean = false,
+    historical: boolean = false,
     {
         dbConnection,
         timestampCacheKey,
@@ -163,15 +164,18 @@ export const getEntities = async <S extends Schema>(
     const time = dbConnection ? getCache(timestampCacheKey) : 0;
 
     while (continueFetching) {
-        const entities = await client.getEntities({
-            limit,
-            offset,
-            clause,
-            order_by: orderBy,
-            entity_models: entityModels,
-            dont_include_hashed_keys: false,
-            entity_updated_after: time,
-        });
+        const entities = await client.getEntities(
+            {
+                limit,
+                offset,
+                clause,
+                order_by: orderBy,
+                entity_models: entityModels,
+                dont_include_hashed_keys: false,
+                entity_updated_after: time,
+            },
+            historical
+        );
 
         if (dbConnection) {
             await insertEntitiesInDB(dbConnection, entities);
@@ -275,7 +279,8 @@ export const getEntitiesQuery = async <S extends Schema>(
     orderBy: OrderBy[] = [],
     entityModels: string[] = [],
     limit: number = 1000,
-    logging: boolean = false
+    logging: boolean = false,
+    historical: boolean = false
 ) => {
     if (logging) console.log("Starting getEntitiesQuery");
     let cursor = 0;
@@ -298,15 +303,18 @@ export const getEntitiesQuery = async <S extends Schema>(
           }
         : null;
 
-    const fetchedEntities = await client.getEntities({
-        limit,
-        offset: cursor,
-        clause: clause || undefined,
-        order_by: orderBy,
-        entity_models: entityModels,
-        dont_include_hashed_keys: false,
-        entity_updated_after: 0,
-    });
+    const fetchedEntities = await client.getEntities(
+        {
+            limit,
+            offset: cursor,
+            clause: clause || undefined,
+            order_by: orderBy,
+            entity_models: entityModels,
+            dont_include_hashed_keys: false,
+            entity_updated_after: 0,
+        },
+        historical
+    );
 
     while (continueFetching) {
         if (logging)
@@ -370,13 +378,11 @@ export const syncEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
     entityKeyClause: EntityKeysClause[],
-    logging: boolean = false,
-    historical: boolean = false
+    logging: boolean = false
 ) => {
     if (logging) console.log("Starting syncEvents");
     return await client.onEventMessageUpdated(
         entityKeyClause,
-        historical,
         (fetchedEntities: any, data: any) => {
             if (logging) console.log("Event message updated", fetchedEntities);
 

@@ -5,7 +5,7 @@ import {
     PatternMatching,
 } from "@dojoengine/torii-client";
 
-import { convertToPrimitive } from "./convertToMemberValue";
+import { convertToPrimitive, MemberValueParam } from "./convertToMemberValue";
 import { SchemaType } from "./types";
 
 type ClauseBuilderInterface = {
@@ -66,7 +66,10 @@ export function MemberClause<
     model: Path,
     member: M & string,
     operator: ComparisonOperator,
-    value: GetModelType<T, Path>[M] | GetModelType<T, Path>[M][]
+    value:
+        | GetModelType<T, Path>[M]
+        | GetModelType<T, Path>[M][]
+        | MemberValueParam
 ): ClauseBuilder<T> {
     return new ClauseBuilder<T>().where(model, member, operator, value);
 }
@@ -132,7 +135,10 @@ export class ClauseBuilder<T extends SchemaType> {
         model: Path,
         member: M & string,
         operator: ComparisonOperator,
-        value: GetModelType<T, Path>[M] | GetModelType<T, Path>[M][]
+        value:
+            | GetModelType<T, Path>[M]
+            | GetModelType<T, Path>[M][]
+            | MemberValueParam
     ): ClauseBuilder<T> {
         const memberValue: MemberValue = Array.isArray(value)
             ? { List: value.map(convertToPrimitive) }
