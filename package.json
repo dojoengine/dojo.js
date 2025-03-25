@@ -3,6 +3,7 @@
     "packageManager": "pnpm@10.5.2",
     "scripts": {
         "build:deps": "turbo build:deps",
+        "build:wasm": "turbo build:wasm",
         "build": "turbo build",
         "clean": "bash ./scripts/clean.sh",
         "prettier": "pnpx prettier --write packages examples",
@@ -11,7 +12,7 @@
         "format:check": "turbo format:check",
         "release": "pnpm build:deps && pnpm -F './packages/**' publish -r --force --no-git-checks",
         "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run",
-        "dev": "turbo watch dev --concurrency 15",
+        "dev": "turbo watch dev --concurrency 20",
         "docs": "turbo run docs --ui stream"
     },
     "devDependencies": {

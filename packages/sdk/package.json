@@ -74,6 +74,8 @@
         "@dojoengine/core": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/utils": "workspace:*",
+        "@starknet-react/chains": "catalog:",
+        "@starknet-react/core": "catalog:",
         "immer": "^10.1.1",
         "zustand": "^4.5.6"
     },

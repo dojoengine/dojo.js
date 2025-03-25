@@ -1,8 +1,8 @@
-import { ReactNode, useContext, createContext } from "react";
-import { SchemaType, SDK } from "../types";
-import { DojoConfig, DojoProvider } from "@dojoengine/core";
-import { createDojoStore } from "./hooks";
-import { GameState } from "../state";
+import { type ReactNode, useContext, createContext } from "react";
+import type { SchemaType, SDK } from "../types";
+import { type DojoConfig, DojoProvider } from "@dojoengine/core";
+import { createDojoStore } from "./hooks/state";
+import type { GameState } from "../state";
 
 // Define the hook type
 export type DojoStoreHook<T extends SchemaType> = <U>(
@@ -15,7 +15,7 @@ export type DojoStoreHook<T extends SchemaType> = <U>(
  */
 export interface DojoContextType<
     Client extends (...args: any) => any,
-    Schema extends SchemaType
+    Schema extends SchemaType,
 > {
     /** The Dojo client instance */
     config: DojoConfig;
