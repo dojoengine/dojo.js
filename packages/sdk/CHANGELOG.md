@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.3.1
+
+### Patch Changes
+
+- ff6eb12: chore: bump dojo 1.3.1
+- 0157fe1: feat: add way to create specific types to query torii
+- Updated dependencies [ff6eb12]
+    - @dojoengine/torii-client@1.3.1
+    - @dojoengine/utils@1.3.1
+    - @dojoengine/core@1.3.1
+
 ## 1.3.0
 
 ### Minor Changes

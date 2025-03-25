@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.3.1
+
+### Patch Changes
+
+- ff6eb12: chore: bump dojo 1.3.1
+- Updated dependencies [ff6eb12]
+    - @dojoengine/torii-client@1.3.1
+    - @dojoengine/state@1.3.1
+    - @dojoengine/utils@1.3.1
+
 ## 1.3.0
 
 ### Minor Changes

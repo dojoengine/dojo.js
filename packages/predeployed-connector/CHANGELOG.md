@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.3.1
+
+### Patch Changes
+
+- ff6eb12: chore: bump dojo 1.3.1
+
 ## 1.3.0
 
 ### Minor Changes
