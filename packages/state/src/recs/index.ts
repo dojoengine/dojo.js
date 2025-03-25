@@ -8,6 +8,7 @@ import {
     Schema,
     setComponent,
     updateComponent,
+    removeComponent,
 } from "@dojoengine/recs";
 import {
     Clause,
@@ -457,6 +458,11 @@ export const setEntities = async <S extends Schema>(
                     }
 
                     if (hasComponent(recsComponent, key as Entity)) {
+                        // torii returns an empty object if the model is removed
+                        if (Object.keys(convertedValue).length === 0) {
+                            removeComponent(recsComponent, key as Entity);
+                            continue;
+                        }
                         updateComponent(
                             recsComponent,
                             key as Entity,
