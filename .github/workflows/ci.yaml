@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - uses: oven-sh/setup-bun@v1
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
@@ -40,9 +42,6 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('packages/torii-wasm/**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
-
-      - name: Update Submodules
-        run: git submodule update --init --recursive
 
       - run: curl -L https://install.dojoengine.org | bash
       - uses: software-mansion/setup-scarb@v1

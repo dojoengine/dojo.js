@@ -74,7 +74,9 @@ export async function init<T extends SchemaType>(
                     "For subscription, you need to include entity ids"
                 );
             }
-            const entities = parseEntities<T>(await client.getEntities(q));
+            const entities = parseEntities<T>(
+                await client.getEntities(q, false)
+            );
             return [
                 entities,
                 client.onEntityUpdated(
@@ -138,7 +140,6 @@ export async function init<T extends SchemaType>(
                 client.onEventMessageUpdated(
                     // @ts-expect-error will fix
                     intoEntityKeysClause<T>(q.clause, events),
-                    historical,
                     (entityId: string, entityData: any) => {
                         try {
                             if (callback) {
@@ -176,7 +177,7 @@ export async function init<T extends SchemaType>(
          */
         getEntities: async ({ query }) => {
             const q = query.build();
-            return parseEntities(await client.getEntities(q));
+            return parseEntities(await client.getEntities(q, false));
         },
         /**
          * Fetches event messages based on the provided query.
@@ -365,13 +366,11 @@ export async function init<T extends SchemaType>(
          */
         updateEventMessageSubscription: async (
             subscription: torii.Subscription,
-            clauses: torii.EntityKeysClause[],
-            historical: boolean
+            clauses: torii.EntityKeysClause[]
         ): Promise<void> => {
             return await client.updateEventMessageSubscription(
                 subscription,
-                clauses,
-                historical
+                clauses
             );
         },
 
@@ -401,7 +400,9 @@ export async function init<T extends SchemaType>(
             query: ToriiQueryBuilder<T>
         ): Promise<[ToriiResponse<T, false>, torii.EntityKeysClause[]]> => {
             const q = query.build();
-            const entities = parseEntities<T>(await client.getEntities(q));
+            const entities = parseEntities<T>(
+                await client.getEntities(q, false)
+            );
             return [entities, intoEntityKeysClause<T>(q.clause, entities)];
         },
 

@@ -10,6 +10,7 @@ export type ToriiSubscriptionCallback<T extends SchemaType> = (response: {
     error?: Error;
 }) => void;
 
+// @deprecated for now use import { init } from "@dojoengine/sdk"
 export async function init<T extends SchemaType>(options: SDKConfig) {
     const clientConfig = {
         ...defaultClientConfig,
@@ -20,7 +21,7 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
 
     return {
         getEntities: async (query: torii.Query) => {
-            return parseEntities(await client.getEntities(query));
+            return parseEntities(await client.getEntities(query, false));
         },
         getEvents: async (query: torii.Query, historical: boolean = false) => {
             const events = await client.getEventMessages(query, historical);
@@ -41,7 +42,9 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                     "For subscription, you need to include entity ids"
                 );
             }
-            const entities = parseEntities<T>(await client.getEntities(query));
+            const entities = parseEntities<T>(
+                await client.getEntities(query, false)
+            );
             return [
                 entities,
                 client.onEntityUpdated(
@@ -93,7 +96,6 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                 events,
                 client.onEventMessageUpdated(
                     intoEntityKeysClause<T>(query.clause, events),
-                    historical,
                     (entityId: string, entityData: any) => {
                         try {
                             if (callback) {

@@ -20,7 +20,7 @@ describe("convertClauseToEntityKeysClause", () => {
         ]);
     });
 
-    it("HashedKeys has priority over keys", () => {
+    it("if keys clause and HashedKeys are present, keys has priority", () => {
         const clause = new ClauseBuilder()
             .keys(["dojo_starter-Position"], ["0x123"])
             .build();
@@ -33,7 +33,11 @@ describe("convertClauseToEntityKeysClause", () => {
             ])
         ).toEqual([
             {
-                HashedKeys: ["0xentityHashedKey"],
+                Keys: {
+                    keys: ["0x123"],
+                    pattern_matching: "VariableLen",
+                    models: ["dojo_starter-Position"],
+                },
             },
         ]);
     });

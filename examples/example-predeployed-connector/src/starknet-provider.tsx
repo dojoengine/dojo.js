@@ -23,6 +23,7 @@ export default function StarknetProvider({ children }: PropsWithChildren) {
             explorer={voyager}
             autoConnect
         >
+            {/* @ts-ignore */}
             {children}
         </StarknetConfig>
     );

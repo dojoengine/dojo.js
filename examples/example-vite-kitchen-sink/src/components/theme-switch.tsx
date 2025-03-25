@@ -21,7 +21,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown";
 import { CairoCustomEnum } from "starknet";
-import { useDojoSDK } from "@dojoengine/sdk/react";
+import { useDojoSDK, useEntityId } from "@dojoengine/sdk/react";
 import { setupWorld } from "@/typescript/contracts.gen";
 
 interface ThemeState {
@@ -50,7 +50,7 @@ export default function ThemeSwitchButton() {
         next: null,
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [entityId, setEntityId] = useState<string | null>(null);
+    const entityId = useEntityId(9999999);
     const { account } = useAccount();
     const [sub, setSub] = useState<Subscription | null>(null);
     const { sdk: db, client: actions } = useDojoSDK<
@@ -120,8 +120,7 @@ export default function ThemeSwitchButton() {
             setSub(sub);
 
             const theme =
-                initialTheme[0].models?.onchain_dash?.Theme?.value?.unwrap();
-            setEntityId(initialTheme[0].entityId);
+                initialTheme[0]?.models?.onchain_dash?.Theme?.value?.unwrap();
             let th = null;
             if (undefined === theme) {
                 th = AvailableTheme.Light;

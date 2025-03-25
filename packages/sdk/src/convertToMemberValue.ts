@@ -1,11 +1,10 @@
 import * as torii from "@dojoengine/torii-client";
 
-
 type ToUnion<T> = T extends infer U ? U : never;
 type ExtractPrimitiveKeys<T> = T extends Record<infer K, any> ? K : never;
 type PrimitiveTypeKeys = ToUnion<ExtractPrimitiveKeys<torii.Primitive>>;
 
-export type MemberValueParam = { type: PrimitiveTypeKeys, value: any };
+export type MemberValueParam = { type: PrimitiveTypeKeys; value: any } | any;
 
 /**
  * Converts a value to a Torii primitive type.
@@ -15,7 +14,7 @@ export type MemberValueParam = { type: PrimitiveTypeKeys, value: any };
  * @throws {Error} - If the value type is unsupported.
  */
 export function convertToPrimitive(value: MemberValueParam): torii.MemberValue {
-
+    // if you want to have more control over type passed to torii
     if (Object.hasOwn(value, "type") && Object.hasOwn(value, "value")) {
         return { Primitive: { [value.type]: value.value } as torii.Primitive };
     }

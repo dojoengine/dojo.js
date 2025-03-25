@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          submodules: true
 
       - uses: pnpm/action-setup@v3
         with:
@@ -70,9 +70,6 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('packages/torii-wasm/**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
-
-      - name: Update Submodules
-        run: git submodule update --init --recursive
 
       - run: curl -L https://install.dojoengine.org | bash
       - uses: software-mansion/setup-scarb@v1
