@@ -191,6 +191,18 @@ export function hexToAscii(hex: string): string {
 }
 
 /**
+ * Converts an ASCII string to a hexadecimal string.
+ * With a 0x prefix, matching the original function's format
+ */
+export function asciiToHex(str: string): string {
+    let hex = "0x";
+    for (let i = 0; i < str.length; i++) {
+        hex += str.charCodeAt(i).toString(16).padStart(2, '0');
+    }
+    return hex;
+}
+
+/**
  * Get the component name from felt event name
  */
 export function getComponentNameFromEvent(
