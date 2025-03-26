@@ -193,7 +193,12 @@ export function hexToAscii(hex: string): string {
 /**
  * Converts an ASCII string to a hexadecimal string.
  * With a 0x prefix, matching the original function's format
- */
+ *  
++ * Example:
++ * - asciiToHex("Hello") → "0x48656c6c6f"
++ * - asciiToHex("A") → "0x41"
++ * - asciiToHex("123") → "0x313233"
+*/
 export function asciiToHex(str: string): string {
     let hex = "0x";
     for (let i = 0; i < str.length; i++) {
