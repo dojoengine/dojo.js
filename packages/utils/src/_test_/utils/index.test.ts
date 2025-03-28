@@ -7,6 +7,7 @@ import {
     getComponentNameFromEvent,
     getSelectorFromTag,
     splitEventTag,
+    asciiToHex,
 } from "../../utils/index";
 
 describe("utils", () => {
@@ -125,5 +126,15 @@ describe("utils", () => {
         ).toBe(
             "/dns4/api.cartridge.gg/tcp/443/x-parity-wss/%2Fx%2Fwordle-game%2Ftorii%2Fwss"
         );
+    });
+
+    it("should convert ASCII strings to hex", () => {
+        const f = (input: string, expected: string) => {
+            expect(asciiToHex(input)).toBe(expected);
+        };
+
+        f("Hello", "0x48656c6c6f");
+        f("A", "0x41");
+        f("123", "0x313233");
     });
 });
