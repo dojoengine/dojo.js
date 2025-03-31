@@ -1,12 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
-import { type init } from "@dojoengine/sdk/experimental";
 import { Button } from "./components/ui/button";
 import { Card } from "./components/ui/card";
 import { QueryHistory, QueryItem } from "./components/query-history";
 import { SchemaExplorer, SchemaItem } from "./components/schema-explorer";
 import { QueryEditor } from "./components/query-editor";
 import { QueryResults } from "./components/query-results";
-import { StandardizedQueryResult, SchemaType } from "@dojoengine/sdk";
+import {
+    StandardizedQueryResult,
+    SchemaType,
+    type init,
+    ToriiQueryBuilder,
+    ClauseBuilder,
+} from "@dojoengine/sdk";
 import { evaluateUserInput } from "./components/ts-executor";
 
 const DEFAULT_COMMENT = `// Welcome to Torii gRPC Playground!
@@ -100,7 +105,9 @@ export const App = ({ sdk }: AppProps) => {
             const evaluatedQuery = await evaluateUserInput(strippedQuery);
 
             const startTime = performance.now();
-            const response = await sdk.getEntities(evaluatedQuery);
+            const response = await sdk.getEntities({
+                query: evaluatedQuery,
+            });
             const endTime = performance.now();
             setExecutionTime(endTime - startTime);
             setResponse(response);

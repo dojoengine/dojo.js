@@ -226,6 +226,7 @@ export async function init<T extends SchemaType>(
                 q,
                 historical ? historical : false
             );
+
             return (
                 historical
                     ? parseHistoricalEvents(events)
