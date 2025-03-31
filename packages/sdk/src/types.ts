@@ -248,15 +248,49 @@ export type UnionOfModelData<T extends SchemaType> = {
 
 export type ToriiResponse<
     T extends SchemaType,
-    Historical extends boolean
+    Historical extends boolean,
 > = Historical extends true
     ? StandardizedQueryResult<T>[]
     : StandardizedQueryResult<T>;
 
 export type SubscribeResponse<
     T extends SchemaType,
-    Historical extends boolean
+    Historical extends boolean,
 > = [ToriiResponse<T, Historical>, torii.Subscription];
+
+export interface GetTokenRequest {
+    contractAddresses?: string[];
+    tokenIds?: string[];
+}
+
+export interface GetTokenBalanceRequest extends GetTokenRequest {
+    accountAddresses?: string[];
+}
+
+type Success<T> = {
+    data: T;
+    error: undefined;
+};
+
+type Failure<E> = {
+    data: undefined;
+    error: E;
+};
+
+export type SubscriptionCallbackArgs<T, E = Error> = Success<T> | Failure<E>;
+
+// ToriiResponse<T, Historical>
+export type SubscriptionCallback<T> = (
+    response: SubscriptionCallbackArgs<T>
+) => void;
+
+export type SubscribeTokenBalanceRequest = GetTokenBalanceRequest & {
+    callback: SubscriptionCallback<torii.TokenBalance>;
+};
+
+export type UpdateTokenBalanceSubscriptionRequest = GetTokenBalanceRequest & {
+    subscription: torii.Subscription;
+};
 
 /**
  * SDK interface for interacting with the DojoEngine.
@@ -294,6 +328,17 @@ export interface SDK<T extends SchemaType> {
     ) => Promise<SubscribeResponse<T, Historical>>;
 
     /**
+     * Subscribes to token balance updates
+     *
+     * # Parameters
+     * @param {SubscribeTokenBalanceRequest} request
+     * @returns {Promise<[torii.TokenBalances, torii.Subscription]>}
+     */
+    subscribeTokenBalance: (
+        request: SubscribeTokenBalanceRequest
+    ) => Promise<[torii.TokenBalances, torii.Subscription]>;
+
+    /**
      * Fetches entities from the Torii client based on the provided query.
      *
      * @template T - The schema type.
@@ -328,10 +373,7 @@ export interface SDK<T extends SchemaType> {
      * @param {string[]} token_ids
      * @returns {Promise<torii.Tokens>}
      */
-    getTokens(
-        contract_addresses: string[],
-        token_ids: string[]
-    ): Promise<torii.Tokens>;
+    getTokens(request: GetTokenRequest): Promise<torii.Tokens>;
 
     /**
      * @param {string[]} account_addresses
@@ -340,9 +382,7 @@ export interface SDK<T extends SchemaType> {
      * @returns {Promise<torii.TokenBalances>}
      */
     getTokenBalances(
-        contract_addresses: string[],
-        account_addresses: string[],
-        token_ids: string[]
+        request: GetTokenBalanceRequest
     ): Promise<torii.TokenBalances>;
 
     /**
@@ -359,10 +399,7 @@ export interface SDK<T extends SchemaType> {
      * @returns torii.Subscription
      */
     onTokenBalanceUpdated: (
-        contract_addresses: string[],
-        account_addresses: string[],
-        token_ids: string[],
-        callback: Function
+        request: SubscribeTokenBalanceRequest
     ) => torii.Subscription;
 
     /**
@@ -379,10 +416,7 @@ export interface SDK<T extends SchemaType> {
      * @returns {Promise<void>}
      */
     updateTokenBalanceSubscription: (
-        subscription: torii.Subscription,
-        contract_addresses: string[],
-        account_addresses: string[],
-        token_ids: string[]
+        request: UpdateTokenBalanceSubscriptionRequest
     ) => Promise<void>;
 
     /**
@@ -489,25 +523,23 @@ export interface SDKFunctionOptions {
 
 export interface SubscribeParams<
     T extends SchemaType,
-    Historical extends boolean = false
+    Historical extends boolean = false,
 > {
     // Query object used to filter entities.
     query: ToriiQueryBuilder<T>;
     // The callback function to handle the response.
-    callback: (response: {
-        data?: ToriiResponse<T, Historical>;
-        error?: Error;
-    }) => void;
+    callback: SubscriptionCallback<ToriiResponse<T, Historical>>;
     // historical events
     historical?: Historical;
 }
 
 export interface GetParams<
     T extends SchemaType,
-    Historical extends boolean = false
+    Historical extends boolean = false,
 > {
     // The query object used to filter entities.
     query: ToriiQueryBuilder<T>;
     // historical events
     historical?: Historical;
 }
+export { ToriiQueryBuilder };

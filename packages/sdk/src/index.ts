@@ -3,6 +3,8 @@ import type { Account, Signature, StarknetDomain, TypedData } from "starknet";
 
 import type {
     GetParams,
+    GetTokenBalanceRequest,
+    GetTokenRequest,
     SchemaType,
     SDK,
     SDKConfig,
@@ -10,12 +12,22 @@ import type {
     SubscribeResponse,
     ToriiResponse,
     UnionOfModelData,
+    SubscribeTokenBalanceRequest,
+    UpdateTokenBalanceSubscriptionRequest,
 } from "./types";
+
 import { intoEntityKeysClause } from "./convertClauseToEntityKeysClause";
 import { parseEntities } from "./parseEntities";
 import { parseHistoricalEvents } from "./parseHistoricalEvents";
 import type { ToriiQueryBuilder } from "./toriiQueryBuilder";
 import { generateTypedData } from "./generateTypedData";
+import {
+    getTokens,
+    getTokenBalances,
+    onTokenBalanceUpdated,
+    updateTokenBalanceSubscription,
+    subscribeTokenBalance,
+} from "./token";
 
 export * from "./types";
 export * from "./queryBuilder";
@@ -87,11 +99,15 @@ export async function init<T extends SchemaType>(
                                 const parsedData = parseEntities<T>({
                                     [entityId]: entityData,
                                 });
-                                callback({ data: parsedData });
+                                callback({
+                                    data: parsedData,
+                                    error: undefined,
+                                });
                             }
                         } catch (error) {
                             if (callback) {
                                 callback({
+                                    data: undefined,
                                     error:
                                         error instanceof Error
                                             ? error
@@ -153,11 +169,13 @@ export async function init<T extends SchemaType>(
                                         T,
                                         Historical
                                     >,
+                                    error: undefined,
                                 });
                             }
                         } catch (error) {
                             if (callback) {
                                 callback({
+                                    data: undefined,
                                     error:
                                         error instanceof Error
                                             ? error
@@ -169,6 +187,19 @@ export async function init<T extends SchemaType>(
                 ),
             ];
         },
+        /**
+         * Subscribes to token balance updates
+         *
+         * # Parameters
+         * @param {SubscribeTokenBalanceRequest} request
+         * @returns {Promise<[torii.TokenBalances, torii.Subscription]>}
+         */
+        subscribeTokenBalance: async (
+            request: SubscribeTokenBalanceRequest
+        ): Promise<[torii.TokenBalances, torii.Subscription]> => {
+            return await subscribeTokenBalance(client, request);
+        },
+
         /**
          * Fetches entities based on the provided query.
          *
@@ -251,42 +282,28 @@ export async function init<T extends SchemaType>(
         },
 
         /**
-         * @param {(string)[]} contract_addresses
-         * @param {string[]} token_ids
-         * @returns {Promise<Tokens>}
+         * @param {GetTokenRequest} request
+         * @returns {Promise<torii.Tokens>}
          */
-        getTokens: async (
-            contract_addresses: string[],
-            token_ids: string[]
-        ): Promise<torii.Tokens> => {
-            return await client.getTokens(contract_addresses, token_ids);
+        getTokens: async (request: GetTokenRequest): Promise<torii.Tokens> => {
+            return await getTokens(client, request);
         },
 
         /**
-         * @param {(string)[]} contract_addresses
-         * @param {(string)[]} account_addresses
-         * @param {string[]} token_ids
-         * @returns {Promise<TokenBalances>}
+         * @param {GetTokenBalanceRequest} request
+         * @returns {Promise<torii.TokenBalances>}
          */
         getTokenBalances: async (
-            contract_addresses: string[],
-            account_addresses: string[],
-            token_ids: string[]
+            request: GetTokenBalanceRequest
         ): Promise<torii.TokenBalances> => {
-            return await client.getTokenBalances(
-                contract_addresses,
-                account_addresses,
-                token_ids
-            );
+            return await getTokenBalances(client, request);
         },
 
         /**
          * Subscribes to token balance updates
          *
          * # Parameters
-         * @param {string[]} contract_addresses - Array of contract addresses to filter (empty for all)
-         * @param {string[]} account_addresses - Array of account addresses to filter (empty for all)
-         * @param {string[]} token_ids - Array of token ids to filter (empty for all)
+         * @param {SubscribeTokenBalanceRequest} request
          * @param {Funtion} callback - JavaScript function to call on updates
          *
          * # Returns
@@ -294,44 +311,25 @@ export async function init<T extends SchemaType>(
          * @returns torii.Subscription
          */
         onTokenBalanceUpdated: (
-            contract_addresses: string[],
-            account_addresses: string[],
-            token_ids: string[],
-            callback: Function
+            request: SubscribeTokenBalanceRequest
         ): torii.Subscription => {
-            return client.onTokenBalanceUpdated(
-                contract_addresses,
-                account_addresses,
-                token_ids,
-                callback
-            );
+            return onTokenBalanceUpdated(client, request);
         },
 
         /**
          * Updates an existing token balance subscription
          *
          * # Parameters
-         * @param {torii.Subscription} subscription - Existing subscription to update
-         * @param {string[]} contract_addresses - New array of contract addresses to filter
-         * @param {string[]} account_addresses - New array of account addresses to filter
-         * @param {string[]} token_ids - New array of token ids to filter (empty for all)
+         * @param {UpdateTokenBalanceSubscriptionRequest} request
          *
          * # Returns
          * Result containing unit or error
          * @returns {Promise<void>}
          */
         updateTokenBalanceSubscription: async (
-            subscription: torii.Subscription,
-            contract_addresses: string[],
-            account_addresses: string[],
-            token_ids: string[]
+            request: UpdateTokenBalanceSubscriptionRequest
         ): Promise<void> => {
-            return await client.updateTokenBalanceSubscription(
-                subscription,
-                contract_addresses,
-                account_addresses,
-                token_ids
-            );
+            return await updateTokenBalanceSubscription(client, request);
         },
 
         /**
