@@ -1,5 +1,19 @@
 # Change Log
 
+## 1.4.0
+
+### Minor Changes
+
+- d908fdf: chore: bump dojo 1.4.0
+
+### Patch Changes
+
+- a7a4ee6: feat: add torii tokens hooks + related example
+- Updated dependencies [d908fdf]
+    - @dojoengine/core@1.4.0
+    - @dojoengine/torii-client@1.4.0
+    - @dojoengine/utils@1.4.0
+
 ## 1.3.1
 
 ### Patch Changes

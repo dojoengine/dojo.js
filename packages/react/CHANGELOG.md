@@ -1,5 +1,18 @@
 # Change Log
 
+## 1.4.0
+
+### Minor Changes
+
+- d908fdf: chore: bump dojo 1.4.0
+
+### Patch Changes
+
+- Updated dependencies [d908fdf]
+    - @dojoengine/state@1.4.0
+    - @dojoengine/torii-client@1.4.0
+    - @dojoengine/utils@1.4.0
+
 ## 1.3.1
 
 ### Patch Changes
