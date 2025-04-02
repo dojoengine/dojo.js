@@ -9,8 +9,6 @@ import {
     StandardizedQueryResult,
     SchemaType,
     type init,
-    ToriiQueryBuilder,
-    ClauseBuilder,
 } from "@dojoengine/sdk";
 import { evaluateUserInput } from "./components/ts-executor";
 
