@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.4.1
+
+### Patch Changes
+
+- c3fd338: fix: bump all packages
+- Updated dependencies [c3fd338]
+    - @dojoengine/core@1.4.1
+    - @dojoengine/torii-client@1.4.1
+    - @dojoengine/utils@1.4.1
+
 ## 1.4.0
 
 ### Minor Changes

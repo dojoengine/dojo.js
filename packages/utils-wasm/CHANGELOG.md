@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.4.1
+
+### Patch Changes
+
+- c3fd338: fix: bump all packages
+
 ## 1.4.0
 
 ### Minor Changes
