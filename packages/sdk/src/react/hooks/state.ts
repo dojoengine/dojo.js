@@ -30,7 +30,7 @@ export function useModel<
     N extends keyof SchemaType,
     M extends keyof SchemaType[N] & string,
     Client extends (...args: any) => any,
-    Schema extends SchemaType,
+    Schema extends SchemaType
 >(entityId: BigNumberish, model: `${N}-${M}`): SchemaType[N][M] | undefined {
     const [namespace, modelName] = model.split("-") as [N, M];
     const { useDojoStore } =
@@ -57,7 +57,7 @@ export function useModels<
     N extends keyof SchemaType,
     M extends keyof SchemaType[N] & string,
     Client extends (...args: any) => any,
-    Schema extends SchemaType,
+    Schema extends SchemaType
 >(model: `${N}-${M}`): { [entityId: string]: SchemaType[N][M] | undefined } {
     const [namespace, modelName] = model.split("-") as [N, M];
     const { useDojoStore } =

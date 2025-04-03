@@ -18,7 +18,7 @@ export * from "./state";
  */
 export function useDojoSDK<
     Client extends (...args: any) => any,
-    Schema extends SchemaType,
+    Schema extends SchemaType
 >(): DojoContextType<Client, Schema> {
     return useContext<DojoContextType<Client, Schema>>(DojoContext);
 }

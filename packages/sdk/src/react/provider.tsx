@@ -15,7 +15,7 @@ export type DojoStoreHook<T extends SchemaType> = <U>(
  */
 export interface DojoContextType<
     Client extends (...args: any) => any,
-    Schema extends SchemaType,
+    Schema extends SchemaType
 > {
     /** The Dojo client instance */
     config: DojoConfig;

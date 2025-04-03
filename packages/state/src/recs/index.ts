@@ -1,15 +1,16 @@
 import {
-    Component,
-    ComponentValue,
-    Entity,
+    type Component,
+    type ComponentValue,
+    type Entity,
+    type Metadata,
+    type Schema,
     getComponentValue,
     hasComponent,
-    Metadata,
-    Schema,
+    removeComponent,
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
-import {
+import type {
     Clause,
     Entities,
     EntityKeysClause,
@@ -411,16 +412,17 @@ export const setEntities = async <S extends Schema>(
         console.warn("No entities to set");
         return;
     }
-
     if (logging) console.log("Entities to set:", entities);
 
     for (const key in entities) {
         if (!Object.hasOwn(entities, key)) {
+            console.log("Did not found key", key);
             continue;
         }
 
         for (const componentName in entities[key]) {
             if (!Object.hasOwn(entities[key], componentName)) {
+                console.log("Did not found componentName", componentName);
                 continue;
             }
             const recsComponent = Object.values(components).find(
@@ -429,63 +431,74 @@ export const setEntities = async <S extends Schema>(
                     componentName
             );
 
-            if (recsComponent) {
-                try {
-                    const rawValue = entities[key][componentName];
-
-                    if (logging)
-                        console.log(
-                            `Raw value for ${componentName} on ${key}:`,
-                            rawValue
-                        );
-
-                    const convertedValue = convertValues(
-                        recsComponent.schema,
-                        rawValue
-                    ) as ComponentValue;
-
-                    if (logging)
-                        console.log(
-                            `Converted value for ${componentName} on ${key}:`,
-                            convertedValue
-                        );
-
-                    if (!convertedValue) {
-                        console.error(
-                            `convertValues returned undefined or invalid for ${componentName} on ${key}`
-                        );
-                    }
-
-                    if (hasComponent(recsComponent, key as Entity)) {
-                        updateComponent(
-                            recsComponent,
-                            key as Entity,
-                            convertedValue as Partial<ComponentValue>,
-                            getComponentValue(recsComponent, key as Entity)
-                        );
-                        if (logging)
-                            console.log(
-                                `Update component ${recsComponent.metadata?.name} on ${key}`
-                            );
-                        continue;
-                    }
-                    setComponent(recsComponent, key as Entity, convertedValue);
-
-                    if (logging)
-                        console.log(
-                            `Set component ${recsComponent.metadata?.name} on ${key}`
-                        );
-                } catch (error) {
-                    console.warn(
-                        `Failed to set component ${recsComponent.metadata?.name} on ${key}`,
-                        error
-                    );
-                }
-            } else {
+            if (!recsComponent) {
                 if (logging)
                     console.warn(
                         `Component ${componentName} not found in provided components.`
                     );
+                continue;
+            }
+
+            try {
+                const rawValue = entities[key][componentName];
+                if (Object.keys(rawValue).length === 0) {
+                    removeComponent(recsComponent, key as Entity, {
+                        skipUpdateStream: false,
+                    });
+                    if (logging)
+                        console.log(
+                            `Removed component ${recsComponent.metadata?.name} on ${key}`
+                        );
+                    continue;
+                }
+
+                if (logging)
+                    console.log(
+                        `Raw value for ${componentName} on ${key}:`,
+                        rawValue
+                    );
+
+                const convertedValue = convertValues(
+                    recsComponent.schema,
+                    rawValue
+                ) as ComponentValue;
+
+                if (logging)
+                    console.log(
+                        `Converted value for ${componentName} on ${key}:`,
+                        convertedValue
+                    );
+
+                if (!convertedValue) {
+                    console.error(
+                        `convertValues returned undefined or invalid for ${componentName} on ${key}`
+                    );
+                }
+
+                if (hasComponent(recsComponent, key as Entity)) {
+                    updateComponent(
+                        recsComponent,
+                        key as Entity,
+                        convertedValue as Partial<ComponentValue>,
+                        getComponentValue(recsComponent, key as Entity)
+                    );
+                    if (logging)
+                        console.log(
+                            `Update component ${recsComponent.metadata?.name} on ${key}`
+                        );
+                    continue;
+                }
+                setComponent(recsComponent, key as Entity, convertedValue);
+
+                if (logging)
+                    console.log(
+                        `Set component ${recsComponent.metadata?.name} on ${key}`
+                    );
+            } catch (error) {
+                console.warn(
+                    `Failed to set component ${recsComponent.metadata?.name} on ${key}`,
+                    error
+                );
             }
         }
     }

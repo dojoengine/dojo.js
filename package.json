@@ -13,6 +13,7 @@
         "release": "pnpm build:deps && pnpm -F './packages/**' publish -r --force --no-git-checks",
         "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run",
         "dev": "turbo watch dev --concurrency 20",
+        "dev:deps": "turbo watch build:deps --concurrency 20",
         "docs": "turbo run docs --ui stream"
     },
     "devDependencies": {
