@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.4.1
+
+### Patch Changes
+
+- 6becde8: fix: remove empty components when no values
+
 ## 1.4.0
 
 ### Minor Changes
