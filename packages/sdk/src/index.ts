@@ -30,6 +30,7 @@ import {
 } from "./token";
 
 export * from "./types";
+export * from "./convertClauseToEntityKeysClause";
 export * from "./queryBuilder";
 export * from "./clauseBuilder";
 export * from "./toriiQueryBuilder";
