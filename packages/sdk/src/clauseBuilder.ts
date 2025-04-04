@@ -1,12 +1,14 @@
-import {
+import type {
     Clause,
     ComparisonOperator,
     MemberValue,
     PatternMatching,
 } from "@dojoengine/torii-client";
-
-import { convertToPrimitive, MemberValueParam } from "./convertToMemberValue";
-import { SchemaType } from "./types";
+import {
+    convertToPrimitive,
+    type MemberValueParam,
+} from "./convertToMemberValue";
+import type { SchemaType } from "./types";
 
 type ClauseBuilderInterface = {
     build(): Clause;

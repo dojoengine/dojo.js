@@ -1,5 +1,5 @@
-import { Clause, OrderBy, Query } from "@dojoengine/torii-client";
-import { SchemaType } from "./types";
+import type { Clause, OrderBy, Query } from "@dojoengine/torii-client";
+import type { SchemaType } from "./types";
 
 const defaultToriiOptions = () => ({
     limit: 100, // default limit
