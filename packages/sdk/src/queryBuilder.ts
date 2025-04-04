@@ -1,4 +1,4 @@
-import { QueryType, SchemaType, SubscriptionQueryType } from "./types";
+import type { QueryType, SchemaType, SubscriptionQueryType } from "./types";
 
 type FirstLevelKeys<ObjectType> = ObjectType extends object
     ? keyof ObjectType & (string | number)

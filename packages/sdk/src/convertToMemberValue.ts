@@ -21,17 +21,25 @@ export function convertToPrimitive(value: MemberValueParam): torii.MemberValue {
 
     if (typeof value === "number") {
         return { Primitive: { U32: value } };
-    } else if (typeof value === "boolean") {
+    }
+
+    if (typeof value === "boolean") {
         return { Primitive: { Bool: value } };
-    } else if (typeof value === "bigint") {
+    }
+
+    if (typeof value === "bigint") {
         return {
             Primitive: {
                 Felt252: torii.cairoShortStringToFelt(value.toString()),
             },
         };
-    } else if (typeof value === "string") {
+    }
+
+    if (typeof value === "string") {
         return { String: value };
-    } else if (Array.isArray(value)) {
+    }
+
+    if (Array.isArray(value)) {
         return { List: value.map((item) => convertToPrimitive(item)) };
     }
 
