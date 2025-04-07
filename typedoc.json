@@ -7,14 +7,12 @@
     "dmtSettings": {
         "animation": true // When true theme animation is enabled.
     },
-    "theme": "default-modern",
     "$schema": "https://typedoc.org/schema.json",
     "name": "dojo.js docs",
     "entryPoints": ["packages/*"],
     "entryPointStrategy": "packages",
     "out": "docs",
     "sort": ["source-order"],
-
     "categorizeByGroup": true,
     "searchCategoryBoosts": {
         "Component": 2,
