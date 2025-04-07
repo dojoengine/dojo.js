@@ -34,7 +34,7 @@
         "format": {},
         "format:check": {},
         "docs": {
-            "dependsOn": ["^docs"],
+            "dependsOn": ["^build:deps", "^docs"],
             "outputs": ["docs/**"]
         }
     }

@@ -1,5 +1,7 @@
 node_modules
 docs
+docs-json
+**/docs-json
 
 .DS_Store
 # Local Netlify folder

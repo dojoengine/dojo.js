@@ -10,8 +10,7 @@
         "build:wasm": "cd crate && sh ./build.sh",
         "build": "pnpm build:wasm",
         "format:check": "prettier --check .",
-        "format": "prettier --write .",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "format": "prettier --write ."
     },
     "files": [
         "./pkg/utils_wasm_bg.wasm",

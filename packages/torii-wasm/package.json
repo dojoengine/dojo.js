@@ -9,8 +9,7 @@
     "scripts": {
         "build:web": "cd dojo.c && pnpx wasm-pack build --out-dir ../pkg/web --release",
         "build:node": "cd dojo.c && pnpx wasm-pack build --out-dir ../pkg/node --release --target nodejs",
-        "build:wasm": "pnpm build:web && pnpm build:node",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "build:wasm": "pnpm build:web && pnpm build:node"
     },
     "module": "./pkg/web/dojo_c.js",
     "types": "./pkg/web/dojo_c.d.ts",

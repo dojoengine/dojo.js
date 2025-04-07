@@ -1,5 +1,7 @@
 {
+    "name": "@dojoengine/create-dojo",
     "entryPoints": ["src/index.ts"],
     "entryPointStrategy": "expand",
-    "extends": ["../../typedoc.json"]
+    "extends": ["../../typedoc.json"],
+    "json": "../../docs-json/create-dojo.json"
 }
