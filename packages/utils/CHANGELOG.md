@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.4.2
+
+### Patch Changes
+
+- ed933bc: feat: export intoEntityKeysClause
+- 84585bc: fix: remove torii-client from core
+
 ## 1.4.1
 
 ### Patch Changes

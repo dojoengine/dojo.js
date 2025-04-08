@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.4.2
+
+### Patch Changes
+
+- ed933bc: feat: export intoEntityKeysClause
+- 84585bc: fix: remove torii-client from core
+- Updated dependencies [ed933bc]
+- Updated dependencies [84585bc]
+    - @dojoengine/torii-wasm@1.4.2
+
 ## 1.4.1
 
 ### Patch Changes
