@@ -15,11 +15,7 @@
         "strictNullChecks": true,
         "esModuleInterop": true
     },
-    "include": [
-        "src/**/*.ts",
-        "bin/generateComponents.cjs",
-        "_test_/**/*.test.ts"
-    ],
+    "include": ["src/**/*.ts", "_test_/**/*.test.ts"],
     "skipLibCheck": true,
     "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
