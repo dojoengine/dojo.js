@@ -2,9 +2,7 @@ import { useDojoSDK } from "../hooks";
 import { useState, useEffect, useRef, useCallback } from "react";
 import type {
     Token,
-    Tokens,
     TokenBalance,
-    TokenBalances,
     Subscription,
 } from "@dojoengine/torii-client";
 import type {
@@ -16,9 +14,9 @@ import { deepEqual } from "./utils";
 
 export function useTokens(request: GetTokenRequest & GetTokenBalanceRequest) {
     const { sdk } = useDojoSDK();
-    const [tokens, setTokens] = useState<Tokens>([]);
+    const [tokens, setTokens] = useState<Token[]>([]);
     const requestRef = useRef<GetTokenRequest | null>(null);
-    const [tokenBalances, setTokenBalances] = useState<TokenBalances>([]);
+    const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>([]);
     const subscriptionRef = useRef<Subscription | null>(null);
 
     const fetchTokens = useCallback(async () => {
@@ -27,7 +25,7 @@ export function useTokens(request: GetTokenRequest & GetTokenBalanceRequest) {
             tokenIds: request.tokenIds ?? [],
         });
         console.log("tokens", tokens);
-        setTokens(tokens);
+        setTokens(tokens.items);
     }, [sdk, request]);
 
     const fetchTokenBalances = useCallback(async () => {
@@ -48,7 +46,7 @@ export function useTokens(request: GetTokenRequest & GetTokenBalanceRequest) {
         });
         console.log("tokenBalances", tokenBalances);
         subscriptionRef.current = subscription;
-        setTokenBalances(tokenBalances);
+        setTokenBalances(tokenBalances.items);
     }, [sdk, request]);
 
     useEffect(() => {
@@ -95,32 +93,3 @@ function updateTokenBalancesList(
         index === existingBalanceIndex ? newBalance : balance
     );
 }
-
-// /**
-//  * Subscribe to event changes. This hook fetches initial events from torii and subscribes to new events.
-//  *
-//  * @param query ToriiQuery
-//  */
-// export function useTokenBalances(request: GetTokenBalanceRequest) {
-//     const { sdk, useDojoStore } = useDojoSDK();
-//     const state = useDojoStore((s) => s);
-
-//     const useEventQueryHook = createSubscriptionHook({
-//         subscribeMethod: (request) => sdk.onTokenBalanceUpdated(request),
-//         updateSubscriptionMethod: (subscription, clause) =>
-//             sdk.updateEventMessageSubscription(subscription, clause, false),
-//         queryToHashedKeysMethod: (query) =>
-//             sdk.toriiEventMessagesQueryIntoHashedKeys(query, false),
-//         processInitialData: (data) => state.mergeEntities(data),
-//         processUpdateData: (data) => {
-//             const event = data.pop();
-//             if (event && event.entityId !== "0x0") {
-//                 state.updateEntity(event);
-//             }
-//         },
-//         getErrorPrefix: () => "Dojo.js - useTokenBalances",
-//         historical: false,
-//     });
-
-//     useEventQueryHook(query);
-// }
