@@ -386,6 +386,12 @@ export function createDojoStoreFactory<T extends SchemaType>(
                         return !!entity.models[namespace]?.[model];
                     });
                 },
+                resetStore: () => {
+                    set((state: Draft<GameState<T>>) => {
+                        state.entities = {};
+                        state.pendingTransactions = {};
+                    });
+                },
             }))
         )
     );

@@ -109,6 +109,8 @@ describe("createDojoStore", () => {
         expect(state.entities["game1"]).toEqual(initialGame);
         expect(state.entities["item1"]).toEqual(initialItem);
         expect(state.entities["galaxy1"]).toEqual(initialGalaxy);
+        state.resetStore();
+        expect(state.getEntities()).toHaveLength(0);
     });
 
     test("mergeEntities should merge entities to the store", () => {

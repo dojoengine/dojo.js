@@ -40,6 +40,7 @@ export interface GameState<T extends SchemaType> {
         namespace: keyof T,
         model: keyof T[keyof T]
     ) => ParsedEntity<T>[];
+    resetStore: () => void;
 }
 
 // Define the store type
