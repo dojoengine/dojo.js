@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.4.3
+
+### Patch Changes
+
+- 624523b: feat: reset store
+
 ## 1.4.2
 
 ### Patch Changes

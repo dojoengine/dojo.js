@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.4.3
+
+### Patch Changes
+
+- 624523b: feat: reset store
+- Updated dependencies [624523b]
+    - @dojoengine/torii-wasm@1.4.3
+
 ## 1.4.2
 
 ### Patch Changes
