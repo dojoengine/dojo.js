@@ -1,5 +1,5 @@
-import { createDojoStore } from "../state";
-import { ParsedEntity } from "../types";
+import { createDojoStore } from "../web/state";
+import type { ParsedEntity } from "../internal/types";
 import { describe, it, beforeEach } from "vitest";
 import Benchmark from "benchmark";
 import {
@@ -128,9 +128,8 @@ describe("Zustand Store Performance Tests", () => {
                 useStore
                     .getState()
                     .applyOptimisticUpdate("txn_perf", (draft) => {
-                        draft.entities[
-                            "entity500"
-                        ].models.world!.item!.durability = 75;
+                        draft.entities["entity500"].models.world!
+                            .item!.durability = 75;
                     });
             })
             .on("cycle", (event: any) => {

@@ -1,5 +1,5 @@
-import { createDojoStore } from "../state";
-import { ParsedEntity } from "../types";
+import { createDojoStore } from "../web/state";
+import { ParsedEntity } from "../internal/types";
 import { describe, expect, beforeEach, test, vi } from "vitest";
 import {
     MockSchemaType,

@@ -4,13 +4,13 @@ import {
     ClauseBuilder,
     MemberClause,
     OrComposeClause,
-} from "../clauseBuilder";
+} from "../web/clauseBuilder";
 import {
     ComparisonOperator,
     LogicalOperator,
     PatternMatching,
-} from "@dojoengine/torii-client";
-import { SchemaType } from "../types";
+} from "@dojoengine/torii-wasm";
+import { SchemaType } from "../internal/types";
 
 // Test models interface
 interface TestModels extends SchemaType {

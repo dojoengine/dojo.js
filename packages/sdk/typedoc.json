@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/sdk",
-    "entryPoints": ["src/index.ts"],
+    "entryPoints": ["src/web/index.ts", "src/node/index.ts"],
     "entryPointStrategy": "expand",
     "extends": ["../../typedoc.json"],
     "json": "../../docs-json/sdk.json"

@@ -1,7 +1,10 @@
-import * as torii from "@dojoengine/torii-client";
+import * as torii from "@dojoengine/torii-wasm";
 import { describe, expect, it } from "vitest";
 
-import { parseHistoricalEvents, orderKeys } from "../parseHistoricalEvents";
+import {
+    parseHistoricalEvents,
+    orderKeys,
+} from "../internal/parseHistoricalEvents";
 
 describe("parseHistoricalEvents", () => {
     it("should preserve order", () => {
