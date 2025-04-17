@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.4.4
+
+### Patch Changes
+
+- a4ed667: feat: torii-wasm nodejs support
+- Updated dependencies [a4ed667]
+    - @dojoengine/torii-wasm@1.4.4
+
 ## 1.4.3
 
 ### Patch Changes

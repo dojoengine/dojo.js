@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/utils-wasm",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "description": "dojo: wasm utils ",
     "author": "dojo",
     "license": "MIT",
