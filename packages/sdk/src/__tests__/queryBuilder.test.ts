@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { QueryBuilder } from "../queryBuilder";
+import { QueryBuilder } from "../web/queryBuilder";
 import { MockSchemaType } from "../__example__/index";
 
 /**

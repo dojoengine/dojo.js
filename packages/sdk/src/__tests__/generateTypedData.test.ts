@@ -1,7 +1,6 @@
-import { describe, expect, it, Test } from "vitest";
-import { init } from "../index";
+import { describe, expect, it } from "vitest";
 import type { StarknetDomain } from "starknet";
-import { generateTypedData } from "../generateTypedData";
+import { generateTypedData } from "../internal/generateTypedData";
 
 // Mock schema type for testing
 type TestSchema = {

@@ -4,14 +4,16 @@
     "description": "dojo: WASM bindings for torii",
     "author": "ohayo",
     "license": "MIT",
-    "main": "./pkg/web/dojo_c.js",
+    "main": "./pkg/node/dojo_c.js",
     "type": "module",
     "scripts": {
         "build:web": "cd dojo.c && pnpx wasm-pack build --out-dir ../pkg/web --release",
         "build:node": "cd dojo.c && pnpx wasm-pack build --out-dir ../pkg/node --release --target nodejs",
+        "build:types": "rm -rf pkg/types && mkdir -p pkg/types && cp pkg/node/dojo_c.d.ts pkg/types/dojo_c.d.ts",
         "build:wasm": "pnpm build:web && pnpm build:node"
     },
     "module": "./pkg/web/dojo_c.js",
+    "browser": "./pkg/web/dojo_c.js",
     "types": "./pkg/web/dojo_c.d.ts",
     "files": [
         "./pkg/web/dojo_c_bg.wasm",
@@ -25,13 +27,16 @@
     ],
     "exports": {
         ".": {
+            "types": "./pkg/web/dojo_c.d.ts",
             "import": "./pkg/web/dojo_c.js",
-            "require": "./pkg/web/dojo_c.js",
-            "types": "./pkg/web/dojo_c.d.ts"
+            "require": "./pkg/web/dojo_c.js"
         },
         "./node": {
+            "types": "./pkg/node/dojo_c.d.ts",
             "import": "./pkg/node/dojo_c.js",
-            "require": "./pkg/node/dojo_c.js",
+            "require": "./pkg/node/dojo_c.js"
+        },
+        "./types": {
             "types": "./pkg/node/dojo_c.d.ts"
         }
     },

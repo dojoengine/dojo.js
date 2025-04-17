@@ -1,24 +1,19 @@
 {
     "compilerOptions": {
-        "jsx": "react-jsx",
-        "target": "ESNext",
-        "module": "ESNext",
+        // "composite": true,
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
         "declaration": true,
-        "outDir": "./dist",
         "sourceMap": true,
         "noImplicitAny": true,
-        "noEmit": false,
         "noUnusedLocals": true,
-        "moduleResolution": "bundler",
         "noUnusedParameters": true,
-        "resolveJsonModule": true,
         "skipLibCheck": true,
         "strict": true,
         "strictNullChecks": true,
         "esModuleInterop": true,
-        "types": ["vitest/globals"],
         "allowImportingTsExtensions": true
     },
-    "include": ["src"],
-    "exclude": ["node_modules", "dist", "**/*.test.ts"]
+    "include": ["../*.ts"],
+    "references": []
 }

@@ -1,7 +1,7 @@
-import * as torii from "@dojoengine/torii-client";
+import * as torii from "@dojoengine/torii-wasm";
 import { describe, expect, it } from "vitest";
 
-import { parseEntities } from "../parseEntities";
+import { parseEntities } from "../internal/parseEntities";
 import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
 import { SchemaType } from "./models.gen.ts";
 

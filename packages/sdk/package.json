@@ -6,41 +6,46 @@
     "license": "MIT",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
+    "type": "module",
     "exports": {
         ".": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.js",
-            "require": "./dist/index.cjs"
+            "types": "./dist/web/index.d.ts",
+            "import": "./dist/web/index.js",
+            "require": "./dist/web/index.cjs"
         },
         "./state": {
-            "types": "./dist/src/state.d.ts",
-            "import": "./dist/src/state.js",
-            "require": "./dist/src/state.cjs"
+            "types": "./dist/web/state.d.ts",
+            "import": "./dist/web/state.js",
+            "require": "./dist/web/state.cjs"
         },
         "./react": {
-            "types": "./dist/src/react.d.ts",
-            "import": "./dist/src/react.js",
-            "require": "./dist/src/react.cjs"
+            "types": "./dist/web/react.d.ts",
+            "import": "./dist/web/react.js",
+            "require": "./dist/web/react.cjs"
         },
         "./sql": {
-            "types": "./dist/src/sql.d.ts",
-            "import": "./dist/src/sql.js",
-            "require": "./dist/src/sql.cjs"
+            "types": "./dist/web/sql.d.ts",
+            "import": "./dist/web/sql.js",
+            "require": "./dist/web/sql.cjs"
         },
         "./experimental": {
-            "types": "./dist/src/experimental.d.ts",
-            "import": "./dist/src/experimental.js",
-            "require": "./dist/src/experimental.cjs"
+            "types": "./dist/web/experimental.d.ts",
+            "import": "./dist/web/experimental.js",
+            "require": "./dist/web/experimental.cjs"
         },
         "./types": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.d.ts",
-            "require": "./dist/index.d.ts"
+            "types": "./dist/web/index.d.ts",
+            "import": "./dist/web/index.d.ts",
+            "require": "./dist/web/index.d.ts"
+        },
+        "./node": {
+            "types": "./dist/node/index.d.ts",
+            "import": "./dist/node/index.js",
+            "require": "./dist/node/index.js"
         }
     },
-    "type": "module",
     "scripts": {
-        "build:deps": "tsup --dts-resolve",
+        "build:deps": "tsup --config tsup.node.ts && tsup --config tsup.web.ts",
         "build": "pnpm build:deps",
         "test": "vitest run --config ./vitest.config.ts",
         "coverage": "vitest run --coverage",
@@ -50,9 +55,11 @@
     },
     "./package.json": "./package.json",
     "devDependencies": {
+        "@anymud/bun-plugin-dts": "^1.0.2",
         "@rollup/plugin-commonjs": "^28.0.2",
         "@vitest/coverage-v8": "^1.6.1",
         "benchmark": "^2.1.4",
+        "bun-plugin-dts": "^0.3.0",
         "eslint": "^8.57.1",
         "lodash": "^4.17.21",
         "prettier": "^2.8.8",
@@ -73,6 +80,7 @@
     "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/torii-wasm": "workspace:*",
         "@dojoengine/utils": "workspace:*",
         "@starknet-react/chains": "catalog:",
         "@starknet-react/core": "catalog:",

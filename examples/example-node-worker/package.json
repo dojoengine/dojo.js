@@ -1,0 +1,13 @@
+{
+    "name": "example-node-worker",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@dojoengine/core": "workspace:*",
+        "@dojoengine/sdk": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/node": "^22.14.1"
+    }
+}

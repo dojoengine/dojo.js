@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { intoEntityKeysClause } from "../convertClauseToEntityKeysClause";
-import { ClauseBuilder } from "../clauseBuilder";
+import { intoEntityKeysClause } from "../internal/convertClauseToEntityKeysClause";
+import { ClauseBuilder } from "../web/clauseBuilder";
 
 describe("convertClauseToEntityKeysClause", () => {
     it("return empty array", () => {

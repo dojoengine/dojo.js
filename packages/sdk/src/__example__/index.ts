@@ -1,5 +1,5 @@
 // @ts-nocheck
-import * as torii from "@dojoengine/torii-client";
+import * as torii from "@dojoengine/torii-wasm";
 import { AndComposeClause, init, MemberClause, ToriiQueryBuilder } from "..";
 import { SchemaType } from "../types";
 
