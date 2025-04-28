@@ -33,7 +33,6 @@
     "scripts": {
         "build": "tsc",
         "serve": "tsc && node dist/src/index.js",
-        "codegen": "graphql-codegen",
-        "test": "echo \"Error: no test specified\""
+        "codegen": "graphql-codegen"
     }
 }

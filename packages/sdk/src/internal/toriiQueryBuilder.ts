@@ -1,14 +1,22 @@
-import type { Clause, OrderBy, Query } from "@dojoengine/torii-wasm/types";
+import type {
+    Clause,
+    OrderBy,
+    Query,
+    PaginationDirection,
+} from "@dojoengine/torii-wasm/types";
 import type { SchemaType } from "./types.ts";
 
 const defaultToriiOptions = () => ({
-    limit: 100, // default limit
-    offset: 0,
+    pagination: {
+        limit: 100,
+        cursor: undefined,
+        direction: "Forward",
+        order_by: [],
+    },
     clause: undefined,
-    dont_include_hashed_keys: true,
-    order_by: [],
-    entity_models: [],
-    entity_updated_after: 0,
+    no_hashed_keys: true,
+    models: [],
+    historical: false,
 });
 
 type ToriiQueryBuilderOptions = Omit<Partial<Query>, "clause">;
@@ -17,22 +25,40 @@ export class ToriiQueryBuilder<T extends SchemaType> {
     private query: Query;
 
     constructor(options?: ToriiQueryBuilderOptions) {
-        this.query = { ...defaultToriiOptions(), ...options };
+        this.query = { ...(defaultToriiOptions() as Query), ...options };
     }
 
     /**
      * Set the maximum number of results to return
      */
     withLimit(limit: number): ToriiQueryBuilder<T> {
-        this.query.limit = limit;
+        this.query.pagination.limit = limit;
         return this;
     }
 
     /**
      * Set the offset for pagination
+     * @deprecated Use `withCursor` instead
      */
-    withOffset(offset: number): ToriiQueryBuilder<T> {
-        this.query.offset = offset;
+    withOffset(): ToriiQueryBuilder<T> {
+        return this;
+    }
+
+    /**
+     * Set the cursor for pagination
+     * undefined is default, fetch from starting point
+     * `next_cursor` is return from queries
+     */
+    withCursor(cursor: string): ToriiQueryBuilder<T> {
+        this.query.pagination.cursor = cursor;
+        return this;
+    }
+
+    /**
+     * Set the maximum number of results to return
+     */
+    withDirection(direction: PaginationDirection): ToriiQueryBuilder<T> {
+        this.query.pagination.direction = direction;
         return this;
     }
 
@@ -49,7 +75,7 @@ export class ToriiQueryBuilder<T extends SchemaType> {
      * HashedKeys represent internal torii entity id.
      */
     includeHashedKeys(): ToriiQueryBuilder<T> {
-        this.query.dont_include_hashed_keys = false;
+        this.query.no_hashed_keys = false;
         return this;
     }
 
@@ -61,7 +87,7 @@ export class ToriiQueryBuilder<T extends SchemaType> {
         member: string,
         direction: "Asc" | "Desc"
     ): ToriiQueryBuilder<T> {
-        this.query.order_by.push({
+        this.query.pagination.order_by.push({
             model,
             member,
             direction,
@@ -73,7 +99,7 @@ export class ToriiQueryBuilder<T extends SchemaType> {
      * Add multiple order by clauses at once
      */
     withOrderBy(orderBy: OrderBy[]): ToriiQueryBuilder<T> {
-        this.query.order_by = orderBy;
+        this.query.pagination.order_by = orderBy;
         return this;
     }
 
@@ -81,7 +107,7 @@ export class ToriiQueryBuilder<T extends SchemaType> {
      * Add a single entity model to filter
      */
     addEntityModel(model: keyof T & string): ToriiQueryBuilder<T> {
-        this.query.entity_models.push(model);
+        this.query.models.push(model);
         return this;
     }
 
@@ -89,15 +115,7 @@ export class ToriiQueryBuilder<T extends SchemaType> {
      * Set multiple entity models at once
      */
     withEntityModels(models: (keyof T & string)[]): ToriiQueryBuilder<T> {
-        this.query.entity_models = models;
-        return this;
-    }
-
-    /**
-     * Set the minimum timestamp for entity updates
-     */
-    updatedAfter(timestamp: number): ToriiQueryBuilder<T> {
-        this.query.entity_updated_after = timestamp;
+        this.query.models = models;
         return this;
     }
 
@@ -110,13 +128,32 @@ export class ToriiQueryBuilder<T extends SchemaType> {
 
     /**
      * Create a new builder instance with pagination settings
+     *
      */
     static withPagination<T extends Record<string, Record<string, any>>>(
-        page: number,
-        pageSize: number
+        cursor: string,
+        limit: number,
+        direction: PaginationDirection
     ): ToriiQueryBuilder<T> {
         return new ToriiQueryBuilder<T>()
-            .withLimit(pageSize)
-            .withOffset(page * pageSize);
+            .withLimit(limit)
+            .withCursor(cursor)
+            .withDirection(direction);
+    }
+}
+
+export type HistoricalToriiQueryBuilderOptions = Omit<
+    Partial<ToriiQueryBuilderOptions>,
+    "historical"
+>;
+export class HistoricalToriiQueryBuilder<
+    T extends SchemaType
+> extends ToriiQueryBuilder<T> {
+    constructor(options?: ToriiQueryBuilderOptions) {
+        super({
+            ...(defaultToriiOptions() as Query),
+            ...options,
+            historical: true,
+        });
     }
 }

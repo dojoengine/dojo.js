@@ -46,10 +46,11 @@ jobs:
       - run: curl -L https://install.dojoengine.org | bash
       - uses: software-mansion/setup-scarb@v1
         with:
-          scarb-version: "2.9.2"
-      - run: /home/runner/.config/.dojo/bin/dojoup -v v1.2.1
+          scarb-version: "2.10.1"
+      - run: /home/runner/.config/.dojo/dojoup/dojoup install v1.5.0-alpha.2
       - run: |
           cd worlds/dojo-starter
+          ls -la /home/runner/.config/.dojo/bin
           /home/runner/.config/.dojo/bin/sozo build
           /home/runner/.config/.dojo/bin/sozo test
       - run: |

@@ -1,8 +1,11 @@
 import { useDojoSDK } from "../hooks";
 import { createSubscriptionHook } from "./hooks";
-import type { SchemaType, ToriiQueryBuilder } from "../../../internal/types";
+import type {
+    ParsedEntity,
+    SchemaType,
+    ToriiQueryBuilder,
+} from "../../../internal/types";
 import { useState } from "react";
-import type { StandardizedQueryResult } from "../../../internal/types";
 
 /**
  * Subscribe to event changes. This hook fetches initial events from torii and subscribes to new events.
@@ -21,11 +24,18 @@ export function useEventQuery<Schema extends SchemaType>(
             sdk.updateEventMessageSubscription(subscription, clause, false),
         queryToHashedKeysMethod: (query) =>
             sdk.toriiEventMessagesQueryIntoHashedKeys(query, false),
-        processInitialData: (data) => state.mergeEntities(data),
+        processInitialData: (data) => {
+            state.mergeEntities(data);
+        },
         processUpdateData: (data) => {
-            const event = data.pop();
-            if (event && event.entityId !== "0x0") {
-                state.updateEntity(event);
+            if (data) {
+                const evts = data.filter(
+                    (e) => Number.parseInt(e.entityId, 16) !== 0
+                );
+                const event = evts[0];
+                if (event) {
+                    state.updateEntity(event);
+                }
             }
         },
         getErrorPrefix: () => "Dojo.js - useEventQuery",
@@ -45,7 +55,7 @@ export function useHistoricalEventsQuery<Schema extends SchemaType>(
     query: ToriiQueryBuilder<Schema>
 ) {
     const { sdk } = useDojoSDK<() => any, Schema>();
-    const [events, setEvents] = useState<StandardizedQueryResult<Schema>[]>([]);
+    const [events, setEvents] = useState<ParsedEntity<Schema>[]>([]);
 
     const useHistoricalEventsQueryHook = createSubscriptionHook<Schema, true>({
         subscribeMethod: (options) => sdk.subscribeEventQuery(options),
@@ -53,11 +63,15 @@ export function useHistoricalEventsQuery<Schema extends SchemaType>(
             sdk.updateEventMessageSubscription(subscription, clause, true),
         queryToHashedKeysMethod: (query) =>
             sdk.toriiEventMessagesQueryIntoHashedKeys(query, true),
-        processInitialData: (data) => setEvents(data),
+        processInitialData: (data) => {
+            setEvents(data);
+        },
         processUpdateData: (data) => {
-            const event = data.pop();
-            if (event) {
-                setEvents((ev) => [event, ...ev]);
+            if (data) {
+                const evts = data.filter(
+                    (e) => Number.parseInt(e.entityId, 16) !== 0
+                );
+                setEvents((ev) => [...evts, ...ev]);
             }
         },
         getErrorPrefix: () => "Dojo.js - useHistoricalEventsQuery",

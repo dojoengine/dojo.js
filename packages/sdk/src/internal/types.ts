@@ -1,6 +1,7 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
 import type { Account, StarknetDomain, TypedData } from "starknet";
 import { ToriiQueryBuilder } from "./toriiQueryBuilder.ts";
+import type { Result } from "neverthrow";
 
 /**
  * Utility type to ensure at least one property is present
@@ -361,10 +362,13 @@ export interface SDK<T extends SchemaType> {
         nsModel: string,
         message: M,
         modelMapping?: Array<{ name: string; type: string }>,
-        domain?: StarknetDomain
+        additionalTypes?: Record<string, Array<{ name: string; type: string }>>
     ) => TypedData;
 
-    sendMessage: (data: TypedData, account: Account) => Promise<void>;
+    sendMessage: (
+        data: TypedData,
+        account?: Account
+    ) => Promise<Result<Uint8Array, string>>;
 
     /**
      * @param {string[]} contract_addresses
@@ -507,6 +511,16 @@ export interface SDKConfig {
      * It typically includes details like the chain ID, name, and version.
      */
     domain: StarknetDomain;
+
+    /**
+     * If you use torii builtin's OffchainMessages, we'll require that you provide signer
+     */
+    signer?: torii.SigningKey;
+    /**
+     * If you use torii builtin's OffchainMessages, we'll require that you provide identity.
+     * This is your backend wallet address. This will be used to sign offchain messages. This *has* to map to `identity` field in your dojo model
+     */
+    identity?: string;
     /**
      * Wether to include logger in queries and subscdription.
      * Could be useful while debugging
@@ -527,7 +541,7 @@ export interface SubscribeParams<
     query: ToriiQueryBuilder<T>;
     // The callback function to handle the response.
     callback: SubscriptionCallback<ToriiResponse<T, Historical>>;
-    // historical events
+    // @deprecated: use `query.historical` instead
     historical?: Historical;
 }
 
@@ -537,7 +551,7 @@ export interface GetParams<
 > {
     // The query object used to filter entities.
     query: ToriiQueryBuilder<T>;
-    // historical events
+    // @deprecated: use `query.historical` instead
     historical?: Historical;
 }
 export { ToriiQueryBuilder };

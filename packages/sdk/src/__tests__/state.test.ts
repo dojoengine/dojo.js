@@ -105,10 +105,10 @@ describe("createDojoStore", () => {
             ]);
         const state = useStore.getState();
         expect(state.getEntities()).toHaveLength(4);
-        expect(state.entities["player1"]).toEqual(initialPlayer);
-        expect(state.entities["game1"]).toEqual(initialGame);
-        expect(state.entities["item1"]).toEqual(initialItem);
-        expect(state.entities["galaxy1"]).toEqual(initialGalaxy);
+        expect(state.entities.player1).toEqual(initialPlayer);
+        expect(state.entities.game1).toEqual(initialGame);
+        expect(state.entities.item1).toEqual(initialItem);
+        expect(state.entities.galaxy1).toEqual(initialGalaxy);
         state.resetStore();
         expect(state.getEntities()).toHaveLength(0);
     });
@@ -119,10 +119,11 @@ describe("createDojoStore", () => {
             entityId: "player1",
             models: { world: { player: { score: 120 } }, universe: {} },
         };
+
         useStore.getState().mergeEntities([updatedPlayer]);
         const state = useStore.getState();
         expect(state.getEntities()).toHaveLength(1);
-        const player = state.entities["player1"];
+        const player = state.entities.player1;
         expect(player.models.world?.player?.name).toEqual("Alice");
         expect(player.models.world?.player?.score).toEqual(120);
     });
@@ -142,7 +143,7 @@ describe("createDojoStore", () => {
         });
         const state = useStore.getState();
         expect(state.getEntities()).toHaveLength(1);
-        expect(state.entities["player1"].models.world?.player?.name).toEqual(
+        expect(state.entities.player1.models.world?.player?.name).toEqual(
             "Bob"
         );
     });

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { ToriiQueryBuilder } from "../internal/toriiQueryBuilder";
-import { Clause, OrderBy } from "@dojoengine/torii-wasm";
-import { SchemaType } from "../internal/types";
+import type { Clause, OrderBy } from "@dojoengine/torii-wasm";
+import type { SchemaType } from "../internal/types";
 import { ClauseBuilder } from "../web/clauseBuilder";
 
 interface TestModels extends SchemaType {
@@ -22,17 +22,17 @@ interface TestModels extends SchemaType {
 describe("ToriiQueryBuilder", () => {
     describe("basic query building", () => {
         it("override default options", () => {
-            const builder = new ToriiQueryBuilder<TestModels>({ limit: 25 });
+            const builder = new ToriiQueryBuilder<TestModels>({
+                pagination: { limit: 25 },
+            });
             const query = builder.build();
 
             expect(query).toEqual({
-                limit: 25,
-                offset: 0,
+                pagination: { limit: 25 },
                 clause: undefined,
-                dont_include_hashed_keys: true,
-                order_by: [],
-                entity_models: [],
-                entity_updated_after: 0,
+                no_hashed_keys: true,
+                models: [],
+                historical: false,
             });
         });
 
@@ -41,22 +41,25 @@ describe("ToriiQueryBuilder", () => {
             const query = builder.build();
 
             expect(query).toEqual({
-                limit: 100,
-                offset: 0,
+                pagination: {
+                    limit: 100,
+                    cursor: undefined,
+                    direction: "Forward",
+                    order_by: [],
+                },
                 clause: undefined,
-                dont_include_hashed_keys: true,
-                order_by: [],
-                entity_models: [],
-                entity_updated_after: 0,
+                no_hashed_keys: true,
+                models: [],
+                historical: false,
             });
         });
 
         it("should set limit and offset", () => {
             const builder = new ToriiQueryBuilder<TestModels>();
-            const query = builder.withLimit(10).withOffset(20).build();
+            const query = builder.withLimit(10).withCursor("cursor").build();
 
-            expect(query.limit).toBe(10);
-            expect(query.offset).toBe(20);
+            expect(query.pagination.limit).toBe(10);
+            expect(query.pagination.cursor).toBe("cursor");
         });
 
         it("should set clause", () => {
@@ -89,7 +92,7 @@ describe("ToriiQueryBuilder", () => {
                 .addOrderBy("dojo_starter", "x", "Asc")
                 .build();
 
-            expect(query.order_by).toEqual([
+            expect(query.pagination.order_by).toEqual([
                 { model: "dojo_starter", member: "x", direction: "Asc" },
             ]);
         });
@@ -103,7 +106,7 @@ describe("ToriiQueryBuilder", () => {
             const builder = new ToriiQueryBuilder<TestModels>();
             const query = builder.withOrderBy(orderBy).build();
 
-            expect(query.order_by).toEqual(orderBy);
+            expect(query.pagination.order_by).toEqual(orderBy);
         });
     });
 
@@ -112,73 +115,67 @@ describe("ToriiQueryBuilder", () => {
             const builder = new ToriiQueryBuilder<TestModels>();
             const query = builder.addEntityModel("dojo_starter").build();
 
-            expect(query.entity_models).toEqual(["dojo_starter"]);
+            expect(query.models).toEqual(["dojo_starter"]);
         });
 
         it("should set multiple entity models", () => {
             const builder = new ToriiQueryBuilder<TestModels>();
             const query = builder.withEntityModels(["dojo_starter"]).build();
 
-            expect(query.entity_models).toEqual(["dojo_starter"]);
+            expect(query.models).toEqual(["dojo_starter"]);
         });
     });
 
-    describe("timestamp and hashed keys handling", () => {
-        it("should set updated after timestamp", () => {
-            const timestamp = Date.now();
-            const builder = new ToriiQueryBuilder<TestModels>();
-            const query = builder.updatedAfter(timestamp).build();
-
-            expect(query.entity_updated_after).toBe(timestamp);
-        });
-
+    describe("hashed keys handling", () => {
         it("should handle hashed keys inclusion", () => {
             const builder = new ToriiQueryBuilder<TestModels>();
             const query = builder.includeHashedKeys().build();
 
-            expect(query.dont_include_hashed_keys).toBe(false);
+            expect(query.no_hashed_keys).toBe(false);
         });
     });
 
     describe("static methods", () => {
         it("should create a paginated query", () => {
             const query = ToriiQueryBuilder.withPagination<TestModels>(
-                2,
-                25
+                "cursor",
+                25,
+                "Forward"
             ).build();
 
-            expect(query.limit).toBe(25);
-            expect(query.offset).toBe(50);
+            expect(query.pagination.limit).toBe(25);
+            expect(query.pagination.cursor).toBe("cursor");
         });
     });
 
     describe("chaining", () => {
         it("should support method chaining", () => {
-            const timestamp = Date.now();
             const builder = new ToriiQueryBuilder<TestModels>();
             const query = builder
                 .withLimit(10)
-                .withOffset(20)
+                .withCursor("cursor")
                 .addEntityModel("dojo_starter-Position")
                 .addOrderBy("dojo_starter-Position", "x", "Asc")
                 .includeHashedKeys()
-                .updatedAfter(timestamp)
                 .build();
 
             expect(query).toEqual({
-                limit: 10,
-                offset: 20,
+                pagination: {
+                    limit: 10,
+                    cursor: "cursor",
+                    direction: "Forward",
+                    order_by: [
+                        {
+                            model: "dojo_starter-Position",
+                            member: "x",
+                            direction: "Asc",
+                        },
+                    ],
+                },
                 clause: undefined,
-                dont_include_hashed_keys: false,
-                order_by: [
-                    {
-                        model: "dojo_starter-Position",
-                        member: "x",
-                        direction: "Asc",
-                    },
-                ],
-                entity_models: ["dojo_starter-Position"],
-                entity_updated_after: timestamp,
+                no_hashed_keys: false,
+                models: ["dojo_starter-Position"],
+                historical: false,
             });
         });
     });

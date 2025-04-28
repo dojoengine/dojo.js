@@ -128,8 +128,9 @@ describe("Zustand Store Performance Tests", () => {
                 useStore
                     .getState()
                     .applyOptimisticUpdate("txn_perf", (draft) => {
-                        draft.entities["entity500"].models.world!
-                            .item!.durability = 75;
+                        draft.entities[
+                            "entity500"
+                        ].models.world!.item!.durability = 75;
                     });
             })
             .on("cycle", (event: any) => {

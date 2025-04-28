@@ -1,5 +1,5 @@
 import * as torii from "@dojoengine/torii-wasm";
-import type { Account, Signature, StarknetDomain, TypedData } from "starknet";
+import type { Account, Signature, TypedData } from "starknet";
 
 import type {
     GetParams,
@@ -18,7 +18,6 @@ import type {
 
 import { intoEntityKeysClause } from "../internal/convertClauseToEntityKeysClause";
 import { parseEntities } from "../internal/parseEntities";
-import { parseHistoricalEvents } from "../internal/parseHistoricalEvents";
 import type { ToriiQueryBuilder } from "../internal/toriiQueryBuilder";
 import { generateTypedData } from "../internal/generateTypedData";
 import {
@@ -28,6 +27,8 @@ import {
     updateTokenBalanceSubscription,
     subscribeTokenBalance,
 } from "../internal/token";
+import { err, ok, type Result } from "neverthrow";
+import { NO_ACCOUNT } from "../internal/errors";
 
 export * from "../internal/types";
 export * from "../internal/convertClauseToEntityKeysClause";
@@ -44,7 +45,7 @@ export * from "../internal/toriiQueryBuilder";
 export async function createClient(
     config: torii.ClientConfig
 ): Promise<torii.ToriiClient> {
-    return await torii.createClient(config);
+    return await new torii.ToriiClient(config);
 }
 
 export const defaultClientConfig: Partial<torii.ClientConfig> = {
@@ -79,7 +80,7 @@ export async function init<T extends SchemaType>(
             const q = query.build();
 
             if (
-                q.dont_include_hashed_keys &&
+                q.no_hashed_keys &&
                 q.clause &&
                 !Object.hasOwn(q.clause, "Keys")
             ) {
@@ -87,19 +88,20 @@ export async function init<T extends SchemaType>(
                     "For subscription, you need to include entity ids"
                 );
             }
+
             const entities = parseEntities<T>(
-                await client.getEntities(q, false)
+                (await client.getEntities(q)).items
             );
             return [
                 entities,
                 client.onEntityUpdated(
                     intoEntityKeysClause<T>(q.clause, entities),
-                    (entityId: string, entityData: any) => {
+                    (_: string, entityData: torii.Entity) => {
                         try {
                             if (callback) {
-                                const parsedData = parseEntities<T>({
-                                    [entityId]: entityData,
-                                });
+                                const parsedData = parseEntities<T>([
+                                    entityData,
+                                ]);
                                 callback({
                                     data: parsedData,
                                     error: undefined,
@@ -129,13 +131,12 @@ export async function init<T extends SchemaType>(
         subscribeEventQuery: async <Historical extends boolean>({
             query,
             callback,
-            historical = false as Historical,
         }: SubscribeParams<T, Historical>): Promise<
             SubscribeResponse<T, Historical>
         > => {
             const q = query.build();
             if (
-                q.dont_include_hashed_keys &&
+                q.no_hashed_keys &&
                 q.clause &&
                 !Object.hasOwn(q.clause, "Keys")
             ) {
@@ -143,27 +144,20 @@ export async function init<T extends SchemaType>(
                     "For subscription, you need to include entity ids"
                 );
             }
-            const events = (
-                historical
-                    ? parseHistoricalEvents<T>(
-                          await client.getEventMessages(q, historical)
-                      )
-                    : parseEntities<T>(
-                          await client.getEventMessages(q, historical)
-                      )
+            const events = parseEntities<T>(
+                (await client.getEventMessages(q)).items
             ) as ToriiResponse<T, Historical>;
             return [
                 events,
                 client.onEventMessageUpdated(
                     // @ts-expect-error TODO: fix type here
                     intoEntityKeysClause<T>(q.clause, events),
-                    (entityId: string, entityData: any) => {
+                    (_: string, entityData: torii.Entity) => {
                         try {
                             if (callback) {
-                                const data = { [entityId]: entityData };
-                                const parsedData = historical
-                                    ? parseHistoricalEvents<T>(data)
-                                    : parseEntities<T>(data);
+                                const parsedData = parseEntities<T>([
+                                    entityData,
+                                ]);
 
                                 callback({
                                     data: parsedData as ToriiResponse<
@@ -209,7 +203,7 @@ export async function init<T extends SchemaType>(
          */
         getEntities: async ({ query }) => {
             const q = query.build();
-            return parseEntities(await client.getEntities(q, false));
+            return parseEntities((await client.getEntities(q)).items);
         },
         /**
          * Fetches event messages based on the provided query.
@@ -219,20 +213,12 @@ export async function init<T extends SchemaType>(
          */
         getEventMessages: async <Historical extends boolean>({
             query,
-            historical,
         }: GetParams<T, Historical>): Promise<ToriiResponse<T, Historical>> => {
             const q = query.build();
 
-            const events = await client.getEventMessages(
-                q,
-                historical ? historical : false
-            );
+            const events = await client.getEventMessages(q);
 
-            return (
-                historical
-                    ? parseHistoricalEvents(events)
-                    : parseEntities(events)
-            ) as ToriiResponse<T, Historical>;
+            return parseEntities(events.items) as ToriiResponse<T, Historical>;
         },
 
         /**
@@ -241,16 +227,24 @@ export async function init<T extends SchemaType>(
          * @template M - The message type defined by the schema models.
          * @param {string} nsModel - Model name prefixed with namespace joined by a hyphen.
          * @param {M} message - The user-defined message content, must be part of the schema models.
-         * @param {StarknetDomain} [domain] - The domain object. If not provided, uses the default domain from options.
          * @returns {TypedData} - The generated typed data.
          */
         generateTypedData: <M extends UnionOfModelData<T>>(
             nsModel: string,
             message: M,
             modelMapping?: Array<{ name: string; type: string }>,
-            domain: StarknetDomain = options.domain
+            additionnalTypes?: Record<
+                string,
+                Array<{ name: string; type: string }>
+            >
         ): TypedData =>
-            generateTypedData(nsModel, message, domain, modelMapping),
+            generateTypedData(
+                nsModel,
+                message,
+                options.domain,
+                modelMapping,
+                additionnalTypes
+            ),
 
         /**
          * Sends a signed message.
@@ -262,8 +256,11 @@ export async function init<T extends SchemaType>(
          */
         sendMessage: async (
             data: TypedData,
-            account: Account
-        ): Promise<void> => {
+            account?: Account
+        ): Promise<Result<Uint8Array, string>> => {
+            if (!account) {
+                return err(NO_ACCOUNT);
+            }
             try {
                 // Sign the typed data
                 const signature: Signature = await account.signMessage(data);
@@ -271,11 +268,13 @@ export async function init<T extends SchemaType>(
                 // Stringify typed data for publishing
                 const dataString = JSON.stringify(data);
                 // Publish the signed message
-                await client.publishMessage(
-                    dataString,
-                    Array.isArray(signature)
-                        ? signature
-                        : [signature.r.toString(), signature.s.toString()]
+                return ok(
+                    await client.publishMessage(
+                        dataString,
+                        Array.isArray(signature)
+                            ? signature
+                            : [signature.r.toString(), signature.s.toString()]
+                    )
                 );
             } catch (error) {
                 console.error("Failed to send message:", error);
@@ -401,7 +400,7 @@ export async function init<T extends SchemaType>(
         ): Promise<[ToriiResponse<T, false>, torii.EntityKeysClause[]]> => {
             const q = query.build();
             const entities = parseEntities<T>(
-                await client.getEntities(q, false)
+                (await client.getEntities(q)).items
             );
             return [entities, intoEntityKeysClause<T>(q.clause, entities)];
         },
@@ -413,21 +412,15 @@ export async function init<T extends SchemaType>(
          * @returns [ToriiResponse<T,false>,torii.EntityKeysClause[]]
          */
         toriiEventMessagesQueryIntoHashedKeys: async <H extends boolean>(
-            query: ToriiQueryBuilder<T>,
-            historical: H
+            query: ToriiQueryBuilder<T>
         ): Promise<[ToriiResponse<T, H>, torii.EntityKeysClause[]]> => {
             const q = query.build();
 
-            const events = await client.getEventMessages(
-                q,
-                historical ? historical : false
-            );
+            const events = await client.getEventMessages(q);
             return [
-                (historical
-                    ? parseHistoricalEvents(events)
-                    : parseEntities(events)) as ToriiResponse<T, H>,
+                parseEntities(events.items) as ToriiResponse<T, H>,
                 // @ts-expect-error TODO: fix type here
-                intoEntityKeysClause<T>(q.clause, events),
+                intoEntityKeysClause<T>(q.clause, events.items),
             ];
         },
     };

@@ -1,4 +1,8 @@
-import { KeysClause, ParsedEntity, ToriiQueryBuilder } from "@dojoengine/sdk";
+import {
+    KeysClause,
+    ParsedEntity,
+    HistoricalToriiQueryBuilder,
+} from "@dojoengine/sdk";
 import { useAccount } from "@starknet-react/core";
 import { SchemaType } from "./typescript/models.gen";
 import { addAddressPadding } from "starknet";
@@ -7,7 +11,7 @@ import { useHistoricalEventsQuery } from "@dojoengine/sdk/react";
 export function HistoricalEvents() {
     const { account } = useAccount();
     const events = useHistoricalEventsQuery(
-        new ToriiQueryBuilder().withClause(
+        new HistoricalToriiQueryBuilder().withClause(
             KeysClause(
                 [],
                 [addAddressPadding(account?.address ?? "0")],

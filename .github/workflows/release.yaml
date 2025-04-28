@@ -28,10 +28,10 @@ jobs:
       - name: Setup Node.js with PNPM cache
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
-          cache: 'pnpm'
+          node-version: "lts/*"
+          cache: "pnpm"
           # The cache will be invalidated if these files change
-          cache-dependency-path: '**/pnpm-lock.yaml'
+          cache-dependency-path: "**/pnpm-lock.yaml"
 
       # Cache the PNPM store to speed up installations
       - name: Get PNPM store directory
@@ -58,7 +58,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-build-
-            
+
       # Add Cargo cache for torii-wasm
       - name: Cache Cargo dependencies and build artifacts
         uses: actions/cache@v3
@@ -74,8 +74,8 @@ jobs:
       - run: curl -L https://install.dojoengine.org | bash
       - uses: software-mansion/setup-scarb@v1
         with:
-          scarb-version: "2.9.2"
-      - run: /home/runner/.config/.dojo/bin/dojoup -v v1.2.1
+          scarb-version: "2.10.1"
+      - run: /home/runner/.config/.dojo/dojoup/dojoup install v1.5.0-alpha.2
       - run: |
           cd worlds/dojo-starter
           /home/runner/.config/.dojo/bin/sozo build
@@ -106,7 +106,7 @@ jobs:
           STATUS=$(pnpm changeset status)
           echo "Changeset status:"
           echo "$STATUS"
-          
+
           # Check if we have packages to bump
           if echo "$STATUS" | grep -q "NO packages to be bumped at patch" && \
              echo "$STATUS" | grep -q "NO packages to be bumped at minor" && \
@@ -124,7 +124,7 @@ jobs:
         run: |
           # Apply version bump based on release type
           pnpm changeset version
-          
+
           # If this is a dry run, revert the version changes
           if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
             echo "DRY RUN: Would version packages to ${NEW_VERSION}"

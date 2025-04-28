@@ -19,12 +19,19 @@ export function useEntityQuery<Schema extends SchemaType>(
         updateSubscriptionMethod: (subscription, clause) =>
             sdk.updateEntitySubscription(subscription, clause),
         queryToHashedKeysMethod: (query) => sdk.toriiQueryIntoHashedKeys(query),
-        processInitialData: (data) => state.mergeEntities(data),
+        processInitialData: (data) => {
+            state.mergeEntities(data);
+        },
         processUpdateData: (data) => {
-            const entity = data.pop();
+            if (data) {
+                const entities = data.filter(
+                    (e) => Number.parseInt(e.entityId, 16) !== 0
+                );
 
-            if (entity && entity.entityId !== "0x0") {
-                state.updateEntity(entity);
+                const entity = entities[0];
+                if (entity) {
+                    state.updateEntity(entity);
+                }
             }
         },
         getErrorPrefix: () => "Dojo.js - useEntityQuery",
