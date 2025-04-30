@@ -17,7 +17,8 @@ export function generateTypedData<
     nsModel: string,
     message: M,
     domain: StarknetDomain,
-    modelMapping?: Array<{ name: string; type: string }>
+    modelMapping?: Array<{ name: string; type: string }>,
+    additionnalTypes?: Record<string, Array<{ name: string; type: string }>>
 ): TypedData {
     return {
         types: {
@@ -27,6 +28,7 @@ export function generateTypedData<
                 { name: "chainId", type: "shortstring" },
                 { name: "revision", type: "shortstring" },
             ],
+            ...additionnalTypes,
             [nsModel]:
                 undefined !== modelMapping
                     ? modelMapping

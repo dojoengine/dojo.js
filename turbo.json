@@ -36,6 +36,10 @@
         "docs": {
             "dependsOn": ["^build:deps", "^docs"],
             "outputs": ["docs/**"]
+        },
+        "test": {},
+        "test:watch": {
+            "persistent": true
         }
     }
 }

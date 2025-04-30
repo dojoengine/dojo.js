@@ -57,6 +57,7 @@
     "devDependencies": {
         "@anymud/bun-plugin-dts": "^1.0.2",
         "@rollup/plugin-commonjs": "^28.0.2",
+        "@types/node": "^22.14.1",
         "@vitest/coverage-v8": "^1.6.1",
         "benchmark": "^2.1.4",
         "bun-plugin-dts": "^0.3.0",
@@ -85,6 +86,7 @@
         "@starknet-react/chains": "catalog:",
         "@starknet-react/core": "catalog:",
         "immer": "^10.1.1",
+        "neverthrow": "^8.2.0",
         "zustand": "^4.5.6"
     },
     "repository": {
@@ -95,13 +97,7 @@
         "url": "https://github.com/dojoengine/sdk/issues"
     },
     "homepage": "https://github.com/dojoengine/sdk#readme",
-    "keywords": [
-        "dojo",
-        "sdk",
-        "engine",
-        "typescript",
-        "torii"
-    ],
+    "keywords": ["dojo", "sdk", "engine", "typescript", "torii"],
     "engines": {
         "node": ">=18.0.0"
     }

@@ -12,7 +12,7 @@ import {
 } from "@dojoengine/recs";
 import type {
     Clause,
-    Entities,
+    Entity as ToriiEntity,
     EntityKeysClause,
     OrderBy,
     PatternMatching,
@@ -159,37 +159,37 @@ export const getEntities = async <S extends Schema>(
     }
 ) => {
     if (logging) console.log("Starting getEntities");
-    let offset = 0;
+    let cursor = undefined;
     let continueFetching = true;
 
-    const time = dbConnection ? getCache(timestampCacheKey) : 0;
+    // const time = dbConnection ? getCache(timestampCacheKey) : 0;
 
     while (continueFetching) {
-        const entities = await client.getEntities(
-            {
+        const entities = await client.getEntities({
+            pagination: {
                 limit,
-                offset,
-                clause,
+                cursor,
+                direction: "Forward",
                 order_by: orderBy,
-                entity_models: entityModels,
-                dont_include_hashed_keys: false,
-                entity_updated_after: time,
             },
-            historical
-        );
+            clause: clause || undefined,
+            no_hashed_keys: false,
+            models: entityModels,
+            historical,
+        });
 
         if (dbConnection) {
-            await insertEntitiesInDB(dbConnection, entities);
+            await insertEntitiesInDB(dbConnection, entities.items);
         }
 
-        if (logging) console.log(`Fetched entities`, entities);
+        if (logging) console.log(`Fetched entities`, entities.items);
 
-        setEntities(entities, components, logging);
+        setEntities(entities.items, components, logging);
 
-        if (Object.keys(entities).length < limit) {
+        if (Object.keys(entities.items).length < limit) {
             continueFetching = false;
         } else {
-            offset += limit;
+            cursor = entities.next_cursor;
         }
     }
 
@@ -222,31 +222,31 @@ export const getEvents = async <S extends Schema>(
     callback?: () => void
 ) => {
     if (logging) console.log("Starting getEvents");
-    let offset = 0;
+    let cursor = undefined;
     let continueFetching = true;
 
     while (continueFetching) {
-        const entities = await client.getEventMessages(
-            {
+        const entities = await client.getEventMessages({
+            pagination: {
                 limit,
-                offset,
-                clause,
+                cursor,
+                direction: "Forward",
                 order_by: orderBy,
-                entity_models: entityModels,
-                dont_include_hashed_keys: false,
-                entity_updated_after: 0,
             },
-            historical
-        );
+            clause: clause || undefined,
+            no_hashed_keys: false,
+            models: entityModels,
+            historical,
+        });
 
-        if (logging) console.log("entities", entities);
+        if (logging) console.log("entities", entities.items);
 
-        setEntities(entities, components, logging);
+        setEntities(entities.items, components, logging);
 
-        if (Object.keys(entities).length === 0) {
+        if (Object.keys(entities.items).length === 0) {
             continueFetching = false;
         } else {
-            offset += limit;
+            cursor = entities.next_cursor;
         }
     }
 
@@ -284,7 +284,7 @@ export const getEntitiesQuery = async <S extends Schema>(
     historical: boolean = false
 ) => {
     if (logging) console.log("Starting getEntitiesQuery");
-    let cursor = 0;
+    let cursor = undefined;
     let continueFetching = true;
 
     const componentArray = Object.values(components);
@@ -304,31 +304,31 @@ export const getEntitiesQuery = async <S extends Schema>(
           }
         : null;
 
-    const fetchedEntities = await client.getEntities(
-        {
+    const fetchedEntities = await client.getEntities({
+        pagination: {
             limit,
-            offset: cursor,
-            clause: clause || undefined,
+            cursor,
+            direction: "Forward",
             order_by: orderBy,
-            entity_models: entityModels,
-            dont_include_hashed_keys: false,
-            entity_updated_after: 0,
         },
-        historical
-    );
+        clause: clause || undefined,
+        no_hashed_keys: false,
+        models: entityModels,
+        historical,
+    });
 
     while (continueFetching) {
         if (logging)
             console.log(
-                `Fetched ${Object.keys(fetchedEntities).length} entities ${cursor}`
+                `Fetched ${Object.keys(fetchedEntities.items).length} entities ${fetchedEntities.next_cursor}`
             );
 
-        setEntities(fetchedEntities, components, logging);
+        setEntities(fetchedEntities.items, components, logging);
 
-        if (Object.keys(fetchedEntities).length < limit) {
+        if (Object.keys(fetchedEntities.items).length < limit) {
             continueFetching = false;
         } else {
-            cursor += limit;
+            cursor = fetchedEntities.next_cursor;
         }
     }
 };
@@ -509,13 +509,13 @@ const setCache = (time: number, timestampCacheKey: string) => {
     localStorage.setItem(timestampCacheKey, timeString);
 };
 
-const getCache = (timestampCacheKey: string) => {
-    return Number(localStorage.getItem(timestampCacheKey) || 0);
-};
+// const getCache = (timestampCacheKey: string) => {
+//     return Number(localStorage.getItem(timestampCacheKey) || 0);
+// };
 
 async function insertEntitiesInDB(
     db: IDBDatabase,
-    entities: Entities
+    entities: ToriiEntity[]
 ): Promise<void> {
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(["entities"], "readwrite");

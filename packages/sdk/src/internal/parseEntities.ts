@@ -8,24 +8,24 @@ import type {
 import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
 
 export function parseEntities<T extends SchemaType>(
-    entities: torii.Entities,
+    entities: torii.Entity[],
     options?: { logging?: boolean }
 ): StandardizedQueryResult<T> {
     // @ts-ignore
-    const result: Record<string, ParsedEntity> = {};
-    const entityIds = Object.keys(entities);
+    const result: ParsedEntity<T>[] = [];
 
-    entityIds.forEach((entityId) => {
-        const entityData = entities[entityId];
+    for (const entity of entities) {
+        const entityId = entity.hashed_keys;
+        const entityData = entity.models;
         const parsedEntity: ParsedEntity<T> = {
             entityId,
             models: {} as ParsedEntity<T>["models"],
         };
 
-        for (const modelName in entityData) {
+        for (const modelName in entity.models) {
             const [schemaKey, modelKey] = modelName.split("-") as [
                 keyof T,
-                string
+                string,
             ];
 
             if (!schemaKey || !modelKey) {
@@ -44,13 +44,12 @@ export function parseEntities<T extends SchemaType>(
             );
         }
 
-        result[entityId] = parsedEntity;
+        result.push(parsedEntity);
 
         if (options?.logging) {
             console.log(`Parsed entity:`, parsedEntity);
         }
-        return parsedEntity;
-    });
+    }
 
     if (options?.logging) {
         console.log("Parsed result:", result);
@@ -88,6 +87,7 @@ function parseValue(value: torii.Ty): any {
             // Handling simple enum as default case
             // Handling CairoCustomEnum for more complex types
             return parseCustomEnum(value);
+        case "tuple":
         case "array":
             return (value.value as torii.Ty[]).map(parseValue);
         default:
@@ -125,7 +125,12 @@ function parseCustomEnum(value: torii.Ty): CairoCustomEnum | string {
 function parsePrimitive(value: torii.Ty): any {
     switch (value.type_name) {
         case "u64":
-            return parseInt(value.value as string, 16);
+            return Number.parseInt(value.value as string, 16);
+        case "i256":
+        case "i128":
+        case "u256":
+        case "u128":
+            return BigInt(value.value as string);
         default:
             return value.value;
     }

@@ -4,6 +4,7 @@ import type {
     ToriiResponse,
     SchemaType,
     SubscribeParams,
+    ParsedEntity,
 } from "../../../internal/types";
 import type { ToriiQueryBuilder } from "../../../internal/toriiQueryBuilder";
 import type { EntityKeysClause, Subscription } from "@dojoengine/torii-wasm";
@@ -14,7 +15,7 @@ import { deepEqual, sleep } from "./utils";
  */
 export function createSubscriptionHook<
     Schema extends SchemaType,
-    Historical extends boolean = false
+    Historical extends boolean = false,
 >(config: {
     subscribeMethod: (
         options: SubscribeParams<Schema, Historical>
@@ -28,8 +29,8 @@ export function createSubscriptionHook<
         query: ToriiQueryBuilder<Schema>,
         historical?: boolean
     ) => Promise<[ToriiResponse<Schema, Historical>, EntityKeysClause[]]>;
-    processInitialData: (data: ToriiResponse<Schema, Historical>) => void;
-    processUpdateData: (data: any) => void;
+    processInitialData: (data: ParsedEntity<Schema>[]) => void;
+    processUpdateData: (data: ParsedEntity<Schema>[]) => void;
     getErrorPrefix: () => string;
     historical: Historical;
 }) {
@@ -60,7 +61,10 @@ export function createSubscriptionHook<
                     clause,
                     config.historical
                 );
-                config.processInitialData(results);
+
+                config.processInitialData(
+                    results as unknown as ParsedEntity<Schema>[]
+                );
                 return null;
             }
 
@@ -68,7 +72,9 @@ export function createSubscriptionHook<
                 query: fetchingRef.current!,
                 callback: ({ data, error }) => {
                     if (data) {
-                        config.processUpdateData(data);
+                        config.processUpdateData(
+                            data as unknown as ParsedEntity<Schema>[]
+                        );
                     }
                     if (error) {
                         console.error(
@@ -81,7 +87,9 @@ export function createSubscriptionHook<
                 historical: config.historical,
             });
 
-            config.processInitialData(initialData);
+            config.processInitialData(
+                initialData as unknown as ParsedEntity<Schema>[]
+            );
             return subscription;
         }, [query]);
 
@@ -110,7 +118,7 @@ export function createSubscriptionHook<
 
             return () => {
                 if (subscriptionRef.current) {
-                    // subscriptionRef.current?.cancel();
+                    // subscriptionRef.current?.free();
                     // subscriptionRef.current = null;
                 }
             };

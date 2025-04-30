@@ -5,7 +5,6 @@ import type {
     StandardizedQueryResult,
 } from "../../internal/types";
 import { parseEntities } from "../../internal/parseEntities";
-import { parseHistoricalEvents } from "../../internal/parseHistoricalEvents";
 import { intoEntityKeysClause } from "../../internal/convertClauseToEntityKeysClause";
 import { defaultClientConfig } from "..";
 
@@ -21,24 +20,22 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
         ...options.client,
     } as torii.ClientConfig;
 
-    const client = await torii.createClient(clientConfig);
+    const client = new torii.ToriiClient(clientConfig);
 
     return {
         getEntities: async (query: torii.Query) => {
-            return parseEntities(await client.getEntities(query, false));
+            return parseEntities((await client.getEntities(query)).items);
         },
-        getEvents: async (query: torii.Query, historical: boolean = false) => {
-            const events = await client.getEventMessages(query, historical);
-            return historical
-                ? parseHistoricalEvents(events)
-                : parseEntities(events);
+        getEvents: async (query: torii.Query) => {
+            const events = await client.getEventMessages(query);
+            return parseEntities(events.items);
         },
         subscribeEntities: async (
             query: torii.Query,
             callback: ToriiSubscriptionCallback<T>
         ) => {
             if (
-                query.dont_include_hashed_keys &&
+                query.no_hashed_keys &&
                 query.clause &&
                 !Object.hasOwn(query.clause, "Keys")
             ) {
@@ -47,18 +44,18 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                 );
             }
             const entities = parseEntities<T>(
-                await client.getEntities(query, false)
+                (await client.getEntities(query)).items
             );
             return [
                 entities,
                 client.onEntityUpdated(
                     intoEntityKeysClause<T>(query.clause, entities),
-                    (entityId: string, entityData: any) => {
+                    (_: string, entityData: torii.Entity) => {
                         try {
                             if (callback) {
-                                const parsedData = parseEntities<T>({
-                                    [entityId]: entityData,
-                                });
+                                const parsedData = parseEntities<T>([
+                                    entityData,
+                                ]);
                                 callback({ data: parsedData });
                             }
                         } catch (error) {
@@ -77,11 +74,10 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
         },
         subscribeEvents: async (
             query: torii.Query,
-            callback: ToriiSubscriptionCallback<T>,
-            historical: boolean = false
+            callback: ToriiSubscriptionCallback<T>
         ) => {
             if (
-                query.dont_include_hashed_keys &&
+                query.no_hashed_keys &&
                 query.clause &&
                 !Object.hasOwn(query.clause, "Keys")
             ) {
@@ -89,24 +85,19 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                     "For subscription, you need to include entity ids"
                 );
             }
-            const events = historical
-                ? parseHistoricalEvents<T>(
-                      await client.getEventMessages(query, historical)
-                  )
-                : parseEntities<T>(
-                      await client.getEventMessages(query, historical)
-                  );
+            const events = parseEntities<T>(
+                (await client.getEventMessages(query)).items
+            );
             return [
                 events,
                 client.onEventMessageUpdated(
                     intoEntityKeysClause<T>(query.clause, events),
-                    (entityId: string, entityData: any) => {
+                    (_: string, entityData: any) => {
                         try {
                             if (callback) {
-                                const data = { [entityId]: entityData };
-                                const parsedData = historical
-                                    ? parseHistoricalEvents<T>(data)
-                                    : parseEntities<T>(data);
+                                const parsedData = parseEntities<T>([
+                                    entityData,
+                                ]);
                                 callback({ data: parsedData });
                             }
                         } catch (error) {

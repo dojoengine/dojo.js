@@ -9,7 +9,7 @@
     "scripts": {
         "build:deps": "tsup --dts-resolve",
         "build": "pnpm build:deps",
-        "test": "echo \"Error: no test specified\"",
+        "test": "vitest run --passWithNoTests",
         "format:check": "prettier --check .",
         "format": "prettier --write .",
         "docs": "typedoc"
@@ -35,7 +35,8 @@
         "@types/react-dom": "^18.3.0",
         "@types/web": "^0.0.114",
         "tsup": "^8.3.5",
-        "typescript": "^5.6.2"
+        "typescript": "^5.6.2",
+        "vitest": "^3.1.2"
     },
     "dependencies": {
         "@dojoengine/recs": "2.0.13",

@@ -7,9 +7,11 @@ import { SchemaType } from "./models.gen.ts";
 
 describe("parseEntities", () => {
     it("should parse entities correctly", () => {
-        const mockEntities: torii.Entities = {
-            "0x14c362c17947ef1d40152d6e3bedd859c98bebfad41f75ef3f26798556a4c85":
-                {
+        const mockEntities: torii.Entity[] = [
+            {
+                hashed_keys:
+                    "0x14c362c17947ef1d40152d6e3bedd859c98bebfad41f75ef3f26798556a4c85",
+                models: {
                     "dojo_starter-Position": {
                         player: {
                             type: "primitive",
@@ -72,8 +74,11 @@ describe("parseEntities", () => {
                         },
                     },
                 },
-            "0x144c128b8ead7d0da39c6a150abbfdd38f572ba9418d3e36929eb6107b4ce4d":
-                {
+            },
+            {
+                hashed_keys:
+                    "0x144c128b8ead7d0da39c6a150abbfdd38f572ba9418d3e36929eb6107b4ce4d",
+                models: {
                     "dojo_starter-Moves": {
                         remaining: {
                             type: "primitive",
@@ -136,7 +141,8 @@ describe("parseEntities", () => {
                         },
                     },
                 },
-        };
+            },
+        ];
 
         const result = parseEntities(mockEntities);
 
@@ -187,9 +193,11 @@ describe("parseEntities", () => {
     });
 
     it("should parse Options", () => {
-        const toriiResult: torii.Entities = {
-            "0x43ebbfee0476dcc36cae36dfa9b47935cc20c36cb4dc7d014076e5f875cf164":
-                {
+        const toriiResult: torii.Entity[] = [
+            {
+                hashed_keys:
+                    "0x43ebbfee0476dcc36cae36dfa9b47935cc20c36cb4dc7d014076e5f875cf164",
+                models: {
                     "onchain_dash-CallerCounter": {
                         counter: {
                             type: "primitive",
@@ -219,7 +227,8 @@ describe("parseEntities", () => {
                         },
                     },
                 },
-        };
+            },
+        ];
         const res = parseEntities(toriiResult);
         const expected = new CairoOption(CairoOptionVariant.Some, 1734537235);
         expect(res[0]?.models?.onchain_dash?.CallerCounter?.timestamp).toEqual(
@@ -227,9 +236,11 @@ describe("parseEntities", () => {
         );
     });
     it("should parse complex enums", () => {
-        const toriiResult: torii.Entities = {
-            "0x5248d30cafd7af5e7f9255ed9bef2bd7aa0f191669a4c1e3a03b8c64ea5a9d8":
-                {
+        const toriiResult: torii.Entity[] = [
+            {
+                hashed_keys:
+                    "0x5248d30cafd7af5e7f9255ed9bef2bd7aa0f191669a4c1e3a03b8c64ea5a9d8",
+                models: {
                     "onchain_dash-Theme": {
                         theme_key: {
                             type: "primitive",
@@ -273,16 +284,19 @@ describe("parseEntities", () => {
                         },
                     },
                 },
-        };
+            },
+        ];
         const res = parseEntities<SchemaType>(toriiResult);
         const expected = new CairoCustomEnum({ Predefined: "Dojo" });
         expect(res[0]?.models?.onchain_dash?.Theme?.value).toEqual(expected);
     });
 
     it("should parse enum with nested struct", () => {
-        const toriiResult: torii.Entities = {
-            "0x5248d30cafd7af5e7f9255ed9bef2bd7aa0f191669a4c1e3a03b8c64ea5a9d8":
-                {
+        const toriiResult: torii.Entity[] = [
+            {
+                hashed_keys:
+                    "0x5248d30cafd7af5e7f9255ed9bef2bd7aa0f191669a4c1e3a03b8c64ea5a9d8",
+                models: {
                     "onchain_dash-Theme": {
                         theme_key: {
                             type: "primitive",
@@ -325,7 +339,8 @@ describe("parseEntities", () => {
                         },
                     },
                 },
-        };
+            },
+        ];
         const res = parseEntities(toriiResult);
         const expected = new CairoCustomEnum({
             Custom: {

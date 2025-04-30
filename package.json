@@ -15,7 +15,9 @@
         "dev": "turbo watch dev --concurrency 20",
         "dev:deps": "turbo watch build:deps --concurrency 20",
         "docs": "turbo run docs --ui stream && typedoc --entryPointStrategy merge 'docs-json/*.json'",
-        "typedoc": "typedoc --options typedoc.json && typedoc"
+        "typedoc": "typedoc --options typedoc.json && typedoc",
+        "test": "turbo test",
+        "test:watch": "turbo watch test"
     },
     "devDependencies": {
         "@commitlint/cli": "^18.6.1",

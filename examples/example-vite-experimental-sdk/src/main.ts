@@ -34,8 +34,7 @@ async function main() {
     const events = await sdk.getEvents(
         new ToriiQueryBuilder()
             .withClause(new ClauseBuilder().keys([], [undefined]).build())
-            .build(),
-        true
+            .build()
     );
     console.log("events", events);
 

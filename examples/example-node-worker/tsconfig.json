@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        // "composite": true,
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "declaration": true,
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "esModuleInterop": true,
+        "allowImportingTsExtensions": true
+    },
+    "include": ["../*.ts"],
+    "references": []
+}

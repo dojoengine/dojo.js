@@ -3,11 +3,22 @@
     "version": "0.0.1",
     "private": true,
     "type": "module",
+    "scripts": {
+        "bun": "IDENTITY=0x0127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec SECRET_KEY=0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912 bun run main.ts",
+        "node": "IDENTITY=0x0127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec SECRET_KEY=0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912 node main.ts",
+        "build": "tsc -b"
+    },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
-        "@dojoengine/sdk": "workspace:*"
+        "@dojoengine/sdk": "workspace:*",
+        "@dojoengine/torii-wasm": "workspace:*",
+        "dotenv": "^16.4.7",
+        "starknet": "catalog:",
+        "websocket": "^1.0.35",
+        "zod": "^3.24.3"
     },
     "devDependencies": {
-        "@types/node": "^22.14.1"
+        "@types/node": "^22.14.1",
+        "@types/websocket": "^1.0.10"
     }
 }

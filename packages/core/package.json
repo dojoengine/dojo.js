@@ -11,7 +11,7 @@
         "build": "pnpm build:deps",
         "format:check": "prettier --check .",
         "format": "prettier --write .",
-        "test": "vitest run --coverage",
+        "test": "vitest run --passWithNoTests --coverage",
         "docs": "typedoc"
     },
     "exports": {
