@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.0
+
+### Minor Changes
+
+- cb2f3ee: chore: bump dojo 1.5
+
 ## 1.4.4
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # Change Log
 
+## 1.5.0
+
+### Minor Changes
+
+- cb2f3ee: chore: bump dojo 1.5
+
+### Patch Changes
+
+- Updated dependencies [cb2f3ee]
+    - @dojoengine/state@1.5.0
+    - @dojoengine/torii-client@1.5.0
+    - @dojoengine/utils@1.5.0
+
 ## 1.4.5
 
 ### Patch Changes
