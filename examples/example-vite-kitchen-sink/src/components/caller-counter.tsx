@@ -2,14 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 
 import {
     KeysClause,
-    ParsedEntity,
-    SDK,
+    type ParsedEntity,
+    type SDK,
     ToriiQueryBuilder,
 } from "@dojoengine/sdk";
 import { useDojoSDK } from "@dojoengine/sdk/react";
-import { Subscription } from "@dojoengine/torii-wasm";
-import { SchemaType } from "@/typescript/models.gen";
-import { setupWorld } from "@/typescript/contracts.gen";
+import type { Subscription } from "@dojoengine/torii-wasm";
+import type { SchemaType } from "@/typescript/models.gen";
+import type { setupWorld } from "@/typescript/contracts.gen";
 import { dojoConfig } from "@/../dojoConfig";
 
 import { addAddressPadding } from "starknet";
@@ -72,7 +72,7 @@ export default function CallerCounter() {
                         }
 
                         setIsLoading(false);
-                        setCount(parseInt(count.toString(), 16));
+                        setCount(Number.parseInt(count.toString(), 16));
                         return;
                     }
                     if (error) {
@@ -82,11 +82,12 @@ export default function CallerCounter() {
             });
             setSub(sub);
             const count =
-                initialEntities[0]?.models.onchain_dash?.CallerCounter?.counter;
+                initialEntities.getItems()[0]?.models.onchain_dash
+                    ?.CallerCounter?.counter;
             if (!count) {
                 setCount(0);
             } else {
-                setCount(parseInt(count.toString(), 16));
+                setCount(Number.parseInt(count.toString(), 16));
             }
         }
         if (address && sdk && sub === null) {

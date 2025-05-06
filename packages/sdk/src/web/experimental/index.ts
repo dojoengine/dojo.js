@@ -5,7 +5,6 @@ import type {
     StandardizedQueryResult,
 } from "../../internal/types";
 import { parseEntities } from "../../internal/parseEntities";
-import { intoEntityKeysClause } from "../../internal/convertClauseToEntityKeysClause";
 import { defaultClientConfig } from "..";
 
 export type ToriiSubscriptionCallback<T extends SchemaType> = (response: {
@@ -34,22 +33,13 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
             query: torii.Query,
             callback: ToriiSubscriptionCallback<T>
         ) => {
-            if (
-                query.no_hashed_keys &&
-                query.clause &&
-                !Object.hasOwn(query.clause, "Keys")
-            ) {
-                throw new Error(
-                    "For subscription, you need to include entity ids"
-                );
-            }
             const entities = parseEntities<T>(
                 (await client.getEntities(query)).items
             );
             return [
                 entities,
                 client.onEntityUpdated(
-                    intoEntityKeysClause<T>(query.clause, entities),
+                    query.clause,
                     (_: string, entityData: torii.Entity) => {
                         try {
                             if (callback) {
@@ -91,7 +81,7 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
             return [
                 events,
                 client.onEventMessageUpdated(
-                    intoEntityKeysClause<T>(query.clause, events),
+                    query.clause,
                     (_: string, entityData: any) => {
                         try {
                             if (callback) {

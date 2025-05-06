@@ -3,21 +3,27 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import { useCallback, useEffect, useRef, useState, KeyboardEvent } from "react";
+import {
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+    type KeyboardEvent,
+} from "react";
 import { useForm } from "react-hook-form";
 import { useAccount } from "@starknet-react/core";
 import { toValidAscii } from "@/lib/utils";
 import {
     KeysClause,
-    ParsedEntity,
-    SDK,
+    type ParsedEntity,
+    type SDK,
     ToriiQueryBuilder,
 } from "@dojoengine/sdk";
-import { Subscription } from "@dojoengine/torii-wasm";
+import type { Subscription } from "@dojoengine/torii-wasm";
 import { shortAddress } from "@/lib/utils";
-import { Message, SchemaType } from "@/typescript/models.gen";
+import type { Message, SchemaType } from "@/typescript/models.gen";
 import { useDojoSDK } from "@dojoengine/sdk/react";
-import { setupWorld } from "@/typescript/contracts.gen";
+import type { setupWorld } from "@/typescript/contracts.gen";
 
 interface MessageItem {
     content: string;
@@ -99,11 +105,12 @@ export default function Chat() {
 
             setMessages(
                 initialMessages
+                    .getItems()
                     .map((e) => e.models.onchain_dash.Message as MessageItem)
                     .filter(Boolean)
                     .sort((a: Message, b: Message): number =>
-                        parseInt(a.timestamp.toString(), 16) <
-                        parseInt(b.timestamp.toString(), 16)
+                        Number.parseInt(a.timestamp.toString(), 16) <
+                        Number.parseInt(b.timestamp.toString(), 16)
                             ? -1
                             : 1
                     )

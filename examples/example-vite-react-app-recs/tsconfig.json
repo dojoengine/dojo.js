@@ -5,7 +5,7 @@
         "module": "ESNext",
         "lib": ["ES2023", "DOM"],
         "skipLibCheck": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,

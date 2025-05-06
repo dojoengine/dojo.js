@@ -5,6 +5,9 @@ import type {
     PaginationDirection,
 } from "@dojoengine/torii-wasm/types";
 import type { SchemaType } from "./types.ts";
+import { Result, ok, err } from "neverthrow";
+import { UNDEFINED_CLAUSE } from "./errors.ts";
+import { Pagination } from "@dojoengine/torii-wasm";
 
 const defaultToriiOptions = () => ({
     pagination: {
@@ -139,6 +142,20 @@ export class ToriiQueryBuilder<T extends SchemaType> {
             .withLimit(limit)
             .withCursor(cursor)
             .withDirection(direction);
+    }
+
+    /**
+     * Returns inner clause inside a Result wrapper.
+     */
+    getClause(): Result<Clause, string> {
+        if (!this.query.clause) {
+            return err(UNDEFINED_CLAUSE);
+        }
+        return ok(this.query.clause);
+    }
+
+    getPagination(): Pagination {
+        return this.query.pagination;
     }
 }
 

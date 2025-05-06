@@ -169,7 +169,7 @@ importers:
         version: 3.0.11
       bun-types:
         specifier: latest
-        version: 1.2.10
+        version: 1.2.12
       graphql:
         specifier: ^16.9.0
         version: 16.10.0
@@ -248,7 +248,7 @@ importers:
         version: link:../../packages/create-burner
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../../packages/state
@@ -581,6 +581,9 @@ importers:
       '@dojoengine/recs':
         specifier: 2.0.13
         version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
+      '@dojoengine/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../../packages/state
@@ -680,7 +683,10 @@ importers:
         version: link:../../packages/react
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.3)
+      '@dojoengine/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../../packages/state
@@ -820,6 +826,9 @@ importers:
       '@dojoengine/recs':
         specifier: 2.0.13
         version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
+      '@dojoengine/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../../packages/state
@@ -1082,7 +1091,7 @@ importers:
         version: 2.1.1
       drizzle-orm:
         specifier: ^0.38.3
-        version: 0.38.3(@libsql/client@0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@types/react@18.3.18)(bun-types@1.2.10)(react@18.3.1)
+        version: 0.38.3(@libsql/client@0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@types/react@18.3.18)(bun-types@1.2.12)(react@18.3.1)
       lucide-react:
         specifier: ^0.469.0
         version: 0.469.0(react@18.3.1)
@@ -1171,6 +1180,9 @@ importers:
       '@dojoengine/recs':
         specifier: 2.0.13
         version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
+      '@dojoengine/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../../packages/state
@@ -1366,7 +1378,7 @@ importers:
         version: link:../../packages/create-burner
       '@dojoengine/recs':
         specifier: ^2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../../packages/state
@@ -1509,7 +1521,10 @@ importers:
         version: link:../../packages/react
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
+      '@dojoengine/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../../packages/state
@@ -1754,7 +1769,7 @@ importers:
     dependencies:
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../state
@@ -1921,7 +1936,7 @@ importers:
     dependencies:
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
       '@dojoengine/torii-client':
         specifier: workspace:*
         version: link:../torii-client
@@ -1971,7 +1986,7 @@ importers:
     dependencies:
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
       '@latticexyz/utils':
         specifier: ^2.2.8
         version: 2.2.14
@@ -9096,8 +9111,8 @@ packages:
   bun-plugin-dts@0.3.0:
     resolution: {integrity: sha512-QpiAOKfPcdOToxySOqRY8FwL+brTvyXEHWzrSCRKt4Pv7Z4pnUrhK9tFtM7Ndm7ED09B/0cGXnHJKqmekr/ERw==}
 
-  bun-types@1.2.10:
-    resolution: {integrity: sha512-b5ITZMnVdf3m1gMvJHG+gIfeJHiQPJak0f7925Hxu6ZN5VKA8AGy4GZ4lM+Xkn6jtWxg5S3ldWvfmXdvnkp3GQ==}
+  bun-types@1.2.12:
+    resolution: {integrity: sha512-tvWMx5vPqbRXgE8WUZI94iS1xAYs8bkqESR9cxBB1Wi+urvfTrF1uzuDgBHFAdO0+d2lmsbG3HmeKMvUyj6pWA==}
 
   bundle-require@5.1.0:
     resolution: {integrity: sha512-3WrrOuZiyaaZPWiEt4G3+IffISVC9HYlWueJEBWED4ZH4aIAC2PnkdnuRrR94M+w6yGWn4AglWtJtBI8YqvgoA==}
@@ -18446,18 +18461,6 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@dojoengine/recs@2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@latticexyz/schema-type': 2.0.12(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)
-      '@latticexyz/utils': 2.0.12
-      mobx: 6.13.5
-      rxjs: 7.5.5
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-
   '@dojoengine/recs@2.0.13(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
       '@latticexyz/schema-type': 2.0.12(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
@@ -18482,9 +18485,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@dojoengine/recs@2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)':
+  '@dojoengine/recs@2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.3)':
     dependencies:
-      '@latticexyz/schema-type': 2.0.12(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+      '@latticexyz/schema-type': 2.0.12(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.3)
       '@latticexyz/utils': 2.0.12
       mobx: 6.13.5
       rxjs: 7.5.5
@@ -20405,16 +20408,6 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@latticexyz/schema-type@2.0.12(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)':
-    dependencies:
-      abitype: 1.0.0(typescript@5.7.2)(zod@3.24.3)
-      viem: 2.9.20(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.3)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-
   '@latticexyz/schema-type@2.0.12(bufferutil@4.0.9)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
       abitype: 1.0.0(typescript@5.7.2)(zod@3.24.1)
@@ -20435,10 +20428,10 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@latticexyz/schema-type@2.0.12(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)':
+  '@latticexyz/schema-type@2.0.12(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.3)':
     dependencies:
-      abitype: 1.0.0(typescript@5.7.3)
-      viem: 2.9.20(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+      abitype: 1.0.0(typescript@5.7.3)(zod@3.24.3)
+      viem: 2.9.20(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.3)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -25129,9 +25122,10 @@ snapshots:
       typescript: 5.7.2
       zod: 3.24.3
 
-  abitype@1.0.0(typescript@5.7.3):
+  abitype@1.0.0(typescript@5.7.3)(zod@3.24.3):
     optionalDependencies:
       typescript: 5.7.3
+      zod: 3.24.3
 
   abitype@1.0.6(typescript@5.7.2)(zod@3.24.3):
     optionalDependencies:
@@ -25746,7 +25740,7 @@ snapshots:
       dts-bundle-generator: 9.5.1
       get-tsconfig: 4.10.0
 
-  bun-types@1.2.10:
+  bun-types@1.2.12:
     dependencies:
       '@types/node': 20.17.27
 
@@ -26657,11 +26651,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.3(@libsql/client@0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@types/react@18.3.18)(bun-types@1.2.10)(react@18.3.1):
+  drizzle-orm@0.38.3(@libsql/client@0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@types/react@18.3.18)(bun-types@1.2.12)(react@18.3.1):
     optionalDependencies:
       '@libsql/client': 0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@types/react': 18.3.18
-      bun-types: 1.2.10
+      bun-types: 1.2.12
       react: 18.3.1
 
   dset@3.1.4: {}
@@ -33095,14 +33089,14 @@ snapshots:
       - utf-8-validate
       - zod
 
-  viem@2.9.20(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10):
+  viem@2.9.20(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.3):
     dependencies:
       '@adraffy/ens-normalize': 1.10.0
       '@noble/curves': 1.2.0
       '@noble/hashes': 1.3.2
       '@scure/bip32': 1.3.2
       '@scure/bip39': 1.2.1
-      abitype: 1.0.0(typescript@5.7.3)
+      abitype: 1.0.0(typescript@5.7.3)(zod@3.24.3)
       isows: 1.0.3(ws@8.13.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       ws: 8.13.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     optionalDependencies:

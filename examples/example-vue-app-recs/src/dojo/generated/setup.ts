@@ -1,5 +1,6 @@
 import { type DojoConfig, DojoProvider } from "@dojoengine/core";
 import { getSyncEntities } from "@dojoengine/state";
+import { KeysClause } from "@dojoengine/sdk";
 import * as torii from "@dojoengine/torii-client";
 import type { ArraySignatureType } from "starknet";
 
@@ -29,7 +30,7 @@ export async function setup({ ...config }: DojoConfig) {
     const sync = await getSyncEntities(
         toriiClient,
         contractComponents as any,
-        undefined,
+        KeysClause([], [], "VariableLen").build(),
         []
     );
 

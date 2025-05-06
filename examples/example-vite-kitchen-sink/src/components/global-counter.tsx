@@ -3,15 +3,15 @@ import { Button } from "./ui/button";
 import { useSendTransaction } from "@starknet-react/core";
 import {
     KeysClause,
-    ParsedEntity,
-    SDK,
+    type ParsedEntity,
+    type SDK,
     ToriiQueryBuilder,
 } from "@dojoengine/sdk";
-import { Subscription } from "@dojoengine/torii-wasm";
+import type { Subscription } from "@dojoengine/torii-wasm";
 import { dojoConfig } from "@/../dojoConfig";
-import { SchemaType } from "@/typescript/models.gen";
+import type { SchemaType } from "@/typescript/models.gen";
 import { useDojoSDK } from "@dojoengine/sdk/react";
-import { setupWorld } from "@/typescript/contracts.gen";
+import type { setupWorld } from "@/typescript/contracts.gen";
 
 export default function GlobalCOunter() {
     const [count, setCount] = useState(0);
@@ -63,7 +63,7 @@ export default function GlobalCOunter() {
                         if (undefined === count) {
                             return 0;
                         }
-                        const value = parseInt(count.toString(), 16);
+                        const value = Number.parseInt(count.toString(), 16);
                         setCount(value);
                         setIsLoading(false);
                         return;
@@ -76,11 +76,12 @@ export default function GlobalCOunter() {
             setSub(sub);
 
             const count =
-                initialEntities[0]?.models.onchain_dash?.GlobalCounter?.counter;
+                initialEntities.getItems()[0]?.models.onchain_dash
+                    ?.GlobalCounter?.counter;
             if (undefined === count) {
                 setCount(0);
             } else {
-                setCount(parseInt(count.toString(), 16));
+                setCount(Number.parseInt(count.toString(), 16));
             }
         }
         if (db && sub === null) {

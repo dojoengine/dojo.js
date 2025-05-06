@@ -6,6 +6,7 @@ import {
     type ParsedEntity,
     getModel,
     HistoricalToriiQueryBuilder,
+    StandardizedQueryResult,
 } from "@dojoengine/sdk/node";
 import { SigningKey } from "@dojoengine/torii-wasm/node";
 import { dojoConfig } from "./dojoConfig.ts";
@@ -87,7 +88,7 @@ async function publishOffchainPositionCount(moves: Moves): Promise<void> {
             )
             .includeHashedKeys(),
     });
-    const m = getModel(ModelsMapping.PositionCount, model);
+    const m = getModel(ModelsMapping.PositionCount, model.getItems());
     if (!m) {
         const data = sdk.generateTypedData(
             ModelsMapping.PositionCount,
@@ -120,7 +121,7 @@ async function publishOffchainPositionCount(moves: Moves): Promise<void> {
 let positionCount = defaultPositionCount;
 
 function initPositionFromEvent(
-    events: ParsedEntity<SchemaType>[]
+    events: StandardizedQueryResult<SchemaType>
 ): PositionCount {
     const pc = defaultPositionCount;
     for (const e of events) {
@@ -162,16 +163,15 @@ await createWorker(async () => {
     const events = await sdk.getEventMessages({
         query: query,
     });
-    positionCount = initPositionFromEvent(events);
+    positionCount = initPositionFromEvent(events.getItems());
 
     const [entities, sub] = await sdk.subscribeEntityQuery({
         query,
         callback: onEntityUpdated,
     });
 
-    console.log("Entities from worker", entities);
+    console.log("Entities from worker", entities.getItems());
     console.log(positionCount);
 
-    return [];
     return [sub];
 });

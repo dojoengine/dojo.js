@@ -18,6 +18,7 @@
         "@dojoengine/create-burner": "workspace:*",
         "@dojoengine/react": "workspace:*",
         "@dojoengine/recs": "2.0.13",
+        "@dojoengine/sdk": "workspace:*",
         "@dojoengine/state": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/utils": "workspace:*",

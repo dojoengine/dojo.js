@@ -12,8 +12,6 @@ export type TypedCairoEnum<T> = CairoCustomEnum & {
     unwrap(): T[keyof T];
 };
 
-type WithFieldOrder<T> = T & { fieldOrder: string[] };
-
 // Type definition for `onchain_dash::models::CallerCounter` struct
 export interface CallerCounter {
     caller: string;
@@ -86,55 +84,47 @@ export type DashboardThemeEnum = CairoCustomEnum;
 
 export interface SchemaType extends ISchemaType {
     onchain_dash: {
-        CallerCounter: WithFieldOrder<CallerCounter>;
-        CallerCounterValue: WithFieldOrder<CallerCounterValue>;
-        CustomTheme: WithFieldOrder<CustomTheme>;
-        GlobalCounter: WithFieldOrder<GlobalCounter>;
-        GlobalCounterValue: WithFieldOrder<GlobalCounterValue>;
-        Message: WithFieldOrder<Message>;
-        MessageValue: WithFieldOrder<MessageValue>;
-        Theme: WithFieldOrder<Theme>;
-        ThemeValue: WithFieldOrder<ThemeValue>;
+        CallerCounter: CallerCounter;
+        CallerCounterValue: CallerCounterValue;
+        CustomTheme: CustomTheme;
+        GlobalCounter: GlobalCounter;
+        GlobalCounterValue: GlobalCounterValue;
+        Message: Message;
+        MessageValue: MessageValue;
+        Theme: Theme;
+        ThemeValue: ThemeValue;
     };
 }
 export const schema: SchemaType = {
     onchain_dash: {
         CallerCounter: {
-            fieldOrder: ["caller", "counter", "timestamp"],
             caller: "",
             counter: 0,
             timestamp: new CairoOption(CairoOptionVariant.None),
         },
         CallerCounterValue: {
-            fieldOrder: ["counter", "timestamp"],
             counter: 0,
             timestamp: new CairoOption(CairoOptionVariant.None),
         },
         CustomTheme: {
-            fieldOrder: ["classname"],
             classname: 0,
         },
         GlobalCounter: {
-            fieldOrder: ["global_counter_key", "counter"],
             global_counter_key: 0,
             counter: 0,
         },
         GlobalCounterValue: {
-            fieldOrder: ["counter"],
             counter: 0,
         },
         Message: {
-            fieldOrder: ["identity", "content", "timestamp"],
             identity: "",
             content: "",
             timestamp: 0,
         },
         MessageValue: {
-            fieldOrder: ["content"],
             content: "",
         },
         Theme: {
-            fieldOrder: ["theme_key", "value", "caller", "timestamp"],
             theme_key: 0,
             value: new CairoCustomEnum({
                 Predefined: AvailableTheme.Light,
@@ -144,7 +134,6 @@ export const schema: SchemaType = {
             timestamp: 0,
         },
         ThemeValue: {
-            fieldOrder: ["value", "caller", "timestamp"],
             value: new CairoCustomEnum({
                 Predefined: AvailableTheme.Light,
                 custom: undefined,
