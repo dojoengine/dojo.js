@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.1
+
+### Patch Changes
+
+- 97aaa22: feat: Support torii pagination
+
 ## 1.5.0
 
 ### Minor Changes

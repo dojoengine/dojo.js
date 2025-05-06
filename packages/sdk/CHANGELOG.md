@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.1
+
+### Patch Changes
+
+- 97aaa22: feat: Support torii pagination
+- Updated dependencies [97aaa22]
+    - @dojoengine/torii-wasm@1.5.1
+    - @dojoengine/core@1.5.1
+    - @dojoengine/torii-client@1.5.1
+    - @dojoengine/utils@1.5.1
+
 ## 1.5.0
 
 ### Minor Changes
