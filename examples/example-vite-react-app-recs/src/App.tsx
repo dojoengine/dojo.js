@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useComponentValue, useQuerySync } from "@dojoengine/react";
-import { Entity } from "@dojoengine/recs";
+import type { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { KeysClause } from "@dojoengine/sdk";
 
 import { useDojo } from "./dojo/useDojo";
 
@@ -18,7 +19,11 @@ function App() {
 
     // sync the contract components to the local state
     // this fetches the entities from the world and updates the local state
-    useQuerySync(toriiClient, contractComponents as any, []);
+    useQuerySync(
+        toriiClient,
+        contractComponents as any,
+        KeysClause([], [], "VariableLen").build()
+    );
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",

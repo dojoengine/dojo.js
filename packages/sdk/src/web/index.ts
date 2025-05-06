@@ -16,9 +16,6 @@ import type {
     UpdateTokenBalanceSubscriptionRequest,
 } from "../internal/types";
 
-import { intoEntityKeysClause } from "../internal/convertClauseToEntityKeysClause";
-import { parseEntities } from "../internal/parseEntities";
-import type { ToriiQueryBuilder } from "../internal/toriiQueryBuilder";
 import { generateTypedData } from "../internal/generateTypedData";
 import {
     getTokens,
@@ -29,9 +26,11 @@ import {
 } from "../internal/token";
 import { err, ok, type Result } from "neverthrow";
 import { NO_ACCOUNT } from "../internal/errors";
+import { subscribeQueryModelCallback } from "../internal/subscribeQueryModel";
+import { Pagination } from "../internal/pagination";
+import { parseEntities } from "../internal/parseEntities";
 
 export * from "../internal/types";
-export * from "../internal/convertClauseToEntityKeysClause";
 export * from "./queryBuilder";
 export * from "./clauseBuilder";
 export * from "../internal/toriiQueryBuilder";
@@ -66,119 +65,48 @@ export async function init<T extends SchemaType>(
         ...defaultClientConfig,
         ...options.client,
     } as torii.ClientConfig;
-    const client = await createClient(clientConfig);
+    const client = await new torii.ToriiClient(clientConfig);
 
     return {
         client,
         /**
          * Subscribes to entity queries.
          *
-         * @param {SubscribeParams<T, false>} params - Parameters object
-         * @returns {Promise<SubscribeResponse<T, false>>} - A promise that resolves when the subscription is set up.
+         * @param {SubscribeParams<T>} params - Parameters object
+         * @returns {Promise<SubscribeResponse<T>>} - A promise that resolves when the subscription is set up.
          */
         subscribeEntityQuery: async ({ query, callback }) => {
             const q = query.build();
 
-            if (
-                q.no_hashed_keys &&
-                q.clause &&
-                !Object.hasOwn(q.clause, "Keys")
-            ) {
-                throw new Error(
-                    "For subscription, you need to include entity ids"
-                );
-            }
-
-            const entities = parseEntities<T>(
-                (await client.getEntities(q)).items
-            );
+            const entities = await client.getEntities(q);
+            const parsedEntities = parseEntities<T>(entities.items);
             return [
-                entities,
+                Pagination.fromQuery(query).withItems(parsedEntities),
                 client.onEntityUpdated(
-                    intoEntityKeysClause<T>(q.clause, entities),
-                    (_: string, entityData: torii.Entity) => {
-                        try {
-                            if (callback) {
-                                const parsedData = parseEntities<T>([
-                                    entityData,
-                                ]);
-                                callback({
-                                    data: parsedData,
-                                    error: undefined,
-                                });
-                            }
-                        } catch (error) {
-                            if (callback) {
-                                callback({
-                                    data: undefined,
-                                    error:
-                                        error instanceof Error
-                                            ? error
-                                            : new Error(String(error)),
-                                });
-                            }
-                        }
-                    }
+                    q.clause,
+                    subscribeQueryModelCallback(callback)
                 ),
             ];
         },
         /**
          * Subscribes to event queries.
          *
-         * @param {SubscribeParams<T, Historical>} params - Parameters object
-         * @returns {Promise<SubscribeResponse<T, Historical>>} - A promise that resolves when the subscription is set up.
+         * @param {SubscribeParams<T>} params - Parameters object
+         * @returns {Promise<SubscribeResponse<T>>} - A promise that resolves when the subscription is set up.
          */
-        subscribeEventQuery: async <Historical extends boolean>({
+        subscribeEventQuery: async ({
             query,
             callback,
-        }: SubscribeParams<T, Historical>): Promise<
-            SubscribeResponse<T, Historical>
-        > => {
+        }: SubscribeParams<T>): Promise<SubscribeResponse<T>> => {
             const q = query.build();
-            if (
-                q.no_hashed_keys &&
-                q.clause &&
-                !Object.hasOwn(q.clause, "Keys")
-            ) {
-                throw new Error(
-                    "For subscription, you need to include entity ids"
-                );
-            }
-            const events = parseEntities<T>(
-                (await client.getEventMessages(q)).items
-            ) as ToriiResponse<T, Historical>;
-            return [
-                events,
-                client.onEventMessageUpdated(
-                    // @ts-expect-error TODO: fix type here
-                    intoEntityKeysClause<T>(q.clause, events),
-                    (_: string, entityData: torii.Entity) => {
-                        try {
-                            if (callback) {
-                                const parsedData = parseEntities<T>([
-                                    entityData,
-                                ]);
 
-                                callback({
-                                    data: parsedData as ToriiResponse<
-                                        T,
-                                        Historical
-                                    >,
-                                    error: undefined,
-                                });
-                            }
-                        } catch (error) {
-                            if (callback) {
-                                callback({
-                                    data: undefined,
-                                    error:
-                                        error instanceof Error
-                                            ? error
-                                            : new Error(String(error)),
-                                });
-                            }
-                        }
-                    }
+            const entities = await client.getEventMessages(q);
+            const parsedEntities = parseEntities<T>(entities.items);
+            return [
+                Pagination.fromQuery(query).withItems(parsedEntities),
+                client.onEventMessageUpdated(
+                    q.clause,
+                    subscribeQueryModelCallback(callback)
                 ),
             ];
         },
@@ -203,22 +131,29 @@ export async function init<T extends SchemaType>(
          */
         getEntities: async ({ query }) => {
             const q = query.build();
-            return parseEntities((await client.getEntities(q)).items);
+
+            const entities = await client.getEntities(q);
+
+            return Pagination.fromQuery(query).withItems(
+                parseEntities(entities.items)
+            );
         },
         /**
          * Fetches event messages based on the provided query.
          *
-         * @param {GetParams<T, Historical>} params - Parameters object
-         * @returns {Promise<ToriiResponse<T, Historical>} - A promise that resolves to the standardized query result.
+         * @param {GetParams<T>} params - Parameters object
+         * @returns {Promise<ToriiResponse<T>} - A promise that resolves to the standardized query result.
          */
-        getEventMessages: async <Historical extends boolean>({
+        getEventMessages: async ({
             query,
-        }: GetParams<T, Historical>): Promise<ToriiResponse<T, Historical>> => {
+        }: GetParams<T>): Promise<ToriiResponse<T>> => {
             const q = query.build();
 
-            const events = await client.getEventMessages(q);
+            const entities = await client.getEventMessages(q);
 
-            return parseEntities(events.items) as ToriiResponse<T, Historical>;
+            return Pagination.fromQuery(query).withItems(
+                parseEntities(entities.items)
+            );
         },
 
         /**
@@ -338,7 +273,7 @@ export async function init<T extends SchemaType>(
          *
          * # Parameters
          * @param {torii.Subscription} subscription - Existing subscription to update
-         * @param {torii.EntityKeysClause[]} clauses - New array of key clauses for filtering
+         * @param {torii.Clause} clauses - New array of key clauses for filtering
          *
          * # Returns
          * Result containing unit or error
@@ -346,7 +281,7 @@ export async function init<T extends SchemaType>(
          */
         updateEntitySubscription: async (
             subscription: torii.Subscription,
-            clauses: torii.EntityKeysClause[]
+            clauses: torii.Clause
         ): Promise<void> => {
             return await client.updateEntitySubscription(subscription, clauses);
         },
@@ -356,7 +291,7 @@ export async function init<T extends SchemaType>(
          *
          * # Parameters
          * @param {torii.Subscription} subscription - Existing subscription to update
-         * @param {torii.EntityKeysClause[]} clauses - New array of key clauses for filtering
+         * @param {torii.Clause} clauses - New array of key clauses for filtering
          * @param {boolean} historical - Whether to include historical messages
          *
          * # Returns
@@ -365,7 +300,7 @@ export async function init<T extends SchemaType>(
          */
         updateEventMessageSubscription: async (
             subscription: torii.Subscription,
-            clauses: torii.EntityKeysClause[]
+            clauses: torii.Clause
         ): Promise<void> => {
             return await client.updateEventMessageSubscription(
                 subscription,
@@ -388,40 +323,6 @@ export async function init<T extends SchemaType>(
             contract_addresses: string[]
         ): Promise<torii.Controllers> => {
             return await client.getControllers(contract_addresses);
-        },
-        /**
-         * Convert torii clause into EntityKeysClause[];
-         *
-         * @param {query} query - ToriiQueryBuilder
-         * @returns [ToriiResponse<T,false>,torii.EntityKeysClause[]]
-         */
-        toriiQueryIntoHashedKeys: async (
-            query: ToriiQueryBuilder<T>
-        ): Promise<[ToriiResponse<T, false>, torii.EntityKeysClause[]]> => {
-            const q = query.build();
-            const entities = parseEntities<T>(
-                (await client.getEntities(q)).items
-            );
-            return [entities, intoEntityKeysClause<T>(q.clause, entities)];
-        },
-
-        /**
-         * Convert torii clause into EntityKeysClause[];
-         *
-         * @param {query} query - ToriiQueryBuilder
-         * @returns [ToriiResponse<T,false>,torii.EntityKeysClause[]]
-         */
-        toriiEventMessagesQueryIntoHashedKeys: async <H extends boolean>(
-            query: ToriiQueryBuilder<T>
-        ): Promise<[ToriiResponse<T, H>, torii.EntityKeysClause[]]> => {
-            const q = query.build();
-
-            const events = await client.getEventMessages(q);
-            return [
-                parseEntities(events.items) as ToriiResponse<T, H>,
-                // @ts-expect-error TODO: fix type here
-                intoEntityKeysClause<T>(q.clause, events.items),
-            ];
         },
     };
 }

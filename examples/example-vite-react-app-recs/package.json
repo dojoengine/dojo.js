@@ -17,6 +17,7 @@
         "@dojoengine/state": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/utils": "workspace:*",
+        "@dojoengine/sdk": "workspace:*",
         "@latticexyz/react": "^2.2.8",
         "@latticexyz/utils": "^2.2.8",
         "ethers": "^5.7.2",

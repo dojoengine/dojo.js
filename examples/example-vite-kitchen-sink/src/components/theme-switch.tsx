@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { Moon, Sun } from "lucide-react";
-import { Subscription } from "@dojoengine/torii-wasm";
+import type { Subscription } from "@dojoengine/torii-wasm";
 import { useAccount } from "@starknet-react/core";
 import {
     KeysClause,
-    ParsedEntity,
-    SDK,
+    type ParsedEntity,
+    type SDK,
     ToriiQueryBuilder,
 } from "@dojoengine/sdk";
-import { SchemaType } from "@/typescript/models.gen";
+import type { SchemaType } from "@/typescript/models.gen";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown";
 import { CairoCustomEnum } from "starknet";
 import { useDojoSDK, useEntityId } from "@dojoengine/sdk/react";
-import { setupWorld } from "@/typescript/contracts.gen";
+import type { setupWorld } from "@/typescript/contracts.gen";
 
 interface ThemeState {
     current: string | null;
@@ -119,8 +119,9 @@ export default function ThemeSwitchButton() {
             });
             setSub(sub);
 
-            const theme =
-                initialTheme[0]?.models?.onchain_dash?.Theme?.value?.unwrap();
+            const theme = initialTheme
+                .getItems()[0]
+                ?.models?.onchain_dash?.Theme?.value?.unwrap();
             let th = null;
             if (undefined === theme) {
                 th = AvailableTheme.Light;

@@ -5,6 +5,7 @@ import {
     defineMapConfig,
     defineCameraConfig,
 } from "@latticexyz/phaserx";
+import * as Phaser from "phaser";
 import { TileAnimations, Tileset } from "../../assets/world";
 import {
     Sprites,

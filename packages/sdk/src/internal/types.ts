@@ -2,6 +2,7 @@ import type * as torii from "@dojoengine/torii-wasm/types";
 import type { Account, StarknetDomain, TypedData } from "starknet";
 import { ToriiQueryBuilder } from "./toriiQueryBuilder.ts";
 import type { Result } from "neverthrow";
+import { Pagination } from "./pagination.ts";
 
 /**
  * Utility type to ensure at least one property is present
@@ -245,17 +246,15 @@ export type UnionOfModelData<T extends SchemaType> = {
     }[keyof T[K]];
 }[keyof T];
 
-export type ToriiResponse<
-    T extends SchemaType,
-    Historical extends boolean
-> = Historical extends true
-    ? StandardizedQueryResult<T>[]
-    : StandardizedQueryResult<T>;
+export type ToriiResponse<T extends SchemaType> = Pagination<
+    T,
+    StandardizedQueryResult<T>
+>;
 
-export type SubscribeResponse<
-    T extends SchemaType,
-    Historical extends boolean
-> = [ToriiResponse<T, Historical>, torii.Subscription];
+export type SubscribeResponse<T extends SchemaType> = [
+    ToriiResponse<T>,
+    torii.Subscription
+];
 
 export interface GetTokenRequest {
     contractAddresses?: string[];
@@ -278,7 +277,7 @@ type Failure<E> = {
 
 export type SubscriptionCallbackArgs<T, E = Error> = Success<T> | Failure<E>;
 
-// ToriiResponse<T, Historical>
+// ToriiResponse<T>
 export type SubscriptionCallback<T> = (
     response: SubscriptionCallbackArgs<T>
 ) => void;
@@ -310,21 +309,20 @@ export interface SDK<T extends SchemaType> {
      * @returns {Promise<SubscribeResponse<T, false>>} - A promise that resolves to a Torii subscription.
      */
     subscribeEntityQuery: (
-        params: SubscribeParams<T, false>
-    ) => Promise<SubscribeResponse<T, false>>;
+        params: SubscribeParams<T>
+    ) => Promise<SubscribeResponse<T>>;
 
     /**
      * Subscribes to event messages based on the provided query and invokes the callback with the updated data.
      *
      * @template T - The schema type.
-     * @template Historical - Wether to include historical events or not.
-     * @param {SubscribeParams<T, Historical>} params - Parameters object
+     * @param {SubscribeParams<T>} params - Parameters object
      * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
-     * @returns {Promise<SubscribeResponse<T, Historical>>} - A promise that resolves to a Torii subscription.
+     * @returns {Promise<SubscribeResponse<T>>} - A promise that resolves to a Torii subscription.
      */
-    subscribeEventQuery: <Historical extends boolean = false>(
-        params: SubscribeParams<T, Historical>
-    ) => Promise<SubscribeResponse<T, Historical>>;
+    subscribeEventQuery: (
+        params: SubscribeParams<T>
+    ) => Promise<SubscribeResponse<T>>;
 
     /**
      * Subscribes to token balance updates
@@ -344,19 +342,16 @@ export interface SDK<T extends SchemaType> {
      * @param {GetParams<T, false>} params - Parameters object
      * @returns {Promise<ToriiResponse<T, false>>} - A promise that resolves to the standardized query result.
      */
-    getEntities: (params: GetParams<T>) => Promise<ToriiResponse<T, false>>;
+    getEntities: (params: GetParams<T>) => Promise<ToriiResponse<T>>;
 
     /**
      * Fetches event messages from the Torii client based on the provided query.
      *
      * @template T - The schema type.
-     * @template Historical - Wether to include historical events or not.
-     * @param {GetParams<T, Historical>} params - Parameters object
-     * @returns {Promise<ToriiResponse<T, Historical>>} - A promise that resolves to the standardized query result.
+     * @param {GetParams<T>} params - Parameters object
+     * @returns {Promise<ToriiResponse<T>>} - A promise that resolves to the standardized query result.
      */
-    getEventMessages: <Historical extends boolean = false>(
-        params: GetParams<T, Historical>
-    ) => Promise<ToriiResponse<T, Historical>>;
+    getEventMessages: (params: GetParams<T>) => Promise<ToriiResponse<T>>;
 
     generateTypedData: <M extends UnionOfModelData<T>>(
         nsModel: string,
@@ -426,7 +421,7 @@ export interface SDK<T extends SchemaType> {
      *
      * # Parameters
      * @param {torii.Subscription} subscription - Existing subscription to update
-     * @param {torii.EntityKeysClause[]} clauses - New array of key clauses for filtering
+     * @param {torii.Clause} clauses - New array of key clauses for filtering
      *
      * # Returns
      * Result containing unit or error
@@ -434,7 +429,7 @@ export interface SDK<T extends SchemaType> {
      */
     updateEntitySubscription: (
         subscription: torii.Subscription,
-        clauses: torii.EntityKeysClause[]
+        clauses: torii.Clause
     ) => Promise<void>;
 
     /**
@@ -442,7 +437,7 @@ export interface SDK<T extends SchemaType> {
      *
      * # Parameters
      * @param {torii.Subscription} subscription - Existing subscription to update
-     * @param {torii.EntityKeysClause[]} clauses - New array of key clauses for filtering
+     * @param {torii.Clause} clauses - New array of key clauses for filtering
      * @param {boolean} historical - Whether to include historical messages
      *
      * # Returns
@@ -451,7 +446,7 @@ export interface SDK<T extends SchemaType> {
      */
     updateEventMessageSubscription: (
         subscription: torii.Subscription,
-        clauses: torii.EntityKeysClause[],
+        clauses: torii.Clause,
         historical: boolean
     ) => Promise<void>;
 
@@ -469,26 +464,6 @@ export interface SDK<T extends SchemaType> {
     getControllers: (
         contract_addresses: string[]
     ) => Promise<torii.Controllers>;
-
-    /**
-     * Convert torii clause into EntityKeysClause[];
-     *
-     * @param {query} query - ToriiQueryBuilder
-     * @returns [ToriiResponse<T,false>,torii.EntityKeysClause[]]
-     */
-    toriiQueryIntoHashedKeys: (
-        query: ToriiQueryBuilder<T>
-    ) => Promise<[ToriiResponse<T, false>, torii.EntityKeysClause[]]>;
-    /**
-     * Convert torii clause into EntityKeysClause[];
-     *
-     * @param {query} query - ToriiQueryBuilder
-     * @returns [ToriiResponse<T,false>,torii.EntityKeysClause[]]
-     */
-    toriiEventMessagesQueryIntoHashedKeys: <H extends boolean>(
-        query: ToriiQueryBuilder<T>,
-        historical: H
-    ) => Promise<[ToriiResponse<T, H>, torii.EntityKeysClause[]]>;
 }
 
 export type SDKClientConfig = Partial<
@@ -533,25 +508,19 @@ export interface SDKFunctionOptions {
     logging?: boolean;
 }
 
-export interface SubscribeParams<
-    T extends SchemaType,
-    Historical extends boolean = false
-> {
+export interface SubscribeParams<T extends SchemaType> {
     // Query object used to filter entities.
     query: ToriiQueryBuilder<T>;
     // The callback function to handle the response.
-    callback: SubscriptionCallback<ToriiResponse<T, Historical>>;
+    callback: SubscriptionCallback<StandardizedQueryResult<T>>;
     // @deprecated: use `query.historical` instead
-    historical?: Historical;
+    historical?: boolean;
 }
 
-export interface GetParams<
-    T extends SchemaType,
-    Historical extends boolean = false
-> {
+export interface GetParams<T extends SchemaType> {
     // The query object used to filter entities.
     query: ToriiQueryBuilder<T>;
     // @deprecated: use `query.historical` instead
-    historical?: Historical;
+    historical?: boolean;
 }
 export { ToriiQueryBuilder };

@@ -22,8 +22,7 @@ export function useEventQuery<Schema extends SchemaType>(
         subscribeMethod: (options) => sdk.subscribeEventQuery(options),
         updateSubscriptionMethod: (subscription, clause) =>
             sdk.updateEventMessageSubscription(subscription, clause, false),
-        queryToHashedKeysMethod: (query) =>
-            sdk.toriiEventMessagesQueryIntoHashedKeys(query, false),
+        queryToHashedKeysMethod: (query) => query.getClause()._unsafeUnwrap(),
         processInitialData: (data) => {
             state.mergeEntities(data);
         },
@@ -61,8 +60,7 @@ export function useHistoricalEventsQuery<Schema extends SchemaType>(
         subscribeMethod: (options) => sdk.subscribeEventQuery(options),
         updateSubscriptionMethod: (subscription, clause) =>
             sdk.updateEventMessageSubscription(subscription, clause, true),
-        queryToHashedKeysMethod: (query) =>
-            sdk.toriiEventMessagesQueryIntoHashedKeys(query, true),
+        queryToHashedKeysMethod: (query) => query.getClause()._unsafeUnwrap(),
         processInitialData: (data) => {
             setEvents(data);
         },

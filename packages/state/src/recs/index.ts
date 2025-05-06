@@ -13,9 +13,7 @@ import {
 import type {
     Clause,
     Entity as ToriiEntity,
-    EntityKeysClause,
     OrderBy,
-    PatternMatching,
     ToriiClient,
 } from "@dojoengine/torii-client";
 import { convertValues } from "../utils";
@@ -51,8 +49,7 @@ import { convertValues } from "../utils";
 export const getSyncEntities = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
-    clause: Clause | undefined,
-    entityKeyClause: EntityKeysClause[],
+    clause: Clause,
     orderBy: OrderBy[] = [],
     entityModels: string[] = [],
     limit: number = 100,
@@ -68,7 +65,7 @@ export const getSyncEntities = async <S extends Schema>(
         limit,
         logging
     );
-    return await syncEntities(client, components, entityKeyClause, logging);
+    return await syncEntities(client, components, clause, logging);
 };
 /**
  * Fetches and synchronizes events with their components. This is useful for initializing the world state with event data.
@@ -103,8 +100,7 @@ export const getSyncEntities = async <S extends Schema>(
 export const getSyncEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
-    clause: Clause | undefined,
-    entityKeyClause: EntityKeysClause[],
+    clause: Clause,
     orderBy: OrderBy[] = [],
     entityModels: string[] = [],
     limit: number = 100,
@@ -124,7 +120,7 @@ export const getSyncEvents = async <S extends Schema>(
         historical,
         callback
     );
-    return await syncEvents(client, components, entityKeyClause, logging);
+    return await syncEvents(client, components, clause, logging);
 };
 
 /**
@@ -257,7 +253,7 @@ export const getEvents = async <S extends Schema>(
  * Fetches entities and their components from the client based on specified criteria.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions to fetch.
- * @param entityKeyClause - An EntityKeysClause to filter entities by their keys.
+ * @param entityKeyClause - An Clause to filter entities by their keys.
  * @param patternMatching - The pattern matching strategy for entity keys (default: "FixedLen").
  * @param limit - The maximum number of entities to fetch per request (default: 1000).
  * @param logging - Whether to log debug information (default: false).
@@ -267,7 +263,7 @@ export const getEvents = async <S extends Schema>(
  * await getEntitiesQuery(client, components, { Keys: { keys: ["0x1"], models: ["Position"] } }, "FixedLen", 1000);
  *
  * This function performs paginated queries to fetch all matching entities and their
- * components. It uses the provided EntityKeysClause to filter entities and
+ * components. It uses the provided Clause to filter entities and
  * the specified components to determine which data to retrieve.
  *
  * Note: Make sure to synchronize the entities by calling the syncEntities method after this.
@@ -275,8 +271,7 @@ export const getEvents = async <S extends Schema>(
 export const getEntitiesQuery = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
-    entityKeyClause: EntityKeysClause,
-    patternMatching: PatternMatching = "FixedLen",
+    entityKeyClause: Clause,
     orderBy: OrderBy[] = [],
     entityModels: string[] = [],
     limit: number = 1000,
@@ -287,23 +282,6 @@ export const getEntitiesQuery = async <S extends Schema>(
     let cursor = undefined;
     let continueFetching = true;
 
-    const componentArray = Object.values(components);
-
-    const clause: Clause | null = entityKeyClause
-        ? {
-              Keys: {
-                  keys:
-                      "HashedKeys" in entityKeyClause
-                          ? entityKeyClause.HashedKeys
-                          : entityKeyClause.Keys.keys,
-                  pattern_matching: patternMatching,
-                  models: [
-                      ...componentArray.map((c) => c.metadata?.name as string),
-                  ],
-              },
-          }
-        : null;
-
     const fetchedEntities = await client.getEntities({
         pagination: {
             limit,
@@ -311,7 +289,7 @@ export const getEntitiesQuery = async <S extends Schema>(
             direction: "Forward",
             order_by: orderBy,
         },
-        clause: clause || undefined,
+        clause: entityKeyClause,
         no_hashed_keys: false,
         models: entityModels,
         historical,
@@ -337,7 +315,7 @@ export const getEntitiesQuery = async <S extends Schema>(
  * Sets up a subscription to sync entity updates.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
- * @param entityKeyClause - An array of EntityKeysClause to filter entities.
+ * @param entityKeyClause - An array of Clause to filter entities.
  * @param logging - Whether to log debug information (default: true).
  * @returns A promise that resolves with the subscription handler.
  * @example
@@ -348,7 +326,7 @@ export const getEntitiesQuery = async <S extends Schema>(
 export const syncEntities = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
-    entityKeyClause: EntityKeysClause[],
+    entityKeyClause: Clause,
     logging: boolean = true
 ) => {
     if (logging) console.log("Starting syncEntities");
@@ -366,7 +344,7 @@ export const syncEntities = async <S extends Schema>(
  * Sets up a subscription to sync event messages.
  * @param client - The client instance for API communication.
  * @param components - An array of component definitions.
- * @param entityKeyClause - An array of EntityKeysClause to filter entities.
+ * @param entityKeyClause - An array of Clause to filter entities.
  * @param logging - Whether to log debug information (default: false).
  * @param historical - Whether to sync to historical events (default: false).
  * @returns A promise that resolves with the subscription handler.
@@ -378,7 +356,7 @@ export const syncEntities = async <S extends Schema>(
 export const syncEvents = async <S extends Schema>(
     client: ToriiClient,
     components: Component<S, Metadata, undefined>[],
-    entityKeyClause: EntityKeysClause[],
+    entityKeyClause: Clause,
     logging: boolean = false
 ) => {
     if (logging) console.log("Starting syncEvents");

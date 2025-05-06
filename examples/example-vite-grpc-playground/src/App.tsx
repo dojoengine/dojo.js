@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "./components/ui/button";
 import { Card } from "./components/ui/card";
-import { QueryHistory, QueryItem } from "./components/query-history";
-import { SchemaExplorer, SchemaItem } from "./components/schema-explorer";
+import { QueryHistory, type QueryItem } from "./components/query-history";
+import { SchemaExplorer, type SchemaItem } from "./components/schema-explorer";
 import { QueryEditor } from "./components/query-editor";
 import { QueryResults } from "./components/query-results";
-import {
+import type {
     StandardizedQueryResult,
     SchemaType,
-    type init,
+    init,
 } from "@dojoengine/sdk";
 import { evaluateUserInput } from "./components/ts-executor";
 
@@ -108,7 +108,7 @@ export const App = ({ sdk }: AppProps) => {
             });
             const endTime = performance.now();
             setExecutionTime(endTime - startTime);
-            setResponse(response);
+            setResponse(response.getItems());
 
             // Add to history with deduplication
             setQueryHistory((prev) => {
@@ -119,7 +119,7 @@ export const App = ({ sdk }: AppProps) => {
                 const newEntry = {
                     query: strippedQuery,
                     timestamp: Date.now(),
-                    rows: response.length,
+                    rows: response.getItems().length,
                     executionTime: endTime - startTime,
                     favorite:
                         existingIndex >= 0

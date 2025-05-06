@@ -3,6 +3,7 @@ import { BurnerManager } from "@dojoengine/create-burner";
 import { getSyncEntities } from "@dojoengine/state";
 import * as torii from "@dojoengine/torii-client";
 import { Account, ArraySignatureType } from "starknet";
+import { KeysClause } from "@dojoengine/sdk";
 
 import { createClientComponents } from "../createClientComponents";
 import { createSystemCalls } from "../createSystemCalls";
@@ -30,7 +31,7 @@ export async function setup({ ...config }: DojoConfig) {
     const sync = await getSyncEntities(
         toriiClient,
         contractComponents as any,
-        undefined,
+        KeysClause([], [undefined], "VariableLen").build(),
         []
     );
 

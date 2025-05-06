@@ -6,7 +6,7 @@
         "lib": ["ES2023", "DOM"],
         "skipLibCheck": true,
         /* Bundler mode */
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,

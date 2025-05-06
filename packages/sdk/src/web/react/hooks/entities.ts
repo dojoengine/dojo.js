@@ -18,7 +18,7 @@ export function useEntityQuery<Schema extends SchemaType>(
         subscribeMethod: (options) => sdk.subscribeEntityQuery(options),
         updateSubscriptionMethod: (subscription, clause) =>
             sdk.updateEntitySubscription(subscription, clause),
-        queryToHashedKeysMethod: (query) => sdk.toriiQueryIntoHashedKeys(query),
+        queryToHashedKeysMethod: (query) => query.getClause()._unsafeUnwrap(),
         processInitialData: (data) => {
             state.mergeEntities(data);
         },
