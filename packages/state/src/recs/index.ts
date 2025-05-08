@@ -161,7 +161,7 @@ export const getEntities = async <S extends Schema>(
     // const time = dbConnection ? getCache(timestampCacheKey) : 0;
 
     while (continueFetching) {
-        const entities = (await client.getEntities({
+        const entities = await client.getEntities({
             pagination: {
                 limit,
                 cursor,
@@ -172,17 +172,17 @@ export const getEntities = async <S extends Schema>(
             no_hashed_keys: false,
             models: entityModels,
             historical,
-        })) as any;
+        });
 
         if (dbConnection) {
-            await insertEntitiesInDB(dbConnection, entities.models);
+            await insertEntitiesInDB(dbConnection, entities.items);
         }
 
-        if (logging) console.log(`Fetched entities`, entities.models);
+        if (logging) console.log(`Fetched entities`, entities.items);
 
-        setEntities(entities.models, components, logging);
+        setEntities(entities.items, components, logging);
 
-        if (Object.keys(entities.models).length < limit) {
+        if (Object.keys(entities.items).length < limit) {
             continueFetching = false;
         } else {
             cursor = entities.next_cursor;
@@ -222,7 +222,7 @@ export const getEvents = async <S extends Schema>(
     let continueFetching = true;
 
     while (continueFetching) {
-        const entities = (await client.getEventMessages({
+        const entities = await client.getEventMessages({
             pagination: {
                 limit,
                 cursor,
@@ -233,13 +233,13 @@ export const getEvents = async <S extends Schema>(
             no_hashed_keys: false,
             models: entityModels,
             historical,
-        })) as any;
+        });
 
-        if (logging) console.log("entities", entities.models);
+        if (logging) console.log("entities", entities.items);
 
-        setEntities(entities.models, components, logging);
+        setEntities(entities.items, components, logging);
 
-        if (Object.keys(entities.models).length === 0) {
+        if (Object.keys(entities.items).length === 0) {
             continueFetching = false;
         } else {
             cursor = entities.next_cursor;
@@ -282,7 +282,7 @@ export const getEntitiesQuery = async <S extends Schema>(
     let cursor = undefined;
     let continueFetching = true;
 
-    const fetchedEntities = (await client.getEntities({
+    const fetchedEntities = await client.getEntities({
         pagination: {
             limit,
             cursor,
@@ -293,17 +293,17 @@ export const getEntitiesQuery = async <S extends Schema>(
         no_hashed_keys: false,
         models: entityModels,
         historical,
-    })) as any;
+    });
 
     while (continueFetching) {
         if (logging)
             console.log(
-                `Fetched ${Object.keys(fetchedEntities.models).length} entities ${fetchedEntities.next_cursor}`
+                `Fetched ${Object.keys(fetchedEntities.items).length} entities ${fetchedEntities.next_cursor}`
             );
 
-        setEntities(fetchedEntities.models, components, logging);
+        setEntities(fetchedEntities.items, components, logging);
 
-        if (Object.keys(fetchedEntities.models).length < limit) {
+        if (Object.keys(fetchedEntities.items).length < limit) {
             continueFetching = false;
         } else {
             cursor = fetchedEntities.next_cursor;
@@ -370,115 +370,185 @@ export const syncEvents = async <S extends Schema>(
     );
 };
 
-/**
- * Updates the components of entities in the local state.
- * @param entities - An object of entities with their updated component data.
- * @param components - An array of component definitions.
- * @param logging - Whether to log debug information (default: false).
- */
-export const setEntities = async <S extends Schema>(
-    entities: any,
-    components: Component<S, Metadata, undefined>[],
-    logging: boolean = false
-) => {
-    if (
-        Object.keys(entities).length === 0 ||
-        (Object.keys(entities).length === 1 &&
-            entities["0x0"] &&
-            Object.keys(entities["0x0"]).length === 0)
-    ) {
-        console.warn("No entities to set");
-        return;
-    }
-    if (logging) console.log("Entities to set:", entities);
+// Helper function to process components for a single entity
+async function processEntityComponents<S extends Schema>(
+    entityId: string,
+    componentsMap: Record<string, any>,
+    recsComponents: Component<S, Metadata, undefined>[],
+    logging: boolean
+) {
+    for (const componentName in componentsMap) {
+        if (!Object.hasOwn(componentsMap, componentName)) {
+            continue;
+        }
+        const recsComponent = Object.values(recsComponents).find(
+            (c) =>
+                `${c.metadata?.namespace}-${c.metadata?.name}` === componentName
+        );
 
-    for (const key in entities) {
-        if (!Object.hasOwn(entities, key)) {
-            console.log("Did not found key", key);
+        if (!recsComponent) {
+            if (logging)
+                console.warn(
+                    `Component ${componentName} not found in provided components for entity ${entityId}.`
+                );
             continue;
         }
 
-        for (const componentName in entities[key]) {
-            if (!Object.hasOwn(entities[key], componentName)) {
-                console.log("Did not found componentName", componentName);
+        try {
+            const rawValue = componentsMap[componentName];
+            // Handle component removal if rawValue is an empty object
+            if (
+                rawValue &&
+                typeof rawValue === "object" &&
+                Object.keys(rawValue).length === 0
+            ) {
+                removeComponent(recsComponent, entityId as Entity, {
+                    skipUpdateStream: false,
+                });
+                if (logging)
+                    console.log(
+                        `Removed component ${recsComponent.metadata?.name} on ${entityId}`
+                    );
                 continue;
             }
-            const recsComponent = Object.values(components).find(
-                (component) =>
-                    `${component.metadata?.namespace}-${component.metadata?.name}` ===
-                    componentName
-            );
 
-            if (!recsComponent) {
+            if (logging)
+                console.log(
+                    `Raw value for ${componentName} on ${entityId}:`,
+                    rawValue
+                );
+
+            const convertedValue = convertValues(
+                recsComponent.schema,
+                rawValue
+            ) as ComponentValue;
+
+            if (logging)
+                console.log(
+                    `Converted value for ${componentName} on ${entityId}:`,
+                    convertedValue
+                );
+
+            if (convertedValue === undefined || convertedValue === null) {
+                console.error(
+                    `convertValues returned null or undefined for ${componentName} on ${entityId}. Raw value:`,
+                    rawValue
+                );
+                // If this means deletion, it should have been caught by the empty object check.
+                // Otherwise, it's an invalid value, so we skip setting/updating.
+                continue;
+            }
+
+            if (hasComponent(recsComponent, entityId as Entity)) {
+                updateComponent(
+                    recsComponent,
+                    entityId as Entity,
+                    convertedValue as Partial<ComponentValue<S, undefined>>,
+                    getComponentValue(recsComponent, entityId as Entity)
+                );
+                if (logging)
+                    console.log(
+                        `Updated component ${recsComponent.metadata?.name} on ${entityId}`
+                    );
+            } else {
+                setComponent(recsComponent, entityId as Entity, convertedValue);
+                if (logging)
+                    console.log(
+                        `Set component ${recsComponent.metadata?.name} on ${entityId}`
+                    );
+            }
+        } catch (error) {
+            console.warn(
+                `Failed to set component ${recsComponent.metadata?.name} on ${entityId}`,
+                error
+            );
+        }
+    }
+}
+
+/**
+ * Updates the components of entities in the local state.
+ * Handles different input structures: an array of ToriiEntity models or a record of entity IDs to component maps.
+ * @param entitiesInput - The entities data, can be ToriiEntity[] (e.g., from getEntities) or Record<EntityId, ComponentMap> (e.g., from syncEntities).
+ * @param recsComponents - An array of RECS component definitions.
+ * @param logging - Whether to log debug information (default: false).
+ */
+export const setEntities = async <S extends Schema>(
+    entitiesInput: any, // Can be ToriiEntity[] or Record<EntityId, ComponentMap>
+    recsComponents: Component<S, Metadata, undefined>[],
+    logging: boolean = false
+) => {
+    if (logging) console.log("Initial input to setEntities:", entitiesInput);
+
+    if (!entitiesInput) {
+        if (logging) console.warn("Null or undefined input to setEntities.");
+        return;
+    }
+
+    if (Array.isArray(entitiesInput)) {
+        // Case 1: Input is an array of ToriiEntity (EntityModel)
+        if (entitiesInput.length === 0) {
+            if (logging) console.warn("Empty array passed to setEntities.");
+            return;
+        }
+        if (logging)
+            console.log("Processing input as an array of ToriiEntity models.");
+        for (const entityModel of entitiesInput as ToriiEntity[]) {
+            if (
+                entityModel &&
+                typeof entityModel.hashed_keys === "string" &&
+                entityModel.models &&
+                typeof entityModel.models === "object"
+            ) {
+                await processEntityComponents(
+                    entityModel.hashed_keys,
+                    entityModel.models,
+                    recsComponents,
+                    logging
+                );
+            } else {
                 if (logging)
                     console.warn(
-                        `Component ${componentName} not found in provided components.`
+                        "Skipping invalid entity model in array:",
+                        entityModel
                     );
-                continue;
-            }
-
-            try {
-                const rawValue = entities[key][componentName];
-                if (Object.keys(rawValue).length === 0) {
-                    removeComponent(recsComponent, key as Entity, {
-                        skipUpdateStream: false,
-                    });
-                    if (logging)
-                        console.log(
-                            `Removed component ${recsComponent.metadata?.name} on ${key}`
-                        );
-                    continue;
-                }
-
-                if (logging)
-                    console.log(
-                        `Raw value for ${componentName} on ${key}:`,
-                        rawValue
-                    );
-
-                const convertedValue = convertValues(
-                    recsComponent.schema,
-                    rawValue
-                ) as ComponentValue;
-
-                if (logging)
-                    console.log(
-                        `Converted value for ${componentName} on ${key}:`,
-                        convertedValue
-                    );
-
-                if (!convertedValue) {
-                    console.error(
-                        `convertValues returned undefined or invalid for ${componentName} on ${key}`
-                    );
-                }
-
-                if (hasComponent(recsComponent, key as Entity)) {
-                    updateComponent(
-                        recsComponent,
-                        key as Entity,
-                        convertedValue as Partial<ComponentValue>,
-                        getComponentValue(recsComponent, key as Entity)
-                    );
-                    if (logging)
-                        console.log(
-                            `Update component ${recsComponent.metadata?.name} on ${key}`
-                        );
-                    continue;
-                }
-                setComponent(recsComponent, key as Entity, convertedValue);
-
-                if (logging)
-                    console.log(
-                        `Set component ${recsComponent.metadata?.name} on ${key}`
-                    );
-            } catch (error) {
-                console.warn(
-                    `Failed to set component ${recsComponent.metadata?.name} on ${key}`,
-                    error
-                );
             }
         }
+    } else if (typeof entitiesInput === "object" && entitiesInput !== null) {
+        // Case 2: Input is an object (Record<EntityId, ComponentMap>)
+        if (Object.keys(entitiesInput).length === 0) {
+            // Handles general empty objects. The specific `{"0x0": {}}` check from before
+            // would effectively result in no operations if it passed this, as the inner loop wouldn't run.
+            if (logging) console.warn("Empty object passed to setEntities.");
+            return;
+        }
+        if (logging)
+            console.log("Processing input as Record<EntityId, ComponentMap>.");
+        for (const entityId in entitiesInput) {
+            if (Object.hasOwn(entitiesInput, entityId)) {
+                const componentsMap = entitiesInput[entityId];
+                if (
+                    typeof componentsMap === "object" &&
+                    componentsMap !== null
+                ) {
+                    await processEntityComponents(
+                        entityId,
+                        componentsMap,
+                        recsComponents,
+                        logging
+                    );
+                } else {
+                    if (logging)
+                        console.warn(
+                            `Data for entity ${entityId} is not a valid components map:`,
+                            componentsMap
+                        );
+                }
+            }
+        }
+    } else {
+        if (logging)
+            console.warn("Invalid input type for setEntities:", entitiesInput);
     }
 };
 
