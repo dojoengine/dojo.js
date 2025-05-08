@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.3
+
+### Patch Changes
+
+- recs
+- Updated dependencies
+    - @dojoengine/core@1.5.3
+    - @dojoengine/torii-client@1.5.3
+    - @dojoengine/torii-wasm@1.5.3
+    - @dojoengine/utils@1.5.3
+
 ## 1.5.2
 
 ### Patch Changes
