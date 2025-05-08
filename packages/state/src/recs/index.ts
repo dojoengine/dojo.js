@@ -161,7 +161,7 @@ export const getEntities = async <S extends Schema>(
     // const time = dbConnection ? getCache(timestampCacheKey) : 0;
 
     while (continueFetching) {
-        const entities = await client.getEntities({
+        const entities = (await client.getEntities({
             pagination: {
                 limit,
                 cursor,
@@ -172,17 +172,17 @@ export const getEntities = async <S extends Schema>(
             no_hashed_keys: false,
             models: entityModels,
             historical,
-        });
+        })) as any;
 
         if (dbConnection) {
-            await insertEntitiesInDB(dbConnection, entities.items);
+            await insertEntitiesInDB(dbConnection, entities.models);
         }
 
-        if (logging) console.log(`Fetched entities`, entities.items);
+        if (logging) console.log(`Fetched entities`, entities.models);
 
-        setEntities(entities.items, components, logging);
+        setEntities(entities.models, components, logging);
 
-        if (Object.keys(entities.items).length < limit) {
+        if (Object.keys(entities.models).length < limit) {
             continueFetching = false;
         } else {
             cursor = entities.next_cursor;
@@ -222,7 +222,7 @@ export const getEvents = async <S extends Schema>(
     let continueFetching = true;
 
     while (continueFetching) {
-        const entities = await client.getEventMessages({
+        const entities = (await client.getEventMessages({
             pagination: {
                 limit,
                 cursor,
@@ -233,13 +233,13 @@ export const getEvents = async <S extends Schema>(
             no_hashed_keys: false,
             models: entityModels,
             historical,
-        });
+        })) as any;
 
-        if (logging) console.log("entities", entities.items);
+        if (logging) console.log("entities", entities.models);
 
-        setEntities(entities.items, components, logging);
+        setEntities(entities.models, components, logging);
 
-        if (Object.keys(entities.items).length === 0) {
+        if (Object.keys(entities.models).length === 0) {
             continueFetching = false;
         } else {
             cursor = entities.next_cursor;
@@ -282,7 +282,7 @@ export const getEntitiesQuery = async <S extends Schema>(
     let cursor = undefined;
     let continueFetching = true;
 
-    const fetchedEntities = await client.getEntities({
+    const fetchedEntities = (await client.getEntities({
         pagination: {
             limit,
             cursor,
@@ -293,17 +293,17 @@ export const getEntitiesQuery = async <S extends Schema>(
         no_hashed_keys: false,
         models: entityModels,
         historical,
-    });
+    })) as any;
 
     while (continueFetching) {
         if (logging)
             console.log(
-                `Fetched ${Object.keys(fetchedEntities.items).length} entities ${fetchedEntities.next_cursor}`
+                `Fetched ${Object.keys(fetchedEntities.models).length} entities ${fetchedEntities.next_cursor}`
             );
 
-        setEntities(fetchedEntities.items, components, logging);
+        setEntities(fetchedEntities.models, components, logging);
 
-        if (Object.keys(fetchedEntities.items).length < limit) {
+        if (Object.keys(fetchedEntities.models).length < limit) {
             continueFetching = false;
         } else {
             cursor = fetchedEntities.next_cursor;
