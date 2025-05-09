@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.4
+
+### Patch Changes
+
+- f846b79: fix: pagination missing next_cursor
+
 ## 1.5.3
 
 ### Patch Changes

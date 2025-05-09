@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.4
+
+### Patch Changes
+
+- f846b79: fix: pagination missing next_cursor
+- Updated dependencies [f846b79]
+    - @dojoengine/core@1.5.4
+    - @dojoengine/torii-client@1.5.4
+    - @dojoengine/torii-wasm@1.5.4
+    - @dojoengine/utils@1.5.4
+
 ## 1.5.3
 
 ### Patch Changes
