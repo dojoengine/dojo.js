@@ -250,7 +250,8 @@ export async function predeployedAccounts(
         return res.map((a: PredeployedAccountRpcResponse, idx: number) => ({
             id: `${id}-${idx}`,
             name: `${name} ${idx}`,
-            account: new PredeployedWalletAccount(
+            account: PredeployedWalletAccount.connect(
+                provider,
                 new PredeployedWallet(
                     `${id}-${idx}`,
                     `${name} ${idx}`,
@@ -261,8 +262,7 @@ export async function predeployedAccounts(
                         undefined,
                         constants.TRANSACTION_VERSION.V3
                     )
-                ),
-                options.rpc
+                )
             ),
         }));
     }
