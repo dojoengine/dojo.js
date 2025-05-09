@@ -15,7 +15,7 @@ import { deepEqual, sleep } from "./utils";
  */
 export function createSubscriptionHook<
     Schema extends SchemaType,
-    Historical extends boolean = false,
+    Historical extends boolean = false
 >(config: {
     subscribeMethod: (
         options: SubscribeParams<Schema>

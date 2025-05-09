@@ -36,12 +36,13 @@ export class Pagination<T extends SchemaType, Inner extends any[]> {
      * @returns A new Pagination instance configured with the query's pagination settings
      */
     static fromQuery<T extends SchemaType, Inner extends any[]>(
-        query: ToriiQueryBuilder<T>
+        query: ToriiQueryBuilder<T>,
+        nextCursor?: string
     ): Pagination<T, Inner> {
         const pagination = query.getPagination();
         return new Pagination(
             pagination.limit,
-            pagination.cursor,
+            nextCursor,
             pagination.direction
         );
     }
