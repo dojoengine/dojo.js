@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StarknetWindowObject } from "get-starknet-core";
+import { StarknetWindowObject } from "@starknet-io/get-starknet-core";
 
 import { DojoPredeployedStarknetWindowObject, PredeployedManager } from "..";
 
