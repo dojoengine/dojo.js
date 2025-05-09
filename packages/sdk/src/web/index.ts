@@ -81,7 +81,9 @@ export async function init<T extends SchemaType>(
             const entities = await client.getEntities(q);
             const parsedEntities = parseEntities<T>(entities.items);
             return [
-                Pagination.fromQuery(query).withItems(parsedEntities),
+                Pagination.fromQuery(query, entities.next_cursor).withItems(
+                    parsedEntities
+                ),
                 client.onEntityUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
@@ -103,7 +105,9 @@ export async function init<T extends SchemaType>(
             const entities = await client.getEventMessages(q);
             const parsedEntities = parseEntities<T>(entities.items);
             return [
-                Pagination.fromQuery(query).withItems(parsedEntities),
+                Pagination.fromQuery(query, entities.next_cursor).withItems(
+                    parsedEntities
+                ),
                 client.onEventMessageUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
@@ -134,7 +138,7 @@ export async function init<T extends SchemaType>(
 
             const entities = await client.getEntities(q);
 
-            return Pagination.fromQuery(query).withItems(
+            return Pagination.fromQuery(query, entities.next_cursor).withItems(
                 parseEntities(entities.items)
             );
         },
@@ -151,7 +155,7 @@ export async function init<T extends SchemaType>(
 
             const entities = await client.getEventMessages(q);
 
-            return Pagination.fromQuery(query).withItems(
+            return Pagination.fromQuery(query, entities.next_cursor).withItems(
                 parseEntities(entities.items)
             );
         },

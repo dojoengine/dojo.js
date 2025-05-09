@@ -31,9 +31,9 @@ describe("Pagination", () => {
         const pagination = Pagination.fromQuery<
             typeof schema,
             (typeof schema)[]
-        >(query);
+        >(query, "next-cursor");
         expect(pagination.limit).toBe(20);
-        expect(pagination.cursor).toBe("test-cursor");
+        expect(pagination.cursor).toBe("next-cursor");
     });
 
     it("should set items and return the instance", () => {
