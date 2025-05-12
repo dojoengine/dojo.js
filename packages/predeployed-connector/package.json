@@ -64,6 +64,10 @@
         "node": ">=18.0.0"
     },
     "dependencies": {
-        "@starknet-io/types-js": "^0.7.10"
+        "@starknet-io/types-js": "^0.7.10",
+        "@starknet-react/core": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "starknet": "catalog:"
     }
 }
