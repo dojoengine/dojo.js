@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.5
+
+### Patch Changes
+
+- e1be67a: fix: recs getEventMessages looping
+
 ## 1.5.4
 
 ### Patch Changes
