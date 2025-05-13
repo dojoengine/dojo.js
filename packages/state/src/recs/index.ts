@@ -539,7 +539,7 @@ export const setEntities = async <S extends Schema>(
             console.log("Processing input as Record<EntityId, ComponentMap>.");
         for (const entityId in entitiesInput) {
             if (Object.hasOwn(entitiesInput, entityId)) {
-                const componentsMap = entitiesInput[entityId];
+                const componentsMap = entitiesInput[entityId].models;
                 if (
                     typeof componentsMap === "object" &&
                     componentsMap !== null
