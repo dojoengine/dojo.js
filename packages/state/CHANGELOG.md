@@ -1,5 +1,21 @@
 # Change Log
 
+## 1.5.6
+
+### Patch Changes
+
+- a36e92a: fix: recs update single component
+- Updated dependencies [a36e92a]
+    - @dojoengine/torii-client@1.5.6
+
+## 1.5.5
+
+### Patch Changes
+
+- e1be67a: fix: recs getEventMessages looping
+- Updated dependencies [e1be67a]
+    - @dojoengine/torii-client@1.5.5
+
 ## 1.5.4
 
 ### Patch Changes

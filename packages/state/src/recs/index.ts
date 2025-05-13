@@ -238,10 +238,16 @@ export const getEvents = async <S extends Schema>(
         if (logging) console.log("entities", entities.items);
 
         setEntities(entities.items, components, logging);
+        if (entities.items.length < limit && !entities.next_cursor) {
+            continueFetching = false;
+            continue;
+        }
 
         if (Object.keys(entities.items).length === 0) {
+            console.error("STOP FETCHING");
             continueFetching = false;
         } else {
+            console.error("NEXT_CURSOR", entities.next_cursor);
             cursor = entities.next_cursor;
         }
     }
@@ -282,26 +288,33 @@ export const getEntitiesQuery = async <S extends Schema>(
     let cursor = undefined;
     let continueFetching = true;
 
-    const fetchedEntities = await client.getEntities({
-        pagination: {
-            limit,
-            cursor,
-            direction: "Forward",
-            order_by: orderBy,
-        },
-        clause: entityKeyClause,
-        no_hashed_keys: false,
-        models: entityModels,
-        historical,
-    });
-
     while (continueFetching) {
+        const fetchedEntities = await client.getEntities({
+            pagination: {
+                limit,
+                cursor,
+                direction: "Forward",
+                order_by: orderBy,
+            },
+            clause: entityKeyClause,
+            no_hashed_keys: false,
+            models: entityModels,
+            historical,
+        });
         if (logging)
             console.log(
                 `Fetched ${Object.keys(fetchedEntities.items).length} entities ${fetchedEntities.next_cursor}`
             );
 
         setEntities(fetchedEntities.items, components, logging);
+
+        if (
+            fetchedEntities.items.length < limit &&
+            !fetchedEntities.next_cursor
+        ) {
+            continueFetching = false;
+            continue;
+        }
 
         if (Object.keys(fetchedEntities.items).length < limit) {
             continueFetching = false;
@@ -526,7 +539,7 @@ export const setEntities = async <S extends Schema>(
             console.log("Processing input as Record<EntityId, ComponentMap>.");
         for (const entityId in entitiesInput) {
             if (Object.hasOwn(entitiesInput, entityId)) {
-                const componentsMap = entitiesInput[entityId];
+                const componentsMap = entitiesInput[entityId].models;
                 if (
                     typeof componentsMap === "object" &&
                     componentsMap !== null
