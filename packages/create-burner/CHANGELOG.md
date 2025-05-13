@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.5.6
+
+### Patch Changes
+
+- a36e92a: fix: recs update single component
+- Updated dependencies [a36e92a]
+    - @dojoengine/core@1.5.6
+
 ## 1.5.5
 
 ### Patch Changes

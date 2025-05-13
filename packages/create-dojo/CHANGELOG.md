@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.6
+
+### Patch Changes
+
+- a36e92a: fix: recs update single component
+
 ## 1.5.5
 
 ### Patch Changes
