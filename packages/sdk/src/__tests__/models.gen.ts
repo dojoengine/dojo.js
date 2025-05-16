@@ -13,60 +13,60 @@ export type TypedCairoEnum<T> = CairoCustomEnum & {
 };
 
 // Type definition for `onchain_dash::models::CallerCounter` struct
-export interface CallerCounter {
+export type CallerCounter = {
     caller: string;
     counter: BigNumberish;
     timestamp: CairoOption<BigNumberish>;
-}
+};
 
 // Type definition for `onchain_dash::models::CallerCounterValue` struct
-export interface CallerCounterValue {
+export type CallerCounterValue = {
     counter: BigNumberish;
     timestamp: CairoOption<BigNumberish>;
-}
+};
 
 // Type definition for `onchain_dash::models::CustomTheme` struct
-export interface CustomTheme {
+export type CustomTheme = {
     classname: BigNumberish;
-}
+};
 
 // Type definition for `onchain_dash::models::GlobalCounter` struct
-export interface GlobalCounter {
+export type GlobalCounter = {
     global_counter_key: BigNumberish;
     counter: BigNumberish;
-}
+};
 
 // Type definition for `onchain_dash::models::GlobalCounterValue` struct
-export interface GlobalCounterValue {
+export type GlobalCounterValue = {
     counter: BigNumberish;
-}
+};
 
 // Type definition for `onchain_dash::models::Message` struct
-export interface Message {
+export type Message = {
     identity: string;
     content: string;
     timestamp: BigNumberish;
-}
+};
 
 // Type definition for `onchain_dash::models::MessageValue` struct
-export interface MessageValue {
+export type MessageValue = {
     content: string;
-}
+};
 
 // Type definition for `onchain_dash::models::Theme` struct
-export interface Theme {
+export type Theme = {
     theme_key: BigNumberish;
     value: DashboardThemeEnum;
     caller: string;
     timestamp: BigNumberish;
-}
+};
 
 // Type definition for `onchain_dash::models::ThemeValue` struct
-export interface ThemeValue {
+export type ThemeValue = {
     value: DashboardThemeEnum;
     caller: string;
     timestamp: BigNumberish;
-}
+};
 
 // Type definition for `onchain_dash::models::AvailableTheme` enum
 export enum AvailableTheme {
@@ -82,7 +82,7 @@ export type DashboardTheme = {
 };
 export type DashboardThemeEnum = CairoCustomEnum;
 
-export interface SchemaType extends ISchemaType {
+export type SchemaType = ISchemaType & {
     onchain_dash: {
         CallerCounter: CallerCounter;
         CallerCounterValue: CallerCounterValue;
@@ -94,7 +94,7 @@ export interface SchemaType extends ISchemaType {
         Theme: Theme;
         ThemeValue: ThemeValue;
     };
-}
+};
 export const schema: SchemaType = {
     onchain_dash: {
         CallerCounter: {

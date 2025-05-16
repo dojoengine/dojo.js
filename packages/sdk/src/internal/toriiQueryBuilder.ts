@@ -1,13 +1,13 @@
+import type { Pagination } from "@dojoengine/torii-wasm";
 import type {
     Clause,
     OrderBy,
-    Query,
     PaginationDirection,
+    Query,
 } from "@dojoengine/torii-wasm/types";
-import type { SchemaType } from "./types.ts";
-import { Result, ok, err } from "neverthrow";
+import { type Result, err, ok } from "neverthrow";
 import { UNDEFINED_CLAUSE } from "./errors.ts";
-import { Pagination } from "@dojoengine/torii-wasm";
+import type { SchemaType } from "./types.ts";
 
 const defaultToriiOptions = () => ({
     pagination: {

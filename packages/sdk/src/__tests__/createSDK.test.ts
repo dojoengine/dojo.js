@@ -1,0 +1,233 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { createSDK } from "../internal/createSDK";
+import type {
+    SDKConfig,
+    SchemaType,
+    ToriiQueryBuilder,
+} from "../internal/types";
+import type * as torii from "@dojoengine/torii-wasm";
+import { ok } from "neverthrow";
+import type { TypedData, Account } from "starknet";
+import type { Result } from "neverthrow";
+
+// Mock schema for testing
+const mockSchema = {
+    world: {
+        Player: {
+            id: "felt252",
+            name: "string",
+            score: "u32",
+        },
+        Item: {
+            id: "felt252",
+            name: "string",
+            durability: "u8",
+        },
+    },
+} satisfies SchemaType;
+
+// Mock Torii client
+const createMockClient = (): torii.ToriiClient =>
+    ({
+        getEntities: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        getEventMessages: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        onEntityUpdated: vi.fn().mockReturnValue({ cancel: vi.fn() }),
+        onEventMessageUpdated: vi.fn().mockReturnValue({ cancel: vi.fn() }),
+        publishMessage: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3])),
+        updateEntitySubscription: vi.fn().mockResolvedValue(undefined),
+        updateEventMessageSubscription: vi.fn().mockResolvedValue(undefined),
+        getControllers: vi.fn().mockResolvedValue([]),
+        // Add other required methods as needed
+    } as unknown as torii.ToriiClient);
+
+describe("createSDK", () => {
+    let mockClient: torii.ToriiClient;
+    let mockConfig: SDKConfig;
+    let mockSignMessage: (
+        data: TypedData,
+        account?: Account
+    ) => Promise<Result<Uint8Array, string>>;
+
+    beforeEach(() => {
+        mockClient = createMockClient();
+        mockConfig = {
+            client: {
+                worldAddress: "0x123",
+                toriiUrl: "http://localhost:8080",
+            },
+            domain: {
+                name: "TestApp",
+                version: "1.0.0",
+                chainId: "SN_MAIN",
+            },
+        };
+        mockSignMessage = vi
+            .fn<[TypedData, Account?], Promise<Result<Uint8Array, string>>>()
+            .mockResolvedValue(ok(new Uint8Array([1, 2, 3])));
+    });
+
+    it("should create SDK with all required methods", () => {
+        const sdk = createSDK<typeof mockSchema>({
+            client: mockClient,
+            config: mockConfig,
+            signMessage: mockSignMessage,
+        });
+
+        // Check that all required methods exist
+        expect(sdk.client).toBe(mockClient);
+        expect(sdk.subscribeEntityQuery).toBeDefined();
+        expect(sdk.subscribeEventQuery).toBeDefined();
+        expect(sdk.subscribeTokenBalance).toBeDefined();
+        expect(sdk.getEntities).toBeDefined();
+        expect(sdk.getEventMessages).toBeDefined();
+        expect(sdk.generateTypedData).toBeDefined();
+        expect(sdk.sendMessage).toBeDefined();
+        expect(sdk.getTokens).toBeDefined();
+        expect(sdk.getTokenBalances).toBeDefined();
+        expect(sdk.onTokenBalanceUpdated).toBeDefined();
+        expect(sdk.updateTokenBalanceSubscription).toBeDefined();
+        expect(sdk.updateEntitySubscription).toBeDefined();
+        expect(sdk.updateEventMessageSubscription).toBeDefined();
+        expect(sdk.getControllers).toBeDefined();
+    });
+
+    it("should use provided signMessage function", async () => {
+        const sdk = createSDK<typeof mockSchema>({
+            client: mockClient,
+            config: mockConfig,
+            signMessage: mockSignMessage,
+        });
+
+        const typedData = {
+            types: {},
+            primaryType: "Test",
+            domain: {},
+            message: {},
+        };
+
+        const result = await sdk.sendMessage(typedData);
+
+        expect(mockSignMessage).toHaveBeenCalledWith(typedData);
+        expect(result.isOk()).toBe(true);
+    });
+
+    it("should generate typed data correctly", () => {
+        const sdk = createSDK<typeof mockSchema>({
+            client: mockClient,
+            config: mockConfig,
+            signMessage: mockSignMessage,
+        });
+
+        const message = {
+            id: "0x1",
+            name: "Test Player",
+            score: "100", // Changed to string to match schema
+        };
+
+        const typedData = sdk.generateTypedData("world-Player", message);
+
+        expect(typedData).toBeDefined();
+        expect(typedData.domain).toEqual(mockConfig.domain);
+    });
+
+    it("should handle entity queries", async () => {
+        const mockQuery = {
+            build: vi.fn().mockReturnValue({
+                clause: {},
+                limit: 10,
+            }),
+            getPagination: vi.fn().mockReturnValue({
+                limit: 10,
+                offset: 0,
+            }),
+        } as unknown as ToriiQueryBuilder<typeof mockSchema>;
+
+        const sdk = createSDK<typeof mockSchema>({
+            client: mockClient,
+            config: mockConfig,
+            signMessage: mockSignMessage,
+        });
+
+        const result = await sdk.getEntities({
+            query: mockQuery,
+        });
+
+        expect(mockClient.getEntities).toHaveBeenCalled();
+        // Use public method to check items
+        expect(result.getItems()).toEqual([]);
+    });
+
+    it("should handle subscriptions with callbacks", async () => {
+        const mockQuery = {
+            build: vi.fn().mockReturnValue({
+                clause: {},
+                limit: 10,
+            }),
+            getPagination: vi.fn().mockReturnValue({
+                limit: 10,
+                offset: 0,
+            }),
+        } as unknown as ToriiQueryBuilder<typeof mockSchema>;
+
+        const mockCallback = vi.fn();
+
+        const sdk = createSDK<typeof mockSchema>({
+            client: mockClient,
+            config: mockConfig,
+            signMessage: mockSignMessage,
+        });
+
+        const [initial, subscription] = await sdk.subscribeEntityQuery({
+            query: mockQuery,
+            callback: mockCallback,
+        });
+
+        expect(mockClient.getEntities).toHaveBeenCalled();
+        expect(mockClient.onEntityUpdated).toHaveBeenCalled();
+        // Use public method to check items
+        expect(initial.getItems()).toEqual([]);
+        expect(subscription).toBeDefined();
+    });
+
+    it("should handle controller queries", async () => {
+        const sdk = createSDK<typeof mockSchema>({
+            client: mockClient,
+            config: mockConfig,
+            signMessage: mockSignMessage,
+        });
+
+        const controllers = await sdk.getControllers(["0x123", "0x456"]);
+
+        expect(mockClient.getControllers).toHaveBeenCalledWith([
+            "0x123",
+            "0x456",
+        ]);
+        expect(controllers).toEqual([]);
+    });
+
+    it("should handle subscription updates", async () => {
+        const sdk = createSDK<typeof mockSchema>({
+            client: mockClient,
+            config: mockConfig,
+            signMessage: mockSignMessage,
+        });
+
+        const mockSubscription = {
+            cancel: vi.fn(),
+        } as unknown as torii.Subscription;
+        const mockClause = {} as unknown as torii.Clause;
+
+        await sdk.updateEntitySubscription(mockSubscription, mockClause);
+
+        expect(mockClient.updateEntitySubscription).toHaveBeenCalledWith(
+            mockSubscription,
+            mockClause
+        );
+    });
+});

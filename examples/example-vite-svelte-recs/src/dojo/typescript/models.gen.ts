@@ -35,11 +35,11 @@ export const LayoutDefinition = {
 };
 
 // Type definition for `core::byte_array::ByteArray` struct
-export interface ByteArray {
+export type ByteArray = {
     data: String[];
     pending_word: BigInt;
     pending_word_len: Number;
-}
+};
 export const ByteArrayDefinition = {
     data: RecsType.StringArray,
     pending_word: RecsType.BigInt,
@@ -47,22 +47,22 @@ export const ByteArrayDefinition = {
 };
 
 // Type definition for `dojo::model::layout::FieldLayout` struct
-export interface FieldLayout {
+export type FieldLayout = {
     selector: BigInt;
     layout: Layout;
-}
+};
 export const FieldLayoutDefinition = {
     selector: RecsType.BigInt,
     layout: LayoutDefinition,
 };
 
 // Type definition for `dojo_starter::models::Moves` struct
-export interface Moves {
+export type Moves = {
     player: BigInt;
     remaining: Number;
     last_direction: Direction;
     can_move: Boolean;
-}
+};
 export const MovesDefinition = {
     player: RecsType.BigInt,
     remaining: RecsType.Number,
@@ -71,40 +71,40 @@ export const MovesDefinition = {
 };
 
 // Type definition for `dojo_starter::models::DirectionsAvailable` struct
-export interface DirectionsAvailable {
+export type DirectionsAvailable = {
     player: BigInt;
     directions: String[];
-}
+};
 export const DirectionsAvailableDefinition = {
     player: RecsType.BigInt,
     directions: RecsType.StringArray,
 };
 
 // Type definition for `dojo_starter::systems::actions::actions::Moved` struct
-export interface Moved {
+export type Moved = {
     player: BigInt;
     direction: Direction;
-}
+};
 export const MovedDefinition = {
     player: RecsType.BigInt,
     direction: DirectionDefinition,
 };
 
 // Type definition for `dojo_starter::models::Vec2` struct
-export interface Vec2 {
+export type Vec2 = {
     x: Number;
     y: Number;
-}
+};
 export const Vec2Definition = {
     x: RecsType.Number,
     y: RecsType.Number,
 };
 
 // Type definition for `dojo_starter::models::Position` struct
-export interface Position {
+export type Position = {
     player: BigInt;
     vec: Vec2;
-}
+};
 export const PositionDefinition = {
     player: RecsType.BigInt,
     vec: Vec2Definition,
