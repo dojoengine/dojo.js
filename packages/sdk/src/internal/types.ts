@@ -1,8 +1,8 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
-import type { Account, StarknetDomain, TypedData } from "starknet";
-import { ToriiQueryBuilder } from "./toriiQueryBuilder.ts";
 import type { Result } from "neverthrow";
-import { Pagination } from "./pagination.ts";
+import type { Account, StarknetDomain, TypedData } from "starknet";
+import type { Pagination } from "./pagination.ts";
+import { ToriiQueryBuilder } from "./toriiQueryBuilder.ts";
 
 /**
  * Utility type to ensure at least one property is present
@@ -21,8 +21,6 @@ export type PrimitiveType = string | number | boolean | string[];
  * from other primitive properties.
  */
 export type ModelDefinition = {
-    fieldOrder: string[];
-} & {
     [key: string]: PrimitiveType; // Other properties must be PrimitiveType
 };
 
@@ -34,13 +32,11 @@ export type ModelDefinition = {
  * const schema: SchemaType = {
  *   world: {
  *     Player: {
- *       fieldOrder: ['id', 'name', 'score'],
  *       id: 'felt252',
  *       name: 'string',
  *       score: 'u32'
  *     },
  *     Item: {
- *       fieldOrder: ['id', 'name', 'durability'],
  *       id: 'felt252',
  *       name: 'string',
  *       durability: 'u8'
@@ -253,7 +249,7 @@ export type ToriiResponse<T extends SchemaType> = Pagination<
 
 export type SubscribeResponse<T extends SchemaType> = [
     ToriiResponse<T>,
-    torii.Subscription
+    torii.Subscription,
 ];
 
 export interface GetTokenRequest {
