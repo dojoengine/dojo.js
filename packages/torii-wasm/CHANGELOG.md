@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.7
+
+### Patch Changes
+
+- e08880e: chore: bump dojo.c + fix node worker
+
 ## 1.5.6
 
 ### Patch Changes

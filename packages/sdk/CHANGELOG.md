@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.7
+
+### Patch Changes
+
+- e08880e: chore: bump dojo.c + fix node worker
+- Updated dependencies [e08880e]
+    - @dojoengine/torii-wasm@1.5.7
+    - @dojoengine/core@1.5.7
+    - @dojoengine/torii-client@1.5.7
+    - @dojoengine/utils@1.5.7
+
 ## 1.5.6
 
 ### Patch Changes
