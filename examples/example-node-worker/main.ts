@@ -3,10 +3,9 @@ import {
     ToriiQueryBuilder,
     createWorker,
     init,
-    type ParsedEntity,
     getModel,
     HistoricalToriiQueryBuilder,
-    StandardizedQueryResult,
+    type StandardizedQueryResult,
 } from "@dojoengine/sdk/node";
 import { SigningKey } from "@dojoengine/torii-wasm/node";
 import { dojoConfig } from "./dojoConfig.ts";
@@ -16,12 +15,12 @@ import {
     type SchemaType,
 } from "./src/typescript/models.gen.ts";
 import { addAddressPadding, type BigNumberish } from "starknet";
-import { w3cwebsocket } from "websocket";
+import ws from "websocket";
 import { env } from "./env.ts";
 
 // Those lines are require so that websocket works.
 // @ts-ignore
-global.Websocket = w3cwebsocket;
+global.Websocket = ws.w3cwebsocket;
 // @ts-ignore
 global.WorkerGlobalScope = global;
 
@@ -39,7 +38,7 @@ const sdk = await init({
     },
 
     identity: env.IDENTITY,
-    signer: SigningKey.fromSecretScalar(env.SECRET_KEY),
+    signer: new SigningKey(env.SECRET_KEY),
 });
 
 type PositionCount = {

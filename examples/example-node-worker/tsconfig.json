@@ -11,8 +11,7 @@
         "skipLibCheck": true,
         "strict": true,
         "strictNullChecks": true,
-        "esModuleInterop": true,
-        "allowImportingTsExtensions": true
+        "esModuleInterop": true
     },
     "include": ["../*.ts"],
     "references": []
