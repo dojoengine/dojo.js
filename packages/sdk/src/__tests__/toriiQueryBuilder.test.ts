@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ToriiQueryBuilder } from "../internal/toriiQueryBuilder";
 import type { Clause, OrderBy } from "@dojoengine/torii-wasm";
 import type { SchemaType } from "../internal/types";
-import { ClauseBuilder } from "../web/clauseBuilder";
+import { ClauseBuilder } from "../internal/clauseBuilder";
 
 interface TestModels extends SchemaType {
     dojo_starter: {

@@ -32,7 +32,7 @@ import { parseEntities } from "../internal/parseEntities";
 
 export * from "../internal/types";
 export * from "./queryBuilder";
-export * from "./clauseBuilder";
+export * from "../internal/clauseBuilder";
 export * from "../internal/toriiQueryBuilder";
 
 /**
