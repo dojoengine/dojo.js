@@ -29,7 +29,7 @@ import { Pagination } from "../internal/pagination.ts";
 import { parseEntities } from "../internal/parseEntities.ts";
 
 export * from "../internal/toriiQueryBuilder.ts";
-export * from "./clauseBuilder.ts";
+export * from "../internal/clauseBuilder.ts";
 export * from "./worker.ts";
 export * from "../internal/types.ts";
 export * from "../internal/models.ts";

@@ -3,12 +3,12 @@ import {
     ComparisonOperator,
     MemberValue,
     PatternMatching,
-    cairoShortStringToFelt,
 } from "@dojoengine/torii-wasm/node";
 import {
     convertToPrimitive,
     type MemberValueParam,
 } from "../internal/convertToMemberValue.ts";
+import { shortString } from "starknet";
 import type { SchemaType } from "../internal/types.ts";
 
 type ClauseBuilderInterface = {
@@ -146,10 +146,10 @@ export class ClauseBuilder<T extends SchemaType> {
         const memberValue: MemberValue = Array.isArray(value)
             ? {
                   List: value.map((i) =>
-                      convertToPrimitive(i, cairoShortStringToFelt)
+                      convertToPrimitive(i, shortString.encodeShortString)
                   ),
               }
-            : convertToPrimitive(value, cairoShortStringToFelt);
+            : convertToPrimitive(value, shortString.encodeShortString);
 
         this.clause = {
             Member: {
