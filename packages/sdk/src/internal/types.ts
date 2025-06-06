@@ -1,30 +1,8 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
-import type { Account, StarknetDomain, TypedData } from "starknet";
-import { ToriiQueryBuilder } from "./toriiQueryBuilder.ts";
 import type { Result } from "neverthrow";
-import { Pagination } from "./pagination.ts";
-
-/**
- * Utility type to ensure at least one property is present
- */
-type AtLeastOne<T> = {
-    [K in keyof T]: Required<Pick<T, K>> & Partial<Omit<T, K>>;
-}[keyof T];
-
-/**
- * Primitive types that can be used in queries
- */
-export type PrimitiveType = string | number | boolean | string[];
-
-/**
- * Defines the structure of a single model, separating `fieldOrder`
- * from other primitive properties.
- */
-export type ModelDefinition = {
-    fieldOrder: string[];
-} & {
-    [key: string]: PrimitiveType; // Other properties must be PrimitiveType
-};
+import type { Account, StarknetDomain, TypedData } from "starknet";
+import type { Pagination } from "./pagination.ts";
+import { ToriiQueryBuilder } from "./toriiQueryBuilder.ts";
 
 /**
  * SchemaType represents the structure of the schema.
@@ -34,13 +12,11 @@ export type ModelDefinition = {
  * const schema: SchemaType = {
  *   world: {
  *     Player: {
- *       fieldOrder: ['id', 'name', 'score'],
  *       id: 'felt252',
  *       name: 'string',
  *       score: 'u32'
  *     },
  *     Item: {
- *       fieldOrder: ['id', 'name', 'durability'],
  *       id: 'felt252',
  *       name: 'string',
  *       durability: 'u8'
@@ -67,124 +43,6 @@ export type SchemaType = {
              */
             [field: string]: any;
         };
-    };
-};
-
-/**
- * Options for querying the database
- */
-export type QueryOptions = {
-    entityId?: string;
-};
-
-/**
- * Logical operators for combining multiple conditions
- */
-
-/**
- * Recursively defines the conditions for the `where` clause.
- */
-export type WhereCondition<TModel> =
-    | {
-          [key in torii.LogicalOperator]?: Array<WhereCondition<TModel>>;
-      }
-    | {
-          [P in keyof TModel]?: {
-              $is?: TModel[P];
-              $eq?: TModel[P];
-              $neq?: TModel[P];
-              $gt?: TModel[P];
-              $gte?: TModel[P];
-              $lt?: TModel[P];
-              $lte?: TModel[P];
-              $in?: TModel[P][];
-              $nin?: TModel[P][];
-          };
-      };
-
-/**
- * WhereOptions for subscriptions, only including the $is operator
- */
-export interface SubscriptionWhereOptions<TModel> extends QueryOptions {
-    where?: {
-        [P in keyof TModel]?: {
-            $is?: TModel[P];
-        };
-    };
-}
-
-/**
- * WhereOptions for queries, including all operators and logical operators
- */
-export interface QueryWhereOptions<TModel> extends QueryOptions {
-    /**
-     * Conditions to filter the query results.
-     */
-    where?: WhereCondition<TModel>;
-}
-
-/**
- * SubscriptionQueryType for subscriptions, only using SubscriptionWhereOptions.
- *
- * This type defines the structure of a subscription query, which can be used to subscribe to changes in the data.
- * It allows specifying conditions to filter the subscription results based on the provided schema.
- *
- * @template T - The schema type.
- *
- * @property {string[]} [entityIds] - An optional array of entity IDs to subscribe to. If provided, the subscription will be limited to these entities.
- *
- * @property {Object} [K in keyof T] - A mapping of namespaces in the schema.
- *
- * @property {Object} [L in keyof T[K]] - A mapping of models within each namespace.
- *
- * @property {AtLeastOne<{ $: SubscriptionWhereOptions<T[K][L]> }> | string[]} [L] -
- * - An object containing at least one SubscriptionWhereOptions condition to filter the subscription results.
- * - Alternatively, an array of strings representing specific values to subscribe to.
- */
-export type SubscriptionQueryType<T extends SchemaType> =
-    | BaseQueryType
-    | {
-          [K in keyof T]?: {
-              [L in keyof T[K]]?:
-                  | AtLeastOne<{
-                        $: SubscriptionWhereOptions<T[K][L]>;
-                    }>
-                  | string[];
-          };
-      };
-
-export type BaseQueryType = {
-    entityIds?: string[];
-};
-
-/**
- * Query type with model conditions
- */
-export type ModelQueryType<T extends SchemaType> = {
-    [K in keyof T]?: {
-        [L in keyof T[K]]?:
-            | AtLeastOne<{
-                  $: QueryWhereOptions<T[K][L]>;
-              }>
-            | string[];
-    };
-};
-
-/**
- * Combined QueryType using union of base and model types
- */
-export type QueryType<T extends SchemaType> = BaseQueryType | ModelQueryType<T>;
-
-/**
- * Result of a query
- */
-export type QueryResult<T extends SchemaType> = {
-    [K in keyof T]: {
-        [L in keyof T[K]]: Array<{
-            [P in keyof T[K][L]]: T[K][L][P] extends SchemaType
-                ? QueryResult<T[K][L][P]>
-                : T[K][L][P];
-        }>;
     };
 };
 
@@ -242,7 +100,7 @@ export type ParsedEntity<T extends SchemaType> = {
  */
 export type UnionOfModelData<T extends SchemaType> = {
     [K in keyof T]: {
-        [L in keyof T[K]]: Omit<T[K][L], "fieldOrder">;
+        [L in keyof T[K]]: T[K][L];
     }[keyof T[K]];
 }[keyof T];
 
@@ -253,7 +111,7 @@ export type ToriiResponse<T extends SchemaType> = Pagination<
 
 export type SubscribeResponse<T extends SchemaType> = [
     ToriiResponse<T>,
-    torii.Subscription
+    torii.Subscription,
 ];
 
 export interface GetTokenRequest {
@@ -277,7 +135,6 @@ type Failure<E> = {
 
 export type SubscriptionCallbackArgs<T, E = Error> = Success<T> | Failure<E>;
 
-// ToriiResponse<T>
 export type SubscriptionCallback<T> = (
     response: SubscriptionCallbackArgs<T>
 ) => void;
