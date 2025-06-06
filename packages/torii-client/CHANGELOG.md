@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.5.8
+
+### Patch Changes
+
+- fd36752: fix: use starknet.shortstring.encodeShortString instead of torii-wasm equivalent
+- Updated dependencies [fd36752]
+    - @dojoengine/torii-wasm@1.5.8
+
 ## 1.5.7
 
 ### Patch Changes
