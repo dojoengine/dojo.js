@@ -7,6 +7,7 @@ import type {
     GetTokenRequest,
     GetTokenBalanceRequest,
     SubscribeTokenBalanceRequest,
+    SubscribeTokenRequest,
     UpdateTokenBalanceSubscriptionRequest,
     ToriiResponse,
     SubscribeParams,
@@ -19,7 +20,9 @@ import {
     getTokenBalances,
     getTokens,
     onTokenBalanceUpdated,
+    onTokenUpdated,
     subscribeTokenBalance,
+    subscribeToken,
     updateTokenBalanceSubscription,
 } from "../internal/token.ts";
 import { err, ok, type Result } from "neverthrow";
@@ -106,6 +109,19 @@ export async function init<T extends SchemaType>(
             request: SubscribeTokenBalanceRequest
         ): Promise<[torii.TokenBalances, torii.Subscription]> => {
             return await subscribeTokenBalance(client, request);
+        },
+
+        /**
+         * Subscribes to token updates
+         *
+         * # Parameters
+         * @param {SubscribeTokenRequest} request
+         * @returns {Promise<[torii.Tokens, torii.Subscription]>}
+         */
+        subscribeToken: async (
+            request: SubscribeTokenRequest
+        ): Promise<[torii.Tokens, torii.Subscription]> => {
+            return await subscribeToken(client, request);
         },
 
         /**
@@ -239,6 +255,23 @@ export async function init<T extends SchemaType>(
             request: SubscribeTokenBalanceRequest
         ): torii.Subscription => {
             return onTokenBalanceUpdated(client, request);
+        },
+
+        /**
+         * Subscribes to token updates
+         *
+         * # Parameters
+         * @param {SubscribeTokenRequest} request
+         * @param {Function} callback - JavaScript function to call on updates
+         *
+         * # Returns
+         * Result containing subscription handle or error
+         * @returns torii.Subscription
+         */
+        onTokenUpdated: (
+            request: SubscribeTokenRequest
+        ): torii.Subscription => {
+            return onTokenUpdated(client, request);
         },
 
         /**

@@ -1,5 +1,6 @@
 **/*/target
 **/*/dist
+./pkg
 packages/torii-client/wasm
 packages/torii-client/pkg
 packages/torii-wasm/pkg/
