@@ -20,7 +20,8 @@
             "worlds",
             ".changeset",
             ".turbo",
-            "**/*/.turbo"
+            "**/*/.turbo",
+            "./pkg"
         ]
     },
     "formatter": {
@@ -50,7 +51,8 @@
             "worlds",
             ".changeset",
             ".turbo",
-            "**/*/.turbo"
+            "**/*/.turbo",
+            "./pkg"
         ]
     },
     "organizeImports": { "enabled": true },

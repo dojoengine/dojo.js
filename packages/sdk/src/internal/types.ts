@@ -290,6 +290,10 @@ export type UpdateTokenBalanceSubscriptionRequest = GetTokenBalanceRequest & {
     subscription: torii.Subscription;
 };
 
+export type SubscribeTokenRequest = GetTokenRequest & {
+    callback: SubscriptionCallback<torii.Token>;
+};
+
 /**
  * SDK interface for interacting with the DojoEngine.
  *
@@ -334,6 +338,17 @@ export interface SDK<T extends SchemaType> {
     subscribeTokenBalance: (
         request: SubscribeTokenBalanceRequest
     ) => Promise<[torii.TokenBalances, torii.Subscription]>;
+
+    /**
+     * Subscribes to token updates
+     *
+     * # Parameters
+     * @param {SubscribeTokenRequest} request
+     * @returns {Promise<[torii.Tokens, torii.Subscription]>}
+     */
+    subscribeToken: (
+        request: SubscribeTokenRequest
+    ) => Promise<[torii.Tokens, torii.Subscription]>;
 
     /**
      * Fetches entities from the Torii client based on the provided query.
@@ -398,6 +413,20 @@ export interface SDK<T extends SchemaType> {
     onTokenBalanceUpdated: (
         request: SubscribeTokenBalanceRequest
     ) => torii.Subscription;
+
+    /**
+     * Subscribes to token updates
+     *
+     * # Parameters
+     * @param {string[]} contract_addresses - Array of contract addresses to filter (empty for all)
+     * @param {string[]} token_ids - Array of token ids to filter (empty for all)
+     * @param {Function} callback - JavaScript function to call on updates
+     *
+     * # Returns
+     * Result containing subscription handle or error
+     * @returns torii.Subscription
+     */
+    onTokenUpdated: (request: SubscribeTokenRequest) => torii.Subscription;
 
     /**
      * Updates an existing token balance subscription
