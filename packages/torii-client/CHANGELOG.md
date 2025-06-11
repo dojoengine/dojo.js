@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.5.9
+
+### Patch Changes
+
+- c8037ed: fix: removed \_hashedKey from subscription callback
+- 1bbe42e: feat: add subscribeToken endpoint
+- Updated dependencies [c8037ed]
+- Updated dependencies [1bbe42e]
+    - @dojoengine/torii-wasm@1.5.9
+
 ## 1.5.8
 
 ### Patch Changes

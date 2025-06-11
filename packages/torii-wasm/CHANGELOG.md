@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.5.9
+
+### Patch Changes
+
+- c8037ed: fix: removed \_hashedKey from subscription callback
+- 1bbe42e: feat: add subscribeToken endpoint
+
 ## 1.5.8
 
 ### Patch Changes
