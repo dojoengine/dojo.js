@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.10
+
+### Patch Changes
+
+- 04cd161: chore: bump dojo.c to get latest publishMessage endpoint
+- Updated dependencies [04cd161]
+    - @dojoengine/torii-wasm@1.5.10
+    - @dojoengine/core@1.5.10
+    - @dojoengine/torii-client@1.5.10
+    - @dojoengine/utils@1.5.10
+
 ## 1.5.9
 
 ### Patch Changes

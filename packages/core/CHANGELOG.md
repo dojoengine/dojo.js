@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.10
+
+### Patch Changes
+
+- 04cd161: chore: bump dojo.c to get latest publishMessage endpoint
+
 ## 1.5.9
 
 ### Patch Changes
