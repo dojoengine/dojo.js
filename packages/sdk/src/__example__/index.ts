@@ -73,7 +73,6 @@ async function exampleUsage() {
     const db = await init<MockSchemaType>({
         client: {
             toriiUrl: "your-torii-url",
-            relayUrl: "your-relay-url",
             worldAddress: "your-world-address",
         },
         domain: {

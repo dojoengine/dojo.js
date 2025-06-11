@@ -89,7 +89,6 @@ const db =
         // your config
         client: {
             toriiUrl: dojoConfig.toriiUrl,
-            relayUrl: dojoConfig.relayUrl,
             worldAddress: dojoConfig.manifest.world.address,
         },
         // allows typed messaging via indexer
@@ -195,18 +194,19 @@ Before running examples, you need to build the packages:
     ```bash
     pnpm run dev
     ```
-- Try out a specific example : 
+
+- Try out a specific example :
 
     ```bash
     pnpm run dev --filter example-vite-react-sdk
     ```
-    
 
 ### Running The Examples
 
 To run the examples, you'll need to set up three terminal windows:
 
-**With docker**: 
+**With docker**:
+
 1. Navigate to the Dojo starter directory:
 
     ```bash

@@ -27,7 +27,6 @@ global.WorkerGlobalScope = global;
 const sdk = await init({
     client: {
         toriiUrl: dojoConfig.toriiUrl,
-        relayUrl: "/ip4/127.0.0.1/tcp/9092/ws",
         worldAddress: dojoConfig.manifest.world.address,
     },
     domain: {

@@ -39,7 +39,6 @@ export * from "../internal/models.ts";
 
 export const defaultClientConfig: Partial<torii.ClientConfig> = {
     toriiUrl: "http://localhost:8080",
-    relayUrl: "/ip4/127.0.0.1/tcp/9090",
 };
 
 export async function init<T extends SchemaType>(
@@ -193,7 +192,7 @@ export async function init<T extends SchemaType>(
         sendMessage: async (
             data: TypedData,
             _account?: Account
-        ): Promise<Result<Uint8Array, string>> => {
+        ): Promise<Result<string, string>> => {
             if (!options.signer) {
                 return err(NO_SIGNER);
             }
