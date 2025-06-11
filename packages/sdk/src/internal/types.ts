@@ -378,7 +378,7 @@ export interface SDK<T extends SchemaType> {
     sendMessage: (
         data: TypedData,
         account?: Account
-    ) => Promise<Result<Uint8Array, string>>;
+    ) => Promise<Result<string, string>>;
 
     /**
      * @param {string[]} contract_addresses

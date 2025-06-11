@@ -18,7 +18,6 @@ export async function setup({ ...config }: DojoConfig) {
     // Initialize Torii client for interacting with the Dojo network
     const toriiClient = new torii.ToriiClient({
         toriiUrl: config.toriiUrl,
-        relayUrl: "",
         worldAddress: config.manifest.world.address || "",
     });
 

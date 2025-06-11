@@ -52,7 +52,6 @@ export async function createClient(
 
 export const defaultClientConfig: Partial<torii.ClientConfig> = {
     toriiUrl: "http://localhost:8080",
-    relayUrl: "/ip4/127.0.0.1/tcp/9090",
 };
 
 /**
@@ -212,7 +211,7 @@ export async function init<T extends SchemaType>(
         sendMessage: async (
             data: TypedData,
             account?: Account
-        ): Promise<Result<Uint8Array, string>> => {
+        ): Promise<Result<string, string>> => {
             if (!account) {
                 return err(NO_ACCOUNT);
             }

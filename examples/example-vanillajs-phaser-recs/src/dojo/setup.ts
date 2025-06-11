@@ -24,7 +24,6 @@ export async function setup({ ...config }: Config) {
     try {
         toriiClient = await torii.createClient({
             toriiUrl: config.toriiUrl,
-            relayUrl: "",
             worldAddress: config.manifest.world.address || "",
         });
     } catch (e) {

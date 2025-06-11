@@ -18,7 +18,6 @@ async function main() {
     const sdk = await init<SchemaType>({
         client: {
             toriiUrl: env.VITE_TORII_URL,
-            relayUrl: env.VITE_RELAY_URL,
             worldAddress: dojoConfig.manifest.world.address,
         },
         domain: {

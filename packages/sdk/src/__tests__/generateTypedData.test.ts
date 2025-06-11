@@ -18,7 +18,6 @@ describe("generateTypedData", () => {
     const mockConfig = {
         client: {
             toriiUrl: "http://localhost:8080",
-            relayUrl: "/ip4/127.0.0.1/tcp/9090",
             worldAddress: "0x123",
         },
         domain: {

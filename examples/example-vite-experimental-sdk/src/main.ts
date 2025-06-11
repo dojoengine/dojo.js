@@ -13,7 +13,6 @@ async function main() {
     const sdk = await init({
         client: {
             toriiUrl: dojoConfig.toriiUrl,
-            relayUrl: dojoConfig.relayUrl,
             worldAddress: dojoConfig.manifest.world.address,
         },
         domain: {

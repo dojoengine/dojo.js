@@ -34,7 +34,6 @@ async function main() {
     const sdk = await init<SchemaType>({
         client: {
             toriiUrl: dojoConfig.toriiUrl,
-            relayUrl: dojoConfig.relayUrl,
             worldAddress: dojoConfig.manifest.world.address,
         },
         domain: {
