@@ -4,6 +4,11 @@ on:
   push:
     tags:
       - '@dojoengine/*@*'
+  
+  workflow_run:
+    workflows: ["Publish packages and create tags"]
+    types:
+      - completed
 
   workflow_dispatch:
     inputs:
@@ -15,13 +20,65 @@ jobs:
   release:
     name: Release pushed tag
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     steps:
-      - name: Create release
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Get latest tags
+        if: ${{ github.event_name == 'workflow_run' }}
+        id: latest-tags
+        run: |
+          # Get all tags created in the last 5 minutes that match our pattern
+          RECENT_TAGS=$(git tag -l '@dojoengine/*@*' --sort=-committerdate | while read tag; do
+            TAG_TIME=$(git log -1 --format=%ct "$tag")
+            CURRENT_TIME=$(date +%s)
+            TIME_DIFF=$((CURRENT_TIME - TAG_TIME))
+            if [ $TIME_DIFF -lt 300 ]; then
+              echo "$tag"
+            fi
+          done)
+          
+          # Store tags in a file for later processing
+          echo "$RECENT_TAGS" > recent_tags.txt
+          echo "Found recent tags:"
+          cat recent_tags.txt
+          
+      - name: Create releases for workflow_run
+        if: ${{ github.event_name == 'workflow_run' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Process each recent tag
+          while IFS= read -r tag; do
+            if [ -n "$tag" ]; then
+              # Check if release already exists
+              if gh release view "$tag" >/dev/null 2>&1; then
+                echo "Release $tag already exists, skipping..."
+              else
+                echo "Creating release for $tag"
+                gh release create "$tag" \
+                    --repo="$GITHUB_REPOSITORY" \
+                    --title="${tag#v}" \
+                    --generate-notes
+              fi
+            fi
+          done < recent_tags.txt
+          
+      - name: Create release for single tag
+        if: ${{ github.event_name != 'workflow_run' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref_name }}
         run: |
-          gh release create "$tag" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${tag#v}" \
-              --generate-notes
+          # Check if release already exists
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists, skipping..."
+          else
+            gh release create "$tag" \
+                --repo="$GITHUB_REPOSITORY" \
+                --title="${tag#v}" \
+                --generate-notes
+          fi
