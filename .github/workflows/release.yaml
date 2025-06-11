@@ -20,6 +20,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: pnpm/action-setup@v3
         with:
@@ -159,6 +160,22 @@ jobs:
         run: |
           pnpm changeset tag
           git push --tags
+          
+      - name: Trigger release creation
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          # Get all tags that were just created
+          TAGS=$(git tag --points-at HEAD | grep '@dojoengine/' || true)
+          
+          # For each tag, trigger the release workflow
+          for TAG in $TAGS; do
+            echo "Triggering release for tag: $TAG"
+            gh workflow run create_release.yaml \
+              --ref main \
+              -f tag="$TAG"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Dry run - Show git changes
         if: ${{ github.event.inputs.dry_run == 'true' }}
