@@ -17,7 +17,7 @@ import type {
 export function subscribeQueryModelCallback<T extends SchemaType>(
     callback: SubscriptionCallback<StandardizedQueryResult<T>>
 ) {
-    return (_hashedKey: string, entityData: Entity) => {
+    return (entityData: Entity) => {
         try {
             if (callback) {
                 const parsedData = parseEntities<T>([entityData]);
