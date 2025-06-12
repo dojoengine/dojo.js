@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.11
+
+### Patch Changes
+
+- 1296ec1: fix: publish offchain messages
+
 ## 1.5.10
 
 ### Patch Changes
