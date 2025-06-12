@@ -201,18 +201,15 @@ export async function init<T extends SchemaType>(
             }
 
             try {
-                const td = new torii.TypedData(JSON.stringify(data)).encode(
-                    options.identity
-                );
-
-                const sig = options.signer.sign(td);
-
                 const dataString = JSON.stringify(data);
+                const sig = await _account?.signMessage(data);
 
                 return ok(
                     await client.publishMessage(dataString, [
-                        sig.r.toString(),
-                        sig.s.toString(),
+                        // @ts-expect-error c
+                        `0x${sig.r.toString(16)}`,
+                        // @ts-expect-error c
+                        `0x${sig.s.toString(16)}`,
                     ])
                 );
             } catch (error) {
