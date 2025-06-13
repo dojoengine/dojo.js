@@ -8,58 +8,58 @@ import {
 } from "starknet";
 
 // Type definition for `dojo_starter::models::DirectionsAvailable` struct
-export interface DirectionsAvailable {
+export type DirectionsAvailable = {
     player: string;
     directions: Array<DirectionEnum>;
-}
+};
 
 // Type definition for `dojo_starter::models::DirectionsAvailableValue` struct
-export interface DirectionsAvailableValue {
+export type DirectionsAvailableValue = {
     directions: Array<DirectionEnum>;
-}
+};
 
 // Type definition for `dojo_starter::models::Moves` struct
-export interface Moves {
+export type Moves = {
     player: string;
     remaining: BigNumberish;
     last_direction: CairoOption<DirectionEnum>;
     can_move: boolean;
-}
+};
 
 // Type definition for `dojo_starter::models::MovesValue` struct
-export interface MovesValue {
+export type MovesValue = {
     remaining: BigNumberish;
     last_direction: CairoOption<DirectionEnum>;
     can_move: boolean;
-}
+};
 
 // Type definition for `dojo_starter::models::Position` struct
-export interface Position {
+export type Position = {
     player: string;
     vec: Vec2;
-}
+};
 
 // Type definition for `dojo_starter::models::PositionValue` struct
-export interface PositionValue {
+export type PositionValue = {
     vec: Vec2;
-}
+};
 
 // Type definition for `dojo_starter::models::Vec2` struct
-export interface Vec2 {
+export type Vec2 = {
     x: BigNumberish;
     y: BigNumberish;
-}
+};
 
 // Type definition for `dojo_starter::systems::actions::actions::Moved` struct
-export interface Moved {
+export type Moved = {
     player: string;
     direction: DirectionEnum;
-}
+};
 
 // Type definition for `dojo_starter::systems::actions::actions::MovedValue` struct
-export interface MovedValue {
+export type MovedValue = {
     direction: DirectionEnum;
-}
+};
 
 // Type definition for `dojo_starter::models::Direction` enum
 export type Direction = {
@@ -70,7 +70,7 @@ export type Direction = {
 };
 export type DirectionEnum = CairoCustomEnum;
 
-export interface SchemaType extends ISchemaType {
+export type SchemaType = ISchemaType & {
     dojo_starter: {
         DirectionsAvailable: DirectionsAvailable;
         DirectionsAvailableValue: DirectionsAvailableValue;
@@ -82,7 +82,7 @@ export interface SchemaType extends ISchemaType {
         Moved: Moved;
         MovedValue: MovedValue;
     };
-}
+};
 export const schema: SchemaType = {
     dojo_starter: {
         DirectionsAvailable: {

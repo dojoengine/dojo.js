@@ -2,61 +2,59 @@ import type { SchemaType as ISchemaType } from "@dojoengine/sdk";
 
 import { CairoOption, CairoOptionVariant, BigNumberish } from "starknet";
 
-type WithFieldOrder<T> = T & { fieldOrder: string[] };
-
 // Type definition for `dojo_starter::models::DirectionsAvailable` struct
-export interface DirectionsAvailable {
+export type DirectionsAvailable = {
     player: string;
     directions: Array<Direction>;
-}
+};
 
 // Type definition for `dojo_starter::models::DirectionsAvailableValue` struct
-export interface DirectionsAvailableValue {
+export type DirectionsAvailableValue = {
     directions: Array<Direction>;
-}
+};
 
 // Type definition for `dojo_starter::models::Moves` struct
-export interface Moves {
+export type Moves = {
     player: string;
     remaining: BigNumberish;
     last_direction: CairoOption<Direction>;
     can_move: boolean;
-}
+};
 
 // Type definition for `dojo_starter::models::MovesValue` struct
-export interface MovesValue {
+export type MovesValue = {
     remaining: BigNumberish;
     last_direction: CairoOption<Direction>;
     can_move: boolean;
-}
+};
 
 // Type definition for `dojo_starter::models::Position` struct
-export interface Position {
+export type Position = {
     player: string;
     vec: Vec2;
-}
+};
 
 // Type definition for `dojo_starter::models::PositionValue` struct
-export interface PositionValue {
+export type PositionValue = {
     vec: Vec2;
-}
+};
 
 // Type definition for `dojo_starter::models::Vec2` struct
-export interface Vec2 {
+export type Vec2 = {
     x: BigNumberish;
     y: BigNumberish;
-}
+};
 
 // Type definition for `dojo_starter::systems::actions::actions::Moved` struct
-export interface Moved {
+export type Moved = {
     player: string;
     direction: Direction;
-}
+};
 
 // Type definition for `dojo_starter::systems::actions::actions::MovedValue` struct
-export interface MovedValue {
+export type MovedValue = {
     direction: Direction;
-}
+};
 
 // Type definition for `dojo_starter::models::Direction` enum
 export enum Direction {
@@ -66,64 +64,55 @@ export enum Direction {
     Down,
 }
 
-export interface SchemaType extends ISchemaType {
+export type SchemaType = ISchemaType & {
     dojo_starter: {
-        DirectionsAvailable: WithFieldOrder<DirectionsAvailable>;
-        DirectionsAvailableValue: WithFieldOrder<DirectionsAvailableValue>;
-        Moves: WithFieldOrder<Moves>;
-        MovesValue: WithFieldOrder<MovesValue>;
-        Position: WithFieldOrder<Position>;
-        PositionValue: WithFieldOrder<PositionValue>;
-        Vec2: WithFieldOrder<Vec2>;
-        Moved: WithFieldOrder<Moved>;
-        MovedValue: WithFieldOrder<MovedValue>;
+        DirectionsAvailable: DirectionsAvailable;
+        DirectionsAvailableValue: DirectionsAvailableValue;
+        Moves: Moves;
+        MovesValue: MovesValue;
+        Position: Position;
+        PositionValue: PositionValue;
+        Vec2: Vec2;
+        Moved: Moved;
+        MovedValue: MovedValue;
     };
-}
+};
 export const schema: SchemaType = {
     dojo_starter: {
         DirectionsAvailable: {
-            fieldOrder: ["player", "directions"],
             player: "",
             directions: [Direction.Left],
         },
         DirectionsAvailableValue: {
-            fieldOrder: ["directions"],
             directions: [Direction.Left],
         },
         Moves: {
-            fieldOrder: ["player", "remaining", "last_direction", "can_move"],
             player: "",
             remaining: 0,
             last_direction: new CairoOption(CairoOptionVariant.None),
             can_move: false,
         },
         MovesValue: {
-            fieldOrder: ["remaining", "last_direction", "can_move"],
             remaining: 0,
             last_direction: new CairoOption(CairoOptionVariant.None),
             can_move: false,
         },
         Position: {
-            fieldOrder: ["player", "vec"],
             player: "",
             vec: { x: 0, y: 0 },
         },
         PositionValue: {
-            fieldOrder: ["vec"],
             vec: { x: 0, y: 0 },
         },
         Vec2: {
-            fieldOrder: ["x", "y"],
             x: 0,
             y: 0,
         },
         Moved: {
-            fieldOrder: ["player", "direction"],
             player: "",
             direction: Direction.Left,
         },
         MovedValue: {
-            fieldOrder: ["direction"],
             direction: Direction.Left,
         },
     },

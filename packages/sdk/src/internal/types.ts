@@ -1,52 +1,30 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
-import type { Account, StarknetDomain, TypedData } from "starknet";
-import { ToriiQueryBuilder } from "./toriiQueryBuilder.ts";
 import type { Result } from "neverthrow";
-import { Pagination } from "./pagination.ts";
+import type { Account, StarknetDomain, TypedData } from "starknet";
+import type { Pagination } from "./pagination.ts";
+import type { ToriiQueryBuilder } from "./toriiQueryBuilder.ts";
 
 /**
- * Utility type to ensure at least one property is present
- */
-type AtLeastOne<T> = {
-    [K in keyof T]: Required<Pick<T, K>> & Partial<Omit<T, K>>;
-}[keyof T];
-
-/**
- * Primitive types that can be used in queries
- */
-export type PrimitiveType = string | number | boolean | string[];
-
-/**
- * Defines the structure of a single model, separating `fieldOrder`
- * from other primitive properties.
- */
-export type ModelDefinition = {
-    fieldOrder: string[];
-} & {
-    [key: string]: PrimitiveType; // Other properties must be PrimitiveType
-};
-
-/**
- * SchemaType represents the structure of the schema.
- * Each namespace contains models defined by ModelDefinition.
+ * SchemaType represents the structure of your Dojo world models.
+ * Each namespace contains models defined by their field types.
  *
  * @example
- * const schema: SchemaType = {
+ * ```typescript
+ * const schema = {
  *   world: {
  *     Player: {
- *       fieldOrder: ['id', 'name', 'score'],
  *       id: 'felt252',
  *       name: 'string',
  *       score: 'u32'
  *     },
  *     Item: {
- *       fieldOrder: ['id', 'name', 'durability'],
  *       id: 'felt252',
  *       name: 'string',
  *       durability: 'u8'
  *     }
  *   }
- * }
+ * } satisfies SchemaType;
+ * ```
  */
 export type SchemaType = {
     /**
@@ -71,125 +49,7 @@ export type SchemaType = {
 };
 
 /**
- * Options for querying the database
- */
-export type QueryOptions = {
-    entityId?: string;
-};
-
-/**
- * Logical operators for combining multiple conditions
- */
-
-/**
- * Recursively defines the conditions for the `where` clause.
- */
-export type WhereCondition<TModel> =
-    | {
-          [key in torii.LogicalOperator]?: Array<WhereCondition<TModel>>;
-      }
-    | {
-          [P in keyof TModel]?: {
-              $is?: TModel[P];
-              $eq?: TModel[P];
-              $neq?: TModel[P];
-              $gt?: TModel[P];
-              $gte?: TModel[P];
-              $lt?: TModel[P];
-              $lte?: TModel[P];
-              $in?: TModel[P][];
-              $nin?: TModel[P][];
-          };
-      };
-
-/**
- * WhereOptions for subscriptions, only including the $is operator
- */
-export interface SubscriptionWhereOptions<TModel> extends QueryOptions {
-    where?: {
-        [P in keyof TModel]?: {
-            $is?: TModel[P];
-        };
-    };
-}
-
-/**
- * WhereOptions for queries, including all operators and logical operators
- */
-export interface QueryWhereOptions<TModel> extends QueryOptions {
-    /**
-     * Conditions to filter the query results.
-     */
-    where?: WhereCondition<TModel>;
-}
-
-/**
- * SubscriptionQueryType for subscriptions, only using SubscriptionWhereOptions.
- *
- * This type defines the structure of a subscription query, which can be used to subscribe to changes in the data.
- * It allows specifying conditions to filter the subscription results based on the provided schema.
- *
- * @template T - The schema type.
- *
- * @property {string[]} [entityIds] - An optional array of entity IDs to subscribe to. If provided, the subscription will be limited to these entities.
- *
- * @property {Object} [K in keyof T] - A mapping of namespaces in the schema.
- *
- * @property {Object} [L in keyof T[K]] - A mapping of models within each namespace.
- *
- * @property {AtLeastOne<{ $: SubscriptionWhereOptions<T[K][L]> }> | string[]} [L] -
- * - An object containing at least one SubscriptionWhereOptions condition to filter the subscription results.
- * - Alternatively, an array of strings representing specific values to subscribe to.
- */
-export type SubscriptionQueryType<T extends SchemaType> =
-    | BaseQueryType
-    | {
-          [K in keyof T]?: {
-              [L in keyof T[K]]?:
-                  | AtLeastOne<{
-                        $: SubscriptionWhereOptions<T[K][L]>;
-                    }>
-                  | string[];
-          };
-      };
-
-export type BaseQueryType = {
-    entityIds?: string[];
-};
-
-/**
- * Query type with model conditions
- */
-export type ModelQueryType<T extends SchemaType> = {
-    [K in keyof T]?: {
-        [L in keyof T[K]]?:
-            | AtLeastOne<{
-                  $: QueryWhereOptions<T[K][L]>;
-              }>
-            | string[];
-    };
-};
-
-/**
- * Combined QueryType using union of base and model types
- */
-export type QueryType<T extends SchemaType> = BaseQueryType | ModelQueryType<T>;
-
-/**
- * Result of a query
- */
-export type QueryResult<T extends SchemaType> = {
-    [K in keyof T]: {
-        [L in keyof T[K]]: Array<{
-            [P in keyof T[K][L]]: T[K][L][P] extends SchemaType
-                ? QueryResult<T[K][L][P]>
-                : T[K][L][P];
-        }>;
-    };
-};
-
-/**
- * Standardized result of a query
+ * Standardized result of a query - an array of parsed entities.
  */
 export type StandardizedQueryResult<T extends SchemaType> = Array<
     ParsedEntity<T>
@@ -200,20 +60,20 @@ export type StandardizedQueryResult<T extends SchemaType> = Array<
  * Ensures that each model's data adheres to the schema's field types.
  *
  * @example
+ * ```typescript
  * // Given a schema:
- * const schema: SchemaType = {
+ * const schema = {
  *   world: {
  *     Player: {
- *       fieldOrder: ['id', 'name', 'score'],
  *       id: 'felt252',
  *       name: 'string',
  *       score: 'u32'
  *     }
  *   }
- * };
+ * } satisfies SchemaType;
  *
  * // A ParsedEntity might look like:
- * const parsedEntity: ParsedEntity<typeof schema> = {
+ * const entity: ParsedEntity<typeof schema> = {
  *   entityId: '0x123',
  *   models: {
  *     world: {
@@ -225,6 +85,7 @@ export type StandardizedQueryResult<T extends SchemaType> = Array<
  *     }
  *   }
  * };
+ * ```
  */
 export type ParsedEntity<T extends SchemaType> = {
     entityId: string;
@@ -238,54 +99,85 @@ export type ParsedEntity<T extends SchemaType> = {
 };
 
 /**
- * Utility type to extract all models' data from SchemaType without `fieldOrder`
+ * Utility type to extract all models' data from SchemaType.
+ * This is useful for typing messages and model data.
  */
 export type UnionOfModelData<T extends SchemaType> = {
     [K in keyof T]: {
-        [L in keyof T[K]]: Omit<T[K][L], "fieldOrder">;
+        [L in keyof T[K]]: T[K][L];
     }[keyof T[K]];
 }[keyof T];
 
+/**
+ * Response type for queries with pagination support.
+ */
 export type ToriiResponse<T extends SchemaType> = Pagination<
     T,
     StandardizedQueryResult<T>
 >;
 
+/**
+ * Response type for subscriptions - includes initial data and subscription handle.
+ */
 export type SubscribeResponse<T extends SchemaType> = [
     ToriiResponse<T>,
-    torii.Subscription
+    torii.Subscription,
 ];
 
+/**
+ * Request type for getting tokens.
+ */
 export interface GetTokenRequest {
     contractAddresses?: string[];
     tokenIds?: string[];
 }
 
+/**
+ * Request type for getting token balances.
+ */
 export interface GetTokenBalanceRequest extends GetTokenRequest {
     accountAddresses?: string[];
 }
 
+/**
+ * Success result for subscription callbacks.
+ */
 type Success<T> = {
     data: T;
     error: undefined;
 };
 
+/**
+ * Failure result for subscription callbacks.
+ */
 type Failure<E> = {
     data: undefined;
     error: E;
 };
 
+/**
+ * Arguments passed to subscription callbacks.
+ * Either contains data or an error, but not both.
+ */
 export type SubscriptionCallbackArgs<T, E = Error> = Success<T> | Failure<E>;
 
-// ToriiResponse<T>
+/**
+ * Callback function type for subscriptions.
+ */
 export type SubscriptionCallback<T> = (
     response: SubscriptionCallbackArgs<T>
 ) => void;
 
+/**
+ * Request type for subscribing to token balance updates.
+ */
 export type SubscribeTokenBalanceRequest = GetTokenBalanceRequest & {
     callback: SubscriptionCallback<torii.TokenBalance>;
 };
 
+/**
+ * Request type for updating token balance subscriptions.
+ */
 export type UpdateTokenBalanceSubscriptionRequest = GetTokenBalanceRequest & {
     subscription: torii.Subscription;
 };
@@ -296,44 +188,78 @@ export type SubscribeTokenRequest = GetTokenRequest & {
 
 /**
  * SDK interface for interacting with the DojoEngine.
+ * Provides methods for querying, subscribing, and managing your Dojo world.
  *
- * @template T - The schema type.
+ * @template T - The schema type defining your world's models.
+ *
+ * @example
+ * ```typescript
+ * const sdk = await init<typeof schema>({
+ *     client: { worldAddress: "0x...", toriiUrl: "http://localhost:8080" },
+ *     domain: { name: "MyApp", version: "1.0.0", chainId: "SN_MAIN" }
+ * });
+ *
+ * // Query entities
+ * const { items } = await sdk.getEntities({
+ *     query: new ToriiQueryBuilder().withClause(...)
+ * });
+ *
+ * // Subscribe to updates
+ * const [initial, subscription] = await sdk.subscribeEntityQuery({
+ *     query: new ToriiQueryBuilder().withClause(...),
+ *     callback: ({ data, error }) => {
+ *         if (error) console.error(error);
+ *         else console.log(data);
+ *     }
+ * });
+ * ```
  */
 export interface SDK<T extends SchemaType> {
     /**
-     * The Torii client instance.
+     * The underlying Torii client instance.
+     * Use this for advanced operations not covered by the SDK methods.
      */
     client: torii.ToriiClient;
 
     /**
-     * Subscribes to entity updates based on the provided query and invokes the callback with the updated data.
+     * Subscribes to entity updates based on the provided query.
+     * Returns initial data and a subscription handle.
      *
-     * @template T - The schema type.
-     * @param {SubscribeParams<T, false>} params - Parameters object
-     * @returns {Promise<SubscribeResponse<T, false>>} - A promise that resolves to a Torii subscription.
+     * @param {SubscribeParams<T>} params - Query and callback parameters
+     * @returns {Promise<SubscribeResponse<T>>} - Initial data and subscription handle
+     *
+     * @example
+     * ```typescript
+     * const [initial, subscription] = await sdk.subscribeEntityQuery({
+     *     query: new ToriiQueryBuilder()
+     *         .withClause(KeysClause([ModelsMapping.Player], [address])),
+     *     callback: ({ data, error }) => {
+     *         if (data) console.log('Entity updated:', data);
+     *     }
+     * });
+     * ```
      */
     subscribeEntityQuery: (
         params: SubscribeParams<T>
     ) => Promise<SubscribeResponse<T>>;
 
     /**
-     * Subscribes to event messages based on the provided query and invokes the callback with the updated data.
+     * Subscribes to event messages based on the provided query.
+     * Returns initial data and a subscription handle.
      *
-     * @template T - The schema type.
-     * @param {SubscribeParams<T>} params - Parameters object
-     * @param {(response: { data?: StandardizedQueryResult<T>; error?: Error }) => void} [callback] - The callback function to handle the response.
-     * @returns {Promise<SubscribeResponse<T>>} - A promise that resolves to a Torii subscription.
+     * @param {SubscribeParams<T>} params - Query and callback parameters
+     * @returns {Promise<SubscribeResponse<T>>} - Initial data and subscription handle
      */
     subscribeEventQuery: (
         params: SubscribeParams<T>
     ) => Promise<SubscribeResponse<T>>;
 
     /**
-     * Subscribes to token balance updates
+     * Subscribes to token balance updates.
+     * Returns initial balances and a subscription handle.
      *
-     * # Parameters
-     * @param {SubscribeTokenBalanceRequest} request
-     * @returns {Promise<[torii.TokenBalances, torii.Subscription]>}
+     * @param {SubscribeTokenBalanceRequest} request - Filter and callback parameters
+     * @returns {Promise<[torii.TokenBalances, torii.Subscription]>} - Initial balances and subscription
      */
     subscribeTokenBalance: (
         request: SubscribeTokenBalanceRequest
@@ -353,21 +279,48 @@ export interface SDK<T extends SchemaType> {
     /**
      * Fetches entities from the Torii client based on the provided query.
      *
-     * @template T - The schema type.
-     * @param {GetParams<T, false>} params - Parameters object
-     * @returns {Promise<ToriiResponse<T, false>>} - A promise that resolves to the standardized query result.
+     * @param {GetParams<T>} params - Query parameters
+     * @returns {Promise<ToriiResponse<T>>} - Paginated query results
+     *
+     * @example
+     * ```typescript
+     * const result = await sdk.getEntities({
+     *     query: new ToriiQueryBuilder()
+     *         .withClause(KeysClause([ModelsMapping.Player], [address]))
+     *         .limit(10)
+     * });
+     *
+     * // Access entities
+     * result.items.forEach(entity => {
+     *     console.log(entity.models.world.Player);
+     * });
+     *
+     * // Load more if available
+     * if (result.hasNextPage()) {
+     *     const nextPage = await result.fetchNextPage();
+     * }
+     * ```
      */
     getEntities: (params: GetParams<T>) => Promise<ToriiResponse<T>>;
 
     /**
      * Fetches event messages from the Torii client based on the provided query.
      *
-     * @template T - The schema type.
-     * @param {GetParams<T>} params - Parameters object
-     * @returns {Promise<ToriiResponse<T>>} - A promise that resolves to the standardized query result.
+     * @param {GetParams<T>} params - Query parameters
+     * @returns {Promise<ToriiResponse<T>>} - Paginated query results
      */
     getEventMessages: (params: GetParams<T>) => Promise<ToriiResponse<T>>;
 
+    /**
+     * Generates typed data for signing messages.
+     * Used for creating off-chain messages that can be verified on-chain.
+     *
+     * @param {string} nsModel - Model name prefixed with namespace (e.g., "world-Player")
+     * @param {M} message - The message data conforming to the model structure
+     * @param {Array} modelMapping - Optional custom type mappings
+     * @param {Record} additionalTypes - Optional additional EIP-712 types
+     * @returns {TypedData} - EIP-712 typed data ready for signing
+     */
     generateTypedData: <M extends UnionOfModelData<T>>(
         nsModel: string,
         message: M,
@@ -375,40 +328,43 @@ export interface SDK<T extends SchemaType> {
         additionalTypes?: Record<string, Array<{ name: string; type: string }>>
     ) => TypedData;
 
+    /**
+     * Sends a signed message to the Torii server.
+     * In web environments, requires an Account. In Node.js, uses configured signer.
+     *
+     * @param {TypedData} data - The typed data to sign and send
+     * @param {Account} account - The account to sign with (web only)
+     * @returns {Promise<Result<Uint8Array, string>>} - Success with message ID or error
+     */
     sendMessage: (
         data: TypedData,
         account?: Account
     ) => Promise<Result<string, string>>;
 
     /**
-     * @param {string[]} contract_addresses
-     * @param {string[]} token_ids
-     * @returns {Promise<torii.Tokens>}
+     * Gets token information.
+     *
+     * @param {GetTokenRequest} request - Filter parameters
+     * @returns {Promise<torii.Tokens>} - Token information
      */
     getTokens(request: GetTokenRequest): Promise<torii.Tokens>;
 
     /**
-     * @param {string[]} account_addresses
-     * @param {string[]} contract_addresses
-     * @param {string[]} token_ids
-     * @returns {Promise<torii.TokenBalances>}
+     * Gets token balances for specified accounts.
+     *
+     * @param {GetTokenBalanceRequest} request - Filter parameters
+     * @returns {Promise<torii.TokenBalances>} - Token balances
      */
     getTokenBalances(
         request: GetTokenBalanceRequest
     ): Promise<torii.TokenBalances>;
 
     /**
-     * Subscribes to token balance updates
+     * Creates a subscription for token balance updates.
+     * Unlike `subscribeTokenBalance`, this only returns the subscription handle.
      *
-     * # Parameters
-     * @param {string[]} contract_addresses - Array of contract addresses to filter (empty for all)
-     * @param {string[]} account_addresses - Array of account addresses to filter (empty for all)
-     * @param {string[]} token_ids - Array of token ids to filter (empty for all)
-     * @param {Funtion} callback - JavaScript function to call on updates
-     *
-     * # Returns
-     * Result containing subscription handle or error
-     * @returns torii.Subscription
+     * @param {SubscribeTokenBalanceRequest} request - Filter and callback parameters
+     * @returns {torii.Subscription} - Subscription handle
      */
     onTokenBalanceUpdated: (
         request: SubscribeTokenBalanceRequest
@@ -429,16 +385,9 @@ export interface SDK<T extends SchemaType> {
     onTokenUpdated: (request: SubscribeTokenRequest) => torii.Subscription;
 
     /**
-     * Updates an existing token balance subscription
+     * Updates an existing token balance subscription with new filters.
      *
-     * # Parameters
-     * @param {torii.Subscription} subscription - Existing subscription to update
-     * @param {string[]} contract_addresses - New array of contract addresses to filter
-     * @param {string[]} account_addresses - New array of account addresses to filter
-     * @param {string[]} token_ids - New array of token ids to filter
-     *
-     * # Returns
-     * Result containing unit or error
+     * @param {UpdateTokenBalanceSubscriptionRequest} request - New filter parameters
      * @returns {Promise<void>}
      */
     updateTokenBalanceSubscription: (
@@ -446,14 +395,10 @@ export interface SDK<T extends SchemaType> {
     ) => Promise<void>;
 
     /**
-     * Updates an existing entity subscription
+     * Updates an existing entity subscription with new clauses.
      *
-     * # Parameters
      * @param {torii.Subscription} subscription - Existing subscription to update
-     * @param {torii.Clause} clauses - New array of key clauses for filtering
-     *
-     * # Returns
-     * Result containing unit or error
+     * @param {torii.Clause} clauses - New filter clauses
      * @returns {Promise<void>}
      */
     updateEntitySubscription: (
@@ -462,15 +407,10 @@ export interface SDK<T extends SchemaType> {
     ) => Promise<void>;
 
     /**
-     * Updates an existing event message subscription
+     * Updates an existing event message subscription with new clauses.
      *
-     * # Parameters
      * @param {torii.Subscription} subscription - Existing subscription to update
-     * @param {torii.Clause} clauses - New array of key clauses for filtering
-     * @param {boolean} historical - Whether to include historical messages
-     *
-     * # Returns
-     * Result containing unit or error
+     * @param {torii.Clause} clauses - New filter clauses
      * @returns {Promise<void>}
      */
     updateEventMessageSubscription: (
@@ -480,76 +420,115 @@ export interface SDK<T extends SchemaType> {
     ) => Promise<void>;
 
     /**
-     * Gets controllers along with their usernames for the given contract addresses
+     * Gets controller information for the specified contract addresses.
      *
-     * # Parameters
-     * @param {string[]} contract_addresses - Array of contract addresses as hex strings. If empty, all
-     *   controllers will be returned.
-     *
-     * # Returns
-     * Result containing controllers or error
-     * @returns {Promise<torii.Controllers>}
+     * @param {string[]} contract_addresses - Contract addresses to query (empty for all)
+     * @returns {Promise<torii.Controllers>} - Controller information
      */
     getControllers: (
         contract_addresses: string[]
     ) => Promise<torii.Controllers>;
 }
 
+/**
+ * Client configuration type with required world address.
+ */
 export type SDKClientConfig = Partial<
     Omit<torii.ClientConfig, "worldAddress">
 > & { worldAddress: torii.ClientConfig["worldAddress"] };
 
 /**
- * Configuration interface for the SDK.
+ * Configuration interface for initializing the SDK.
+ *
+ * @example
+ * ```typescript
+ * const config: SDKConfig = {
+ *     client: {
+ *         worldAddress: "0x...",
+ *         toriiUrl: "http://localhost:8080",
+ *         relayUrl: "/ip4/127.0.0.1/tcp/9090"
+ *     },
+ *     domain: {
+ *         name: "MyApp",
+ *         version: "1.0.0",
+ *         chainId: "SN_MAIN"
+ *     },
+ *     // Node.js only:
+ *     signer: signingKey,
+ *     identity: "0x..."
+ * };
+ * ```
  */
 export interface SDKConfig {
     /**
-     * Configuration for the Torii client.
-     * This includes settings such as the endpoint URL, authentication details, etc.
+     * Configuration for the Torii client connection.
      */
     client: SDKClientConfig;
 
     /**
-     * The Starknet domain configuration.
-     * This is used for generating typed data and signing messages.
-     * It typically includes details like the chain ID, name, and version.
+     * The Starknet domain configuration for EIP-712 typed data.
      */
     domain: StarknetDomain;
 
     /**
-     * If you use torii builtin's OffchainMessages, we'll require that you provide signer
+     * Signing key for off-chain messages (Node.js only).
+     * Required when using `sendMessage` in Node.js environments.
      */
     signer?: torii.SigningKey;
+
     /**
-     * If you use torii builtin's OffchainMessages, we'll require that you provide identity.
-     * This is your backend wallet address. This will be used to sign offchain messages. This *has* to map to `identity` field in your dojo model
+     * Identity address for off-chain messages (Node.js only).
+     * This should match the `identity` field in your Dojo models.
      */
     identity?: string;
+
     /**
-     * Wether to include logger in queries and subscdription.
-     * Could be useful while debugging
+     * Enable debug logging for queries and subscriptions.
      */
     withLogger?: boolean;
 }
 
+/**
+ * @deprecated - Use SDKConfig.withLogger instead
+ */
 export interface SDKFunctionOptions {
-    // If true, enables logging of the fetching process. Default is false.
     logging?: boolean;
 }
 
+/**
+ * Parameters for subscription methods.
+ */
 export interface SubscribeParams<T extends SchemaType> {
-    // Query object used to filter entities.
+    /**
+     * Query builder instance configured with your filters.
+     */
     query: ToriiQueryBuilder<T>;
-    // The callback function to handle the response.
+
+    /**
+     * Callback function invoked when data changes.
+     * Receives either data or an error, but not both.
+     */
     callback: SubscriptionCallback<StandardizedQueryResult<T>>;
-    // @deprecated: use `query.historical` instead
+
+    /**
+     * @deprecated - Use `query.historical()` instead
+     */
     historical?: boolean;
 }
 
+/**
+ * Parameters for get/fetch methods.
+ */
 export interface GetParams<T extends SchemaType> {
-    // The query object used to filter entities.
+    /**
+     * Query builder instance configured with your filters.
+     */
     query: ToriiQueryBuilder<T>;
-    // @deprecated: use `query.historical` instead
+
+    /**
+     * @deprecated - Use `query.historical()` instead
+     */
     historical?: boolean;
 }
-export { ToriiQueryBuilder };
+
+export type { ToriiQueryBuilder };
