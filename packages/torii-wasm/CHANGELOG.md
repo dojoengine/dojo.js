@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.12
+
+### Patch Changes
+
+- 5143b5e: fix: torii-wasm import from node-worker
+
 ## 1.5.11
 
 ### Patch Changes

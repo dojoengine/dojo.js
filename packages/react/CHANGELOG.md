@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.5.12
+
+### Patch Changes
+
+- 5143b5e: fix: torii-wasm import from node-worker
+- Updated dependencies [5143b5e]
+    - @dojoengine/state@1.5.12
+    - @dojoengine/torii-client@1.5.12
+    - @dojoengine/utils@1.5.12
+
 ## 1.5.11
 
 ### Patch Changes
