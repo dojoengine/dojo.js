@@ -1,5 +1,17 @@
 # Change Log
 
+## 1.5.13
+
+### Patch Changes
+
+- afd1b66: chore: bump packages version
+- afd1b66: bump: package version 2
+- Updated dependencies [afd1b66]
+- Updated dependencies [afd1b66]
+    - @dojoengine/state@1.5.13
+    - @dojoengine/torii-client@1.5.13
+    - @dojoengine/utils@1.5.13
+
 ## 1.5.12
 
 ### Patch Changes
