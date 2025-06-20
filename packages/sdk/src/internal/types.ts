@@ -121,7 +121,7 @@ export type ToriiResponse<T extends SchemaType> = Pagination<
  */
 export type SubscribeResponse<T extends SchemaType> = [
     ToriiResponse<T>,
-    torii.Subscription,
+    torii.Subscription
 ];
 
 /**
@@ -340,6 +340,19 @@ export interface SDK<T extends SchemaType> {
         data: TypedData,
         account?: Account
     ) => Promise<Result<string, string>>;
+
+    /**
+     * Sends multiple signed messages to the Torii server in a batch.
+     * In web environments, requires an Account. In Node.js, uses configured signer.
+     *
+     * @param {TypedData[]} data - Array of typed data to sign and send
+     * @param {Account} account - The account to sign with (web only)
+     * @returns {Promise<Result<string[], string>>} - Success with array of message IDs or error
+     */
+    sendMessageBatch: (
+        data: TypedData[],
+        account?: Account
+    ) => Promise<Result<string[], string>>;
 
     /**
      * Gets token information.
