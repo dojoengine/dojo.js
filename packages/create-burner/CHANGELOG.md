@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.5.13
+
+### Patch Changes
+
+- Updated dependencies [4a1bb53]
+    - @dojoengine/core@1.5.13
+
 ## 1.5.12
 
 ### Patch Changes

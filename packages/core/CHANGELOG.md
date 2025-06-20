@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.13
+
+### Patch Changes
+
+- 4a1bb53: chore: bump patch version
+
 ## 1.5.12
 
 ### Patch Changes
