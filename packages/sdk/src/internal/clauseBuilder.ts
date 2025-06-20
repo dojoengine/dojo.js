@@ -8,7 +8,7 @@ import {
     convertToPrimitive,
     type MemberValueParam,
 } from "../internal/convertToMemberValue.ts";
-import { shortString } from "starknet";
+import { type BigNumberish, shortString } from "starknet";
 import type { SchemaType } from "../internal/types.ts";
 
 type ClauseBuilderInterface = {
@@ -26,7 +26,7 @@ type ModelPath<T, K extends keyof T> = K extends string
 
 type GetModelType<
     T,
-    Path extends string
+    Path extends string,
 > = Path extends `${infer Namespace}-${infer Model}`
     ? Namespace extends keyof T
         ? Model extends keyof T[Namespace]
@@ -52,6 +52,18 @@ export function KeysClause<T extends SchemaType>(
 }
 
 /**
+ * Saves some keyboard strokes to get a HashedKeysClause.
+ *
+ * @param keys - the hashed_keys (entityId) that you want to query over
+ * @return ClauseBuilder<T>
+ */
+export function HashedKeysClause<T extends SchemaType>(
+    keys: BigNumberish[]
+): ClauseBuilder<T> {
+    return new ClauseBuilder<T>().hashed_keys(keys);
+}
+
+/**
  * Saves some keyboard strokes to get a MemberClause.
  *
  * @template T - the schema type
@@ -64,7 +76,7 @@ export function KeysClause<T extends SchemaType>(
 export function MemberClause<
     T extends SchemaType,
     Path extends ModelPath<T, keyof T>,
-    M extends keyof GetModelType<T, ModelPath<T, keyof T>>
+    M extends keyof GetModelType<T, ModelPath<T, keyof T>>,
 >(
     model: Path,
     member: M & string,
@@ -129,11 +141,35 @@ export class ClauseBuilder<T extends SchemaType> {
     }
 
     /**
+     * Create a hashed keys clause based on entity keys
+     * keys: an array of your keys array (no need to hash it, just pass raw keys)
+     */
+    hashed_keys(keys: BigNumberish[]): ClauseBuilder<T> {
+        const hexKeys = keys.map((k, index) => {
+            try {
+                // Convert to BigInt for robust handling of different input types
+                const num = typeof k === "string" ? BigInt(k) : BigInt(k);
+                // Convert to hex string with 0x prefix
+                return `0x${num.toString(16)}`;
+            } catch (error) {
+                throw new Error(
+                    `Invalid key value at index ${index}: ${k}. Expected a valid BigNumberish value.`
+                );
+            }
+        });
+
+        this.clause = {
+            HashedKeys: hexKeys,
+        };
+        return this;
+    }
+
+    /**
      * Create a member clause for comparing values
      */
     where<
         Path extends ModelPath<T, keyof T>,
-        M extends keyof GetModelType<T, Path>
+        M extends keyof GetModelType<T, Path>,
     >(
         model: Path,
         member: M & string,
