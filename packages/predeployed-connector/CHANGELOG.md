@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.13
+
+### Patch Changes
+
+- 5317d6a: chore: bump @dojoengine/predeployed-connector version
+
 ## 1.5.12
 
 ### Patch Changes
