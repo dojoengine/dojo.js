@@ -103,19 +103,19 @@ export async function init<T extends SchemaType>(
 
         try {
             // Sign all messages and prepare batch
-            const messages = await Promise.all(
-                data.map(async (typedData) => {
-                    const signature: Signature = await account.signMessage(typedData);
-                    const dataString = JSON.stringify(typedData);
-                    
-                    return {
-                        message: dataString,
-                        signature: Array.isArray(signature)
-                            ? signature
-                            : [signature.r.toString(), signature.s.toString()]
-                    };
-                })
-            );
+            const messages = [];
+            for (const typedData of data) {
+                const signature: Signature =
+                    await account.signMessage(typedData);
+                const dataString = JSON.stringify(typedData);
+
+                messages.push({
+                    message: dataString,
+                    signature: Array.isArray(signature)
+                        ? signature
+                        : [signature.r.toString(), signature.s.toString()],
+                });
+            }
 
             // Publish the batch of signed messages
             return ok(await client.publishMessageBatch(messages));
