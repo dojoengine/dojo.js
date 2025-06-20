@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.14
+
+### Patch Changes
+
+- 9ee999e: fix: remove promise.all from batch
+
 ## 1.5.13
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.16
+
+### Patch Changes
+
+- 9ee999e: fix: remove promise.all from batch
+- Updated dependencies [9ee999e]
+    - @dojoengine/core@1.5.15
+    - @dojoengine/torii-client@1.5.14
+    - @dojoengine/torii-wasm@1.5.14
+    - @dojoengine/utils@1.5.14
+
 ## 1.5.15
 
 ### Patch Changes

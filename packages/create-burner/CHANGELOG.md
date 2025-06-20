@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.5.15
+
+### Patch Changes
+
+- 9ee999e: fix: remove promise.all from batch
+- Updated dependencies [9ee999e]
+    - @dojoengine/core@1.5.15
+
 ## 1.5.14
 
 ### Patch Changes
