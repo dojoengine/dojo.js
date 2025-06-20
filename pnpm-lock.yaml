@@ -14,7 +14,7 @@ catalogs:
       version: 3.7.4
     '@types/react':
       specifier: ^18.3.1
-      version: 19.1.3
+      version: 18.3.21
     '@types/react-dom':
       specifier: ^18.3.1
       version: 18.3.7
@@ -23,7 +23,7 @@ catalogs:
       version: 4.0.0
     react:
       specifier: ^18.3.1
-      version: 19.1.0
+      version: 18.3.1
     react-dom:
       specifier: ^18.3.1
       version: 18.3.1
@@ -169,7 +169,7 @@ importers:
         version: 3.0.11
       bun-types:
         specifier: latest
-        version: 1.2.13
+        version: 1.2.16
       graphql:
         specifier: ^16.9.0
         version: 16.11.0
@@ -1091,7 +1091,7 @@ importers:
         version: 2.1.1
       drizzle-orm:
         specifier: ^0.38.3
-        version: 0.38.4(@libsql/client@0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@types/react@18.3.21)(bun-types@1.2.13)(react@18.3.1)
+        version: 0.38.4(@libsql/client@0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@types/react@18.3.21)(bun-types@1.2.16)(react@18.3.1)
       lucide-react:
         specifier: ^0.469.0
         version: 0.469.0(react@18.3.1)
@@ -1669,12 +1669,6 @@ importers:
       '@inquirer/prompts':
         specifier: ^3.3.2
         version: 3.3.2
-      '@types/fs-extra':
-        specifier: ^11.0.4
-        version: 11.0.4
-      '@types/prompts':
-        specifier: ^2.4.9
-        version: 2.4.9
       commander:
         specifier: ^12.1.0
         version: 12.1.0
@@ -1688,11 +1682,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       node-fetch:
-        specifier: ^2.7.0
-        version: 2.7.0(encoding@0.1.13)
-      prompts:
-        specifier: ^2.4.2
-        version: 2.4.2
+        specifier: ^3.3.2
+        version: 3.3.2
       type-fest:
         specifier: ^4.26.1
         version: 4.41.0
@@ -1700,12 +1691,15 @@ importers:
       '@types/cross-spawn':
         specifier: ^6.0.6
         version: 6.0.6
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9
-      '@types/node-fetch':
-        specifier: ^2.6.12
-        version: 2.6.12
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.17.44
       tsup:
         specifier: ^8.3.5
         version: 8.4.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.4)(typescript@5.7.3)(yaml@2.7.1)
@@ -1714,7 +1708,7 @@ importers:
         version: 5.7.3
       vitest:
         specifier: ^2.1.1
-        version: 2.1.9(@types/node@22.15.15)(jsdom@24.1.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.2)(terser@5.39.0)
+        version: 2.1.9(@types/node@20.17.44)(jsdom@24.1.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.2)(terser@5.39.0)
 
   packages/predeployed-connector:
     dependencies:
@@ -6818,9 +6812,6 @@ packages:
   '@types/pretty-hrtime@1.0.3':
     resolution: {integrity: sha512-nj39q0wAIdhwn7DGUyT9irmsKK1tV0bd5WFEhgpqNTMFZ8cE+jieuTphCW0tfdm47S2zVT5mr09B28b1chmQMA==}
 
-  '@types/prompts@2.4.9':
-    resolution: {integrity: sha512-qTxFi6Buiu8+50/+3DGIWLHM6QuWsEKugJnnP6iv2Mc4ncxE4A/OJkjuVOA+5X0X1S/nq5VJRa8Lu+nwcvbrKA==}
-
   '@types/prop-types@15.7.14':
     resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
 
@@ -7990,8 +7981,8 @@ packages:
   bun-plugin-dts@0.3.0:
     resolution: {integrity: sha512-QpiAOKfPcdOToxySOqRY8FwL+brTvyXEHWzrSCRKt4Pv7Z4pnUrhK9tFtM7Ndm7ED09B/0cGXnHJKqmekr/ERw==}
 
-  bun-types@1.2.13:
-    resolution: {integrity: sha512-rRjA1T6n7wto4gxhAO/ErZEtOXyEZEmnIHQfl0Dt1QQSB4QV0iP6BZ9/YB5fZaHFQ2dwHFrmPaRQ9GGMX01k9Q==}
+  bun-types@1.2.16:
+    resolution: {integrity: sha512-ciXLrHV4PXax9vHvUrkvun9VPVGOVwbbbBF/Ev1cXz12lyEZMoJpIJABOfPcN9gDJRaiKF9MVbSygLg4NXu3/A==}
 
   bundle-require@5.1.0:
     resolution: {integrity: sha512-3WrrOuZiyaaZPWiEt4G3+IffISVC9HYlWueJEBWED4ZH4aIAC2PnkdnuRrR94M+w6yGWn4AglWtJtBI8YqvgoA==}
@@ -11244,6 +11235,7 @@ packages:
 
   libsql@0.4.7:
     resolution: {integrity: sha512-T9eIRCs6b0J1SHKYIvD8+KCJMcWZ900iZyxdnSCdqxN12Z1ijzT+jY5nrk72Jw4B0HGzms2NgpryArlJqvc3Lw==}
+    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   lie@3.3.0:
@@ -21919,11 +21911,6 @@ snapshots:
 
   '@types/pretty-hrtime@1.0.3': {}
 
-  '@types/prompts@2.4.9':
-    dependencies:
-      '@types/node': 20.17.44
-      kleur: 3.0.3
-
   '@types/prop-types@15.7.14': {}
 
   '@types/pug@2.0.10': {}
@@ -22562,6 +22549,14 @@ snapshots:
       '@vitest/utils': 3.1.3
       chai: 5.2.0
       tinyrainbow: 2.0.0
+
+  '@vitest/mocker@2.1.9(vite@5.4.19(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.39.0))':
+    dependencies:
+      '@vitest/spy': 2.1.9
+      estree-walker: 3.0.3
+      magic-string: 0.30.17
+    optionalDependencies:
+      vite: 5.4.19(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.39.0)
 
   '@vitest/mocker@2.1.9(vite@5.4.19(@types/node@22.15.15)(lightningcss@1.29.2)(terser@5.39.0))':
     dependencies:
@@ -23953,7 +23948,7 @@ snapshots:
       dts-bundle-generator: 9.5.1
       get-tsconfig: 4.10.0
 
-  bun-types@1.2.13:
+  bun-types@1.2.16:
     dependencies:
       '@types/node': 20.17.44
 
@@ -24878,11 +24873,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.4(@libsql/client@0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@types/react@18.3.21)(bun-types@1.2.13)(react@18.3.1):
+  drizzle-orm@0.38.4(@libsql/client@0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@types/react@18.3.21)(bun-types@1.2.16)(react@18.3.1):
     optionalDependencies:
       '@libsql/client': 0.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@types/react': 18.3.21
-      bun-types: 1.2.13
+      bun-types: 1.2.16
       react: 18.3.1
 
   dset@3.1.4: {}
@@ -25386,8 +25381,8 @@ snapshots:
       '@typescript-eslint/parser': 5.62.0(eslint@8.57.1)(typescript@5.8.3)
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
@@ -25406,7 +25401,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0)(eslint@8.57.1):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.0
@@ -25417,22 +25412,22 @@ snapshots:
       tinyglobby: 0.2.13
       unrs-resolver: 1.7.2
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 5.62.0(eslint@8.57.1)(typescript@5.8.3)
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0)(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -25443,7 +25438,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -31404,6 +31399,24 @@ snapshots:
       - supports-color
       - terser
 
+  vite-node@2.1.9(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.39.0):
+    dependencies:
+      cac: 6.7.14
+      debug: 4.4.0
+      es-module-lexer: 1.7.0
+      pathe: 1.1.2
+      vite: 5.4.19(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.39.0)
+    transitivePeerDependencies:
+      - '@types/node'
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+
   vite-node@2.1.9(@types/node@22.15.15)(lightningcss@1.29.2)(terser@5.39.0):
     dependencies:
       cac: 6.7.14
@@ -31625,6 +31638,17 @@ snapshots:
       lightningcss: 1.29.2
       terser: 5.39.0
 
+  vite@5.4.19(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.39.0):
+    dependencies:
+      esbuild: 0.21.5
+      postcss: 8.5.3
+      rollup: 4.40.2
+    optionalDependencies:
+      '@types/node': 20.17.44
+      fsevents: 2.3.3
+      lightningcss: 1.29.2
+      terser: 5.39.0
+
   vite@5.4.19(@types/node@22.15.15)(lightningcss@1.29.2)(terser@5.39.0):
     dependencies:
       esbuild: 0.21.5
@@ -31771,6 +31795,42 @@ snapshots:
     transitivePeerDependencies:
       - less
       - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+
+  vitest@2.1.9(@types/node@20.17.44)(jsdom@24.1.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.2)(terser@5.39.0):
+    dependencies:
+      '@vitest/expect': 2.1.9
+      '@vitest/mocker': 2.1.9(vite@5.4.19(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.39.0))
+      '@vitest/pretty-format': 2.1.9
+      '@vitest/runner': 2.1.9
+      '@vitest/snapshot': 2.1.9
+      '@vitest/spy': 2.1.9
+      '@vitest/utils': 2.1.9
+      chai: 5.2.0
+      debug: 4.4.0
+      expect-type: 1.2.1
+      magic-string: 0.30.17
+      pathe: 1.1.2
+      std-env: 3.9.0
+      tinybench: 2.9.0
+      tinyexec: 0.3.2
+      tinypool: 1.0.2
+      tinyrainbow: 1.2.0
+      vite: 5.4.19(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.39.0)
+      vite-node: 2.1.9(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.39.0)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 20.17.44
+      jsdom: 24.1.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+    transitivePeerDependencies:
+      - less
+      - lightningcss
+      - msw
       - sass
       - sass-embedded
       - stylus
