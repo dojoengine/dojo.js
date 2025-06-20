@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.13
+
+### Patch Changes
+
+- 676d4a5: chore: revamp create-dojo command
+
 ## 1.5.12
 
 ### Patch Changes

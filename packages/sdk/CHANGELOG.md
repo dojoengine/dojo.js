@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.13
+
+### Patch Changes
+
+- ec746da: feat: add hashedkeysclause to clause builder
+
 ## 1.5.12
 
 ### Patch Changes
