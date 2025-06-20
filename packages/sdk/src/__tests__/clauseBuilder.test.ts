@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
     AndComposeClause,
     ClauseBuilder,
+    HashedKeysClause,
     MemberClause,
     OrComposeClause,
 } from "../internal/clauseBuilder";
@@ -355,5 +356,63 @@ describe("ClauseBuilder", () => {
         ]).build();
 
         expect(clause).toEqual(nicerClause);
+    });
+
+    describe("hashed_keys", () => {
+        it("should create a HashedKeys clause with valid number keys", () => {
+            const builder = new ClauseBuilder<TestModels>();
+            const clause = builder.hashed_keys([123, 456, 789]).build();
+
+            expect(clause).toEqual({
+                HashedKeys: ["0x7b", "0x1c8", "0x315"],
+            });
+        });
+
+        it("should create a HashedKeys clause with valid string keys", () => {
+            const builder = new ClauseBuilder<TestModels>();
+            const clause = builder.hashed_keys(["123", "456", "789"]).build();
+
+            expect(clause).toEqual({
+                HashedKeys: ["0x7b", "0x1c8", "0x315"],
+            });
+        });
+
+        it("should create a HashedKeys clause with mixed types", () => {
+            const builder = new ClauseBuilder<TestModels>();
+            const clause = builder
+                .hashed_keys([123, "456", BigInt(789)])
+                .build();
+
+            expect(clause).toEqual({
+                HashedKeys: ["0x7b", "0x1c8", "0x315"],
+            });
+        });
+
+        it("should create a HashedKeys clause with hex string input", () => {
+            const builder = new ClauseBuilder<TestModels>();
+            const clause = builder
+                .hashed_keys(["0x7b", "0x1c8", "0x315"])
+                .build();
+
+            expect(clause).toEqual({
+                HashedKeys: ["0x7b", "0x1c8", "0x315"],
+            });
+        });
+
+        it("should throw error for invalid key value", () => {
+            const builder = new ClauseBuilder<TestModels>();
+
+            expect(() => builder.hashed_keys(["invalid", 123]).build()).toThrow(
+                "Invalid key value at index 0: invalid. Expected a valid BigNumberish value."
+            );
+        });
+
+        it("should work with HashedKeysClause helper function", () => {
+            const clause = HashedKeysClause<TestModels>([123, 456]).build();
+
+            expect(clause).toEqual({
+                HashedKeys: ["0x7b", "0x1c8"],
+            });
+        });
     });
 });
