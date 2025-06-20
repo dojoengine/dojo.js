@@ -57,10 +57,10 @@ export default function Chat() {
                 const signature = await account.signMessage(msg);
 
                 try {
-                    await db.client.publishMessage(
-                        JSON.stringify(msg),
-                        signature as string[]
-                    );
+                    await db.client.publishMessage({
+                        message: JSON.stringify(msg),
+                        signature: signature as string[],
+                    });
                     reset();
                 } catch (error) {
                     console.error("failed to publish message:", error);

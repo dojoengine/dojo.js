@@ -79,15 +79,48 @@ export async function init<T extends SchemaType>(
 
             // Publish the signed message
             return ok(
-                await client.publishMessage(
-                    dataString,
-                    Array.isArray(signature)
+                await client.publishMessage({
+                    message: dataString,
+                    signature: Array.isArray(signature)
                         ? signature
-                        : [signature.r.toString(), signature.s.toString()]
-                )
+                        : [signature.r.toString(), signature.s.toString()],
+                })
             );
         } catch (error) {
             console.error("Failed to send message:", error);
+            throw error;
+        }
+    };
+
+    // Web-specific batch message signing implementation
+    const signMessageBatch = async (
+        data: TypedData[],
+        account?: Account
+    ): Promise<Result<string[], string>> => {
+        if (!account) {
+            return err(NO_ACCOUNT);
+        }
+
+        try {
+            // Sign all messages and prepare batch
+            const messages = await Promise.all(
+                data.map(async (typedData) => {
+                    const signature: Signature = await account.signMessage(typedData);
+                    const dataString = JSON.stringify(typedData);
+                    
+                    return {
+                        message: dataString,
+                        signature: Array.isArray(signature)
+                            ? signature
+                            : [signature.r.toString(), signature.s.toString()]
+                    };
+                })
+            );
+
+            // Publish the batch of signed messages
+            return ok(await client.publishMessageBatch(messages));
+        } catch (error) {
+            console.error("Failed to send message batch:", error);
             throw error;
         }
     };
@@ -96,5 +129,6 @@ export async function init<T extends SchemaType>(
         client,
         config: options,
         signMessage,
+        signMessageBatch,
     });
 }

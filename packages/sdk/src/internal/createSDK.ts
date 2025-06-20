@@ -38,6 +38,10 @@ export interface CreateSDKOptions {
         data: TypedData,
         account?: Account
     ) => Promise<Result<string, string>>;
+    signMessageBatch: (
+        data: TypedData[],
+        account?: Account
+    ) => Promise<Result<string[], string>>;
 }
 
 /**
@@ -48,6 +52,7 @@ export function createSDK<T extends SchemaType>({
     client,
     config,
     signMessage,
+    signMessageBatch,
 }: CreateSDKOptions): SDK<T> {
     return {
         client,
@@ -180,6 +185,15 @@ export function createSDK<T extends SchemaType>({
          * @returns {Promise<Result<Uint8Array, string>>} - A promise that resolves when the message is sent successfully.
          */
         sendMessage: signMessage,
+
+        /**
+         * Sends multiple signed messages in a batch.
+         *
+         * @param {TypedData[]} data - Array of typed data to be signed and sent.
+         * @param {Account} account - The account used to sign the messages.
+         * @returns {Promise<Result<string[], string>>} - A promise that resolves when all messages are sent successfully.
+         */
+        sendMessageBatch: signMessageBatch,
 
         /**
          * Gets tokens based on the provided request.

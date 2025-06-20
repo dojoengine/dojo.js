@@ -73,7 +73,7 @@ export async function setup({ ...config }: DojoConfig) {
         clientComponents,
         contractComponents,
         publish: (typedData: string, signature: ArraySignatureType) => {
-            toriiClient.publishMessage(typedData, signature);
+            toriiClient.publishMessage({ message: typedData, signature });
         },
         config,
         dojoProvider,
