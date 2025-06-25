@@ -73,8 +73,18 @@ function updateTokenBalancesList(
     previousBalances: TokenBalance[],
     newBalance: TokenBalance
 ): TokenBalance[] {
+    if (
+        BigInt(newBalance.account_address) === 0n &&
+        BigInt(newBalance.contract_address) === 0n
+    ) {
+        // torii subscription received, we ignore
+        return previousBalances;
+    }
+
     const existingBalanceIndex = previousBalances.findIndex(
-        (balance) => balance.token_id === newBalance.token_id
+        (balance) =>
+            balance.token_id === newBalance.token_id &&
+            balance.contract_address === newBalance.contract_address
     );
 
     // If balance doesn't exist, append it to the list
