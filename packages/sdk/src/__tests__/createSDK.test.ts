@@ -86,8 +86,8 @@ describe("createSDK", () => {
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,
             config: mockConfig,
-            signMessage: mockSignMessage,
-            signMessageBatch: mockSignMessageBatch,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
         });
 
         // Check that all required methods exist
@@ -107,14 +107,15 @@ describe("createSDK", () => {
         expect(sdk.updateEntitySubscription).toBeDefined();
         expect(sdk.updateEventMessageSubscription).toBeDefined();
         expect(sdk.getControllers).toBeDefined();
+        expect(sdk.sendSignedMessageBatch).toBeDefined();
     });
 
     it("should use provided signMessage function", async () => {
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,
             config: mockConfig,
-            signMessage: mockSignMessage,
-            signMessageBatch: mockSignMessageBatch,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
         });
 
         const typedData = {
@@ -134,8 +135,8 @@ describe("createSDK", () => {
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,
             config: mockConfig,
-            signMessage: mockSignMessage,
-            signMessageBatch: mockSignMessageBatch,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
         });
 
         const typedData1 = {
@@ -159,9 +160,57 @@ describe("createSDK", () => {
             message: { id: "3" },
         };
 
-        const result = await sdk.sendMessageBatch([typedData1, typedData2, typedData3]);
+        const result = await sdk.sendMessageBatch([
+            typedData1,
+            typedData2,
+            typedData3,
+        ]);
 
-        expect(mockSignMessageBatch).toHaveBeenCalledWith([typedData1, typedData2, typedData3]);
+        expect(mockSignMessageBatch).toHaveBeenCalledWith([
+            typedData1,
+            typedData2,
+            typedData3,
+        ]);
+        expect(result.isOk()).toBe(true);
+        if (result.isOk()) {
+            expect(result.value).toEqual(["0x123", "0x456", "0x789"]);
+        }
+    });
+
+    it("should send signed message batch directly", async () => {
+        const sdk = createSDK<typeof mockSchema>({
+            client: mockClient,
+            config: mockConfig,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
+        });
+
+        const signedMessages: torii.Message[] = [
+            {
+                message: JSON.stringify({
+                    types: {},
+                    primaryType: "Test1",
+                    domain: {},
+                    message: { id: "1" },
+                }),
+                signature: ["0xabc123", "0xdef456"],
+            },
+            {
+                message: JSON.stringify({
+                    types: {},
+                    primaryType: "Test2",
+                    domain: {},
+                    message: { id: "2" },
+                }),
+                signature: ["0x789abc", "0xdef012"],
+            },
+        ];
+
+        const result = await sdk.sendSignedMessageBatch(signedMessages);
+
+        expect(mockClient.publishMessageBatch).toHaveBeenCalledWith(
+            signedMessages
+        );
         expect(result.isOk()).toBe(true);
         if (result.isOk()) {
             expect(result.value).toEqual(["0x123", "0x456", "0x789"]);
@@ -172,8 +221,8 @@ describe("createSDK", () => {
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,
             config: mockConfig,
-            signMessage: mockSignMessage,
-            signMessageBatch: mockSignMessageBatch,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
         });
 
         const message = {
@@ -203,8 +252,8 @@ describe("createSDK", () => {
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,
             config: mockConfig,
-            signMessage: mockSignMessage,
-            signMessageBatch: mockSignMessageBatch,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
         });
 
         const result = await sdk.getEntities({
@@ -233,8 +282,8 @@ describe("createSDK", () => {
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,
             config: mockConfig,
-            signMessage: mockSignMessage,
-            signMessageBatch: mockSignMessageBatch,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
         });
 
         const [initial, subscription] = await sdk.subscribeEntityQuery({
@@ -253,8 +302,8 @@ describe("createSDK", () => {
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,
             config: mockConfig,
-            signMessage: mockSignMessage,
-            signMessageBatch: mockSignMessageBatch,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
         });
 
         const controllers = await sdk.getControllers(["0x123", "0x456"]);
@@ -270,8 +319,8 @@ describe("createSDK", () => {
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,
             config: mockConfig,
-            signMessage: mockSignMessage,
-            signMessageBatch: mockSignMessageBatch,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
         });
 
         const mockSubscription = {

@@ -62,7 +62,7 @@ export async function init<T extends SchemaType>(
     const client = await new torii.ToriiClient(clientConfig);
 
     // Web-specific message signing implementation
-    const signMessage = async (
+    const sendMessage = async (
         data: TypedData,
         account?: Account
     ): Promise<Result<string, string>> => {
@@ -93,7 +93,7 @@ export async function init<T extends SchemaType>(
     };
 
     // Web-specific batch message signing implementation
-    const signMessageBatch = async (
+    const sendMessageBatch = async (
         data: TypedData[],
         account?: Account
     ): Promise<Result<string[], string>> => {
@@ -105,8 +105,9 @@ export async function init<T extends SchemaType>(
             // Sign all messages and prepare batch
             const messages = [];
             for (const typedData of data) {
-                const signature: Signature =
-                    await account.signMessage(typedData);
+                const signature: Signature = await account.signMessage(
+                    typedData
+                );
                 const dataString = JSON.stringify(typedData);
 
                 messages.push({
@@ -128,7 +129,7 @@ export async function init<T extends SchemaType>(
     return createSDK<T>({
         client,
         config: options,
-        signMessage,
-        signMessageBatch,
+        sendMessage,
+        sendMessageBatch,
     });
 }

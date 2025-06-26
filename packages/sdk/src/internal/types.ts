@@ -355,6 +355,17 @@ export interface SDK<T extends SchemaType> {
     ) => Promise<Result<string[], string>>;
 
     /**
+     * Sends already signed messages to the Torii server in a batch.
+     * This method allows you to send pre-signed messages directly without signing them again.
+     *
+     * @param {torii.Message[]} data - Array of signed messages with message content and signatures
+     * @returns {Promise<Result<string[], string>>} - Success with array of message IDs or error
+     */
+    sendSignedMessageBatch: (
+        data: torii.Message[]
+    ) => Promise<Result<string[], string>>;
+
+    /**
      * Gets token information.
      *
      * @param {GetTokenRequest} request - Filter parameters
