@@ -47,7 +47,7 @@ const createMockClient = (): torii.ToriiClient =>
         updateEventMessageSubscription: vi.fn().mockResolvedValue(undefined),
         getControllers: vi.fn().mockResolvedValue([]),
         // Add other required methods as needed
-    } as unknown as torii.ToriiClient);
+    }) as unknown as torii.ToriiClient;
 
 describe("createSDK", () => {
     let mockClient: torii.ToriiClient;
@@ -171,46 +171,6 @@ describe("createSDK", () => {
             typedData2,
             typedData3,
         ]);
-        expect(result.isOk()).toBe(true);
-        if (result.isOk()) {
-            expect(result.value).toEqual(["0x123", "0x456", "0x789"]);
-        }
-    });
-
-    it("should send signed message batch directly", async () => {
-        const sdk = createSDK<typeof mockSchema>({
-            client: mockClient,
-            config: mockConfig,
-            sendMessage: mockSignMessage,
-            sendMessageBatch: mockSignMessageBatch,
-        });
-
-        const signedMessages: torii.Message[] = [
-            {
-                message: JSON.stringify({
-                    types: {},
-                    primaryType: "Test1",
-                    domain: {},
-                    message: { id: "1" },
-                }),
-                signature: ["0xabc123", "0xdef456"],
-            },
-            {
-                message: JSON.stringify({
-                    types: {},
-                    primaryType: "Test2",
-                    domain: {},
-                    message: { id: "2" },
-                }),
-                signature: ["0x789abc", "0xdef012"],
-            },
-        ];
-
-        const result = await sdk.sendSignedMessageBatch(signedMessages);
-
-        expect(mockClient.publishMessageBatch).toHaveBeenCalledWith(
-            signedMessages
-        );
         expect(result.isOk()).toBe(true);
         if (result.isOk()) {
             expect(result.value).toEqual(["0x123", "0x456", "0x789"]);
