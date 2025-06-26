@@ -159,9 +159,17 @@ describe("createSDK", () => {
             message: { id: "3" },
         };
 
-        const result = await sdk.sendMessageBatch([typedData1, typedData2, typedData3]);
+        const result = await sdk.sendMessageBatch([
+            typedData1,
+            typedData2,
+            typedData3,
+        ]);
 
-        expect(mockSignMessageBatch).toHaveBeenCalledWith([typedData1, typedData2, typedData3]);
+        expect(mockSignMessageBatch).toHaveBeenCalledWith([
+            typedData1,
+            typedData2,
+            typedData3,
+        ]);
         expect(result.isOk()).toBe(true);
         if (result.isOk()) {
             expect(result.value).toEqual(["0x123", "0x456", "0x789"]);

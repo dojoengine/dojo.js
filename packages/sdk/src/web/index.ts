@@ -105,8 +105,9 @@ export async function init<T extends SchemaType>(
             // Sign all messages and prepare batch
             const messages = [];
             for (const typedData of data) {
-                const signature: Signature =
-                    await account.signMessage(typedData);
+                const signature: Signature = await account.signMessage(
+                    typedData
+                );
                 const dataString = JSON.stringify(typedData);
 
                 messages.push({
