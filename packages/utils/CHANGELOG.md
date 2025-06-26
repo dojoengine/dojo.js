@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.16
+
+### Patch Changes
+
+- 7d93332: fix: add sendSignedMessageBatch util
+
 ## 1.5.15
 
 ### Patch Changes

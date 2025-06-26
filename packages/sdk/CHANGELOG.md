@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.18
+
+### Patch Changes
+
+- 7d93332: fix: add sendSignedMessageBatch util
+- Updated dependencies [7d93332]
+    - @dojoengine/core@1.5.17
+    - @dojoengine/torii-client@1.5.16
+    - @dojoengine/torii-wasm@1.5.16
+    - @dojoengine/utils@1.5.16
+
 ## 1.5.17
 
 ### Patch Changes
