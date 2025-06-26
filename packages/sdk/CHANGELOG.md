@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.17
+
+### Patch Changes
+
+- 5b32060: fix: useTokens
+- Updated dependencies [5b32060]
+    - @dojoengine/core@1.5.16
+    - @dojoengine/torii-client@1.5.15
+    - @dojoengine/torii-wasm@1.5.15
+    - @dojoengine/utils@1.5.15
+
 ## 1.5.16
 
 ### Patch Changes

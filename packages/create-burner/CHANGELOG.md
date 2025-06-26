@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.5.16
+
+### Patch Changes
+
+- 5b32060: fix: useTokens
+- Updated dependencies [5b32060]
+    - @dojoengine/core@1.5.16
+
 ## 1.5.15
 
 ### Patch Changes
