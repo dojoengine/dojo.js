@@ -1,6 +1,6 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
 import type { Account, TypedData } from "starknet";
-import { type Result } from "neverthrow";
+import { type Result, ok } from "neverthrow";
 
 import type {
     SDK,
@@ -34,11 +34,11 @@ import { parseEntities } from "./parseEntities.ts";
 export interface CreateSDKOptions {
     client: torii.ToriiClient;
     config: SDKConfig;
-    signMessage: (
+    sendMessage: (
         data: TypedData,
         account?: Account
     ) => Promise<Result<string, string>>;
-    signMessageBatch: (
+    sendMessageBatch: (
         data: TypedData[],
         account?: Account
     ) => Promise<Result<string[], string>>;
@@ -51,8 +51,8 @@ export interface CreateSDKOptions {
 export function createSDK<T extends SchemaType>({
     client,
     config,
-    signMessage,
-    signMessageBatch,
+    sendMessage,
+    sendMessageBatch,
 }: CreateSDKOptions): SDK<T> {
     return {
         client,
@@ -184,7 +184,7 @@ export function createSDK<T extends SchemaType>({
          * @param {Account} account - The account used to sign the message.
          * @returns {Promise<Result<Uint8Array, string>>} - A promise that resolves when the message is sent successfully.
          */
-        sendMessage: signMessage,
+        sendMessage,
 
         /**
          * Sends multiple signed messages in a batch.
@@ -193,7 +193,26 @@ export function createSDK<T extends SchemaType>({
          * @param {Account} account - The account used to sign the messages.
          * @returns {Promise<Result<string[], string>>} - A promise that resolves when all messages are sent successfully.
          */
-        sendMessageBatch: signMessageBatch,
+        sendMessageBatch,
+
+        /**
+         * Sends already signed messages to the Torii server in a batch.
+         * This method allows you to send pre-signed messages directly without signing them again.
+         *
+         * @param {torii.Message[]} data - Array of signed messages with message content and signatures
+         * @returns {Promise<Result<string[], string>>} - A promise that resolves when all messages are sent successfully.
+         */
+        sendSignedMessageBatch: async (
+            data: torii.Message[]
+        ): Promise<Result<string[], string>> => {
+            try {
+                // Publish the batch of already signed messages
+                return ok(await client.publishMessageBatch(data));
+            } catch (error) {
+                console.error("Failed to send signed message batch:", error);
+                throw error;
+            }
+        },
 
         /**
          * Gets tokens based on the provided request.
