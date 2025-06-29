@@ -3,8 +3,8 @@ packages:
   - "examples/**"
 
 catalog:
-  starknet: 6.23.1
-  get-starknet-core: ^4.0.0
+  starknet: 7.1.0
+  "@starknet-io/get-starknet-core": 4.0.7
   "@starknet-react/core": ^3.6.2
   "@starknet-react/chains": ^3.1.0
   "@types/react": ^18.3.1
