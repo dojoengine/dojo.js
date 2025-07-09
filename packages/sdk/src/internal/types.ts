@@ -392,7 +392,7 @@ export interface SDK<T extends SchemaType> {
      */
     onTokenBalanceUpdated: (
         request: SubscribeTokenBalanceRequest
-    ) => torii.Subscription;
+    ) => Promise<torii.Subscription>;
 
     /**
      * Subscribes to token updates
@@ -406,7 +406,7 @@ export interface SDK<T extends SchemaType> {
      * Result containing subscription handle or error
      * @returns torii.Subscription
      */
-    onTokenUpdated: (request: SubscribeTokenRequest) => torii.Subscription;
+    onTokenUpdated: (request: SubscribeTokenRequest) => Promise<torii.Subscription>;
 
     /**
      * Updates an existing token balance subscription with new filters.
