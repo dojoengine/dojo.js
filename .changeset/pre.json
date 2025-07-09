@@ -1,0 +1,38 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "example-node-worker": "0.0.1",
+    "example-nodejs-bot": "0.0.0",
+    "example-predeployed-connector": "0.0.0",
+    "example-vanillajs-phaser-recs": "0.0.0",
+    "example-vite-experimental-sdk": "0.0.0",
+    "example-vite-grpc-playground": "0.0.0",
+    "example-vite-kitchen-sink": "0.1.0",
+    "example-vite-phaser-sdk": "1.5.4",
+    "example-vite-react-app-recs": "0.0.1",
+    "example-vite-react-phaser-recs": "0.1.0",
+    "example-vite-react-pwa-recs": "0.0.1",
+    "example-vite-react-sdk": "0.0.0",
+    "example-vite-react-sql": "1.0.0",
+    "example-vite-react-threejs-recs": "0.0.1",
+    "example-vite-svelte-recs": "0.0.0",
+    "example-vite-token-balance": "0.0.0",
+    "example-vue-app-recs": "0.0.0",
+    "@dojoengine/core": "1.5.17",
+    "@dojoengine/create-burner": "1.5.17",
+    "@dojoengine/create-dojo": "1.5.17",
+    "@dojoengine/predeployed-connector": "1.5.17",
+    "@dojoengine/react": "1.5.16",
+    "@dojoengine/sdk": "1.5.18",
+    "@dojoengine/state": "1.5.16",
+    "@dojoengine/torii-client": "1.5.16",
+    "@dojoengine/torii-wasm": "1.5.16",
+    "@dojoengine/utils": "1.5.16",
+    "@dojoengine/utils-wasm": "1.5.16"
+  },
+  "changesets": [
+    "long-papers-judge",
+    "metal-cats-wish"
+  ]
+}

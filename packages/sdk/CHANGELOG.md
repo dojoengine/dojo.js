@@ -1,5 +1,21 @@
 # Change Log
 
+## 1.6.0-beta.0
+
+### Minor Changes
+
+- b9817aa: chore: bump starknetjs version
+
+### Patch Changes
+
+- 30b6165: fix: add sendSignedMessageBatch util
+- Updated dependencies [b9817aa]
+- Updated dependencies [30b6165]
+    - @dojoengine/core@1.6.0-beta.0
+    - @dojoengine/torii-client@1.6.0-beta.0
+    - @dojoengine/torii-wasm@1.6.0-beta.0
+    - @dojoengine/utils@1.6.0-beta.0
+
 ## 1.5.18
 
 ### Patch Changes

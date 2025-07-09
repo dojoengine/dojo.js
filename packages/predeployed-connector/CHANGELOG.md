@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.6.0-beta.0
+
+### Minor Changes
+
+- b9817aa: chore: bump starknetjs version
+
+### Patch Changes
+
+- 30b6165: fix: add sendSignedMessageBatch util
+
 ## 1.5.17
 
 ### Patch Changes
