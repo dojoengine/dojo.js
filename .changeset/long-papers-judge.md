@@ -1,15 +1,15 @@
 ---
-"@dojoengine/predeployed-connector": patch
-"@dojoengine/create-burner": patch
-"@dojoengine/react": patch
-"@dojoengine/core": patch
-"@dojoengine/create-dojo": patch
-"@dojoengine/sdk": patch
-"@dojoengine/state": patch
-"@dojoengine/torii-client": patch
-"@dojoengine/torii-wasm": patch
-"@dojoengine/utils": patch
-"@dojoengine/utils-wasm": patch
+"@dojoengine/predeployed-connector": minor
+"@dojoengine/create-burner": minor
+"@dojoengine/react": minor
+"@dojoengine/core": minor
+"@dojoengine/create-dojo": minor
+"@dojoengine/sdk": minor
+"@dojoengine/state": minor
+"@dojoengine/torii-client": minor
+"@dojoengine/torii-wasm": minor
+"@dojoengine/utils": minor
+"@dojoengine/utils-wasm": minor
 ---
 
 chore: bump starknetjs version
