@@ -106,7 +106,6 @@ jobs:
         run: |
           CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
           echo "Current branch: $CURRENT_BRANCH"
-          
           # Determine if we should use prerelease mode
           if [[ "$CURRENT_BRANCH" != "main" && "${{ github.event.inputs.release_type }}" == "auto" ]]; then
             echo "Non-main branch detected, will use prerelease mode"
@@ -146,7 +145,7 @@ jobs:
         run: |
           PRERELEASE_TAG="${{ steps.release-strategy.outputs.prerelease_tag }}"
           echo "Entering prerelease mode with tag: $PRERELEASE_TAG"
-          
+
           if [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
             pnpm changeset pre enter "$PRERELEASE_TAG"
           else
@@ -171,7 +170,6 @@ jobs:
         id: changesets-version
         run: |
           echo "Running changeset version..."
-          
           if [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
             pnpm changeset version
             
@@ -193,7 +191,6 @@ jobs:
           else
             git add .
             git commit -m "chore: release"
-            
             # Push to the current branch
             CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
             git push origin "refs/heads/$CURRENT_BRANCH:refs/heads/$CURRENT_BRANCH"
@@ -204,7 +201,7 @@ jobs:
         run: |
           echo "Publishing packages..."
           # Changesets will only publish packages that are not ignored in config
-          pnpm changeset publish
+          pnpm release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -225,13 +222,12 @@ jobs:
           echo "Creating tags..."
           pnpm changeset tag
           git push --tags
-          
+
       - name: Exit prerelease mode if needed
         if: steps.release-strategy.outputs.use_prerelease == 'true' && github.event.inputs.dry_run != 'true' && steps.check-changesets.outputs.has_changesets == 'true'
         run: |
           echo "Exiting prerelease mode"
           pnpm changeset pre exit || true
-          
           # Commit the pre.json removal if it exists
           if [ -f .changeset/pre.json ]; then
             git add .changeset/pre.json
@@ -245,7 +241,7 @@ jobs:
         run: |
           # Get all tags that were just created
           TAGS=$(git tag --points-at HEAD | grep '@dojoengine/' || true)
-          
+
           # For each tag, trigger the release workflow
           CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
           for TAG in $TAGS; do
@@ -262,20 +258,17 @@ jobs:
         run: |
           echo "DRY RUN SUMMARY:"
           echo "================"
-          
           if [ "${{ steps.release-strategy.outputs.use_prerelease }}" == "true" ]; then
             echo "Would enter prerelease mode: ${{ steps.release-strategy.outputs.prerelease_tag }}"
           fi
-          
           echo "Would version packages according to changesets"
           echo "Would commit with message: chore: release"
           echo "Would create and push tags"
           echo "Would publish packages to npm"
-          
+
           if [ "${{ steps.release-strategy.outputs.use_prerelease }}" == "true" ]; then
             echo "Would exit prerelease mode after publishing"
           fi
-          
           echo ""
           echo "Current git status:"
           git status

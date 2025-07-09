@@ -47,7 +47,7 @@ const createMockClient = (): torii.ToriiClient =>
         updateEventMessageSubscription: vi.fn().mockResolvedValue(undefined),
         getControllers: vi.fn().mockResolvedValue(["0x123", "0x456"]),
         // Add other required methods as needed
-    }) as unknown as torii.ToriiClient;
+    } as unknown as torii.ToriiClient);
 
 describe("createSDK", () => {
     let mockClient: torii.ToriiClient;

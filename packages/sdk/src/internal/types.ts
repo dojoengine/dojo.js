@@ -406,7 +406,9 @@ export interface SDK<T extends SchemaType> {
      * Result containing subscription handle or error
      * @returns torii.Subscription
      */
-    onTokenUpdated: (request: SubscribeTokenRequest) => Promise<torii.Subscription>;
+    onTokenUpdated: (
+        request: SubscribeTokenRequest
+    ) => Promise<torii.Subscription>;
 
     /**
      * Updates an existing token balance subscription with new filters.
