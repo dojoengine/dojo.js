@@ -1,5 +1,5 @@
 import { Connector } from "@starknet-react/core";
-import { StarknetWindowObject } from "get-starknet-core";
+import { StarknetWindowObject } from "@starknet-io/get-starknet-core";
 import { Account, AccountInterface, shortString } from "starknet";
 
 import { katanaIcon } from "./icons";
