@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.6.0-beta.2
+
+### Patch Changes
+
+- 19c9411: fix: github workflow fix
+- Updated dependencies [19c9411]
+    - @dojoengine/torii-client@1.6.0-beta.2
+    - @dojoengine/state@1.6.0-beta.2
+    - @dojoengine/utils@1.6.0-beta.2
+
 ## 1.6.0-beta.1
 
 ### Patch Changes

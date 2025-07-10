@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.0-beta.2
+
+### Patch Changes
+
+- 19c9411: fix: github workflow fix
+
 ## 1.6.0-beta.1
 
 ### Patch Changes

@@ -1,5 +1,5 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "beta",
   "initialVersions": {
     "example-node-worker": "0.0.1",
@@ -19,19 +19,20 @@
     "example-vite-svelte-recs": "0.0.0",
     "example-vite-token-balance": "0.0.0",
     "example-vue-app-recs": "0.0.0",
-    "@dojoengine/core": "1.6.0-beta.0",
-    "@dojoengine/create-burner": "1.6.0-beta.0",
-    "@dojoengine/create-dojo": "1.6.0-beta.0",
-    "@dojoengine/predeployed-connector": "1.6.0-beta.0",
-    "@dojoengine/react": "1.6.0-beta.0",
-    "@dojoengine/sdk": "1.6.0-beta.0",
-    "@dojoengine/state": "1.6.0-beta.0",
-    "@dojoengine/torii-client": "1.6.0-beta.0",
-    "@dojoengine/torii-wasm": "1.6.0-beta.0",
-    "@dojoengine/utils": "1.6.0-beta.0",
-    "@dojoengine/utils-wasm": "1.6.0-beta.0"
+    "@dojoengine/core": "1.6.0-beta.1",
+    "@dojoengine/create-burner": "1.6.0-beta.1",
+    "@dojoengine/create-dojo": "1.6.0-beta.1",
+    "@dojoengine/predeployed-connector": "1.6.0-beta.1",
+    "@dojoengine/react": "1.6.0-beta.1",
+    "@dojoengine/sdk": "1.6.0-beta.1",
+    "@dojoengine/state": "1.6.0-beta.1",
+    "@dojoengine/torii-client": "1.6.0-beta.1",
+    "@dojoengine/torii-wasm": "1.6.0-beta.1",
+    "@dojoengine/utils": "1.6.0-beta.1",
+    "@dojoengine/utils-wasm": "1.6.0-beta.1"
   },
   "changesets": [
+    "eager-eggs-swim",
     "long-papers-judge",
     "metal-cats-wish",
     "sixty-moments-brake"
