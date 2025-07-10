@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.6.0-beta.3
+
+### Patch Changes
+
+- 9e163f4: chore: bump starknet.js to 7.6.2
+- Updated dependencies [9e163f4]
+    - @dojoengine/torii-client@1.6.0-beta.3
+
 ## 1.6.0-beta.2
 
 ### Patch Changes
