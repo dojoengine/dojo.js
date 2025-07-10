@@ -28,7 +28,7 @@ catalogs:
       specifier: ^18.3.1
       version: 18.3.1
     starknet:
-      specifier: ^7.5.0
+      specifier: ^7.6.2
       version: 7.6.2
 
 importers:
@@ -6277,20 +6277,20 @@ packages:
     resolution: {integrity: sha512-E1ImOIAD1tBZFRdjeM4/pzTiTApC0AOBGwyAMS4fwIodCWArzJ3DWdoh8cKxeFM2fElkxBh2Aqts1BPC373rHA==}
     engines: {node: '>=5.10'}
 
-  '@solana/codecs-core@2.2.1':
-    resolution: {integrity: sha512-ZW1kTmvqhQhk/jMDo7wZgApn1Lf+d3AecHF6bcWPVSr+KlGLtWZL0wcP+0tnsncPhvG28pZxRR57f4TUylSA7Q==}
+  '@solana/codecs-core@2.3.0':
+    resolution: {integrity: sha512-oG+VZzN6YhBHIoSKgS5ESM9VIGzhWjEHEGNPSibiDTxFhsFWxNaz8LbMDPjBUE69r9wmdGLkrQ+wVPbnJcZPvw==}
     engines: {node: '>=20.18.0'}
     peerDependencies:
       typescript: '>=5.3.3'
 
-  '@solana/codecs-numbers@2.2.1':
-    resolution: {integrity: sha512-qlJHWZFGzhMa7R6EZXNM/ycINGrR4lzBQjwFMs2pXnCxqKTI3Vru0f4kSh0qqf6U1bjNLaYXTMniqETX6ANpzg==}
+  '@solana/codecs-numbers@2.3.0':
+    resolution: {integrity: sha512-jFvvwKJKffvG7Iz9dmN51OGB7JBcy2CJ6Xf3NqD/VP90xak66m/Lg48T01u5IQ/hc15mChVHiBm+HHuOFDUrQg==}
     engines: {node: '>=20.18.0'}
     peerDependencies:
       typescript: '>=5.3.3'
 
-  '@solana/errors@2.2.1':
-    resolution: {integrity: sha512-BiCivvqhNsg5BiWTshsRwGC/866ycfAxj/KMV+uH9pKohXyEENXedgj6U3fAIJiJLdSFya61CLl2EnDygnUPBg==}
+  '@solana/errors@2.3.0':
+    resolution: {integrity: sha512-66RI9MAbwYV0UtP7kGcTBVLxJgUxoZGm8Fbc0ah+lGiAw17Gugco6+9GrJCV83VyF2mDWyYnYM9qdI3yjgpnaQ==}
     engines: {node: '>=20.18.0'}
     hasBin: true
     peerDependencies:
@@ -8722,9 +8722,9 @@ packages:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
     engines: {node: '>=18'}
 
-  commander@13.1.0:
-    resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
-    engines: {node: '>=18'}
+  commander@14.0.0:
+    resolution: {integrity: sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==}
+    engines: {node: '>=20'}
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -9436,8 +9436,8 @@ packages:
   electron-to-chromium@1.5.150:
     resolution: {integrity: sha512-rOOkP2ZUMx1yL4fCxXQKDHQ8ZXwisb2OycOQVKHgvB3ZI4CvehOd4y2tfnnLDieJ3Zs1RL1Dlp3cMkyIn7nnXA==}
 
-  electron-to-chromium@1.5.180:
-    resolution: {integrity: sha512-ED+GEyEh3kYMwt2faNmgMB0b8O5qtATGgR4RmRsIp4T6p7B8vdMbIedYndnvZfsaXvSzegtpfqRMDNCjjiSduA==}
+  electron-to-chromium@1.5.181:
+    resolution: {integrity: sha512-+ISMj8OIQ+0qEeDj14Rt8WwcTOiqHyAB+5bnK1K7xNNLjBJ4hRCQfUkw8RWtcLbfBzDwc15ZnKH0c7SNOfwiyA==}
 
   elliptic@6.6.1:
     resolution: {integrity: sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g==}
@@ -21490,21 +21490,21 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@solana/codecs-core@2.2.1(typescript@5.7.3)':
+  '@solana/codecs-core@2.3.0(typescript@5.7.3)':
     dependencies:
-      '@solana/errors': 2.2.1(typescript@5.7.3)
+      '@solana/errors': 2.3.0(typescript@5.7.3)
       typescript: 5.7.3
 
-  '@solana/codecs-numbers@2.2.1(typescript@5.7.3)':
+  '@solana/codecs-numbers@2.3.0(typescript@5.7.3)':
     dependencies:
-      '@solana/codecs-core': 2.2.1(typescript@5.7.3)
-      '@solana/errors': 2.2.1(typescript@5.7.3)
+      '@solana/codecs-core': 2.3.0(typescript@5.7.3)
+      '@solana/errors': 2.3.0(typescript@5.7.3)
       typescript: 5.7.3
 
-  '@solana/errors@2.2.1(typescript@5.7.3)':
+  '@solana/errors@2.3.0(typescript@5.7.3)':
     dependencies:
       chalk: 5.4.1
-      commander: 13.1.0
+      commander: 14.0.0
       typescript: 5.7.3
 
   '@solana/web3.js@1.98.2(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.7.3)(utf-8-validate@5.0.10)':
@@ -21513,7 +21513,7 @@ snapshots:
       '@noble/curves': 1.9.2
       '@noble/hashes': 1.8.0
       '@solana/buffer-layout': 4.0.1
-      '@solana/codecs-numbers': 2.2.1(typescript@5.7.3)
+      '@solana/codecs-numbers': 2.3.0(typescript@5.7.3)
       agentkeepalive: 4.6.0
       bn.js: 5.2.2
       borsh: 0.7.0
@@ -25125,7 +25125,7 @@ snapshots:
   browserslist@4.25.1:
     dependencies:
       caniuse-lite: 1.0.30001727
-      electron-to-chromium: 1.5.180
+      electron-to-chromium: 1.5.181
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.25.1)
 
@@ -25542,7 +25542,7 @@ snapshots:
 
   commander@12.1.0: {}
 
-  commander@13.1.0: {}
+  commander@14.0.0: {}
 
   commander@2.20.3: {}
 
@@ -26183,7 +26183,7 @@ snapshots:
 
   electron-to-chromium@1.5.150: {}
 
-  electron-to-chromium@1.5.180: {}
+  electron-to-chromium@1.5.181: {}
 
   elliptic@6.6.1:
     dependencies:
