@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.6.0-beta.1
+
+### Patch Changes
+
+- ef76fca: fix: update release process
+- Updated dependencies [ef76fca]
+    - @dojoengine/torii-client@1.6.0-beta.1
+    - @dojoengine/state@1.6.0-beta.1
+    - @dojoengine/utils@1.6.0-beta.1
+
 ## 1.6.0-beta.0
 
 ### Minor Changes

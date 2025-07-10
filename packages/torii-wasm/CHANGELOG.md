@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.0-beta.1
+
+### Patch Changes
+
+- ef76fca: fix: update release process
+
 ## 1.6.0-beta.0
 
 ### Minor Changes
