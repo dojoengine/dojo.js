@@ -10,8 +10,10 @@
         "prettier-check": "pnpx prettier --check packages examples",
         "format": "turbo format",
         "format:check": "turbo format:check",
-        "release": "pnpm build:deps && pnpm -F './packages/**' publish -r --force --no-git-checks",
-        "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run",
+        "changeset": "changeset",
+        "version": "changeset version",
+        "release": "pnpm build:deps && changeset publish",
+        "release:dry-run": "pnpm build:deps && changeset publish --dry-run",
         "dev": "turbo watch dev --concurrency 20",
         "dev:deps": "turbo watch build:deps --concurrency 20",
         "docs": "turbo run docs --ui stream && typedoc --entryPointStrategy merge 'docs-json/*.json'",
@@ -22,18 +24,18 @@
     "devDependencies": {
         "@commitlint/cli": "^18.6.1",
         "@commitlint/config-conventional": "^18.6.3",
-        "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
+        "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
         "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.3",
         "husky": "^9.1.7",
-        "lerna": "^8.1.9",
-        "prettier": "^3.4.2",
-        "tsup": "^8.3.5",
-        "turbo": "^2.4.4",
+        "lerna": "^8.2.3",
+        "prettier": "^3.6.2",
+        "tsup": "^8.5.0",
+        "turbo": "^2.5.4",
         "typedoc": "^0.26.11",
         "typedoc-plugin-coverage": "^3.4.1",
         "typedoc-plugin-missing-exports": "^3.1.0"
     },
     "dependencies": {
-        "@changesets/cli": "^2.27.11"
+        "@changesets/cli": "^2.29.5"
     }
 }

@@ -3,8 +3,8 @@ name: Create github release
 on:
   push:
     tags:
-      - '@dojoengine/*@*'
-  
+      - "@dojoengine/*@*"
+
   workflow_run:
     workflows: ["Publish packages and create tags"]
     types:
@@ -26,26 +26,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Get latest tags
         if: ${{ github.event_name == 'workflow_run' }}
         id: latest-tags
-        run: |
-          # Get all tags created in the last 5 minutes that match our pattern
-          RECENT_TAGS=$(git tag -l '@dojoengine/*@*' --sort=-committerdate | while read tag; do
-            TAG_TIME=$(git log -1 --format=%ct "$tag")
-            CURRENT_TIME=$(date +%s)
-            TIME_DIFF=$((CURRENT_TIME - TAG_TIME))
-            if [ $TIME_DIFF -lt 300 ]; then
-              echo "$tag"
-            fi
-          done)
-          
-          # Store tags in a file for later processing
-          echo "$RECENT_TAGS" > recent_tags.txt
-          echo "Found recent tags:"
-          cat recent_tags.txt
-          
+        run: scripts/get-latest-tags.sh
+
       - name: Create releases for workflow_run
         if: ${{ github.event_name == 'workflow_run' }}
         env:
@@ -66,7 +52,7 @@ jobs:
               fi
             fi
           done < recent_tags.txt
-          
+
       - name: Create release for single tag
         if: ${{ github.event_name != 'workflow_run' }}
         env:
@@ -82,3 +68,4 @@ jobs:
                 --title="${tag#v}" \
                 --generate-notes
           fi
+

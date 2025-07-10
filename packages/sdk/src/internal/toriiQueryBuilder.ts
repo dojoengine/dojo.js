@@ -86,13 +86,11 @@ export class ToriiQueryBuilder<T extends SchemaType> {
      * Add a single order by clause
      */
     addOrderBy(
-        model: keyof T & string,
         member: string,
         direction: "Asc" | "Desc"
     ): ToriiQueryBuilder<T> {
         this.query.pagination.order_by.push({
-            model,
-            member,
+            field: member,
             direction,
         });
         return this;

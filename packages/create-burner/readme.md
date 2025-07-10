@@ -91,7 +91,6 @@ const activeAccount = manager.getActiveAccount();
 ## API
 
 - **useBurner**: A React hook that provides functionalities like creating burners, selecting them, and more.
-
     - `get(address: string)`: Get a burner account based on its address.
     - `list()`: List all burners.
     - `select(address: string)`: Set a burner as the active account.

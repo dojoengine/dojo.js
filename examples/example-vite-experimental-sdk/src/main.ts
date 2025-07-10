@@ -1,6 +1,5 @@
 import "./style.css";
 import { init } from "@dojoengine/sdk/experimental";
-import { ModelsMapping } from "./typescript/models.gen";
 import { dojoConfig } from "../dojoConfig.ts";
 import { ThemeManager } from "./theme-manager";
 import { UpdateManager } from "./update-manager";
@@ -25,7 +24,7 @@ async function main() {
     const entities = await sdk.getEntities(
         new ToriiQueryBuilder()
             .withClause(new ClauseBuilder().keys([], [undefined]).build())
-            .addOrderBy(ModelsMapping.Moves, "remaining", "Asc")
+            .addOrderBy("remaining", "Asc")
             .build()
     );
     console.log("entities", entities);
@@ -40,7 +39,7 @@ async function main() {
     const [initialEntities, freeSubscription] = await sdk.subscribeEntities(
         new ToriiQueryBuilder()
             .withClause(new ClauseBuilder().keys([], [undefined]).build())
-            .addOrderBy(ModelsMapping.Moves, "remaining", "Asc")
+            .addOrderBy("remaining", "Asc")
             .includeHashedKeys()
             .build(),
         ({ data, error }) => {

@@ -50,7 +50,6 @@ jobs:
       - run: /home/runner/.config/.dojo/dojoup/dojoup install v1.5.0-alpha.2
       - run: |
           cd worlds/dojo-starter
-          ls -la /home/runner/.config/.dojo/bin
           /home/runner/.config/.dojo/bin/sozo build
           /home/runner/.config/.dojo/bin/sozo test
       - run: |

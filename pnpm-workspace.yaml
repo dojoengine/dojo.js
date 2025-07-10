@@ -3,10 +3,11 @@ packages:
   - "examples/**"
 
 catalog:
-  starknet: 6.23.1
-  get-starknet-core: ^4.0.0
-  "@starknet-react/core": ^3.6.2
-  "@starknet-react/chains": ^3.1.0
+  starknet: ^7.6.2
+  "@starknet-io/get-starknet-core": 4.0.7
+  "@starknet-react/core": ^4.0.1-beta.4
+  "@starknet-react/chains": ^4.0.1-beta.3
+  "@starknet-io/types-js": ^0.8
   "@types/react": ^18.3.1
   "@types/react-dom": ^18.3.1
   react: ^18.3.1

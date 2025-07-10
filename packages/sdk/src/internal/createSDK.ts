@@ -72,7 +72,7 @@ export function createSDK<T extends SchemaType>({
                 Pagination.fromQuery(query, entities.next_cursor).withItems(
                     parsedEntities
                 ),
-                client.onEntityUpdated(
+                await client.onEntityUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
                 ),
@@ -97,7 +97,7 @@ export function createSDK<T extends SchemaType>({
                 Pagination.fromQuery(query, entities.next_cursor).withItems(
                     parsedEntities
                 ),
-                client.onEventMessageUpdated(
+                await client.onEventMessageUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
                 ),
@@ -242,10 +242,10 @@ export function createSDK<T extends SchemaType>({
          * @param {SubscribeTokenBalanceRequest} request
          * @returns {torii.Subscription}
          */
-        onTokenBalanceUpdated: (
+        onTokenBalanceUpdated: async (
             request: SubscribeTokenBalanceRequest
-        ): torii.Subscription => {
-            return onTokenBalanceUpdated(client, request);
+        ): Promise<torii.Subscription> => {
+            return await onTokenBalanceUpdated(client, request);
         },
 
         /**
@@ -259,10 +259,10 @@ export function createSDK<T extends SchemaType>({
          * Result containing subscription handle or error
          * @returns torii.Subscription
          */
-        onTokenUpdated: (
+        onTokenUpdated: async (
             request: SubscribeTokenRequest
-        ): torii.Subscription => {
-            return onTokenUpdated(client, request);
+        ): Promise<torii.Subscription> => {
+            return await onTokenUpdated(client, request);
         },
 
         /**
@@ -318,7 +318,7 @@ export function createSDK<T extends SchemaType>({
         getControllers: async (
             contract_addresses: string[]
         ): Promise<torii.Controllers> => {
-            return await client.getControllers(contract_addresses);
+            return await client.getControllers(contract_addresses, []);
         },
 
         /**

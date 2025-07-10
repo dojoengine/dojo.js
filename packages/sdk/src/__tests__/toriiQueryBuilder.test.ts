@@ -88,19 +88,17 @@ describe("ToriiQueryBuilder", () => {
     describe("order by handling", () => {
         it("should add a single order by", () => {
             const builder = new ToriiQueryBuilder<TestModels>();
-            const query = builder
-                .addOrderBy("dojo_starter", "x", "Asc")
-                .build();
+            const query = builder.addOrderBy("x", "Asc").build();
 
             expect(query.pagination.order_by).toEqual([
-                { model: "dojo_starter", member: "x", direction: "Asc" },
+                { field: "x", direction: "Asc" },
             ]);
         });
 
         it("should set multiple order by clauses", () => {
             const orderBy: OrderBy[] = [
-                { model: "dojo_starter", member: "x", direction: "Asc" },
-                { model: "dojo_starter", member: "y", direction: "Desc" },
+                { field: "x", direction: "Asc" },
+                { field: "y", direction: "Desc" },
             ];
 
             const builder = new ToriiQueryBuilder<TestModels>();
@@ -155,7 +153,7 @@ describe("ToriiQueryBuilder", () => {
                 .withLimit(10)
                 .withCursor("cursor")
                 .addEntityModel("dojo_starter-Position")
-                .addOrderBy("dojo_starter-Position", "x", "Asc")
+                .addOrderBy("x", "Asc")
                 .includeHashedKeys()
                 .build();
 
@@ -166,8 +164,7 @@ describe("ToriiQueryBuilder", () => {
                     direction: "Forward",
                     order_by: [
                         {
-                            model: "dojo_starter-Position",
-                            member: "x",
+                            field: "x",
                             direction: "Asc",
                         },
                     ],

@@ -103,13 +103,13 @@ export async function getTokenBalances(
  * Result containing subscription handle or error
  * @returns torii.Subscription
  */
-export function onTokenBalanceUpdated(
+export async function onTokenBalanceUpdated(
     client: torii.ToriiClient,
     request: SubscribeTokenBalanceRequest
-): torii.Subscription {
+): Promise<torii.Subscription> {
     const { contractAddresses, accountAddresses, tokenIds, callback } =
         parseTokenRequest(request);
-    return client.onTokenBalanceUpdated(
+    return await client.onTokenBalanceUpdated(
         contractAddresses ?? [],
         accountAddresses ?? [],
         tokenIds ?? [],
@@ -165,7 +165,7 @@ export async function subscribeTokenBalance(
     });
 
     // Create subscription for updates
-    const subscription = client.onTokenBalanceUpdated(
+    const subscription = await client.onTokenBalanceUpdated(
         contractAddresses ?? [],
         accountAddresses ?? [],
         tokenIds ?? [],
@@ -195,13 +195,13 @@ export const defaultToken: torii.Token = {
  * Result containing subscription handle or error
  * @returns torii.Subscription
  */
-export function onTokenUpdated(
+export async function onTokenUpdated(
     client: torii.ToriiClient,
     request: SubscribeTokenRequest
-): torii.Subscription {
+): Promise<torii.Subscription> {
     const { contractAddresses, tokenIds, callback } =
         parseTokenRequest(request);
-    return client.onTokenUpdated(
+    return await client.onTokenUpdated(
         contractAddresses ?? [],
         tokenIds ?? [],
         safeCallback(callback, defaultToken)
@@ -231,7 +231,7 @@ export async function subscribeToken(
     });
 
     // Create subscription for updates
-    const subscription = client.onTokenUpdated(
+    const subscription = await client.onTokenUpdated(
         contractAddresses ?? [],
         tokenIds ?? [],
         safeCallback(callback, defaultToken)

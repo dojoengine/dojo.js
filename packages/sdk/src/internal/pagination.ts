@@ -1,6 +1,8 @@
 import type { PaginationDirection } from "@dojoengine/torii-wasm/types";
 import type { SchemaType, ToriiQueryBuilder } from "./types.ts";
 
+const DEFAULT_LIMIT = 1000;
+
 /**
  * A generic pagination class that handles cursor-based pagination for query results.
  * This class manages the state of paginated items and provides methods to navigate through pages.
@@ -41,7 +43,7 @@ export class Pagination<T extends SchemaType, Inner extends any[]> {
     ): Pagination<T, Inner> {
         const pagination = query.getPagination();
         return new Pagination(
-            pagination.limit,
+            pagination.limit ?? DEFAULT_LIMIT,
             nextCursor,
             pagination.direction
         );
