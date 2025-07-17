@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.6.0-beta.4
+
+### Patch Changes
+
+- ca4814b: chore: bump dojo.c
+- Updated dependencies [ca4814b]
+    - @dojoengine/torii-client@1.6.0-beta.4
+
 ## 1.6.0-beta.3
 
 ### Patch Changes

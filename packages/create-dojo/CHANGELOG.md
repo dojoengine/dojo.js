@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.0-beta.4
+
+### Patch Changes
+
+- ca4814b: chore: bump dojo.c
+
 ## 1.6.0-beta.3
 
 ### Patch Changes
