@@ -128,13 +128,6 @@ class PredeployedWallet implements StarknetWindowObject {
                     data: "wallet_addStarknetChain not implemented",
                 } as Errors.UNEXPECTED_ERROR;
 
-            case "wallet_switchStarknetChain":
-                throw {
-                    code: 63,
-                    message: "An unexpected error occurred",
-                    data: "wallet_switchStarknetChain not implemented",
-                } as Errors.UNEXPECTED_ERROR;
-
             case "wallet_requestChainId":
                 if (!this.account) {
                     throw {
@@ -194,6 +187,8 @@ class PredeployedWallet implements StarknetWindowObject {
                 return [];
             case "wallet_supportedWalletApi":
                 return [];
+            case "wallet_switchStarknetChain":
+                return new Promise((resolve) => resolve(true));
             default:
                 throw {
                     code: 63,

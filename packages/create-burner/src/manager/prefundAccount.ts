@@ -1,5 +1,6 @@
 import {
     AccountInterface,
+    Call,
     CallData,
     TransactionFinalityStatus,
 } from "starknet";
@@ -25,7 +26,7 @@ export const prefundAccount = async (
 ): Promise<any> => {
     try {
         // Configure the options for the transfer transaction
-        const transferOptions = {
+        const transferOptions: Call = {
             contractAddress: feeTokenAddress,
             entrypoint: "transfer",
             calldata: CallData.compile([address, prefundAmount, "0x0"]),
