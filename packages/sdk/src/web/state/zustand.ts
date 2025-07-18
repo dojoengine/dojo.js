@@ -159,7 +159,9 @@ export function createDojoStoreFactory<T extends SchemaType>(
                                 state.historical_entities[entity.entityId] = [];
                             }
                             state.historical_entities[entity.entityId].push(
-                                JSON.parse(JSON.stringify(entity)) as WritableDraft<ParsedEntity<T>>
+                                JSON.parse(
+                                    JSON.stringify(entity)
+                                ) as WritableDraft<ParsedEntity<T>>
                             );
                         }
                     });
@@ -168,11 +170,16 @@ export function createDojoStoreFactory<T extends SchemaType>(
                     set((state: Draft<GameState<T>>) => {
                         for (const entity of entities) {
                             if (entity.entityId && entity.models) {
-                                if (!state.historical_entities[entity.entityId]) {
-                                    state.historical_entities[entity.entityId] = [];
+                                if (
+                                    !state.historical_entities[entity.entityId]
+                                ) {
+                                    state.historical_entities[entity.entityId] =
+                                        [];
                                 }
                                 state.historical_entities[entity.entityId].push(
-                                    JSON.parse(JSON.stringify(entity)) as WritableDraft<ParsedEntity<T>>
+                                    JSON.parse(
+                                        JSON.stringify(entity)
+                                    ) as WritableDraft<ParsedEntity<T>>
                                 );
                             }
                         }
@@ -185,7 +192,9 @@ export function createDojoStoreFactory<T extends SchemaType>(
                                 state.historical_entities[entity.entityId] = [];
                             }
                             state.historical_entities[entity.entityId].push(
-                                JSON.parse(JSON.stringify(entity)) as WritableDraft<ParsedEntity<T>>
+                                JSON.parse(
+                                    JSON.stringify(entity)
+                                ) as WritableDraft<ParsedEntity<T>>
                             );
                         }
                     });
@@ -279,8 +288,13 @@ export function createDojoStoreFactory<T extends SchemaType>(
                 },
 
                 getEntityAtIndex: (entityId: string, index: number) => {
-                    const historicalStates = get().historical_entities[entityId];
-                    if (!historicalStates || index < 0 || index >= historicalStates.length) {
+                    const historicalStates =
+                        get().historical_entities[entityId];
+                    if (
+                        !historicalStates ||
+                        index < 0 ||
+                        index >= historicalStates.length
+                    ) {
                         return undefined;
                     }
                     return historicalStates[index];

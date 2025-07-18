@@ -45,7 +45,10 @@ export interface GameState<T extends SchemaType> {
         model: keyof T[keyof T]
     ) => ParsedEntity<T>[];
     getHistoricalEntities: (entityId: string) => ParsedEntity<T>[];
-    getEntityAtIndex: (entityId: string, index: number) => ParsedEntity<T> | undefined;
+    getEntityAtIndex: (
+        entityId: string,
+        index: number
+    ) => ParsedEntity<T> | undefined;
     clearHistoricalEntities: (entityId?: string) => void;
     resetStore: () => void;
 }
