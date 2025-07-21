@@ -50,7 +50,7 @@ export function useEntityQuery<Schema extends SchemaType>(
 export function useHistoricalEntityQuery<Schema extends SchemaType>(
     query: ToriiQueryBuilder<Schema>
 ) {
-    if (query.isHistorical()) {
+    if (!query.isHistorical()) {
         throw new Error("Query must be  HistoricalToriiQueryBuilder");
     }
     const { sdk, useDojoStore } = useDojoSDK<() => any, Schema>();

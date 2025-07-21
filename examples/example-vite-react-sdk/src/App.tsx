@@ -1,4 +1,8 @@
-import { KeysClause, ToriiQueryBuilder } from "@dojoengine/sdk";
+import {
+    HistoricalToriiQueryBuilder,
+    KeysClause,
+    ToriiQueryBuilder,
+} from "@dojoengine/sdk";
 
 import { ModelsMapping } from "./typescript/models.gen.ts";
 import { useSystemCalls } from "./useSystemCalls.ts";
@@ -9,6 +13,7 @@ import {
     useDojoSDK,
     useEntityId,
     useEntityQuery,
+    useHistoricalEntityQuery,
     useModel,
 } from "@dojoengine/sdk/react";
 import { addAddressPadding, CairoCustomEnum } from "starknet";
@@ -31,6 +36,22 @@ function App() {
 
     useEntityQuery(
         new ToriiQueryBuilder()
+            .withClause(
+                // Querying Moves and Position models that has at least [account.address] as key
+                KeysClause(
+                    [ModelsMapping.Moves, ModelsMapping.Position],
+                    [
+                        account?.address
+                            ? addAddressPadding(account.address)
+                            : undefined,
+                    ],
+                    "FixedLen"
+                ).build()
+            )
+            .includeHashedKeys()
+    );
+    useHistoricalEntityQuery(
+        new HistoricalToriiQueryBuilder()
             .withClause(
                 // Querying Moves and Position models that has at least [account.address] as key
                 KeysClause(

@@ -28,7 +28,7 @@ import {
     updateTokenBalanceSubscription,
 } from "./token.ts";
 import { subscribeQueryModelCallback } from "./subscribeQueryModel.ts";
-import { Pagination } from "./pagination.ts";
+import { defaultToriiPagination, Pagination } from "./pagination.ts";
 import { parseEntities } from "./parseEntities.ts";
 
 export interface CreateSDKOptions {
@@ -316,9 +316,15 @@ export function createSDK<T extends SchemaType>({
          * @returns {Promise<torii.Controllers>}
          */
         getControllers: async (
-            contract_addresses: string[]
+            contract_addresses: string[],
+            usernames: string[],
+            pagination: torii.Pagination = defaultToriiPagination
         ): Promise<torii.Controllers> => {
-            return await client.getControllers(contract_addresses, []);
+            return await client.getControllers({
+                contract_addresses,
+                usernames,
+                pagination,
+            });
         },
 
         /**

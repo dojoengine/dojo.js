@@ -121,7 +121,7 @@ export type ToriiResponse<T extends SchemaType> = Pagination<
  */
 export type SubscribeResponse<T extends SchemaType> = [
     ToriiResponse<T>,
-    torii.Subscription
+    torii.Subscription,
 ];
 
 /**
@@ -130,6 +130,7 @@ export type SubscribeResponse<T extends SchemaType> = [
 export interface GetTokenRequest {
     contractAddresses?: string[];
     tokenIds?: string[];
+    pagination?: torii.Pagination;
 }
 
 /**
@@ -449,10 +450,14 @@ export interface SDK<T extends SchemaType> {
      * Gets controller information for the specified contract addresses.
      *
      * @param {string[]} contract_addresses - Contract addresses to query (empty for all)
+     * @param {string[]} usernames - usernames to query (empty for all)
+     * @param {torii.Pagination} pagination - torii pagination object
      * @returns {Promise<torii.Controllers>} - Controller information
      */
     getControllers: (
-        contract_addresses: string[]
+        contract_addresses: string[],
+        usernames: string[],
+        pagination?: torii.Pagination
     ) => Promise<torii.Controllers>;
 }
 

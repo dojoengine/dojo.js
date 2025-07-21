@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { ToriiQueryBuilder } from "../internal/toriiQueryBuilder";
+import {
+    ToriiQueryBuilder,
+    HistoricalToriiQueryBuilder,
+} from "../internal/toriiQueryBuilder";
 import type { Clause, OrderBy } from "@dojoengine/torii-wasm";
 import type { SchemaType } from "../internal/types";
 import { ClauseBuilder } from "../internal/clauseBuilder";
@@ -174,6 +177,36 @@ describe("ToriiQueryBuilder", () => {
                 models: ["dojo_starter-Position"],
                 historical: false,
             });
+        });
+    });
+});
+describe("HistoricalToriiQueryBuilder", () => {
+    it("should be historical", () => {
+        const builder = new HistoricalToriiQueryBuilder<TestModels>();
+        const query = builder
+            .withLimit(10)
+            .withCursor("cursor")
+            .addEntityModel("dojo_starter-Position")
+            .addOrderBy("x", "Asc")
+            .includeHashedKeys()
+            .build();
+
+        expect(query).toEqual({
+            pagination: {
+                limit: 10,
+                cursor: "cursor",
+                direction: "Forward",
+                order_by: [
+                    {
+                        field: "x",
+                        direction: "Asc",
+                    },
+                ],
+            },
+            clause: undefined,
+            no_hashed_keys: false,
+            models: ["dojo_starter-Position"],
+            historical: true,
         });
     });
 });
