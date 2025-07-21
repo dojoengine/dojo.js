@@ -155,6 +155,13 @@ export class ToriiQueryBuilder<T extends SchemaType> {
     getPagination(): Pagination {
         return this.query.pagination;
     }
+
+    /**
+     * Check is query is historical
+     */
+    isHistorical(): boolean {
+        return this.query.historical;
+    }
 }
 
 export type HistoricalToriiQueryBuilderOptions = Omit<

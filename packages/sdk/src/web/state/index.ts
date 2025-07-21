@@ -13,10 +13,14 @@ interface PendingTransaction {
 
 export interface GameState<T extends SchemaType> {
     entities: Record<string, ParsedEntity<T>>;
+    historical_entities: Record<string, ParsedEntity<T>[]>;
     pendingTransactions: Record<string, PendingTransaction>;
     setEntities: (entities: ParsedEntity<T>[]) => void;
     mergeEntities: (entities: ParsedEntity<T>[]) => void;
     updateEntity: (entity: Partial<ParsedEntity<T>>) => void;
+    setHistoricalEntities: (entities: ParsedEntity<T>[]) => void;
+    mergeHistoricalEntities: (entities: ParsedEntity<T>[]) => void;
+    updateHistoricalEntity: (entity: Partial<ParsedEntity<T>>) => void;
     applyOptimisticUpdate: (
         transactionId: string,
         updateFn: (draft: Draft<GameState<T>>) => void
@@ -40,6 +44,12 @@ export interface GameState<T extends SchemaType> {
         namespace: keyof T,
         model: keyof T[keyof T]
     ) => ParsedEntity<T>[];
+    getHistoricalEntities: (entityId: string) => ParsedEntity<T>[];
+    getEntityAtIndex: (
+        entityId: string,
+        index: number
+    ) => ParsedEntity<T> | undefined;
+    clearHistoricalEntities: (entityId?: string) => void;
     resetStore: () => void;
 }
 
