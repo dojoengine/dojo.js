@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.0-beta.6
+
+### Patch Changes
+
+- dba78bb: fix: zustand historical state hook
+
 ## 1.6.0-beta.5
 
 ### Minor Changes
