@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.0-beta.5
+
+### Minor Changes
+
+- 736a46b: feat: add zustand historical entities
+
 ## 1.6.0-beta.4
 
 ### Patch Changes
