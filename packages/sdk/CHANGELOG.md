@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.0-beta.7
+
+### Patch Changes
+
+- b4a3c92: fix(sdk): deduplicate historical entities
+
 ## 1.6.0-beta.6
 
 ### Patch Changes
