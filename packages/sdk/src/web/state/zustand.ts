@@ -15,6 +15,18 @@ import { deepMerge, MergedModels } from "../../internal/merge";
 
 enablePatches();
 
+// Helper function to compare entities for deduplication
+function areEntitiesEqual<T extends SchemaType>(
+    entity1: ParsedEntity<T>,
+    entity2: ParsedEntity<T>
+): boolean {
+    // Compare entityId and deep compare models
+    return (
+        entity1.entityId === entity2.entityId &&
+        JSON.stringify(entity1.models) === JSON.stringify(entity2.models)
+    );
+}
+
 // Define middleware types
 type ImmerMiddleware = [["zustand/immer", never]];
 type SubscribeMiddleware = [["zustand/subscribeWithSelector", never]];
@@ -155,28 +167,31 @@ export function createDojoStoreFactory<T extends SchemaType>(
                 setHistoricalEntities: (entities: ParsedEntity<T>[]) => {
                     set((state: Draft<GameState<T>>) => {
                         for (const entity of entities) {
-                            if (!state.historical_entities[entity.entityId]) {
-                                state.historical_entities[entity.entityId] = [];
+                            const existingHistory =
+                                state.historical_entities[entity.entityId];
+
+                            if (
+                                !existingHistory ||
+                                existingHistory.length === 0
+                            ) {
+                                // First state for this entity
+                                state.historical_entities[entity.entityId] = [
+                                    JSON.parse(
+                                        JSON.stringify(entity)
+                                    ) as WritableDraft<ParsedEntity<T>>,
+                                ];
+                                continue;
                             }
-                            state.historical_entities[entity.entityId].push(
-                                JSON.parse(
-                                    JSON.stringify(entity)
-                                ) as WritableDraft<ParsedEntity<T>>
-                            );
-                        }
-                    });
-                },
-                mergeHistoricalEntities: (entities: ParsedEntity<T>[]) => {
-                    set((state: Draft<GameState<T>>) => {
-                        for (const entity of entities) {
-                            if (entity.entityId && entity.models) {
-                                if (
-                                    !state.historical_entities[entity.entityId]
-                                ) {
-                                    state.historical_entities[entity.entityId] =
-                                        [];
-                                }
-                                state.historical_entities[entity.entityId].push(
+                            // Check against last state for deduplication
+                            const lastState =
+                                existingHistory[existingHistory.length - 1];
+                            if (
+                                !areEntitiesEqual(
+                                    entity,
+                                    lastState as ParsedEntity<T>
+                                )
+                            ) {
+                                existingHistory.push(
                                     JSON.parse(
                                         JSON.stringify(entity)
                                     ) as WritableDraft<ParsedEntity<T>>
@@ -185,17 +200,80 @@ export function createDojoStoreFactory<T extends SchemaType>(
                         }
                     });
                 },
+                mergeHistoricalEntities: (entities: ParsedEntity<T>[]) => {
+                    set((state: Draft<GameState<T>>) => {
+                        for (const entity of entities) {
+                            if (entity.entityId && entity.models) {
+                                const existingHistory =
+                                    state.historical_entities[entity.entityId];
+
+                                if (
+                                    !existingHistory ||
+                                    existingHistory.length === 0
+                                ) {
+                                    // First state for this entity
+                                    state.historical_entities[entity.entityId] =
+                                        [
+                                            JSON.parse(
+                                                JSON.stringify(entity)
+                                            ) as WritableDraft<ParsedEntity<T>>,
+                                        ];
+                                    continue;
+                                }
+                                // Check against last state for deduplication
+                                const lastState =
+                                    existingHistory[existingHistory.length - 1];
+                                if (
+                                    !areEntitiesEqual(
+                                        entity,
+                                        lastState as ParsedEntity<T>
+                                    )
+                                ) {
+                                    existingHistory.push(
+                                        JSON.parse(
+                                            JSON.stringify(entity)
+                                        ) as WritableDraft<ParsedEntity<T>>
+                                    );
+                                }
+                            }
+                        }
+                    });
+                },
                 updateHistoricalEntity: (entity: Partial<ParsedEntity<T>>) => {
                     set((state: Draft<GameState<T>>) => {
                         if (entity.entityId) {
-                            if (!state.historical_entities[entity.entityId]) {
-                                state.historical_entities[entity.entityId] = [];
+                            const existingHistory =
+                                state.historical_entities[entity.entityId];
+
+                            if (
+                                !existingHistory ||
+                                existingHistory.length === 0
+                            ) {
+                                // First state, always add
+                                state.historical_entities[entity.entityId] = [
+                                    JSON.parse(
+                                        JSON.stringify(entity)
+                                    ) as WritableDraft<ParsedEntity<T>>,
+                                ];
+                            } else {
+                                // Check if state has changed from the last entry
+                                const lastState =
+                                    existingHistory[existingHistory.length - 1];
+                                if (
+                                    !areEntitiesEqual(
+                                        entity as ParsedEntity<T>,
+                                        lastState as ParsedEntity<T>
+                                    )
+                                ) {
+                                    // State has changed, add to history
+                                    existingHistory.push(
+                                        JSON.parse(
+                                            JSON.stringify(entity)
+                                        ) as WritableDraft<ParsedEntity<T>>
+                                    );
+                                }
+                                // If states are equal, do nothing (deduplicated)
                             }
-                            state.historical_entities[entity.entityId].push(
-                                JSON.parse(
-                                    JSON.stringify(entity)
-                                ) as WritableDraft<ParsedEntity<T>>
-                            );
                         }
                     });
                 },

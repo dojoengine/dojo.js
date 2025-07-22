@@ -68,7 +68,7 @@ function parseTokenRequest<T extends GetTokenRequest & GetTokenBalanceRequest>(
     }
 
     return {
-        contractAddresses: req.accountAddresses ?? [],
+        contractAddresses: req.contractAddresses ?? [],
         accountAddresses: req.accountAddresses ?? [],
         tokenIds: req.tokenIds ?? [],
         pagination: req.pagination ?? defaultToriiPagination,
