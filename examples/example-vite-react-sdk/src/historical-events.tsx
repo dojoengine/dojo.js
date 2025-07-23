@@ -4,21 +4,36 @@ import {
     HistoricalToriiQueryBuilder,
 } from "@dojoengine/sdk";
 import { useAccount } from "@starknet-react/core";
-import { SchemaType } from "./typescript/models.gen";
+import { ModelsMapping, SchemaType } from "./typescript/models.gen";
 import { addAddressPadding } from "starknet";
-import { useHistoricalEventsQuery } from "@dojoengine/sdk/react";
+import {
+    useEntityId,
+    useHistoricalEntityQuery,
+    useHistoricalModel,
+} from "@dojoengine/sdk/react";
 
 export function HistoricalEvents() {
     const { account } = useAccount();
-    const events = useHistoricalEventsQuery(
-        new HistoricalToriiQueryBuilder().withClause(
-            KeysClause(
-                [],
-                [addAddressPadding(account?.address ?? "0")],
-                "VariableLen"
-            ).build()
-        )
+
+    const entityId = useEntityId(account?.address ?? "0");
+    useHistoricalEntityQuery(
+        new HistoricalToriiQueryBuilder()
+            .withClause(
+                // Querying Moves and Position models that has at least [account.address] as key
+                KeysClause(
+                    [ModelsMapping.Moves],
+                    [
+                        account?.address
+                            ? addAddressPadding(account.address)
+                            : undefined,
+                    ],
+                    "FixedLen"
+                ).build()
+            )
+            .includeHashedKeys()
     );
+
+    const moves = useHistoricalModel(entityId as string, ModelsMapping.Moves);
     if (!account) {
         return (
             <div className="mt-6">
@@ -29,17 +44,21 @@ export function HistoricalEvents() {
     return (
         <div className="mt-6">
             <h2 className="text-white">Player Events :</h2>
-            {/* @ts-ignore */}
-            {events.map((e: ParsedEntity<SchemaType>, key) => {
+            {/* @ts-expect-error type inference error */}
+            {moves.map((e: ParsedEntity<SchemaType>, key) => {
                 return <Event event={e} key={key} />;
             })}
         </div>
     );
 }
+
 function Event({ event }: { event: ParsedEntity<SchemaType> }) {
     if (!event) return null;
-    const player = event.models?.dojo_starter?.Moved?.player;
-    const direction = event.models?.dojo_starter?.Moved?.direction;
+    const player = event.models?.dojo_starter?.Moves?.player;
+    const lastDirection = event.models?.dojo_starter?.Moves?.last_direction;
+    const direction = lastDirection?.isSome()
+        ? lastDirection?.Some
+        : "Initial direction";
 
     return (
         <div className="text-white flex gap-3">

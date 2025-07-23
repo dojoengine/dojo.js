@@ -176,9 +176,7 @@ export function createDojoStoreFactory<T extends SchemaType>(
                             ) {
                                 // First state for this entity
                                 state.historical_entities[entity.entityId] = [
-                                    JSON.parse(
-                                        JSON.stringify(entity)
-                                    ) as WritableDraft<ParsedEntity<T>>,
+                                    entity as WritableDraft<ParsedEntity<T>>,
                                 ];
                                 continue;
                             }
@@ -192,9 +190,7 @@ export function createDojoStoreFactory<T extends SchemaType>(
                                 )
                             ) {
                                 existingHistory.push(
-                                    JSON.parse(
-                                        JSON.stringify(entity)
-                                    ) as WritableDraft<ParsedEntity<T>>
+                                    entity as WritableDraft<ParsedEntity<T>>
                                 );
                             }
                         }
@@ -214,9 +210,9 @@ export function createDojoStoreFactory<T extends SchemaType>(
                                     // First state for this entity
                                     state.historical_entities[entity.entityId] =
                                         [
-                                            JSON.parse(
-                                                JSON.stringify(entity)
-                                            ) as WritableDraft<ParsedEntity<T>>,
+                                            entity as WritableDraft<
+                                                ParsedEntity<T>
+                                            >,
                                         ];
                                     continue;
                                 }
@@ -230,9 +226,7 @@ export function createDojoStoreFactory<T extends SchemaType>(
                                     )
                                 ) {
                                     existingHistory.push(
-                                        JSON.parse(
-                                            JSON.stringify(entity)
-                                        ) as WritableDraft<ParsedEntity<T>>
+                                        entity as WritableDraft<ParsedEntity<T>>
                                     );
                                 }
                             }
@@ -251,9 +245,7 @@ export function createDojoStoreFactory<T extends SchemaType>(
                             ) {
                                 // First state, always add
                                 state.historical_entities[entity.entityId] = [
-                                    JSON.parse(
-                                        JSON.stringify(entity)
-                                    ) as WritableDraft<ParsedEntity<T>>,
+                                    entity as WritableDraft<ParsedEntity<T>>,
                                 ];
                             } else {
                                 // Check if state has changed from the last entry
@@ -267,9 +259,7 @@ export function createDojoStoreFactory<T extends SchemaType>(
                                 ) {
                                     // State has changed, add to history
                                     existingHistory.push(
-                                        JSON.parse(
-                                            JSON.stringify(entity)
-                                        ) as WritableDraft<ParsedEntity<T>>
+                                        entity as WritableDraft<ParsedEntity<T>>
                                     );
                                 }
                                 // If states are equal, do nothing (deduplicated)
