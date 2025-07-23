@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.6.0-beta.8
+
+### Patch Changes
+
+- 4b13219: chore: bump dojo & dojo-starter
+- Updated dependencies [4b13219]
+    - @dojoengine/torii-client@1.6.0-beta.5
+    - @dojoengine/torii-wasm@1.6.0-beta.5
+    - @dojoengine/utils@1.6.0-beta.5
+    - @dojoengine/core@1.6.0-beta.5
+
 ## 1.6.0-beta.7
 
 ### Patch Changes

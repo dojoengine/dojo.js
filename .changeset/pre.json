@@ -1,5 +1,5 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "beta",
   "initialVersions": {
     "example-node-worker": "0.0.1",
@@ -24,7 +24,7 @@
     "@dojoengine/create-dojo": "1.6.0-beta.4",
     "@dojoengine/predeployed-connector": "1.6.0-beta.4",
     "@dojoengine/react": "1.6.0-beta.4",
-    "@dojoengine/sdk": "1.6.0-beta.6",
+    "@dojoengine/sdk": "1.6.0-beta.7",
     "@dojoengine/state": "1.6.0-beta.4",
     "@dojoengine/torii-client": "1.6.0-beta.4",
     "@dojoengine/torii-wasm": "1.6.0-beta.4",
@@ -39,6 +39,7 @@
     "light-cups-pay",
     "long-papers-judge",
     "metal-cats-wish",
+    "orange-mice-flash",
     "shiny-showers-chew",
     "sixty-moments-brake",
     "young-mice-crash"
