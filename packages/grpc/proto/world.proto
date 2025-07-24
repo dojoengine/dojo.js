@@ -1,0 +1,288 @@
+syntax = "proto3";
+package world;
+
+import "types.proto";
+import "google/protobuf/empty.proto";
+
+
+// The World service provides information about the world.
+service World {
+    // Subscribes to updates about the indexer. Like the head block number, tps, etc.
+    rpc SubscribeIndexer (SubscribeIndexerRequest) returns (stream SubscribeIndexerResponse);
+
+    // Retrieves metadata about the World including all the registered components and systems.
+    rpc WorldMetadata (WorldMetadataRequest) returns (WorldMetadataResponse);
+   
+    // Subscribe to entity updates.
+    rpc SubscribeEntities (SubscribeEntitiesRequest) returns (stream SubscribeEntityResponse);
+
+    // Update entity subscription
+    rpc UpdateEntitiesSubscription (UpdateEntitiesSubscriptionRequest) returns (google.protobuf.Empty);
+
+    // Retrieve entities
+    rpc RetrieveEntities (RetrieveEntitiesRequest) returns (RetrieveEntitiesResponse);
+
+    // Subscribe to entity updates.
+    rpc SubscribeEventMessages (SubscribeEventMessagesRequest) returns (stream SubscribeEntityResponse);
+
+    // Update entity subscription
+    rpc UpdateEventMessagesSubscription (UpdateEventMessagesSubscriptionRequest) returns (google.protobuf.Empty);
+
+    // Subscribe to token balance updates.
+    rpc SubscribeTokenBalances (SubscribeTokenBalancesRequest) returns (stream SubscribeTokenBalancesResponse);
+
+    // Update token balance subscription
+    rpc UpdateTokenBalancesSubscription (UpdateTokenBalancesSubscriptionRequest) returns (google.protobuf.Empty);
+
+    // Subscribe to token updates.
+    rpc SubscribeTokens (SubscribeTokensRequest) returns (stream SubscribeTokensResponse);
+
+    // Update token subscription
+    rpc UpdateTokensSubscription (UpdateTokenSubscriptionRequest) returns (google.protobuf.Empty);
+
+    // Retrieve entities
+    rpc RetrieveEventMessages (RetrieveEventMessagesRequest) returns (RetrieveEntitiesResponse);
+
+    // Retrieve events
+    rpc RetrieveEvents (RetrieveEventsRequest) returns (RetrieveEventsResponse);
+
+    // Subscribe to events
+    rpc SubscribeEvents (SubscribeEventsRequest) returns (stream SubscribeEventsResponse);
+
+    // Retrieve tokens
+    rpc RetrieveTokens (RetrieveTokensRequest) returns (RetrieveTokensResponse);
+
+    // Retrieve token balances
+    rpc RetrieveTokenBalances (RetrieveTokenBalancesRequest) returns (RetrieveTokenBalancesResponse);
+
+    // Retrieve transactions
+    rpc RetrieveTransactions (RetrieveTransactionsRequest) returns (RetrieveTransactionsResponse);
+
+    // Subscribe to transactions
+    rpc SubscribeTransactions (SubscribeTransactionsRequest) returns (stream SubscribeTransactionsResponse);
+
+    // Retrieve controllers
+    rpc RetrieveControllers (RetrieveControllersRequest) returns (RetrieveControllersResponse);
+
+    // Retrieve tokens collections
+    rpc RetrieveTokenCollections (RetrieveTokenCollectionsRequest) returns (RetrieveTokenCollectionsResponse);
+
+    // Publish a torii offchain message
+    rpc PublishMessage (PublishMessageRequest) returns (PublishMessageResponse);
+
+    // Publish a set of torii offchain messages
+    rpc PublishMessageBatch (PublishMessageBatchRequest) returns (PublishMessageBatchResponse);
+}
+
+message SubscribeTransactionsRequest {
+    types.TransactionFilter filter = 1;
+}
+
+message SubscribeTransactionsResponse {
+    types.Transaction transaction = 1;
+}
+
+message RetrieveControllersRequest {
+    types.ControllerQuery query = 1;
+}
+
+message RetrieveControllersResponse {
+    string next_cursor = 1;
+    repeated types.Controller controllers = 2;
+}
+
+// A request to update a token balance subscription
+message UpdateTokenBalancesSubscriptionRequest {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // The list of contract addresses to subscribe to
+    repeated bytes contract_addresses = 2;
+    // The list of account addresses to subscribe to
+    repeated bytes account_addresses = 3;
+    // The list of token IDs to subscribe to
+    repeated bytes token_ids = 4;
+}
+
+// A response containing token balances
+message SubscribeTokenBalancesResponse {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // The token balance
+    types.TokenBalance balance = 2;
+}
+
+// A request to retrieve tokens
+message RetrieveTokensRequest {
+    types.TokenQuery query = 1;
+}
+
+// A request to subscribe to token updates
+message SubscribeTokensRequest {
+    // The list of contract addresses to subscribe to
+    repeated bytes contract_addresses = 1;
+    // The list of token IDs to subscribe to
+    repeated bytes token_ids = 2;
+}
+
+// A response containing tokens
+message RetrieveTokensResponse {
+    string next_cursor = 1;
+    repeated types.Token tokens = 2;
+}
+
+// A response containing token updates
+message SubscribeTokensResponse {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // The token
+    types.Token token = 2;
+}
+
+// A request to update a token subscription
+message UpdateTokenSubscriptionRequest {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // The list of contract addresses to subscribe to
+    repeated bytes contract_addresses = 2;
+    // The list of token IDs to subscribe to
+    repeated bytes token_ids = 3;
+}
+
+// A request to retrieve token balances
+message RetrieveTokenBalancesRequest {
+    types.TokenBalanceQuery query = 1;
+}
+
+// A request to subscribe to token balance updates
+message SubscribeTokenBalancesRequest {
+    // The account addresses to subscribe to
+    repeated bytes account_addresses = 1;
+    // The list of token contract addresses to subscribe to
+    repeated bytes contract_addresses = 2;
+    // The list of token IDs to subscribe to
+    repeated bytes token_ids = 3;
+}
+
+// A response containing token balances
+message RetrieveTokenBalancesResponse {
+    string next_cursor = 1;
+    repeated types.TokenBalance balances = 2;
+}
+
+// A request to retrieve transactions
+message RetrieveTransactionsRequest {
+    types.TransactionQuery query = 1;
+}
+
+// A response containing transactions
+message RetrieveTransactionsResponse {
+    string next_cursor = 1;
+    repeated types.Transaction transactions = 2;
+}
+
+// A request to retrieve token collections 
+message RetrieveTokenCollectionsRequest {
+    types.TokenBalanceQuery query = 1;
+}
+
+// A response containing token balances
+message RetrieveTokenCollectionsResponse {
+    string next_cursor = 1;
+    repeated types.TokenCollection tokens = 2;
+}
+
+// A request to subscribe to indexer updates.
+message SubscribeIndexerRequest {
+    bytes contract_address = 1;
+}
+
+// A response containing indexer updates.
+message SubscribeIndexerResponse {
+    int64 head = 1;
+    int64 tps = 2;
+    int64 last_block_timestamp = 3;
+    bytes contract_address = 4;
+}
+
+// A request to retrieve metadata for a specific world ID.
+message WorldMetadataRequest {
+
+}
+
+// The metadata response contains addresses and class hashes for the world.
+message WorldMetadataResponse {
+   types.World world = 1;
+}
+
+message SubscribeEntitiesRequest {
+    types.Clause clause = 1;
+}
+
+message SubscribeEventMessagesRequest {
+    types.Clause clause = 1;
+}
+
+message UpdateEntitiesSubscriptionRequest {
+    uint64 subscription_id = 1;
+    types.Clause clause = 2;
+}
+
+message UpdateEventMessagesSubscriptionRequest {
+    uint64 subscription_id = 1;
+    types.Clause clause = 2;
+}
+
+message SubscribeEntityResponse {
+    types.Entity entity = 1;
+    uint64 subscription_id = 2;
+}
+
+message RetrieveEntitiesRequest {
+    // The entities to retrieve
+    types.Query query = 1;
+}
+
+message RetrieveEventMessagesRequest {
+    // The event messages to retrieve
+    types.Query query = 1;
+}
+
+message RetrieveEntitiesResponse {
+    string next_cursor = 1;
+    repeated types.Entity entities = 2;
+}
+
+message RetrieveEventsRequest {
+    // The events to retrieve
+    types.EventQuery query = 1;
+}
+
+message RetrieveEventsResponse {
+    string next_cursor = 1;
+    repeated types.Event events = 2;
+}
+
+message SubscribeEventsRequest {
+    repeated types.KeysClause keys = 1;
+}
+
+message SubscribeEventsResponse {
+    types.Event event = 1;
+}
+
+message PublishMessageRequest {
+    repeated bytes signature = 1;
+    string message = 2;
+}
+
+message PublishMessageResponse {
+    bytes entity_id = 1;
+}
+
+message PublishMessageBatchRequest {
+    repeated PublishMessageRequest messages = 1;
+}
+
+message PublishMessageBatchResponse {
+    repeated PublishMessageResponse responses = 1;
+}
