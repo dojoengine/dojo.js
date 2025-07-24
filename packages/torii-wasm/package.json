@@ -5,6 +5,7 @@
     "author": "ohayo",
     "license": "MIT",
     "main": "./pkg/node/dojo_c.js",
+    "type": "module",
     "scripts": {
         "build:web": "cd dojo.c && pnpx wasm-pack build --out-dir ../pkg/web --release",
         "build:node": "cd dojo.c && pnpx wasm-pack build --out-dir ../pkg/node --release --target nodejs",
@@ -35,6 +36,11 @@
             "types": "./pkg/node/dojo_c.d.ts",
             "import": "./node.mjs",
             "require": "./pkg/node/dojo_c.js"
+        },
+        "./web": {
+            "types": "./pkg/web/dojo_c.d.ts",
+            "import": "./pkg/web/dojo_c.js",
+            "require": "./pkg/web/dojo_c.js"
         },
         "./types": {
             "types": "./pkg/node/dojo_c.d.ts"
