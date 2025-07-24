@@ -1,0 +1,19 @@
+{
+    "name": "@dojoengine/grpc",
+    "version": "0.0.0",
+    "author": "Dojo Team",
+    "license": "MIT",
+    "description": "Dojo SDK: Build onchain and provable apps faster",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "update:proto": "./scripts/update-proto.sh"
+    },
+    "keywords": [],
+    "packageManager": "pnpm@10.5.2",
+    "dependencies": {
+        "protoc-gen-js": "3.21.4-4"
+    }
+}
