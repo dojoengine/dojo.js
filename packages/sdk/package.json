@@ -85,6 +85,7 @@
         "@dojoengine/utils": "workspace:*",
         "@starknet-react/chains": "catalog:",
         "@starknet-react/core": "catalog:",
+        "effect": "^3.17.1",
         "immer": "^10.1.1",
         "neverthrow": "^8.2.0",
         "zustand": "^4.5.6"

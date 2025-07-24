@@ -669,4 +669,3 @@ describe("Historical Entity Store", () => {
         });
     });
 });
-

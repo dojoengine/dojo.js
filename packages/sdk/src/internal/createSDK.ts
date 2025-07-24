@@ -30,6 +30,7 @@ import {
 import { subscribeQueryModelCallback } from "./subscribeQueryModel.ts";
 import { defaultToriiPagination, Pagination } from "./pagination.ts";
 import { parseEntities } from "./parseEntities.ts";
+import { parseEntitiesWithSchema } from "./effect.ts";
 
 export interface CreateSDKOptions {
     client: torii.ToriiClient;
@@ -67,6 +68,7 @@ export function createSDK<T extends SchemaType>({
             const q = query.build();
 
             const entities = await client.getEntities(q);
+
             const parsedEntities = parseEntities<T>(entities.items);
             return [
                 Pagination.fromQuery(query, entities.next_cursor).withItems(
