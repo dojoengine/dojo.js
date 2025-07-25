@@ -1,5 +1,60 @@
 # Change Log
 
+## 1.6.0-beta.4
+
+### Patch Changes
+
+- ca4814b: chore: bump dojo.c
+- Updated dependencies [ca4814b]
+    - @dojoengine/torii-client@1.6.0-beta.4
+    - @dojoengine/state@1.6.0-beta.4
+    - @dojoengine/utils@1.6.0-beta.4
+
+## 1.6.0-beta.3
+
+### Patch Changes
+
+- 9e163f4: chore: bump starknet.js to 7.6.2
+- Updated dependencies [9e163f4]
+    - @dojoengine/torii-client@1.6.0-beta.3
+    - @dojoengine/state@1.6.0-beta.3
+    - @dojoengine/utils@1.6.0-beta.3
+
+## 1.6.0-beta.2
+
+### Patch Changes
+
+- 19c9411: fix: github workflow fix
+- Updated dependencies [19c9411]
+    - @dojoengine/torii-client@1.6.0-beta.2
+    - @dojoengine/state@1.6.0-beta.2
+    - @dojoengine/utils@1.6.0-beta.2
+
+## 1.6.0-beta.1
+
+### Patch Changes
+
+- ef76fca: fix: update release process
+- Updated dependencies [ef76fca]
+    - @dojoengine/torii-client@1.6.0-beta.1
+    - @dojoengine/state@1.6.0-beta.1
+    - @dojoengine/utils@1.6.0-beta.1
+
+## 1.6.0-beta.0
+
+### Minor Changes
+
+- b9817aa: chore: bump starknetjs version
+
+### Patch Changes
+
+- 30b6165: fix: add sendSignedMessageBatch util
+- Updated dependencies [b9817aa]
+- Updated dependencies [30b6165]
+    - @dojoengine/state@1.6.0-beta.0
+    - @dojoengine/torii-client@1.6.0-beta.0
+    - @dojoengine/utils@1.6.0-beta.0
+
 ## 1.5.16
 
 ### Patch Changes

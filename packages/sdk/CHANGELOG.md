@@ -1,5 +1,84 @@
 # Change Log
 
+## 1.6.0-beta.7
+
+### Patch Changes
+
+- b4a3c92: fix(sdk): deduplicate historical entities
+
+## 1.6.0-beta.6
+
+### Patch Changes
+
+- dba78bb: fix: zustand historical state hook
+
+## 1.6.0-beta.5
+
+### Minor Changes
+
+- 736a46b: feat: add zustand historical entities
+
+## 1.6.0-beta.4
+
+### Patch Changes
+
+- ca4814b: chore: bump dojo.c
+- Updated dependencies [ca4814b]
+    - @dojoengine/torii-client@1.6.0-beta.4
+    - @dojoengine/torii-wasm@1.6.0-beta.4
+    - @dojoengine/utils@1.6.0-beta.4
+    - @dojoengine/core@1.6.0-beta.4
+
+## 1.6.0-beta.3
+
+### Patch Changes
+
+- 9e163f4: chore: bump starknet.js to 7.6.2
+- Updated dependencies [9e163f4]
+- Updated dependencies [d8f7035]
+    - @dojoengine/torii-client@1.6.0-beta.3
+    - @dojoengine/torii-wasm@1.6.0-beta.3
+    - @dojoengine/utils@1.6.0-beta.3
+    - @dojoengine/core@1.6.0-beta.3
+
+## 1.6.0-beta.2
+
+### Patch Changes
+
+- 19c9411: fix: github workflow fix
+- Updated dependencies [19c9411]
+    - @dojoengine/torii-client@1.6.0-beta.2
+    - @dojoengine/torii-wasm@1.6.0-beta.2
+    - @dojoengine/utils@1.6.0-beta.2
+    - @dojoengine/core@1.6.0-beta.2
+
+## 1.6.0-beta.1
+
+### Patch Changes
+
+- ef76fca: fix: update release process
+- Updated dependencies [ef76fca]
+    - @dojoengine/torii-client@1.6.0-beta.1
+    - @dojoengine/torii-wasm@1.6.0-beta.1
+    - @dojoengine/utils@1.6.0-beta.1
+    - @dojoengine/core@1.6.0-beta.1
+
+## 1.6.0-beta.0
+
+### Minor Changes
+
+- b9817aa: chore: bump starknetjs version
+
+### Patch Changes
+
+- 30b6165: fix: add sendSignedMessageBatch util
+- Updated dependencies [b9817aa]
+- Updated dependencies [30b6165]
+    - @dojoengine/core@1.6.0-beta.0
+    - @dojoengine/torii-client@1.6.0-beta.0
+    - @dojoengine/torii-wasm@1.6.0-beta.0
+    - @dojoengine/utils@1.6.0-beta.0
+
 ## 1.5.18
 
 ### Patch Changes

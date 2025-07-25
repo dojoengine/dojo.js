@@ -28,7 +28,7 @@ import {
     updateTokenBalanceSubscription,
 } from "./token.ts";
 import { subscribeQueryModelCallback } from "./subscribeQueryModel.ts";
-import { Pagination } from "./pagination.ts";
+import { defaultToriiPagination, Pagination } from "./pagination.ts";
 import { parseEntities } from "./parseEntities.ts";
 
 export interface CreateSDKOptions {
@@ -67,12 +67,13 @@ export function createSDK<T extends SchemaType>({
             const q = query.build();
 
             const entities = await client.getEntities(q);
+
             const parsedEntities = parseEntities<T>(entities.items);
             return [
                 Pagination.fromQuery(query, entities.next_cursor).withItems(
                     parsedEntities
                 ),
-                client.onEntityUpdated(
+                await client.onEntityUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
                 ),
@@ -97,7 +98,7 @@ export function createSDK<T extends SchemaType>({
                 Pagination.fromQuery(query, entities.next_cursor).withItems(
                     parsedEntities
                 ),
-                client.onEventMessageUpdated(
+                await client.onEventMessageUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
                 ),
@@ -242,10 +243,10 @@ export function createSDK<T extends SchemaType>({
          * @param {SubscribeTokenBalanceRequest} request
          * @returns {torii.Subscription}
          */
-        onTokenBalanceUpdated: (
+        onTokenBalanceUpdated: async (
             request: SubscribeTokenBalanceRequest
-        ): torii.Subscription => {
-            return onTokenBalanceUpdated(client, request);
+        ): Promise<torii.Subscription> => {
+            return await onTokenBalanceUpdated(client, request);
         },
 
         /**
@@ -259,10 +260,10 @@ export function createSDK<T extends SchemaType>({
          * Result containing subscription handle or error
          * @returns torii.Subscription
          */
-        onTokenUpdated: (
+        onTokenUpdated: async (
             request: SubscribeTokenRequest
-        ): torii.Subscription => {
-            return onTokenUpdated(client, request);
+        ): Promise<torii.Subscription> => {
+            return await onTokenUpdated(client, request);
         },
 
         /**
@@ -316,9 +317,15 @@ export function createSDK<T extends SchemaType>({
          * @returns {Promise<torii.Controllers>}
          */
         getControllers: async (
-            contract_addresses: string[]
+            contract_addresses: string[],
+            usernames: string[],
+            pagination: torii.Pagination = defaultToriiPagination
         ): Promise<torii.Controllers> => {
-            return await client.getControllers(contract_addresses);
+            return await client.getControllers({
+                contract_addresses,
+                usernames,
+                pagination,
+            });
         },
 
         /**

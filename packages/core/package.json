@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/core",
-    "version": "1.5.17",
+    "version": "1.6.0-beta.4",
     "description": "dojo: Core package for interacting with dojo worlds. Execution client and other helpful functions",
     "author": "dojo",
     "license": "MIT",
@@ -23,7 +23,7 @@
     "devDependencies": {
         "@types/elliptic": "^6.4.18",
         "@vitest/coverage-v8": "^1.6.0",
-        "tsup": "^8.3.5",
+        "tsup": "^8.4.0",
         "typescript": "^5.6.2",
         "vitest": "^1.6.0"
     },

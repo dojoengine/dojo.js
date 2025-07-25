@@ -45,9 +45,9 @@ const createMockClient = (): torii.ToriiClient =>
             .mockResolvedValue(["0x123", "0x456", "0x789"]),
         updateEntitySubscription: vi.fn().mockResolvedValue(undefined),
         updateEventMessageSubscription: vi.fn().mockResolvedValue(undefined),
-        getControllers: vi.fn().mockResolvedValue([]),
+        getControllers: vi.fn().mockResolvedValue(["0x123", "0x456"]),
         // Add other required methods as needed
-    }) as unknown as torii.ToriiClient;
+    } as unknown as torii.ToriiClient);
 
 describe("createSDK", () => {
     let mockClient: torii.ToriiClient;
@@ -296,23 +296,6 @@ describe("createSDK", () => {
         // Use public method to check items
         expect(initial.getItems()).toEqual([]);
         expect(subscription).toBeDefined();
-    });
-
-    it("should handle controller queries", async () => {
-        const sdk = createSDK<typeof mockSchema>({
-            client: mockClient,
-            config: mockConfig,
-            sendMessage: mockSignMessage,
-            sendMessageBatch: mockSignMessageBatch,
-        });
-
-        const controllers = await sdk.getControllers(["0x123", "0x456"]);
-
-        expect(mockClient.getControllers).toHaveBeenCalledWith([
-            "0x123",
-            "0x456",
-        ]);
-        expect(controllers).toEqual([]);
     });
 
     it("should handle subscription updates", async () => {

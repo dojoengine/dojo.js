@@ -194,7 +194,7 @@ export class DojoProvider extends Provider {
         );
 
         try {
-            return await account?.execute(calls, undefined, details);
+            return await account?.execute(calls, details);
         } catch (error) {
             this.logger.error("Error occured: ", error);
             throw error;

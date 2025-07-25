@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { ToriiQueryBuilder } from "../internal/toriiQueryBuilder";
+import {
+    ToriiQueryBuilder,
+    HistoricalToriiQueryBuilder,
+} from "../internal/toriiQueryBuilder";
 import type { Clause, OrderBy } from "@dojoengine/torii-wasm";
 import type { SchemaType } from "../internal/types";
 import { ClauseBuilder } from "../internal/clauseBuilder";
@@ -88,19 +91,17 @@ describe("ToriiQueryBuilder", () => {
     describe("order by handling", () => {
         it("should add a single order by", () => {
             const builder = new ToriiQueryBuilder<TestModels>();
-            const query = builder
-                .addOrderBy("dojo_starter", "x", "Asc")
-                .build();
+            const query = builder.addOrderBy("x", "Asc").build();
 
             expect(query.pagination.order_by).toEqual([
-                { model: "dojo_starter", member: "x", direction: "Asc" },
+                { field: "x", direction: "Asc" },
             ]);
         });
 
         it("should set multiple order by clauses", () => {
             const orderBy: OrderBy[] = [
-                { model: "dojo_starter", member: "x", direction: "Asc" },
-                { model: "dojo_starter", member: "y", direction: "Desc" },
+                { field: "x", direction: "Asc" },
+                { field: "y", direction: "Desc" },
             ];
 
             const builder = new ToriiQueryBuilder<TestModels>();
@@ -155,7 +156,7 @@ describe("ToriiQueryBuilder", () => {
                 .withLimit(10)
                 .withCursor("cursor")
                 .addEntityModel("dojo_starter-Position")
-                .addOrderBy("dojo_starter-Position", "x", "Asc")
+                .addOrderBy("x", "Asc")
                 .includeHashedKeys()
                 .build();
 
@@ -166,8 +167,7 @@ describe("ToriiQueryBuilder", () => {
                     direction: "Forward",
                     order_by: [
                         {
-                            model: "dojo_starter-Position",
-                            member: "x",
+                            field: "x",
                             direction: "Asc",
                         },
                     ],
@@ -177,6 +177,36 @@ describe("ToriiQueryBuilder", () => {
                 models: ["dojo_starter-Position"],
                 historical: false,
             });
+        });
+    });
+});
+describe("HistoricalToriiQueryBuilder", () => {
+    it("should be historical", () => {
+        const builder = new HistoricalToriiQueryBuilder<TestModels>();
+        const query = builder
+            .withLimit(10)
+            .withCursor("cursor")
+            .addEntityModel("dojo_starter-Position")
+            .addOrderBy("x", "Asc")
+            .includeHashedKeys()
+            .build();
+
+        expect(query).toEqual({
+            pagination: {
+                limit: 10,
+                cursor: "cursor",
+                direction: "Forward",
+                order_by: [
+                    {
+                        field: "x",
+                        direction: "Asc",
+                    },
+                ],
+            },
+            clause: undefined,
+            no_hashed_keys: false,
+            models: ["dojo_starter-Position"],
+            historical: true,
         });
     });
 });

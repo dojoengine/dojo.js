@@ -10,3 +10,5 @@ lerna-debug.log
 
 .turbo/
 **/**/vite.config.ts.timestamp-*
+**/**/tsup.config.bundled*
+

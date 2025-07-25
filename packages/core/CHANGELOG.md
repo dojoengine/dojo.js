@@ -1,5 +1,39 @@
 # Change Log
 
+## 1.6.0-beta.4
+
+### Patch Changes
+
+- ca4814b: chore: bump dojo.c
+
+## 1.6.0-beta.3
+
+### Patch Changes
+
+- 9e163f4: chore: bump starknet.js to 7.6.2
+
+## 1.6.0-beta.2
+
+### Patch Changes
+
+- 19c9411: fix: github workflow fix
+
+## 1.6.0-beta.1
+
+### Patch Changes
+
+- ef76fca: fix: update release process
+
+## 1.6.0-beta.0
+
+### Minor Changes
+
+- b9817aa: chore: bump starknetjs version
+
+### Patch Changes
+
+- 30b6165: fix: add sendSignedMessageBatch util
+
 ## 1.5.17
 
 ### Patch Changes

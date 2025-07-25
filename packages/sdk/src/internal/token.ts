@@ -9,6 +9,11 @@ import type {
 } from "./types.ts";
 
 import { addAddressPadding } from "starknet";
+import { defaultToriiPagination } from "./pagination.ts";
+
+type Strict<T> = {
+    [K in keyof T]-?: NonNullable<T[K]>;
+};
 
 /**
  * Creates a safe callback wrapper that handles errors
@@ -49,7 +54,7 @@ export const defaultTokenBalance: torii.TokenBalance = {
 
 function parseTokenRequest<T extends GetTokenRequest & GetTokenBalanceRequest>(
     req: T
-): T {
+): Strict<T> {
     if (req.contractAddresses) {
         req.contractAddresses = req.contractAddresses.map((r) =>
             addAddressPadding(r)
@@ -62,7 +67,12 @@ function parseTokenRequest<T extends GetTokenRequest & GetTokenBalanceRequest>(
         );
     }
 
-    return req;
+    return {
+        contractAddresses: req.contractAddresses ?? [],
+        accountAddresses: req.accountAddresses ?? [],
+        tokenIds: req.tokenIds ?? [],
+        pagination: req.pagination ?? defaultToriiPagination,
+    } as Strict<T>;
 }
 /**
  * @param {GetTokenRequest} request
@@ -72,8 +82,13 @@ export async function getTokens(
     client: torii.ToriiClient,
     request: GetTokenRequest
 ): Promise<torii.Tokens> {
-    const { contractAddresses, tokenIds } = parseTokenRequest(request);
-    return await client.getTokens(contractAddresses ?? [], tokenIds ?? []);
+    const { contractAddresses, tokenIds, pagination } =
+        parseTokenRequest(request);
+    return await client.getTokens({
+        contract_addresses: contractAddresses,
+        token_ids: tokenIds,
+        pagination,
+    });
 }
 
 /**
@@ -84,13 +99,14 @@ export async function getTokenBalances(
     client: torii.ToriiClient,
     request: GetTokenBalanceRequest
 ): Promise<torii.TokenBalances> {
-    const { contractAddresses, accountAddresses, tokenIds } =
+    const { contractAddresses, accountAddresses, tokenIds, pagination } =
         parseTokenRequest(request);
-    return await client.getTokenBalances(
-        contractAddresses ?? [],
-        accountAddresses ?? [],
-        tokenIds ?? []
-    );
+    return await client.getTokenBalances({
+        contract_addresses: contractAddresses,
+        account_addresses: accountAddresses,
+        token_ids: tokenIds,
+        pagination,
+    });
 }
 
 /**
@@ -103,13 +119,13 @@ export async function getTokenBalances(
  * Result containing subscription handle or error
  * @returns torii.Subscription
  */
-export function onTokenBalanceUpdated(
+export async function onTokenBalanceUpdated(
     client: torii.ToriiClient,
     request: SubscribeTokenBalanceRequest
-): torii.Subscription {
+): Promise<torii.Subscription> {
     const { contractAddresses, accountAddresses, tokenIds, callback } =
         parseTokenRequest(request);
-    return client.onTokenBalanceUpdated(
+    return await client.onTokenBalanceUpdated(
         contractAddresses ?? [],
         accountAddresses ?? [],
         tokenIds ?? [],
@@ -165,7 +181,7 @@ export async function subscribeTokenBalance(
     });
 
     // Create subscription for updates
-    const subscription = client.onTokenBalanceUpdated(
+    const subscription = await client.onTokenBalanceUpdated(
         contractAddresses ?? [],
         accountAddresses ?? [],
         tokenIds ?? [],
@@ -195,13 +211,13 @@ export const defaultToken: torii.Token = {
  * Result containing subscription handle or error
  * @returns torii.Subscription
  */
-export function onTokenUpdated(
+export async function onTokenUpdated(
     client: torii.ToriiClient,
     request: SubscribeTokenRequest
-): torii.Subscription {
+): Promise<torii.Subscription> {
     const { contractAddresses, tokenIds, callback } =
         parseTokenRequest(request);
-    return client.onTokenUpdated(
+    return await client.onTokenUpdated(
         contractAddresses ?? [],
         tokenIds ?? [],
         safeCallback(callback, defaultToken)
@@ -231,7 +247,7 @@ export async function subscribeToken(
     });
 
     // Create subscription for updates
-    const subscription = client.onTokenUpdated(
+    const subscription = await client.onTokenUpdated(
         contractAddresses ?? [],
         tokenIds ?? [],
         safeCallback(callback, defaultToken)

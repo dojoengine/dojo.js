@@ -4,9 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       release_type:
-        description: "Type of release (prerelease, prepatch, patch, minor, preminor, major)"
+        description: "Type of release (auto, prerelease, patch, minor, major)"
         required: true
-        default: "patch"
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - prerelease
+          - patch
+          - minor
+          - major
+      prerelease_tag:
+        description: "Prerelease tag (e.g., rc, beta, alpha) - only used for prerelease"
+        required: false
+        default: "rc"
       dry_run:
         description: "Dry run (no actual publishing or commits)"
         required: false
@@ -21,6 +32,7 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v3
         with:
@@ -89,9 +101,37 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: "Setup npm for npmjs"
+      - name: Determine release strategy
+        id: release-strategy
+        run: |
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "Current branch: $CURRENT_BRANCH"
+          # Determine if we should use prerelease mode
+          if [[ "$CURRENT_BRANCH" != "main" && "${{ github.event.inputs.release_type }}" == "auto" ]]; then
+            echo "Non-main branch detected, will use prerelease mode"
+            echo "use_prerelease=true" >> $GITHUB_OUTPUT
+            
+            # Extract version from branch name if it's a release branch
+            if [[ "$CURRENT_BRANCH" =~ ^release/([0-9]+\.[0-9]+) ]]; then
+              echo "prerelease_tag=${BASH_REMATCH[1]}-rc" >> $GITHUB_OUTPUT
+            else
+              # Use branch name as prerelease tag (sanitized)
+              SANITIZED_BRANCH=$(echo "$CURRENT_BRANCH" | sed 's/[^a-zA-Z0-9-]/-/g')
+              echo "prerelease_tag=$SANITIZED_BRANCH" >> $GITHUB_OUTPUT
+            fi
+          elif [[ "${{ github.event.inputs.release_type }}" == "prerelease" ]]; then
+            echo "Manual prerelease requested"
+            echo "use_prerelease=true" >> $GITHUB_OUTPUT
+            echo "prerelease_tag=${{ github.event.inputs.prerelease_tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "Standard release mode"
+            echo "use_prerelease=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: "Setup npm authentication"
         run: |
           npm config set registry https://registry.npmjs.org/
+          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       - name: Install Protobuf Compiler
@@ -100,87 +140,135 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Check for packages to be bumped
-        id: check-status
+      - name: Enter prerelease mode if needed
+        if: steps.release-strategy.outputs.use_prerelease == 'true'
         run: |
-          # Run changeset status and capture output
-          STATUS=$(pnpm changeset status)
-          echo "Changeset status:"
-          echo "$STATUS"
+          PRERELEASE_TAG="${{ steps.release-strategy.outputs.prerelease_tag }}"
+          echo "Entering prerelease mode with tag: $PRERELEASE_TAG"
 
-          # Check if we have packages to bump
-          if echo "$STATUS" | grep -q "NO packages to be bumped at patch" && \
-             echo "$STATUS" | grep -q "NO packages to be bumped at minor" && \
-             echo "$STATUS" | grep -q "NO packages to be bumped at major"; then
-            echo "No packages need to be bumped at any level. Exiting workflow."
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+          if [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
+            pnpm changeset pre enter "$PRERELEASE_TAG"
+          else
+            echo "DRY RUN: Would enter prerelease mode with tag $PRERELEASE_TAG"
+          fi
+
+      - name: Check for changesets
+        id: check-changesets
+        run: |
+          # Check if there are any changesets
+          if [ -z "$(ls -A .changeset/*.md 2>/dev/null | grep -v README.md)" ]; then
+            echo "No changesets found. Nothing to release."
+            echo "has_changesets=false" >> $GITHUB_OUTPUT
             exit 0
           else
-            echo "Found packages that need to be bumped. Continuing workflow."
-            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Found changesets to process."
+            echo "has_changesets=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Version packages
+        if: steps.check-changesets.outputs.has_changesets == 'true'
         id: changesets-version
         run: |
-          # Apply version bump based on release type
-          pnpm changeset version
-
-          # If this is a dry run, revert the version changes
-          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
-            echo "DRY RUN: Would version packages to ${NEW_VERSION}"
-            git checkout -- .
+          echo "Running changeset version..."
+          if [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
+            pnpm changeset version
+            
+            # If we're in prerelease mode and on a non-main branch, we might need to force version bumps
+            if [ "${{ steps.release-strategy.outputs.use_prerelease }}" == "true" ]; then
+              echo "Prerelease versioning completed"
+            fi
+          else
+            echo "DRY RUN: Would run changeset version"
+            # Show what would be versioned
+            pnpm changeset status --verbose
           fi
 
       - name: Commit changes
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+        if: ${{ github.event.inputs.dry_run != 'true' && steps.check-changesets.outputs.has_changesets == 'true' }}
         run: |
           if git diff --quiet && git diff --staged --quiet; then
             echo "No changes to commit"
           else
             git add .
             git commit -m "chore: release"
-            git push origin refs/heads/main:refs/heads/main
+            # Push to the current branch
+            CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+            git push origin "refs/heads/$CURRENT_BRANCH:refs/heads/$CURRENT_BRANCH"
           fi
 
       - name: Publish to npm
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: pnpm release
+        if: ${{ github.event.inputs.dry_run != 'true' && steps.check-changesets.outputs.has_changesets == 'true' }}
+        run: |
+          echo "Publishing packages..."
+          # Changesets will only publish packages that are not ignored in config
+          pnpm release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Dry run - Show npm publish
-        if: ${{ github.event.inputs.dry_run == 'true' }}
+        if: ${{ github.event.inputs.dry_run == 'true' && steps.check-changesets.outputs.has_changesets == 'true' }}
         run: |
           echo "DRY RUN: Would publish the following packages to npm:"
-          pnpm release:dry-run
+          # Show what changesets would publish
+          pnpm changeset publish --dry-run
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Create and push tag
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+      - name: Create and push tags
+        if: ${{ github.event.inputs.dry_run != 'true' && steps.check-changesets.outputs.has_changesets == 'true' }}
         run: |
+          echo "Creating tags..."
           pnpm changeset tag
           git push --tags
-          
+
+      - name: Exit prerelease mode if needed
+        if: steps.release-strategy.outputs.use_prerelease == 'true' && github.event.inputs.dry_run != 'true' && steps.check-changesets.outputs.has_changesets == 'true'
+        run: |
+          echo "Exiting prerelease mode"
+          pnpm changeset pre exit || true
+          # Commit the pre.json removal if it exists
+          if [ -f .changeset/pre.json ]; then
+            git add .changeset/pre.json
+            git commit -m "chore: exit prerelease mode" || true
+            CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+            git push origin "refs/heads/$CURRENT_BRANCH:refs/heads/$CURRENT_BRANCH" || true
+          fi
+
       - name: Trigger release creation
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+        if: ${{ github.event.inputs.dry_run != 'true' && steps.check-changesets.outputs.has_changesets == 'true' }}
         run: |
           # Get all tags that were just created
           TAGS=$(git tag --points-at HEAD | grep '@dojoengine/' || true)
-          
+
           # For each tag, trigger the release workflow
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
           for TAG in $TAGS; do
             echo "Triggering release for tag: $TAG"
             gh workflow run create_release.yaml \
-              --ref main \
+              --ref "$CURRENT_BRANCH" \
               -f tag="$TAG"
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Dry run - Show git changes
-        if: ${{ github.event.inputs.dry_run == 'true' }}
+      - name: Dry run - Summary
+        if: ${{ github.event.inputs.dry_run == 'true' && steps.check-changesets.outputs.has_changesets == 'true' }}
         run: |
-          TAGS=$(pnpm changeset tag)
-          echo "DRY RUN: Would commit changes with message: chore: release"
-          echo "DRY RUN: Would create and push tag: $TAGS"
+          echo "DRY RUN SUMMARY:"
+          echo "================"
+          if [ "${{ steps.release-strategy.outputs.use_prerelease }}" == "true" ]; then
+            echo "Would enter prerelease mode: ${{ steps.release-strategy.outputs.prerelease_tag }}"
+          fi
+          echo "Would version packages according to changesets"
+          echo "Would commit with message: chore: release"
+          echo "Would create and push tags"
+          echo "Would publish packages to npm"
+
+          if [ "${{ steps.release-strategy.outputs.use_prerelease }}" == "true" ]; then
+            echo "Would exit prerelease mode after publishing"
+          fi
+          echo ""
+          echo "Current git status:"
           git status
