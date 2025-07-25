@@ -30,7 +30,6 @@ import {
 import { subscribeQueryModelCallback } from "./subscribeQueryModel.ts";
 import { defaultToriiPagination, Pagination } from "./pagination.ts";
 import { parseEntities } from "./parseEntities.ts";
-import { parseEntitiesWithSchema } from "./effect.ts";
 
 export interface CreateSDKOptions {
     client: torii.ToriiClient;
