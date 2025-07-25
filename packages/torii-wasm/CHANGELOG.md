@@ -1,5 +1,23 @@
 # Change Log
 
+## 1.6.0
+
+### Minor Changes
+
+- 69dcb43: chore: bump starknetjs version
+
+### Patch Changes
+
+- 69dcb43: fix: github workflow fix
+- 69dcb43: chore: bump starknet.js to 7.6.2
+- 69dcb43: fix(torii-wasm): add type module to package.json
+- 69dcb43: chore: bump dojo.c
+- 30b6165: fix: add sendSignedMessageBatch util
+- 69dcb43: chore: bump dojo & dojo-starter
+- 69dcb43: chore: bump dojo.c
+- 69dcb43: feat: remove grpc client lock
+- 69dcb43: fix: update release process
+
 ## 1.6.0-beta.4
 
 ### Patch Changes
