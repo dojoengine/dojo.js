@@ -6,8 +6,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 GRPC_DIR="$(dirname "$SCRIPT_DIR")"
 PROTO_DIR="$GRPC_DIR/proto"
 
-echo "Creating proto directory..."
+echo "Creating proto directories..."
 mkdir -p "$PROTO_DIR"
+mkdir -p "$PROTO_DIR/google/protobuf"
 
 GITHUB_BASE_URL="https://raw.githubusercontent.com/dojoengine/torii/main/crates/proto/proto"
 
@@ -27,5 +28,15 @@ for file in "${PROTO_FILES[@]}"; do
         exit 1
     fi
 done
+
+# Download google protobuf empty.proto
+echo "Downloading google/protobuf/empty.proto..."
+curl -s -o "$PROTO_DIR/google/protobuf/empty.proto" "https://raw.githubusercontent.com/protocolbuffers/protobuf/main/src/google/protobuf/empty.proto"
+if [ $? -eq 0 ]; then
+    echo "✓ Downloaded google/protobuf/empty.proto"
+else
+    echo "✗ Failed to download google/protobuf/empty.proto"
+    exit 1
+fi
 
 echo "All proto files updated successfully!"

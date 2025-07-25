@@ -5,15 +5,38 @@
     "license": "MIT",
     "description": "Dojo SDK: Build onchain and provable apps faster",
     "main": "dist/index.js",
-    "types": "dist/index.d.ts",
     "type": "module",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "build:proto": "./scripts/build-proto.sh",
+        "build:deps": "tsup",
+        "build": "pnpm build:proto && pnpm build:deps",
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
+        "test": "vitest run --passWithNoTests --coverage",
         "update:proto": "./scripts/update-proto.sh"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
     },
     "keywords": [],
     "packageManager": "pnpm@10.5.2",
     "dependencies": {
-        "protoc-gen-js": "3.21.4-4"
+        "@grpc/grpc-js": "^1.9.14",
+        "@protobuf-ts/grpcweb-transport": "^2.11.1",
+        "@protobuf-ts/runtime": "^2.11.1",
+        "@protobuf-ts/runtime-rpc": "^2.11.1",
+        "google-protobuf": "^3.21.2",
+        "grpc-web": "^1.5.0"
+    },
+    "devDependencies": {
+        "@protobuf-ts/plugin": "^2.11.1",
+        "@types/google-protobuf": "^3.15.12",
+        "@vitest/coverage-v8": "^1.6.0",
+        "tsup": "^8.4.0",
+        "typescript": "^5.6.2",
+        "vitest": "^1.6.0"
     }
 }
