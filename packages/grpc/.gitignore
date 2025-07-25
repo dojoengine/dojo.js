@@ -2,3 +2,4 @@ node_modules
 dist
 tsup.node.bundled_*
 coverage
+bench

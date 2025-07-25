@@ -14,7 +14,7 @@ export class DojoGrpcClient {
     constructor(config: DojoGrpcClientConfig) {
         this.transport = new GrpcWebFetchTransport({
             baseUrl: config.url,
-            format: "text",
+            format: "binary",
         });
 
         this.worldClient = new WorldClient(this.transport);
