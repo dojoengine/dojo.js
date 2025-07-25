@@ -39,6 +39,38 @@ for await (const response of subscription.responses) {
 }
 ```
 
+## Performance Comparison
+
+This package includes comprehensive benchmarks comparing performance with `@dojoengine/torii-wasm`.
+
+### Running Benchmarks
+
+```bash
+# Run all benchmarks
+pnpm run bench
+
+# Generate comparison report
+pnpm run bench:report
+
+# Run benchmarks and generate report
+pnpm run bench:full
+```
+
+### Benchmark Categories
+
+1. **Entity Queries**: Single entity, batch retrieval, complex queries, pagination
+2. **Subscriptions**: Setup time, message throughput, concurrent connections
+3. **Serialization**: Small/large payloads, complex structures, batch processing
+4. **Integration**: Full lifecycle, mixed workloads, error recovery
+
+### Performance Considerations
+
+- **gRPC-Web** uses Protocol Buffers for efficient binary serialization
+- **torii-wasm** uses native WebAssembly bindings for direct memory access
+- Choice depends on your specific use case:
+    - gRPC-Web: Better for standard web environments, easier debugging
+    - torii-wasm: Better for high-performance applications, lower overhead
+
 ## Development
 
 ### Update Proto Files
