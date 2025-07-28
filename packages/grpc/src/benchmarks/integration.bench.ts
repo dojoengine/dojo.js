@@ -41,9 +41,7 @@ describe("Integration Benchmark - Real-world Scenarios", () => {
 
             try {
                 // 3. Query entities
-                const { response } = await client.worldClient.retrieveEntities({
-                    query: testQuery,
-                });
+                const response = await client.getEntities(testQueryTorii);
 
                 // 4. Cleanup
                 client.destroy();
@@ -103,9 +101,7 @@ describe("Integration Benchmark - Real-world Scenarios", () => {
 
             try {
                 // 1. Initial query
-                const { response } = await client.worldClient.retrieveEntities({
-                    query: testQuery,
-                });
+                const response = await client.getEntities(testQueryTorii);
 
                 client.destroy();
             } catch (error) {
@@ -161,10 +157,7 @@ describe("Integration Benchmark - Real-world Scenarios", () => {
             const client = createBenchmarkGrpcClient();
 
             try {
-                // Attempt invalid query
-                const { response } = await client.worldClient.retrieveEntities({
-                    query: testQuery,
-                });
+                const response = await client.getEntities(testQueryTorii);
             } catch (error) {
                 // Expected error, measure recovery time
                 console.error("gRPC lifecycle error:", error);

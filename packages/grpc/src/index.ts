@@ -1,4 +1,11 @@
 export * from "./client";
+export * from "./torii-client";
+export {
+    parseEntities,
+    type SchemaType,
+    type ParsedEntity,
+    type StandardizedQueryResult,
+} from "./parseEntities";
 
 // Re-export generated protobuf types
 export * from "./generated/schema";

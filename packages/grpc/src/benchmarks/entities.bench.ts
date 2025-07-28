@@ -22,10 +22,7 @@ describe("Entity Queries Benchmark", async () => {
 
         bench("gRPC-Web", async () => {
             try {
-                const { response } =
-                    await grpcClient.worldClient.retrieveEntities({
-                        query: grpcQuery,
-                    });
+                const response = await grpcClient.getEntities(grpcQuery);
             } catch (error) {
                 // Handle connection errors gracefully
                 // This is expected when no server is running
@@ -34,9 +31,7 @@ describe("Entity Queries Benchmark", async () => {
 
         bench("torii-wasm", async () => {
             try {
-                const response = await toriiClient.retrieveEntities({
-                    query: grpcQuery,
-                });
+                const response = await toriiClient.getEntities(grpcQuery);
             } catch (error) {
                 // Handle connection errors gracefully
                 // This is expected when no server is running
@@ -55,19 +50,14 @@ describe("Entity Queries Benchmark", async () => {
 
         bench("gRPC-Web", async () => {
             try {
-                const { response } =
-                    await grpcClient.worldClient.retrieveEntities({
-                        query: grpcQuery,
-                    });
+                const response = await grpcClient.getEntities(grpcQuery);
             } catch (error) {
                 // Handle connection errors gracefully
             }
         });
         bench("torii-wasm", async () => {
             try {
-                const response = await toriiClient.retrieveEntities({
-                    query: grpcQuery,
-                });
+                const response = await toriiClient.getEntities(grpcQuery);
             } catch (error) {
                 // Handle connection errors gracefully
             }
@@ -85,10 +75,7 @@ describe("Entity Queries Benchmark", async () => {
 
         bench("gRPC-Web", async () => {
             try {
-                const { response } =
-                    await grpcClient.worldClient.retrieveEntities({
-                        query: grpcQuery,
-                    });
+                const response = await grpcClient.getEntities(grpcQuery);
             } catch (error) {
                 // Handle connection errors gracefully
             }
@@ -96,9 +83,7 @@ describe("Entity Queries Benchmark", async () => {
 
         bench("torii-wasm", async () => {
             try {
-                const response = await toriiClient.retrieveEntities({
-                    query: grpcQuery,
-                });
+                const response = await toriiClient.getEntities(grpcQuery);
             } catch (error) {
                 // Handle connection errors gracefully
             }
@@ -116,19 +101,14 @@ describe("Entity Queries Benchmark", async () => {
 
         bench("gRPC-Web", async () => {
             try {
-                const { response } =
-                    await grpcClient.worldClient.retrieveEntities({
-                        query: grpcQuery,
-                    });
+                const response = await grpcClient.getEntities(grpcQuery);
             } catch (error) {
                 // Handle connection errors gracefully
             }
         });
         bench("torii-wasm", async () => {
             try {
-                const response = await toriiClient.retrieveEntities({
-                    query: grpcQuery,
-                });
+                const response = await toriiClient.getEntities(grpcQuery);
             } catch (error) {
                 // Handle connection errors gracefully
             }

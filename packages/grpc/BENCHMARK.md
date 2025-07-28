@@ -85,20 +85,30 @@ Tests real-world scenarios:
 - **Mean Time**: Average time per operation in milliseconds (lower is better)
 - **Difference %**: Performance comparison between implementations
 
-### Example Output
+### Latest Benchmark Results
 
-```
-Entity Queries Benchmark
-| Operation | gRPC-Web (ops/sec) | torii-wasm (ops/sec) | Difference | Mean Time (gRPC) | Mean Time (torii) |
-|-----------|-------------------|---------------------|------------|------------------|-------------------|
-| Single Entity | 1,234 | 1,567 | -21.2% | 0.810ms | 0.638ms |
-```
+#### Entity Queries
 
-In this example:
+| Operation            | gRPC-Web (ops/sec) | torii-wasm (ops/sec) | Difference | Mean Time (gRPC) | Mean Time (torii) |
+| -------------------- | ------------------ | -------------------- | ---------- | ---------------- | ----------------- |
+| Single Entity        | 1,303              | 1,084                | +20.2%     | 0.767ms          | 0.923ms           |
+| Batch (100 entities) | 1,309              | 1,166                | +12.3%     | 0.764ms          | 0.858ms           |
+| Complex Query        | 1,265              | 1,091                | +15.9%     | 0.791ms          | 0.916ms           |
+| Pagination           | 1,450              | 1,368                | +6.0%      | 0.690ms          | 0.731ms           |
 
-- torii-wasm performs 1,567 operations per second
-- gRPC-Web performs 1,234 operations per second
-- gRPC-Web is 21.2% slower for this operation
+#### Integration Tests
+
+| Operation      | gRPC-Web (ops/sec) | torii-wasm (ops/sec) | Difference | Mean Time (gRPC) | Mean Time (torii) |
+| -------------- | ------------------ | -------------------- | ---------- | ---------------- | ----------------- |
+| Full Lifecycle | 21.9               | 22.8                 | -4.0%      | 45.8ms           | 43.8ms            |
+| Mixed Workload | 1,118              | 952                  | +17.4%     | 0.894ms          | 1.051ms           |
+| Error Recovery | 21.6               | 20.8                 | +3.8%      | 46.3ms           | 48.2ms            |
+
+In these results:
+
+- gRPC-Web generally performs better for simple queries
+- torii-wasm shows slightly better performance for full lifecycle operations
+- Performance differences vary by operation type
 
 ### Performance Factors
 

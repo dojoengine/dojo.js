@@ -6,6 +6,7 @@ import { KeysClause, ToriiQueryBuilder } from "@dojoengine/sdk";
 import { ToriiClient } from "@dojoengine/torii-wasm/node";
 
 import ws from "websocket";
+import { ToriiGrpcClient } from "../torii-client";
 
 // Those lines are require so that websocket works.
 // @ts-ignore
@@ -27,9 +28,11 @@ export const TEST_SIZES = {
 };
 
 // Create a gRPC client for benchmarks
-export function createBenchmarkGrpcClient(): DojoGrpcClient {
-    return createDojoGrpcClient({
-        url: TORII_GRPC_URL,
+export function createBenchmarkGrpcClient(): ToriiGrpcClient {
+    return new ToriiGrpcClient({
+        toriiUrl: "http://localhost:8080",
+        worldAddress:
+            "0x0248f59aeb5c6a086409dc1ec588f0f5346b29960e7e64d10c133bcc85ba7244",
     });
 }
 export async function createBenchmarkToriiClient(): Promise<ToriiClient> {
