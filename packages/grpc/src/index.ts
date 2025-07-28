@@ -1,4 +1,5 @@
 export * from "./client";
+export * from "./torii-client";
 
 // Re-export generated protobuf types
 export * from "./generated/schema";
