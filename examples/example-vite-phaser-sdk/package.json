@@ -19,8 +19,8 @@
         "dev-nolog": "vite --config vite/config.dev.mjs",
         "build-nolog": "vite build --config vite/config.prod.mjs",
         "preview": "vite preview",
-        "format:check": "prettier --check .",
-        "format": "prettier --write ."
+        "format:check": "biome check .",
+        "format": "biome check . --write"
     },
     "devDependencies": {
         "terser": "^5.31.0",

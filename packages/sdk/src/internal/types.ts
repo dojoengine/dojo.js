@@ -121,7 +121,7 @@ export type ToriiResponse<T extends SchemaType> = Pagination<
  */
 export type SubscribeResponse<T extends SchemaType> = [
     ToriiResponse<T>,
-    torii.Subscription
+    torii.Subscription,
 ];
 
 /**

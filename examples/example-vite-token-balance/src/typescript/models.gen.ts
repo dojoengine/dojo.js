@@ -159,4 +159,3 @@ export enum ModelsMapping {
     Moved = "dojo_starter-Moved",
     MovedValue = "dojo_starter-MovedValue",
 }
-

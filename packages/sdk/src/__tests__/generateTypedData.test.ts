@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import type { StarknetDomain } from "starknet";
+import { describe, expect, it } from "vitest";
 import { generateTypedData } from "../internal/generateTypedData";
 
 // Mock schema type for testing

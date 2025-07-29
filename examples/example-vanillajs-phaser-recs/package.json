@@ -6,8 +6,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "format:check": "prettier --check .",
-        "format": "prettier --write .",
+        "format:check": "biome check .",
+        "format": "biome check . --write",
         "preview": "vite preview"
     },
     "devDependencies": {

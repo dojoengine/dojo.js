@@ -1,6 +1,6 @@
-import GlobalCounter from "@/components/global-counter";
 import CallerCounter from "@/components/caller-counter";
 import Chat from "@/components/chat";
+import GlobalCounter from "@/components/global-counter";
 
 export default function Home() {
     return (

@@ -8,11 +8,10 @@ import "./app/globals.css";
 
 import { init } from "@dojoengine/sdk";
 import { DojoSdkProvider } from "@dojoengine/sdk/react";
+import { env } from "@/env";
 import { dojoConfig } from "../dojoConfig";
 import { setupWorld } from "./typescript/contracts.gen";
-import { SchemaType } from "./typescript/models.gen";
-
-import { env } from "@/env";
+import type { SchemaType } from "./typescript/models.gen";
 
 async function main() {
     const sdk = await init<SchemaType>({

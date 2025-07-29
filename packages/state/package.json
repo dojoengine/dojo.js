@@ -10,8 +10,8 @@
         "build:deps": "tsup",
         "build": "pnpm build:deps",
         "test": "vitest run",
-        "format:check": "prettier --check .",
-        "format": "prettier --write .",
+        "format:check": "biome check .",
+        "format": "biome check . --write",
         "docs": "typedoc"
     },
     "exports": {

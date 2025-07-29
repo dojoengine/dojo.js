@@ -1,5 +1,5 @@
-import { DojoProvider, DojoCall } from "@dojoengine/core";
-import { Account, AccountInterface, CairoCustomEnum } from "starknet";
+import type { DojoCall, DojoProvider } from "@dojoengine/core";
+import type { Account, AccountInterface, CairoCustomEnum } from "starknet";
 
 export function setupWorld(provider: DojoProvider) {
     const build_actions_changeTheme_calldata = (

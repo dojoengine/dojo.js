@@ -1,14 +1,15 @@
-import { useState, useEffect, useCallback } from "react";
-import { Moon, Sun } from "lucide-react";
-import type { Subscription } from "@dojoengine/torii-wasm";
-import { useAccount } from "@starknet-react/core";
 import {
     KeysClause,
     type ParsedEntity,
     type SDK,
     ToriiQueryBuilder,
 } from "@dojoengine/sdk";
-import type { SchemaType } from "@/typescript/models.gen";
+import { useDojoSDK, useEntityId } from "@dojoengine/sdk/react";
+import type { Subscription } from "@dojoengine/torii-wasm";
+import { useAccount } from "@starknet-react/core";
+import { Moon, Sun } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { CairoCustomEnum } from "starknet";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -20,9 +21,8 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown";
-import { CairoCustomEnum } from "starknet";
-import { useDojoSDK, useEntityId } from "@dojoengine/sdk/react";
 import type { setupWorld } from "@/typescript/contracts.gen";
+import type { SchemaType } from "@/typescript/models.gen";
 
 interface ThemeState {
     current: string | null;

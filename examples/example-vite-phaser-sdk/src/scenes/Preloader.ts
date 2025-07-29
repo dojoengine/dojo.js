@@ -1,5 +1,5 @@
-import { Scene } from "phaser";
 import { predeployedAccounts } from "@dojoengine/predeployed-connector";
+import { Scene } from "phaser";
 import { dojoConfig } from "../../dojoConfig";
 
 export class Preloader extends Scene {

@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { OrbitControls, Stage } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
+import { useEffect } from "react";
 import { Vector3 } from "three";
 
 import { Players } from "./Players";

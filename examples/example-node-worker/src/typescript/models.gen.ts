@@ -91,7 +91,7 @@ export type SchemaType = ISchemaType & {
         Moved: Moved;
         MovedValue: MovedValue;
     };
-}
+};
 export const schema: SchemaType = {
     dojo_starter: {
         DirectionsAvailable: {
@@ -177,4 +177,3 @@ export enum ModelsMapping {
     Moved = "dojo_starter-Moved",
     MovedValue = "dojo_starter-MovedValue",
 }
-

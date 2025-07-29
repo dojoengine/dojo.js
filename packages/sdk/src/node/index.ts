@@ -1,16 +1,17 @@
 import * as torii from "@dojoengine/torii-wasm/node";
-import type { Account, Signature, TypedData } from "starknet";
 import { err, ok, type Result } from "neverthrow";
+import type { Account, Signature, TypedData } from "starknet";
 import { NO_IDENTITY, NO_SIGNER } from "../internal/errors.ts";
 
-export * from "../internal/toriiQueryBuilder.ts";
 export * from "../internal/clauseBuilder.ts";
-export * from "./worker.ts";
-export * from "../internal/types.ts";
 export * from "../internal/models.ts";
 export * from "../internal/toriiQueryBuilder.ts";
+export * from "../internal/toriiQueryBuilder.ts";
+export * from "../internal/types.ts";
+export * from "./worker.ts";
+
 import { createSDK } from "../internal/createSDK.ts";
-import { SchemaType, SDK, SDKConfig } from "../internal/types.ts";
+import type { SchemaType, SDK, SDKConfig } from "../internal/types.ts";
 
 export const defaultClientConfig: Partial<torii.ClientConfig> = {
     toriiUrl: "http://localhost:8080",
@@ -109,9 +110,8 @@ export async function init<T extends SchemaType>(
             // Sign all messages and prepare batch
             const messages = [];
             for (const typedData of data) {
-                const signature: Signature = await _account.signMessage(
-                    typedData
-                );
+                const signature: Signature =
+                    await _account.signMessage(typedData);
                 const dataString = JSON.stringify(typedData);
 
                 messages.push({

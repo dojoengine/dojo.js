@@ -1,11 +1,11 @@
-import { useDojoSDK } from "../hooks";
-import { createSubscriptionHook } from "./hooks";
+import { useState } from "react";
 import type {
     ParsedEntity,
     SchemaType,
     ToriiQueryBuilder,
 } from "../../../internal/types";
-import { useState } from "react";
+import { useDojoSDK } from "../hooks";
+import { createSubscriptionHook } from "./hooks";
 
 /**
  * Subscribe to event changes. This hook fetches initial events from torii and subscribes to new events.

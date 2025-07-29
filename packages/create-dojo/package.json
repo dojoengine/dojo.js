@@ -18,8 +18,8 @@
     "scripts": {
         "build:deps": "tsup --dts-resolve",
         "build": "pnpm build:deps",
-        "format:check": "prettier --check .",
-        "format": "prettier --write .",
+        "format:check": "biome check .",
+        "format": "biome check . --write",
         "docs": "typedoc"
     },
     "dependencies": {

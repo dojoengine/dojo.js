@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { useSendTransaction } from "@starknet-react/core";
 import {
     KeysClause,
     type ParsedEntity,
     type SDK,
     ToriiQueryBuilder,
 } from "@dojoengine/sdk";
-import type { Subscription } from "@dojoengine/torii-wasm";
-import { dojoConfig } from "@/../dojoConfig";
-import type { SchemaType } from "@/typescript/models.gen";
 import { useDojoSDK } from "@dojoengine/sdk/react";
+import type { Subscription } from "@dojoengine/torii-wasm";
+import { useSendTransaction } from "@starknet-react/core";
+import { useCallback, useEffect, useState } from "react";
+import { dojoConfig } from "@/../dojoConfig";
 import type { setupWorld } from "@/typescript/contracts.gen";
+import type { SchemaType } from "@/typescript/models.gen";
+import { Button } from "./ui/button";
 
 export default function GlobalCOunter() {
     const [count, setCount] = useState(0);

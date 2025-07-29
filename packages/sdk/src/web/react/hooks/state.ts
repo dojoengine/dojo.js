@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import type { BigNumberish } from "starknet";
-import type { ParsedEntity, SchemaType } from "../../../internal/types";
-import { DojoContext, type DojoContextType } from "../provider";
 import { create, type StoreApi, type UseBoundStore } from "zustand";
-import { createDojoStoreFactory } from "../../state/zustand";
+import type { ParsedEntity, SchemaType } from "../../../internal/types";
 import type { GameState } from "../../state";
+import { createDojoStoreFactory } from "../../state/zustand";
+import { DojoContext, type DojoContextType } from "../provider";
 
 /**
  * Factory function to create a React Zustand store based on a given SchemaType.
@@ -30,7 +30,7 @@ export function useModel<
     N extends keyof SchemaType,
     M extends keyof SchemaType[N] & string,
     Client extends (...args: any) => any,
-    Schema extends SchemaType
+    Schema extends SchemaType,
 >(entityId: BigNumberish, model: `${N}-${M}`): SchemaType[N][M] | undefined {
     const [namespace, modelName] = model.split("-") as [N, M];
     const { useDojoStore } =
@@ -58,7 +58,7 @@ export function useHistoricalModel<
     N extends keyof SchemaType,
     M extends keyof SchemaType[N] & string,
     Client extends (...args: any) => any,
-    Schema extends SchemaType
+    Schema extends SchemaType,
 >(entityId: BigNumberish, model: `${N}-${M}`): ParsedEntity<Schema>[] {
     const [namespace, modelName] = model.split("-") as [N, M];
     const { useDojoStore } =
@@ -87,7 +87,7 @@ export function useModels<
     N extends keyof SchemaType,
     M extends keyof SchemaType[N] & string,
     Client extends (...args: any) => any,
-    Schema extends SchemaType
+    Schema extends SchemaType,
 >(model: `${N}-${M}`): { [entityId: string]: SchemaType[N][M] | undefined } {
     const [namespace, modelName] = model.split("-") as [N, M];
     const { useDojoStore } =

@@ -1,14 +1,14 @@
-import { Scene, GameObjects } from "phaser";
-import { DojoContext } from "../dojo/context";
-import { PredeployedAccountsConnector } from "@dojoengine/predeployed-connector";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
+import type { PredeployedAccountsConnector } from "@dojoengine/predeployed-connector";
 import {
     ClauseBuilder,
-    ParsedEntity,
+    type ParsedEntity,
     ToriiQueryBuilder,
 } from "@dojoengine/sdk";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { type GameObjects, Scene } from "phaser";
 import { addAddressPadding } from "starknet";
-import { SchemaType } from "../typescript/models.gen";
+import type { DojoContext } from "../dojo/context";
+import type { SchemaType } from "../typescript/models.gen";
 
 export class MainMenu extends Scene {
     background: GameObjects.Image;

@@ -10,8 +10,8 @@
         "build:deps": "tsup --dts-resolve",
         "build": "pnpm build:deps",
         "test": "vitest run --passWithNoTests",
-        "format:check": "prettier --check .",
-        "format": "prettier --write .",
+        "format:check": "biome check .",
+        "format": "biome check . --write",
         "docs": "typedoc"
     },
     "license": "MIT",

@@ -1,16 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
+import type {
+    init,
+    SchemaType,
+    StandardizedQueryResult,
+} from "@dojoengine/sdk";
+import { useCallback, useEffect, useState } from "react";
+import { QueryEditor } from "./components/query-editor";
+import { QueryHistory, type QueryItem } from "./components/query-history";
+import { QueryResults } from "./components/query-results";
+import { SchemaExplorer, type SchemaItem } from "./components/schema-explorer";
+import { evaluateUserInput } from "./components/ts-executor";
 import { Button } from "./components/ui/button";
 import { Card } from "./components/ui/card";
-import { QueryHistory, type QueryItem } from "./components/query-history";
-import { SchemaExplorer, type SchemaItem } from "./components/schema-explorer";
-import { QueryEditor } from "./components/query-editor";
-import { QueryResults } from "./components/query-results";
-import type {
-    StandardizedQueryResult,
-    SchemaType,
-    init,
-} from "@dojoengine/sdk";
-import { evaluateUserInput } from "./components/ts-executor";
 
 const DEFAULT_COMMENT = `// Welcome to Torii gRPC Playground!
 // This is a sandboxed environment. All you need is return the value you want.

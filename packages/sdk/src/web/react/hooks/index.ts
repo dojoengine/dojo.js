@@ -1,13 +1,13 @@
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useContext, useMemo } from "react";
 import type { BigNumberish } from "starknet";
 import type { SchemaType } from "../../../internal/types";
 import { DojoContext, type DojoContextType } from "../provider";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export * from "./entities";
 export * from "./events";
-export * from "./token";
 export * from "./state";
+export * from "./token";
 
 /**
  * Hook that exposes sdk features.
@@ -18,7 +18,7 @@ export * from "./state";
  */
 export function useDojoSDK<
     Client extends (...args: any) => any,
-    Schema extends SchemaType
+    Schema extends SchemaType,
 >(): DojoContextType<Client, Schema> {
     return useContext<DojoContextType<Client, Schema>>(DojoContext);
 }

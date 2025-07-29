@@ -9,8 +9,8 @@
         "lint": "eslint .",
         "preview": "vite preview",
         "serve": "vite preview",
-        "format:check": "prettier --check .",
-        "format": "prettier --write ."
+        "format:check": "biome check .",
+        "format": "biome check . --write"
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",

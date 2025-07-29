@@ -1,3 +1,7 @@
+import type {
+    ComparisonOperator,
+    PatternMatching,
+} from "@dojoengine/torii-wasm";
 import { describe, expect, it } from "vitest";
 import {
     AndComposeClause,
@@ -6,10 +10,6 @@ import {
     MemberClause,
     OrComposeClause,
 } from "../internal/clauseBuilder";
-import type {
-    ComparisonOperator,
-    PatternMatching,
-} from "@dojoengine/torii-wasm";
 import type { SchemaType } from "../internal/types";
 
 // Test models interface

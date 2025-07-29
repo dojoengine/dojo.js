@@ -12,7 +12,7 @@ import type { SchemaType, UnionOfModelData } from "../internal/types";
  */
 export function generateTypedData<
     T extends SchemaType,
-    M extends UnionOfModelData<T>
+    M extends UnionOfModelData<T>,
 >(
     nsModel: string,
     message: M,

@@ -1,13 +1,13 @@
+import type { Subscription } from "@dojoengine/torii-wasm";
 import type { Clause } from "@dojoengine/torii-wasm/types";
 import { useCallback, useEffect, useRef } from "react";
+import type { ToriiQueryBuilder } from "../../../internal/toriiQueryBuilder";
 import type {
-    SubscribeResponse,
+    ParsedEntity,
     SchemaType,
     SubscribeParams,
-    ParsedEntity,
+    SubscribeResponse,
 } from "../../../internal/types";
-import type { ToriiQueryBuilder } from "../../../internal/toriiQueryBuilder";
-import type { Subscription } from "@dojoengine/torii-wasm";
 import { deepEqual, sleep } from "./utils";
 
 /**
@@ -15,7 +15,7 @@ import { deepEqual, sleep } from "./utils";
  */
 export function createSubscriptionHook<
     Schema extends SchemaType,
-    Historical extends boolean = false
+    Historical extends boolean = false,
 >(config: {
     subscribeMethod: (
         options: SubscribeParams<Schema>

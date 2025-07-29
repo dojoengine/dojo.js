@@ -1,6 +1,6 @@
-import { createRequire } from 'module';
+import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const dojo_c = require('./pkg/node/dojo_c.js');
+const dojo_c = require("./pkg/node/dojo_c.js");
 
 // Re-export all named exports
 export const {
@@ -22,7 +22,7 @@ export const {
     getSelectorFromName,
     starknetKeccak,
     cairoShortStringToFelt,
-    parseCairoShortString
+    parseCairoShortString,
 } = dojo_c;
 
 // Also export as default for compatibility

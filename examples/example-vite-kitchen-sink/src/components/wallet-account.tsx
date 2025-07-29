@@ -1,6 +1,6 @@
 import { useAccount, useDisconnect } from "@starknet-react/core";
-import { Button } from "./ui/button";
 import { shortAddress } from "@/lib/utils";
+import { Button } from "./ui/button";
 
 export default function WalletAccount() {
     const { address } = useAccount();

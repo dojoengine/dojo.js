@@ -1,8 +1,8 @@
-import { useRef, useEffect } from "react";
-import * as monaco from "monaco-editor";
-import { Button } from "./ui/button";
-import * as ts from "typescript";
 import sdkType from "@dojoengine/sdk/types?raw";
+import * as monaco from "monaco-editor";
+import { useEffect, useRef } from "react";
+import * as ts from "typescript";
+import { Button } from "./ui/button";
 
 monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
     target: monaco.languages.typescript.ScriptTarget.ESNext,

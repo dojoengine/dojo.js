@@ -1,18 +1,15 @@
-import { Game, Types } from "phaser";
-
+import { DojoProvider } from "@dojoengine/core";
+import { init } from "@dojoengine/sdk/experimental";
+import { createDojoStore } from "@dojoengine/sdk/state";
+import { Game, type Types } from "phaser";
+import { dojoConfig } from "../dojoConfig";
+import { DojoContext } from "./dojo/context";
 import { Boot } from "./scenes/Boot";
 import { Game as MainGame } from "./scenes/Game";
 import { GameOver } from "./scenes/GameOver";
 import { MainMenu } from "./scenes/MainMenu";
 import { Preloader } from "./scenes/Preloader";
-
-import { init } from "@dojoengine/sdk/experimental";
-
-import { SchemaType } from "./typescript/models.gen";
-import { dojoConfig } from "../dojoConfig";
-import { DojoContext } from "./dojo/context";
-import { DojoProvider } from "@dojoengine/core";
-import { createDojoStore } from "@dojoengine/sdk/state";
+import type { SchemaType } from "./typescript/models.gen";
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig

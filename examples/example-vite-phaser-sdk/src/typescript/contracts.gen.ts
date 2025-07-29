@@ -1,5 +1,5 @@
-import { DojoProvider } from "@dojoengine/core";
-import { Account, AccountInterface, CairoCustomEnum } from "starknet";
+import type { DojoProvider } from "@dojoengine/core";
+import type { Account, AccountInterface, CairoCustomEnum } from "starknet";
 
 export function setupWorld(provider: DojoProvider) {
     const build_actions_move_calldata = (direction: CairoCustomEnum) => {

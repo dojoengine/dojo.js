@@ -1,11 +1,11 @@
-import { useDojoSDK } from "../hooks";
-import { useState, useEffect, useRef, useCallback } from "react";
-import type { Token, TokenBalance, Subscription } from "@dojoengine/torii-wasm";
+import type { Subscription, Token, TokenBalance } from "@dojoengine/torii-wasm";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type {
-    GetTokenRequest,
     GetTokenBalanceRequest,
+    GetTokenRequest,
     SubscriptionCallbackArgs,
 } from "../..";
+import { useDojoSDK } from "../hooks";
 import { deepEqual } from "./utils";
 
 export function useTokens(request: GetTokenRequest & GetTokenBalanceRequest) {

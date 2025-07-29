@@ -1,7 +1,7 @@
-import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { v4 as uuidv4 } from "uuid";
-import { useAccount } from "@starknet-react/core";
 import { useDojoSDK } from "@dojoengine/sdk/react";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { useAccount } from "@starknet-react/core";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Custom hook to handle system calls and state management in the Dojo application.

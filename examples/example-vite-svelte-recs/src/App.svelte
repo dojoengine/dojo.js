@@ -1,35 +1,34 @@
 <script lang="ts">
-    import type { Entity } from "@dojoengine/recs";
-    import {
-        componentValueStore,
-        type ComponentStore,
-    } from "./dojo/componentValueStore";
-    import { dojoStore, accountStore, burnerStore } from "./stores";
-    import { Account } from "starknet";
-    import { type Burner } from "@dojoengine/create-burner";
-    import {
-        handleBurnerChange,
-        handleNewBurner,
-        handleClearBurners,
-    } from "./handlers";
+import type { Entity } from "@dojoengine/recs";
+import {
+    componentValueStore,
+    type ComponentStore,
+} from "./dojo/componentValueStore";
+import { dojoStore, accountStore, burnerStore } from "./stores";
+import { Account } from "starknet";
+import { type Burner } from "@dojoengine/create-burner";
+import {
+    handleBurnerChange,
+    handleNewBurner,
+    handleClearBurners,
+} from "./handlers";
 
-    let entityId: Entity;
-    let account: Account;
-    let position: ComponentStore;
-    let moves: ComponentStore;
-    let burners: Burner[];
+let entityId: Entity;
+let account: Account;
+let position: ComponentStore;
+let moves: ComponentStore;
+let burners: Burner[];
 
-    $: ({ clientComponents, torii, burnerManager, client } = $dojoStore);
-    $: if ($accountStore) account = $accountStore;
+$: ({ clientComponents, torii, burnerManager, client } = $dojoStore);
+$: if ($accountStore) account = $accountStore;
 
-    $: if (torii && account)
-        entityId = torii.poseidonHash([account.address]) as Entity;
+$: if (torii && account)
+    entityId = torii.poseidonHash([account.address]) as Entity;
 
-    $: if (dojoStore)
-        position = componentValueStore(clientComponents.Position, entityId);
-    $: if (dojoStore)
-        moves = componentValueStore(clientComponents.Moves, entityId);
-    $: if ($burnerStore) burners = $burnerStore;
+$: if (dojoStore)
+    position = componentValueStore(clientComponents.Position, entityId);
+$: if (dojoStore) moves = componentValueStore(clientComponents.Moves, entityId);
+$: if ($burnerStore) burners = $burnerStore;
 </script>
 
 <main>

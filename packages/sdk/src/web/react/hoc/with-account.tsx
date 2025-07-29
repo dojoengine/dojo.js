@@ -1,5 +1,5 @@
-import type { AccountInterface } from "starknet";
 import { useAccount } from "@starknet-react/core";
+import type { AccountInterface } from "starknet";
 
 interface WithAccountProps {
     account: AccountInterface;

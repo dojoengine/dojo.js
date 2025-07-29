@@ -1,8 +1,8 @@
-import { TooltipProvider } from "@/components/ui/tooltip";
+import Header from "@/components/header";
 
 import Sidebar from "@/components/sidebar";
-import Header from "@/components/header";
 import StarknetProvider from "@/components/starknet-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function RootLayout({ children }: React.PropsWithChildren<{}>) {
     return (

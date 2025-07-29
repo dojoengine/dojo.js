@@ -1,4 +1,4 @@
-import { defineConfig, Options } from "tsup";
+import { defineConfig, type Options } from "tsup";
 
 import { tsupConfig } from "../../tsup.config";
 

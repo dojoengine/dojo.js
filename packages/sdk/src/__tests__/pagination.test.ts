@@ -1,8 +1,8 @@
-import { describe, it, expect } from "vitest";
+import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
+import { describe, expect, it } from "vitest";
 import { Pagination } from "../internal/pagination";
 import { ToriiQueryBuilder } from "../internal/toriiQueryBuilder";
 import type { schema } from "./models.gen";
-import { CairoOption, CairoOptionVariant, CairoCustomEnum } from "starknet";
 
 describe("Pagination", () => {
     it("should create a Pagination instance with default direction", () => {

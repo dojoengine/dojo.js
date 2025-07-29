@@ -1,14 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import type * as torii from "@dojoengine/torii-wasm";
+import type { Result } from "neverthrow";
+import { ok } from "neverthrow";
+import type { Account, TypedData } from "starknet";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createSDK } from "../internal/createSDK";
 import type {
-    SDKConfig,
     SchemaType,
+    SDKConfig,
     ToriiQueryBuilder,
 } from "../internal/types";
-import type * as torii from "@dojoengine/torii-wasm";
-import { ok } from "neverthrow";
-import type { TypedData, Account } from "starknet";
-import type { Result } from "neverthrow";
 
 // Mock schema for testing
 const mockSchema = {
@@ -47,7 +47,7 @@ const createMockClient = (): torii.ToriiClient =>
         updateEventMessageSubscription: vi.fn().mockResolvedValue(undefined),
         getControllers: vi.fn().mockResolvedValue(["0x123", "0x456"]),
         // Add other required methods as needed
-    } as unknown as torii.ToriiClient);
+    }) as unknown as torii.ToriiClient;
 
 describe("createSDK", () => {
     let mockClient: torii.ToriiClient;

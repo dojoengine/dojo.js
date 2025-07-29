@@ -50,7 +50,7 @@
         "test": "vitest run --config ./vitest.config.ts",
         "coverage": "vitest run --coverage",
         "lint": "eslint . --ext .ts,.tsx",
-        "format": "prettier --write .",
+        "format": "biome check . --write",
         "docs": "typedoc"
     },
     "./package.json": "./package.json",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Entity } from "@dojoengine/recs";
+import type { Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { onMounted, reactive, ref, toRaw, watch } from "vue";
 
@@ -35,7 +35,7 @@ const spawnFun = async () => {
         alert("No account");
         return;
     }
-    let { spawn } = dojoContext.setup.systemCalls;
+    const { spawn } = dojoContext.setup.systemCalls;
     await spawn(dojoContext.account);
 };
 
@@ -46,7 +46,7 @@ const moveFun = async (direction: any) => {
         alert("No account");
         return;
     }
-    let { move } = dojoContext.setup.systemCalls;
+    const { move } = dojoContext.setup.systemCalls;
     await move(account, direction);
 };
 

@@ -10,8 +10,8 @@
         "preview": "vite preview",
         "codegen": "graphql-codegen",
         "generate-pwa-assets": "pwa-assets-generator",
-        "format:check": "prettier --check .",
-        "format": "prettier --write ."
+        "format:check": "biome check .",
+        "format": "biome check . --write"
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",

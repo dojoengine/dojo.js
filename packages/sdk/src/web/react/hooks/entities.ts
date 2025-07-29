@@ -1,6 +1,6 @@
+import type { SchemaType, ToriiQueryBuilder } from "../../../internal/types";
 import { useDojoSDK } from "../hooks";
 import { createSubscriptionHook } from "./hooks";
-import type { SchemaType, ToriiQueryBuilder } from "../../../internal/types";
 
 /**
  * Subscribe to entity changes. This hook fetches initial data from torii and subscribes to each entity change.

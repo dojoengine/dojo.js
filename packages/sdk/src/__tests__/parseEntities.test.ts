@@ -1,9 +1,8 @@
-import * as torii from "@dojoengine/torii-wasm";
-import { describe, expect, it } from "vitest";
-
-import { parseEntities } from "../internal/parseEntities";
+import type * as torii from "@dojoengine/torii-wasm";
 import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
-import { SchemaType } from "./models.gen.ts";
+import { describe, expect, it } from "vitest";
+import { parseEntities } from "../internal/parseEntities";
+import type { SchemaType } from "./models.gen.ts";
 
 describe("parseEntities", () => {
     it("should parse entities correctly", () => {

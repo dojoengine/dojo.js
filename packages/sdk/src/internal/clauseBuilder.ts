@@ -1,14 +1,14 @@
-import {
+import type {
     Clause,
     ComparisonOperator,
     MemberValue,
     PatternMatching,
 } from "@dojoengine/torii-wasm/node";
+import { type BigNumberish, shortString } from "starknet";
 import {
     convertToPrimitive,
     type MemberValueParam,
 } from "../internal/convertToMemberValue.ts";
-import { type BigNumberish, shortString } from "starknet";
 import type { SchemaType } from "../internal/types.ts";
 
 type ClauseBuilderInterface = {
@@ -26,7 +26,7 @@ type ModelPath<T, K extends keyof T> = K extends string
 
 type GetModelType<
     T,
-    Path extends string
+    Path extends string,
 > = Path extends `${infer Namespace}-${infer Model}`
     ? Namespace extends keyof T
         ? Model extends keyof T[Namespace]
@@ -76,7 +76,7 @@ export function HashedKeysClause<T extends SchemaType>(
 export function MemberClause<
     T extends SchemaType,
     Path extends ModelPath<T, keyof T>,
-    M extends keyof GetModelType<T, ModelPath<T, keyof T>>
+    M extends keyof GetModelType<T, ModelPath<T, keyof T>>,
 >(
     model: Path,
     member: M & string,
@@ -169,7 +169,7 @@ export class ClauseBuilder<T extends SchemaType> {
      */
     where<
         Path extends ModelPath<T, keyof T>,
-        M extends keyof GetModelType<T, Path>
+        M extends keyof GetModelType<T, Path>,
     >(
         model: Path,
         member: M & string,

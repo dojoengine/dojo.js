@@ -8,7 +8,7 @@ import {
     setComponent,
 } from "@dojoengine/recs";
 import { poseidonHashMany } from "micro-starknet";
-import { byteArray, type ByteArray } from "starknet";
+import { type ByteArray, byteArray } from "starknet";
 
 const STORE_SET_RECORD_EVENT_NAME =
     "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d";
@@ -62,7 +62,7 @@ export function setComponentFromEvent(
 
         // get keys
         const keysNumber = parseInt(eventData[1]);
-        let index = 2 + keysNumber + 1;
+        const index = 2 + keysNumber + 1;
 
         const keys = eventData
             .slice(2, 2 + keysNumber)
@@ -94,7 +94,7 @@ export function setComponentFromEvent(
 
 // Extract component names from components
 function getComponentNames(components: Components): Map<string, string> {
-    let names = new Map<string, string>();
+    const names = new Map<string, string>();
     for (const key of Object.keys(components)) {
         const c: Component = components[key];
         names.set(c.metadata?.name as string, key);
@@ -276,7 +276,7 @@ export function getEntityIdFromKeys(keys: bigint[]): Entity {
     //     return ("0x" + keys[0].toString(16)) as Entity;
     // }
     // calculate the poseidon hash of the keys
-    let poseidon = poseidonHashMany(keys);
+    const poseidon = poseidonHashMany(keys);
     return ("0x" + poseidon.toString(16)) as Entity;
 }
 

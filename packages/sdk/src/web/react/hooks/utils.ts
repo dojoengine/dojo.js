@@ -48,9 +48,7 @@ export function deepEqual(a: any, b: any): boolean {
 
     // Check if every key in a exists in b and has the same value
     return keysA.every(
-        (key) =>
-            Object.prototype.hasOwnProperty.call(b, key) &&
-            deepEqual(a[key], b[key])
+        (key) => Object.hasOwn(b, key) && deepEqual(a[key], b[key])
     );
 }
 

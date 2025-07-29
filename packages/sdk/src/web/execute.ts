@@ -71,8 +71,8 @@ type MapInputType<T extends InputsType> = {
 type MapOutputType<T extends OutputsType> = T extends []
     ? void
     : T["length"] extends 1
-    ? MapAbiType<T[0]["type"]>
-    : { [K in keyof T]: MapAbiType<T[K]["type"]> };
+      ? MapAbiType<T[0]["type"]>
+      : { [K in keyof T]: MapAbiType<T[K]["type"]> };
 
 type ContractFunctions<T extends readonly FunctionAbi[]> = {
     [F in T[number] as F["name"]]: (

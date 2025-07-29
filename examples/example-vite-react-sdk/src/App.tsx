@@ -1,18 +1,17 @@
 import { KeysClause, ToriiQueryBuilder } from "@dojoengine/sdk";
-
-import { ModelsMapping } from "./typescript/models.gen.ts";
-import { useSystemCalls } from "./useSystemCalls.ts";
-import { useAccount } from "@starknet-react/core";
-import { WalletAccount } from "./wallet-account.tsx";
-import { HistoricalEvents } from "./historical-events.tsx";
 import {
     useDojoSDK,
     useEntityId,
     useEntityQuery,
     useModel,
 } from "@dojoengine/sdk/react";
+import { useAccount } from "@starknet-react/core";
 import { addAddressPadding, CairoCustomEnum } from "starknet";
 import { Events } from "./events.tsx";
+import { HistoricalEvents } from "./historical-events.tsx";
+import { ModelsMapping } from "./typescript/models.gen.ts";
+import { useSystemCalls } from "./useSystemCalls.ts";
+import { WalletAccount } from "./wallet-account.tsx";
 
 /**
  * Main application component that provides game functionality and UI.

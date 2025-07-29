@@ -1,4 +1,4 @@
-import type { DojoProvider, DojoCall } from "@dojoengine/core";
+import type { DojoCall, DojoProvider } from "@dojoengine/core";
 import type { Account, AccountInterface, CairoCustomEnum } from "starknet";
 
 export function setupWorld(provider: DojoProvider) {

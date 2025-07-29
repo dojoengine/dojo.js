@@ -132,7 +132,7 @@ export function deepMerge<T extends SchemaType>(
     }
     const result = { ...target } as Record<string, any>;
     for (const key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
+        if (Object.hasOwn(source, key)) {
             if (
                 source[key] !== null &&
                 typeof source[key] === "object" &&

@@ -1,19 +1,19 @@
-import { Scene } from "phaser";
-import { DojoContext } from "../dojo/context";
-import { PredeployedAccountsConnector } from "@dojoengine/predeployed-connector";
-import {
-    AccountInterface,
-    addAddressPadding,
-    BigNumberish,
-    CairoCustomEnum,
-} from "starknet";
+import type { PredeployedAccountsConnector } from "@dojoengine/predeployed-connector";
 import {
     ClauseBuilder,
-    ParsedEntity,
-    StandardizedQueryResult,
+    type ParsedEntity,
+    type StandardizedQueryResult,
     ToriiQueryBuilder,
 } from "@dojoengine/sdk";
-import { ModelsMapping, SchemaType } from "../typescript/models.gen";
+import { Scene } from "phaser";
+import {
+    type AccountInterface,
+    addAddressPadding,
+    type BigNumberish,
+    CairoCustomEnum,
+} from "starknet";
+import type { DojoContext } from "../dojo/context";
+import { ModelsMapping, type SchemaType } from "../typescript/models.gen";
 
 type MoveKeys = {
     W: Phaser.Input.Keyboard.Key;

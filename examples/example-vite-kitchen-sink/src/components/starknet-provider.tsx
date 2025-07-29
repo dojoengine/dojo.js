@@ -1,8 +1,8 @@
-import type { PropsWithChildren } from "react";
+import { usePredeployedAccounts } from "@dojoengine/predeployed-connector/react";
 import { mainnet } from "@starknet-react/chains";
 import { jsonRpcProvider, StarknetConfig, voyager } from "@starknet-react/core";
+import type { PropsWithChildren } from "react";
 import { getRpcUrl } from "@/env";
-import { usePredeployedAccounts } from "@dojoengine/predeployed-connector/react";
 import { dojoConfig } from "../../dojoConfig";
 
 export default function StarknetProvider({ children }: PropsWithChildren) {

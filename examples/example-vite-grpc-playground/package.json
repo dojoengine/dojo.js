@@ -8,8 +8,8 @@
         "build": "tsc -b && vite build",
         "lint": "eslint .",
         "preview": "vite preview",
-        "format:check": "prettier --check .",
-        "format": "prettier --write ."
+        "format:check": "biome check .",
+        "format": "biome check . --write"
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
