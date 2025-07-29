@@ -1,0 +1,49 @@
+{
+    "name": "@dojoengine/grpc",
+    "version": "0.0.0",
+    "author": "Dojo Team",
+    "license": "MIT",
+    "description": "Dojo SDK: Build onchain and provable apps faster",
+    "main": "dist/index.js",
+    "type": "module",
+    "scripts": {
+        "build:proto": "./scripts/build-proto.sh",
+        "build:deps": "tsup",
+        "build": "pnpm build:proto && pnpm build:deps",
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
+        "test": "vitest run --passWithNoTests --coverage",
+        "bench": "vitest bench --config vitest.config.bench.ts",
+        "bench:report": "bun run src/benchmarks/report.ts",
+        "bench:full": "pnpm bench && pnpm bench:report",
+        "update:proto": "./scripts/update-proto.sh"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "keywords": [],
+    "packageManager": "pnpm@10.5.2",
+    "dependencies": {
+        "@grpc/grpc-js": "^1.9.14",
+        "@protobuf-ts/grpcweb-transport": "^2.11.1",
+        "@protobuf-ts/runtime": "^2.11.1",
+        "@protobuf-ts/runtime-rpc": "^2.11.1",
+        "google-protobuf": "^3.21.2",
+        "grpc-web": "^1.5.0"
+    },
+    "devDependencies": {
+        "@dojoengine/sdk": "workspace:*",
+        "@dojoengine/torii-wasm": "workspace:*",
+        "@protobuf-ts/plugin": "^2.11.1",
+        "@types/google-protobuf": "^3.15.12",
+        "@vitest/coverage-v8": "^1.6.0",
+        "tsup": "^8.4.0",
+        "typescript": "^5.6.2",
+        "vite-plugin-wasm": "^3.5.0",
+        "vitest": "^1.6.0",
+        "websocket": "^1.0.35"
+    }
+}
