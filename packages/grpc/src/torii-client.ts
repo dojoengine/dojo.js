@@ -119,10 +119,9 @@ export class ToriiGrpcClient {
         });
     }
 
-    private async createStreamSubscription<
-        TReq extends object,
-        TRes extends object,
-    >(options: StreamHandlerOptions<TReq, TRes>): Subscription {
+    private createStreamSubscription<TReq extends object, TRes extends object>(
+        options: StreamHandlerOptions<TReq, TRes>
+    ): Subscription {
         const subscriptionId = this.nextSubscriptionId++;
         const stream = options.createStream();
 
