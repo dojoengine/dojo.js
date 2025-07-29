@@ -132,3 +132,436 @@ export type DojoCall = {
     entrypoint: string;
     calldata: RawArgs | Calldata;
 };
+
+/**
+ * Cairo to TypeScript type mappings
+ */
+type CairoToTsTypeMap = {
+    "core::felt252": string;
+    "core::integer::u8": number;
+    "core::integer::u16": number;
+    "core::integer::u32": number;
+    "core::integer::u64": bigint;
+    "core::integer::u128": bigint;
+    "core::integer::u256": bigint;
+    "core::integer::i8": number;
+    "core::integer::i16": number;
+    "core::integer::i32": number;
+    "core::integer::i64": bigint;
+    "core::integer::i128": bigint;
+    "core::bool": boolean;
+    "core::starknet::contract_address::ContractAddress": string;
+    "core::starknet::class_hash::ClassHash": string;
+    "core::byte_array::ByteArray": string;
+    "()": void;
+};
+
+/**
+ * Map Cairo type to TypeScript type
+ */
+type MapCairoType<T extends string> = T extends keyof CairoToTsTypeMap
+    ? CairoToTsTypeMap[T]
+    : T extends `core::array::Array::<${infer Inner}>`
+      ? MapCairoType<Inner>[]
+      : T extends `core::array::Span::<${infer Inner}>`
+        ? MapCairoType<Inner>[]
+        : T extends `@core::array::Array::<${infer Inner}>`
+          ? MapCairoType<Inner>[]
+          : T extends `(${infer Types})`
+            ? MapTupleTypes<Types>
+            : unknown;
+
+/**
+ * Map tuple types
+ */
+type MapTupleTypes<T extends string> = T extends `${infer First}, ${infer Rest}`
+    ? [MapCairoType<First>, ...MapTupleTypes<Rest>]
+    : T extends ""
+      ? []
+      : [MapCairoType<T>];
+
+/**
+ * Extract struct type from ABI
+ */
+type ExtractStructType<T> = T extends {
+    type: "struct";
+    name: string;
+    members: infer Members;
+}
+    ? Members extends readonly { name: string; type: string }[]
+        ? {
+              [K in Members[number] as K["name"]]: MapCairoType<K["type"]>;
+          }
+        : never
+    : never;
+
+/**
+ * Extract enum variant type
+ */
+type ExtractEnumVariantType<V> = V extends { name: string; type: infer T }
+    ? T extends string
+        ? MapCairoType<T>
+        : never
+    : never;
+
+/**
+ * Extract enum type from ABI
+ */
+type ExtractEnumType<T> = T extends {
+    type: "enum";
+    name: string;
+    variants: infer Variants;
+}
+    ? Variants extends readonly { name: string; type: string }[]
+        ? {
+              [K in Variants[number] as K["name"]]: ExtractEnumVariantType<K>;
+          }[Variants[number]["name"]]
+        : never
+    : never;
+
+/**
+ * Extract function input parameters
+ */
+type ExtractFunctionInputs<Inputs> = Inputs extends readonly {
+    name: string;
+    type: string;
+}[]
+    ? {
+          [K in Inputs[number] as K["name"]]: MapCairoType<K["type"]>;
+      }
+    : never;
+
+/**
+ * Extract function output type
+ */
+type ExtractFunctionOutputs<Outputs> = Outputs extends readonly {
+    type: string;
+}[]
+    ? Outputs["length"] extends 0
+        ? void
+        : Outputs["length"] extends 1
+          ? MapCairoType<Outputs[0]["type"]>
+          : {
+                [K in keyof Outputs]: Outputs[K] extends { type: string }
+                    ? MapCairoType<Outputs[K]["type"]>
+                    : never;
+            }
+    : void;
+
+/**
+ * Extract function type from ABI
+ */
+type ExtractFunctionType<T> = T extends {
+    type: "function";
+    name: string;
+    inputs: infer Inputs;
+    outputs: infer Outputs;
+}
+    ? {
+          inputs: ExtractFunctionInputs<Inputs>;
+          outputs: ExtractFunctionOutputs<Outputs>;
+      }
+    : never;
+
+/**
+ * Extract all types from ABI array
+ */
+type ExtractAbiTypesFromArray<ABI> = ABI extends readonly any[]
+    ? {
+          structs: {
+              [K in ABI[number] as K extends { type: "struct"; name: infer N }
+                  ? N extends string
+                      ? N
+                      : never
+                  : never]: ExtractStructType<K>;
+          };
+          enums: {
+              [K in ABI[number] as K extends { type: "enum"; name: infer N }
+                  ? N extends string
+                      ? N
+                      : never
+                  : never]: ExtractEnumType<K>;
+          };
+          functions: {
+              [K in ABI[number] as K extends {
+                  type: "function";
+                  name: infer N;
+              }
+                  ? N extends string
+                      ? N
+                      : never
+                  : never]: ExtractFunctionType<K>;
+          };
+      }
+    : never;
+
+/**
+ * Extract contract types from manifest
+ */
+type ExtractContractTypes<Contract> = Contract extends {
+    tag: string;
+    abi: infer ABI;
+}
+    ? {
+          abi: ExtractAbiTypesFromArray<ABI>;
+          tag: Contract["tag"];
+          address: Contract extends { address: string }
+              ? Contract["address"]
+              : never;
+      }
+    : never;
+
+/**
+ * Extract model type from manifest
+ */
+type ExtractModelType<Model> = Model extends {
+    tag: string;
+    selector: string;
+    members?: infer Members;
+}
+    ? {
+          tag: Model["tag"];
+          selector: Model["selector"];
+          fields: Members extends readonly { name: string; type: string }[]
+              ? {
+                    [K in Members[number] as K["name"]]: MapCairoType<
+                        K["type"]
+                    >;
+                }
+              : {};
+      }
+    : never;
+
+/**
+ * Extract event type from manifest
+ */
+type ExtractEventType<Event> = Event extends {
+    tag: string;
+    selector: string;
+    members?: infer Members;
+}
+    ? {
+          tag: Event["tag"];
+          selector: Event["selector"];
+          data: Members extends readonly {
+              name: string;
+              type: string;
+              kind: string;
+          }[]
+              ? {
+                    [K in Members[number] as K["name"]]: MapCairoType<
+                        K["type"]
+                    >;
+                }
+              : {};
+      }
+    : never;
+
+/**
+ * Main type extractor for Dojo manifest
+ */
+export type ExtractManifestTypes<Manifest> = Manifest extends {
+    world?: infer World;
+    contracts?: infer Contracts;
+    models?: infer Models;
+    events?: infer Events;
+}
+    ? {
+          world: World extends { abi: infer ABI }
+              ? ExtractAbiTypesFromArray<ABI>
+              : never;
+          contracts: Contracts extends readonly any[]
+              ? {
+                    [K in Contracts[number] as K extends { tag: infer Tag }
+                        ? Tag extends string
+                            ? Tag
+                            : never
+                        : never]: ExtractContractTypes<K>;
+                }
+              : {};
+          models: Models extends readonly any[]
+              ? {
+                    [K in Models[number] as K extends { tag: infer Tag }
+                        ? Tag extends string
+                            ? Tag
+                            : never
+                        : never]: ExtractModelType<K>;
+                }
+              : {};
+          events: Events extends readonly any[]
+              ? {
+                    [K in Events[number] as K extends { tag: infer Tag }
+                        ? Tag extends string
+                            ? Tag
+                            : never
+                        : never]: ExtractEventType<K>;
+                }
+              : {};
+      }
+    : never;
+
+/**
+ * Helper type to get a specific model type
+ */
+export type GetModel<Manifest, ModelName extends string> =
+    ExtractManifestTypes<Manifest> extends { models: infer Models }
+        ? ModelName extends keyof Models
+            ? Models[ModelName] extends { fields: infer Fields }
+                ? Fields
+                : never
+            : never
+        : never;
+
+/**
+ * Helper type to get a specific contract's function
+ */
+export type GetContractFunction<
+    Manifest,
+    ContractName extends string,
+    FunctionName extends string,
+> =
+    ExtractManifestTypes<Manifest> extends { contracts: infer Contracts }
+        ? ContractName extends keyof Contracts
+            ? Contracts[ContractName] extends {
+                  abi: { functions: infer Functions };
+              }
+                ? FunctionName extends keyof Functions
+                    ? Functions[FunctionName]
+                    : never
+                : never
+            : never
+        : never;
+
+/**
+ * Extract ABIs from contracts array
+ */
+type ExtractContractAbis<Contracts> = Contracts extends readonly [
+    infer First,
+    ...infer Rest,
+]
+    ? First extends { abi: infer Abi }
+        ? Abi extends readonly any[]
+            ? [Abi, ...ExtractContractAbis<Rest>]
+            : ExtractContractAbis<Rest>
+        : ExtractContractAbis<Rest>
+    : [];
+
+/**
+ * Extract all ABIs from a single manifest
+ */
+type ExtractAllAbisFromManifest<Manifest> = Manifest extends {
+    world?: { abi: infer WorldAbi };
+    contracts?: infer Contracts;
+}
+    ? [
+          ...(WorldAbi extends readonly any[] ? [WorldAbi] : []),
+          ...ExtractContractAbis<Contracts>,
+      ]
+    : [];
+
+/**
+ * Flatten array of ABI arrays into a single ABI array
+ */
+type FlattenAbis<Abis> = Abis extends readonly [infer First, ...infer Rest]
+    ? First extends readonly any[]
+        ? [...First, ...FlattenAbis<Rest>]
+        : FlattenAbis<Rest>
+    : [];
+
+/**
+ * Merge two ABI type objects
+ */
+type MergeAbiTypesPair<T1, T2> = T1 extends {
+    structs: infer S1;
+    enums: infer E1;
+    functions: infer F1;
+}
+    ? T2 extends {
+          structs: infer S2;
+          enums: infer E2;
+          functions: infer F2;
+      }
+        ? {
+              structs: S1 & S2;
+              enums: E1 & E2;
+              functions: F1 & F2;
+          }
+        : T1
+    : T2;
+
+/**
+ * Extract ABI types from a single manifest
+ */
+type ExtractAbiTypesFromSingleManifest<Manifest> = ExtractAbiTypesFromArray<
+    FlattenAbis<ExtractAllAbisFromManifest<Manifest>>
+>;
+
+/**
+ * Extract ABI types from multiple manifests (supports up to 5 manifests)
+ */
+type ExtractAbiTypesFromManifests<Manifests extends readonly any[]> =
+    Manifests extends readonly [infer M1]
+        ? ExtractAbiTypesFromSingleManifest<M1>
+        : Manifests extends readonly [infer M1, infer M2]
+          ? MergeAbiTypesPair<
+                ExtractAbiTypesFromSingleManifest<M1>,
+                ExtractAbiTypesFromSingleManifest<M2>
+            >
+          : Manifests extends readonly [infer M1, infer M2, infer M3]
+            ? MergeAbiTypesPair<
+                  MergeAbiTypesPair<
+                      ExtractAbiTypesFromSingleManifest<M1>,
+                      ExtractAbiTypesFromSingleManifest<M2>
+                  >,
+                  ExtractAbiTypesFromSingleManifest<M3>
+              >
+            : Manifests extends readonly [
+                    infer M1,
+                    infer M2,
+                    infer M3,
+                    infer M4,
+                ]
+              ? MergeAbiTypesPair<
+                    MergeAbiTypesPair<
+                        MergeAbiTypesPair<
+                            ExtractAbiTypesFromSingleManifest<M1>,
+                            ExtractAbiTypesFromSingleManifest<M2>
+                        >,
+                        ExtractAbiTypesFromSingleManifest<M3>
+                    >,
+                    ExtractAbiTypesFromSingleManifest<M4>
+                >
+              : Manifests extends readonly [
+                      infer M1,
+                      infer M2,
+                      infer M3,
+                      infer M4,
+                      infer M5,
+                  ]
+                ? MergeAbiTypesPair<
+                      MergeAbiTypesPair<
+                          MergeAbiTypesPair<
+                              MergeAbiTypesPair<
+                                  ExtractAbiTypesFromSingleManifest<M1>,
+                                  ExtractAbiTypesFromSingleManifest<M2>
+                              >,
+                              ExtractAbiTypesFromSingleManifest<M3>
+                          >,
+                          ExtractAbiTypesFromSingleManifest<M4>
+                      >,
+                      ExtractAbiTypesFromSingleManifest<M5>
+                  >
+                : { structs: {}; enums: {}; functions: {} };
+
+/**
+ * Main exported type for extracting ABI types from multiple manifests
+ * Usage:
+ * - Single ABI array: type MyAbi = ExtractAbiTypes<typeof abi>
+ * - Single manifest: type MyAbi = ExtractAbiTypes<typeof manifest>
+ * - Multiple manifests: type MyAbi = ExtractAbiTypes<[typeof manifest1, typeof manifest2, typeof manifest3]>
+ */
+export type ExtractAbiTypes<T> = T extends readonly any[]
+    ? T extends readonly { type: string }[]
+        ? ExtractAbiTypesFromArray<T>
+        : ExtractAbiTypesFromManifests<T>
+    : ExtractAbiTypesFromManifests<[T]>;
