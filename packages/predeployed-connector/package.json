@@ -7,13 +7,14 @@
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "build:deps": "tsup --dts-resolve",
         "build": "pnpm build:deps",
         "test": "vitest run --passWithNoTests --config ./vitest.config.ts",
         "coverage": "vitest run --coverage",
-        "lint": "eslint . --ext .ts,.tsx",
-        "format:check": "biome check .",
-        "format": "biome check . --write",
+        "format:check": "biome format .",
+        "format": "biome format . --write",
         "docs": "typedoc"
     },
     "exports": {

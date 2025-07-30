@@ -4,13 +4,15 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "dev": "vite",
         "build": "pnpm run type-check && pnpm run build-only",
         "preview": "vite preview",
         "build-only": "vite build",
         "type-check": "vue-tsc --noEmit -p tsconfig.json --composite false",
-        "format:check": "biome check .",
-        "format": "biome check . --write"
+        "format:check": "biome format .",
+        "format": "biome format . --write"
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",

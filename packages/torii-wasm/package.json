@@ -7,10 +7,14 @@
     "main": "./pkg/node/dojo_c.js",
     "type": "module",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "build:web": "cd dojo.c && pnpx wasm-pack build --out-dir ../pkg/web --release",
         "build:node": "cd dojo.c && pnpx wasm-pack build --out-dir ../pkg/node --release --target nodejs",
         "build:types": "rm -rf pkg/types && mkdir -p pkg/types && cp pkg/node/dojo_c.d.ts pkg/types/dojo_c.d.ts",
-        "build:wasm": "pnpm build:web && pnpm build:node"
+        "build:wasm": "pnpm build:web && pnpm build:node",
+        "format:check": "biome format .",
+        "format": "biome format . --write"
     },
     "module": "./pkg/web/dojo_c.js",
     "browser": "./pkg/web/dojo_c.js",

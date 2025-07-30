@@ -38,7 +38,7 @@ export const Player = (props: any) => {
         move(account, direction);
     };
 
-    const isLocalPlayer = localPlayer?.player == player.player;
+    const isLocalPlayer = localPlayer?.player === player.player;
 
     const { vec } = player;
     const color = isLocalPlayer ? "green" : "red";

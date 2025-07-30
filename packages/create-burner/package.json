@@ -8,10 +8,12 @@
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "build:deps": "tsup",
         "build": "pnpm build:deps",
-        "format:check": "biome check .",
-        "format": "biome check . --write",
+        "format:check": "biome format .",
+        "format": "biome format . --write",
         "test": "vitest run --coverage",
         "docs": "typedoc"
     },

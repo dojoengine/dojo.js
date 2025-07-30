@@ -165,7 +165,7 @@ function decodeComponentValues(
             indices.values++;
             // the u256 type in cairo is actually { low: u128, high: u128 }
             // we need to consume two u128 values, shifting the second to compose u256
-            if (types[indices.types] == "u256") {
+            if (types[indices.types] === "u256") {
                 const value = parseComponentValue(
                     values[indices.values],
                     valueType as RecsType

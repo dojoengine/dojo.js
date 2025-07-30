@@ -9,8 +9,10 @@
     "scripts": {
         "build:deps": "tsup",
         "build": "pnpm build:deps",
-        "format:check": "biome check .",
-        "format": "biome check . --write",
+        "format:check": "biome format .",
+        "format": "biome format . --write",
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "test": "vitest run --passWithNoTests --coverage",
         "docs": "typedoc"
     },

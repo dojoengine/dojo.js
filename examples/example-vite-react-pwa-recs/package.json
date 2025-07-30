@@ -4,14 +4,15 @@
     "version": "0.0.1",
     "type": "module",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "dev": "vite",
         "build": "tsc && vite build",
-        "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
         "codegen": "graphql-codegen",
         "generate-pwa-assets": "pwa-assets-generator",
-        "format:check": "biome check .",
-        "format": "biome check . --write"
+        "format:check": "biome format .",
+        "format": "biome format . --write"
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",

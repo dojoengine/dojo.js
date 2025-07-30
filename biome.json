@@ -4,26 +4,33 @@
     "files": {
         "ignoreUnknown": false,
         "includes": [
-            "**",
-            "!**/*/target",
-            "!**/*/dist",
-            "!**/packages/torii-client/wasm",
-            "!**/packages/torii-client/pkg",
-            "!**/packages/torii-wasm/pkg/",
-            "!**/packages/utils-wasm/pkg/",
-            "!**/packages/create-burner/coverage",
-            "!**/packages/core/coverage",
-            "!**/worlds/dojo-starter",
+            "packages/**/*.{ts,tsx,js,jsx,mjs,cjs}",
+            "examples/**/*.{ts,tsx,js,jsx,mjs,cjs}",
+            "!**/*/target/**",
+            "!**/*/dist/**",
+            "!**/*/build/**",
+            "!**/*/coverage/**",
+            "!**/packages/torii-client/wasm/**",
+            "!**/packages/torii-client/pkg/**",
+            "!**/packages/torii-wasm/pkg/**",
+            "!**/packages/utils-wasm/pkg/**",
+            "!**/packages/create-burner/coverage/**",
+            "!**/packages/core/coverage/**",
+            "!**/worlds/**",
             "!**/*-lock.yaml",
             "!**/package-lock.json",
-            "!**/dev-dist",
+            "!**/dev-dist/**",
             "!**/CHANGELOG.md",
-            "!**/worlds",
-            "!**/.changeset",
-            "!**/.turbo",
-            "!**/*/.turbo",
+            "!**/.changeset/**",
+            "!**/.turbo/**",
+            "!**/*/.turbo/**",
             "!**/dojoConfig.ts",
-            "!**/dojoConfig.js"
+            "!**/dojoConfig.js",
+            "!**/node_modules/**",
+            "!**/*.d.ts",
+            "!**/generated/**",
+            "!**/*.gen.ts",
+            "!**/*.gen.js"
         ]
     },
     "formatter": {
@@ -35,33 +42,33 @@
         "lineEnding": "lf",
         "lineWidth": 80,
         "attributePosition": "auto",
-        "bracketSpacing": true,
-        "includes": [
-            "**",
-            "!**/*/target",
-            "!**/*/dist",
-            "!**/packages/torii-client/wasm",
-            "!**/packages/torii-client/pkg",
-            "!**/packages/torii-wasm/pkg/",
-            "!**/packages/utils-wasm/pkg/",
-            "!**/packages/create-burner/coverage",
-            "!**/packages/core/coverage",
-            "!**/worlds/dojo-starter",
-            "!**/*-lock.yaml",
-            "!**/package-lock.json",
-            "!**/dev-dist",
-            "!**/CHANGELOG.md",
-            "!**/worlds",
-            "!**/.changeset",
-            "!**/.turbo",
-            "!**/*/.turbo",
-            "!**/dojoConfig.ts",
-            "!**/dojoConfig.js"
-        ]
+        "bracketSpacing": true
     },
     "assist": { "actions": { "source": { "organizeImports": "off" } } },
     "linter": { 
-        "enabled": false
+        "enabled": true,
+        "rules": {
+            "recommended": false,
+            "complexity": {
+                "noUselessConstructor": "error",
+                "noUselessLoneBlockStatements": "off"
+            },
+            "style": {
+                "useImportType": "off",
+                "useTemplate": "off"
+            },
+            "suspicious": {
+                "noExplicitAny": "off",
+                "noImplicitAnyLet": "off",
+                "noConfusingLabels": "off",
+                "noDoubleEquals": "error",
+                "noDebugger": "error"
+            },
+            "correctness": {
+                "noUnreachable": "error",
+                "noUndeclaredVariables": "error"
+            }
+        }
     },
     "javascript": {
         "formatter": {
@@ -77,7 +84,8 @@
         },
         "parser": {
             "unsafeParameterDecoratorsEnabled": true
-        }
+        },
+        "globals": ["Phaser", "hljs", "THREE"]
     },
     "json": {
         "formatter": {

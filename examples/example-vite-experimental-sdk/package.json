@@ -3,11 +3,13 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "format:check": "biome check .",
-        "format": "biome check . --write"
+        "format:check": "biome format .",
+        "format": "biome format . --write"
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",

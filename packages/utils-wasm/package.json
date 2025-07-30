@@ -7,10 +7,12 @@
     "main": "./pkg/utils_wasm.js",
     "type": "module",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "build:wasm": "cd crate && sh ./build.sh",
         "build": "pnpm build:wasm",
-        "format:check": "biome check .",
-        "format": "biome check . --write"
+        "format:check": "biome format .",
+        "format": "biome format . --write"
     },
     "files": [
         "./pkg/utils_wasm_bg.wasm",

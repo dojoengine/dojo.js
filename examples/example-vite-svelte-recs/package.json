@@ -4,10 +4,14 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"
+        "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json",
+        "format:check": "biome format .",
+        "format": "biome format . --write"
     },
     "devDependencies": {
         "@sveltejs/vite-plugin-svelte": "^3.1.1",

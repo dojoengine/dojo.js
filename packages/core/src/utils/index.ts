@@ -146,7 +146,7 @@ export const createModelTypedData = (name: string, model: any): TypedData => {
             model: name,
             [name]: Object.fromEntries(
                 Object.entries(model).map(([k, v]) => {
-                    if (typeof v == "bigint") {
+                    if (typeof v === "bigint") {
                         return [k, "0x" + v.toString(16)];
                     }
 

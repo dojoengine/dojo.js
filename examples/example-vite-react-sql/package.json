@@ -5,12 +5,13 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "dev": "vite",
         "build": "tsc -b && vite build",
-        "lint": "eslint .",
         "preview": "vite preview",
-        "format:check": "biome check .",
-        "format": "biome check . --write"
+        "format:check": "biome format .",
+        "format": "biome format . --write"
     },
     "keywords": [],
     "author": "",

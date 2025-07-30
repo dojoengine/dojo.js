@@ -30,7 +30,7 @@
             "dependsOn": ["^check-types"]
         },
         "lint": {},
-        "lint:fix": {},
+        "lint:check": {},
         "format": {},
         "format:check": {},
         "docs": {
