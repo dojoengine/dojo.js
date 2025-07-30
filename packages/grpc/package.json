@@ -39,6 +39,7 @@
         "grpc-web": "^1.5.0"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.1.3",
         "@dojoengine/sdk": "workspace:*",
         "@dojoengine/torii-wasm": "workspace:*",
         "@protobuf-ts/plugin": "^2.11.1",

@@ -29,6 +29,7 @@
         "./package.json": "./package.json"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.1.3",
         "@rollup/plugin-commonjs": "^28.0.0",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",

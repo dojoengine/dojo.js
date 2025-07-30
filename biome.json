@@ -13,6 +13,7 @@
             "!**/packages/torii-client/wasm/**",
             "!**/packages/torii-client/pkg/**",
             "!**/packages/torii-wasm/pkg/**",
+            "!**/packages/torii-wasm/dojo.c/**",
             "!**/packages/utils-wasm/pkg/**",
             "!**/packages/create-burner/coverage/**",
             "!**/packages/core/coverage/**",
@@ -45,7 +46,7 @@
         "bracketSpacing": true
     },
     "assist": { "actions": { "source": { "organizeImports": "off" } } },
-    "linter": { 
+    "linter": {
         "enabled": true,
         "rules": {
             "recommended": false,
