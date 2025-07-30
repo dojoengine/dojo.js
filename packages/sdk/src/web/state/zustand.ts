@@ -1,17 +1,16 @@
-import type { StateCreator, StoreApi } from "zustand";
-import { immer } from "zustand/middleware/immer";
 import {
-    type Draft,
-    type WritableDraft,
     applyPatches,
-    produceWithPatches,
+    type Draft,
     enablePatches,
+    produceWithPatches,
+    type WritableDraft,
 } from "immer";
-
+import type { StateCreator, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+import { deepMerge, type MergedModels } from "../../internal/merge";
 import type { ParsedEntity, SchemaType } from "../../internal/types";
 import type { GameState } from ".";
-import { deepMerge, MergedModels } from "../../internal/merge";
 
 enablePatches();
 
@@ -32,11 +31,9 @@ type ImmerMiddleware = [["zustand/immer", never]];
 type SubscribeMiddleware = [["zustand/subscribeWithSelector", never]];
 type Middlewares = [...SubscribeMiddleware, ...ImmerMiddleware];
 
-type CreateStore = {
-    <T, Mos extends [...Middlewares]>(
-        initializer: StateCreator<T, [], Mos>
-    ): StoreApi<T>;
-};
+type CreateStore = <T, Mos extends [...Middlewares]>(
+    initializer: StateCreator<T, [], Mos>
+) => StoreApi<T>;
 
 /**
  * Factory function to create a Zustand store based on a given SchemaType.

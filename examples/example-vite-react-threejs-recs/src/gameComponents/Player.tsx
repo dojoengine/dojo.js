@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { MAP_SCALE } from "@/config";
-import { useDojo } from "@/dojo/useDojo";
-import { Direction } from "@/utils";
 import { useComponentValue } from "@dojoengine/react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { Cone } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { MAP_SCALE } from "@/config";
+import { useDojo } from "@/dojo/useDojo";
+import { Direction } from "@/utils";
 
 export const Player = (props: any) => {
     const {
@@ -23,7 +23,7 @@ export const Player = (props: any) => {
     const [startPosition, setStartPosition] = useState<
         THREE.Vector3 | undefined
     >();
-    let targetPosition = useRef<THREE.Vector3 | undefined>();
+    const targetPosition = useRef<THREE.Vector3 | undefined>();
 
     // Retrieve player info
     const { player } = props;
@@ -38,7 +38,7 @@ export const Player = (props: any) => {
         move(account, direction);
     };
 
-    const isLocalPlayer = localPlayer?.player == player.player;
+    const isLocalPlayer = localPlayer?.player === player.player;
 
     const { vec } = player;
     const color = isLocalPlayer ? "green" : "red";

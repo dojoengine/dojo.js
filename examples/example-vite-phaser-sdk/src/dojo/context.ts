@@ -1,9 +1,9 @@
-import { init } from "@dojoengine/sdk/experimental";
+import type { DojoProvider } from "@dojoengine/core";
+import type { SchemaType } from "@dojoengine/sdk";
+import type { init } from "@dojoengine/sdk/experimental";
+import type { DojoStore, GameState } from "@dojoengine/sdk/state";
+import type { BigNumberish } from "starknet";
 import { setupWorld } from "../typescript/contracts.gen";
-import { DojoProvider } from "@dojoengine/core";
-import { SchemaType } from "@dojoengine/sdk";
-import { DojoStore, GameState } from "@dojoengine/sdk/state";
-import { BigNumberish } from "starknet";
 
 export class DojoContext<Schema extends SchemaType> {
     client: ReturnType<typeof setupWorld>;

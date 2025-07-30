@@ -1,11 +1,11 @@
-import { describe, expect, it } from "vitest";
-import {
-    ToriiQueryBuilder,
-    HistoricalToriiQueryBuilder,
-} from "../internal/toriiQueryBuilder";
 import type { Clause, OrderBy } from "@dojoengine/torii-wasm";
-import type { SchemaType } from "../internal/types";
+import { describe, expect, it } from "vitest";
 import { ClauseBuilder } from "../internal/clauseBuilder";
+import {
+    HistoricalToriiQueryBuilder,
+    ToriiQueryBuilder,
+} from "../internal/toriiQueryBuilder";
+import type { SchemaType } from "../internal/types";
 
 interface TestModels extends SchemaType {
     dojo_starter: {

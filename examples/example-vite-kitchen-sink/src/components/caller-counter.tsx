@@ -1,5 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
-
 import {
     KeysClause,
     type ParsedEntity,
@@ -8,13 +6,13 @@ import {
 } from "@dojoengine/sdk";
 import { useDojoSDK } from "@dojoengine/sdk/react";
 import type { Subscription } from "@dojoengine/torii-wasm";
-import type { SchemaType } from "@/typescript/models.gen";
-import type { setupWorld } from "@/typescript/contracts.gen";
-import { dojoConfig } from "@/../dojoConfig";
-
-import { addAddressPadding } from "starknet";
-import { Button } from "./ui/button";
 import { useAccount, useSendTransaction } from "@starknet-react/core";
+import { useCallback, useEffect, useState } from "react";
+import { addAddressPadding } from "starknet";
+import { dojoConfig } from "@/../dojoConfig";
+import type { setupWorld } from "@/typescript/contracts.gen";
+import type { SchemaType } from "@/typescript/models.gen";
+import { Button } from "./ui/button";
 
 export default function CallerCounter() {
     const [count, setCount] = useState(0);

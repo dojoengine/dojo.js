@@ -1,9 +1,8 @@
 import { Share } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import ThemeSwitchButton from "@/components/theme-switch";
-import WalletAccount from "./wallet-account";
+import { Button } from "@/components/ui/button";
 import { appConfig } from "@/config";
+import WalletAccount from "./wallet-account";
 
 export default function Header() {
     return (

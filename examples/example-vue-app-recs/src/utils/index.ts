@@ -1,12 +1,12 @@
 import {
-    Component,
-    ComponentValue,
+    type Component,
+    type ComponentValue,
     defineQuery,
-    Entity,
+    type Entity,
     getComponentValue,
     Has,
     isComponentUpdate,
-    Schema,
+    type Schema,
 } from "@dojoengine/recs";
 import { Account, CallData, ec, hash, RpcProvider, stark } from "starknet";
 import { onUnmounted, reactive, ref, toRaw, watchEffect } from "vue";
@@ -46,7 +46,7 @@ export const getAccount = async (nodeUrl: string) => {
     const localBurners: any = localStorage.getItem("burners") || "{}";
     const burners = JSON.parse(localBurners);
     let address = "";
-    for (let key in burners) {
+    for (const key in burners) {
         if (burners[key].active) {
             address = key;
             break;

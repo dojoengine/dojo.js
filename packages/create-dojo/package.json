@@ -16,10 +16,12 @@
     "exports": "./dist/index.cjs",
     "bin": "./dist/index.cjs",
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "build:deps": "tsup --dts-resolve",
         "build": "pnpm build:deps",
-        "format:check": "prettier --check .",
-        "format": "prettier --write .",
+        "format:check": "biome format .",
+        "format": "biome format . --write",
         "docs": "typedoc"
     },
     "dependencies": {
@@ -32,6 +34,7 @@
         "type-fest": "^4.26.1"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.1.3",
         "@types/cross-spawn": "^6.0.6",
         "@types/fs-extra": "^11.0.4",
         "@types/js-yaml": "^4.0.9",

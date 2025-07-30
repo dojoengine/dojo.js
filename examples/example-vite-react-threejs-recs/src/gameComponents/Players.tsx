@@ -1,7 +1,7 @@
+import { defineSystem, Has } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import { useDojo } from "@/dojo/useDojo";
 import { useElementStore } from "@/store";
-import { defineSystem, Has } from "@dojoengine/recs";
 
 import { Player } from "./Player";
 

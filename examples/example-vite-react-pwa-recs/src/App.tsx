@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import { useComponentValue } from "@dojoengine/react";
-import { Entity } from "@dojoengine/recs";
+import type { Entity } from "@dojoengine/recs";
+import { useEffect, useState } from "react";
 
 import "./App.css";
 

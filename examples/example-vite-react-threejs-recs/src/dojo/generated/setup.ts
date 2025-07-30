@@ -1,7 +1,7 @@
 import { type DojoConfig, DojoProvider } from "@dojoengine/core";
 import { BurnerManager } from "@dojoengine/create-burner";
-import { getSyncEntities } from "@dojoengine/state";
 import { KeysClause } from "@dojoengine/sdk";
+import { getSyncEntities } from "@dojoengine/state";
 import * as torii from "@dojoengine/torii-client";
 import { Account, type ArraySignatureType } from "starknet";
 

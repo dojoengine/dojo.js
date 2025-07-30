@@ -2,12 +2,12 @@ import { byteArray } from "starknet";
 import { describe, expect, it } from "vitest";
 
 import {
+    asciiToHex,
     computeByteArrayHash,
     convertToRelayUri,
     getComponentNameFromEvent,
     getSelectorFromTag,
     splitEventTag,
-    asciiToHex,
 } from "../../utils/index";
 
 describe("utils", () => {

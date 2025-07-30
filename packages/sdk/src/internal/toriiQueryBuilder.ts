@@ -5,7 +5,7 @@ import type {
     PaginationDirection,
     Query,
 } from "@dojoengine/torii-wasm/types";
-import { type Result, err, ok } from "neverthrow";
+import { err, ok, type Result } from "neverthrow";
 import { UNDEFINED_CLAUSE } from "./errors.ts";
 import type { SchemaType } from "./types.ts";
 
@@ -169,7 +169,7 @@ export type HistoricalToriiQueryBuilderOptions = Omit<
     "historical"
 >;
 export class HistoricalToriiQueryBuilder<
-    T extends SchemaType
+    T extends SchemaType,
 > extends ToriiQueryBuilder<T> {
     constructor(options?: ToriiQueryBuilderOptions) {
         super({

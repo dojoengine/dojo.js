@@ -1,13 +1,13 @@
-import { createDojoStore } from "../web/state";
-import { ParsedEntity } from "../internal/types";
-import { describe, expect, beforeEach, test, vi } from "vitest";
-import {
-    MockSchemaType,
-    PlayerModel,
+import { beforeEach, describe, expect, test, vi } from "vitest";
+import type {
+    GalaxyModel,
     GameModel,
     ItemModel,
-    GalaxyModel,
+    MockSchemaType,
+    PlayerModel,
 } from "../__example__/index";
+import type { ParsedEntity } from "../internal/types";
+import { createDojoStore } from "../web/state";
 
 interface MockParsedEntity extends ParsedEntity<MockSchemaType> {
     entityId: string;

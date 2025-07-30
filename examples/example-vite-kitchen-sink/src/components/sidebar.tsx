@@ -1,18 +1,20 @@
+import { type Connector, useConnect } from "@starknet-react/core";
 import {
     Book,
+    Circle,
     Code2,
     LifeBuoy,
-    SquareUser,
-    Circle,
     Loader,
+    SquareUser,
 } from "lucide-react";
-
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { appConfig } from "@/config";
 import {
     Dialog,
     DialogContent,
@@ -21,9 +23,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "./ui/dialog";
-import { Connector, useConnect } from "@starknet-react/core";
-import { useCallback, useState } from "react";
-import { appConfig } from "@/config";
 
 export default function Sidebar() {
     const { connectors, connectAsync } = useConnect();

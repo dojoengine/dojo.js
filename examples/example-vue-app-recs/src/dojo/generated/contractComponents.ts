@@ -4,7 +4,11 @@
  * Command: npx @dojoengine/core <MANIFEST_LOCATION> <OUTPUT_PATH> <RPC_URL> <WORLD_ADDRESS>
  */
 
-import { defineComponent, Type as RecsType, World } from "@dojoengine/recs";
+import {
+    defineComponent,
+    Type as RecsType,
+    type World,
+} from "@dojoengine/recs";
 
 export type ContractComponents = Awaited<
     ReturnType<typeof defineContractComponents>

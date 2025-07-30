@@ -81,9 +81,7 @@
         transform: scale(1);
     }
     50% {
-        transform: scale(
-            1.1
-        ); /* Adjust this value to control the extent of the pulse */
+        transform: scale(1.1); /* Adjust this value to control the extent of the pulse */
     }
 }
 

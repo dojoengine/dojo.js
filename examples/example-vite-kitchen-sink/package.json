@@ -3,12 +3,13 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "lint:check": "biome lint .",
+        "lint": "biome lint . --write",
         "dev": "vite",
         "build": "tsc -b && vite build",
-        "lint": "eslint .",
         "preview": "vite preview",
-        "format:check": "prettier --check .",
-        "format": "prettier --write ."
+        "format:check": "biome format .",
+        "format": "biome format . --write"
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
@@ -44,6 +45,7 @@
         "zod": "^3.24.2"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.1.3",
         "@types/node": "^20.17.27",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",

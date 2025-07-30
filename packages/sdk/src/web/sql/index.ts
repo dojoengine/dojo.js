@@ -1,6 +1,6 @@
 import {
-    useQuery as useTanStackQuery,
     type UseQueryOptions,
+    useQuery as useTanStackQuery,
 } from "@tanstack/react-query";
 
 /**

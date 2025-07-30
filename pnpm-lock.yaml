@@ -4,6 +4,33 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@starknet-io/get-starknet-core':
+      specifier: 4.0.7
+      version: 4.0.7
+    '@starknet-react/chains':
+      specifier: ^4.0.1-beta.3
+      version: 4.0.1-beta.3
+    '@starknet-react/core':
+      specifier: ^4.0.1-beta.4
+      version: 4.0.1-beta.4
+    '@types/react':
+      specifier: ^18.3.1
+      version: 18.3.21
+    '@types/react-dom':
+      specifier: ^18.3.1
+      version: 18.3.7
+    react:
+      specifier: ^18.3.1
+      version: 18.3.1
+    react-dom:
+      specifier: ^18.3.1
+      version: 18.3.1
+    starknet:
+      specifier: ^7.6.2
+      version: 7.6.2
+
 importers:
 
   .:
@@ -12,15 +39,15 @@ importers:
         specifier: ^2.29.5
         version: 2.29.5
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@commitlint/cli':
         specifier: ^18.6.1
         version: 18.6.1(@types/node@22.15.15)(typescript@5.8.3)
       '@commitlint/config-conventional':
         specifier: ^18.6.3
         version: 18.6.3
-      '@ianvs/prettier-plugin-sort-imports':
-        specifier: ^4.4.2
-        version: 4.4.2(@vue/compiler-sfc@3.5.13)(prettier@3.6.2)
       '@typhonjs-typedoc/typedoc-theme-dmt':
         specifier: ^0.2.3
         version: 0.2.3(typedoc@0.26.11(typescript@5.8.3))
@@ -30,9 +57,6 @@ importers:
       lerna:
         specifier: ^8.2.3
         version: 8.2.3(@swc/core@1.11.24(@swc/helpers@0.5.17))(encoding@0.1.13)
-      prettier:
-        specifier: ^3.6.2
-        version: 3.6.2
       tsup:
         specifier: ^8.5.0
         version: 8.5.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(jiti@2.4.2)(postcss@8.5.3)(tsx@4.20.3)(typescript@5.8.3)(yaml@2.8.0)
@@ -73,6 +97,9 @@ importers:
         specifier: ^3.24.3
         version: 3.24.4
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@types/node':
         specifier: ^22.14.1
         version: 22.15.15
@@ -119,6 +146,9 @@ importers:
         specifier: ^5.6.2
         version: 5.7.3
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@graphql-codegen/cli':
         specifier: ^5.0.2
         version: 5.0.6(@types/node@20.17.44)(bufferutil@4.0.9)(encoding@0.1.13)(enquirer@2.4.1)(graphql@16.11.0)(typescript@5.7.3)(utf-8-validate@5.0.10)
@@ -180,6 +210,9 @@ importers:
         specifier: ~5.7.3
         version: 5.7.3
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@eslint/js':
         specifier: ^9.21.0
         version: 9.26.0
@@ -221,7 +254,7 @@ importers:
         version: link:../../packages/create-burner
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../../packages/state
@@ -244,6 +277,9 @@ importers:
         specifier: 'catalog:'
         version: 7.6.2
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       typescript:
         specifier: ^5.6.2
         version: 5.7.3
@@ -272,6 +308,9 @@ importers:
         specifier: 'catalog:'
         version: 7.6.2
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@types/highlight.js':
         specifier: ^10.1.0
         version: 10.1.0
@@ -312,6 +351,9 @@ importers:
         specifier: ^1.11.0
         version: 1.12.0
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@eslint/js':
         specifier: ^9.17.0
         version: 9.26.0
@@ -454,6 +496,9 @@ importers:
         specifier: ^3.24.2
         version: 3.24.4
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@types/node':
         specifier: ^20.17.27
         version: 20.17.44
@@ -524,6 +569,9 @@ importers:
         specifier: ^4.5.5
         version: 4.5.6(@types/react@19.1.3)(immer@10.1.1)(react@19.1.0)
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       terser:
         specifier: ^5.31.0
         version: 5.39.0
@@ -597,6 +645,9 @@ importers:
         specifier: ^3.3.0
         version: 3.4.1(vite@4.5.14(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.43.1))
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@types/node':
         specifier: ^20.16.6
         version: 20.17.44
@@ -656,7 +707,7 @@ importers:
         version: link:../../packages/react
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@dojoengine/sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
@@ -739,6 +790,9 @@ importers:
         specifier: ^4.5.6
         version: 4.5.6(@types/react@18.3.21)(immer@10.1.1)(react@18.3.1)
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@types/node':
         specifier: ^20.17.14
         version: 20.17.44
@@ -854,6 +908,9 @@ importers:
         specifier: ^3.3.0
         version: 3.4.1(vite@4.5.14(@types/node@20.17.44)(lightningcss@1.29.2)(terser@5.43.1))
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@graphql-codegen/cli':
         specifier: ^5.0.2
         version: 5.0.6(@types/node@20.17.44)(bufferutil@4.0.9)(encoding@0.1.13)(enquirer@2.4.1)(graphql@16.11.0)(typescript@5.7.3)(utf-8-validate@5.0.10)
@@ -957,6 +1014,9 @@ importers:
         specifier: ^4.5.6
         version: 4.5.6(@types/react@18.3.21)(immer@10.1.1)(react@18.3.1)
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@eslint/js':
         specifier: ^9.20.0
         version: 9.26.0
@@ -1090,6 +1150,9 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@tanstack/eslint-plugin-query':
         specifier: ^5.62.16
         version: 5.74.7(eslint@9.26.0(jiti@2.4.2))(typescript@5.7.3)
@@ -1274,6 +1337,9 @@ importers:
         specifier: ^4.5.5
         version: 4.5.6(@types/react@18.3.21)(immer@10.1.1)(react@18.3.1)
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@storybook/addon-essentials':
         specifier: ^7.6.20
         version: 7.6.20(@types/react-dom@18.3.7(@types/react@18.3.21))(@types/react@18.3.21)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1351,7 +1417,7 @@ importers:
         version: link:../../packages/create-burner
       '@dojoengine/recs':
         specifier: ^2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../../packages/state
@@ -1371,6 +1437,9 @@ importers:
         specifier: ^3.3.0
         version: 3.4.1(vite@5.4.19(@types/node@22.15.15)(lightningcss@1.29.2)(terser@5.43.1))
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.1
         version: 3.1.2(svelte@4.2.19)(vite@5.4.19(@types/node@22.15.15)(lightningcss@1.29.2)(terser@5.43.1))
@@ -1441,6 +1510,9 @@ importers:
         specifier: ^4.0.14
         version: 4.1.5
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@eslint/js':
         specifier: ^9.21.0
         version: 9.26.0
@@ -1494,7 +1566,7 @@ importers:
         version: link:../../packages/react
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@dojoengine/sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
@@ -1520,6 +1592,9 @@ importers:
         specifier: ^3.5.8
         version: 3.5.13(typescript@5.7.3)
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@vitejs/plugin-vue':
         specifier: ^5.1.4
         version: 5.2.3(vite@5.4.19(@types/node@22.15.15)(lightningcss@1.29.2)(terser@5.43.1))(vue@3.5.13(typescript@5.7.3))
@@ -1548,6 +1623,9 @@ importers:
         specifier: ^3.23.8
         version: 3.24.4
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@types/elliptic':
         specifier: ^6.4.18
         version: 6.4.18
@@ -1600,6 +1678,9 @@ importers:
       '@babel/preset-env':
         specifier: ^7.25.4
         version: 7.27.2(@babel/core@7.27.1)
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@testing-library/react':
         specifier: ^16.0.1
         version: 16.3.0(@testing-library/dom@9.3.4)(@types/react-dom@18.3.7(@types/react@18.3.21))(@types/react@18.3.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1661,6 +1742,9 @@ importers:
         specifier: ^4.26.1
         version: 4.41.0
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@types/cross-spawn':
         specifier: ^6.0.6
         version: 6.0.6
@@ -1704,6 +1788,9 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@dojoengine/sdk':
         specifier: workspace:*
         version: link:../sdk
@@ -1753,6 +1840,9 @@ importers:
         specifier: 'catalog:'
         version: 7.6.2
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@rollup/plugin-commonjs':
         specifier: ^28.0.0
         version: 28.0.3(rollup@4.44.2)
@@ -1788,7 +1878,7 @@ importers:
     dependencies:
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@dojoengine/state':
         specifier: workspace:*
         version: link:../state
@@ -1835,6 +1925,9 @@ importers:
       '@babel/preset-env':
         specifier: ^7.25.4
         version: 7.27.2(@babel/core@7.27.1)
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
@@ -1914,6 +2007,9 @@ importers:
       '@anymud/bun-plugin-dts':
         specifier: ^1.0.2
         version: 1.0.2(typescript@5.7.3)
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@rollup/plugin-commonjs':
         specifier: ^28.0.2
         version: 28.0.3(rollup@4.44.2)
@@ -1958,7 +2054,7 @@ importers:
     dependencies:
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@dojoengine/torii-client':
         specifier: workspace:*
         version: link:../torii-client
@@ -1969,6 +2065,9 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(@types/node@22.15.15)(jsdom@24.1.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.2)(terser@5.43.1)
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       tsup:
         specifier: ^8.4.0
         version: 8.4.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(jiti@2.4.2)(postcss@8.5.3)(tsx@4.20.3)(typescript@5.7.3)(yaml@2.8.0)
@@ -1982,6 +2081,9 @@ importers:
         specifier: workspace:*
         version: link:../torii-wasm
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       tsup:
         specifier: ^8.4.0
         version: 8.4.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(jiti@2.4.2)(postcss@8.5.3)(tsx@4.20.3)(typescript@5.7.3)(yaml@2.8.0)
@@ -1994,6 +2096,9 @@ importers:
 
   packages/torii-wasm:
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       tsup:
         specifier: ^8.3.0
         version: 8.4.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(jiti@2.4.2)(postcss@8.5.3)(tsx@4.20.3)(typescript@5.7.3)(yaml@2.8.0)
@@ -2008,7 +2113,7 @@ importers:
     dependencies:
       '@dojoengine/recs':
         specifier: 2.0.13
-        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        version: 2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@latticexyz/utils':
         specifier: ^2.2.8
         version: 2.2.21
@@ -2022,6 +2127,9 @@ importers:
         specifier: 'catalog:'
         version: 7.6.2
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       '@types/elliptic':
         specifier: ^6.4.18
         version: 6.4.18
@@ -2040,6 +2148,9 @@ importers:
 
   packages/utils-wasm:
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
       tsup:
         specifier: ^8.3.0
         version: 8.4.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(jiti@2.4.2)(postcss@8.5.3)(tsx@4.20.3)(typescript@5.7.3)(yaml@2.8.0)
@@ -2801,6 +2912,59 @@ packages:
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
+
+  '@biomejs/biome@2.1.3':
+    resolution: {integrity: sha512-KE/tegvJIxTkl7gJbGWSgun7G6X/n2M6C35COT6ctYrAy7SiPyNvi6JtoQERVK/VRbttZfgGq96j2bFmhmnH4w==}
+    engines: {node: '>=14.21.3'}
+    hasBin: true
+
+  '@biomejs/cli-darwin-arm64@2.1.3':
+    resolution: {integrity: sha512-LFLkSWRoSGS1wVUD/BE6Nlt2dSn0ulH3XImzg2O/36BoToJHKXjSxzPEMAqT9QvwVtk7/9AQhZpTneERU9qaXA==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@biomejs/cli-darwin-x64@2.1.3':
+    resolution: {integrity: sha512-Q/4OTw8P9No9QeowyxswcWdm0n2MsdCwWcc5NcKQQvzwPjwuPdf8dpPPf4r+x0RWKBtl1FLiAUtJvBlri6DnYw==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@biomejs/cli-linux-arm64-musl@2.1.3':
+    resolution: {integrity: sha512-KXouFSBnoxAWZYDQrnNRzZBbt5s9UJkIm40hdvSL9mBxSSoxRFQJbtg1hP3aa8A2SnXyQHxQfpiVeJlczZt76w==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@biomejs/cli-linux-arm64@2.1.3':
+    resolution: {integrity: sha512-2hS6LgylRqMFmAZCOFwYrf77QMdUwJp49oe8PX/O8+P2yKZMSpyQTf3Eo5ewnsMFUEmYbPOskafdV1ds1MZMJA==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@biomejs/cli-linux-x64-musl@2.1.3':
+    resolution: {integrity: sha512-KaLAxnROouzIWtl6a0Y88r/4hW5oDUJTIqQorOTVQITaKQsKjZX4XCUmHIhdEk8zMnaiLZzRTAwk1yIAl+mIew==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [linux]
+
+  '@biomejs/cli-linux-x64@2.1.3':
+    resolution: {integrity: sha512-NxlSCBhLvQtWGagEztfAZ4WcE1AkMTntZV65ZvR+J9jp06+EtOYEBPQndA70ZGhHbEDG57bR6uNvqkd1WrEYVA==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [linux]
+
+  '@biomejs/cli-win32-arm64@2.1.3':
+    resolution: {integrity: sha512-V9CUZCtWH4u0YwyCYbQ3W5F4ZGPWp2C2TYcsiWFNNyRfmOW1j/TY/jAurl33SaRjgZPO5UUhGyr9m6BN9t84NQ==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@biomejs/cli-win32-x64@2.1.3':
+    resolution: {integrity: sha512-dxy599q6lgp8ANPpR8sDMscwdp9oOumEsVXuVCVT9N2vAho8uYXlCz53JhxX6LtJOXaE73qzgkGQ7QqvFlMC0g==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [win32]
 
   '@bufbuild/protobuf@2.6.2':
     resolution: {integrity: sha512-vLu7SRY84CV/Dd+NUdgtidn2hS5hSMUC1vDBY0VcviTdgRYkU43vIz3vIFbmx14cX1r+mM7WjzE5Fl1fGEM0RQ==}
@@ -4381,15 +4545,6 @@ packages:
   '@hutson/parse-repository-url@3.0.2':
     resolution: {integrity: sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==}
     engines: {node: '>=6.9.0'}
-
-  '@ianvs/prettier-plugin-sort-imports@4.4.2':
-    resolution: {integrity: sha512-KkVFy3TLh0OFzimbZglMmORi+vL/i2OFhEs5M07R9w0IwWAGpsNNyE4CY/2u0YoMF5bawKC2+8/fUH60nnNtjw==}
-    peerDependencies:
-      '@vue/compiler-sfc': 2.7.x || 3.x
-      prettier: 2 || 3 || ^4.0.0-0
-    peerDependenciesMeta:
-      '@vue/compiler-sfc':
-        optional: true
 
   '@inquirer/checkbox@1.5.2':
     resolution: {integrity: sha512-CifrkgQjDkUkWexmgYYNyB5603HhTHI91vLFeQXh6qrTKiCMVASol01Rs1cv6LP/A2WccZSRlJKZhbaBIs/9ZA==}
@@ -11845,7 +12000,6 @@ packages:
 
   libsql@0.4.7:
     resolution: {integrity: sha512-T9eIRCs6b0J1SHKYIvD8+KCJMcWZ900iZyxdnSCdqxN12Z1ijzT+jY5nrk72Jw4B0HGzms2NgpryArlJqvc3Lw==}
-    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   lie@3.3.0:
@@ -17253,6 +17407,41 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
+  '@biomejs/biome@2.1.3':
+    optionalDependencies:
+      '@biomejs/cli-darwin-arm64': 2.1.3
+      '@biomejs/cli-darwin-x64': 2.1.3
+      '@biomejs/cli-linux-arm64': 2.1.3
+      '@biomejs/cli-linux-arm64-musl': 2.1.3
+      '@biomejs/cli-linux-x64': 2.1.3
+      '@biomejs/cli-linux-x64-musl': 2.1.3
+      '@biomejs/cli-win32-arm64': 2.1.3
+      '@biomejs/cli-win32-x64': 2.1.3
+
+  '@biomejs/cli-darwin-arm64@2.1.3':
+    optional: true
+
+  '@biomejs/cli-darwin-x64@2.1.3':
+    optional: true
+
+  '@biomejs/cli-linux-arm64-musl@2.1.3':
+    optional: true
+
+  '@biomejs/cli-linux-arm64@2.1.3':
+    optional: true
+
+  '@biomejs/cli-linux-x64-musl@2.1.3':
+    optional: true
+
+  '@biomejs/cli-linux-x64@2.1.3':
+    optional: true
+
+  '@biomejs/cli-win32-arm64@2.1.3':
+    optional: true
+
+  '@biomejs/cli-win32-x64@2.1.3':
+    optional: true
+
   '@bufbuild/protobuf@2.6.2': {}
 
   '@bufbuild/protoplugin@2.6.2':
@@ -17714,18 +17903,6 @@ snapshots:
       - utf-8-validate
 
   '@discoveryjs/json-ext@0.5.7': {}
-
-  '@dojoengine/recs@2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@latticexyz/schema-type': 2.0.12(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
-      '@latticexyz/utils': 2.0.12
-      mobx: 6.13.7
-      rxjs: 7.5.5
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
 
   '@dojoengine/recs@2.0.13(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4)':
     dependencies:
@@ -19146,19 +19323,6 @@ snapshots:
 
   '@hutson/parse-repository-url@3.0.2': {}
 
-  '@ianvs/prettier-plugin-sort-imports@4.4.2(@vue/compiler-sfc@3.5.13)(prettier@3.6.2)':
-    dependencies:
-      '@babel/generator': 7.28.0
-      '@babel/parser': 7.28.0
-      '@babel/traverse': 7.28.0
-      '@babel/types': 7.28.0
-      prettier: 3.6.2
-      semver: 7.7.2
-    optionalDependencies:
-      '@vue/compiler-sfc': 3.5.13
-    transitivePeerDependencies:
-      - supports-color
-
   '@inquirer/checkbox@1.5.2':
     dependencies:
       '@inquirer/core': 6.0.0
@@ -19454,16 +19618,6 @@ snapshots:
     transitivePeerDependencies:
       - typescript
       - viem
-      - zod
-
-  '@latticexyz/schema-type@2.0.12(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)':
-    dependencies:
-      abitype: 1.0.0(typescript@5.7.3)(zod@3.25.76)
-      viem: 2.9.20(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
       - zod
 
   '@latticexyz/schema-type@2.0.12(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4)':
@@ -26886,8 +27040,8 @@ snapshots:
       '@typescript-eslint/parser': 5.62.0(eslint@8.57.1)(typescript@5.8.3)
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0)(eslint@8.57.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
@@ -26906,7 +27060,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0)(eslint@8.57.1):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.1
@@ -26917,22 +27071,22 @@ snapshots:
       tinyglobby: 0.2.14
       unrs-resolver: 1.7.2
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 5.62.0(eslint@8.57.1)(typescript@5.8.3)
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0)(eslint@8.57.1)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -26943,7 +27097,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -33459,12 +33613,12 @@ snapshots:
 
   vite@6.3.5(@types/node@18.19.98)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.43.1)(tsx@4.20.3)(yaml@2.8.0):
     dependencies:
-      esbuild: 0.25.4
-      fdir: 6.4.4(picomatch@4.0.2)
+      esbuild: 0.25.6
+      fdir: 6.4.6(picomatch@4.0.2)
       picomatch: 4.0.2
       postcss: 8.5.3
-      rollup: 4.40.2
-      tinyglobby: 0.2.13
+      rollup: 4.44.2
+      tinyglobby: 0.2.14
     optionalDependencies:
       '@types/node': 18.19.98
       fsevents: 2.3.3
@@ -33476,12 +33630,12 @@ snapshots:
 
   vite@6.3.5(@types/node@20.17.44)(jiti@1.21.7)(lightningcss@1.29.2)(terser@5.43.1)(tsx@4.20.3)(yaml@2.8.0):
     dependencies:
-      esbuild: 0.25.4
-      fdir: 6.4.4(picomatch@4.0.2)
+      esbuild: 0.25.6
+      fdir: 6.4.6(picomatch@4.0.2)
       picomatch: 4.0.2
       postcss: 8.5.3
-      rollup: 4.40.2
-      tinyglobby: 0.2.13
+      rollup: 4.44.2
+      tinyglobby: 0.2.14
     optionalDependencies:
       '@types/node': 20.17.44
       fsevents: 2.3.3
@@ -33493,12 +33647,12 @@ snapshots:
 
   vite@6.3.5(@types/node@20.17.44)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.43.1)(tsx@4.20.3)(yaml@2.8.0):
     dependencies:
-      esbuild: 0.25.4
-      fdir: 6.4.4(picomatch@4.0.2)
+      esbuild: 0.25.6
+      fdir: 6.4.6(picomatch@4.0.2)
       picomatch: 4.0.2
       postcss: 8.5.3
-      rollup: 4.40.2
-      tinyglobby: 0.2.13
+      rollup: 4.44.2
+      tinyglobby: 0.2.14
     optionalDependencies:
       '@types/node': 20.17.44
       fsevents: 2.3.3

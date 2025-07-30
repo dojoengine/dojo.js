@@ -1,36 +1,36 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import { init } from "@dojoengine/sdk";
-    import { dojoConfig } from "../../dojoConfig";
+import { onMount } from "svelte";
+import { init } from "@dojoengine/sdk";
+import { dojoConfig } from "../../dojoConfig";
 
-    let sdk: any = null;
-    let loading = true;
+let sdk: any = null;
+let loading = true;
 
-    onMount(async () => {
-        try {
-            sdk = await init(
-                {
-                    client: {
-                        rpcUrl: dojoConfig.rpcUrl,
-                        toriiUrl: dojoConfig.toriiUrl,
-                        relayUrl: dojoConfig.relayUrl,
-                        worldAddress: dojoConfig.manifest.world.address,
-                    },
-                    domain: {
-                        name: "MyDojoApp",
-                        version: "1.0.0",
-                        chainId: "0x534e5f5345504f4c4941",
-                        revision: 1,
-                    },
+onMount(async () => {
+    try {
+        sdk = await init(
+            {
+                client: {
+                    rpcUrl: dojoConfig.rpcUrl,
+                    toriiUrl: dojoConfig.toriiUrl,
+                    relayUrl: dojoConfig.relayUrl,
+                    worldAddress: dojoConfig.manifest.world.address,
                 },
-                {} // models will be imported here
-            );
-        } catch (error) {
-            console.error("Failed to initialize Dojo:", error);
-        } finally {
-            loading = false;
-        }
-    });
+                domain: {
+                    name: "MyDojoApp",
+                    version: "1.0.0",
+                    chainId: "0x534e5f5345504f4c4941",
+                    revision: 1,
+                },
+            },
+            {} // models will be imported here
+        );
+    } catch (error) {
+        console.error("Failed to initialize Dojo:", error);
+    } finally {
+        loading = false;
+    }
+});
 </script>
 
 <main>

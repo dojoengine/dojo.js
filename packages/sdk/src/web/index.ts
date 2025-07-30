@@ -1,14 +1,13 @@
 import * as torii from "@dojoengine/torii-wasm";
-import type { Account, Signature, TypedData } from "starknet";
 import { err, ok, type Result } from "neverthrow";
-
-import type { SDKConfig, SchemaType, SDK } from "../internal/types";
-import { NO_ACCOUNT } from "../internal/errors";
+import type { Account, Signature, TypedData } from "starknet";
 import { createSDK } from "../internal/createSDK";
+import { NO_ACCOUNT } from "../internal/errors";
+import type { SchemaType, SDK, SDKConfig } from "../internal/types";
 
-export * from "../internal/types";
 export * from "../internal/clauseBuilder";
 export * from "../internal/toriiQueryBuilder";
+export * from "../internal/types";
 
 /**
  * Creates a new Torii client instance.
@@ -105,9 +104,8 @@ export async function init<T extends SchemaType>(
             // Sign all messages and prepare batch
             const messages = [];
             for (const typedData of data) {
-                const signature: Signature = await account.signMessage(
-                    typedData
-                );
+                const signature: Signature =
+                    await account.signMessage(typedData);
                 const dataString = JSON.stringify(typedData);
 
                 messages.push({

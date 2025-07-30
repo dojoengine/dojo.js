@@ -1,26 +1,37 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+    "$schema": "https://biomejs.dev/schemas/2.1.3/schema.json",
     "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": true },
     "files": {
         "ignoreUnknown": false,
-        "ignore": [
-            "**/*/target",
-            "**/*/dist",
-            "packages/torii-client/wasm",
-            "packages/torii-client/pkg",
-            "packages/torii-wasm/pkg/",
-            "packages/utils-wasm/pkg/",
-            "packages/create-burner/coverage",
-            "packages/core/coverage",
-            "worlds/dojo-starter",
-            "**/*-lock.yaml",
-            "**/package-lock.json",
-            "**/dev-dist",
-            "**/CHANGELOG.md",
-            "worlds",
-            ".changeset",
-            ".turbo",
-            "**/*/.turbo"
+        "includes": [
+            "packages/**/*.{ts,tsx,js,jsx,mjs,cjs}",
+            "examples/**/*.{ts,tsx,js,jsx,mjs,cjs}",
+            "!**/*/target/**",
+            "!**/*/dist/**",
+            "!**/*/build/**",
+            "!**/*/coverage/**",
+            "!**/packages/torii-client/wasm/**",
+            "!**/packages/torii-client/pkg/**",
+            "!**/packages/torii-wasm/pkg/**",
+            "!**/packages/torii-wasm/dojo.c/**",
+            "!**/packages/utils-wasm/pkg/**",
+            "!**/packages/create-burner/coverage/**",
+            "!**/packages/core/coverage/**",
+            "!**/worlds/**",
+            "!**/*-lock.yaml",
+            "!**/package-lock.json",
+            "!**/dev-dist/**",
+            "!**/CHANGELOG.md",
+            "!**/.changeset/**",
+            "!**/.turbo/**",
+            "!**/*/.turbo/**",
+            "!**/dojoConfig.ts",
+            "!**/dojoConfig.js",
+            "!**/node_modules/**",
+            "!**/*.d.ts",
+            "!**/generated/**",
+            "!**/*.gen.ts",
+            "!**/*.gen.js"
         ]
     },
     "formatter": {
@@ -32,29 +43,34 @@
         "lineEnding": "lf",
         "lineWidth": 80,
         "attributePosition": "auto",
-        "bracketSpacing": true,
-        "ignore": [
-            "**/*/target",
-            "**/*/dist",
-            "packages/torii-client/wasm",
-            "packages/torii-client/pkg",
-            "packages/torii-wasm/pkg/",
-            "packages/utils-wasm/pkg/",
-            "packages/create-burner/coverage",
-            "packages/core/coverage",
-            "worlds/dojo-starter",
-            "**/*-lock.yaml",
-            "**/package-lock.json",
-            "**/dev-dist",
-            "**/CHANGELOG.md",
-            "worlds",
-            ".changeset",
-            ".turbo",
-            "**/*/.turbo"
-        ]
+        "bracketSpacing": true
     },
-    "organizeImports": { "enabled": true },
-    "linter": { "enabled": true, "rules": { "recommended": true } },
+    "assist": { "actions": { "source": { "organizeImports": "off" } } },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": false,
+            "complexity": {
+                "noUselessConstructor": "error",
+                "noUselessLoneBlockStatements": "off"
+            },
+            "style": {
+                "useImportType": "off",
+                "useTemplate": "off"
+            },
+            "suspicious": {
+                "noExplicitAny": "off",
+                "noImplicitAnyLet": "off",
+                "noConfusingLabels": "off",
+                "noDoubleEquals": "error",
+                "noDebugger": "error"
+            },
+            "correctness": {
+                "noUnreachable": "error",
+                "noUndeclaredVariables": "error"
+            }
+        }
+    },
     "javascript": {
         "formatter": {
             "jsxQuoteStyle": "double",
@@ -66,6 +82,18 @@
             "quoteStyle": "double",
             "attributePosition": "auto",
             "bracketSpacing": true
+        },
+        "parser": {
+            "unsafeParameterDecoratorsEnabled": true
+        },
+        "globals": ["Phaser", "hljs", "THREE"]
+    },
+    "json": {
+        "formatter": {
+            "enabled": true,
+            "indentStyle": "space",
+            "indentWidth": 4,
+            "lineWidth": 80
         }
     }
 }

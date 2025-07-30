@@ -1,5 +1,5 @@
 import {
-    Connector,
+    type Connector,
     useAccount,
     useConnect,
     useDisconnect,

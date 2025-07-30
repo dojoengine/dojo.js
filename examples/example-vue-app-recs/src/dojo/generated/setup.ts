@@ -1,6 +1,6 @@
 import { type DojoConfig, DojoProvider } from "@dojoengine/core";
-import { getSyncEntities } from "@dojoengine/state";
 import { KeysClause } from "@dojoengine/sdk";
+import { getSyncEntities } from "@dojoengine/state";
 import * as torii from "@dojoengine/torii-client";
 import type { ArraySignatureType } from "starknet";
 

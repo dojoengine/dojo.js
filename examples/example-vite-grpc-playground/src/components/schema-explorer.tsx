@@ -44,9 +44,7 @@ export const SchemaExplorer = ({ schema }: SchemaExplorerProps) => {
                                 }))
                             }
                         >
-                            <span>
-                                {expandedTables[tableName] ? "▼" : "▶"}
-                            </span>
+                            <span>{expandedTables[tableName] ? "▼" : "▶"}</span>
                             <span>{tableName}</span>
                         </div>
                         {expandedTables[tableName] && (

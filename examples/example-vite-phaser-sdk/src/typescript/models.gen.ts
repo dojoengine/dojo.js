@@ -1,6 +1,6 @@
 import type { SchemaType as ISchemaType } from "@dojoengine/sdk";
 
-import { CairoOption, CairoOptionVariant, BigNumberish } from "starknet";
+import { type BigNumberish, CairoOption, CairoOptionVariant } from "starknet";
 
 // Type definition for `dojo_starter::models::DirectionsAvailable` struct
 export type DirectionsAvailable = {

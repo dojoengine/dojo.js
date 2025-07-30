@@ -1,11 +1,10 @@
-import type { SchemaType as ISchemaType } from "../internal/types";
-
 import {
+    type BigNumberish,
     CairoCustomEnum,
     CairoOption,
     CairoOptionVariant,
-    type BigNumberish,
 } from "starknet";
+import type { SchemaType as ISchemaType } from "../internal/types";
 
 export type TypedCairoEnum<T> = CairoCustomEnum & {
     variant: { [K in keyof T]: T[K] | undefined };

@@ -11,7 +11,7 @@ import type { SchemaType, StandardizedQueryResult } from "./types.ts";
 export function getModelByEntityId<
     N extends keyof SchemaType,
     M extends keyof SchemaType[N] & string,
-    Schema extends SchemaType
+    Schema extends SchemaType,
 >(
     entityId: BigNumberish,
     model: `${N}-${M}`,
@@ -38,7 +38,7 @@ export function getModelByEntityId<
 export function getModel<
     N extends keyof SchemaType,
     M extends keyof SchemaType[N] & string,
-    Schema extends SchemaType
+    Schema extends SchemaType,
 >(
     model: `${N}-${M}`,
     value: StandardizedQueryResult<Schema>

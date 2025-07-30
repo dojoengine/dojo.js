@@ -1,9 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { App } from "./App.tsx";
 import { init } from "@dojoengine/sdk";
 import { dojoConfig } from "../dojoConfig.ts";
+import { App } from "./App.tsx";
 
 async function main() {
     const sdk = await init({

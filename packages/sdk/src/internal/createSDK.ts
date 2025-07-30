@@ -1,23 +1,10 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
+import { ok, type Result } from "neverthrow";
 import type { Account, TypedData } from "starknet";
-import { type Result, ok } from "neverthrow";
-
-import type {
-    SDK,
-    SDKConfig,
-    SchemaType,
-    UnionOfModelData,
-    GetTokenRequest,
-    GetTokenBalanceRequest,
-    SubscribeTokenBalanceRequest,
-    UpdateTokenBalanceSubscriptionRequest,
-    SubscribeParams,
-    SubscribeResponse,
-    GetParams,
-    ToriiResponse,
-    SubscribeTokenRequest,
-} from "./types";
 import { generateTypedData } from "./generateTypedData.ts";
+import { defaultToriiPagination, Pagination } from "./pagination.ts";
+import { parseEntities } from "./parseEntities.ts";
+import { subscribeQueryModelCallback } from "./subscribeQueryModel.ts";
 import {
     getTokenBalances,
     getTokens,
@@ -27,9 +14,21 @@ import {
     subscribeTokenBalance,
     updateTokenBalanceSubscription,
 } from "./token.ts";
-import { subscribeQueryModelCallback } from "./subscribeQueryModel.ts";
-import { defaultToriiPagination, Pagination } from "./pagination.ts";
-import { parseEntities } from "./parseEntities.ts";
+import type {
+    GetParams,
+    GetTokenBalanceRequest,
+    GetTokenRequest,
+    SchemaType,
+    SDK,
+    SDKConfig,
+    SubscribeParams,
+    SubscribeResponse,
+    SubscribeTokenBalanceRequest,
+    SubscribeTokenRequest,
+    ToriiResponse,
+    UnionOfModelData,
+    UpdateTokenBalanceSubscriptionRequest,
+} from "./types";
 
 export interface CreateSDKOptions {
     client: torii.ToriiClient;

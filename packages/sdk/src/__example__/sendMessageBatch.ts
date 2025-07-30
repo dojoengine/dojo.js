@@ -1,5 +1,5 @@
-import { init } from "../web";
 import type { Account } from "starknet";
+import { init } from "../web";
 
 // Example usage of sendMessageBatch
 async function exampleSendMessageBatch(account: Account) {

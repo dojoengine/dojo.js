@@ -1,29 +1,28 @@
-import { CornerDownLeft } from "lucide-react";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
-import { Label } from "./ui/label";
-import { Textarea } from "./ui/textarea";
-import {
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-    type KeyboardEvent,
-} from "react";
-import { useForm } from "react-hook-form";
-import { useAccount } from "@starknet-react/core";
-import { toValidAscii } from "@/lib/utils";
 import {
     KeysClause,
     type ParsedEntity,
     type SDK,
     ToriiQueryBuilder,
 } from "@dojoengine/sdk";
-import type { Subscription } from "@dojoengine/torii-wasm";
-import { shortAddress } from "@/lib/utils";
-import type { Message, SchemaType } from "@/typescript/models.gen";
 import { useDojoSDK } from "@dojoengine/sdk/react";
+import type { Subscription } from "@dojoengine/torii-wasm";
+import { useAccount } from "@starknet-react/core";
+import { CornerDownLeft } from "lucide-react";
+import {
+    type KeyboardEvent,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+import { useForm } from "react-hook-form";
+import { shortAddress, toValidAscii } from "@/lib/utils";
 import type { setupWorld } from "@/typescript/contracts.gen";
+import type { Message, SchemaType } from "@/typescript/models.gen";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
 
 interface MessageItem {
     content: string;

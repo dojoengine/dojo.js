@@ -1,16 +1,16 @@
 import {
-    KeysClause,
-    ParsedEntity,
     HistoricalToriiQueryBuilder,
+    KeysClause,
+    type ParsedEntity,
 } from "@dojoengine/sdk";
-import { useAccount } from "@starknet-react/core";
-import { ModelsMapping, SchemaType } from "./typescript/models.gen";
-import { addAddressPadding } from "starknet";
 import {
     useEntityId,
     useHistoricalEntityQuery,
     useHistoricalModel,
 } from "@dojoengine/sdk/react";
+import { useAccount } from "@starknet-react/core";
+import { addAddressPadding } from "starknet";
+import { ModelsMapping, type SchemaType } from "./typescript/models.gen";
 
 export function HistoricalEvents() {
     const { account } = useAccount();

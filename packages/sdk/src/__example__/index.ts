@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as torii from "@dojoengine/torii-wasm";
 import { AndComposeClause, init, MemberClause, ToriiQueryBuilder } from "..";
-import { SchemaType } from "../types";
+import type { SchemaType } from "../types";
 
 export interface PlayerModel {
     fieldOrder: string[];

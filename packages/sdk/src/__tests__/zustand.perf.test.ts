@@ -1,14 +1,14 @@
-import { createDojoStore } from "../web/state";
-import type { ParsedEntity } from "../internal/types";
-import { describe, it, beforeEach } from "vitest";
 import Benchmark from "benchmark";
-import {
-    MockSchemaType,
-    PlayerModel,
+import { beforeEach, describe, it } from "vitest";
+import type {
+    GalaxyModel,
     GameModel,
     ItemModel,
-    GalaxyModel,
+    MockSchemaType,
+    PlayerModel,
 } from "../__example__/index";
+import type { ParsedEntity } from "../internal/types";
+import { createDojoStore } from "../web/state";
 
 interface MockParsedEntity extends ParsedEntity<MockSchemaType> {
     entityId: string;
@@ -128,9 +128,8 @@ describe("Zustand Store Performance Tests", () => {
                 useStore
                     .getState()
                     .applyOptimisticUpdate("txn_perf", (draft) => {
-                        draft.entities[
-                            "entity500"
-                        ].models.world!.item!.durability = 75;
+                        draft.entities["entity500"].models.world!
+                            .item!.durability = 75;
                     });
             })
             .on("cycle", (event: any) => {

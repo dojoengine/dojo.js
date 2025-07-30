@@ -1,10 +1,10 @@
 import type { SchemaType as ISchemaType } from "@dojoengine/sdk";
 
 import {
+    type BigNumberish,
     CairoCustomEnum,
     CairoOption,
     CairoOptionVariant,
-    BigNumberish,
 } from "starknet";
 
 // Type definition for `onchain_dash::models::CallerCounter` struct

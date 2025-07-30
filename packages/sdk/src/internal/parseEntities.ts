@@ -1,11 +1,10 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
-
+import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
 import type {
     ParsedEntity,
     SchemaType,
     StandardizedQueryResult,
 } from "./types.ts";
-import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
 
 export function parseEntities<T extends SchemaType>(
     entities: torii.Entity[],
@@ -25,7 +24,7 @@ export function parseEntities<T extends SchemaType>(
         for (const modelName in entity.models) {
             const [schemaKey, modelKey] = modelName.split("-") as [
                 keyof T,
-                string
+                string,
             ];
 
             if (!schemaKey || !modelKey) {
