@@ -159,7 +159,7 @@ type CairoToTsTypeMap = {
 /**
  * Map Cairo type to TypeScript type
  */
-type MapCairoType<T extends string> = T extends keyof CairoToTsTypeMap
+export type MapCairoType<T extends string> = T extends keyof CairoToTsTypeMap
     ? CairoToTsTypeMap[T]
     : T extends `core::array::Array::<${infer Inner}>`
       ? MapCairoType<Inner>[]
@@ -181,106 +181,47 @@ type MapTupleTypes<T extends string> = T extends `${infer First}, ${infer Rest}`
       : [MapCairoType<T>];
 
 /**
- * Extract struct type from ABI
- */
-type ExtractStructType<T> = T extends {
-    type: "struct";
-    name: string;
-    members: infer Members;
-}
-    ? Members extends readonly { name: string; type: string }[]
-        ? {
-              [K in Members[number] as K["name"]]: MapCairoType<K["type"]>;
-          }
-        : never
-    : never;
-
-/**
- * Extract enum variant type
- */
-type ExtractEnumVariantType<V> = V extends { name: string; type: infer T }
-    ? T extends string
-        ? MapCairoType<T>
-        : never
-    : never;
-
-/**
- * Extract enum type from ABI
- */
-type ExtractEnumType<T> = T extends {
-    type: "enum";
-    name: string;
-    variants: infer Variants;
-}
-    ? Variants extends readonly { name: string; type: string }[]
-        ? {
-              [K in Variants[number] as K["name"]]: ExtractEnumVariantType<K>;
-          }[Variants[number]["name"]]
-        : never
-    : never;
-
-/**
- * Extract function input parameters
- */
-type ExtractFunctionInputs<Inputs> = Inputs extends readonly {
-    name: string;
-    type: string;
-}[]
-    ? {
-          [K in Inputs[number] as K["name"]]: MapCairoType<K["type"]>;
-      }
-    : never;
-
-/**
- * Extract function output type
- */
-type ExtractFunctionOutputs<Outputs> = Outputs extends readonly {
-    type: string;
-}[]
-    ? Outputs["length"] extends 0
-        ? void
-        : Outputs["length"] extends 1
-          ? MapCairoType<Outputs[0]["type"]>
-          : {
-                [K in keyof Outputs]: Outputs[K] extends { type: string }
-                    ? MapCairoType<Outputs[K]["type"]>
-                    : never;
-            }
-    : void;
-
-/**
- * Extract function type from ABI
- */
-type ExtractFunctionType<T> = T extends {
-    type: "function";
-    name: string;
-    inputs: infer Inputs;
-    outputs: infer Outputs;
-}
-    ? {
-          inputs: ExtractFunctionInputs<Inputs>;
-          outputs: ExtractFunctionOutputs<Outputs>;
-      }
-    : never;
-
-/**
  * Extract all types from ABI array
  */
-type ExtractAbiTypesFromArray<ABI> = ABI extends readonly any[]
+export type ExtractAbiTypesFromArray<ABI> = ABI extends readonly any[]
     ? {
           structs: {
               [K in ABI[number] as K extends { type: "struct"; name: infer N }
                   ? N extends string
                       ? N
                       : never
-                  : never]: ExtractStructType<K>;
+                  : never]: K extends {
+                  type: "struct";
+                  name: string;
+                  members: infer M;
+              }
+                  ? M extends readonly { name: string; type: string }[]
+                      ? {
+                            [P in M[number] as P["name"]]: MapCairoType<
+                                P["type"]
+                            >;
+                        }
+                      : never
+                  : never;
           };
           enums: {
               [K in ABI[number] as K extends { type: "enum"; name: infer N }
                   ? N extends string
                       ? N
                       : never
-                  : never]: ExtractEnumType<K>;
+                  : never]: K extends {
+                  type: "enum";
+                  name: string;
+                  variants: infer V;
+              }
+                  ? V extends readonly { name: string; type: string }[]
+                      ? {
+                            [P in V[number] as P["name"]]: MapCairoType<
+                                P["type"]
+                            >;
+                        }[V[number]["name"]]
+                      : never
+                  : never;
           };
           functions: {
               [K in ABI[number] as K extends {
@@ -290,7 +231,38 @@ type ExtractAbiTypesFromArray<ABI> = ABI extends readonly any[]
                   ? N extends string
                       ? N
                       : never
-                  : never]: ExtractFunctionType<K>;
+                  : never]: K extends {
+                  type: "function";
+                  name: string;
+                  inputs: infer I;
+                  outputs: infer O;
+              }
+                  ? {
+                        inputs: I extends readonly {
+                            name: string;
+                            type: string;
+                        }[]
+                            ? {
+                                  [P in I[number] as P["name"]]: MapCairoType<
+                                      P["type"]
+                                  >;
+                              }
+                            : never;
+                        outputs: O extends readonly { type: string }[]
+                            ? O["length"] extends 0
+                                ? void
+                                : O["length"] extends 1
+                                  ? MapCairoType<O[0]["type"]>
+                                  : {
+                                        [Index in keyof O]: O[Index] extends {
+                                            type: string;
+                                        }
+                                            ? MapCairoType<O[Index]["type"]>
+                                            : never;
+                                    }
+                            : void;
+                    }
+                  : never;
           };
       }
     : never;
@@ -403,14 +375,16 @@ export type ExtractManifestTypes<Manifest> = Manifest extends {
 /**
  * Helper type to get a specific model type
  */
-export type GetModel<Manifest, ModelName extends string> =
-    ExtractManifestTypes<Manifest> extends { models: infer Models }
-        ? ModelName extends keyof Models
-            ? Models[ModelName] extends { fields: infer Fields }
-                ? Fields
-                : never
+export type GetModel<
+    Manifest,
+    ModelName extends string,
+> = ExtractManifestTypes<Manifest> extends { models: infer Models }
+    ? ModelName extends keyof Models
+        ? Models[ModelName] extends { fields: infer Fields }
+            ? Fields
             : never
-        : never;
+        : never
+    : never;
 
 /**
  * Helper type to get a specific contract's function
@@ -419,18 +393,17 @@ export type GetContractFunction<
     Manifest,
     ContractName extends string,
     FunctionName extends string,
-> =
-    ExtractManifestTypes<Manifest> extends { contracts: infer Contracts }
-        ? ContractName extends keyof Contracts
-            ? Contracts[ContractName] extends {
-                  abi: { functions: infer Functions };
-              }
-                ? FunctionName extends keyof Functions
-                    ? Functions[FunctionName]
-                    : never
+> = ExtractManifestTypes<Manifest> extends { contracts: infer Contracts }
+    ? ContractName extends keyof Contracts
+        ? Contracts[ContractName] extends {
+              abi: { functions: infer Functions };
+          }
+            ? FunctionName extends keyof Functions
+                ? Functions[FunctionName]
                 : never
             : never
-        : never;
+        : never
+    : never;
 
 /**
  * Extract ABIs from contracts array
@@ -559,9 +532,14 @@ type ExtractAbiTypesFromManifests<Manifests extends readonly any[]> =
  * - Single ABI array: type MyAbi = ExtractAbiTypes<typeof abi>
  * - Single manifest: type MyAbi = ExtractAbiTypes<typeof manifest>
  * - Multiple manifests: type MyAbi = ExtractAbiTypes<[typeof manifest1, typeof manifest2, typeof manifest3]>
+ * - Compiled ABI: type MyAbi = ExtractAbiTypes<typeof compiledAbi>
  */
-export type ExtractAbiTypes<T> = T extends readonly any[]
-    ? T extends readonly { type: string }[]
-        ? ExtractAbiTypesFromArray<T>
-        : ExtractAbiTypesFromManifests<T>
-    : ExtractAbiTypesFromManifests<[T]>;
+export type ExtractAbiTypes<T> = T extends { abi: infer ABI }
+    ? ABI extends readonly any[]
+        ? ExtractAbiTypesFromArray<ABI>
+        : never
+    : T extends readonly any[]
+      ? T extends readonly { type: string }[]
+          ? ExtractAbiTypesFromArray<T>
+          : ExtractAbiTypesFromManifests<T>
+      : ExtractAbiTypesFromManifests<[T]>;

@@ -47,122 +47,105 @@ export interface Primitive {
     /**
      * @generated from protobuf oneof: primitive_type
      */
-    primitive_type:
-        | {
-              oneofKind: "i8";
-              /**
-               * @generated from protobuf field: int32 i8 = 1
-               */
-              i8: number;
-          }
-        | {
-              oneofKind: "i16";
-              /**
-               * @generated from protobuf field: int32 i16 = 2
-               */
-              i16: number;
-          }
-        | {
-              oneofKind: "i32";
-              /**
-               * @generated from protobuf field: int32 i32 = 3
-               */
-              i32: number;
-          }
-        | {
-              oneofKind: "i64";
-              /**
-               * @generated from protobuf field: int64 i64 = 4
-               */
-              i64: bigint;
-          }
-        | {
-              oneofKind: "i128";
-              /**
-               * @generated from protobuf field: bytes i128 = 5
-               */
-              i128: Uint8Array;
-          }
-        | {
-              oneofKind: "u8";
-              /**
-               * @generated from protobuf field: uint32 u8 = 6
-               */
-              u8: number;
-          }
-        | {
-              oneofKind: "u16";
-              /**
-               * @generated from protobuf field: uint32 u16 = 7
-               */
-              u16: number;
-          }
-        | {
-              oneofKind: "u32";
-              /**
-               * @generated from protobuf field: uint32 u32 = 8
-               */
-              u32: number;
-          }
-        | {
-              oneofKind: "u64";
-              /**
-               * @generated from protobuf field: uint64 u64 = 9
-               */
-              u64: bigint;
-          }
-        | {
-              oneofKind: "u128";
-              /**
-               * @generated from protobuf field: bytes u128 = 10
-               */
-              u128: Uint8Array;
-          }
-        | {
-              oneofKind: "u256";
-              /**
-               * @generated from protobuf field: bytes u256 = 11
-               */
-              u256: Uint8Array;
-          }
-        | {
-              oneofKind: "bool";
-              /**
-               * @generated from protobuf field: bool bool = 12
-               */
-              bool: boolean;
-          }
-        | {
-              oneofKind: "felt252";
-              /**
-               * @generated from protobuf field: bytes felt252 = 13
-               */
-              felt252: Uint8Array;
-          }
-        | {
-              oneofKind: "class_hash";
-              /**
-               * @generated from protobuf field: bytes class_hash = 14
-               */
-              class_hash: Uint8Array;
-          }
-        | {
-              oneofKind: "contract_address";
-              /**
-               * @generated from protobuf field: bytes contract_address = 15
-               */
-              contract_address: Uint8Array;
-          }
-        | {
-              oneofKind: "eth_address";
-              /**
-               * @generated from protobuf field: bytes eth_address = 16
-               */
-              eth_address: Uint8Array;
-          }
-        | {
-              oneofKind: undefined;
-          };
+    primitive_type: {
+        oneofKind: "i8";
+        /**
+         * @generated from protobuf field: int32 i8 = 1
+         */
+        i8: number;
+    } | {
+        oneofKind: "i16";
+        /**
+         * @generated from protobuf field: int32 i16 = 2
+         */
+        i16: number;
+    } | {
+        oneofKind: "i32";
+        /**
+         * @generated from protobuf field: int32 i32 = 3
+         */
+        i32: number;
+    } | {
+        oneofKind: "i64";
+        /**
+         * @generated from protobuf field: int64 i64 = 4
+         */
+        i64: bigint;
+    } | {
+        oneofKind: "i128";
+        /**
+         * @generated from protobuf field: bytes i128 = 5
+         */
+        i128: Uint8Array;
+    } | {
+        oneofKind: "u8";
+        /**
+         * @generated from protobuf field: uint32 u8 = 6
+         */
+        u8: number;
+    } | {
+        oneofKind: "u16";
+        /**
+         * @generated from protobuf field: uint32 u16 = 7
+         */
+        u16: number;
+    } | {
+        oneofKind: "u32";
+        /**
+         * @generated from protobuf field: uint32 u32 = 8
+         */
+        u32: number;
+    } | {
+        oneofKind: "u64";
+        /**
+         * @generated from protobuf field: uint64 u64 = 9
+         */
+        u64: bigint;
+    } | {
+        oneofKind: "u128";
+        /**
+         * @generated from protobuf field: bytes u128 = 10
+         */
+        u128: Uint8Array;
+    } | {
+        oneofKind: "u256";
+        /**
+         * @generated from protobuf field: bytes u256 = 11
+         */
+        u256: Uint8Array;
+    } | {
+        oneofKind: "bool";
+        /**
+         * @generated from protobuf field: bool bool = 12
+         */
+        bool: boolean;
+    } | {
+        oneofKind: "felt252";
+        /**
+         * @generated from protobuf field: bytes felt252 = 13
+         */
+        felt252: Uint8Array;
+    } | {
+        oneofKind: "class_hash";
+        /**
+         * @generated from protobuf field: bytes class_hash = 14
+         */
+        class_hash: Uint8Array;
+    } | {
+        oneofKind: "contract_address";
+        /**
+         * @generated from protobuf field: bytes contract_address = 15
+         */
+        contract_address: Uint8Array;
+    } | {
+        oneofKind: "eth_address";
+        /**
+         * @generated from protobuf field: bytes eth_address = 16
+         */
+        eth_address: Uint8Array;
+    } | {
+        oneofKind: undefined;
+    };
 }
 /**
  * @generated from protobuf message types.Struct
@@ -193,52 +176,45 @@ export interface Ty {
     /**
      * @generated from protobuf oneof: ty_type
      */
-    ty_type:
-        | {
-              oneofKind: "primitive";
-              /**
-               * @generated from protobuf field: types.Primitive primitive = 2
-               */
-              primitive: Primitive;
-          }
-        | {
-              oneofKind: "enum";
-              /**
-               * @generated from protobuf field: types.Enum enum = 3
-               */
-              enum: Enum;
-          }
-        | {
-              oneofKind: "struct";
-              /**
-               * @generated from protobuf field: types.Struct struct = 4
-               */
-              struct: Struct;
-          }
-        | {
-              oneofKind: "tuple";
-              /**
-               * @generated from protobuf field: types.Array tuple = 5
-               */
-              tuple: Array$;
-          }
-        | {
-              oneofKind: "array";
-              /**
-               * @generated from protobuf field: types.Array array = 6
-               */
-              array: Array$;
-          }
-        | {
-              oneofKind: "bytearray";
-              /**
-               * @generated from protobuf field: string bytearray = 7
-               */
-              bytearray: string;
-          }
-        | {
-              oneofKind: undefined;
-          };
+    ty_type: {
+        oneofKind: "primitive";
+        /**
+         * @generated from protobuf field: types.Primitive primitive = 2
+         */
+        primitive: Primitive;
+    } | {
+        oneofKind: "enum";
+        /**
+         * @generated from protobuf field: types.Enum enum = 3
+         */
+        enum: Enum;
+    } | {
+        oneofKind: "struct";
+        /**
+         * @generated from protobuf field: types.Struct struct = 4
+         */
+        struct: Struct;
+    } | {
+        oneofKind: "tuple";
+        /**
+         * @generated from protobuf field: types.Array tuple = 5
+         */
+        tuple: Array$;
+    } | {
+        oneofKind: "array";
+        /**
+         * @generated from protobuf field: types.Array array = 6
+         */
+        array: Array$;
+    } | {
+        oneofKind: "bytearray";
+        /**
+         * @generated from protobuf field: string bytearray = 7
+         */
+        bytearray: string;
+    } | {
+        oneofKind: undefined;
+    };
 }
 /**
  * @generated from protobuf message types.Member
@@ -262,24 +238,18 @@ class EnumOption$Type extends MessageType<EnumOption> {
     constructor() {
         super("types.EnumOption", [
             { no: 1, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "ty", kind: "message", T: () => Ty },
+            { no: 2, name: "ty", kind: "message", T: () => Ty }
         ]);
     }
     create(value?: PartialMessage<EnumOption>): EnumOption {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.name = "";
         if (value !== undefined)
             reflectionMergePartial<EnumOption>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: EnumOption
-    ): EnumOption {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: EnumOption): EnumOption {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -287,54 +257,29 @@ class EnumOption$Type extends MessageType<EnumOption> {
                     message.name = reader.string();
                     break;
                 case /* types.Ty ty */ 2:
-                    message.ty = Ty.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.ty
-                    );
+                    message.ty = Ty.internalBinaryRead(reader, reader.uint32(), options, message.ty);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: EnumOption,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: EnumOption, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string name = 1; */
         if (message.name !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.name);
         /* types.Ty ty = 2; */
         if (message.ty)
-            Ty.internalBinaryWrite(
-                message.ty,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Ty.internalBinaryWrite(message.ty, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -347,23 +292,12 @@ class Enum$Type extends MessageType<Enum> {
     constructor() {
         super("types.Enum", [
             { no: 1, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            {
-                no: 2,
-                name: "option",
-                kind: "scalar",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 3,
-                name: "options",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => EnumOption,
-            },
+            { no: 2, name: "option", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 3, name: "options", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => EnumOption }
         ]);
     }
     create(value?: PartialMessage<Enum>): Enum {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.name = "";
         message.option = 0;
         message.options = [];
@@ -371,14 +305,8 @@ class Enum$Type extends MessageType<Enum> {
             reflectionMergePartial<Enum>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Enum
-    ): Enum {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Enum): Enum {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -389,38 +317,20 @@ class Enum$Type extends MessageType<Enum> {
                     message.option = reader.uint32();
                     break;
                 case /* repeated types.EnumOption options */ 3:
-                    message.options.push(
-                        EnumOption.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.options.push(EnumOption.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Enum,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Enum, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string name = 1; */
         if (message.name !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.name);
@@ -429,18 +339,10 @@ class Enum$Type extends MessageType<Enum> {
             writer.tag(2, WireType.Varint).uint32(message.option);
         /* repeated types.EnumOption options = 3; */
         for (let i = 0; i < message.options.length; i++)
-            EnumOption.internalBinaryWrite(
-                message.options[i],
-                writer.tag(3, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            EnumOption.internalBinaryWrite(message.options[i], writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -452,263 +354,144 @@ export const Enum = new Enum$Type();
 class Primitive$Type extends MessageType<Primitive> {
     constructor() {
         super("types.Primitive", [
-            {
-                no: 1,
-                name: "i8",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 5 /*ScalarType.INT32*/,
-            },
-            {
-                no: 2,
-                name: "i16",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 5 /*ScalarType.INT32*/,
-            },
-            {
-                no: 3,
-                name: "i32",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 5 /*ScalarType.INT32*/,
-            },
-            {
-                no: 4,
-                name: "i64",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 3 /*ScalarType.INT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 5,
-                name: "i128",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 6,
-                name: "u8",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 7,
-                name: "u16",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 8,
-                name: "u32",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 9,
-                name: "u64",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 10,
-                name: "u128",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 11,
-                name: "u256",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 12,
-                name: "bool",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 8 /*ScalarType.BOOL*/,
-            },
-            {
-                no: 13,
-                name: "felt252",
-                kind: "scalar",
-                oneof: "primitive_type",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 14,
-                name: "class_hash",
-                kind: "scalar",
-                localName: "class_hash",
-                oneof: "primitive_type",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 15,
-                name: "contract_address",
-                kind: "scalar",
-                localName: "contract_address",
-                oneof: "primitive_type",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 16,
-                name: "eth_address",
-                kind: "scalar",
-                localName: "eth_address",
-                oneof: "primitive_type",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "i8", kind: "scalar", oneof: "primitive_type", T: 5 /*ScalarType.INT32*/ },
+            { no: 2, name: "i16", kind: "scalar", oneof: "primitive_type", T: 5 /*ScalarType.INT32*/ },
+            { no: 3, name: "i32", kind: "scalar", oneof: "primitive_type", T: 5 /*ScalarType.INT32*/ },
+            { no: 4, name: "i64", kind: "scalar", oneof: "primitive_type", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 5, name: "i128", kind: "scalar", oneof: "primitive_type", T: 12 /*ScalarType.BYTES*/ },
+            { no: 6, name: "u8", kind: "scalar", oneof: "primitive_type", T: 13 /*ScalarType.UINT32*/ },
+            { no: 7, name: "u16", kind: "scalar", oneof: "primitive_type", T: 13 /*ScalarType.UINT32*/ },
+            { no: 8, name: "u32", kind: "scalar", oneof: "primitive_type", T: 13 /*ScalarType.UINT32*/ },
+            { no: 9, name: "u64", kind: "scalar", oneof: "primitive_type", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 10, name: "u128", kind: "scalar", oneof: "primitive_type", T: 12 /*ScalarType.BYTES*/ },
+            { no: 11, name: "u256", kind: "scalar", oneof: "primitive_type", T: 12 /*ScalarType.BYTES*/ },
+            { no: 12, name: "bool", kind: "scalar", oneof: "primitive_type", T: 8 /*ScalarType.BOOL*/ },
+            { no: 13, name: "felt252", kind: "scalar", oneof: "primitive_type", T: 12 /*ScalarType.BYTES*/ },
+            { no: 14, name: "class_hash", kind: "scalar", localName: "class_hash", oneof: "primitive_type", T: 12 /*ScalarType.BYTES*/ },
+            { no: 15, name: "contract_address", kind: "scalar", localName: "contract_address", oneof: "primitive_type", T: 12 /*ScalarType.BYTES*/ },
+            { no: 16, name: "eth_address", kind: "scalar", localName: "eth_address", oneof: "primitive_type", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<Primitive>): Primitive {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.primitive_type = { oneofKind: undefined };
         if (value !== undefined)
             reflectionMergePartial<Primitive>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Primitive
-    ): Primitive {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Primitive): Primitive {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* int32 i8 */ 1:
                     message.primitive_type = {
                         oneofKind: "i8",
-                        i8: reader.int32(),
+                        i8: reader.int32()
                     };
                     break;
                 case /* int32 i16 */ 2:
                     message.primitive_type = {
                         oneofKind: "i16",
-                        i16: reader.int32(),
+                        i16: reader.int32()
                     };
                     break;
                 case /* int32 i32 */ 3:
                     message.primitive_type = {
                         oneofKind: "i32",
-                        i32: reader.int32(),
+                        i32: reader.int32()
                     };
                     break;
                 case /* int64 i64 */ 4:
                     message.primitive_type = {
                         oneofKind: "i64",
-                        i64: reader.int64().toBigInt(),
+                        i64: reader.int64().toBigInt()
                     };
                     break;
                 case /* bytes i128 */ 5:
                     message.primitive_type = {
                         oneofKind: "i128",
-                        i128: reader.bytes(),
+                        i128: reader.bytes()
                     };
                     break;
                 case /* uint32 u8 */ 6:
                     message.primitive_type = {
                         oneofKind: "u8",
-                        u8: reader.uint32(),
+                        u8: reader.uint32()
                     };
                     break;
                 case /* uint32 u16 */ 7:
                     message.primitive_type = {
                         oneofKind: "u16",
-                        u16: reader.uint32(),
+                        u16: reader.uint32()
                     };
                     break;
                 case /* uint32 u32 */ 8:
                     message.primitive_type = {
                         oneofKind: "u32",
-                        u32: reader.uint32(),
+                        u32: reader.uint32()
                     };
                     break;
                 case /* uint64 u64 */ 9:
                     message.primitive_type = {
                         oneofKind: "u64",
-                        u64: reader.uint64().toBigInt(),
+                        u64: reader.uint64().toBigInt()
                     };
                     break;
                 case /* bytes u128 */ 10:
                     message.primitive_type = {
                         oneofKind: "u128",
-                        u128: reader.bytes(),
+                        u128: reader.bytes()
                     };
                     break;
                 case /* bytes u256 */ 11:
                     message.primitive_type = {
                         oneofKind: "u256",
-                        u256: reader.bytes(),
+                        u256: reader.bytes()
                     };
                     break;
                 case /* bool bool */ 12:
                     message.primitive_type = {
                         oneofKind: "bool",
-                        bool: reader.bool(),
+                        bool: reader.bool()
                     };
                     break;
                 case /* bytes felt252 */ 13:
                     message.primitive_type = {
                         oneofKind: "felt252",
-                        felt252: reader.bytes(),
+                        felt252: reader.bytes()
                     };
                     break;
                 case /* bytes class_hash */ 14:
                     message.primitive_type = {
                         oneofKind: "class_hash",
-                        class_hash: reader.bytes(),
+                        class_hash: reader.bytes()
                     };
                     break;
                 case /* bytes contract_address */ 15:
                     message.primitive_type = {
                         oneofKind: "contract_address",
-                        contract_address: reader.bytes(),
+                        contract_address: reader.bytes()
                     };
                     break;
                 case /* bytes eth_address */ 16:
                     message.primitive_type = {
                         oneofKind: "eth_address",
-                        eth_address: reader.bytes(),
+                        eth_address: reader.bytes()
                     };
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Primitive,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Primitive, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* int32 i8 = 1; */
         if (message.primitive_type.oneofKind === "i8")
             writer.tag(1, WireType.Varint).int32(message.primitive_type.i8);
@@ -723,9 +506,7 @@ class Primitive$Type extends MessageType<Primitive> {
             writer.tag(4, WireType.Varint).int64(message.primitive_type.i64);
         /* bytes i128 = 5; */
         if (message.primitive_type.oneofKind === "i128")
-            writer
-                .tag(5, WireType.LengthDelimited)
-                .bytes(message.primitive_type.i128);
+            writer.tag(5, WireType.LengthDelimited).bytes(message.primitive_type.i128);
         /* uint32 u8 = 6; */
         if (message.primitive_type.oneofKind === "u8")
             writer.tag(6, WireType.Varint).uint32(message.primitive_type.u8);
@@ -740,44 +521,28 @@ class Primitive$Type extends MessageType<Primitive> {
             writer.tag(9, WireType.Varint).uint64(message.primitive_type.u64);
         /* bytes u128 = 10; */
         if (message.primitive_type.oneofKind === "u128")
-            writer
-                .tag(10, WireType.LengthDelimited)
-                .bytes(message.primitive_type.u128);
+            writer.tag(10, WireType.LengthDelimited).bytes(message.primitive_type.u128);
         /* bytes u256 = 11; */
         if (message.primitive_type.oneofKind === "u256")
-            writer
-                .tag(11, WireType.LengthDelimited)
-                .bytes(message.primitive_type.u256);
+            writer.tag(11, WireType.LengthDelimited).bytes(message.primitive_type.u256);
         /* bool bool = 12; */
         if (message.primitive_type.oneofKind === "bool")
             writer.tag(12, WireType.Varint).bool(message.primitive_type.bool);
         /* bytes felt252 = 13; */
         if (message.primitive_type.oneofKind === "felt252")
-            writer
-                .tag(13, WireType.LengthDelimited)
-                .bytes(message.primitive_type.felt252);
+            writer.tag(13, WireType.LengthDelimited).bytes(message.primitive_type.felt252);
         /* bytes class_hash = 14; */
         if (message.primitive_type.oneofKind === "class_hash")
-            writer
-                .tag(14, WireType.LengthDelimited)
-                .bytes(message.primitive_type.class_hash);
+            writer.tag(14, WireType.LengthDelimited).bytes(message.primitive_type.class_hash);
         /* bytes contract_address = 15; */
         if (message.primitive_type.oneofKind === "contract_address")
-            writer
-                .tag(15, WireType.LengthDelimited)
-                .bytes(message.primitive_type.contract_address);
+            writer.tag(15, WireType.LengthDelimited).bytes(message.primitive_type.contract_address);
         /* bytes eth_address = 16; */
         if (message.primitive_type.oneofKind === "eth_address")
-            writer
-                .tag(16, WireType.LengthDelimited)
-                .bytes(message.primitive_type.eth_address);
+            writer.tag(16, WireType.LengthDelimited).bytes(message.primitive_type.eth_address);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -790,31 +555,19 @@ class Struct$Type extends MessageType<Struct> {
     constructor() {
         super("types.Struct", [
             { no: 1, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            {
-                no: 2,
-                name: "children",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Member,
-            },
+            { no: 2, name: "children", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Member }
         ]);
     }
     create(value?: PartialMessage<Struct>): Struct {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.name = "";
         message.children = [];
         if (value !== undefined)
             reflectionMergePartial<Struct>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Struct
-    ): Struct {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Struct): Struct {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -822,55 +575,29 @@ class Struct$Type extends MessageType<Struct> {
                     message.name = reader.string();
                     break;
                 case /* repeated types.Member children */ 2:
-                    message.children.push(
-                        Member.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.children.push(Member.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Struct,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Struct, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string name = 1; */
         if (message.name !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.name);
         /* repeated types.Member children = 2; */
         for (let i = 0; i < message.children.length; i++)
-            Member.internalBinaryWrite(
-                message.children[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Member.internalBinaryWrite(message.children[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -882,76 +609,42 @@ export const Struct = new Struct$Type();
 class Array$$Type extends MessageType<Array$> {
     constructor() {
         super("types.Array", [
-            {
-                no: 1,
-                name: "children",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Ty,
-            },
+            { no: 1, name: "children", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Ty }
         ]);
     }
     create(value?: PartialMessage<Array$>): Array$ {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.children = [];
         if (value !== undefined)
             reflectionMergePartial<Array$>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Array$
-    ): Array$ {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Array$): Array$ {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* repeated types.Ty children */ 1:
-                    message.children.push(
-                        Ty.internalBinaryRead(reader, reader.uint32(), options)
-                    );
+                    message.children.push(Ty.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Array$,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Array$, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated types.Ty children = 1; */
         for (let i = 0; i < message.children.length; i++)
-            Ty.internalBinaryWrite(
-                message.children[i],
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Ty.internalBinaryWrite(message.children[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -963,200 +656,95 @@ export const Array$ = new Array$$Type();
 class Ty$Type extends MessageType<Ty> {
     constructor() {
         super("types.Ty", [
-            {
-                no: 2,
-                name: "primitive",
-                kind: "message",
-                oneof: "ty_type",
-                T: () => Primitive,
-            },
-            {
-                no: 3,
-                name: "enum",
-                kind: "message",
-                oneof: "ty_type",
-                T: () => Enum,
-            },
-            {
-                no: 4,
-                name: "struct",
-                kind: "message",
-                oneof: "ty_type",
-                T: () => Struct,
-            },
-            {
-                no: 5,
-                name: "tuple",
-                kind: "message",
-                oneof: "ty_type",
-                T: () => Array$,
-            },
-            {
-                no: 6,
-                name: "array",
-                kind: "message",
-                oneof: "ty_type",
-                T: () => Array$,
-            },
-            {
-                no: 7,
-                name: "bytearray",
-                kind: "scalar",
-                oneof: "ty_type",
-                T: 9 /*ScalarType.STRING*/,
-            },
+            { no: 2, name: "primitive", kind: "message", oneof: "ty_type", T: () => Primitive },
+            { no: 3, name: "enum", kind: "message", oneof: "ty_type", T: () => Enum },
+            { no: 4, name: "struct", kind: "message", oneof: "ty_type", T: () => Struct },
+            { no: 5, name: "tuple", kind: "message", oneof: "ty_type", T: () => Array$ },
+            { no: 6, name: "array", kind: "message", oneof: "ty_type", T: () => Array$ },
+            { no: 7, name: "bytearray", kind: "scalar", oneof: "ty_type", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<Ty>): Ty {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.ty_type = { oneofKind: undefined };
         if (value !== undefined)
             reflectionMergePartial<Ty>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Ty
-    ): Ty {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Ty): Ty {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Primitive primitive */ 2:
                     message.ty_type = {
                         oneofKind: "primitive",
-                        primitive: Primitive.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.ty_type as any).primitive
-                        ),
+                        primitive: Primitive.internalBinaryRead(reader, reader.uint32(), options, (message.ty_type as any).primitive)
                     };
                     break;
                 case /* types.Enum enum */ 3:
                     message.ty_type = {
                         oneofKind: "enum",
-                        enum: Enum.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.ty_type as any).enum
-                        ),
+                        enum: Enum.internalBinaryRead(reader, reader.uint32(), options, (message.ty_type as any).enum)
                     };
                     break;
                 case /* types.Struct struct */ 4:
                     message.ty_type = {
                         oneofKind: "struct",
-                        struct: Struct.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.ty_type as any).struct
-                        ),
+                        struct: Struct.internalBinaryRead(reader, reader.uint32(), options, (message.ty_type as any).struct)
                     };
                     break;
                 case /* types.Array tuple */ 5:
                     message.ty_type = {
                         oneofKind: "tuple",
-                        tuple: Array$.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.ty_type as any).tuple
-                        ),
+                        tuple: Array$.internalBinaryRead(reader, reader.uint32(), options, (message.ty_type as any).tuple)
                     };
                     break;
                 case /* types.Array array */ 6:
                     message.ty_type = {
                         oneofKind: "array",
-                        array: Array$.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.ty_type as any).array
-                        ),
+                        array: Array$.internalBinaryRead(reader, reader.uint32(), options, (message.ty_type as any).array)
                     };
                     break;
                 case /* string bytearray */ 7:
                     message.ty_type = {
                         oneofKind: "bytearray",
-                        bytearray: reader.string(),
+                        bytearray: reader.string()
                     };
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Ty,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Ty, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Primitive primitive = 2; */
         if (message.ty_type.oneofKind === "primitive")
-            Primitive.internalBinaryWrite(
-                message.ty_type.primitive,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Primitive.internalBinaryWrite(message.ty_type.primitive, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         /* types.Enum enum = 3; */
         if (message.ty_type.oneofKind === "enum")
-            Enum.internalBinaryWrite(
-                message.ty_type.enum,
-                writer.tag(3, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Enum.internalBinaryWrite(message.ty_type.enum, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         /* types.Struct struct = 4; */
         if (message.ty_type.oneofKind === "struct")
-            Struct.internalBinaryWrite(
-                message.ty_type.struct,
-                writer.tag(4, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Struct.internalBinaryWrite(message.ty_type.struct, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
         /* types.Array tuple = 5; */
         if (message.ty_type.oneofKind === "tuple")
-            Array$.internalBinaryWrite(
-                message.ty_type.tuple,
-                writer.tag(5, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Array$.internalBinaryWrite(message.ty_type.tuple, writer.tag(5, WireType.LengthDelimited).fork(), options).join();
         /* types.Array array = 6; */
         if (message.ty_type.oneofKind === "array")
-            Array$.internalBinaryWrite(
-                message.ty_type.array,
-                writer.tag(6, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Array$.internalBinaryWrite(message.ty_type.array, writer.tag(6, WireType.LengthDelimited).fork(), options).join();
         /* string bytearray = 7; */
         if (message.ty_type.oneofKind === "bytearray")
-            writer
-                .tag(7, WireType.LengthDelimited)
-                .string(message.ty_type.bytearray);
+            writer.tag(7, WireType.LengthDelimited).string(message.ty_type.bytearray);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1170,25 +758,19 @@ class Member$Type extends MessageType<Member> {
         super("types.Member", [
             { no: 1, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "ty", kind: "message", T: () => Ty },
-            { no: 3, name: "key", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 3, name: "key", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<Member>): Member {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.name = "";
         message.key = false;
         if (value !== undefined)
             reflectionMergePartial<Member>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Member
-    ): Member {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Member): Member {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1196,12 +778,7 @@ class Member$Type extends MessageType<Member> {
                     message.name = reader.string();
                     break;
                 case /* types.Ty ty */ 2:
-                    message.ty = Ty.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.ty
-                    );
+                    message.ty = Ty.internalBinaryRead(reader, reader.uint32(), options, message.ty);
                     break;
                 case /* bool key */ 3:
                     message.key = reader.bool();
@@ -1209,47 +786,27 @@ class Member$Type extends MessageType<Member> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Member,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Member, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string name = 1; */
         if (message.name !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.name);
         /* types.Ty ty = 2; */
         if (message.ty)
-            Ty.internalBinaryWrite(
-                message.ty,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Ty.internalBinaryWrite(message.ty, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         /* bool key = 3; */
         if (message.key !== false)
             writer.tag(3, WireType.Varint).bool(message.key);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }

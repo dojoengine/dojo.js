@@ -1,94 +1,80 @@
 import { ExtractAbiTypes } from "./index";
 
-// Example manifest types (these would come from your actual manifest JSON files)
-declare const manifest1: {
-    world: {
-        abi: [
-            {
-                type: "struct";
-                name: "Position";
-                members: [
-                    { name: "x"; type: "core::integer::u32" },
-                    { name: "y"; type: "core::integer::u32" },
-                ];
-            },
-        ];
-    };
-    contracts: [
+// There are two approaches to use compiled ABI with TypeScript:
+
+// Approach 1: Import the JSON and use it at runtime (but types won't work automatically)
+import compiledJson from "../../../../worlds/dojo-starter/compiled-abi.json";
+
+// Approach 2: Use a code generation tool to create a TypeScript file from the JSON
+// For example, create a compiled-abi.ts file that exports:
+// export const compiledAbi = { abi: [...] } as const;
+
+// For this example, we'll show how it would work with proper typing:
+// You would need to generate this from your compiled-abi.json
+declare const compiledAbi: {
+    readonly abi: readonly [
         {
-            tag: "actions";
-            abi: [
+            readonly type: "struct";
+            readonly name: "dojo_starter::models::Position";
+            readonly members: readonly [
                 {
-                    type: "function";
-                    name: "move";
-                    inputs: [
-                        { name: "entity"; type: "core::felt252" },
-                        { name: "direction"; type: "core::integer::u8" },
-                    ];
-                    outputs: [];
+                    readonly name: "player";
+                    readonly type: "core::starknet::contract_address::ContractAddress";
+                },
+                {
+                    readonly name: "vec";
+                    readonly type: "dojo_starter::models::Vec2";
                 },
             ];
         },
-    ];
-};
-
-declare const manifest2: {
-    world: {
-        abi: [
-            {
-                type: "enum";
-                name: "Direction";
-                variants: [
-                    { name: "Up"; type: "()" },
-                    { name: "Down"; type: "()" },
-                    { name: "Left"; type: "()" },
-                    { name: "Right"; type: "()" },
-                ];
-            },
-        ];
-    };
-    contracts: [];
-};
-
-declare const manifest3: {
-    contracts: [
         {
-            tag: "combat";
-            abi: [
-                {
-                    type: "struct";
-                    name: "Health";
-                    members: [
-                        { name: "current"; type: "core::integer::u32" },
-                        { name: "max"; type: "core::integer::u32" },
-                    ];
-                },
-                {
-                    type: "function";
-                    name: "attack";
-                    inputs: [
-                        { name: "attacker"; type: "core::felt252" },
-                        { name: "target"; type: "core::felt252" },
-                        { name: "damage"; type: "core::integer::u32" },
-                    ];
-                    outputs: [{ type: "core::bool" }];
-                },
+            readonly type: "struct";
+            readonly name: "dojo_starter::models::Vec2";
+            readonly members: readonly [
+                { readonly name: "x"; readonly type: "core::integer::u32" },
+                { readonly name: "y"; readonly type: "core::integer::u32" },
             ];
         },
+        {
+            readonly type: "enum";
+            readonly name: "dojo_starter::models::Direction";
+            readonly variants: readonly [
+                { readonly name: "None"; readonly type: "()" },
+                { readonly name: "Up"; readonly type: "()" },
+                { readonly name: "Down"; readonly type: "()" },
+                { readonly name: "Left"; readonly type: "()" },
+                { readonly name: "Right"; readonly type: "()" },
+            ];
+        },
+        // ... more ABI entries
     ];
 };
 
-// Extract ABI types from multiple manifests
-type MyAbi = ExtractAbiTypes<
-    [typeof manifest1, typeof manifest2, typeof manifest3]
->;
+// Extract ABI types from the properly typed ABI
+type MyAbi = ExtractAbiTypes<typeof compiledAbi>;
+
+// Debug: Check the structure of MyAbi
+type MyAbiStructs = MyAbi["structs"];
+type MyAbiEnums = MyAbi["enums"];
+type MyAbiFunctions = MyAbi["functions"];
 
 // Now you can use the extracted types
-type Position = MyAbi["structs"]["Position"]; // { x: number; y: number }
-type Direction = MyAbi["enums"]["Direction"]; // "Up" | "Down" | "Left" | "Right"
-type Health = MyAbi["structs"]["Health"]; // { current: number; max: number }
-type MoveFunction = MyAbi["functions"]["move"]; // { inputs: { entity: string; direction: number }; outputs: void }
-type AttackFunction = MyAbi["functions"]["attack"]; // { inputs: { attacker: string; target: string; damage: number }; outputs: boolean }
+type Position = MyAbi["structs"]["dojo_starter::models::Position"]; // { player: string; vec: Vec2 }
+type Vec2 = MyAbi["structs"]["dojo_starter::models::Vec2"]; // { x: number; y: number }
+type Direction = MyAbi["enums"]["dojo_starter::models::Direction"]; // "None" | "Up" | "Down" | "Left" | "Right"
+
+// To make this work with your actual compiled-abi.json, you need to:
+// 1. Create a script that converts compiled-abi.json to a TypeScript file with proper const assertions
+// 2. Or use a build tool that preserves literal types when importing JSON
+
+// Example of what the generated TypeScript file would look like:
+// compiled-abi.generated.ts:
+// export const compiledAbi = {
+//   "abi": [
+//     { "type": "struct", "name": "...", "members": [...] },
+//     // ... rest of your ABI
+//   ]
+// } as const;
 
 // Backward compatibility - still works with raw ABI arrays
 declare const abi: [

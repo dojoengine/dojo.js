@@ -6,6 +6,10 @@
     "license": "MIT",
     "main": "./dist/index.js",
     "type": "module",
+    "bin": {
+        "compile-abi": "./dist/cli/compile-abi.js",
+        "generate-abi-types": "./dist/cli/generate-abi-types.js"
+    },
     "scripts": {
         "build:deps": "tsup",
         "build": "pnpm build:deps",
@@ -14,7 +18,8 @@
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
         "test": "vitest run --passWithNoTests --coverage",
-        "docs": "typedoc"
+        "docs": "typedoc",
+    "type:check": "tsc"
     },
     "exports": {
         ".": {
