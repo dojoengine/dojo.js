@@ -350,7 +350,8 @@ export interface SubscribeIndexerResponse {
  *
  * @generated from protobuf message world.WorldMetadataRequest
  */
-export interface WorldMetadataRequest {}
+export interface WorldMetadataRequest {
+}
 /**
  * The metadata response contains addresses and class hashes for the world.
  *
@@ -540,256 +541,133 @@ export interface PublishMessageBatchResponse {
 class SubscribeTransactionsRequest$Type extends MessageType<SubscribeTransactionsRequest> {
     constructor() {
         super("world.SubscribeTransactionsRequest", [
-            {
-                no: 1,
-                name: "filter",
-                kind: "message",
-                T: () => TransactionFilter,
-            },
+            { no: 1, name: "filter", kind: "message", T: () => TransactionFilter }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeTransactionsRequest>
-    ): SubscribeTransactionsRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeTransactionsRequest>): SubscribeTransactionsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<SubscribeTransactionsRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeTransactionsRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeTransactionsRequest
-    ): SubscribeTransactionsRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeTransactionsRequest): SubscribeTransactionsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.TransactionFilter filter */ 1:
-                    message.filter = TransactionFilter.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.filter
-                    );
+                    message.filter = TransactionFilter.internalBinaryRead(reader, reader.uint32(), options, message.filter);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeTransactionsRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeTransactionsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.TransactionFilter filter = 1; */
         if (message.filter)
-            TransactionFilter.internalBinaryWrite(
-                message.filter,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TransactionFilter.internalBinaryWrite(message.filter, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.SubscribeTransactionsRequest
  */
-export const SubscribeTransactionsRequest =
-    new SubscribeTransactionsRequest$Type();
+export const SubscribeTransactionsRequest = new SubscribeTransactionsRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class SubscribeTransactionsResponse$Type extends MessageType<SubscribeTransactionsResponse> {
     constructor() {
         super("world.SubscribeTransactionsResponse", [
-            {
-                no: 1,
-                name: "transaction",
-                kind: "message",
-                T: () => Transaction,
-            },
+            { no: 1, name: "transaction", kind: "message", T: () => Transaction }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeTransactionsResponse>
-    ): SubscribeTransactionsResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeTransactionsResponse>): SubscribeTransactionsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<SubscribeTransactionsResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeTransactionsResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeTransactionsResponse
-    ): SubscribeTransactionsResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeTransactionsResponse): SubscribeTransactionsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Transaction transaction */ 1:
-                    message.transaction = Transaction.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.transaction
-                    );
+                    message.transaction = Transaction.internalBinaryRead(reader, reader.uint32(), options, message.transaction);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeTransactionsResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeTransactionsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Transaction transaction = 1; */
         if (message.transaction)
-            Transaction.internalBinaryWrite(
-                message.transaction,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Transaction.internalBinaryWrite(message.transaction, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.SubscribeTransactionsResponse
  */
-export const SubscribeTransactionsResponse =
-    new SubscribeTransactionsResponse$Type();
+export const SubscribeTransactionsResponse = new SubscribeTransactionsResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RetrieveControllersRequest$Type extends MessageType<RetrieveControllersRequest> {
     constructor() {
         super("world.RetrieveControllersRequest", [
-            { no: 1, name: "query", kind: "message", T: () => ControllerQuery },
+            { no: 1, name: "query", kind: "message", T: () => ControllerQuery }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveControllersRequest>
-    ): RetrieveControllersRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveControllersRequest>): RetrieveControllersRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<RetrieveControllersRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveControllersRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveControllersRequest
-    ): RetrieveControllersRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveControllersRequest): RetrieveControllersRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.ControllerQuery query */ 1:
-                    message.query = ControllerQuery.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.query
-                    );
+                    message.query = ControllerQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveControllersRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveControllersRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.ControllerQuery query = 1; */
         if (message.query)
-            ControllerQuery.internalBinaryWrite(
-                message.query,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            ControllerQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -801,44 +679,20 @@ export const RetrieveControllersRequest = new RetrieveControllersRequest$Type();
 class RetrieveControllersResponse$Type extends MessageType<RetrieveControllersResponse> {
     constructor() {
         super("world.RetrieveControllersResponse", [
-            {
-                no: 1,
-                name: "next_cursor",
-                kind: "scalar",
-                localName: "next_cursor",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "controllers",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Controller,
-            },
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "controllers", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Controller }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveControllersResponse>
-    ): RetrieveControllersResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveControllersResponse>): RetrieveControllersResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.next_cursor = "";
         message.controllers = [];
         if (value !== undefined)
-            reflectionMergePartial<RetrieveControllersResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveControllersResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveControllersResponse
-    ): RetrieveControllersResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveControllersResponse): RetrieveControllersResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -846,125 +700,58 @@ class RetrieveControllersResponse$Type extends MessageType<RetrieveControllersRe
                     message.next_cursor = reader.string();
                     break;
                 case /* repeated types.Controller controllers */ 2:
-                    message.controllers.push(
-                        Controller.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.controllers.push(Controller.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveControllersResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveControllersResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string next_cursor = 1; */
         if (message.next_cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
         /* repeated types.Controller controllers = 2; */
         for (let i = 0; i < message.controllers.length; i++)
-            Controller.internalBinaryWrite(
-                message.controllers[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Controller.internalBinaryWrite(message.controllers[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.RetrieveControllersResponse
  */
-export const RetrieveControllersResponse =
-    new RetrieveControllersResponse$Type();
+export const RetrieveControllersResponse = new RetrieveControllersResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class UpdateTokenBalancesSubscriptionRequest$Type extends MessageType<UpdateTokenBalancesSubscriptionRequest> {
     constructor() {
         super("world.UpdateTokenBalancesSubscriptionRequest", [
-            {
-                no: 1,
-                name: "subscription_id",
-                kind: "scalar",
-                localName: "subscription_id",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 2,
-                name: "contract_addresses",
-                kind: "scalar",
-                localName: "contract_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 3,
-                name: "account_addresses",
-                kind: "scalar",
-                localName: "account_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 4,
-                name: "token_ids",
-                kind: "scalar",
-                localName: "token_ids",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "account_addresses", kind: "scalar", localName: "account_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
-    create(
-        value?: PartialMessage<UpdateTokenBalancesSubscriptionRequest>
-    ): UpdateTokenBalancesSubscriptionRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<UpdateTokenBalancesSubscriptionRequest>): UpdateTokenBalancesSubscriptionRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.subscription_id = 0n;
         message.contract_addresses = [];
         message.account_addresses = [];
         message.token_ids = [];
         if (value !== undefined)
-            reflectionMergePartial<UpdateTokenBalancesSubscriptionRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<UpdateTokenBalancesSubscriptionRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: UpdateTokenBalancesSubscriptionRequest
-    ): UpdateTokenBalancesSubscriptionRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UpdateTokenBalancesSubscriptionRequest): UpdateTokenBalancesSubscriptionRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -983,94 +770,54 @@ class UpdateTokenBalancesSubscriptionRequest$Type extends MessageType<UpdateToke
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: UpdateTokenBalancesSubscriptionRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: UpdateTokenBalancesSubscriptionRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* uint64 subscription_id = 1; */
         if (message.subscription_id !== 0n)
             writer.tag(1, WireType.Varint).uint64(message.subscription_id);
         /* repeated bytes contract_addresses = 2; */
         for (let i = 0; i < message.contract_addresses.length; i++)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .bytes(message.contract_addresses[i]);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
         /* repeated bytes account_addresses = 3; */
         for (let i = 0; i < message.account_addresses.length; i++)
-            writer
-                .tag(3, WireType.LengthDelimited)
-                .bytes(message.account_addresses[i]);
+            writer.tag(3, WireType.LengthDelimited).bytes(message.account_addresses[i]);
         /* repeated bytes token_ids = 4; */
         for (let i = 0; i < message.token_ids.length; i++)
             writer.tag(4, WireType.LengthDelimited).bytes(message.token_ids[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.UpdateTokenBalancesSubscriptionRequest
  */
-export const UpdateTokenBalancesSubscriptionRequest =
-    new UpdateTokenBalancesSubscriptionRequest$Type();
+export const UpdateTokenBalancesSubscriptionRequest = new UpdateTokenBalancesSubscriptionRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class SubscribeTokenBalancesResponse$Type extends MessageType<SubscribeTokenBalancesResponse> {
     constructor() {
         super("world.SubscribeTokenBalancesResponse", [
-            {
-                no: 1,
-                name: "subscription_id",
-                kind: "scalar",
-                localName: "subscription_id",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            { no: 2, name: "balance", kind: "message", T: () => TokenBalance },
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "balance", kind: "message", T: () => TokenBalance }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeTokenBalancesResponse>
-    ): SubscribeTokenBalancesResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeTokenBalancesResponse>): SubscribeTokenBalancesResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.subscription_id = 0n;
         if (value !== undefined)
-            reflectionMergePartial<SubscribeTokenBalancesResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeTokenBalancesResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeTokenBalancesResponse
-    ): SubscribeTokenBalancesResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeTokenBalancesResponse): SubscribeTokenBalancesResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1078,134 +825,75 @@ class SubscribeTokenBalancesResponse$Type extends MessageType<SubscribeTokenBala
                     message.subscription_id = reader.uint64().toBigInt();
                     break;
                 case /* types.TokenBalance balance */ 2:
-                    message.balance = TokenBalance.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.balance
-                    );
+                    message.balance = TokenBalance.internalBinaryRead(reader, reader.uint32(), options, message.balance);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeTokenBalancesResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeTokenBalancesResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* uint64 subscription_id = 1; */
         if (message.subscription_id !== 0n)
             writer.tag(1, WireType.Varint).uint64(message.subscription_id);
         /* types.TokenBalance balance = 2; */
         if (message.balance)
-            TokenBalance.internalBinaryWrite(
-                message.balance,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TokenBalance.internalBinaryWrite(message.balance, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.SubscribeTokenBalancesResponse
  */
-export const SubscribeTokenBalancesResponse =
-    new SubscribeTokenBalancesResponse$Type();
+export const SubscribeTokenBalancesResponse = new SubscribeTokenBalancesResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RetrieveTokensRequest$Type extends MessageType<RetrieveTokensRequest> {
     constructor() {
         super("world.RetrieveTokensRequest", [
-            { no: 1, name: "query", kind: "message", T: () => TokenQuery },
+            { no: 1, name: "query", kind: "message", T: () => TokenQuery }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveTokensRequest>
-    ): RetrieveTokensRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveTokensRequest>): RetrieveTokensRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
             reflectionMergePartial<RetrieveTokensRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveTokensRequest
-    ): RetrieveTokensRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokensRequest): RetrieveTokensRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.TokenQuery query */ 1:
-                    message.query = TokenQuery.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.query
-                    );
+                    message.query = TokenQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveTokensRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTokensRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.TokenQuery query = 1; */
         if (message.query)
-            TokenQuery.internalBinaryWrite(
-                message.query,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TokenQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1217,46 +905,20 @@ export const RetrieveTokensRequest = new RetrieveTokensRequest$Type();
 class SubscribeTokensRequest$Type extends MessageType<SubscribeTokensRequest> {
     constructor() {
         super("world.SubscribeTokensRequest", [
-            {
-                no: 1,
-                name: "contract_addresses",
-                kind: "scalar",
-                localName: "contract_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "token_ids",
-                kind: "scalar",
-                localName: "token_ids",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeTokensRequest>
-    ): SubscribeTokensRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeTokensRequest>): SubscribeTokensRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.contract_addresses = [];
         message.token_ids = [];
         if (value !== undefined)
-            reflectionMergePartial<SubscribeTokensRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeTokensRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeTokensRequest
-    ): SubscribeTokensRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeTokensRequest): SubscribeTokensRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1269,42 +931,24 @@ class SubscribeTokensRequest$Type extends MessageType<SubscribeTokensRequest> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeTokensRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeTokensRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes contract_addresses = 1; */
         for (let i = 0; i < message.contract_addresses.length; i++)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.contract_addresses[i]);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
         /* repeated bytes token_ids = 2; */
         for (let i = 0; i < message.token_ids.length; i++)
             writer.tag(2, WireType.LengthDelimited).bytes(message.token_ids[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1316,44 +960,20 @@ export const SubscribeTokensRequest = new SubscribeTokensRequest$Type();
 class RetrieveTokensResponse$Type extends MessageType<RetrieveTokensResponse> {
     constructor() {
         super("world.RetrieveTokensResponse", [
-            {
-                no: 1,
-                name: "next_cursor",
-                kind: "scalar",
-                localName: "next_cursor",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "tokens",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Token,
-            },
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "tokens", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Token }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveTokensResponse>
-    ): RetrieveTokensResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveTokensResponse>): RetrieveTokensResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.next_cursor = "";
         message.tokens = [];
         if (value !== undefined)
-            reflectionMergePartial<RetrieveTokensResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveTokensResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveTokensResponse
-    ): RetrieveTokensResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokensResponse): RetrieveTokensResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1361,55 +981,29 @@ class RetrieveTokensResponse$Type extends MessageType<RetrieveTokensResponse> {
                     message.next_cursor = reader.string();
                     break;
                 case /* repeated types.Token tokens */ 2:
-                    message.tokens.push(
-                        Token.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.tokens.push(Token.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveTokensResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTokensResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string next_cursor = 1; */
         if (message.next_cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
         /* repeated types.Token tokens = 2; */
         for (let i = 0; i < message.tokens.length; i++)
-            Token.internalBinaryWrite(
-                message.tokens[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Token.internalBinaryWrite(message.tokens[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1421,38 +1015,19 @@ export const RetrieveTokensResponse = new RetrieveTokensResponse$Type();
 class SubscribeTokensResponse$Type extends MessageType<SubscribeTokensResponse> {
     constructor() {
         super("world.SubscribeTokensResponse", [
-            {
-                no: 1,
-                name: "subscription_id",
-                kind: "scalar",
-                localName: "subscription_id",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            { no: 2, name: "token", kind: "message", T: () => Token },
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "token", kind: "message", T: () => Token }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeTokensResponse>
-    ): SubscribeTokensResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeTokensResponse>): SubscribeTokensResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.subscription_id = 0n;
         if (value !== undefined)
-            reflectionMergePartial<SubscribeTokensResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeTokensResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeTokensResponse
-    ): SubscribeTokensResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeTokensResponse): SubscribeTokensResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1460,54 +1035,29 @@ class SubscribeTokensResponse$Type extends MessageType<SubscribeTokensResponse> 
                     message.subscription_id = reader.uint64().toBigInt();
                     break;
                 case /* types.Token token */ 2:
-                    message.token = Token.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.token
-                    );
+                    message.token = Token.internalBinaryRead(reader, reader.uint32(), options, message.token);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeTokensResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeTokensResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* uint64 subscription_id = 1; */
         if (message.subscription_id !== 0n)
             writer.tag(1, WireType.Varint).uint64(message.subscription_id);
         /* types.Token token = 2; */
         if (message.token)
-            Token.internalBinaryWrite(
-                message.token,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Token.internalBinaryWrite(message.token, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1519,55 +1069,22 @@ export const SubscribeTokensResponse = new SubscribeTokensResponse$Type();
 class UpdateTokenSubscriptionRequest$Type extends MessageType<UpdateTokenSubscriptionRequest> {
     constructor() {
         super("world.UpdateTokenSubscriptionRequest", [
-            {
-                no: 1,
-                name: "subscription_id",
-                kind: "scalar",
-                localName: "subscription_id",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 2,
-                name: "contract_addresses",
-                kind: "scalar",
-                localName: "contract_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 3,
-                name: "token_ids",
-                kind: "scalar",
-                localName: "token_ids",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
-    create(
-        value?: PartialMessage<UpdateTokenSubscriptionRequest>
-    ): UpdateTokenSubscriptionRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<UpdateTokenSubscriptionRequest>): UpdateTokenSubscriptionRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.subscription_id = 0n;
         message.contract_addresses = [];
         message.token_ids = [];
         if (value !== undefined)
-            reflectionMergePartial<UpdateTokenSubscriptionRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<UpdateTokenSubscriptionRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: UpdateTokenSubscriptionRequest
-    ): UpdateTokenSubscriptionRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UpdateTokenSubscriptionRequest): UpdateTokenSubscriptionRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1583,195 +1100,100 @@ class UpdateTokenSubscriptionRequest$Type extends MessageType<UpdateTokenSubscri
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: UpdateTokenSubscriptionRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: UpdateTokenSubscriptionRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* uint64 subscription_id = 1; */
         if (message.subscription_id !== 0n)
             writer.tag(1, WireType.Varint).uint64(message.subscription_id);
         /* repeated bytes contract_addresses = 2; */
         for (let i = 0; i < message.contract_addresses.length; i++)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .bytes(message.contract_addresses[i]);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
         /* repeated bytes token_ids = 3; */
         for (let i = 0; i < message.token_ids.length; i++)
             writer.tag(3, WireType.LengthDelimited).bytes(message.token_ids[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.UpdateTokenSubscriptionRequest
  */
-export const UpdateTokenSubscriptionRequest =
-    new UpdateTokenSubscriptionRequest$Type();
+export const UpdateTokenSubscriptionRequest = new UpdateTokenSubscriptionRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RetrieveTokenBalancesRequest$Type extends MessageType<RetrieveTokenBalancesRequest> {
     constructor() {
         super("world.RetrieveTokenBalancesRequest", [
-            {
-                no: 1,
-                name: "query",
-                kind: "message",
-                T: () => TokenBalanceQuery,
-            },
+            { no: 1, name: "query", kind: "message", T: () => TokenBalanceQuery }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveTokenBalancesRequest>
-    ): RetrieveTokenBalancesRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveTokenBalancesRequest>): RetrieveTokenBalancesRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<RetrieveTokenBalancesRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveTokenBalancesRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveTokenBalancesRequest
-    ): RetrieveTokenBalancesRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenBalancesRequest): RetrieveTokenBalancesRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.TokenBalanceQuery query */ 1:
-                    message.query = TokenBalanceQuery.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.query
-                    );
+                    message.query = TokenBalanceQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveTokenBalancesRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTokenBalancesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.TokenBalanceQuery query = 1; */
         if (message.query)
-            TokenBalanceQuery.internalBinaryWrite(
-                message.query,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TokenBalanceQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.RetrieveTokenBalancesRequest
  */
-export const RetrieveTokenBalancesRequest =
-    new RetrieveTokenBalancesRequest$Type();
+export const RetrieveTokenBalancesRequest = new RetrieveTokenBalancesRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class SubscribeTokenBalancesRequest$Type extends MessageType<SubscribeTokenBalancesRequest> {
     constructor() {
         super("world.SubscribeTokenBalancesRequest", [
-            {
-                no: 1,
-                name: "account_addresses",
-                kind: "scalar",
-                localName: "account_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "contract_addresses",
-                kind: "scalar",
-                localName: "contract_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 3,
-                name: "token_ids",
-                kind: "scalar",
-                localName: "token_ids",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "account_addresses", kind: "scalar", localName: "account_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeTokenBalancesRequest>
-    ): SubscribeTokenBalancesRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeTokenBalancesRequest>): SubscribeTokenBalancesRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.account_addresses = [];
         message.contract_addresses = [];
         message.token_ids = [];
         if (value !== undefined)
-            reflectionMergePartial<SubscribeTokenBalancesRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeTokenBalancesRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeTokenBalancesRequest
-    ): SubscribeTokenBalancesRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeTokenBalancesRequest): SubscribeTokenBalancesRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1787,97 +1209,52 @@ class SubscribeTokenBalancesRequest$Type extends MessageType<SubscribeTokenBalan
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeTokenBalancesRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeTokenBalancesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes account_addresses = 1; */
         for (let i = 0; i < message.account_addresses.length; i++)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.account_addresses[i]);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.account_addresses[i]);
         /* repeated bytes contract_addresses = 2; */
         for (let i = 0; i < message.contract_addresses.length; i++)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .bytes(message.contract_addresses[i]);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
         /* repeated bytes token_ids = 3; */
         for (let i = 0; i < message.token_ids.length; i++)
             writer.tag(3, WireType.LengthDelimited).bytes(message.token_ids[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.SubscribeTokenBalancesRequest
  */
-export const SubscribeTokenBalancesRequest =
-    new SubscribeTokenBalancesRequest$Type();
+export const SubscribeTokenBalancesRequest = new SubscribeTokenBalancesRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RetrieveTokenBalancesResponse$Type extends MessageType<RetrieveTokenBalancesResponse> {
     constructor() {
         super("world.RetrieveTokenBalancesResponse", [
-            {
-                no: 1,
-                name: "next_cursor",
-                kind: "scalar",
-                localName: "next_cursor",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "balances",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => TokenBalance,
-            },
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "balances", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TokenBalance }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveTokenBalancesResponse>
-    ): RetrieveTokenBalancesResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveTokenBalancesResponse>): RetrieveTokenBalancesResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.next_cursor = "";
         message.balances = [];
         if (value !== undefined)
-            reflectionMergePartial<RetrieveTokenBalancesResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveTokenBalancesResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveTokenBalancesResponse
-    ): RetrieveTokenBalancesResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenBalancesResponse): RetrieveTokenBalancesResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1885,194 +1262,100 @@ class RetrieveTokenBalancesResponse$Type extends MessageType<RetrieveTokenBalanc
                     message.next_cursor = reader.string();
                     break;
                 case /* repeated types.TokenBalance balances */ 2:
-                    message.balances.push(
-                        TokenBalance.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.balances.push(TokenBalance.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveTokenBalancesResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTokenBalancesResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string next_cursor = 1; */
         if (message.next_cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
         /* repeated types.TokenBalance balances = 2; */
         for (let i = 0; i < message.balances.length; i++)
-            TokenBalance.internalBinaryWrite(
-                message.balances[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TokenBalance.internalBinaryWrite(message.balances[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.RetrieveTokenBalancesResponse
  */
-export const RetrieveTokenBalancesResponse =
-    new RetrieveTokenBalancesResponse$Type();
+export const RetrieveTokenBalancesResponse = new RetrieveTokenBalancesResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RetrieveTransactionsRequest$Type extends MessageType<RetrieveTransactionsRequest> {
     constructor() {
         super("world.RetrieveTransactionsRequest", [
-            {
-                no: 1,
-                name: "query",
-                kind: "message",
-                T: () => TransactionQuery,
-            },
+            { no: 1, name: "query", kind: "message", T: () => TransactionQuery }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveTransactionsRequest>
-    ): RetrieveTransactionsRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveTransactionsRequest>): RetrieveTransactionsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<RetrieveTransactionsRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveTransactionsRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveTransactionsRequest
-    ): RetrieveTransactionsRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTransactionsRequest): RetrieveTransactionsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.TransactionQuery query */ 1:
-                    message.query = TransactionQuery.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.query
-                    );
+                    message.query = TransactionQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveTransactionsRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTransactionsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.TransactionQuery query = 1; */
         if (message.query)
-            TransactionQuery.internalBinaryWrite(
-                message.query,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TransactionQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.RetrieveTransactionsRequest
  */
-export const RetrieveTransactionsRequest =
-    new RetrieveTransactionsRequest$Type();
+export const RetrieveTransactionsRequest = new RetrieveTransactionsRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RetrieveTransactionsResponse$Type extends MessageType<RetrieveTransactionsResponse> {
     constructor() {
         super("world.RetrieveTransactionsResponse", [
-            {
-                no: 1,
-                name: "next_cursor",
-                kind: "scalar",
-                localName: "next_cursor",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "transactions",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Transaction,
-            },
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "transactions", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Transaction }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveTransactionsResponse>
-    ): RetrieveTransactionsResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveTransactionsResponse>): RetrieveTransactionsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.next_cursor = "";
         message.transactions = [];
         if (value !== undefined)
-            reflectionMergePartial<RetrieveTransactionsResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveTransactionsResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveTransactionsResponse
-    ): RetrieveTransactionsResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTransactionsResponse): RetrieveTransactionsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2080,194 +1363,100 @@ class RetrieveTransactionsResponse$Type extends MessageType<RetrieveTransactions
                     message.next_cursor = reader.string();
                     break;
                 case /* repeated types.Transaction transactions */ 2:
-                    message.transactions.push(
-                        Transaction.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.transactions.push(Transaction.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveTransactionsResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTransactionsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string next_cursor = 1; */
         if (message.next_cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
         /* repeated types.Transaction transactions = 2; */
         for (let i = 0; i < message.transactions.length; i++)
-            Transaction.internalBinaryWrite(
-                message.transactions[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Transaction.internalBinaryWrite(message.transactions[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.RetrieveTransactionsResponse
  */
-export const RetrieveTransactionsResponse =
-    new RetrieveTransactionsResponse$Type();
+export const RetrieveTransactionsResponse = new RetrieveTransactionsResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RetrieveTokenCollectionsRequest$Type extends MessageType<RetrieveTokenCollectionsRequest> {
     constructor() {
         super("world.RetrieveTokenCollectionsRequest", [
-            {
-                no: 1,
-                name: "query",
-                kind: "message",
-                T: () => TokenBalanceQuery,
-            },
+            { no: 1, name: "query", kind: "message", T: () => TokenBalanceQuery }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveTokenCollectionsRequest>
-    ): RetrieveTokenCollectionsRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveTokenCollectionsRequest>): RetrieveTokenCollectionsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<RetrieveTokenCollectionsRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveTokenCollectionsRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveTokenCollectionsRequest
-    ): RetrieveTokenCollectionsRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenCollectionsRequest): RetrieveTokenCollectionsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.TokenBalanceQuery query */ 1:
-                    message.query = TokenBalanceQuery.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.query
-                    );
+                    message.query = TokenBalanceQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveTokenCollectionsRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTokenCollectionsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.TokenBalanceQuery query = 1; */
         if (message.query)
-            TokenBalanceQuery.internalBinaryWrite(
-                message.query,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TokenBalanceQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.RetrieveTokenCollectionsRequest
  */
-export const RetrieveTokenCollectionsRequest =
-    new RetrieveTokenCollectionsRequest$Type();
+export const RetrieveTokenCollectionsRequest = new RetrieveTokenCollectionsRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RetrieveTokenCollectionsResponse$Type extends MessageType<RetrieveTokenCollectionsResponse> {
     constructor() {
         super("world.RetrieveTokenCollectionsResponse", [
-            {
-                no: 1,
-                name: "next_cursor",
-                kind: "scalar",
-                localName: "next_cursor",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "tokens",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => TokenCollection,
-            },
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "tokens", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TokenCollection }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveTokenCollectionsResponse>
-    ): RetrieveTokenCollectionsResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveTokenCollectionsResponse>): RetrieveTokenCollectionsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.next_cursor = "";
         message.tokens = [];
         if (value !== undefined)
-            reflectionMergePartial<RetrieveTokenCollectionsResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveTokenCollectionsResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveTokenCollectionsResponse
-    ): RetrieveTokenCollectionsResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenCollectionsResponse): RetrieveTokenCollectionsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2275,97 +1464,52 @@ class RetrieveTokenCollectionsResponse$Type extends MessageType<RetrieveTokenCol
                     message.next_cursor = reader.string();
                     break;
                 case /* repeated types.TokenCollection tokens */ 2:
-                    message.tokens.push(
-                        TokenCollection.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.tokens.push(TokenCollection.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveTokenCollectionsResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTokenCollectionsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string next_cursor = 1; */
         if (message.next_cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
         /* repeated types.TokenCollection tokens = 2; */
         for (let i = 0; i < message.tokens.length; i++)
-            TokenCollection.internalBinaryWrite(
-                message.tokens[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TokenCollection.internalBinaryWrite(message.tokens[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.RetrieveTokenCollectionsResponse
  */
-export const RetrieveTokenCollectionsResponse =
-    new RetrieveTokenCollectionsResponse$Type();
+export const RetrieveTokenCollectionsResponse = new RetrieveTokenCollectionsResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class SubscribeIndexerRequest$Type extends MessageType<SubscribeIndexerRequest> {
     constructor() {
         super("world.SubscribeIndexerRequest", [
-            {
-                no: 1,
-                name: "contract_address",
-                kind: "scalar",
-                localName: "contract_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeIndexerRequest>
-    ): SubscribeIndexerRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeIndexerRequest>): SubscribeIndexerRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.contract_address = new Uint8Array(0);
         if (value !== undefined)
-            reflectionMergePartial<SubscribeIndexerRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeIndexerRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeIndexerRequest
-    ): SubscribeIndexerRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeIndexerRequest): SubscribeIndexerRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2375,39 +1519,21 @@ class SubscribeIndexerRequest$Type extends MessageType<SubscribeIndexerRequest> 
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeIndexerRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeIndexerRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes contract_address = 1; */
         if (message.contract_address.length)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.contract_address);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_address);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2419,61 +1545,24 @@ export const SubscribeIndexerRequest = new SubscribeIndexerRequest$Type();
 class SubscribeIndexerResponse$Type extends MessageType<SubscribeIndexerResponse> {
     constructor() {
         super("world.SubscribeIndexerResponse", [
-            {
-                no: 1,
-                name: "head",
-                kind: "scalar",
-                T: 3 /*ScalarType.INT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 2,
-                name: "tps",
-                kind: "scalar",
-                T: 3 /*ScalarType.INT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 3,
-                name: "last_block_timestamp",
-                kind: "scalar",
-                localName: "last_block_timestamp",
-                T: 3 /*ScalarType.INT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 4,
-                name: "contract_address",
-                kind: "scalar",
-                localName: "contract_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "head", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "tps", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 3, name: "last_block_timestamp", kind: "scalar", localName: "last_block_timestamp", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 4, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeIndexerResponse>
-    ): SubscribeIndexerResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeIndexerResponse>): SubscribeIndexerResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.head = 0n;
         message.tps = 0n;
         message.last_block_timestamp = 0n;
         message.contract_address = new Uint8Array(0);
         if (value !== undefined)
-            reflectionMergePartial<SubscribeIndexerResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeIndexerResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeIndexerResponse
-    ): SubscribeIndexerResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeIndexerResponse): SubscribeIndexerResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2492,27 +1581,15 @@ class SubscribeIndexerResponse$Type extends MessageType<SubscribeIndexerResponse
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeIndexerResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeIndexerResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* int64 head = 1; */
         if (message.head !== 0n)
             writer.tag(1, WireType.Varint).int64(message.head);
@@ -2524,16 +1601,10 @@ class SubscribeIndexerResponse$Type extends MessageType<SubscribeIndexerResponse
             writer.tag(3, WireType.Varint).int64(message.last_block_timestamp);
         /* bytes contract_address = 4; */
         if (message.contract_address.length)
-            writer
-                .tag(4, WireType.LengthDelimited)
-                .bytes(message.contract_address);
+            writer.tag(4, WireType.LengthDelimited).bytes(message.contract_address);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2547,53 +1618,31 @@ class WorldMetadataRequest$Type extends MessageType<WorldMetadataRequest> {
         super("world.WorldMetadataRequest", []);
     }
     create(value?: PartialMessage<WorldMetadataRequest>): WorldMetadataRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
             reflectionMergePartial<WorldMetadataRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: WorldMetadataRequest
-    ): WorldMetadataRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WorldMetadataRequest): WorldMetadataRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: WorldMetadataRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: WorldMetadataRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2605,74 +1654,41 @@ export const WorldMetadataRequest = new WorldMetadataRequest$Type();
 class WorldMetadataResponse$Type extends MessageType<WorldMetadataResponse> {
     constructor() {
         super("world.WorldMetadataResponse", [
-            { no: 1, name: "world", kind: "message", T: () => World$ },
+            { no: 1, name: "world", kind: "message", T: () => World$ }
         ]);
     }
-    create(
-        value?: PartialMessage<WorldMetadataResponse>
-    ): WorldMetadataResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<WorldMetadataResponse>): WorldMetadataResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
             reflectionMergePartial<WorldMetadataResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: WorldMetadataResponse
-    ): WorldMetadataResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WorldMetadataResponse): WorldMetadataResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.World world */ 1:
-                    message.world = World$.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.world
-                    );
+                    message.world = World$.internalBinaryRead(reader, reader.uint32(), options, message.world);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: WorldMetadataResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: WorldMetadataResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.World world = 1; */
         if (message.world)
-            World$.internalBinaryWrite(
-                message.world,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            World$.internalBinaryWrite(message.world, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2684,78 +1700,41 @@ export const WorldMetadataResponse = new WorldMetadataResponse$Type();
 class SubscribeEntitiesRequest$Type extends MessageType<SubscribeEntitiesRequest> {
     constructor() {
         super("world.SubscribeEntitiesRequest", [
-            { no: 1, name: "clause", kind: "message", T: () => Clause },
+            { no: 1, name: "clause", kind: "message", T: () => Clause }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeEntitiesRequest>
-    ): SubscribeEntitiesRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeEntitiesRequest>): SubscribeEntitiesRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<SubscribeEntitiesRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeEntitiesRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeEntitiesRequest
-    ): SubscribeEntitiesRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeEntitiesRequest): SubscribeEntitiesRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Clause clause */ 1:
-                    message.clause = Clause.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.clause
-                    );
+                    message.clause = Clause.internalBinaryRead(reader, reader.uint32(), options, message.clause);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeEntitiesRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeEntitiesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Clause clause = 1; */
         if (message.clause)
-            Clause.internalBinaryWrite(
-                message.clause,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Clause.internalBinaryWrite(message.clause, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2767,122 +1746,65 @@ export const SubscribeEntitiesRequest = new SubscribeEntitiesRequest$Type();
 class SubscribeEventMessagesRequest$Type extends MessageType<SubscribeEventMessagesRequest> {
     constructor() {
         super("world.SubscribeEventMessagesRequest", [
-            { no: 1, name: "clause", kind: "message", T: () => Clause },
+            { no: 1, name: "clause", kind: "message", T: () => Clause }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeEventMessagesRequest>
-    ): SubscribeEventMessagesRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeEventMessagesRequest>): SubscribeEventMessagesRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<SubscribeEventMessagesRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeEventMessagesRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeEventMessagesRequest
-    ): SubscribeEventMessagesRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeEventMessagesRequest): SubscribeEventMessagesRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Clause clause */ 1:
-                    message.clause = Clause.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.clause
-                    );
+                    message.clause = Clause.internalBinaryRead(reader, reader.uint32(), options, message.clause);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeEventMessagesRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeEventMessagesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Clause clause = 1; */
         if (message.clause)
-            Clause.internalBinaryWrite(
-                message.clause,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Clause.internalBinaryWrite(message.clause, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.SubscribeEventMessagesRequest
  */
-export const SubscribeEventMessagesRequest =
-    new SubscribeEventMessagesRequest$Type();
+export const SubscribeEventMessagesRequest = new SubscribeEventMessagesRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class UpdateEntitiesSubscriptionRequest$Type extends MessageType<UpdateEntitiesSubscriptionRequest> {
     constructor() {
         super("world.UpdateEntitiesSubscriptionRequest", [
-            {
-                no: 1,
-                name: "subscription_id",
-                kind: "scalar",
-                localName: "subscription_id",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            { no: 2, name: "clause", kind: "message", T: () => Clause },
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "clause", kind: "message", T: () => Clause }
         ]);
     }
-    create(
-        value?: PartialMessage<UpdateEntitiesSubscriptionRequest>
-    ): UpdateEntitiesSubscriptionRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<UpdateEntitiesSubscriptionRequest>): UpdateEntitiesSubscriptionRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.subscription_id = 0n;
         if (value !== undefined)
-            reflectionMergePartial<UpdateEntitiesSubscriptionRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<UpdateEntitiesSubscriptionRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: UpdateEntitiesSubscriptionRequest
-    ): UpdateEntitiesSubscriptionRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UpdateEntitiesSubscriptionRequest): UpdateEntitiesSubscriptionRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2890,98 +1812,53 @@ class UpdateEntitiesSubscriptionRequest$Type extends MessageType<UpdateEntitiesS
                     message.subscription_id = reader.uint64().toBigInt();
                     break;
                 case /* types.Clause clause */ 2:
-                    message.clause = Clause.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.clause
-                    );
+                    message.clause = Clause.internalBinaryRead(reader, reader.uint32(), options, message.clause);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: UpdateEntitiesSubscriptionRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: UpdateEntitiesSubscriptionRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* uint64 subscription_id = 1; */
         if (message.subscription_id !== 0n)
             writer.tag(1, WireType.Varint).uint64(message.subscription_id);
         /* types.Clause clause = 2; */
         if (message.clause)
-            Clause.internalBinaryWrite(
-                message.clause,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Clause.internalBinaryWrite(message.clause, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.UpdateEntitiesSubscriptionRequest
  */
-export const UpdateEntitiesSubscriptionRequest =
-    new UpdateEntitiesSubscriptionRequest$Type();
+export const UpdateEntitiesSubscriptionRequest = new UpdateEntitiesSubscriptionRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class UpdateEventMessagesSubscriptionRequest$Type extends MessageType<UpdateEventMessagesSubscriptionRequest> {
     constructor() {
         super("world.UpdateEventMessagesSubscriptionRequest", [
-            {
-                no: 1,
-                name: "subscription_id",
-                kind: "scalar",
-                localName: "subscription_id",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            { no: 2, name: "clause", kind: "message", T: () => Clause },
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "clause", kind: "message", T: () => Clause }
         ]);
     }
-    create(
-        value?: PartialMessage<UpdateEventMessagesSubscriptionRequest>
-    ): UpdateEventMessagesSubscriptionRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<UpdateEventMessagesSubscriptionRequest>): UpdateEventMessagesSubscriptionRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.subscription_id = 0n;
         if (value !== undefined)
-            reflectionMergePartial<UpdateEventMessagesSubscriptionRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<UpdateEventMessagesSubscriptionRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: UpdateEventMessagesSubscriptionRequest
-    ): UpdateEventMessagesSubscriptionRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UpdateEventMessagesSubscriptionRequest): UpdateEventMessagesSubscriptionRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2989,108 +1866,58 @@ class UpdateEventMessagesSubscriptionRequest$Type extends MessageType<UpdateEven
                     message.subscription_id = reader.uint64().toBigInt();
                     break;
                 case /* types.Clause clause */ 2:
-                    message.clause = Clause.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.clause
-                    );
+                    message.clause = Clause.internalBinaryRead(reader, reader.uint32(), options, message.clause);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: UpdateEventMessagesSubscriptionRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: UpdateEventMessagesSubscriptionRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* uint64 subscription_id = 1; */
         if (message.subscription_id !== 0n)
             writer.tag(1, WireType.Varint).uint64(message.subscription_id);
         /* types.Clause clause = 2; */
         if (message.clause)
-            Clause.internalBinaryWrite(
-                message.clause,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Clause.internalBinaryWrite(message.clause, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.UpdateEventMessagesSubscriptionRequest
  */
-export const UpdateEventMessagesSubscriptionRequest =
-    new UpdateEventMessagesSubscriptionRequest$Type();
+export const UpdateEventMessagesSubscriptionRequest = new UpdateEventMessagesSubscriptionRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class SubscribeEntityResponse$Type extends MessageType<SubscribeEntityResponse> {
     constructor() {
         super("world.SubscribeEntityResponse", [
             { no: 1, name: "entity", kind: "message", T: () => Entity },
-            {
-                no: 2,
-                name: "subscription_id",
-                kind: "scalar",
-                localName: "subscription_id",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
+            { no: 2, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeEntityResponse>
-    ): SubscribeEntityResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeEntityResponse>): SubscribeEntityResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.subscription_id = 0n;
         if (value !== undefined)
-            reflectionMergePartial<SubscribeEntityResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeEntityResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeEntityResponse
-    ): SubscribeEntityResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeEntityResponse): SubscribeEntityResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Entity entity */ 1:
-                    message.entity = Entity.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.entity
-                    );
+                    message.entity = Entity.internalBinaryRead(reader, reader.uint32(), options, message.entity);
                     break;
                 case /* uint64 subscription_id */ 2:
                     message.subscription_id = reader.uint64().toBigInt();
@@ -3098,44 +1925,24 @@ class SubscribeEntityResponse$Type extends MessageType<SubscribeEntityResponse> 
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeEntityResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeEntityResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Entity entity = 1; */
         if (message.entity)
-            Entity.internalBinaryWrite(
-                message.entity,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Entity.internalBinaryWrite(message.entity, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* uint64 subscription_id = 2; */
         if (message.subscription_id !== 0n)
             writer.tag(2, WireType.Varint).uint64(message.subscription_id);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3147,78 +1954,41 @@ export const SubscribeEntityResponse = new SubscribeEntityResponse$Type();
 class RetrieveEntitiesRequest$Type extends MessageType<RetrieveEntitiesRequest> {
     constructor() {
         super("world.RetrieveEntitiesRequest", [
-            { no: 1, name: "query", kind: "message", T: () => Query },
+            { no: 1, name: "query", kind: "message", T: () => Query }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveEntitiesRequest>
-    ): RetrieveEntitiesRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveEntitiesRequest>): RetrieveEntitiesRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<RetrieveEntitiesRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveEntitiesRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveEntitiesRequest
-    ): RetrieveEntitiesRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveEntitiesRequest): RetrieveEntitiesRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Query query */ 1:
-                    message.query = Query.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.query
-                    );
+                    message.query = Query.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveEntitiesRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveEntitiesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Query query = 1; */
         if (message.query)
-            Query.internalBinaryWrite(
-                message.query,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Query.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3230,128 +2000,66 @@ export const RetrieveEntitiesRequest = new RetrieveEntitiesRequest$Type();
 class RetrieveEventMessagesRequest$Type extends MessageType<RetrieveEventMessagesRequest> {
     constructor() {
         super("world.RetrieveEventMessagesRequest", [
-            { no: 1, name: "query", kind: "message", T: () => Query },
+            { no: 1, name: "query", kind: "message", T: () => Query }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveEventMessagesRequest>
-    ): RetrieveEventMessagesRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveEventMessagesRequest>): RetrieveEventMessagesRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<RetrieveEventMessagesRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveEventMessagesRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveEventMessagesRequest
-    ): RetrieveEventMessagesRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveEventMessagesRequest): RetrieveEventMessagesRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Query query */ 1:
-                    message.query = Query.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.query
-                    );
+                    message.query = Query.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveEventMessagesRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveEventMessagesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Query query = 1; */
         if (message.query)
-            Query.internalBinaryWrite(
-                message.query,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Query.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.RetrieveEventMessagesRequest
  */
-export const RetrieveEventMessagesRequest =
-    new RetrieveEventMessagesRequest$Type();
+export const RetrieveEventMessagesRequest = new RetrieveEventMessagesRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RetrieveEntitiesResponse$Type extends MessageType<RetrieveEntitiesResponse> {
     constructor() {
         super("world.RetrieveEntitiesResponse", [
-            {
-                no: 1,
-                name: "next_cursor",
-                kind: "scalar",
-                localName: "next_cursor",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "entities",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Entity,
-            },
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "entities", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Entity }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveEntitiesResponse>
-    ): RetrieveEntitiesResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveEntitiesResponse>): RetrieveEntitiesResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.next_cursor = "";
         message.entities = [];
         if (value !== undefined)
-            reflectionMergePartial<RetrieveEntitiesResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveEntitiesResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveEntitiesResponse
-    ): RetrieveEntitiesResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveEntitiesResponse): RetrieveEntitiesResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3359,55 +2067,29 @@ class RetrieveEntitiesResponse$Type extends MessageType<RetrieveEntitiesResponse
                     message.next_cursor = reader.string();
                     break;
                 case /* repeated types.Entity entities */ 2:
-                    message.entities.push(
-                        Entity.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.entities.push(Entity.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveEntitiesResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveEntitiesResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string next_cursor = 1; */
         if (message.next_cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
         /* repeated types.Entity entities = 2; */
         for (let i = 0; i < message.entities.length; i++)
-            Entity.internalBinaryWrite(
-                message.entities[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Entity.internalBinaryWrite(message.entities[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3419,74 +2101,41 @@ export const RetrieveEntitiesResponse = new RetrieveEntitiesResponse$Type();
 class RetrieveEventsRequest$Type extends MessageType<RetrieveEventsRequest> {
     constructor() {
         super("world.RetrieveEventsRequest", [
-            { no: 1, name: "query", kind: "message", T: () => EventQuery },
+            { no: 1, name: "query", kind: "message", T: () => EventQuery }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveEventsRequest>
-    ): RetrieveEventsRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveEventsRequest>): RetrieveEventsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
             reflectionMergePartial<RetrieveEventsRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveEventsRequest
-    ): RetrieveEventsRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveEventsRequest): RetrieveEventsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.EventQuery query */ 1:
-                    message.query = EventQuery.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.query
-                    );
+                    message.query = EventQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveEventsRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveEventsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.EventQuery query = 1; */
         if (message.query)
-            EventQuery.internalBinaryWrite(
-                message.query,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            EventQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3498,44 +2147,20 @@ export const RetrieveEventsRequest = new RetrieveEventsRequest$Type();
 class RetrieveEventsResponse$Type extends MessageType<RetrieveEventsResponse> {
     constructor() {
         super("world.RetrieveEventsResponse", [
-            {
-                no: 1,
-                name: "next_cursor",
-                kind: "scalar",
-                localName: "next_cursor",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "events",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Event,
-            },
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "events", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Event }
         ]);
     }
-    create(
-        value?: PartialMessage<RetrieveEventsResponse>
-    ): RetrieveEventsResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<RetrieveEventsResponse>): RetrieveEventsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.next_cursor = "";
         message.events = [];
         if (value !== undefined)
-            reflectionMergePartial<RetrieveEventsResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<RetrieveEventsResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: RetrieveEventsResponse
-    ): RetrieveEventsResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveEventsResponse): RetrieveEventsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3543,55 +2168,29 @@ class RetrieveEventsResponse$Type extends MessageType<RetrieveEventsResponse> {
                     message.next_cursor = reader.string();
                     break;
                 case /* repeated types.Event events */ 2:
-                    message.events.push(
-                        Event.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.events.push(Event.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: RetrieveEventsResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveEventsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string next_cursor = 1; */
         if (message.next_cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
         /* repeated types.Event events = 2; */
         for (let i = 0; i < message.events.length; i++)
-            Event.internalBinaryWrite(
-                message.events[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Event.internalBinaryWrite(message.events[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3603,86 +2202,42 @@ export const RetrieveEventsResponse = new RetrieveEventsResponse$Type();
 class SubscribeEventsRequest$Type extends MessageType<SubscribeEventsRequest> {
     constructor() {
         super("world.SubscribeEventsRequest", [
-            {
-                no: 1,
-                name: "keys",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => KeysClause,
-            },
+            { no: 1, name: "keys", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => KeysClause }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeEventsRequest>
-    ): SubscribeEventsRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeEventsRequest>): SubscribeEventsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.keys = [];
         if (value !== undefined)
-            reflectionMergePartial<SubscribeEventsRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeEventsRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeEventsRequest
-    ): SubscribeEventsRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeEventsRequest): SubscribeEventsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* repeated types.KeysClause keys */ 1:
-                    message.keys.push(
-                        KeysClause.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.keys.push(KeysClause.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeEventsRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeEventsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated types.KeysClause keys = 1; */
         for (let i = 0; i < message.keys.length; i++)
-            KeysClause.internalBinaryWrite(
-                message.keys[i],
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            KeysClause.internalBinaryWrite(message.keys[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3694,78 +2249,41 @@ export const SubscribeEventsRequest = new SubscribeEventsRequest$Type();
 class SubscribeEventsResponse$Type extends MessageType<SubscribeEventsResponse> {
     constructor() {
         super("world.SubscribeEventsResponse", [
-            { no: 1, name: "event", kind: "message", T: () => Event },
+            { no: 1, name: "event", kind: "message", T: () => Event }
         ]);
     }
-    create(
-        value?: PartialMessage<SubscribeEventsResponse>
-    ): SubscribeEventsResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<SubscribeEventsResponse>): SubscribeEventsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<SubscribeEventsResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<SubscribeEventsResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: SubscribeEventsResponse
-    ): SubscribeEventsResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeEventsResponse): SubscribeEventsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Event event */ 1:
-                    message.event = Event.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.event
-                    );
+                    message.event = Event.internalBinaryRead(reader, reader.uint32(), options, message.event);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: SubscribeEventsResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: SubscribeEventsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Event event = 1; */
         if (message.event)
-            Event.internalBinaryWrite(
-                message.event,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Event.internalBinaryWrite(message.event, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3777,39 +2295,20 @@ export const SubscribeEventsResponse = new SubscribeEventsResponse$Type();
 class PublishMessageRequest$Type extends MessageType<PublishMessageRequest> {
     constructor() {
         super("world.PublishMessageRequest", [
-            {
-                no: 1,
-                name: "signature",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "message",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
+            { no: 1, name: "signature", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "message", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(
-        value?: PartialMessage<PublishMessageRequest>
-    ): PublishMessageRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<PublishMessageRequest>): PublishMessageRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.signature = [];
         message.message = "";
         if (value !== undefined)
             reflectionMergePartial<PublishMessageRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: PublishMessageRequest
-    ): PublishMessageRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PublishMessageRequest): PublishMessageRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3822,27 +2321,15 @@ class PublishMessageRequest$Type extends MessageType<PublishMessageRequest> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: PublishMessageRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: PublishMessageRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes signature = 1; */
         for (let i = 0; i < message.signature.length; i++)
             writer.tag(1, WireType.LengthDelimited).bytes(message.signature[i]);
@@ -3851,11 +2338,7 @@ class PublishMessageRequest$Type extends MessageType<PublishMessageRequest> {
             writer.tag(2, WireType.LengthDelimited).string(message.message);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3867,36 +2350,18 @@ export const PublishMessageRequest = new PublishMessageRequest$Type();
 class PublishMessageResponse$Type extends MessageType<PublishMessageResponse> {
     constructor() {
         super("world.PublishMessageResponse", [
-            {
-                no: 1,
-                name: "entity_id",
-                kind: "scalar",
-                localName: "entity_id",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "entity_id", kind: "scalar", localName: "entity_id", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
-    create(
-        value?: PartialMessage<PublishMessageResponse>
-    ): PublishMessageResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<PublishMessageResponse>): PublishMessageResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.entity_id = new Uint8Array(0);
         if (value !== undefined)
-            reflectionMergePartial<PublishMessageResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<PublishMessageResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: PublishMessageResponse
-    ): PublishMessageResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PublishMessageResponse): PublishMessageResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3906,37 +2371,21 @@ class PublishMessageResponse$Type extends MessageType<PublishMessageResponse> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: PublishMessageResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: PublishMessageResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes entity_id = 1; */
         if (message.entity_id.length)
             writer.tag(1, WireType.LengthDelimited).bytes(message.entity_id);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3948,86 +2397,42 @@ export const PublishMessageResponse = new PublishMessageResponse$Type();
 class PublishMessageBatchRequest$Type extends MessageType<PublishMessageBatchRequest> {
     constructor() {
         super("world.PublishMessageBatchRequest", [
-            {
-                no: 1,
-                name: "messages",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => PublishMessageRequest,
-            },
+            { no: 1, name: "messages", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => PublishMessageRequest }
         ]);
     }
-    create(
-        value?: PartialMessage<PublishMessageBatchRequest>
-    ): PublishMessageBatchRequest {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<PublishMessageBatchRequest>): PublishMessageBatchRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.messages = [];
         if (value !== undefined)
-            reflectionMergePartial<PublishMessageBatchRequest>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<PublishMessageBatchRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: PublishMessageBatchRequest
-    ): PublishMessageBatchRequest {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PublishMessageBatchRequest): PublishMessageBatchRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* repeated world.PublishMessageRequest messages */ 1:
-                    message.messages.push(
-                        PublishMessageRequest.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.messages.push(PublishMessageRequest.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: PublishMessageBatchRequest,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: PublishMessageBatchRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated world.PublishMessageRequest messages = 1; */
         for (let i = 0; i < message.messages.length; i++)
-            PublishMessageRequest.internalBinaryWrite(
-                message.messages[i],
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            PublishMessageRequest.internalBinaryWrite(message.messages[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -4039,235 +2444,73 @@ export const PublishMessageBatchRequest = new PublishMessageBatchRequest$Type();
 class PublishMessageBatchResponse$Type extends MessageType<PublishMessageBatchResponse> {
     constructor() {
         super("world.PublishMessageBatchResponse", [
-            {
-                no: 1,
-                name: "responses",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => PublishMessageResponse,
-            },
+            { no: 1, name: "responses", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => PublishMessageResponse }
         ]);
     }
-    create(
-        value?: PartialMessage<PublishMessageBatchResponse>
-    ): PublishMessageBatchResponse {
-        const message = globalThis.Object.create(this.messagePrototype!);
+    create(value?: PartialMessage<PublishMessageBatchResponse>): PublishMessageBatchResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.responses = [];
         if (value !== undefined)
-            reflectionMergePartial<PublishMessageBatchResponse>(
-                this,
-                message,
-                value
-            );
+            reflectionMergePartial<PublishMessageBatchResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: PublishMessageBatchResponse
-    ): PublishMessageBatchResponse {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PublishMessageBatchResponse): PublishMessageBatchResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* repeated world.PublishMessageResponse responses */ 1:
-                    message.responses.push(
-                        PublishMessageResponse.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.responses.push(PublishMessageResponse.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: PublishMessageBatchResponse,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: PublishMessageBatchResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated world.PublishMessageResponse responses = 1; */
         for (let i = 0; i < message.responses.length; i++)
-            PublishMessageResponse.internalBinaryWrite(
-                message.responses[i],
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            PublishMessageResponse.internalBinaryWrite(message.responses[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
 /**
  * @generated MessageType for protobuf message world.PublishMessageBatchResponse
  */
-export const PublishMessageBatchResponse =
-    new PublishMessageBatchResponse$Type();
+export const PublishMessageBatchResponse = new PublishMessageBatchResponse$Type();
 /**
  * @generated ServiceType for protobuf service world.World
  */
 export const World = new ServiceType("world.World", [
-    {
-        name: "SubscribeIndexer",
-        serverStreaming: true,
-        options: {},
-        I: SubscribeIndexerRequest,
-        O: SubscribeIndexerResponse,
-    },
-    {
-        name: "WorldMetadata",
-        options: {},
-        I: WorldMetadataRequest,
-        O: WorldMetadataResponse,
-    },
-    {
-        name: "SubscribeEntities",
-        serverStreaming: true,
-        options: {},
-        I: SubscribeEntitiesRequest,
-        O: SubscribeEntityResponse,
-    },
-    {
-        name: "UpdateEntitiesSubscription",
-        options: {},
-        I: UpdateEntitiesSubscriptionRequest,
-        O: Empty,
-    },
-    {
-        name: "RetrieveEntities",
-        options: {},
-        I: RetrieveEntitiesRequest,
-        O: RetrieveEntitiesResponse,
-    },
-    {
-        name: "SubscribeEventMessages",
-        serverStreaming: true,
-        options: {},
-        I: SubscribeEventMessagesRequest,
-        O: SubscribeEntityResponse,
-    },
-    {
-        name: "UpdateEventMessagesSubscription",
-        options: {},
-        I: UpdateEventMessagesSubscriptionRequest,
-        O: Empty,
-    },
-    {
-        name: "SubscribeTokenBalances",
-        serverStreaming: true,
-        options: {},
-        I: SubscribeTokenBalancesRequest,
-        O: SubscribeTokenBalancesResponse,
-    },
-    {
-        name: "UpdateTokenBalancesSubscription",
-        options: {},
-        I: UpdateTokenBalancesSubscriptionRequest,
-        O: Empty,
-    },
-    {
-        name: "SubscribeTokens",
-        serverStreaming: true,
-        options: {},
-        I: SubscribeTokensRequest,
-        O: SubscribeTokensResponse,
-    },
-    {
-        name: "UpdateTokensSubscription",
-        options: {},
-        I: UpdateTokenSubscriptionRequest,
-        O: Empty,
-    },
-    {
-        name: "RetrieveEventMessages",
-        options: {},
-        I: RetrieveEventMessagesRequest,
-        O: RetrieveEntitiesResponse,
-    },
-    {
-        name: "RetrieveEvents",
-        options: {},
-        I: RetrieveEventsRequest,
-        O: RetrieveEventsResponse,
-    },
-    {
-        name: "SubscribeEvents",
-        serverStreaming: true,
-        options: {},
-        I: SubscribeEventsRequest,
-        O: SubscribeEventsResponse,
-    },
-    {
-        name: "RetrieveTokens",
-        options: {},
-        I: RetrieveTokensRequest,
-        O: RetrieveTokensResponse,
-    },
-    {
-        name: "RetrieveTokenBalances",
-        options: {},
-        I: RetrieveTokenBalancesRequest,
-        O: RetrieveTokenBalancesResponse,
-    },
-    {
-        name: "RetrieveTransactions",
-        options: {},
-        I: RetrieveTransactionsRequest,
-        O: RetrieveTransactionsResponse,
-    },
-    {
-        name: "SubscribeTransactions",
-        serverStreaming: true,
-        options: {},
-        I: SubscribeTransactionsRequest,
-        O: SubscribeTransactionsResponse,
-    },
-    {
-        name: "RetrieveControllers",
-        options: {},
-        I: RetrieveControllersRequest,
-        O: RetrieveControllersResponse,
-    },
-    {
-        name: "RetrieveTokenCollections",
-        options: {},
-        I: RetrieveTokenCollectionsRequest,
-        O: RetrieveTokenCollectionsResponse,
-    },
-    {
-        name: "PublishMessage",
-        options: {},
-        I: PublishMessageRequest,
-        O: PublishMessageResponse,
-    },
-    {
-        name: "PublishMessageBatch",
-        options: {},
-        I: PublishMessageBatchRequest,
-        O: PublishMessageBatchResponse,
-    },
+    { name: "SubscribeIndexer", serverStreaming: true, options: {}, I: SubscribeIndexerRequest, O: SubscribeIndexerResponse },
+    { name: "WorldMetadata", options: {}, I: WorldMetadataRequest, O: WorldMetadataResponse },
+    { name: "SubscribeEntities", serverStreaming: true, options: {}, I: SubscribeEntitiesRequest, O: SubscribeEntityResponse },
+    { name: "UpdateEntitiesSubscription", options: {}, I: UpdateEntitiesSubscriptionRequest, O: Empty },
+    { name: "RetrieveEntities", options: {}, I: RetrieveEntitiesRequest, O: RetrieveEntitiesResponse },
+    { name: "SubscribeEventMessages", serverStreaming: true, options: {}, I: SubscribeEventMessagesRequest, O: SubscribeEntityResponse },
+    { name: "UpdateEventMessagesSubscription", options: {}, I: UpdateEventMessagesSubscriptionRequest, O: Empty },
+    { name: "SubscribeTokenBalances", serverStreaming: true, options: {}, I: SubscribeTokenBalancesRequest, O: SubscribeTokenBalancesResponse },
+    { name: "UpdateTokenBalancesSubscription", options: {}, I: UpdateTokenBalancesSubscriptionRequest, O: Empty },
+    { name: "SubscribeTokens", serverStreaming: true, options: {}, I: SubscribeTokensRequest, O: SubscribeTokensResponse },
+    { name: "UpdateTokensSubscription", options: {}, I: UpdateTokenSubscriptionRequest, O: Empty },
+    { name: "RetrieveEventMessages", options: {}, I: RetrieveEventMessagesRequest, O: RetrieveEntitiesResponse },
+    { name: "RetrieveEvents", options: {}, I: RetrieveEventsRequest, O: RetrieveEventsResponse },
+    { name: "SubscribeEvents", serverStreaming: true, options: {}, I: SubscribeEventsRequest, O: SubscribeEventsResponse },
+    { name: "RetrieveTokens", options: {}, I: RetrieveTokensRequest, O: RetrieveTokensResponse },
+    { name: "RetrieveTokenBalances", options: {}, I: RetrieveTokenBalancesRequest, O: RetrieveTokenBalancesResponse },
+    { name: "RetrieveTransactions", options: {}, I: RetrieveTransactionsRequest, O: RetrieveTransactionsResponse },
+    { name: "SubscribeTransactions", serverStreaming: true, options: {}, I: SubscribeTransactionsRequest, O: SubscribeTransactionsResponse },
+    { name: "RetrieveControllers", options: {}, I: RetrieveControllersRequest, O: RetrieveControllersResponse },
+    { name: "RetrieveTokenCollections", options: {}, I: RetrieveTokenCollectionsRequest, O: RetrieveTokenCollectionsResponse },
+    { name: "PublishMessage", options: {}, I: PublishMessageRequest, O: PublishMessageResponse },
+    { name: "PublishMessageBatch", options: {}, I: PublishMessageBatchRequest, O: PublishMessageBatchResponse }
 ]);

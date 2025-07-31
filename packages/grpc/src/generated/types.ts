@@ -173,38 +173,33 @@ export interface Clause {
     /**
      * @generated from protobuf oneof: clause_type
      */
-    clause_type:
-        | {
-              oneofKind: "hashed_keys";
-              /**
-               * @generated from protobuf field: types.HashedKeysClause hashed_keys = 1
-               */
-              hashed_keys: HashedKeysClause;
-          }
-        | {
-              oneofKind: "keys";
-              /**
-               * @generated from protobuf field: types.KeysClause keys = 2
-               */
-              keys: KeysClause;
-          }
-        | {
-              oneofKind: "member";
-              /**
-               * @generated from protobuf field: types.MemberClause member = 3
-               */
-              member: MemberClause;
-          }
-        | {
-              oneofKind: "composite";
-              /**
-               * @generated from protobuf field: types.CompositeClause composite = 4
-               */
-              composite: CompositeClause;
-          }
-        | {
-              oneofKind: undefined;
-          };
+    clause_type: {
+        oneofKind: "hashed_keys";
+        /**
+         * @generated from protobuf field: types.HashedKeysClause hashed_keys = 1
+         */
+        hashed_keys: HashedKeysClause;
+    } | {
+        oneofKind: "keys";
+        /**
+         * @generated from protobuf field: types.KeysClause keys = 2
+         */
+        keys: KeysClause;
+    } | {
+        oneofKind: "member";
+        /**
+         * @generated from protobuf field: types.MemberClause member = 3
+         */
+        member: MemberClause;
+    } | {
+        oneofKind: "composite";
+        /**
+         * @generated from protobuf field: types.CompositeClause composite = 4
+         */
+        composite: CompositeClause;
+    } | {
+        oneofKind: undefined;
+    };
 }
 /**
  * @generated from protobuf message types.KeysClause
@@ -239,31 +234,27 @@ export interface MemberValue {
     /**
      * @generated from protobuf oneof: value_type
      */
-    value_type:
-        | {
-              oneofKind: "primitive";
-              /**
-               * @generated from protobuf field: types.Primitive primitive = 1
-               */
-              primitive: Primitive;
-          }
-        | {
-              oneofKind: "string";
-              /**
-               * @generated from protobuf field: string string = 2
-               */
-              string: string;
-          }
-        | {
-              oneofKind: "list";
-              /**
-               * @generated from protobuf field: types.MemberValueList list = 3
-               */
-              list: MemberValueList;
-          }
-        | {
-              oneofKind: undefined;
-          };
+    value_type: {
+        oneofKind: "primitive";
+        /**
+         * @generated from protobuf field: types.Primitive primitive = 1
+         */
+        primitive: Primitive;
+    } | {
+        oneofKind: "string";
+        /**
+         * @generated from protobuf field: string string = 2
+         */
+        string: string;
+    } | {
+        oneofKind: "list";
+        /**
+         * @generated from protobuf field: types.MemberValueList list = 3
+         */
+        list: MemberValueList;
+    } | {
+        oneofKind: undefined;
+    };
 }
 /**
  * @generated from protobuf message types.MemberValueList
@@ -696,7 +687,7 @@ export enum PatternMatching {
     /**
      * @generated from protobuf enum value: VariableLen = 1;
      */
-    VariableLen = 1,
+    VariableLen = 1
 }
 /**
  * @generated from protobuf enum types.LogicalOperator
@@ -709,7 +700,7 @@ export enum LogicalOperator {
     /**
      * @generated from protobuf enum value: OR = 1;
      */
-    OR = 1,
+    OR = 1
 }
 /**
  * @generated from protobuf enum types.ComparisonOperator
@@ -746,7 +737,7 @@ export enum ComparisonOperator {
     /**
      * @generated from protobuf enum value: NOT_IN = 7;
      */
-    NOT_IN = 7,
+    NOT_IN = 7
 }
 /**
  * @generated from protobuf enum types.OrderDirection
@@ -759,7 +750,7 @@ export enum OrderDirection {
     /**
      * @generated from protobuf enum value: DESC = 1;
      */
-    DESC = 1,
+    DESC = 1
 }
 /**
  * @generated from protobuf enum types.PaginationDirection
@@ -772,7 +763,7 @@ export enum PaginationDirection {
     /**
      * @generated from protobuf enum value: BACKWARD = 1;
      */
-    BACKWARD = 1,
+    BACKWARD = 1
 }
 /**
  * @generated from protobuf enum types.CallType
@@ -785,44 +776,26 @@ export enum CallType {
     /**
      * @generated from protobuf enum value: EXECUTE_FROM_OUTSIDE = 1;
      */
-    EXECUTE_FROM_OUTSIDE = 1,
+    EXECUTE_FROM_OUTSIDE = 1
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class World$Type extends MessageType<World> {
     constructor() {
         super("types.World", [
-            {
-                no: 1,
-                name: "world_address",
-                kind: "scalar",
-                localName: "world_address",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "models",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Model,
-            },
+            { no: 1, name: "world_address", kind: "scalar", localName: "world_address", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "models", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Model }
         ]);
     }
     create(value?: PartialMessage<World>): World {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.world_address = "";
         message.models = [];
         if (value !== undefined)
             reflectionMergePartial<World>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: World
-    ): World {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: World): World {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -830,57 +803,29 @@ class World$Type extends MessageType<World> {
                     message.world_address = reader.string();
                     break;
                 case /* repeated types.Model models */ 2:
-                    message.models.push(
-                        Model.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.models.push(Model.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: World,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: World, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string world_address = 1; */
         if (message.world_address !== "")
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .string(message.world_address);
+            writer.tag(1, WireType.LengthDelimited).string(message.world_address);
         /* repeated types.Model models = 2; */
         for (let i = 0; i < message.models.length; i++)
-            Model.internalBinaryWrite(
-                message.models[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Model.internalBinaryWrite(message.models[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -892,63 +837,19 @@ export const World = new World$Type();
 class Model$Type extends MessageType<Model> {
     constructor() {
         super("types.Model", [
-            {
-                no: 1,
-                name: "selector",
-                kind: "scalar",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "namespace",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
+            { no: 1, name: "selector", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "namespace", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            {
-                no: 4,
-                name: "packed_size",
-                kind: "scalar",
-                localName: "packed_size",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 5,
-                name: "unpacked_size",
-                kind: "scalar",
-                localName: "unpacked_size",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 6,
-                name: "class_hash",
-                kind: "scalar",
-                localName: "class_hash",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 7,
-                name: "layout",
-                kind: "scalar",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 8,
-                name: "schema",
-                kind: "scalar",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 9,
-                name: "contract_address",
-                kind: "scalar",
-                localName: "contract_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 4, name: "packed_size", kind: "scalar", localName: "packed_size", T: 13 /*ScalarType.UINT32*/ },
+            { no: 5, name: "unpacked_size", kind: "scalar", localName: "unpacked_size", T: 13 /*ScalarType.UINT32*/ },
+            { no: 6, name: "class_hash", kind: "scalar", localName: "class_hash", T: 12 /*ScalarType.BYTES*/ },
+            { no: 7, name: "layout", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 8, name: "schema", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 9, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<Model>): Model {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.selector = new Uint8Array(0);
         message.namespace = "";
         message.name = "";
@@ -962,14 +863,8 @@ class Model$Type extends MessageType<Model> {
             reflectionMergePartial<Model>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Model
-    ): Model {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Model): Model {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1003,27 +898,15 @@ class Model$Type extends MessageType<Model> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Model,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Model, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes selector = 1; */
         if (message.selector.length)
             writer.tag(1, WireType.LengthDelimited).bytes(message.selector);
@@ -1050,16 +933,10 @@ class Model$Type extends MessageType<Model> {
             writer.tag(8, WireType.LengthDelimited).bytes(message.schema);
         /* bytes contract_address = 9; */
         if (message.contract_address.length)
-            writer
-                .tag(9, WireType.LengthDelimited)
-                .bytes(message.contract_address);
+            writer.tag(9, WireType.LengthDelimited).bytes(message.contract_address);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1071,38 +948,20 @@ export const Model = new Model$Type();
 class Entity$Type extends MessageType<Entity> {
     constructor() {
         super("types.Entity", [
-            {
-                no: 1,
-                name: "hashed_keys",
-                kind: "scalar",
-                localName: "hashed_keys",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "models",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Struct,
-            },
+            { no: 1, name: "hashed_keys", kind: "scalar", localName: "hashed_keys", T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "models", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Struct }
         ]);
     }
     create(value?: PartialMessage<Entity>): Entity {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.hashed_keys = new Uint8Array(0);
         message.models = [];
         if (value !== undefined)
             reflectionMergePartial<Entity>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Entity
-    ): Entity {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Entity): Entity {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1110,55 +969,29 @@ class Entity$Type extends MessageType<Entity> {
                     message.hashed_keys = reader.bytes();
                     break;
                 case /* repeated types.Struct models */ 2:
-                    message.models.push(
-                        Struct.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.models.push(Struct.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Entity,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Entity, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes hashed_keys = 1; */
         if (message.hashed_keys.length)
             writer.tag(1, WireType.LengthDelimited).bytes(message.hashed_keys);
         /* repeated types.Struct models = 2; */
         for (let i = 0; i < message.models.length; i++)
-            Struct.internalBinaryWrite(
-                message.models[i],
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Struct.internalBinaryWrite(message.models[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1170,31 +1003,13 @@ export const Entity = new Entity$Type();
 class Event$Type extends MessageType<Event> {
     constructor() {
         super("types.Event", [
-            {
-                no: 1,
-                name: "keys",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "data",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 3,
-                name: "transaction_hash",
-                kind: "scalar",
-                localName: "transaction_hash",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "keys", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "data", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "transaction_hash", kind: "scalar", localName: "transaction_hash", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<Event>): Event {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.keys = [];
         message.data = [];
         message.transaction_hash = new Uint8Array(0);
@@ -1202,14 +1017,8 @@ class Event$Type extends MessageType<Event> {
             reflectionMergePartial<Event>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Event
-    ): Event {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Event): Event {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1225,27 +1034,15 @@ class Event$Type extends MessageType<Event> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Event,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Event, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes keys = 1; */
         for (let i = 0; i < message.keys.length; i++)
             writer.tag(1, WireType.LengthDelimited).bytes(message.keys[i]);
@@ -1254,16 +1051,10 @@ class Event$Type extends MessageType<Event> {
             writer.tag(2, WireType.LengthDelimited).bytes(message.data[i]);
         /* bytes transaction_hash = 3; */
         if (message.transaction_hash.length)
-            writer
-                .tag(3, WireType.LengthDelimited)
-                .bytes(message.transaction_hash);
+            writer.tag(3, WireType.LengthDelimited).bytes(message.transaction_hash);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1276,31 +1067,14 @@ class Query$Type extends MessageType<Query> {
     constructor() {
         super("types.Query", [
             { no: 1, name: "clause", kind: "message", T: () => Clause },
-            {
-                no: 2,
-                name: "no_hashed_keys",
-                kind: "scalar",
-                localName: "no_hashed_keys",
-                T: 8 /*ScalarType.BOOL*/,
-            },
-            {
-                no: 3,
-                name: "models",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 9 /*ScalarType.STRING*/,
-            },
+            { no: 2, name: "no_hashed_keys", kind: "scalar", localName: "no_hashed_keys", T: 8 /*ScalarType.BOOL*/ },
+            { no: 3, name: "models", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "pagination", kind: "message", T: () => Pagination },
-            {
-                no: 5,
-                name: "historical",
-                kind: "scalar",
-                T: 8 /*ScalarType.BOOL*/,
-            },
+            { no: 5, name: "historical", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<Query>): Query {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.no_hashed_keys = false;
         message.models = [];
         message.historical = false;
@@ -1308,24 +1082,13 @@ class Query$Type extends MessageType<Query> {
             reflectionMergePartial<Query>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Query
-    ): Query {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Query): Query {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Clause clause */ 1:
-                    message.clause = Clause.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.clause
-                    );
+                    message.clause = Clause.internalBinaryRead(reader, reader.uint32(), options, message.clause);
                     break;
                 case /* bool no_hashed_keys */ 2:
                     message.no_hashed_keys = reader.bool();
@@ -1334,12 +1097,7 @@ class Query$Type extends MessageType<Query> {
                     message.models.push(reader.string());
                     break;
                 case /* types.Pagination pagination */ 4:
-                    message.pagination = Pagination.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.pagination
-                    );
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
                     break;
                 case /* bool historical */ 5:
                     message.historical = reader.bool();
@@ -1347,34 +1105,18 @@ class Query$Type extends MessageType<Query> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Query,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Query, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Clause clause = 1; */
         if (message.clause)
-            Clause.internalBinaryWrite(
-                message.clause,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Clause.internalBinaryWrite(message.clause, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* bool no_hashed_keys = 2; */
         if (message.no_hashed_keys !== false)
             writer.tag(2, WireType.Varint).bool(message.no_hashed_keys);
@@ -1383,21 +1125,13 @@ class Query$Type extends MessageType<Query> {
             writer.tag(3, WireType.LengthDelimited).string(message.models[i]);
         /* types.Pagination pagination = 4; */
         if (message.pagination)
-            Pagination.internalBinaryWrite(
-                message.pagination,
-                writer.tag(4, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
         /* bool historical = 5; */
         if (message.historical !== false)
             writer.tag(5, WireType.Varint).bool(message.historical);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1410,87 +1144,47 @@ class EventQuery$Type extends MessageType<EventQuery> {
     constructor() {
         super("types.EventQuery", [
             { no: 1, name: "keys", kind: "message", T: () => KeysClause },
-            { no: 2, name: "pagination", kind: "message", T: () => Pagination },
+            { no: 2, name: "pagination", kind: "message", T: () => Pagination }
         ]);
     }
     create(value?: PartialMessage<EventQuery>): EventQuery {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
             reflectionMergePartial<EventQuery>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: EventQuery
-    ): EventQuery {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: EventQuery): EventQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.KeysClause keys */ 1:
-                    message.keys = KeysClause.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.keys
-                    );
+                    message.keys = KeysClause.internalBinaryRead(reader, reader.uint32(), options, message.keys);
                     break;
                 case /* types.Pagination pagination */ 2:
-                    message.pagination = Pagination.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.pagination
-                    );
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: EventQuery,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: EventQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.KeysClause keys = 1; */
         if (message.keys)
-            KeysClause.internalBinaryWrite(
-                message.keys,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            KeysClause.internalBinaryWrite(message.keys, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* types.Pagination pagination = 2; */
         if (message.pagination)
-            Pagination.internalBinaryWrite(
-                message.pagination,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1502,158 +1196,75 @@ export const EventQuery = new EventQuery$Type();
 class Clause$Type extends MessageType<Clause> {
     constructor() {
         super("types.Clause", [
-            {
-                no: 1,
-                name: "hashed_keys",
-                kind: "message",
-                localName: "hashed_keys",
-                oneof: "clause_type",
-                T: () => HashedKeysClause,
-            },
-            {
-                no: 2,
-                name: "keys",
-                kind: "message",
-                oneof: "clause_type",
-                T: () => KeysClause,
-            },
-            {
-                no: 3,
-                name: "member",
-                kind: "message",
-                oneof: "clause_type",
-                T: () => MemberClause,
-            },
-            {
-                no: 4,
-                name: "composite",
-                kind: "message",
-                oneof: "clause_type",
-                T: () => CompositeClause,
-            },
+            { no: 1, name: "hashed_keys", kind: "message", localName: "hashed_keys", oneof: "clause_type", T: () => HashedKeysClause },
+            { no: 2, name: "keys", kind: "message", oneof: "clause_type", T: () => KeysClause },
+            { no: 3, name: "member", kind: "message", oneof: "clause_type", T: () => MemberClause },
+            { no: 4, name: "composite", kind: "message", oneof: "clause_type", T: () => CompositeClause }
         ]);
     }
     create(value?: PartialMessage<Clause>): Clause {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.clause_type = { oneofKind: undefined };
         if (value !== undefined)
             reflectionMergePartial<Clause>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Clause
-    ): Clause {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Clause): Clause {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.HashedKeysClause hashed_keys */ 1:
                     message.clause_type = {
                         oneofKind: "hashed_keys",
-                        hashed_keys: HashedKeysClause.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.clause_type as any).hashed_keys
-                        ),
+                        hashed_keys: HashedKeysClause.internalBinaryRead(reader, reader.uint32(), options, (message.clause_type as any).hashed_keys)
                     };
                     break;
                 case /* types.KeysClause keys */ 2:
                     message.clause_type = {
                         oneofKind: "keys",
-                        keys: KeysClause.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.clause_type as any).keys
-                        ),
+                        keys: KeysClause.internalBinaryRead(reader, reader.uint32(), options, (message.clause_type as any).keys)
                     };
                     break;
                 case /* types.MemberClause member */ 3:
                     message.clause_type = {
                         oneofKind: "member",
-                        member: MemberClause.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.clause_type as any).member
-                        ),
+                        member: MemberClause.internalBinaryRead(reader, reader.uint32(), options, (message.clause_type as any).member)
                     };
                     break;
                 case /* types.CompositeClause composite */ 4:
                     message.clause_type = {
                         oneofKind: "composite",
-                        composite: CompositeClause.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.clause_type as any).composite
-                        ),
+                        composite: CompositeClause.internalBinaryRead(reader, reader.uint32(), options, (message.clause_type as any).composite)
                     };
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Clause,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Clause, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.HashedKeysClause hashed_keys = 1; */
         if (message.clause_type.oneofKind === "hashed_keys")
-            HashedKeysClause.internalBinaryWrite(
-                message.clause_type.hashed_keys,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            HashedKeysClause.internalBinaryWrite(message.clause_type.hashed_keys, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* types.KeysClause keys = 2; */
         if (message.clause_type.oneofKind === "keys")
-            KeysClause.internalBinaryWrite(
-                message.clause_type.keys,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            KeysClause.internalBinaryWrite(message.clause_type.keys, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         /* types.MemberClause member = 3; */
         if (message.clause_type.oneofKind === "member")
-            MemberClause.internalBinaryWrite(
-                message.clause_type.member,
-                writer.tag(3, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            MemberClause.internalBinaryWrite(message.clause_type.member, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         /* types.CompositeClause composite = 4; */
         if (message.clause_type.oneofKind === "composite")
-            CompositeClause.internalBinaryWrite(
-                message.clause_type.composite,
-                writer.tag(4, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            CompositeClause.internalBinaryWrite(message.clause_type.composite, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1665,31 +1276,13 @@ export const Clause = new Clause$Type();
 class KeysClause$Type extends MessageType<KeysClause> {
     constructor() {
         super("types.KeysClause", [
-            {
-                no: 2,
-                name: "keys",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 3,
-                name: "pattern_matching",
-                kind: "enum",
-                localName: "pattern_matching",
-                T: () => ["types.PatternMatching", PatternMatching],
-            },
-            {
-                no: 4,
-                name: "models",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 9 /*ScalarType.STRING*/,
-            },
+            { no: 2, name: "keys", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "pattern_matching", kind: "enum", localName: "pattern_matching", T: () => ["types.PatternMatching", PatternMatching] },
+            { no: 4, name: "models", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<KeysClause>): KeysClause {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.keys = [];
         message.pattern_matching = 0;
         message.models = [];
@@ -1697,14 +1290,8 @@ class KeysClause$Type extends MessageType<KeysClause> {
             reflectionMergePartial<KeysClause>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: KeysClause
-    ): KeysClause {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: KeysClause): KeysClause {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1720,27 +1307,15 @@ class KeysClause$Type extends MessageType<KeysClause> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: KeysClause,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: KeysClause, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes keys = 2; */
         for (let i = 0; i < message.keys.length; i++)
             writer.tag(2, WireType.LengthDelimited).bytes(message.keys[i]);
@@ -1752,11 +1327,7 @@ class KeysClause$Type extends MessageType<KeysClause> {
             writer.tag(4, WireType.LengthDelimited).string(message.models[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1768,31 +1339,18 @@ export const KeysClause = new KeysClause$Type();
 class HashedKeysClause$Type extends MessageType<HashedKeysClause> {
     constructor() {
         super("types.HashedKeysClause", [
-            {
-                no: 1,
-                name: "hashed_keys",
-                kind: "scalar",
-                localName: "hashed_keys",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "hashed_keys", kind: "scalar", localName: "hashed_keys", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<HashedKeysClause>): HashedKeysClause {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.hashed_keys = [];
         if (value !== undefined)
             reflectionMergePartial<HashedKeysClause>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: HashedKeysClause
-    ): HashedKeysClause {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: HashedKeysClause): HashedKeysClause {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -1802,39 +1360,21 @@ class HashedKeysClause$Type extends MessageType<HashedKeysClause> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: HashedKeysClause,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: HashedKeysClause, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes hashed_keys = 1; */
         for (let i = 0; i < message.hashed_keys.length; i++)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.hashed_keys[i]);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.hashed_keys[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1846,125 +1386,65 @@ export const HashedKeysClause = new HashedKeysClause$Type();
 class MemberValue$Type extends MessageType<MemberValue> {
     constructor() {
         super("types.MemberValue", [
-            {
-                no: 1,
-                name: "primitive",
-                kind: "message",
-                oneof: "value_type",
-                T: () => Primitive,
-            },
-            {
-                no: 2,
-                name: "string",
-                kind: "scalar",
-                oneof: "value_type",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 3,
-                name: "list",
-                kind: "message",
-                oneof: "value_type",
-                T: () => MemberValueList,
-            },
+            { no: 1, name: "primitive", kind: "message", oneof: "value_type", T: () => Primitive },
+            { no: 2, name: "string", kind: "scalar", oneof: "value_type", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "list", kind: "message", oneof: "value_type", T: () => MemberValueList }
         ]);
     }
     create(value?: PartialMessage<MemberValue>): MemberValue {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.value_type = { oneofKind: undefined };
         if (value !== undefined)
             reflectionMergePartial<MemberValue>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: MemberValue
-    ): MemberValue {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: MemberValue): MemberValue {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.Primitive primitive */ 1:
                     message.value_type = {
                         oneofKind: "primitive",
-                        primitive: Primitive.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.value_type as any).primitive
-                        ),
+                        primitive: Primitive.internalBinaryRead(reader, reader.uint32(), options, (message.value_type as any).primitive)
                     };
                     break;
                 case /* string string */ 2:
                     message.value_type = {
                         oneofKind: "string",
-                        string: reader.string(),
+                        string: reader.string()
                     };
                     break;
                 case /* types.MemberValueList list */ 3:
                     message.value_type = {
                         oneofKind: "list",
-                        list: MemberValueList.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options,
-                            (message.value_type as any).list
-                        ),
+                        list: MemberValueList.internalBinaryRead(reader, reader.uint32(), options, (message.value_type as any).list)
                     };
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: MemberValue,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: MemberValue, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.Primitive primitive = 1; */
         if (message.value_type.oneofKind === "primitive")
-            Primitive.internalBinaryWrite(
-                message.value_type.primitive,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Primitive.internalBinaryWrite(message.value_type.primitive, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* string string = 2; */
         if (message.value_type.oneofKind === "string")
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .string(message.value_type.string);
+            writer.tag(2, WireType.LengthDelimited).string(message.value_type.string);
         /* types.MemberValueList list = 3; */
         if (message.value_type.oneofKind === "list")
-            MemberValueList.internalBinaryWrite(
-                message.value_type.list,
-                writer.tag(3, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            MemberValueList.internalBinaryWrite(message.value_type.list, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -1976,80 +1456,42 @@ export const MemberValue = new MemberValue$Type();
 class MemberValueList$Type extends MessageType<MemberValueList> {
     constructor() {
         super("types.MemberValueList", [
-            {
-                no: 1,
-                name: "values",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => MemberValue,
-            },
+            { no: 1, name: "values", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => MemberValue }
         ]);
     }
     create(value?: PartialMessage<MemberValueList>): MemberValueList {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.values = [];
         if (value !== undefined)
             reflectionMergePartial<MemberValueList>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: MemberValueList
-    ): MemberValueList {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: MemberValueList): MemberValueList {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* repeated types.MemberValue values */ 1:
-                    message.values.push(
-                        MemberValue.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.values.push(MemberValue.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: MemberValueList,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: MemberValueList, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated types.MemberValue values = 1; */
         for (let i = 0; i < message.values.length; i++)
-            MemberValue.internalBinaryWrite(
-                message.values[i],
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            MemberValue.internalBinaryWrite(message.values[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2061,29 +1503,14 @@ export const MemberValueList = new MemberValueList$Type();
 class MemberClause$Type extends MessageType<MemberClause> {
     constructor() {
         super("types.MemberClause", [
-            {
-                no: 2,
-                name: "model",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 3,
-                name: "member",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 4,
-                name: "operator",
-                kind: "enum",
-                T: () => ["types.ComparisonOperator", ComparisonOperator],
-            },
-            { no: 5, name: "value", kind: "message", T: () => MemberValue },
+            { no: 2, name: "model", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "member", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "operator", kind: "enum", T: () => ["types.ComparisonOperator", ComparisonOperator] },
+            { no: 5, name: "value", kind: "message", T: () => MemberValue }
         ]);
     }
     create(value?: PartialMessage<MemberClause>): MemberClause {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.model = "";
         message.member = "";
         message.operator = 0;
@@ -2091,14 +1518,8 @@ class MemberClause$Type extends MessageType<MemberClause> {
             reflectionMergePartial<MemberClause>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: MemberClause
-    ): MemberClause {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: MemberClause): MemberClause {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2112,37 +1533,20 @@ class MemberClause$Type extends MessageType<MemberClause> {
                     message.operator = reader.int32();
                     break;
                 case /* types.MemberValue value */ 5:
-                    message.value = MemberValue.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.value
-                    );
+                    message.value = MemberValue.internalBinaryRead(reader, reader.uint32(), options, message.value);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: MemberClause,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: MemberClause, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string model = 2; */
         if (message.model !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.model);
@@ -2154,18 +1558,10 @@ class MemberClause$Type extends MessageType<MemberClause> {
             writer.tag(4, WireType.Varint).int32(message.operator);
         /* types.MemberValue value = 5; */
         if (message.value)
-            MemberValue.internalBinaryWrite(
-                message.value,
-                writer.tag(5, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            MemberValue.internalBinaryWrite(message.value, writer.tag(5, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2177,37 +1573,20 @@ export const MemberClause = new MemberClause$Type();
 class CompositeClause$Type extends MessageType<CompositeClause> {
     constructor() {
         super("types.CompositeClause", [
-            {
-                no: 3,
-                name: "operator",
-                kind: "enum",
-                T: () => ["types.LogicalOperator", LogicalOperator],
-            },
-            {
-                no: 4,
-                name: "clauses",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => Clause,
-            },
+            { no: 3, name: "operator", kind: "enum", T: () => ["types.LogicalOperator", LogicalOperator] },
+            { no: 4, name: "clauses", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Clause }
         ]);
     }
     create(value?: PartialMessage<CompositeClause>): CompositeClause {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.operator = 0;
         message.clauses = [];
         if (value !== undefined)
             reflectionMergePartial<CompositeClause>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: CompositeClause
-    ): CompositeClause {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CompositeClause): CompositeClause {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2215,55 +1594,29 @@ class CompositeClause$Type extends MessageType<CompositeClause> {
                     message.operator = reader.int32();
                     break;
                 case /* repeated types.Clause clauses */ 4:
-                    message.clauses.push(
-                        Clause.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.clauses.push(Clause.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: CompositeClause,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: CompositeClause, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.LogicalOperator operator = 3; */
         if (message.operator !== 0)
             writer.tag(3, WireType.Varint).int32(message.operator);
         /* repeated types.Clause clauses = 4; */
         for (let i = 0; i < message.clauses.length; i++)
-            Clause.internalBinaryWrite(
-                message.clauses[i],
-                writer.tag(4, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Clause.internalBinaryWrite(message.clauses[i], writer.tag(4, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2275,44 +1628,16 @@ export const CompositeClause = new CompositeClause$Type();
 class Token$Type extends MessageType<Token> {
     constructor() {
         super("types.Token", [
-            {
-                no: 1,
-                name: "token_id",
-                kind: "scalar",
-                localName: "token_id",
-                opt: true,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "contract_address",
-                kind: "scalar",
-                localName: "contract_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "token_id", kind: "scalar", localName: "token_id", opt: true, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
             { no: 3, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            {
-                no: 4,
-                name: "symbol",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 5,
-                name: "decimals",
-                kind: "scalar",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 6,
-                name: "metadata",
-                kind: "scalar",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 4, name: "symbol", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "decimals", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 6, name: "metadata", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<Token>): Token {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.contract_address = new Uint8Array(0);
         message.name = "";
         message.symbol = "";
@@ -2322,14 +1647,8 @@ class Token$Type extends MessageType<Token> {
             reflectionMergePartial<Token>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Token
-    ): Token {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Token): Token {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2354,35 +1673,21 @@ class Token$Type extends MessageType<Token> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Token,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Token, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* optional bytes token_id = 1; */
         if (message.token_id !== undefined)
             writer.tag(1, WireType.LengthDelimited).bytes(message.token_id);
         /* bytes contract_address = 2; */
         if (message.contract_address.length)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .bytes(message.contract_address);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_address);
         /* string name = 3; */
         if (message.name !== "")
             writer.tag(3, WireType.LengthDelimited).string(message.name);
@@ -2397,11 +1702,7 @@ class Token$Type extends MessageType<Token> {
             writer.tag(6, WireType.LengthDelimited).bytes(message.metadata);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2413,42 +1714,16 @@ export const Token = new Token$Type();
 class TokenCollection$Type extends MessageType<TokenCollection> {
     constructor() {
         super("types.TokenCollection", [
-            {
-                no: 2,
-                name: "contract_address",
-                kind: "scalar",
-                localName: "contract_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 2, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
             { no: 3, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            {
-                no: 4,
-                name: "symbol",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 5,
-                name: "decimals",
-                kind: "scalar",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 6,
-                name: "count",
-                kind: "scalar",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 7,
-                name: "metadata",
-                kind: "scalar",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 4, name: "symbol", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "decimals", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 6, name: "count", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 7, name: "metadata", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<TokenCollection>): TokenCollection {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.contract_address = new Uint8Array(0);
         message.name = "";
         message.symbol = "";
@@ -2459,14 +1734,8 @@ class TokenCollection$Type extends MessageType<TokenCollection> {
             reflectionMergePartial<TokenCollection>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: TokenCollection
-    ): TokenCollection {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenCollection): TokenCollection {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2491,32 +1760,18 @@ class TokenCollection$Type extends MessageType<TokenCollection> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: TokenCollection,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: TokenCollection, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes contract_address = 2; */
         if (message.contract_address.length)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .bytes(message.contract_address);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_address);
         /* string name = 3; */
         if (message.name !== "")
             writer.tag(3, WireType.LengthDelimited).string(message.name);
@@ -2534,11 +1789,7 @@ class TokenCollection$Type extends MessageType<TokenCollection> {
             writer.tag(7, WireType.LengthDelimited).bytes(message.metadata);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2550,38 +1801,14 @@ export const TokenCollection = new TokenCollection$Type();
 class TokenBalance$Type extends MessageType<TokenBalance> {
     constructor() {
         super("types.TokenBalance", [
-            {
-                no: 1,
-                name: "balance",
-                kind: "scalar",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "account_address",
-                kind: "scalar",
-                localName: "account_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 3,
-                name: "contract_address",
-                kind: "scalar",
-                localName: "contract_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 4,
-                name: "token_id",
-                kind: "scalar",
-                localName: "token_id",
-                opt: true,
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "balance", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "account_address", kind: "scalar", localName: "account_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "token_id", kind: "scalar", localName: "token_id", opt: true, T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<TokenBalance>): TokenBalance {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.balance = new Uint8Array(0);
         message.account_address = new Uint8Array(0);
         message.contract_address = new Uint8Array(0);
@@ -2589,14 +1816,8 @@ class TokenBalance$Type extends MessageType<TokenBalance> {
             reflectionMergePartial<TokenBalance>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: TokenBalance
-    ): TokenBalance {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenBalance): TokenBalance {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2615,50 +1836,30 @@ class TokenBalance$Type extends MessageType<TokenBalance> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: TokenBalance,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: TokenBalance, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes balance = 1; */
         if (message.balance.length)
             writer.tag(1, WireType.LengthDelimited).bytes(message.balance);
         /* bytes account_address = 2; */
         if (message.account_address.length)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .bytes(message.account_address);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.account_address);
         /* bytes contract_address = 3; */
         if (message.contract_address.length)
-            writer
-                .tag(3, WireType.LengthDelimited)
-                .bytes(message.contract_address);
+            writer.tag(3, WireType.LengthDelimited).bytes(message.contract_address);
         /* optional bytes token_id = 4; */
         if (message.token_id !== undefined)
             writer.tag(4, WireType.LengthDelimited).bytes(message.token_id);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2670,36 +1871,20 @@ export const TokenBalance = new TokenBalance$Type();
 class OrderBy$Type extends MessageType<OrderBy> {
     constructor() {
         super("types.OrderBy", [
-            {
-                no: 1,
-                name: "field",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "direction",
-                kind: "enum",
-                T: () => ["types.OrderDirection", OrderDirection],
-            },
+            { no: 1, name: "field", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "direction", kind: "enum", T: () => ["types.OrderDirection", OrderDirection] }
         ]);
     }
     create(value?: PartialMessage<OrderBy>): OrderBy {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.field = "";
         message.direction = 0;
         if (value !== undefined)
             reflectionMergePartial<OrderBy>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: OrderBy
-    ): OrderBy {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: OrderBy): OrderBy {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2712,27 +1897,15 @@ class OrderBy$Type extends MessageType<OrderBy> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: OrderBy,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: OrderBy, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string field = 1; */
         if (message.field !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.field);
@@ -2741,11 +1914,7 @@ class OrderBy$Type extends MessageType<OrderBy> {
             writer.tag(2, WireType.Varint).int32(message.direction);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2757,30 +1926,13 @@ export const OrderBy = new OrderBy$Type();
 class Controller$Type extends MessageType<Controller> {
     constructor() {
         super("types.Controller", [
-            {
-                no: 1,
-                name: "address",
-                kind: "scalar",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "username",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 3,
-                name: "deployed_at_timestamp",
-                kind: "scalar",
-                localName: "deployed_at_timestamp",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
+            { no: 1, name: "address", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "username", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "deployed_at_timestamp", kind: "scalar", localName: "deployed_at_timestamp", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
         ]);
     }
     create(value?: PartialMessage<Controller>): Controller {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.address = new Uint8Array(0);
         message.username = "";
         message.deployed_at_timestamp = 0n;
@@ -2788,14 +1940,8 @@ class Controller$Type extends MessageType<Controller> {
             reflectionMergePartial<Controller>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Controller
-    ): Controller {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Controller): Controller {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2811,27 +1957,15 @@ class Controller$Type extends MessageType<Controller> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Controller,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Controller, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes address = 1; */
         if (message.address.length)
             writer.tag(1, WireType.LengthDelimited).bytes(message.address);
@@ -2840,16 +1974,10 @@ class Controller$Type extends MessageType<Controller> {
             writer.tag(2, WireType.LengthDelimited).string(message.username);
         /* uint64 deployed_at_timestamp = 3; */
         if (message.deployed_at_timestamp !== 0n)
-            writer
-                .tag(3, WireType.Varint)
-                .uint64(message.deployed_at_timestamp);
+            writer.tag(3, WireType.Varint).uint64(message.deployed_at_timestamp);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2861,36 +1989,14 @@ export const Controller = new Controller$Type();
 class Pagination$Type extends MessageType<Pagination> {
     constructor() {
         super("types.Pagination", [
-            {
-                no: 1,
-                name: "cursor",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 2,
-                name: "limit",
-                kind: "scalar",
-                T: 13 /*ScalarType.UINT32*/,
-            },
-            {
-                no: 3,
-                name: "direction",
-                kind: "enum",
-                T: () => ["types.PaginationDirection", PaginationDirection],
-            },
-            {
-                no: 4,
-                name: "order_by",
-                kind: "message",
-                localName: "order_by",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => OrderBy,
-            },
+            { no: 1, name: "cursor", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "limit", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 3, name: "direction", kind: "enum", T: () => ["types.PaginationDirection", PaginationDirection] },
+            { no: 4, name: "order_by", kind: "message", localName: "order_by", repeat: 2 /*RepeatType.UNPACKED*/, T: () => OrderBy }
         ]);
     }
     create(value?: PartialMessage<Pagination>): Pagination {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.cursor = "";
         message.limit = 0;
         message.direction = 0;
@@ -2899,14 +2005,8 @@ class Pagination$Type extends MessageType<Pagination> {
             reflectionMergePartial<Pagination>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Pagination
-    ): Pagination {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Pagination): Pagination {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -2920,38 +2020,20 @@ class Pagination$Type extends MessageType<Pagination> {
                     message.direction = reader.int32();
                     break;
                 case /* repeated types.OrderBy order_by */ 4:
-                    message.order_by.push(
-                        OrderBy.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.order_by.push(OrderBy.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Pagination,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Pagination, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string cursor = 1; */
         if (message.cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.cursor);
@@ -2963,18 +2045,10 @@ class Pagination$Type extends MessageType<Pagination> {
             writer.tag(3, WireType.Varint).int32(message.direction);
         /* repeated types.OrderBy order_by = 4; */
         for (let i = 0; i < message.order_by.length; i++)
-            OrderBy.internalBinaryWrite(
-                message.order_by[i],
-                writer.tag(4, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            OrderBy.internalBinaryWrite(message.order_by[i], writer.tag(4, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -2986,40 +2060,21 @@ export const Pagination = new Pagination$Type();
 class ControllerQuery$Type extends MessageType<ControllerQuery> {
     constructor() {
         super("types.ControllerQuery", [
-            {
-                no: 1,
-                name: "contract_addresses",
-                kind: "scalar",
-                localName: "contract_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "usernames",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 9 /*ScalarType.STRING*/,
-            },
-            { no: 3, name: "pagination", kind: "message", T: () => Pagination },
+            { no: 1, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "usernames", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "pagination", kind: "message", T: () => Pagination }
         ]);
     }
     create(value?: PartialMessage<ControllerQuery>): ControllerQuery {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.contract_addresses = [];
         message.usernames = [];
         if (value !== undefined)
             reflectionMergePartial<ControllerQuery>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: ControllerQuery
-    ): ControllerQuery {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ControllerQuery): ControllerQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3030,61 +2085,32 @@ class ControllerQuery$Type extends MessageType<ControllerQuery> {
                     message.usernames.push(reader.string());
                     break;
                 case /* types.Pagination pagination */ 3:
-                    message.pagination = Pagination.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.pagination
-                    );
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: ControllerQuery,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: ControllerQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes contract_addresses = 1; */
         for (let i = 0; i < message.contract_addresses.length; i++)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.contract_addresses[i]);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
         /* repeated string usernames = 2; */
         for (let i = 0; i < message.usernames.length; i++)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .string(message.usernames[i]);
+            writer.tag(2, WireType.LengthDelimited).string(message.usernames[i]);
         /* types.Pagination pagination = 3; */
         if (message.pagination)
-            Pagination.internalBinaryWrite(
-                message.pagination,
-                writer.tag(3, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3096,41 +2122,21 @@ export const ControllerQuery = new ControllerQuery$Type();
 class TokenQuery$Type extends MessageType<TokenQuery> {
     constructor() {
         super("types.TokenQuery", [
-            {
-                no: 1,
-                name: "contract_addresses",
-                kind: "scalar",
-                localName: "contract_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "token_ids",
-                kind: "scalar",
-                localName: "token_ids",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            { no: 3, name: "pagination", kind: "message", T: () => Pagination },
+            { no: 1, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "pagination", kind: "message", T: () => Pagination }
         ]);
     }
     create(value?: PartialMessage<TokenQuery>): TokenQuery {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.contract_addresses = [];
         message.token_ids = [];
         if (value !== undefined)
             reflectionMergePartial<TokenQuery>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: TokenQuery
-    ): TokenQuery {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenQuery): TokenQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3141,59 +2147,32 @@ class TokenQuery$Type extends MessageType<TokenQuery> {
                     message.token_ids.push(reader.bytes());
                     break;
                 case /* types.Pagination pagination */ 3:
-                    message.pagination = Pagination.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.pagination
-                    );
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: TokenQuery,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: TokenQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes contract_addresses = 1; */
         for (let i = 0; i < message.contract_addresses.length; i++)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.contract_addresses[i]);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
         /* repeated bytes token_ids = 2; */
         for (let i = 0; i < message.token_ids.length; i++)
             writer.tag(2, WireType.LengthDelimited).bytes(message.token_ids[i]);
         /* types.Pagination pagination = 3; */
         if (message.pagination)
-            Pagination.internalBinaryWrite(
-                message.pagination,
-                writer.tag(3, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3205,35 +2184,14 @@ export const TokenQuery = new TokenQuery$Type();
 class TokenBalanceQuery$Type extends MessageType<TokenBalanceQuery> {
     constructor() {
         super("types.TokenBalanceQuery", [
-            {
-                no: 1,
-                name: "account_addresses",
-                kind: "scalar",
-                localName: "account_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "contract_addresses",
-                kind: "scalar",
-                localName: "contract_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 3,
-                name: "token_ids",
-                kind: "scalar",
-                localName: "token_ids",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            { no: 4, name: "pagination", kind: "message", T: () => Pagination },
+            { no: 1, name: "account_addresses", kind: "scalar", localName: "account_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "pagination", kind: "message", T: () => Pagination }
         ]);
     }
     create(value?: PartialMessage<TokenBalanceQuery>): TokenBalanceQuery {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.account_addresses = [];
         message.contract_addresses = [];
         message.token_ids = [];
@@ -3241,14 +2199,8 @@ class TokenBalanceQuery$Type extends MessageType<TokenBalanceQuery> {
             reflectionMergePartial<TokenBalanceQuery>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: TokenBalanceQuery
-    ): TokenBalanceQuery {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenBalanceQuery): TokenBalanceQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3262,64 +2214,35 @@ class TokenBalanceQuery$Type extends MessageType<TokenBalanceQuery> {
                     message.token_ids.push(reader.bytes());
                     break;
                 case /* types.Pagination pagination */ 4:
-                    message.pagination = Pagination.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.pagination
-                    );
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: TokenBalanceQuery,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: TokenBalanceQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes account_addresses = 1; */
         for (let i = 0; i < message.account_addresses.length; i++)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.account_addresses[i]);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.account_addresses[i]);
         /* repeated bytes contract_addresses = 2; */
         for (let i = 0; i < message.contract_addresses.length; i++)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .bytes(message.contract_addresses[i]);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
         /* repeated bytes token_ids = 3; */
         for (let i = 0; i < message.token_ids.length; i++)
             writer.tag(3, WireType.LengthDelimited).bytes(message.token_ids[i]);
         /* types.Pagination pagination = 4; */
         if (message.pagination)
-            Pagination.internalBinaryWrite(
-                message.pagination,
-                writer.tag(4, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3331,44 +2254,15 @@ export const TokenBalanceQuery = new TokenBalanceQuery$Type();
 class TransactionCall$Type extends MessageType<TransactionCall> {
     constructor() {
         super("types.TransactionCall", [
-            {
-                no: 1,
-                name: "contract_address",
-                kind: "scalar",
-                localName: "contract_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "entrypoint",
-                kind: "scalar",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 3,
-                name: "calldata",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 4,
-                name: "call_type",
-                kind: "enum",
-                localName: "call_type",
-                T: () => ["types.CallType", CallType],
-            },
-            {
-                no: 5,
-                name: "caller_address",
-                kind: "scalar",
-                localName: "caller_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "entrypoint", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "calldata", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "call_type", kind: "enum", localName: "call_type", T: () => ["types.CallType", CallType] },
+            { no: 5, name: "caller_address", kind: "scalar", localName: "caller_address", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<TransactionCall>): TransactionCall {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.contract_address = new Uint8Array(0);
         message.entrypoint = "";
         message.calldata = [];
@@ -3378,14 +2272,8 @@ class TransactionCall$Type extends MessageType<TransactionCall> {
             reflectionMergePartial<TransactionCall>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: TransactionCall
-    ): TransactionCall {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TransactionCall): TransactionCall {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3407,32 +2295,18 @@ class TransactionCall$Type extends MessageType<TransactionCall> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: TransactionCall,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: TransactionCall, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes contract_address = 1; */
         if (message.contract_address.length)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.contract_address);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_address);
         /* string entrypoint = 2; */
         if (message.entrypoint !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.entrypoint);
@@ -3444,16 +2318,10 @@ class TransactionCall$Type extends MessageType<TransactionCall> {
             writer.tag(4, WireType.Varint).int32(message.call_type);
         /* bytes caller_address = 5; */
         if (message.caller_address.length)
-            writer
-                .tag(5, WireType.LengthDelimited)
-                .bytes(message.caller_address);
+            writer.tag(5, WireType.LengthDelimited).bytes(message.caller_address);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3465,89 +2333,21 @@ export const TransactionCall = new TransactionCall$Type();
 class Transaction$Type extends MessageType<Transaction> {
     constructor() {
         super("types.Transaction", [
-            {
-                no: 1,
-                name: "transaction_hash",
-                kind: "scalar",
-                localName: "transaction_hash",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "sender_address",
-                kind: "scalar",
-                localName: "sender_address",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 3,
-                name: "calldata",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 4,
-                name: "max_fee",
-                kind: "scalar",
-                localName: "max_fee",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 5,
-                name: "signature",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 6,
-                name: "nonce",
-                kind: "scalar",
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 7,
-                name: "block_number",
-                kind: "scalar",
-                localName: "block_number",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 8,
-                name: "transaction_type",
-                kind: "scalar",
-                localName: "transaction_type",
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 9,
-                name: "block_timestamp",
-                kind: "scalar",
-                localName: "block_timestamp",
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 10,
-                name: "calls",
-                kind: "message",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: () => TransactionCall,
-            },
-            {
-                no: 11,
-                name: "unique_models",
-                kind: "scalar",
-                localName: "unique_models",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
+            { no: 1, name: "transaction_hash", kind: "scalar", localName: "transaction_hash", T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "sender_address", kind: "scalar", localName: "sender_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "calldata", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "max_fee", kind: "scalar", localName: "max_fee", T: 12 /*ScalarType.BYTES*/ },
+            { no: 5, name: "signature", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 6, name: "nonce", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 7, name: "block_number", kind: "scalar", localName: "block_number", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 8, name: "transaction_type", kind: "scalar", localName: "transaction_type", T: 9 /*ScalarType.STRING*/ },
+            { no: 9, name: "block_timestamp", kind: "scalar", localName: "block_timestamp", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 10, name: "calls", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TransactionCall },
+            { no: 11, name: "unique_models", kind: "scalar", localName: "unique_models", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<Transaction>): Transaction {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.transaction_hash = new Uint8Array(0);
         message.sender_address = new Uint8Array(0);
         message.calldata = [];
@@ -3563,14 +2363,8 @@ class Transaction$Type extends MessageType<Transaction> {
             reflectionMergePartial<Transaction>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: Transaction
-    ): Transaction {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Transaction): Transaction {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3602,13 +2396,7 @@ class Transaction$Type extends MessageType<Transaction> {
                     message.block_timestamp = reader.uint64().toBigInt();
                     break;
                 case /* repeated types.TransactionCall calls */ 10:
-                    message.calls.push(
-                        TransactionCall.internalBinaryRead(
-                            reader,
-                            reader.uint32(),
-                            options
-                        )
-                    );
+                    message.calls.push(TransactionCall.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 case /* repeated bytes unique_models */ 11:
                     message.unique_models.push(reader.bytes());
@@ -3616,37 +2404,21 @@ class Transaction$Type extends MessageType<Transaction> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: Transaction,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: Transaction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes transaction_hash = 1; */
         if (message.transaction_hash.length)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.transaction_hash);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.transaction_hash);
         /* bytes sender_address = 2; */
         if (message.sender_address.length)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .bytes(message.sender_address);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.sender_address);
         /* repeated bytes calldata = 3; */
         for (let i = 0; i < message.calldata.length; i++)
             writer.tag(3, WireType.LengthDelimited).bytes(message.calldata[i]);
@@ -3664,31 +2436,19 @@ class Transaction$Type extends MessageType<Transaction> {
             writer.tag(7, WireType.Varint).uint64(message.block_number);
         /* string transaction_type = 8; */
         if (message.transaction_type !== "")
-            writer
-                .tag(8, WireType.LengthDelimited)
-                .string(message.transaction_type);
+            writer.tag(8, WireType.LengthDelimited).string(message.transaction_type);
         /* uint64 block_timestamp = 9; */
         if (message.block_timestamp !== 0n)
             writer.tag(9, WireType.Varint).uint64(message.block_timestamp);
         /* repeated types.TransactionCall calls = 10; */
         for (let i = 0; i < message.calls.length; i++)
-            TransactionCall.internalBinaryWrite(
-                message.calls[i],
-                writer.tag(10, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TransactionCall.internalBinaryWrite(message.calls[i], writer.tag(10, WireType.LengthDelimited).fork(), options).join();
         /* repeated bytes unique_models = 11; */
         for (let i = 0; i < message.unique_models.length; i++)
-            writer
-                .tag(11, WireType.LengthDelimited)
-                .bytes(message.unique_models[i]);
+            writer.tag(11, WireType.LengthDelimited).bytes(message.unique_models[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3700,67 +2460,17 @@ export const Transaction = new Transaction$Type();
 class TransactionFilter$Type extends MessageType<TransactionFilter> {
     constructor() {
         super("types.TransactionFilter", [
-            {
-                no: 1,
-                name: "transaction_hashes",
-                kind: "scalar",
-                localName: "transaction_hashes",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 2,
-                name: "caller_addresses",
-                kind: "scalar",
-                localName: "caller_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 3,
-                name: "contract_addresses",
-                kind: "scalar",
-                localName: "contract_addresses",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 4,
-                name: "entrypoints",
-                kind: "scalar",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 9 /*ScalarType.STRING*/,
-            },
-            {
-                no: 5,
-                name: "model_selectors",
-                kind: "scalar",
-                localName: "model_selectors",
-                repeat: 2 /*RepeatType.UNPACKED*/,
-                T: 12 /*ScalarType.BYTES*/,
-            },
-            {
-                no: 6,
-                name: "from_block",
-                kind: "scalar",
-                localName: "from_block",
-                opt: true,
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
-            {
-                no: 7,
-                name: "to_block",
-                kind: "scalar",
-                localName: "to_block",
-                opt: true,
-                T: 4 /*ScalarType.UINT64*/,
-                L: 0 /*LongType.BIGINT*/,
-            },
+            { no: 1, name: "transaction_hashes", kind: "scalar", localName: "transaction_hashes", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "caller_addresses", kind: "scalar", localName: "caller_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "entrypoints", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "model_selectors", kind: "scalar", localName: "model_selectors", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 6, name: "from_block", kind: "scalar", localName: "from_block", opt: true, T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 7, name: "to_block", kind: "scalar", localName: "to_block", opt: true, T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
         ]);
     }
     create(value?: PartialMessage<TransactionFilter>): TransactionFilter {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         message.transaction_hashes = [];
         message.caller_addresses = [];
         message.contract_addresses = [];
@@ -3770,14 +2480,8 @@ class TransactionFilter$Type extends MessageType<TransactionFilter> {
             reflectionMergePartial<TransactionFilter>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: TransactionFilter
-    ): TransactionFilter {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TransactionFilter): TransactionFilter {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -3805,52 +2509,30 @@ class TransactionFilter$Type extends MessageType<TransactionFilter> {
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: TransactionFilter,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: TransactionFilter, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* repeated bytes transaction_hashes = 1; */
         for (let i = 0; i < message.transaction_hashes.length; i++)
-            writer
-                .tag(1, WireType.LengthDelimited)
-                .bytes(message.transaction_hashes[i]);
+            writer.tag(1, WireType.LengthDelimited).bytes(message.transaction_hashes[i]);
         /* repeated bytes caller_addresses = 2; */
         for (let i = 0; i < message.caller_addresses.length; i++)
-            writer
-                .tag(2, WireType.LengthDelimited)
-                .bytes(message.caller_addresses[i]);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.caller_addresses[i]);
         /* repeated bytes contract_addresses = 3; */
         for (let i = 0; i < message.contract_addresses.length; i++)
-            writer
-                .tag(3, WireType.LengthDelimited)
-                .bytes(message.contract_addresses[i]);
+            writer.tag(3, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
         /* repeated string entrypoints = 4; */
         for (let i = 0; i < message.entrypoints.length; i++)
-            writer
-                .tag(4, WireType.LengthDelimited)
-                .string(message.entrypoints[i]);
+            writer.tag(4, WireType.LengthDelimited).string(message.entrypoints[i]);
         /* repeated bytes model_selectors = 5; */
         for (let i = 0; i < message.model_selectors.length; i++)
-            writer
-                .tag(5, WireType.LengthDelimited)
-                .bytes(message.model_selectors[i]);
+            writer.tag(5, WireType.LengthDelimited).bytes(message.model_selectors[i]);
         /* optional uint64 from_block = 6; */
         if (message.from_block !== undefined)
             writer.tag(6, WireType.Varint).uint64(message.from_block);
@@ -3859,11 +2541,7 @@ class TransactionFilter$Type extends MessageType<TransactionFilter> {
             writer.tag(7, WireType.Varint).uint64(message.to_block);
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
@@ -3875,93 +2553,48 @@ export const TransactionFilter = new TransactionFilter$Type();
 class TransactionQuery$Type extends MessageType<TransactionQuery> {
     constructor() {
         super("types.TransactionQuery", [
-            {
-                no: 1,
-                name: "filter",
-                kind: "message",
-                T: () => TransactionFilter,
-            },
-            { no: 2, name: "pagination", kind: "message", T: () => Pagination },
+            { no: 1, name: "filter", kind: "message", T: () => TransactionFilter },
+            { no: 2, name: "pagination", kind: "message", T: () => Pagination }
         ]);
     }
     create(value?: PartialMessage<TransactionQuery>): TransactionQuery {
-        const message = globalThis.Object.create(this.messagePrototype!);
+        const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
             reflectionMergePartial<TransactionQuery>(this, message, value);
         return message;
     }
-    internalBinaryRead(
-        reader: IBinaryReader,
-        length: number,
-        options: BinaryReadOptions,
-        target?: TransactionQuery
-    ): TransactionQuery {
-        let message = target ?? this.create(),
-            end = reader.pos + length;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TransactionQuery): TransactionQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* types.TransactionFilter filter */ 1:
-                    message.filter = TransactionFilter.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.filter
-                    );
+                    message.filter = TransactionFilter.internalBinaryRead(reader, reader.uint32(), options, message.filter);
                     break;
                 case /* types.Pagination pagination */ 2:
-                    message.pagination = Pagination.internalBinaryRead(
-                        reader,
-                        reader.uint32(),
-                        options,
-                        message.pagination
-                    );
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
                     break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
-                        throw new globalThis.Error(
-                            `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
-                        );
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
                     let d = reader.skip(wireType);
                     if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(
-                            this.typeName,
-                            message,
-                            fieldNo,
-                            wireType,
-                            d
-                        );
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
             }
         }
         return message;
     }
-    internalBinaryWrite(
-        message: TransactionQuery,
-        writer: IBinaryWriter,
-        options: BinaryWriteOptions
-    ): IBinaryWriter {
+    internalBinaryWrite(message: TransactionQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.TransactionFilter filter = 1; */
         if (message.filter)
-            TransactionFilter.internalBinaryWrite(
-                message.filter,
-                writer.tag(1, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            TransactionFilter.internalBinaryWrite(message.filter, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* types.Pagination pagination = 2; */
         if (message.pagination)
-            Pagination.internalBinaryWrite(
-                message.pagination,
-                writer.tag(2, WireType.LengthDelimited).fork(),
-                options
-            ).join();
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(
-                this.typeName,
-                message,
-                writer
-            );
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
         return writer;
     }
 }
