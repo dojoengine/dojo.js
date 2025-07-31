@@ -157,28 +157,80 @@ type CairoToTsTypeMap = {
 };
 
 /**
- * Map Cairo type to TypeScript type
+ * Map Cairo type to TypeScript type with ABI context
  */
-export type MapCairoType<T extends string> = T extends keyof CairoToTsTypeMap
+export type MapCairoType<
+    T extends string,
+    ABI extends readonly any[] = never,
+> = T extends keyof CairoToTsTypeMap
     ? CairoToTsTypeMap[T]
     : T extends `core::array::Array::<${infer Inner}>`
-      ? MapCairoType<Inner>[]
+      ? MapCairoType<Inner, ABI>[]
       : T extends `core::array::Span::<${infer Inner}>`
-        ? MapCairoType<Inner>[]
+        ? MapCairoType<Inner, ABI>[]
         : T extends `@core::array::Array::<${infer Inner}>`
-          ? MapCairoType<Inner>[]
+          ? MapCairoType<Inner, ABI>[]
           : T extends `(${infer Types})`
-            ? MapTupleTypes<Types>
-            : unknown;
+            ? MapTupleTypes<Types, ABI>
+            : ABI extends never
+              ? unknown
+              : T extends ExtractStructNames<ABI>
+                ? ExtractStructType<T, ABI>
+                : T extends ExtractEnumNames<ABI>
+                  ? ExtractEnumType<T, ABI>
+                  : unknown;
+
+/**
+ * Extract all struct names from ABI
+ */
+type ExtractStructNames<ABI extends readonly any[]> = Extract<
+    ABI[number],
+    { type: "struct"; name: string }
+>["name"];
+
+/**
+ * Find the first struct with a specific name in the ABI
+ * This prevents duplicate struct definitions from creating union types
+ */
+type FindFirstStructByName<
+    ABI extends readonly any[],
+    Name extends string,
+> = ABI extends readonly [infer First, ...infer Rest extends readonly any[]]
+    ? First extends { type: "struct"; name: Name }
+        ? First
+        : FindFirstStructByName<Rest, Name>
+    : never;
+
+/**
+ * Extract a specific struct type by name from ABI
+ * Only uses the first occurrence of a struct with the given name
+ */
+type ExtractStructType<
+    Name extends string,
+    ABI extends readonly any[],
+> = FindFirstStructByName<ABI, Name> extends {
+    type: "struct";
+    name: Name;
+    members: infer M;
+}
+    ? M extends readonly { name: string; type: string }[]
+        ? {
+              [P in M[number] as P["name"]]: MapCairoType<P["type"], ABI>;
+          }
+        : never
+    : never;
 
 /**
  * Map tuple types
  */
-type MapTupleTypes<T extends string> = T extends `${infer First}, ${infer Rest}`
-    ? [MapCairoType<First>, ...MapTupleTypes<Rest>]
+type MapTupleTypes<
+    T extends string,
+    ABI extends readonly any[] = never,
+> = T extends `${infer First}, ${infer Rest}`
+    ? [MapCairoType<First, ABI>, ...MapTupleTypes<Rest, ABI>]
     : T extends ""
       ? []
-      : [MapCairoType<T>];
+      : [MapCairoType<T, ABI>];
 
 // ========================
 // ABI Type Extraction
@@ -187,7 +239,10 @@ type MapTupleTypes<T extends string> = T extends `${infer First}, ${infer Rest}`
 /**
  * Extract function signature from a function item
  */
-type ExtractFunctionSignature<F> = F extends {
+type ExtractFunctionSignature<
+    F,
+    ABI extends readonly any[] = never,
+> = F extends {
     type: "function";
     name: string;
     inputs: infer I;
@@ -199,19 +254,19 @@ type ExtractFunctionSignature<F> = F extends {
               type: string;
           }[]
               ? {
-                    [P in I[number] as P["name"]]: MapCairoType<P["type"]>;
+                    [P in I[number] as P["name"]]: MapCairoType<P["type"], ABI>;
                 }
               : never;
           outputs: O extends readonly { type: string }[]
               ? O["length"] extends 0
                   ? void
                   : O["length"] extends 1
-                    ? MapCairoType<O[0]["type"]>
+                    ? MapCairoType<O[0]["type"], ABI>
                     : {
                           [Index in keyof O]: O[Index] extends {
                               type: string;
                           }
-                              ? MapCairoType<O[Index]["type"]>
+                              ? MapCairoType<O[Index]["type"], ABI>
                               : never;
                       }
               : void;
@@ -223,86 +278,162 @@ type ExtractFunctionSignature<F> = F extends {
  */
 export type ExtractAbiTypesFromArray<ABI> = ABI extends readonly any[]
     ? {
-          structs: {
-              [K in ABI[number] as K extends { type: "struct"; name: infer N }
-                  ? N extends string
-                      ? N
-                      : never
-                  : never]: K extends {
-                  type: "struct";
-                  name: string;
-                  members: infer M;
-              }
-                  ? M extends readonly { name: string; type: string }[]
-                      ? {
-                            [P in M[number] as P["name"]]: MapCairoType<
-                                P["type"]
-                            >;
-                        }
-                      : never
-                  : never;
-          };
-          enums: {
-              [K in ABI[number] as K extends { type: "enum"; name: infer N }
-                  ? N extends string
-                      ? N
-                      : never
-                  : never]: K extends {
-                  type: "enum";
-                  name: string;
-                  variants: infer V;
-              }
-                  ? V extends readonly { name: string; type: string }[]
-                      ? {
-                            variants: {
-                                [P in V[number] as P["name"]]: MapCairoType<
-                                    P["type"]
-                                >;
-                            };
-                            type: V[number]["name"];
-                        }
-                      : never
-                  : never;
-          };
-          functions: {
-              [K in ABI[number] as K extends {
-                  type: "function";
-                  name: infer N;
-              }
-                  ? N extends string
-                      ? N
-                      : never
-                  : never]: ExtractFunctionSignature<K>;
-          };
-          interfaces: {
-              [K in ABI[number] as K extends {
-                  type: "interface";
-                  name: infer N;
-              }
-                  ? N extends string
-                      ? N
-                      : never
-                  : never]: K extends {
-                  type: "interface";
-                  name: string;
-                  items: infer Items;
-              }
-                  ? Items extends readonly any[]
-                      ? {
-                            [F in Items[number] as F extends {
-                                type: "function";
-                                name: infer FN;
-                            }
-                                ? FN extends string
-                                    ? FN
-                                    : never
-                                : never]: ExtractFunctionSignature<F>;
-                        }
-                      : {}
-                  : never;
-          };
+          structs: ExtractStructs<ABI>;
+          enums: ExtractEnums<ABI>;
+          functions: ExtractFunctions<ABI>;
+          interfaces: ExtractInterfaces<ABI>;
       }
     : never;
+
+/**
+ * Helper type to extract structs from ABI
+ */
+type ExtractStructs<ABI extends readonly any[]> = {
+    [StructName in ExtractStructNames<ABI>]: ExtractStructType<StructName, ABI>;
+};
+
+/**
+ * Find the first enum with a specific name in the ABI
+ * This prevents duplicate enum definitions from creating union types
+ */
+type FindFirstEnumByName<
+    ABI extends readonly any[],
+    Name extends string,
+> = ABI extends readonly [infer First, ...infer Rest extends readonly any[]]
+    ? First extends { type: "enum"; name: Name }
+        ? First
+        : FindFirstEnumByName<Rest, Name>
+    : never;
+
+/**
+ * Extract all enum names from ABI
+ */
+type ExtractEnumNames<ABI extends readonly any[]> = Extract<
+    ABI[number],
+    { type: "enum"; name: string }
+>["name"];
+
+/**
+ * Extract just the type union of an enum by name
+ * This is used for type mapping in function parameters
+ */
+type ExtractEnumType<
+    Name extends string,
+    ABI extends readonly any[],
+> = FindFirstEnumByName<ABI, Name> extends {
+    type: "enum";
+    name: Name;
+    variants: infer V;
+}
+    ? V extends readonly { name: string; type: string }[]
+        ? V[number]["name"]
+        : never
+    : never;
+
+/**
+ * Helper type to extract enums from ABI
+ */
+type ExtractEnums<ABI extends readonly any[]> = {
+    [EnumName in ExtractEnumNames<ABI>]: FindFirstEnumByName<
+        ABI,
+        EnumName
+    > extends {
+        type: "enum";
+        name: EnumName;
+        variants: infer V;
+    }
+        ? V extends readonly { name: string; type: string }[]
+            ? {
+                  variants: {
+                      [P in V[number] as P["name"]]: MapCairoType<
+                          P["type"],
+                          ABI
+                      >;
+                  };
+                  type: V[number]["name"];
+              }
+            : never
+        : never;
+};
+
+/**
+ * Find the first function with a specific name in the ABI
+ * This prevents duplicate function definitions from creating union types
+ */
+type FindFirstFunctionByName<
+    ABI extends readonly any[],
+    Name extends string,
+> = ABI extends readonly [infer First, ...infer Rest extends readonly any[]]
+    ? First extends { type: "function"; name: Name }
+        ? First
+        : FindFirstFunctionByName<Rest, Name>
+    : never;
+
+/**
+ * Extract all function names from ABI
+ */
+type ExtractFunctionNames<ABI extends readonly any[]> = Extract<
+    ABI[number],
+    { type: "function"; name: string }
+>["name"];
+
+/**
+ * Helper type to extract functions from ABI
+ */
+type ExtractFunctions<ABI extends readonly any[]> = {
+    [FunctionName in ExtractFunctionNames<ABI>]: ExtractFunctionSignature<
+        FindFirstFunctionByName<ABI, FunctionName>,
+        ABI
+    >;
+};
+
+/**
+ * Find the first interface with a specific name in the ABI
+ * This prevents duplicate interface definitions from creating union types
+ */
+type FindFirstInterfaceByName<
+    ABI extends readonly any[],
+    Name extends string,
+> = ABI extends readonly [infer First, ...infer Rest extends readonly any[]]
+    ? First extends { type: "interface"; name: Name }
+        ? First
+        : FindFirstInterfaceByName<Rest, Name>
+    : never;
+
+/**
+ * Extract all interface names from ABI
+ */
+type ExtractInterfaceNames<ABI extends readonly any[]> = Extract<
+    ABI[number],
+    { type: "interface"; name: string }
+>["name"];
+
+/**
+ * Helper type to extract interfaces from ABI
+ */
+type ExtractInterfaces<ABI extends readonly any[]> = {
+    [InterfaceName in ExtractInterfaceNames<ABI>]: FindFirstInterfaceByName<
+        ABI,
+        InterfaceName
+    > extends {
+        type: "interface";
+        name: InterfaceName;
+        items: infer Items;
+    }
+        ? Items extends readonly any[]
+            ? {
+                  [F in Items[number] as F extends {
+                      type: "function";
+                      name: infer FN;
+                  }
+                      ? FN extends string
+                          ? FN
+                          : never
+                      : never]: ExtractFunctionSignature<F, ABI>;
+              }
+            : {}
+        : never;
+};
 
 /**
  * Main exported type for extracting ABI types

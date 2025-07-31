@@ -1,10 +1,10 @@
 import { ExtractAbiTypes } from "./index";
 
-// Problem: Importing JSON directly doesn't preserve literal types in TypeScript
-import compiledJson from "../../../../worlds/dojo-starter/compiled-abi.json";
-
 // Solution 1: Import the generated TypeScript file instead
-import { compiledAbi } from "../../../../worlds/dojo-starter/compiled-abi";
+import {
+    CompiledAbi,
+    compiledAbi,
+} from "../../../../worlds/dojo-starter/compiled-abi";
 
 // Extract ABI types from the TypeScript version (this works!)
 type MyAbi = ExtractAbiTypes<typeof compiledAbi>;
@@ -31,8 +31,12 @@ type MyAbiFunctions = MyAbi["functions"];
 type MyAbiInterfaces = MyAbi["interfaces"];
 
 // Now you can use the extracted types
-type Position = MyAbi["structs"]["dojo_starter::models::Position"]; // { player: string; vec: Vec2 }
 type Vec2 = MyAbi["structs"]["dojo_starter::models::Vec2"]; // { x: number; y: number }
+type Position = MyAbi["structs"]["dojo_starter::models::Position"]; // { player: string; vec: Vec2 }
+type PositionCount = MyAbi["structs"]["dojo_starter::models::PositionCount"];
+
+// Note: Nested struct references are resolved through the ABI context.
+// The type system now supports cross-references between structs in the same ABI.
 
 // Enum types now include variants structure
 type Direction = MyAbi["enums"]["dojo_starter::models::Direction"];

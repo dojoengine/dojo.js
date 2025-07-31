@@ -19,7 +19,7 @@
         "lint": "biome lint . --write",
         "test": "vitest run --passWithNoTests --coverage",
         "docs": "typedoc",
-    "type:check": "tsc"
+        "type:check": "tsc"
     },
     "exports": {
         ".": {
