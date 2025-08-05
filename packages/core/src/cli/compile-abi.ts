@@ -26,7 +26,47 @@ type TargetFile = {
     [key: string]: any;
 };
 
-function collectAbis(): void {
+/**
+ * Generate a TypeScript file from compiled-abi.json with proper const assertions
+ * This allows TypeScript to extract literal types from the ABI
+ */
+function generateAbiTypes(dojoRoot: string): void {
+    const inputPath = join(dojoRoot, "compiled-abi.json");
+    const outputPath = join(dojoRoot, "compiled-abi.ts");
+
+    try {
+        // Read the compiled ABI
+        const abiContent = readFileSync(inputPath, "utf-8");
+        const abiJson = JSON.parse(abiContent);
+
+        // Generate TypeScript content
+        const tsContent = `// This file is auto-generated from compiled-abi.json
+// Do not edit manually
+
+export const compiledAbi = ${JSON.stringify(abiJson, null, 2)} as const;
+
+export type CompiledAbi = typeof compiledAbi;
+`;
+
+        // Write the TypeScript file
+        writeFileSync(outputPath, tsContent);
+
+        console.log(`✅ Generated TypeScript types!`);
+        console.log(`📄 Output written to: ${outputPath}`);
+        console.log(`\nUsage in your code:`);
+        console.log(`\nimport { compiledAbi } from './compiled-abi';`);
+        console.log(`import { ExtractAbiTypes } from '@dojoengine/core';`);
+        console.log(`\ntype MyAbi = ExtractAbiTypes<typeof compiledAbi>;`);
+        console.log(
+            `type Position = MyAbi["structs"]["dojo_starter::models::Position"];`
+        );
+    } catch (error) {
+        console.error(`Error generating types: ${error}`);
+        process.exit(1);
+    }
+}
+
+function collectAbis(generateTypes: boolean): void {
     const dojoRoot = process.env.DOJO_ROOT || process.cwd();
     const dojoEnv = process.env.DOJO_ENV || "dev";
 
@@ -36,35 +76,37 @@ function collectAbis(): void {
     const allAbis: AbiEntry[] = [];
 
     // Read manifest file
-    if (existsSync(manifestPath)) {
-        try {
-            const manifestContent = readFileSync(manifestPath, "utf-8");
-            const manifest: Manifest = JSON.parse(manifestContent);
-
-            // Extract ABIs from world
-            if (manifest.world?.abi) {
-                allAbis.push(...manifest.world.abi);
-            }
-
-            // Extract ABIs from contracts
-            if (manifest.contracts) {
-                for (const contract of manifest.contracts) {
-                    if (contract.abi) {
-                        allAbis.push(...contract.abi);
-                    }
-                }
-            }
-        } catch (error) {
-            console.error(`Error reading manifest file: ${error}`);
-            process.exit(1);
-        }
-    } else {
+    if (!existsSync(manifestPath)) {
         console.error(`Manifest file not found: ${manifestPath}`);
         process.exit(1);
     }
 
+    try {
+        const manifestContent = readFileSync(manifestPath, "utf-8");
+        const manifest: Manifest = JSON.parse(manifestContent);
+
+        // Extract ABIs from world
+        if (manifest.world?.abi) {
+            allAbis.push(...manifest.world.abi);
+        }
+
+        // Extract ABIs from contracts
+        if (manifest.contracts) {
+            for (const contract of manifest.contracts) {
+                if (contract.abi) {
+                    allAbis.push(...contract.abi);
+                }
+            }
+        }
+    } catch (error) {
+        console.error(`Error reading manifest file: ${error}`);
+        process.exit(1);
+    }
+
     // Read target directory files
-    if (existsSync(targetDir)) {
+    if (!existsSync(targetDir)) {
+        console.warn(`Target directory not found: ${targetDir}`);
+    } else {
         try {
             const files = readdirSync(targetDir).filter((file) =>
                 file.endsWith(".json")
@@ -87,8 +129,6 @@ function collectAbis(): void {
         } catch (error) {
             console.error(`Error reading target directory: ${error}`);
         }
-    } else {
-        console.warn(`Target directory not found: ${targetDir}`);
     }
 
     // Write output
@@ -102,11 +142,20 @@ function collectAbis(): void {
     console.log(`✅ ABI compilation complete!`);
     console.log(`📄 Output written to: ${outputPath}`);
     console.log(`📊 Total ABI entries: ${allAbis.length}`);
+
+    // Generate TypeScript types if requested
+    if (generateTypes) {
+        generateAbiTypes(dojoRoot);
+    }
 }
+
+// Parse command line arguments
+const args = process.argv.slice(2);
+const generateTypes = args.includes("--generate-types");
 
 // Run the compilation
 try {
-    collectAbis();
+    collectAbis(generateTypes);
 } catch (error) {
     console.error(`Unexpected error: ${error}`);
     process.exit(1);
