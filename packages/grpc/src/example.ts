@@ -6,7 +6,7 @@ import { ToriiQueryBuilder } from "@dojoengine/sdk/node";
 async function main() {
     // Create a client with the same config as torii-wasm
     const client = new ToriiGrpcClient({
-        toriiUrl: "http://localhost:8080",
+        toriiUrl: "https://api.cartridge.gg/x/arcade-briq/torii",
         worldAddress:
             "0x0248f59aeb5c6a086409dc1ec588f0f5346b29960e7e64d10c133bcc85ba7244",
     });

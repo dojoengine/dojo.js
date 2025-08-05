@@ -58,211 +58,133 @@ export interface IWorldClient {
      *
      * @generated from protobuf rpc: SubscribeIndexer
      */
-    subscribeIndexer(
-        input: SubscribeIndexerRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<SubscribeIndexerRequest, SubscribeIndexerResponse>;
+    subscribeIndexer(input: SubscribeIndexerRequest, options?: RpcOptions): ServerStreamingCall<SubscribeIndexerRequest, SubscribeIndexerResponse>;
     /**
      * Retrieves metadata about the World including all the registered components and systems.
      *
      * @generated from protobuf rpc: WorldMetadata
      */
-    worldMetadata(
-        input: WorldMetadataRequest,
-        options?: RpcOptions
-    ): UnaryCall<WorldMetadataRequest, WorldMetadataResponse>;
+    worldMetadata(input: WorldMetadataRequest, options?: RpcOptions): UnaryCall<WorldMetadataRequest, WorldMetadataResponse>;
     /**
      * Subscribe to entity updates.
      *
      * @generated from protobuf rpc: SubscribeEntities
      */
-    subscribeEntities(
-        input: SubscribeEntitiesRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<SubscribeEntitiesRequest, SubscribeEntityResponse>;
+    subscribeEntities(input: SubscribeEntitiesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEntitiesRequest, SubscribeEntityResponse>;
     /**
      * Update entity subscription
      *
      * @generated from protobuf rpc: UpdateEntitiesSubscription
      */
-    updateEntitiesSubscription(
-        input: UpdateEntitiesSubscriptionRequest,
-        options?: RpcOptions
-    ): UnaryCall<UpdateEntitiesSubscriptionRequest, Empty>;
+    updateEntitiesSubscription(input: UpdateEntitiesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateEntitiesSubscriptionRequest, Empty>;
     /**
      * Retrieve entities
      *
      * @generated from protobuf rpc: RetrieveEntities
      */
-    retrieveEntities(
-        input: RetrieveEntitiesRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveEntitiesRequest, RetrieveEntitiesResponse>;
+    retrieveEntities(input: RetrieveEntitiesRequest, options?: RpcOptions): UnaryCall<RetrieveEntitiesRequest, RetrieveEntitiesResponse>;
     /**
      * Subscribe to entity updates.
      *
      * @generated from protobuf rpc: SubscribeEventMessages
      */
-    subscribeEventMessages(
-        input: SubscribeEventMessagesRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<
-        SubscribeEventMessagesRequest,
-        SubscribeEntityResponse
-    >;
+    subscribeEventMessages(input: SubscribeEventMessagesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEventMessagesRequest, SubscribeEntityResponse>;
     /**
      * Update entity subscription
      *
      * @generated from protobuf rpc: UpdateEventMessagesSubscription
      */
-    updateEventMessagesSubscription(
-        input: UpdateEventMessagesSubscriptionRequest,
-        options?: RpcOptions
-    ): UnaryCall<UpdateEventMessagesSubscriptionRequest, Empty>;
+    updateEventMessagesSubscription(input: UpdateEventMessagesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateEventMessagesSubscriptionRequest, Empty>;
     /**
      * Subscribe to token balance updates.
      *
      * @generated from protobuf rpc: SubscribeTokenBalances
      */
-    subscribeTokenBalances(
-        input: SubscribeTokenBalancesRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<
-        SubscribeTokenBalancesRequest,
-        SubscribeTokenBalancesResponse
-    >;
+    subscribeTokenBalances(input: SubscribeTokenBalancesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeTokenBalancesRequest, SubscribeTokenBalancesResponse>;
     /**
      * Update token balance subscription
      *
      * @generated from protobuf rpc: UpdateTokenBalancesSubscription
      */
-    updateTokenBalancesSubscription(
-        input: UpdateTokenBalancesSubscriptionRequest,
-        options?: RpcOptions
-    ): UnaryCall<UpdateTokenBalancesSubscriptionRequest, Empty>;
+    updateTokenBalancesSubscription(input: UpdateTokenBalancesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateTokenBalancesSubscriptionRequest, Empty>;
     /**
      * Subscribe to token updates.
      *
      * @generated from protobuf rpc: SubscribeTokens
      */
-    subscribeTokens(
-        input: SubscribeTokensRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<SubscribeTokensRequest, SubscribeTokensResponse>;
+    subscribeTokens(input: SubscribeTokensRequest, options?: RpcOptions): ServerStreamingCall<SubscribeTokensRequest, SubscribeTokensResponse>;
     /**
      * Update token subscription
      *
      * @generated from protobuf rpc: UpdateTokensSubscription
      */
-    updateTokensSubscription(
-        input: UpdateTokenSubscriptionRequest,
-        options?: RpcOptions
-    ): UnaryCall<UpdateTokenSubscriptionRequest, Empty>;
+    updateTokensSubscription(input: UpdateTokenSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateTokenSubscriptionRequest, Empty>;
     /**
      * Retrieve entities
      *
      * @generated from protobuf rpc: RetrieveEventMessages
      */
-    retrieveEventMessages(
-        input: RetrieveEventMessagesRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveEventMessagesRequest, RetrieveEntitiesResponse>;
+    retrieveEventMessages(input: RetrieveEventMessagesRequest, options?: RpcOptions): UnaryCall<RetrieveEventMessagesRequest, RetrieveEntitiesResponse>;
     /**
      * Retrieve events
      *
      * @generated from protobuf rpc: RetrieveEvents
      */
-    retrieveEvents(
-        input: RetrieveEventsRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveEventsRequest, RetrieveEventsResponse>;
+    retrieveEvents(input: RetrieveEventsRequest, options?: RpcOptions): UnaryCall<RetrieveEventsRequest, RetrieveEventsResponse>;
     /**
      * Subscribe to events
      *
      * @generated from protobuf rpc: SubscribeEvents
      */
-    subscribeEvents(
-        input: SubscribeEventsRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<SubscribeEventsRequest, SubscribeEventsResponse>;
+    subscribeEvents(input: SubscribeEventsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEventsRequest, SubscribeEventsResponse>;
     /**
      * Retrieve tokens
      *
      * @generated from protobuf rpc: RetrieveTokens
      */
-    retrieveTokens(
-        input: RetrieveTokensRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveTokensRequest, RetrieveTokensResponse>;
+    retrieveTokens(input: RetrieveTokensRequest, options?: RpcOptions): UnaryCall<RetrieveTokensRequest, RetrieveTokensResponse>;
     /**
      * Retrieve token balances
      *
      * @generated from protobuf rpc: RetrieveTokenBalances
      */
-    retrieveTokenBalances(
-        input: RetrieveTokenBalancesRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveTokenBalancesRequest, RetrieveTokenBalancesResponse>;
+    retrieveTokenBalances(input: RetrieveTokenBalancesRequest, options?: RpcOptions): UnaryCall<RetrieveTokenBalancesRequest, RetrieveTokenBalancesResponse>;
     /**
      * Retrieve transactions
      *
      * @generated from protobuf rpc: RetrieveTransactions
      */
-    retrieveTransactions(
-        input: RetrieveTransactionsRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveTransactionsRequest, RetrieveTransactionsResponse>;
+    retrieveTransactions(input: RetrieveTransactionsRequest, options?: RpcOptions): UnaryCall<RetrieveTransactionsRequest, RetrieveTransactionsResponse>;
     /**
      * Subscribe to transactions
      *
      * @generated from protobuf rpc: SubscribeTransactions
      */
-    subscribeTransactions(
-        input: SubscribeTransactionsRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<
-        SubscribeTransactionsRequest,
-        SubscribeTransactionsResponse
-    >;
+    subscribeTransactions(input: SubscribeTransactionsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeTransactionsRequest, SubscribeTransactionsResponse>;
     /**
      * Retrieve controllers
      *
      * @generated from protobuf rpc: RetrieveControllers
      */
-    retrieveControllers(
-        input: RetrieveControllersRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveControllersRequest, RetrieveControllersResponse>;
+    retrieveControllers(input: RetrieveControllersRequest, options?: RpcOptions): UnaryCall<RetrieveControllersRequest, RetrieveControllersResponse>;
     /**
      * Retrieve tokens collections
      *
      * @generated from protobuf rpc: RetrieveTokenCollections
      */
-    retrieveTokenCollections(
-        input: RetrieveTokenCollectionsRequest,
-        options?: RpcOptions
-    ): UnaryCall<
-        RetrieveTokenCollectionsRequest,
-        RetrieveTokenCollectionsResponse
-    >;
+    retrieveTokenCollections(input: RetrieveTokenCollectionsRequest, options?: RpcOptions): UnaryCall<RetrieveTokenCollectionsRequest, RetrieveTokenCollectionsResponse>;
     /**
      * Publish a torii offchain message
      *
      * @generated from protobuf rpc: PublishMessage
      */
-    publishMessage(
-        input: PublishMessageRequest,
-        options?: RpcOptions
-    ): UnaryCall<PublishMessageRequest, PublishMessageResponse>;
+    publishMessage(input: PublishMessageRequest, options?: RpcOptions): UnaryCall<PublishMessageRequest, PublishMessageResponse>;
     /**
      * Publish a set of torii offchain messages
      *
      * @generated from protobuf rpc: PublishMessageBatch
      */
-    publishMessageBatch(
-        input: PublishMessageBatchRequest,
-        options?: RpcOptions
-    ): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse>;
+    publishMessageBatch(input: PublishMessageBatchRequest, options?: RpcOptions): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse>;
 }
 /**
  * The World service provides information about the world.
@@ -273,399 +195,204 @@ export class WorldClient implements IWorldClient, ServiceInfo {
     typeName = World.typeName;
     methods = World.methods;
     options = World.options;
-    constructor(private readonly _transport: RpcTransport) {}
+    constructor(private readonly _transport: RpcTransport) {
+    }
     /**
      * Subscribes to updates about the indexer. Like the head block number, tps, etc.
      *
      * @generated from protobuf rpc: SubscribeIndexer
      */
-    subscribeIndexer(
-        input: SubscribeIndexerRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<SubscribeIndexerRequest, SubscribeIndexerResponse> {
-        const method = this.methods[0],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            SubscribeIndexerRequest,
-            SubscribeIndexerResponse
-        >("serverStreaming", this._transport, method, opt, input);
+    subscribeIndexer(input: SubscribeIndexerRequest, options?: RpcOptions): ServerStreamingCall<SubscribeIndexerRequest, SubscribeIndexerResponse> {
+        const method = this.methods[0], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeIndexerRequest, SubscribeIndexerResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
      * Retrieves metadata about the World including all the registered components and systems.
      *
      * @generated from protobuf rpc: WorldMetadata
      */
-    worldMetadata(
-        input: WorldMetadataRequest,
-        options?: RpcOptions
-    ): UnaryCall<WorldMetadataRequest, WorldMetadataResponse> {
-        const method = this.methods[1],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<WorldMetadataRequest, WorldMetadataResponse>(
-            "unary",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    worldMetadata(input: WorldMetadataRequest, options?: RpcOptions): UnaryCall<WorldMetadataRequest, WorldMetadataResponse> {
+        const method = this.methods[1], opt = this._transport.mergeOptions(options);
+        return stackIntercept<WorldMetadataRequest, WorldMetadataResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Subscribe to entity updates.
      *
      * @generated from protobuf rpc: SubscribeEntities
      */
-    subscribeEntities(
-        input: SubscribeEntitiesRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<SubscribeEntitiesRequest, SubscribeEntityResponse> {
-        const method = this.methods[2],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            SubscribeEntitiesRequest,
-            SubscribeEntityResponse
-        >("serverStreaming", this._transport, method, opt, input);
+    subscribeEntities(input: SubscribeEntitiesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEntitiesRequest, SubscribeEntityResponse> {
+        const method = this.methods[2], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeEntitiesRequest, SubscribeEntityResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
      * Update entity subscription
      *
      * @generated from protobuf rpc: UpdateEntitiesSubscription
      */
-    updateEntitiesSubscription(
-        input: UpdateEntitiesSubscriptionRequest,
-        options?: RpcOptions
-    ): UnaryCall<UpdateEntitiesSubscriptionRequest, Empty> {
-        const method = this.methods[3],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<UpdateEntitiesSubscriptionRequest, Empty>(
-            "unary",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    updateEntitiesSubscription(input: UpdateEntitiesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateEntitiesSubscriptionRequest, Empty> {
+        const method = this.methods[3], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateEntitiesSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * Retrieve entities
      *
      * @generated from protobuf rpc: RetrieveEntities
      */
-    retrieveEntities(
-        input: RetrieveEntitiesRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveEntitiesRequest, RetrieveEntitiesResponse> {
-        const method = this.methods[4],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            RetrieveEntitiesRequest,
-            RetrieveEntitiesResponse
-        >("unary", this._transport, method, opt, input);
+    retrieveEntities(input: RetrieveEntitiesRequest, options?: RpcOptions): UnaryCall<RetrieveEntitiesRequest, RetrieveEntitiesResponse> {
+        const method = this.methods[4], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveEntitiesRequest, RetrieveEntitiesResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Subscribe to entity updates.
      *
      * @generated from protobuf rpc: SubscribeEventMessages
      */
-    subscribeEventMessages(
-        input: SubscribeEventMessagesRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<
-        SubscribeEventMessagesRequest,
-        SubscribeEntityResponse
-    > {
-        const method = this.methods[5],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            SubscribeEventMessagesRequest,
-            SubscribeEntityResponse
-        >("serverStreaming", this._transport, method, opt, input);
+    subscribeEventMessages(input: SubscribeEventMessagesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEventMessagesRequest, SubscribeEntityResponse> {
+        const method = this.methods[5], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeEventMessagesRequest, SubscribeEntityResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
      * Update entity subscription
      *
      * @generated from protobuf rpc: UpdateEventMessagesSubscription
      */
-    updateEventMessagesSubscription(
-        input: UpdateEventMessagesSubscriptionRequest,
-        options?: RpcOptions
-    ): UnaryCall<UpdateEventMessagesSubscriptionRequest, Empty> {
-        const method = this.methods[6],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<UpdateEventMessagesSubscriptionRequest, Empty>(
-            "unary",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    updateEventMessagesSubscription(input: UpdateEventMessagesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateEventMessagesSubscriptionRequest, Empty> {
+        const method = this.methods[6], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateEventMessagesSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * Subscribe to token balance updates.
      *
      * @generated from protobuf rpc: SubscribeTokenBalances
      */
-    subscribeTokenBalances(
-        input: SubscribeTokenBalancesRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<
-        SubscribeTokenBalancesRequest,
-        SubscribeTokenBalancesResponse
-    > {
-        const method = this.methods[7],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            SubscribeTokenBalancesRequest,
-            SubscribeTokenBalancesResponse
-        >("serverStreaming", this._transport, method, opt, input);
+    subscribeTokenBalances(input: SubscribeTokenBalancesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeTokenBalancesRequest, SubscribeTokenBalancesResponse> {
+        const method = this.methods[7], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeTokenBalancesRequest, SubscribeTokenBalancesResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
      * Update token balance subscription
      *
      * @generated from protobuf rpc: UpdateTokenBalancesSubscription
      */
-    updateTokenBalancesSubscription(
-        input: UpdateTokenBalancesSubscriptionRequest,
-        options?: RpcOptions
-    ): UnaryCall<UpdateTokenBalancesSubscriptionRequest, Empty> {
-        const method = this.methods[8],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<UpdateTokenBalancesSubscriptionRequest, Empty>(
-            "unary",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    updateTokenBalancesSubscription(input: UpdateTokenBalancesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateTokenBalancesSubscriptionRequest, Empty> {
+        const method = this.methods[8], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateTokenBalancesSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * Subscribe to token updates.
      *
      * @generated from protobuf rpc: SubscribeTokens
      */
-    subscribeTokens(
-        input: SubscribeTokensRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<SubscribeTokensRequest, SubscribeTokensResponse> {
-        const method = this.methods[9],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<SubscribeTokensRequest, SubscribeTokensResponse>(
-            "serverStreaming",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    subscribeTokens(input: SubscribeTokensRequest, options?: RpcOptions): ServerStreamingCall<SubscribeTokensRequest, SubscribeTokensResponse> {
+        const method = this.methods[9], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeTokensRequest, SubscribeTokensResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
      * Update token subscription
      *
      * @generated from protobuf rpc: UpdateTokensSubscription
      */
-    updateTokensSubscription(
-        input: UpdateTokenSubscriptionRequest,
-        options?: RpcOptions
-    ): UnaryCall<UpdateTokenSubscriptionRequest, Empty> {
-        const method = this.methods[10],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<UpdateTokenSubscriptionRequest, Empty>(
-            "unary",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    updateTokensSubscription(input: UpdateTokenSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateTokenSubscriptionRequest, Empty> {
+        const method = this.methods[10], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateTokenSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * Retrieve entities
      *
      * @generated from protobuf rpc: RetrieveEventMessages
      */
-    retrieveEventMessages(
-        input: RetrieveEventMessagesRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveEventMessagesRequest, RetrieveEntitiesResponse> {
-        const method = this.methods[11],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            RetrieveEventMessagesRequest,
-            RetrieveEntitiesResponse
-        >("unary", this._transport, method, opt, input);
+    retrieveEventMessages(input: RetrieveEventMessagesRequest, options?: RpcOptions): UnaryCall<RetrieveEventMessagesRequest, RetrieveEntitiesResponse> {
+        const method = this.methods[11], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveEventMessagesRequest, RetrieveEntitiesResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Retrieve events
      *
      * @generated from protobuf rpc: RetrieveEvents
      */
-    retrieveEvents(
-        input: RetrieveEventsRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveEventsRequest, RetrieveEventsResponse> {
-        const method = this.methods[12],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<RetrieveEventsRequest, RetrieveEventsResponse>(
-            "unary",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    retrieveEvents(input: RetrieveEventsRequest, options?: RpcOptions): UnaryCall<RetrieveEventsRequest, RetrieveEventsResponse> {
+        const method = this.methods[12], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveEventsRequest, RetrieveEventsResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Subscribe to events
      *
      * @generated from protobuf rpc: SubscribeEvents
      */
-    subscribeEvents(
-        input: SubscribeEventsRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<SubscribeEventsRequest, SubscribeEventsResponse> {
-        const method = this.methods[13],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<SubscribeEventsRequest, SubscribeEventsResponse>(
-            "serverStreaming",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    subscribeEvents(input: SubscribeEventsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEventsRequest, SubscribeEventsResponse> {
+        const method = this.methods[13], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeEventsRequest, SubscribeEventsResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
      * Retrieve tokens
      *
      * @generated from protobuf rpc: RetrieveTokens
      */
-    retrieveTokens(
-        input: RetrieveTokensRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveTokensRequest, RetrieveTokensResponse> {
-        const method = this.methods[14],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<RetrieveTokensRequest, RetrieveTokensResponse>(
-            "unary",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    retrieveTokens(input: RetrieveTokensRequest, options?: RpcOptions): UnaryCall<RetrieveTokensRequest, RetrieveTokensResponse> {
+        const method = this.methods[14], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveTokensRequest, RetrieveTokensResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Retrieve token balances
      *
      * @generated from protobuf rpc: RetrieveTokenBalances
      */
-    retrieveTokenBalances(
-        input: RetrieveTokenBalancesRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveTokenBalancesRequest, RetrieveTokenBalancesResponse> {
-        const method = this.methods[15],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            RetrieveTokenBalancesRequest,
-            RetrieveTokenBalancesResponse
-        >("unary", this._transport, method, opt, input);
+    retrieveTokenBalances(input: RetrieveTokenBalancesRequest, options?: RpcOptions): UnaryCall<RetrieveTokenBalancesRequest, RetrieveTokenBalancesResponse> {
+        const method = this.methods[15], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveTokenBalancesRequest, RetrieveTokenBalancesResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Retrieve transactions
      *
      * @generated from protobuf rpc: RetrieveTransactions
      */
-    retrieveTransactions(
-        input: RetrieveTransactionsRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveTransactionsRequest, RetrieveTransactionsResponse> {
-        const method = this.methods[16],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            RetrieveTransactionsRequest,
-            RetrieveTransactionsResponse
-        >("unary", this._transport, method, opt, input);
+    retrieveTransactions(input: RetrieveTransactionsRequest, options?: RpcOptions): UnaryCall<RetrieveTransactionsRequest, RetrieveTransactionsResponse> {
+        const method = this.methods[16], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveTransactionsRequest, RetrieveTransactionsResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Subscribe to transactions
      *
      * @generated from protobuf rpc: SubscribeTransactions
      */
-    subscribeTransactions(
-        input: SubscribeTransactionsRequest,
-        options?: RpcOptions
-    ): ServerStreamingCall<
-        SubscribeTransactionsRequest,
-        SubscribeTransactionsResponse
-    > {
-        const method = this.methods[17],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            SubscribeTransactionsRequest,
-            SubscribeTransactionsResponse
-        >("serverStreaming", this._transport, method, opt, input);
+    subscribeTransactions(input: SubscribeTransactionsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeTransactionsRequest, SubscribeTransactionsResponse> {
+        const method = this.methods[17], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeTransactionsRequest, SubscribeTransactionsResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
      * Retrieve controllers
      *
      * @generated from protobuf rpc: RetrieveControllers
      */
-    retrieveControllers(
-        input: RetrieveControllersRequest,
-        options?: RpcOptions
-    ): UnaryCall<RetrieveControllersRequest, RetrieveControllersResponse> {
-        const method = this.methods[18],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            RetrieveControllersRequest,
-            RetrieveControllersResponse
-        >("unary", this._transport, method, opt, input);
+    retrieveControllers(input: RetrieveControllersRequest, options?: RpcOptions): UnaryCall<RetrieveControllersRequest, RetrieveControllersResponse> {
+        const method = this.methods[18], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveControllersRequest, RetrieveControllersResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Retrieve tokens collections
      *
      * @generated from protobuf rpc: RetrieveTokenCollections
      */
-    retrieveTokenCollections(
-        input: RetrieveTokenCollectionsRequest,
-        options?: RpcOptions
-    ): UnaryCall<
-        RetrieveTokenCollectionsRequest,
-        RetrieveTokenCollectionsResponse
-    > {
-        const method = this.methods[19],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            RetrieveTokenCollectionsRequest,
-            RetrieveTokenCollectionsResponse
-        >("unary", this._transport, method, opt, input);
+    retrieveTokenCollections(input: RetrieveTokenCollectionsRequest, options?: RpcOptions): UnaryCall<RetrieveTokenCollectionsRequest, RetrieveTokenCollectionsResponse> {
+        const method = this.methods[19], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveTokenCollectionsRequest, RetrieveTokenCollectionsResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Publish a torii offchain message
      *
      * @generated from protobuf rpc: PublishMessage
      */
-    publishMessage(
-        input: PublishMessageRequest,
-        options?: RpcOptions
-    ): UnaryCall<PublishMessageRequest, PublishMessageResponse> {
-        const method = this.methods[20],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<PublishMessageRequest, PublishMessageResponse>(
-            "unary",
-            this._transport,
-            method,
-            opt,
-            input
-        );
+    publishMessage(input: PublishMessageRequest, options?: RpcOptions): UnaryCall<PublishMessageRequest, PublishMessageResponse> {
+        const method = this.methods[20], opt = this._transport.mergeOptions(options);
+        return stackIntercept<PublishMessageRequest, PublishMessageResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Publish a set of torii offchain messages
      *
      * @generated from protobuf rpc: PublishMessageBatch
      */
-    publishMessageBatch(
-        input: PublishMessageBatchRequest,
-        options?: RpcOptions
-    ): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse> {
-        const method = this.methods[21],
-            opt = this._transport.mergeOptions(options);
-        return stackIntercept<
-            PublishMessageBatchRequest,
-            PublishMessageBatchResponse
-        >("unary", this._transport, method, opt, input);
+    publishMessageBatch(input: PublishMessageBatchRequest, options?: RpcOptions): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse> {
+        const method = this.methods[21], opt = this._transport.mergeOptions(options);
+        return stackIntercept<PublishMessageBatchRequest, PublishMessageBatchResponse>("unary", this._transport, method, opt, input);
     }
 }

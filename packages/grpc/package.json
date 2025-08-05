@@ -14,8 +14,6 @@
         "build": "pnpm build:proto && pnpm build:deps",
         "format:check": "biome format .",
         "format": "biome format . --write",
-        "lint:check": "biome check .",
-        "lint": "biome check . --write",
         "test": "vitest run --passWithNoTests --coverage",
         "bench": "vitest bench --config vitest.config.bench.ts",
         "bench:report": "bun run src/benchmarks/report.ts",
