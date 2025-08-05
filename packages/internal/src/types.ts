@@ -1,8 +1,8 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
 import type { Result } from "neverthrow";
 import type { Account, StarknetDomain, TypedData } from "starknet";
-import type { Pagination } from "./pagination.ts";
-import type { ToriiQueryBuilder } from "./toriiQueryBuilder.ts";
+import type { Pagination } from "./pagination";
+import type { ToriiQueryBuilder } from "./toriiQueryBuilder";
 
 /**
  * SchemaType represents the structure of your Dojo world models.

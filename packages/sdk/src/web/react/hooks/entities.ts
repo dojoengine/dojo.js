@@ -1,4 +1,4 @@
-import type { SchemaType, ToriiQueryBuilder } from "../../../internal/types";
+import type { SchemaType, ToriiQueryBuilder } from "@dojoengine/internal";
 import { useDojoSDK } from "../hooks";
 import { createSubscriptionHook } from "./hooks";
 

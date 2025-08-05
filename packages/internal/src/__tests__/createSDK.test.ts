@@ -3,12 +3,12 @@ import type { Result } from "neverthrow";
 import { ok } from "neverthrow";
 import type { Account, TypedData } from "starknet";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createSDK } from "../internal/createSDK";
-import type {
-    SchemaType,
-    SDKConfig,
-    ToriiQueryBuilder,
-} from "../internal/types";
+import {
+    createSDK,
+    type SchemaType,
+    type SDKConfig,
+    type ToriiQueryBuilder,
+} from "..";
 
 // Mock schema for testing
 const mockSchema = {

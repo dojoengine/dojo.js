@@ -1,10 +1,10 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
 import { ok, type Result } from "neverthrow";
 import type { Account, TypedData } from "starknet";
-import { generateTypedData } from "./generateTypedData.ts";
-import { defaultToriiPagination, Pagination } from "./pagination.ts";
-import { parseEntities } from "./parseEntities.ts";
-import { subscribeQueryModelCallback } from "./subscribeQueryModel.ts";
+import { generateTypedData } from "./generateTypedData";
+import { defaultToriiPagination, Pagination } from "./pagination";
+import { parseEntities } from "./parseEntities";
+import { subscribeQueryModelCallback } from "./subscribeQueryModel";
 import {
     getTokenBalances,
     getTokens,
@@ -13,7 +13,7 @@ import {
     subscribeToken,
     subscribeTokenBalance,
     updateTokenBalanceSubscription,
-} from "./token.ts";
+} from "./token";
 import type {
     GetParams,
     GetTokenBalanceRequest,

@@ -8,8 +8,12 @@ import {
 import type { StateCreator, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { deepMerge, type MergedModels } from "../../internal/merge";
-import type { ParsedEntity, SchemaType } from "../../internal/types";
+import {
+    deepMerge,
+    type MergedModels,
+    type ParsedEntity,
+    type SchemaType,
+} from "@dojoengine/internal";
 import type { GameState } from ".";
 
 enablePatches();

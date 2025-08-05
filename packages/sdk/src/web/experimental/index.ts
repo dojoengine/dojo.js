@@ -1,10 +1,10 @@
 import * as torii from "@dojoengine/torii-wasm";
-import { parseEntities } from "../../internal/parseEntities";
-import type {
-    SchemaType,
-    SDKConfig,
-    StandardizedQueryResult,
-} from "../../internal/types";
+import {
+    parseEntities,
+    type SchemaType,
+    type SDKConfig,
+    type StandardizedQueryResult,
+} from "@dojoengine/internal";
 import { defaultClientConfig } from "..";
 
 export type ToriiSubscriptionCallback<T extends SchemaType> = (response: {

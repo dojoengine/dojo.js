@@ -1791,6 +1791,9 @@ importers:
       '@biomejs/biome':
         specifier: ^2.1.3
         version: 2.1.3
+      '@dojoengine/internal':
+        specifier: workspace:*
+        version: link:../internal
       '@dojoengine/sdk':
         specifier: workspace:*
         version: link:../sdk
@@ -1821,6 +1824,46 @@ importers:
       websocket:
         specifier: ^1.0.35
         version: 1.0.35
+
+  packages/internal:
+    dependencies:
+      '@dojoengine/core':
+        specifier: workspace:*
+        version: link:../core
+      '@dojoengine/torii-client':
+        specifier: workspace:*
+        version: link:../torii-client
+      '@dojoengine/torii-wasm':
+        specifier: workspace:*
+        version: link:../torii-wasm
+      '@dojoengine/utils':
+        specifier: workspace:*
+        version: link:../utils
+      neverthrow:
+        specifier: ^8.2.0
+        version: 8.2.0
+      starknet:
+        specifier: 'catalog:'
+        version: 7.6.2
+    devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.1.3
+        version: 2.1.3
+      '@types/node':
+        specifier: ^22.14.1
+        version: 22.15.15
+      '@vitest/coverage-v8':
+        specifier: ^1.6.0
+        version: 1.6.1(vitest@1.6.1(@types/node@22.15.15)(jsdom@24.1.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.2)(terser@5.43.1))
+      tsup:
+        specifier: ^8.4.0
+        version: 8.5.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(jiti@2.4.2)(postcss@8.5.3)(tsx@4.20.3)(typescript@5.7.3)(yaml@2.8.0)
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@22.15.15)(jsdom@24.1.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.2)(terser@5.43.1)
 
   packages/predeployed-connector:
     dependencies:
@@ -1958,6 +2001,9 @@ importers:
       '@dojoengine/core':
         specifier: workspace:*
         version: link:../core
+      '@dojoengine/internal':
+        specifier: workspace:*
+        version: link:../internal
       '@dojoengine/torii-client':
         specifier: workspace:*
         version: link:../torii-client

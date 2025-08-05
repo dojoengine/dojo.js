@@ -1,14 +1,14 @@
 // Example usage of ToriiGrpcClient with the same API as torii-wasm
 
 import { ToriiGrpcClient } from "./torii-client";
-import { ToriiQueryBuilder } from "@dojoengine/sdk/node";
+import { ToriiQueryBuilder } from "@dojoengine/internal";
 
 async function main() {
     // Create a client with the same config as torii-wasm
     const client = new ToriiGrpcClient({
-        toriiUrl: "https://api.cartridge.gg/x/arcade-briq/torii",
+        toriiUrl: "https://api.cartridge.gg/x/pistols-mainnet/torii",
         worldAddress:
-            "0x0248f59aeb5c6a086409dc1ec588f0f5346b29960e7e64d10c133bcc85ba7244",
+            "0x8b4838140a3cbd36ebe64d4b5aaf56a30cc3753c928a79338bf56c53f506c5",
     });
 
     // Build a query using ToriiQueryBuilder
@@ -41,7 +41,7 @@ async function main() {
         contract_addresses: [],
         token_ids: [],
         pagination: {
-            limit: 20,
+            limit: 500,
             cursor: undefined,
             direction: "Forward",
             order_by: [],
@@ -65,10 +65,20 @@ async function main() {
         }
     );
 
+    const tokenssub = await client.onTokenBalanceUpdated(
+        [],
+        [],
+        [],
+        (token) => {
+            console.log("Token balance update", token);
+        }
+    );
+
     process.on("SIGINT", () => {
         console.log("\nInterrupted, cleaning up...");
         subscription.cancel();
         txSubscription.cancel();
+        tokenssub.cancel();
         client.destroy();
         process.exit(0);
     });

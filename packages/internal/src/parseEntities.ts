@@ -4,7 +4,7 @@ import type {
     ParsedEntity,
     SchemaType,
     StandardizedQueryResult,
-} from "./types.ts";
+} from "./types";
 
 export function parseEntities<T extends SchemaType>(
     entities: torii.Entity[],

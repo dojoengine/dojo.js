@@ -1,7 +1,7 @@
 import type { Draft, Patch } from "immer";
 import type { StoreApi } from "zustand";
 import { createStore } from "zustand/vanilla";
-import type { ParsedEntity, SchemaType } from "../../internal/types";
+import type { ParsedEntity, SchemaType } from "@dojoengine/internal";
 import { createDojoStoreFactory } from "./zustand";
 
 interface PendingTransaction {

@@ -2,7 +2,7 @@ import type {
     PaginationDirection,
     Pagination as ToriiPagination,
 } from "@dojoengine/torii-wasm/types";
-import type { SchemaType, ToriiQueryBuilder } from "./types.ts";
+import type { SchemaType, ToriiQueryBuilder } from "./types";
 
 const DEFAULT_LIMIT = 1000;
 export const defaultToriiPagination: ToriiPagination = {

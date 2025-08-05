@@ -1,7 +1,6 @@
 import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
 import { describe, expect, it } from "vitest";
-import { Pagination } from "../internal/pagination";
-import { ToriiQueryBuilder } from "../internal/toriiQueryBuilder";
+import { Pagination, ToriiQueryBuilder } from "..";
 import type { schema } from "./models.gen";
 
 describe("Pagination", () => {

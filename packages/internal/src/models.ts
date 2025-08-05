@@ -1,5 +1,5 @@
 import type { BigNumberish } from "starknet";
-import type { SchemaType, StandardizedQueryResult } from "./types.ts";
+import type { SchemaType, StandardizedQueryResult } from "./types";
 
 /**
  * Custom hook to retrieve a specific model for a given entityId within a specified namespace.

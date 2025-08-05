@@ -8,8 +8,8 @@ import { type BigNumberish, shortString } from "starknet";
 import {
     convertToPrimitive,
     type MemberValueParam,
-} from "../internal/convertToMemberValue.ts";
-import type { SchemaType } from "../internal/types.ts";
+} from "./convertToMemberValue";
+import type { SchemaType } from "./types";
 
 type ClauseBuilderInterface = {
     build(): Clause;
