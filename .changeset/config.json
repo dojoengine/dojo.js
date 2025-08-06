@@ -7,8 +7,13 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "privatePackages": false,
+  "privatePackages": {
+    "version": true,
+    "tag": false
+  },
   "ignore": [
-    "example-*"
+    "example-*",
+    "@dojoengine/grpc",
+    "@dojoengine/internal"
   ]
 }
