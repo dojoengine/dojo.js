@@ -6,8 +6,6 @@ import { addAddressPadding } from "starknet";
 import { ModelsMapping } from "./typescript/models.gen.ts";
 import { WalletAccount } from "./wallet-account.tsx";
 import { useEffect, useRef } from "react";
-import * as grpc from "@dojoengine/grpc";
-import { dojoConfig } from "../dojoConfig.ts";
 
 /**
  * Main application component that provides game functionality and UI.
@@ -20,9 +18,6 @@ function App() {
     const { account } = useAccount();
     // const entities = useDojoStore((state) => state.entities);
     const subscriptionRef = useRef<torii.Subscription>();
-    const grpcClient = useRef<grpc.ToriiGrpcClient>();
-    console.log(subscriptionRef.current);
-    console.log(grpcClient.current);
 
     // const { spawn } = useSystemCalls();
 
@@ -30,10 +25,6 @@ function App() {
     useEffect(() => {
         async function setupSub() {
             if (subscriptionRef.current) return;
-            grpcClient.current = new grpc.ToriiGrpcClient({
-                toriiUrl: "http://localhost:8080",
-                worldAddress: dojoConfig.manifest.world.address,
-            });
             const contractAddresses = [
                 "0x044e6bcc627e6201ce09f781d1aae44ea4c21c2fdef299e34fce55bef2d02210",
                 "0x02549653a4ae1ff8d04a20b8820a49cbe97486c536ec0e4c8f68aa33d80067cf",
@@ -47,20 +38,24 @@ function App() {
                 contractAddresses,
                 accountAddresses: [],
                 tokenIds: [],
-                callback: (response) => {
+                callback: ({ data }) => {
                     console.log("Subscription dojo.c callback called");
-                    console.log(response);
+                    console.log(data);
                 },
             });
-            grpcClient.current.onTokenBalanceUpdated(
-                contractAddresses,
-                [],
-                [],
-                (response: torii.TokenBalance) => {
-                    console.log("Subscription grpc callback called");
-                    console.log(response);
-                }
-            );
+            await sdk.subscribeEventQuery({
+                query: new ToriiQueryBuilder().withClause(
+                    KeysClause([], [undefined], "VariableLen").build()
+                ),
+                callback: ({ data, error }) => {
+                    if (data) {
+                        console.log(data[0]);
+                    }
+                    if (error) {
+                        console.error(error);
+                    }
+                },
+            });
         }
         setupSub();
         return () => {
