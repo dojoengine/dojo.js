@@ -1,6 +1,6 @@
 {
     "name": "example-vite-react-pwa-recs",
-    "private": false,
+    "private": true,
     "version": "0.0.1",
     "type": "module",
     "scripts": {

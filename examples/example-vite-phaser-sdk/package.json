@@ -2,6 +2,7 @@
     "name": "example-vite-phaser-sdk",
     "description": "A Phaser 3 TypeScript template using Vite.",
     "version": "1.5.4",
+    "private": true,
     "repository": {
         "type": "git",
         "url": "git+https://github.com/phaserjs/template-vite-ts.git"
