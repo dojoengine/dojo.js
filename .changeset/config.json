@@ -12,8 +12,6 @@
     "tag": false
   },
   "ignore": [
-    "example-*",
-    "@dojoengine/grpc",
-    "@dojoengine/internal"
+    "example-*"
   ]
 }
