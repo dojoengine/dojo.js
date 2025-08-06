@@ -7,17 +7,17 @@
             "dependsOn": ["^build:deps"],
             "outputs": ["dist/**"]
         },
-        "build:wasm": {
-            "dependsOn": ["^build:wasm"],
-            "outputs": ["dist/**", "target/**", "pkg/**"],
-            "inputs": ["dojo.c/**", "crates/**"]
-        },
         "build:internal": {
             "dependsOn": ["^build:internal"],
             "outputs": ["dist/**", "target/**", "pkg/**"]
         },
+        "build:wasm": {
+            "dependsOn": ["^build:wasm","^build:internal"],
+            "outputs": ["dist/**", "target/**", "pkg/**"],
+            "inputs": ["dojo.c/**", "crates/**"]
+        },
         "build:deps": {
-            "dependsOn": ["^build:deps", "^build:wasm", "^build:internal"],
+            "dependsOn": ["^build:deps", "^build:wasm"],
             "outputs": ["dist/**", "target/**", "pkg/**"]
         },
         "build": {
