@@ -4,11 +4,11 @@ import type { Account, Signature, TypedData } from "starknet";
 import {
     NO_IDENTITY,
     NO_SIGNER,
-    createSDK,
     type SchemaType,
     type SDK,
     type SDKConfig,
 } from "@dojoengine/internal";
+import { createSDK } from "../createSDK.ts";
 
 export * from "@dojoengine/internal";
 export * from "./worker.ts";

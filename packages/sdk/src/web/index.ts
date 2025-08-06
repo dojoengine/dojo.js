@@ -2,12 +2,12 @@ import * as torii from "@dojoengine/torii-wasm";
 import { err, ok, type Result } from "neverthrow";
 import type { Account, Signature, TypedData } from "starknet";
 import {
-    createSDK,
     NO_ACCOUNT,
     type SchemaType,
     type SDK,
     type SDKConfig,
 } from "@dojoengine/internal";
+import { createSDK } from "../createSDK";
 
 export {
     ClauseBuilder,

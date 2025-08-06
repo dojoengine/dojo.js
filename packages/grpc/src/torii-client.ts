@@ -80,7 +80,7 @@ function bufferToHex(buffer: Uint8Array): string {
 }
 
 interface GrpcSubscription {
-    id: number;
+    id: bigint;
     stream: ServerStreamingCall<object, object>;
     cancel: () => void;
 }
@@ -96,7 +96,11 @@ class Subscription {
         this._subscription.cancel();
     }
 
-    get id(): number {
+    free() {
+        this._subscription.cancel();
+    }
+
+    get id(): bigint {
         return this._subscription.id;
     }
 }
@@ -110,8 +114,8 @@ interface StreamHandlerOptions<TReq extends object, TRes extends object> {
 
 export class ToriiGrpcClient {
     private client: DojoGrpcClient;
-    private nextSubscriptionId = 1;
-    private subscriptions = new Map<number, GrpcSubscription>();
+    private nextSubscriptionId = 1n;
+    private subscriptions = new Map<bigint, GrpcSubscription>();
 
     constructor(config: ClientConfig) {
         this.client = new DojoGrpcClient({
