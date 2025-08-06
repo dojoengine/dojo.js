@@ -1,11 +1,11 @@
 {
     "name": "@dojoengine/internal",
-    "version": "1.6.0",
+    "version": "1.6.1",
     "description": "Internal APIs for Dojo Engine packages",
     "author": "Dojo Team",
     "license": "MIT",
     "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+    "types": "./dist/index.d.ts",
     "type": "module",
     "scripts": {
         "build:internal": "tsup",
