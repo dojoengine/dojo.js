@@ -1,6 +1,5 @@
 export * from "./clauseBuilder";
 export * from "./convertToMemberValue";
-export * from "./createSDK";
 export * from "./errors";
 export * from "./generateTypedData";
 export * from "./merge";

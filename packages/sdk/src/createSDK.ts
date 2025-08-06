@@ -1,19 +1,22 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
 import { ok, type Result } from "neverthrow";
 import type { Account, TypedData } from "starknet";
-import { generateTypedData } from "./generateTypedData";
-import { defaultToriiPagination, Pagination } from "./pagination";
-import { parseEntities } from "./parseEntities";
-import { subscribeQueryModelCallback } from "./subscribeQueryModel";
 import {
+    subscribeQueryModelCallback,
+    generateTypedData,
+    defaultToriiPagination,
+    Pagination,
+    parseEntities,
+    defaultTokenBalance,
     getTokenBalances,
     getTokens,
-    onTokenBalanceUpdated,
     onTokenUpdated,
+    parseTokenRequest,
+    safeCallback,
     subscribeToken,
     subscribeTokenBalance,
     updateTokenBalanceSubscription,
-} from "./token";
+} from "@dojoengine/internal";
 import type {
     GetParams,
     GetTokenBalanceRequest,
@@ -28,7 +31,8 @@ import type {
     ToriiResponse,
     UnionOfModelData,
     UpdateTokenBalanceSubscriptionRequest,
-} from "./types";
+} from "@dojoengine/internal";
+import { ToriiGrpcClient } from "@dojoengine/grpc";
 
 export interface CreateSDKOptions {
     client: torii.ToriiClient;
@@ -53,6 +57,10 @@ export function createSDK<T extends SchemaType>({
     sendMessage,
     sendMessageBatch,
 }: CreateSDKOptions): SDK<T> {
+    const grpcClient = new ToriiGrpcClient({
+        toriiUrl: config.client.toriiUrl ?? "",
+        worldAddress: config.client.worldAddress,
+    });
     return {
         client,
 
@@ -245,7 +253,14 @@ export function createSDK<T extends SchemaType>({
         onTokenBalanceUpdated: async (
             request: SubscribeTokenBalanceRequest
         ): Promise<torii.Subscription> => {
-            return await onTokenBalanceUpdated(client, request);
+            const { contractAddresses, accountAddresses, tokenIds, callback } =
+                parseTokenRequest(request);
+            return await grpcClient.onTokenBalanceUpdated(
+                contractAddresses ?? [],
+                accountAddresses ?? [],
+                tokenIds ?? [],
+                safeCallback(callback, defaultTokenBalance)
+            );
         },
 
         /**

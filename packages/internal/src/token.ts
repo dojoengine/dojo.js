@@ -20,7 +20,7 @@ type Strict<T> = {
  * @param defaultValue - Default value to check against
  * @returns Wrapped callback that handles try/catch
  */
-function safeCallback<T>(
+export function safeCallback<T>(
     callback: SubscriptionCallback<T>,
     defaultValue: T
 ): (res: T) => void {
@@ -51,9 +51,9 @@ export const defaultTokenBalance: torii.TokenBalance = {
         "0x0000000000000000000000000000000000000000000000000000000000000000",
 };
 
-function parseTokenRequest<T extends GetTokenRequest & GetTokenBalanceRequest>(
-    req: T
-): Strict<T> {
+export function parseTokenRequest<
+    T extends GetTokenRequest & GetTokenBalanceRequest,
+>(req: T): Strict<T> {
     if (req.contractAddresses) {
         req.contractAddresses = req.contractAddresses.map((r) =>
             addAddressPadding(r)
