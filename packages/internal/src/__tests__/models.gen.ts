@@ -4,7 +4,7 @@ import {
     CairoOption,
     CairoOptionVariant,
 } from "starknet";
-import type { SchemaType as ISchemaType } from "../internal/types";
+import type { SchemaType as ISchemaType } from "..";
 
 export type TypedCairoEnum<T> = CairoCustomEnum & {
     variant: { [K in keyof T]: T[K] | undefined };

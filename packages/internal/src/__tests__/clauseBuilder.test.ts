@@ -9,8 +9,8 @@ import {
     HashedKeysClause,
     MemberClause,
     OrComposeClause,
-} from "../internal/clauseBuilder";
-import type { SchemaType } from "../internal/types";
+    type SchemaType,
+} from "../";
 
 // Test models interface
 interface TestModels extends SchemaType {

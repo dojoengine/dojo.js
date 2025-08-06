@@ -1,13 +1,28 @@
 import * as torii from "@dojoengine/torii-wasm";
 import { err, ok, type Result } from "neverthrow";
 import type { Account, Signature, TypedData } from "starknet";
-import { createSDK } from "../internal/createSDK";
-import { NO_ACCOUNT } from "../internal/errors";
-import type { SchemaType, SDK, SDKConfig } from "../internal/types";
+import {
+    createSDK,
+    NO_ACCOUNT,
+    type SchemaType,
+    type SDK,
+    type SDKConfig,
+} from "@dojoengine/internal";
 
-export * from "../internal/clauseBuilder";
-export * from "../internal/toriiQueryBuilder";
-export * from "../internal/types";
+export {
+    ClauseBuilder,
+    ToriiQueryBuilder,
+    type SchemaType,
+    type SDK,
+    KeysClause,
+    MemberClause,
+    AndComposeClause,
+    OrComposeClause,
+    HashedKeysClause,
+    type StandardizedQueryResult,
+    HistoricalToriiQueryBuilder,
+    type ParsedEntity,
+} from "@dojoengine/internal";
 
 /**
  * Creates a new Torii client instance.

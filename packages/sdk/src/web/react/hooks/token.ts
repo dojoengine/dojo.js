@@ -4,7 +4,7 @@ import type {
     GetTokenBalanceRequest,
     GetTokenRequest,
     SubscriptionCallbackArgs,
-} from "../..";
+} from "@dojoengine/internal";
 import { useDojoSDK } from "../hooks";
 import { deepEqual } from "./utils";
 

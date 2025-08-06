@@ -1,7 +1,7 @@
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useContext, useMemo } from "react";
 import type { BigNumberish } from "starknet";
-import type { SchemaType } from "../../../internal/types";
+import type { SchemaType } from "@dojoengine/internal";
 import { DojoContext, type DojoContextType } from "../provider";
 
 export * from "./entities";

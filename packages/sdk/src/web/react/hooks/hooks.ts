@@ -1,13 +1,13 @@
 import type { Subscription } from "@dojoengine/torii-wasm";
 import type { Clause } from "@dojoengine/torii-wasm/types";
 import { useCallback, useEffect, useRef } from "react";
-import type { ToriiQueryBuilder } from "../../../internal/toriiQueryBuilder";
 import type {
+    ToriiQueryBuilder,
     ParsedEntity,
     SchemaType,
     SubscribeParams,
     SubscribeResponse,
-} from "../../../internal/types";
+} from "@dojoengine/internal";
 import { deepEqual, sleep } from "./utils";
 
 /**

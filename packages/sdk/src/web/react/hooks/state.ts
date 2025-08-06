@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import type { BigNumberish } from "starknet";
 import { create, type StoreApi, type UseBoundStore } from "zustand";
-import type { ParsedEntity, SchemaType } from "../../../internal/types";
+import type { ParsedEntity, SchemaType } from "@dojoengine/internal";
 import type { GameState } from "../../state";
 import { createDojoStoreFactory } from "../../state/zustand";
 import { DojoContext, type DojoContextType } from "../provider";

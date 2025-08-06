@@ -6,7 +6,7 @@ import type {
     MockSchemaType,
     PlayerModel,
 } from "../__example__/index";
-import type { ParsedEntity } from "../internal/types";
+import type { ParsedEntity } from "@dojoengine/internal";
 import { createDojoStore } from "../web/state";
 
 interface MockParsedEntity extends ParsedEntity<MockSchemaType> {

@@ -6,8 +6,8 @@ import type {
     Query,
 } from "@dojoengine/torii-wasm/types";
 import { err, ok, type Result } from "neverthrow";
-import { UNDEFINED_CLAUSE } from "./errors.ts";
-import type { SchemaType } from "./types.ts";
+import { UNDEFINED_CLAUSE } from "./errors";
+import type { SchemaType } from "./types";
 
 const defaultToriiOptions = () => ({
     pagination: {

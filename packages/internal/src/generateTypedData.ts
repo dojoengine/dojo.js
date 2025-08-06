@@ -1,5 +1,5 @@
 import type { StarknetDomain, TypedData } from "starknet";
-import type { SchemaType, UnionOfModelData } from "../internal/types";
+import type { SchemaType, UnionOfModelData } from "./types";
 
 /**
  * Generates typed data for any user-defined message.

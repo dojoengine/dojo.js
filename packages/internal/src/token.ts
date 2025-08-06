@@ -1,6 +1,6 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
 import { addAddressPadding } from "starknet";
-import { defaultToriiPagination } from "./pagination.ts";
+import { defaultToriiPagination } from "./pagination";
 import type {
     GetTokenBalanceRequest,
     GetTokenRequest,
@@ -8,7 +8,7 @@ import type {
     SubscribeTokenRequest,
     SubscriptionCallback,
     UpdateTokenBalanceSubscriptionRequest,
-} from "./types.ts";
+} from "./types";
 
 type Strict<T> = {
     [K in keyof T]-?: NonNullable<T[K]>;

@@ -1,6 +1,6 @@
 import { type DojoConfig, DojoProvider } from "@dojoengine/core";
 import { createContext, type ReactNode, useContext } from "react";
-import type { SchemaType, SDK } from "../../internal/types";
+import type { SchemaType, SDK } from "@dojoengine/internal";
 import type { GameState } from "../state";
 import { createDojoStore } from "./hooks/state";
 

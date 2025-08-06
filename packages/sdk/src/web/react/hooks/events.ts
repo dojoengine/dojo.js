@@ -3,7 +3,7 @@ import type {
     ParsedEntity,
     SchemaType,
     ToriiQueryBuilder,
-} from "../../../internal/types";
+} from "@dojoengine/internal";
 import { useDojoSDK } from "../hooks";
 import { createSubscriptionHook } from "./hooks";
 

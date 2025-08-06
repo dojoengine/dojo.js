@@ -50,6 +50,8 @@ import type {
     PublishMessageRequest,
 } from "../generated/world";
 
+let textDecoder: TextDecoder | undefined = undefined;
+
 function bufferToHex(buffer: Uint8Array): string {
     return (
         "0x" +
@@ -133,6 +135,22 @@ export function mapControllersResponse(
     };
 }
 
+export function uint8ArrayToString(input: Uint8Array): string {
+    if (textDecoder) {
+        return textDecoder.decode(input);
+    }
+    textDecoder = new TextDecoder();
+    return textDecoder.decode(input);
+}
+
+export function parseJsonMetadata(input: Uint8Array): any {
+    try {
+        return JSON.parse(uint8ArrayToString(input));
+    } catch (_err) {
+        return uint8ArrayToString(input);
+    }
+}
+
 export function mapToken(token: GrpcToken): ToriiToken {
     return {
         contract_address: bufferToHex(token.contract_address),
@@ -140,7 +158,7 @@ export function mapToken(token: GrpcToken): ToriiToken {
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,
-        metadata: bufferToHex(token.metadata),
+        metadata: parseJsonMetadata(token.metadata),
     };
 }
 
@@ -180,7 +198,7 @@ export function mapTokenCollection(
         symbol: collection.symbol,
         decimals: collection.decimals,
         count: collection.count,
-        metadata: bufferToHex(collection.metadata),
+        metadata: parseJsonMetadata(collection.metadata),
     };
 }
 
