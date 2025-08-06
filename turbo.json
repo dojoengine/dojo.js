@@ -12,8 +12,12 @@
             "outputs": ["dist/**", "target/**", "pkg/**"],
             "inputs": ["dojo.c/**", "crates/**"]
         },
+        "build:internal": {
+            "dependsOn": ["^build:internal"],
+            "outputs": ["dist/**", "target/**", "pkg/**"]
+        },
         "build:deps": {
-            "dependsOn": ["^build:deps", "^build:wasm"],
+            "dependsOn": ["^build:deps", "^build:wasm", "^build:internal"],
             "outputs": ["dist/**", "target/**", "pkg/**"]
         },
         "build": {

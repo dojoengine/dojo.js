@@ -10,12 +10,12 @@ import {
     defaultTokenBalance,
     getTokenBalances,
     getTokens,
-    onTokenUpdated,
     parseTokenRequest,
     safeCallback,
     subscribeToken,
     subscribeTokenBalance,
     updateTokenBalanceSubscription,
+    defaultToken,
 } from "@dojoengine/internal";
 import type {
     GetParams,
@@ -58,7 +58,7 @@ export function createSDK<T extends SchemaType>({
     sendMessageBatch,
 }: CreateSDKOptions): SDK<T> {
     const grpcClient = new ToriiGrpcClient({
-        toriiUrl: config.client.toriiUrl ?? "",
+        toriiUrl: config.client.toriiUrl ?? "http://localhost:8080",
         worldAddress: config.client.worldAddress,
     });
     return {
@@ -99,13 +99,13 @@ export function createSDK<T extends SchemaType>({
         }: SubscribeParams<T>): Promise<SubscribeResponse<T>> => {
             const q = query.build();
 
-            const entities = await client.getEventMessages(q);
+            const entities = await grpcClient.getEventMessages(q);
             const parsedEntities = parseEntities<T>(entities.items);
             return [
                 Pagination.fromQuery(query, entities.next_cursor).withItems(
                     parsedEntities
                 ),
-                await client.onEventMessageUpdated(
+                await grpcClient.onEventMessageUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
                 ),
@@ -253,13 +253,13 @@ export function createSDK<T extends SchemaType>({
         onTokenBalanceUpdated: async (
             request: SubscribeTokenBalanceRequest
         ): Promise<torii.Subscription> => {
-            const { contractAddresses, accountAddresses, tokenIds, callback } =
+            const { contractAddresses, accountAddresses, tokenIds } =
                 parseTokenRequest(request);
             return await grpcClient.onTokenBalanceUpdated(
                 contractAddresses ?? [],
                 accountAddresses ?? [],
                 tokenIds ?? [],
-                safeCallback(callback, defaultTokenBalance)
+                safeCallback(request.callback, defaultTokenBalance)
             );
         },
 
@@ -277,7 +277,12 @@ export function createSDK<T extends SchemaType>({
         onTokenUpdated: async (
             request: SubscribeTokenRequest
         ): Promise<torii.Subscription> => {
-            return await onTokenUpdated(client, request);
+            const { contractAddresses, tokenIds } = parseTokenRequest(request);
+            return await grpcClient.onTokenUpdated(
+                contractAddresses ?? [],
+                tokenIds ?? [],
+                safeCallback(request.callback, defaultToken)
+            );
         },
 
         /**

@@ -8,7 +8,8 @@
   "types": "./dist/index.d.ts",
     "type": "module",
     "scripts": {
-        "build:deps": "tsup",
+        "build:internal": "tsup",
+        "build:deps": "pnpm build:internal",
         "build": "pnpm build:deps",
         "format:check": "biome format .",
         "format": "biome format . --write",

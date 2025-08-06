@@ -122,13 +122,13 @@ export async function onTokenBalanceUpdated(
     client: torii.ToriiClient,
     request: SubscribeTokenBalanceRequest
 ): Promise<torii.Subscription> {
-    const { contractAddresses, accountAddresses, tokenIds, callback } =
+    const { contractAddresses, accountAddresses, tokenIds } =
         parseTokenRequest(request);
     return await client.onTokenBalanceUpdated(
         contractAddresses ?? [],
         accountAddresses ?? [],
         tokenIds ?? [],
-        safeCallback(callback, defaultTokenBalance)
+        safeCallback(request.callback, defaultTokenBalance)
     );
 }
 
