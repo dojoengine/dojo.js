@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 1.6.3
+
+### Patch Changes
+
+- 521d4ca: chore(grpc): publish to registry
+
 ## 0.0.2
 
 ### Patch Changes

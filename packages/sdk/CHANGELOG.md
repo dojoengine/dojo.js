@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.6.5
+
+### Patch Changes
+
+- Updated dependencies [521d4ca]
+  - @dojoengine/grpc@1.6.3
+
 ## 1.6.4
 
 ### Patch Changes
