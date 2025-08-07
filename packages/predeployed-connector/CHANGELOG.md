@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.3
+
+### Patch Changes
+
+- b408e6f: fix: bundle @dojoengine/internal with public packages
+
 ## 1.6.2
 
 ### Patch Changes

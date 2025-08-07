@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.6.3
+
+### Patch Changes
+
+- b408e6f: fix: bundle @dojoengine/internal with public packages
+- Updated dependencies [b408e6f]
+  - @dojoengine/state@1.6.3
+  - @dojoengine/torii-client@1.6.3
+  - @dojoengine/utils@1.6.3
+
 ## 1.6.2
 
 ### Patch Changes

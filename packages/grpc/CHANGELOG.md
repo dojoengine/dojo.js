@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 0.0.2
+
+### Patch Changes
+
+- b408e6f: fix: bundle @dojoengine/internal with public packages
+
 ## 0.0.1
 
 ### Patch Changes
