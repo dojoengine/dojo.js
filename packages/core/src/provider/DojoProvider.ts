@@ -5,9 +5,9 @@ import {
     type ArgsOrCalldata,
     type Call,
     type CallContractResponse,
+    CallResult,
     Contract,
     type InvokeFunctionResponse,
-    type Result,
     RpcProvider,
     shortString,
     type UniversalDetails,
@@ -51,11 +51,11 @@ export class DojoProvider extends Provider {
             nodeUrl: url,
         });
 
-        this.contract = new Contract(
-            manifest.world.abi,
-            this.getWorldAddress(),
-            this.provider
-        );
+        this.contract = new Contract({
+            abi: manifest.world.abi,
+            address: this.getWorldAddress(),
+            providerOrAccount: this.provider,
+        });
         this.manifest = manifest;
         this.logger = new ConsoleLogger({ level: logLevel });
     }
@@ -213,7 +213,7 @@ export class DojoProvider extends Provider {
     public async call(
         nameSpace: string,
         call: DojoCall | Call
-    ): Promise<Result> {
+    ): Promise<CallResult> {
         if ("contractName" in call) {
             try {
                 const contractInfos = getContractByName(
@@ -221,11 +221,11 @@ export class DojoProvider extends Provider {
                     nameSpace,
                     call.contractName
                 );
-                const contract = new Contract(
-                    contractInfos.abi,
-                    contractInfos.address,
-                    this.provider
-                );
+                const contract = new Contract({
+                    abi: contractInfos.abi,
+                    address: contractInfos.address,
+                    providerOrAccount: this.provider,
+                });
                 return await contract.call(
                     call.entrypoint,
                     call.calldata as ArgsOrCalldata

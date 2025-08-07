@@ -2,7 +2,7 @@ import { InjectedConnector } from "@starknet-react/core";
 import {
     Account,
     type AccountInterface,
-    constants,
+    ETransactionVersion,
     type ProviderInterface,
     RpcChannel,
     RpcProvider,
@@ -70,7 +70,13 @@ export class PredeployedAccountsConnector extends InjectedConnector {
 class PredeployedWalletAccount extends WalletAccount {
     private _inner: PredeployedWallet;
     constructor(base: any, rpc: string) {
-        super({ nodeUrl: rpc }, base, "1", base.account.address);
+        super({
+            provider: base,
+            walletProvider: base,
+            address: base.account.address,
+            cairoVersion: "1",
+            paymaster: { nodeUrl: rpc },
+        });
         this._inner = base;
     }
     request: RequestFn = async (call) => {
@@ -250,13 +256,13 @@ export async function predeployedAccounts(
                 new PredeployedWallet(
                     `${id}-${idx}`,
                     `${name} ${idx}`,
-                    new Account(
+                    new Account({
                         provider,
-                        a.address,
-                        a.privateKey,
-                        undefined,
-                        constants.TRANSACTION_VERSION.V3
-                    )
+                        address: a.address,
+                        signer: a.privateKey,
+                        cairoVersion: "1",
+                        transactionVersion: ETransactionVersion.V3,
+                    })
                 )
             ),
         }));

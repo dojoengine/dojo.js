@@ -1,4 +1,5 @@
 import { Account, RpcProvider, shortString } from "starknet";
+import { newAccount } from ".";
 
 import {
     Predeployed,
@@ -75,7 +76,7 @@ export class PredeployedManager {
     private setActiveAccount(storage: PredeployedStorage): void {
         for (let address in storage) {
             if (storage[address].active) {
-                this.account = new Account(
+                this.account = newAccount(
                     this.provider,
                     address,
                     storage[address].privateKey,
@@ -132,7 +133,7 @@ export class PredeployedManager {
         storage[address].active = true;
 
         Storage.set(this.getStorageKey(), storage);
-        this.account = new Account(
+        this.account = newAccount(
             this.provider,
             address,
             storage[address].privateKey,
@@ -146,7 +147,7 @@ export class PredeployedManager {
             throw new Error("predeployed not found");
         }
 
-        return new Account(
+        return newAccount(
             this.provider,
             address,
             storage[address].privateKey,
@@ -173,7 +174,7 @@ export class PredeployedManager {
         const storage = this.getStorage();
         for (let address in storage) {
             if (storage[address].active) {
-                return new Account(
+                return newAccount(
                     this.provider,
                     address,
                     storage[address].privateKey,

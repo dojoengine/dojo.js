@@ -1,15 +1,16 @@
 import { DojoConfig } from "@dojoengine/core";
-import { Account, RpcProvider } from "starknet";
-import { BurnerManager } from "..";
+import { RpcProvider } from "starknet";
+import { BurnerManager, newAccount } from "..";
 
 export const setupBurnerManager = async (config: DojoConfig) => {
     const burnerManager = new BurnerManager({
-        masterAccount: new Account(
+        masterAccount: newAccount(
             {
                 nodeUrl: config.rpcUrl,
             },
             config.masterAddress,
-            config.masterPrivateKey
+            config.masterPrivateKey,
+            "1"
         ),
         accountClassHash: config.accountClassHash,
         rpcProvider: new RpcProvider({ nodeUrl: config.rpcUrl }),

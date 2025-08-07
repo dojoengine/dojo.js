@@ -20,6 +20,7 @@ import {
 import { derivePrivateKeyFromSeed } from "../utils/keyDerivation";
 import Storage from "../utils/storage";
 import { prefundAccount } from "./prefundAccount";
+import { newAccount } from ".";
 
 export const PREFUND_AMOUNT = "10000000000000000"; // 0.01 ETH
 
@@ -137,7 +138,7 @@ export class BurnerManager {
     private setActiveBurnerAccount(storage: BurnerStorage): void {
         for (let address in storage) {
             if (storage[address].active) {
-                this.account = new Account(
+                this.account = newAccount(
                     this.provider,
                     address,
                     storage[address].privateKey,
@@ -232,7 +233,7 @@ export class BurnerManager {
         storage[address].active = true;
 
         Storage.set(this.getBurnerKey(), storage);
-        this.account = new Account(
+        this.account = newAccount(
             this.provider,
             address,
             storage[address].privateKey,
@@ -255,7 +256,7 @@ export class BurnerManager {
             throw new Error("burner not found");
         }
 
-        return new Account(
+        return newAccount(
             this.provider,
             address,
             storage[address].privateKey,
@@ -282,7 +283,7 @@ export class BurnerManager {
         const storage = this.getBurnerStorage();
         for (let address in storage) {
             if (storage[address].active) {
-                return new Account(
+                return newAccount(
                     this.provider,
                     address,
                     storage[address].privateKey,
@@ -323,7 +324,7 @@ export class BurnerManager {
         const { privateKey, publicKey, address } =
             this.generateKeysAndAddress(options);
 
-        const burner = new Account(this.provider, address, privateKey, "1");
+        const burner = newAccount(this.provider, address, privateKey, "1");
 
         let deployTx = "";
 
