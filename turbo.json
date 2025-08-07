@@ -10,25 +10,48 @@
         },
         "build:internal": {
             "dependsOn": ["^build:internal", "^build:wasm"],
-            "outputs": ["dist/**"]
+            "outputs": ["dist/**"],
+            "inputs": [
+                "src/**",
+                "package.json",
+                "tsconfig.json",
+                "build*.ts",
+                "../../bun.build.config.ts"
+            ]
         },
         "build:wasm": {
             "dependsOn": ["^build:wasm"],
             "outputs": ["dist/**", "target/**", "pkg/**"],
-            "inputs": ["dojo.c/**", "crates/**"]
+            "inputs": ["dojo.c/**", "crate/**", "scripts/**", "package.json"]
+        },
+        "build:proto": {
+            "outputs": ["src/generated/**"],
+            "inputs": ["proto/**", "scripts/build-proto.sh"]
         },
         "build:deps": {
-            "dependsOn": ["^build:deps", "^build:internal", "^build:wasm"],
-            "outputs": ["dist/**", "target/**", "pkg/**"]
+            "dependsOn": ["^build:deps", "^build:internal", "^build:wasm", "build:proto"],
+            "outputs": ["dist/**"],
+            "inputs": [
+                "src/**",
+                "package.json",
+                "tsconfig.json",
+                "build*.ts",
+                "../../bun.build.config.ts"
+            ]
         },
         "build": {
             "dependsOn": ["^build", "^build:wasm", "^build:internal"],
             "outputs": [
                 ".next/**",
                 "!.next/cache/**",
-                "dist/**",
-                "target/**",
-                "pkg/**"
+                "dist/**"
+            ],
+            "inputs": [
+                "src/**",
+                "package.json",
+                "tsconfig.json",
+                "build*.ts",
+                "../../bun.build.config.ts"
             ]
         },
         "check-types": {
