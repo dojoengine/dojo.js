@@ -4,9 +4,9 @@ import { buildPackage } from "../../bun.build.config";
 await buildPackage({
     entry: "./src/index.ts",
     outdir: "./dist",
-    minify: false,
-    splitting: false,
-    sourcemap: true,
+    minify: true, // Enable minification
+    splitting: false, // Single entry point
+    sourcemap: "external",
     external: [],
 });
 

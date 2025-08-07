@@ -4,9 +4,9 @@ import { buildPackage } from "../../bun.build.config";
 await buildPackage({
     entry: ["./src/index.ts", "./src/cli/compile-abi.ts"],
     outdir: "./dist",
-    minify: false,
-    splitting: false,
-    sourcemap: true,
+    minify: true, // Enable minification
+    splitting: true, // Enable splitting for shared code between entries
+    sourcemap: "external",
     external: ["@dojoengine/recs", "starknet", "zod"],
 });
 

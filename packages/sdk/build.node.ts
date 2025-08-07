@@ -7,7 +7,10 @@ await buildPackage({
     },
     outdir: "./dist/node",
     format: "esm",
-    target: "node",
+    target: "bun", // Optimize for Bun runtime
+    minify: true, // Enable minification
+    splitting: false, // Single entry, no need for splitting
+    sourcemap: "external",
     external: [
         "@dojoengine/core",
         "@dojoengine/grpc",

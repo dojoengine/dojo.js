@@ -12,6 +12,9 @@ await buildPackage({
     outdir: "./dist/web",
     format: "esm",
     target: "browser",
+    splitting: true, // Enable splitting for shared code
+    minify: true, // Use default minification settings
+    sourcemap: "external",
     external: [
         "@dojoengine/core",
         "@dojoengine/grpc",
