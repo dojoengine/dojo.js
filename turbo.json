@@ -8,8 +8,8 @@
             "outputs": ["dist/**"]
         },
         "build:internal": {
-            "dependsOn": ["^build:internal"],
-            "outputs": ["dist/**", "target/**", "pkg/**"]
+            "dependsOn": ["^build:internal", "^build:wasm"],
+            "outputs": ["dist/**"]
         },
         "build:wasm": {
             "dependsOn": ["^build:wasm","^build:internal"],
@@ -17,11 +17,11 @@
             "inputs": ["dojo.c/**", "crates/**"]
         },
         "build:deps": {
-            "dependsOn": ["^build:deps", "^build:wasm"],
+            "dependsOn": ["^build:deps", "^build:internal"],
             "outputs": ["dist/**", "target/**", "pkg/**"]
         },
         "build": {
-            "dependsOn": ["^build", "^build:wasm", "^build:deps"],
+            "dependsOn": ["^build"],
             "outputs": [
                 ".next/**",
                 "!.next/cache/**",
