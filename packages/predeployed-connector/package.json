@@ -9,7 +9,7 @@
     "scripts": {
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
-        "build:deps": "tsup --dts-resolve",
+        "build:deps": "bun run build.ts",
         "build": "bun run build:deps",
         "test": "vitest run --passWithNoTests --config ./vitest.config.ts",
         "coverage": "vitest run --coverage",

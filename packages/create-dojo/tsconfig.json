@@ -6,7 +6,8 @@
         "moduleResolution": "node",
         "moduleDetection": "force",
         "allowImportingTsExtensions": true,
-        "noEmit": true,
+        "declaration": true,
+        "outDir": "./dist",
 
         "strict": true,
         "downlevelIteration": true,

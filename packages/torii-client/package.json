@@ -9,7 +9,7 @@
     "scripts": {
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
-        "build:deps": "tsup",
+        "build:deps": "bun run build.ts",
         "build": "bun run build:deps",
         "test": "vitest run --passWithNoTests",
         "format:check": "biome format .",

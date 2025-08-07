@@ -50,7 +50,6 @@
         "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.3",
         "husky": "^9.1.7",
         "lerna": "^8.2.3",
-        "tsup": "^8.5.0",
         "turbo": "^2.5.5",
         "typedoc": "^0.26.11",
         "typedoc-plugin-coverage": "^3.4.1",

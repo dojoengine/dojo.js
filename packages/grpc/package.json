@@ -10,7 +10,7 @@
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
         "build:proto": "./scripts/build-proto.sh",
-        "build:deps": "tsup",
+        "build:deps": "bun run build.ts",
         "build": "bun run build:proto && bun run build:deps",
         "format:check": "biome format .",
         "format": "biome format . --write",

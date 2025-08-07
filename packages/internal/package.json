@@ -9,7 +9,7 @@
     "types": "./dist/index.d.ts",
     "type": "module",
     "scripts": {
-        "build:internal": "tsup",
+        "build:internal": "bun run build.ts",
         "format:check": "biome format .",
         "format": "biome format . --write",
         "lint:check": "biome lint .",
