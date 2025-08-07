@@ -4,8 +4,9 @@
     "files": {
         "ignoreUnknown": false,
         "includes": [
-            "packages/**/*.{ts,tsx,js,jsx,mjs,cjs}",
-            "examples/**/*.{ts,tsx,js,jsx,mjs,cjs}",
+            "packages/**/*.{ts,tsx,js,jsx,mjs,cjs,json}",
+            "examples/**/*.{ts,tsx,js,jsx,mjs,cjs,json}",
+            "*.{ts,tsx,js,jsx,mjs,cjs,json}",
             "!**/*/target/**",
             "!**/*/dist/**",
             "!**/*/build/**",

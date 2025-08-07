@@ -24,6 +24,6 @@ examples=(
 for example in "${examples[@]}"; do
   echo "Building in $example..."
   cd "$example"
-  pnpm run build
+  bun run build
   cd ../../
 done

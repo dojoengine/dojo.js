@@ -16,6 +16,10 @@ on:
         description: "Given github tag to create release for"
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Release pushed tag

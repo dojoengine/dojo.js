@@ -4,13 +4,17 @@ on:
     pull_request:
         types: [opened, edited, synchronize]
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+    cancel-in-progress: true
+
 jobs:
     check-pr-title:
         runs-on: ubuntu-latest
 
         steps:
             - name: Check out the repository
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
 
             - name: Validate PR title
               id: validate

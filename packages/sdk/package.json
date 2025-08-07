@@ -48,7 +48,7 @@
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
         "build:deps": "tsup --config tsup.node.ts && tsup --config tsup.web.ts",
-        "build": "pnpm build:deps",
+        "build": "bun run build:deps",
         "test": "vitest run --config ./vitest.config.ts",
         "coverage": "vitest run --coverage",
         "format:check": "biome format .",

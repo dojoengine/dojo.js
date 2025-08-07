@@ -1,1 +1,1 @@
-pnpm run format:check --ui stream
+bun run format:check --ui stream

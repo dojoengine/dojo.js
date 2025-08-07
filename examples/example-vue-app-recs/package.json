@@ -7,7 +7,7 @@
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
         "dev": "vite",
-        "build": "pnpm run type-check && pnpm run build-only",
+        "build": "bun run type-check && bun run build-only",
         "preview": "vite preview",
         "build-only": "vite build",
         "type-check": "vue-tsc --noEmit -p tsconfig.json --composite false",

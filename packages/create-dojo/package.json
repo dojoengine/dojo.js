@@ -19,7 +19,7 @@
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
         "build:deps": "tsup --dts-resolve",
-        "build": "pnpm build:deps",
+        "build": "bun run build:deps",
         "format:check": "biome format .",
         "format": "biome format . --write",
         "docs": "typedoc"

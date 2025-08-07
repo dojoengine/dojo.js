@@ -19,10 +19,10 @@ if ! command -v protoc &>/dev/null; then
 fi
 
 # Find the protobuf-ts plugin
-PROTOC_GEN_TS="$GRPC_DIR/node_modules/.bin/protoc-gen-ts"
+PROTOC_GEN_TS="$GRPC_DIR/../../node_modules/.bin/protoc-gen-ts"
 
 if [ ! -f "$PROTOC_GEN_TS" ]; then
-  echo "Error: @protobuf-ts/plugin not found. Run 'pnpm install' first."
+  echo "Error: @protobuf-ts/plugin not found. Run 'bun install' first."
   exit 1
 fi
 
@@ -40,4 +40,3 @@ protoc \
   "$PROTO_DIR"/*.proto
 
 echo "Proto compilation complete!"
-
