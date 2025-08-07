@@ -2007,9 +2007,6 @@ importers:
       '@dojoengine/grpc':
         specifier: workspace:*
         version: link:../grpc
-      '@dojoengine/internal':
-        specifier: workspace:*
-        version: link:../internal
       '@dojoengine/torii-client':
         specifier: workspace:*
         version: link:../torii-client
@@ -2062,6 +2059,9 @@ importers:
       '@biomejs/biome':
         specifier: ^2.1.3
         version: 2.1.3
+      '@dojoengine/internal':
+        specifier: workspace:*
+        version: link:../internal
       '@rollup/plugin-commonjs':
         specifier: ^28.0.2
         version: 28.0.3(rollup@4.44.2)
