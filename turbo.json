@@ -1,10 +1,15 @@
 {
-    "$schema": "./node_modules/turbo/schema.json",
+    "$schema": "https://turborepo.com/schema.v2.json",
     "ui": "tui",
     "tasks": {
         "dev": {
             "persistent": true,
-            "dependsOn": ["^build:deps"],
+            "cache": false,
+            "interruptible": true,
+            "dependsOn": ["^build:deps"]
+        },
+        "build:internal": {
+            "dependsOn": ["^build:internal", "^build:wasm"],
             "outputs": ["dist/**"]
         },
         "build:wasm": {
@@ -12,16 +17,12 @@
             "outputs": ["dist/**", "target/**", "pkg/**"],
             "inputs": ["dojo.c/**", "crates/**"]
         },
-        "build:internal": {
-            "dependsOn": ["^build:internal"],
-            "outputs": ["dist/**", "target/**", "pkg/**"]
-        },
         "build:deps": {
-            "dependsOn": ["^build:deps", "^build:wasm", "^build:internal"],
+            "dependsOn": ["^build:deps", "^build:internal", "^build:wasm"],
             "outputs": ["dist/**", "target/**", "pkg/**"]
         },
         "build": {
-            "dependsOn": ["^build", "^build:wasm", "^build:deps"],
+            "dependsOn": ["^build", "^build:wasm", "^build:internal"],
             "outputs": [
                 ".next/**",
                 "!.next/cache/**",
@@ -43,7 +44,8 @@
         },
         "test": {},
         "test:watch": {
-            "persistent": true
+            "persistent": true,
+            "cache": false
         }
     }
 }
