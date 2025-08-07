@@ -21,11 +21,11 @@ packages=(
 # Iterate over each package directory and run the build command
 for package in "${packages[@]}"; do
   echo "Building $package..."
-  pnpm --dir "$package" build
+  bun --cwd "$package" run build
 
   # Run tests only for non-wasm packages, non-torii-client packages, and create-dojo
   if [[ "$package" != *"-wasm" && "$package" != "packages/torii-client" && "$package" != "packages/create-dojo" ]]; then
-    pnpm --dir "$package" test
+    bun --cwd "$package" run test
   fi
 done
 

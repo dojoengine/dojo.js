@@ -12,13 +12,13 @@
         "lint": "biome lint . --write",
         "build:proto": "./scripts/build-proto.sh",
         "build:deps": "tsup",
-        "build": "pnpm build:proto && pnpm build:deps",
+        "build": "bun run build:proto && bun run build:deps",
         "format:check": "biome format .",
         "format": "biome format . --write",
         "test": "vitest run --passWithNoTests --coverage",
         "bench": "vitest bench --config vitest.config.bench.ts",
         "bench:report": "bun run src/benchmarks/report.ts",
-        "bench:full": "pnpm bench && pnpm bench:report",
+        "bench:full": "bun run bench && bun run bench:report",
         "update:proto": "./scripts/update-proto.sh"
     },
     "exports": {
@@ -28,7 +28,7 @@
         }
     },
     "keywords": [],
-    "packageManager": "pnpm@10.5.2",
+    "packageManager": "bun@1.2.19",
     "dependencies": {
         "@grpc/grpc-js": "^1.9.14",
         "@protobuf-ts/grpcweb-transport": "^2.11.1",

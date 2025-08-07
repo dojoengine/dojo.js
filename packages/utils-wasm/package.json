@@ -9,8 +9,8 @@
     "scripts": {
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
-        "build:wasm": "cd crate && sh ./build.sh",
-        "build": "pnpm build:wasm",
+        "build:wasm": "cd crate && bunx wasm-pack build --out-dir ../pkg --release --features console-error-panic",
+        "build": "bun run build:wasm",
         "format:check": "biome format .",
         "format": "biome format . --write"
     },

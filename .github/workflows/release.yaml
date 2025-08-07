@@ -34,32 +34,30 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 10.0.0
+      - uses: oven-sh/setup-bun@v1
 
-      - name: Setup Node.js with PNPM cache
+      - name: Setup Node.js with Bun cache
         uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
-          cache: "pnpm"
+          cache: "npm"
           # The cache will be invalidated if these files change
-          cache-dependency-path: "**/pnpm-lock.yaml"
+          cache-dependency-path: "**/bun.lock"
 
-      # Cache the PNPM store to speed up installations
-      - name: Get PNPM store directory
-        id: pnpm-cache
+      # Cache the Bun cache to speed up installations
+      - name: Get Bun cache directory
+        id: bun-cache
         shell: bash
         run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+          echo "STORE_PATH=$(bun pm cache)" >> $GITHUB_OUTPUT
 
-      - name: Setup PNPM cache
+      - name: Setup Bun cache
         uses: actions/cache@v3
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ${{ steps.bun-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-bun-store-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            ${{ runner.os }}-bun-store-
 
       # Optional: Cache build output for even faster subsequent builds
       - name: Cache build output
@@ -138,7 +136,7 @@ jobs:
         run: sudo apt-get install -y protobuf-compiler
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
       - name: Enter prerelease mode if needed
         if: steps.release-strategy.outputs.use_prerelease == 'true'
@@ -147,7 +145,7 @@ jobs:
           echo "Entering prerelease mode with tag: $PRERELEASE_TAG"
 
           if [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
-            pnpm changeset pre enter "$PRERELEASE_TAG"
+            bun changeset pre enter "$PRERELEASE_TAG"
           else
             echo "DRY RUN: Would enter prerelease mode with tag $PRERELEASE_TAG"
           fi
@@ -171,7 +169,7 @@ jobs:
         run: |
           echo "Running changeset version..."
           if [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
-            pnpm changeset version
+            bun changeset version
             
             # If we're in prerelease mode and on a non-main branch, we might need to force version bumps
             if [ "${{ steps.release-strategy.outputs.use_prerelease }}" == "true" ]; then
@@ -180,7 +178,7 @@ jobs:
           else
             echo "DRY RUN: Would run changeset version"
             # Show what would be versioned
-            pnpm changeset status --verbose
+            bun changeset status --verbose
           fi
 
       - name: Commit changes
@@ -201,7 +199,7 @@ jobs:
         run: |
           echo "Publishing packages..."
           # Changesets will only publish packages that are not ignored in config
-          pnpm release
+          bun run release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -211,7 +209,7 @@ jobs:
         run: |
           echo "DRY RUN: Would publish the following packages to npm:"
           # Show what changesets would publish
-          pnpm changeset publish --dry-run
+          bun changeset publish --dry-run
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -220,14 +218,14 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' && steps.check-changesets.outputs.has_changesets == 'true' }}
         run: |
           echo "Creating tags..."
-          pnpm changeset tag
+          bun changeset tag
           git push --tags
 
       - name: Exit prerelease mode if needed
         if: steps.release-strategy.outputs.use_prerelease == 'true' && github.event.inputs.dry_run != 'true' && steps.check-changesets.outputs.has_changesets == 'true'
         run: |
           echo "Exiting prerelease mode"
-          pnpm changeset pre exit || true
+          bun changeset pre exit || true
           # Commit the pre.json removal if it exists
           if [ -f .changeset/pre.json ]; then
             git add .changeset/pre.json

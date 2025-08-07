@@ -8,134 +8,91 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router'
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
 
-import { Route as rootRoute } from "./routes/__root";
+const PlaygroundLazyRouteImport = createFileRoute('/playground')()
+const DocumentationLazyRouteImport = createFileRoute('/documentation')()
+const IndexLazyRouteImport = createFileRoute('/')()
 
-// Create Virtual Routes
-
-const PlaygroundLazyImport = createFileRoute("/playground")();
-const DocumentationLazyImport = createFileRoute("/documentation")();
-const IndexLazyImport = createFileRoute("/")();
-
-// Create/Update Routes
-
-const PlaygroundLazyRoute = PlaygroundLazyImport.update({
-    id: "/playground",
-    path: "/playground",
-    getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/playground.lazy").then((d) => d.Route));
-
-const DocumentationLazyRoute = DocumentationLazyImport.update({
-    id: "/documentation",
-    path: "/documentation",
-    getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-    import("./routes/documentation.lazy").then((d) => d.Route)
-);
-
-const IndexLazyRoute = IndexLazyImport.update({
-    id: "/",
-    path: "/",
-    getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
-
-// Populate the FileRoutesByPath interface
-
-declare module "@tanstack/react-router" {
-    interface FileRoutesByPath {
-        "/": {
-            id: "/";
-            path: "/";
-            fullPath: "/";
-            preLoaderRoute: typeof IndexLazyImport;
-            parentRoute: typeof rootRoute;
-        };
-        "/documentation": {
-            id: "/documentation";
-            path: "/documentation";
-            fullPath: "/documentation";
-            preLoaderRoute: typeof DocumentationLazyImport;
-            parentRoute: typeof rootRoute;
-        };
-        "/playground": {
-            id: "/playground";
-            path: "/playground";
-            fullPath: "/playground";
-            preLoaderRoute: typeof PlaygroundLazyImport;
-            parentRoute: typeof rootRoute;
-        };
-    }
-}
-
-// Create and export the route tree
+const PlaygroundLazyRoute = PlaygroundLazyRouteImport.update({
+  id: '/playground',
+  path: '/playground',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/playground.lazy').then((d) => d.Route))
+const DocumentationLazyRoute = DocumentationLazyRouteImport.update({
+  id: '/documentation',
+  path: '/documentation',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/documentation.lazy').then((d) => d.Route))
+const IndexLazyRoute = IndexLazyRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 export interface FileRoutesByFullPath {
-    "/": typeof IndexLazyRoute;
-    "/documentation": typeof DocumentationLazyRoute;
-    "/playground": typeof PlaygroundLazyRoute;
+  '/': typeof IndexLazyRoute
+  '/documentation': typeof DocumentationLazyRoute
+  '/playground': typeof PlaygroundLazyRoute
 }
-
 export interface FileRoutesByTo {
-    "/": typeof IndexLazyRoute;
-    "/documentation": typeof DocumentationLazyRoute;
-    "/playground": typeof PlaygroundLazyRoute;
+  '/': typeof IndexLazyRoute
+  '/documentation': typeof DocumentationLazyRoute
+  '/playground': typeof PlaygroundLazyRoute
 }
-
 export interface FileRoutesById {
-    __root__: typeof rootRoute;
-    "/": typeof IndexLazyRoute;
-    "/documentation": typeof DocumentationLazyRoute;
-    "/playground": typeof PlaygroundLazyRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexLazyRoute
+  '/documentation': typeof DocumentationLazyRoute
+  '/playground': typeof PlaygroundLazyRoute
 }
-
 export interface FileRouteTypes {
-    fileRoutesByFullPath: FileRoutesByFullPath;
-    fullPaths: "/" | "/documentation" | "/playground";
-    fileRoutesByTo: FileRoutesByTo;
-    to: "/" | "/documentation" | "/playground";
-    id: "__root__" | "/" | "/documentation" | "/playground";
-    fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/documentation' | '/playground'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/documentation' | '/playground'
+  id: '__root__' | '/' | '/documentation' | '/playground'
+  fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
-    IndexLazyRoute: typeof IndexLazyRoute;
-    DocumentationLazyRoute: typeof DocumentationLazyRoute;
-    PlaygroundLazyRoute: typeof PlaygroundLazyRoute;
+  IndexLazyRoute: typeof IndexLazyRoute
+  DocumentationLazyRoute: typeof DocumentationLazyRoute
+  PlaygroundLazyRoute: typeof PlaygroundLazyRoute
 }
 
-const rootRouteChildren: RootRouteChildren = {
-    IndexLazyRoute: IndexLazyRoute,
-    DocumentationLazyRoute: DocumentationLazyRoute,
-    PlaygroundLazyRoute: PlaygroundLazyRoute,
-};
-
-export const routeTree = rootRoute
-    ._addFileChildren(rootRouteChildren)
-    ._addFileTypes<FileRouteTypes>();
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/documentation",
-        "/playground"
-      ]
-    },
-    "/": {
-      "filePath": "index.lazy.tsx"
-    },
-    "/documentation": {
-      "filePath": "documentation.lazy.tsx"
-    },
-    "/playground": {
-      "filePath": "playground.lazy.tsx"
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/playground': {
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documentation': {
+      id: '/documentation'
+      path: '/documentation'
+      fullPath: '/documentation'
+      preLoaderRoute: typeof DocumentationLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexLazyRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-ROUTE_MANIFEST_END */
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexLazyRoute: IndexLazyRoute,
+  DocumentationLazyRoute: DocumentationLazyRoute,
+  PlaygroundLazyRoute: PlaygroundLazyRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
