@@ -1,18 +1,19 @@
 {
-    "$schema": "./node_modules/turbo/schema.json",
+    "$schema": "https://turborepo.com/schema.v2.json",
     "ui": "tui",
     "tasks": {
         "dev": {
             "persistent": true,
-            "dependsOn": ["^build:deps"],
-            "outputs": ["dist/**"]
+            "cache": false,
+            "interruptible": true,
+            "dependsOn": ["^build:deps"]
         },
         "build:internal": {
             "dependsOn": ["^build:internal", "^build:wasm"],
             "outputs": ["dist/**"]
         },
         "build:wasm": {
-            "dependsOn": ["^build:wasm","^build:internal"],
+            "dependsOn": ["^build:wasm"],
             "outputs": ["dist/**", "target/**", "pkg/**"],
             "inputs": ["dojo.c/**", "crates/**"]
         },
@@ -43,7 +44,8 @@
         },
         "test": {},
         "test:watch": {
-            "persistent": true
+            "persistent": true,
+            "cache": false
         }
     }
 }
