@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.6.2
+
+### Patch Changes
+
+- 3a4f6c6: fix: build issues
+- 04fe923: fix: deploy to npm
+
 ## 1.6.1
 
 ### Patch Changes

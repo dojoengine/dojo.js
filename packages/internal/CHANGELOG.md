@@ -1,5 +1,18 @@
 # @dojoengine/internal
 
+## 1.6.3
+
+### Patch Changes
+
+- 3a4f6c6: fix: build issues
+- 04fe923: fix: deploy to npm
+- Updated dependencies [3a4f6c6]
+- Updated dependencies [04fe923]
+  - @dojoengine/core@1.6.2
+  - @dojoengine/torii-client@1.6.2
+  - @dojoengine/torii-wasm@1.6.2
+  - @dojoengine/utils@1.6.2
+
 ## 1.6.2
 
 ### Patch Changes
