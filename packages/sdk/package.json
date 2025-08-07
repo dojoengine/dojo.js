@@ -59,6 +59,7 @@
     "devDependencies": {
         "@anymud/bun-plugin-dts": "^1.0.2",
         "@biomejs/biome": "^2.1.3",
+        "@dojoengine/internal": "workspace:*",
         "@rollup/plugin-commonjs": "^28.0.2",
         "@types/node": "^22.14.1",
         "@vitest/coverage-v8": "^1.6.1",
@@ -83,7 +84,6 @@
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
-        "@dojoengine/internal": "workspace:*",
         "@dojoengine/grpc": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/torii-wasm": "workspace:*",
