@@ -20,6 +20,14 @@
         ".": {
             "import": "./dist/index.js",
             "types": "./dist/index.d.ts"
+        },
+        "./zustand": {
+            "import": "./dist/zustand/index.js",
+            "types": "./dist/zustand/index.d.ts"
+        },
+        "./recs": {
+            "import": "./dist/recs/index.js",
+            "types": "./dist/recs/index.d.ts"
         }
     },
     "devDependencies": {
@@ -31,8 +39,11 @@
         "starknet": "catalog:"
     },
     "dependencies": {
+        "@dojoengine/internal": "workspace:*",
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/torii-client": "workspace:*",
-        "vitest": "^1.6.0"
+        "immer": "^10.1.1",
+        "vitest": "^1.6.0",
+        "zustand": "^5.0.2"
     }
 }
