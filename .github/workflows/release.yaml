@@ -86,23 +86,6 @@ jobs:
           dojo-version: v1.5.0-alpha.2
           scarb-version: 2.10.1
 
-      - name: Cache Cairo build artifacts
-        uses: actions/cache@v4
-        with:
-          path: |
-            worlds/*/target
-          key: ${{ runner.os }}-cairo-all-${{ hashFiles('worlds/**/*.cairo') }}
-          restore-keys: |
-            ${{ runner.os }}-cairo-all-
-
-      - name: Build Cairo projects in parallel
-        run: |
-          cd worlds/dojo-starter && /home/runner/.config/.dojo/bin/sozo build &
-          PID1=$!
-          cd ../onchain-dash && /home/runner/.config/.dojo/bin/sozo build &
-          PID2=$!
-          wait $PID1 $PID2
-
       - name: Configure Git
         run: |
           git config user.name "${{ github.actor }}"
