@@ -2,7 +2,7 @@ import { useContext } from "react";
 import type { BigNumberish } from "starknet";
 import { create, type StoreApi, type UseBoundStore } from "zustand";
 import type { ParsedEntity, SchemaType } from "@dojoengine/internal";
-import type { GameState } from "@dojoengine/state";
+import type { GameState } from "@dojoengine/state/zustand";
 import { createDojoStoreFactory } from "@dojoengine/state/zustand";
 import { DojoContext, type DojoContextType } from "../provider";
 
@@ -69,7 +69,7 @@ export function useHistoricalModel<
         const entityModels = state.historical_entities[entityId.toString()];
         if (!entityModels) return [];
 
-        return entityModels.filter((entity) => {
+        return entityModels.filter((entity: ParsedEntity<Schema>) => {
             return entity.models[namespace][modelName] !== undefined;
         });
     });
@@ -94,9 +94,11 @@ export function useModels<
         useContext<DojoContextType<Client, Schema>>(DojoContext);
 
     const modelData = useDojoStore((state) =>
-        state.getEntitiesByModel(namespace, modelName).map((entity) => ({
-            [entity.entityId]: entity.models?.[namespace]?.[modelName],
-        }))
+        state
+            .getEntitiesByModel(namespace, modelName)
+            .map((entity: ParsedEntity<Schema>) => ({
+                [entity.entityId]: entity.models?.[namespace]?.[modelName],
+            }))
     ) as unknown as { [entityId: string]: SchemaType[N][M] | undefined };
 
     return modelData;

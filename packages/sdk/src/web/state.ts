@@ -4,4 +4,4 @@ export {
     type DojoStore,
     createDojoStore,
     createDojoStoreFactory,
-} from "@dojoengine/state";
+} from "@dojoengine/state/zustand";

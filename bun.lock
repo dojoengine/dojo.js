@@ -843,6 +843,7 @@
       "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@dojoengine/grpc": "workspace:*",
+        "@dojoengine/state": "workspace:*",
         "@dojoengine/torii-client": "workspace:*",
         "@dojoengine/torii-wasm": "workspace:*",
         "@dojoengine/utils": "workspace:*",
@@ -888,7 +889,6 @@
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/torii-client": "workspace:*",
         "immer": "^10.1.1",
-        "vitest": "^1.6.0",
         "zustand": "^5.0.2",
       },
       "devDependencies": {

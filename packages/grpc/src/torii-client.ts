@@ -79,16 +79,22 @@ function bufferToHex(buffer: Uint8Array): string {
     );
 }
 
-interface GrpcSubscription {
+interface ToriiSubscription {
     id: bigint;
     stream: ServerStreamingCall<object, object>;
     cancel: () => void;
 }
 
-class Subscription {
-    private _subscription: GrpcSubscription;
+type GrpcSubscription = {
+    id: bigint;
+    cancel: () => void;
+    free: () => void;
+};
 
-    constructor(subscription: GrpcSubscription) {
+export class Subscription {
+    private _subscription: ToriiSubscription;
+
+    constructor(subscription: ToriiSubscription) {
         this._subscription = subscription;
     }
 
@@ -115,7 +121,7 @@ interface StreamHandlerOptions<TReq extends object, TRes extends object> {
 export class ToriiGrpcClient {
     private client: DojoGrpcClient;
     private nextSubscriptionId = 1n;
-    private subscriptions = new Map<bigint, GrpcSubscription>();
+    private subscriptions = new Map<bigint, ToriiSubscription>();
 
     constructor(config: ClientConfig) {
         this.client = new DojoGrpcClient({
@@ -129,7 +135,7 @@ export class ToriiGrpcClient {
         const subscriptionId = this.nextSubscriptionId++;
         const stream = options.createStream();
 
-        const subscription: GrpcSubscription = {
+        const subscription: ToriiSubscription = {
             id: subscriptionId,
             stream: stream as ServerStreamingCall<object, object>,
             cancel: () => {
@@ -332,7 +338,7 @@ export class ToriiGrpcClient {
     }
 
     async updateEventMessageSubscription(
-        subscription: Subscription,
+        subscription: GrpcSubscription,
         clause?: Clause | null
     ): Promise<void> {
         const grpcSubscription = this.findSubscription(subscription);
@@ -460,8 +466,8 @@ export class ToriiGrpcClient {
     }
 
     private findSubscription(
-        subscription: Subscription
-    ): GrpcSubscription | undefined {
+        subscription: GrpcSubscription
+    ): ToriiSubscription | undefined {
         return this.subscriptions.get(subscription.id);
     }
 
