@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.6
+
+### Patch Changes
+
+- fefe27a: fix(sdk): re-export internal package
+
 ## 1.6.5
 
 ### Patch Changes
