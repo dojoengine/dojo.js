@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, mock } from "bun:test";
 import type {
     GalaxyModel,
     GameModel,
@@ -7,7 +7,7 @@ import type {
     PlayerModel,
 } from "../__example__/index";
 import type { ParsedEntity } from "@dojoengine/internal";
-import { createDojoStore } from "../web/state";
+import { createDojoStore } from "../zustand/index";
 
 interface MockParsedEntity extends ParsedEntity<MockSchemaType> {
     entityId: string;
@@ -221,7 +221,7 @@ describe("createDojoStore", () => {
         expect(state.pendingTransactions["txn1"]).toBeUndefined();
     });
     test("subscribeToEntity should call listener on entity updates", () => {
-        const listener = vi.fn();
+        const listener = mock(() => {});
         const unsubscribe = useStore
             .getState()
             .subscribeToEntity("player1", listener);

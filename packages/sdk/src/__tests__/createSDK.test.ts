@@ -4,11 +4,11 @@ import { ok } from "neverthrow";
 import type { Account, TypedData } from "starknet";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
-    createSDK,
     type SchemaType,
     type SDKConfig,
     type ToriiQueryBuilder,
-} from "..";
+} from "@dojoengine/internal";
+import { createSDK } from "../createSDK";
 
 // Mock schema for testing
 const mockSchema = {

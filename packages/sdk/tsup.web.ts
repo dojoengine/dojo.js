@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: "dist/web",
     entry: {
         index: "src/web/index.ts",
-        state: "src/web/state/index.ts",
+        state: "src/web/state.ts",
         react: "src/web/react/index.ts",
         sql: "src/web/sql/index.ts",
         experimental: "src/web/experimental/index.ts",

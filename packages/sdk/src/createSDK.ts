@@ -320,9 +320,10 @@ export function createSDK<T extends SchemaType>({
          */
         updateEventMessageSubscription: async (
             subscription: torii.Subscription,
-            clauses: torii.Clause
+            clauses: torii.Clause,
+            _historical: boolean
         ): Promise<void> => {
-            return await client.updateEventMessageSubscription(
+            return await grpcClient.updateEventMessageSubscription(
                 subscription,
                 clauses
             );

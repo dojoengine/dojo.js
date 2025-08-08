@@ -1,13 +1,13 @@
 import { Type as RecsType, Schema } from "@dojoengine/recs";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, spyOn } from "bun:test";
 
 import { convertValues } from "../utils";
 
 describe("convertValues", () => {
     // ... existing tests ...
-    const consoleSpy = vi
-        .spyOn(console, "warn")
-        .mockImplementation(() => undefined);
+    const consoleSpy = spyOn(console, "warn").mockImplementation(
+        () => undefined
+    );
     afterEach(() => {
         consoleSpy.mockReset();
     });

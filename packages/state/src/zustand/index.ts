@@ -55,6 +55,9 @@ export interface GameState<T extends SchemaType> {
 // Define the store type
 export type DojoStore<T extends SchemaType> = StoreApi<GameState<T>>;
 
+// Re-export the factory function
+export { createDojoStoreFactory } from "./zustand";
+
 /**
  * Factory function to create a Vanilla Zustand store based on a given SchemaType.
  *

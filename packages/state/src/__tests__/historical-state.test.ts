@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from "bun:test";
 import type {
     GalaxyModel,
     GameModel,
@@ -7,7 +7,7 @@ import type {
     PlayerModel,
 } from "../__example__/index";
 import type { ParsedEntity } from "@dojoengine/internal";
-import { createDojoStore } from "../web/state";
+import { createDojoStore } from "../zustand/index";
 
 interface MockParsedEntity extends ParsedEntity<MockSchemaType> {
     entityId: string;
