@@ -10,38 +10,31 @@
     "exports": {
         ".": {
             "types": "./dist/web/index.d.ts",
-            "import": "./dist/web/index.js",
-            "require": "./dist/web/index.cjs"
+            "import": "./dist/web/index.js"
         },
         "./state": {
             "types": "./dist/web/state.d.ts",
-            "import": "./dist/web/state.js",
-            "require": "./dist/web/state.cjs"
+            "import": "./dist/web/state.js"
         },
         "./react": {
             "types": "./dist/web/react.d.ts",
-            "import": "./dist/web/react.js",
-            "require": "./dist/web/react.cjs"
+            "import": "./dist/web/react.js"
         },
         "./sql": {
             "types": "./dist/web/sql.d.ts",
-            "import": "./dist/web/sql.js",
-            "require": "./dist/web/sql.cjs"
+            "import": "./dist/web/sql.js"
         },
         "./experimental": {
             "types": "./dist/web/experimental.d.ts",
-            "import": "./dist/web/experimental.js",
-            "require": "./dist/web/experimental.cjs"
+            "import": "./dist/web/experimental.js"
         },
         "./types": {
             "types": "./dist/web/index.d.ts",
-            "import": "./dist/web/index.d.ts",
-            "require": "./dist/web/index.d.ts"
+            "import": "./dist/web/index.d.ts"
         },
         "./node": {
             "types": "./dist/node/index.d.ts",
-            "import": "./dist/node/index.js",
-            "require": "./dist/node/index.js"
+            "import": "./dist/node/index.js"
         }
     },
     "scripts": {
