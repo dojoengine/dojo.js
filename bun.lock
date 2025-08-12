@@ -736,6 +736,7 @@
         "@protobuf-ts/plugin": "^2.11.1",
         "@protobuf-ts/runtime": "^2.11.1",
         "@protobuf-ts/runtime-rpc": "^2.11.1",
+        "effect": "^3.12.6",
         "google-protobuf": "^3.21.4",
         "grpc-web": "^1.5.0",
       },

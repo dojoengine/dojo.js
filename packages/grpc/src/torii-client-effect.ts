@@ -19,7 +19,6 @@ import type {
 } from "@dojoengine/torii-wasm";
 
 import type { KeysClause as GrpcKeysClause } from "./generated/types";
-
 import { PatternMatching as GrpcPatternMatching } from "./generated/types";
 
 import {
@@ -33,21 +32,6 @@ import {
     mapTransactionFilter,
     mapClause,
 } from "./mappings/query";
-
-import {
-    mapEntitiesResponse,
-    mapControllersResponse,
-    mapTokensResponse,
-    mapTokenBalancesResponse,
-    mapTokenCollectionsResponse,
-    mapTransactionsResponse,
-    mapIndexerUpdate,
-    mapMessage,
-    mapTransaction,
-    mapEntity,
-    mapToken,
-    mapTokenBalance,
-} from "./mappings/types";
 
 import {
     transformEntitiesResponse,
@@ -64,9 +48,6 @@ import {
     transformTokenBalance,
 } from "./mappings/effect-schema/transformers";
 
-import { Schema } from "effect";
-import { BufferToHex } from "./mappings/effect-schema/base-schemas";
-
 import { DojoGrpcClient } from "./client";
 import type { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
 import type {
@@ -79,6 +60,9 @@ import type {
     PublishMessageBatchRequest,
 } from "./generated/world";
 
+import { Schema } from "effect";
+import { BufferToHex } from "./mappings/effect-schema/base-schemas";
+
 function hexToBuffer(hex: string): Uint8Array {
     const cleanHex = hex.startsWith("0x") ? hex.slice(2) : hex;
     const bytes = new Uint8Array(cleanHex.length / 2);
@@ -86,15 +70,6 @@ function hexToBuffer(hex: string): Uint8Array {
         bytes[i / 2] = parseInt(cleanHex.substr(i, 2), 16);
     }
     return bytes;
-}
-
-function bufferToHex(buffer: Uint8Array): string {
-    return (
-        "0x" +
-        Array.from(buffer)
-            .map((b) => b.toString(16).padStart(2, "0"))
-            .join("")
-    );
 }
 
 interface ToriiSubscription {
@@ -136,66 +111,15 @@ interface StreamHandlerOptions<TReq extends object, TRes extends object> {
     onComplete?: () => void;
 }
 
-export interface ToriiGrpcClientConfig extends ClientConfig {
-    useEffectSchema?: boolean;
-}
-
-export class ToriiGrpcClient {
+export class ToriiGrpcClientEffect {
     private client: DojoGrpcClient;
     private nextSubscriptionId = 1n;
     private subscriptions = new Map<bigint, ToriiSubscription>();
-    private useEffectSchema: boolean;
-    private mappers: {
-        entitiesResponse: (response: any) => any;
-        controllersResponse: (response: any) => any;
-        tokensResponse: (response: any) => any;
-        tokenBalancesResponse: (response: any) => any;
-        tokenCollectionsResponse: (response: any) => any;
-        transactionsResponse: (response: any) => any;
-        indexerUpdate: (response: any) => any;
-        message: (message: any) => any;
-        transaction: (tx: any) => any;
-        entity: (entity: any) => any;
-        token: (token: any) => any;
-        tokenBalance: (balance: any) => any;
-    };
 
-    constructor(config: ToriiGrpcClientConfig) {
+    constructor(config: ClientConfig) {
         this.client = new DojoGrpcClient({
             url: config.toriiUrl,
         });
-        this.useEffectSchema = config.useEffectSchema ?? false;
-
-        // Initialize mappers based on schema preference
-        this.mappers = this.useEffectSchema
-            ? {
-                  entitiesResponse: transformEntitiesResponse,
-                  controllersResponse: transformControllersResponse,
-                  tokensResponse: transformTokensResponse,
-                  tokenBalancesResponse: transformTokenBalancesResponse,
-                  tokenCollectionsResponse: transformTokenCollectionsResponse,
-                  transactionsResponse: transformTransactionsResponse,
-                  indexerUpdate: transformIndexerUpdate,
-                  message: transformMessage,
-                  transaction: transformTransaction,
-                  entity: transformEntity,
-                  token: transformToken,
-                  tokenBalance: transformTokenBalance,
-              }
-            : {
-                  entitiesResponse: mapEntitiesResponse,
-                  controllersResponse: mapControllersResponse,
-                  tokensResponse: mapTokensResponse,
-                  tokenBalancesResponse: mapTokenBalancesResponse,
-                  tokenCollectionsResponse: mapTokenCollectionsResponse,
-                  transactionsResponse: mapTransactionsResponse,
-                  indexerUpdate: mapIndexerUpdate,
-                  message: mapMessage,
-                  transaction: mapTransaction,
-                  entity: mapEntity,
-                  token: mapToken,
-                  tokenBalance: mapTokenBalance,
-              };
     }
 
     private createStreamSubscription<TReq extends object, TRes extends object>(
@@ -208,14 +132,12 @@ export class ToriiGrpcClient {
             id: subscriptionId,
             stream: stream as ServerStreamingCall<object, object>,
             cancel: () => {
-                // ServerStreamingCall doesn't have a cancel method, so we just clean up
                 this.subscriptions.delete(subscriptionId);
             },
         };
 
         this.subscriptions.set(subscriptionId, subscription);
 
-        // Set up stream event handlers
         stream.responses.onMessage(options.onMessage);
 
         if (options.onError) {
@@ -244,7 +166,7 @@ export class ToriiGrpcClient {
         const request = createRetrieveControllersRequest(query);
         const response =
             await this.client.worldClient.retrieveControllers(request).response;
-        return this.mappers.controllersResponse(response);
+        return transformControllersResponse(response);
     }
 
     async getTransactions(query: TransactionQuery): Promise<Transactions> {
@@ -252,14 +174,14 @@ export class ToriiGrpcClient {
         const response =
             await this.client.worldClient.retrieveTransactions(request)
                 .response;
-        return this.mappers.transactionsResponse(response);
+        return transformTransactionsResponse(response);
     }
 
     async getTokens(query: TokenQuery): Promise<Tokens> {
         const request = createRetrieveTokensRequest(query);
         const response =
             await this.client.worldClient.retrieveTokens(request).response;
-        return this.mappers.tokensResponse(response);
+        return transformTokensResponse(response);
     }
 
     async getTokenBalances(query: TokenBalanceQuery): Promise<TokenBalances> {
@@ -267,7 +189,7 @@ export class ToriiGrpcClient {
         const response =
             await this.client.worldClient.retrieveTokenBalances(request)
                 .response;
-        return this.mappers.tokenBalancesResponse(response);
+        return transformTokenBalancesResponse(response);
     }
 
     async getTokenCollections(
@@ -277,14 +199,14 @@ export class ToriiGrpcClient {
         const response =
             await this.client.worldClient.retrieveTokenCollections(request)
                 .response;
-        return this.mappers.tokenCollectionsResponse(response);
+        return transformTokenCollectionsResponse(response);
     }
 
     async getEntities(query: Query): Promise<Entities> {
         const request = createRetrieveEntitiesRequest(query);
         const response =
             await this.client.worldClient.retrieveEntities(request).response;
-        return this.mappers.entitiesResponse(response);
+        return transformEntitiesResponse(response);
     }
 
     async getAllEntities(
@@ -311,7 +233,7 @@ export class ToriiGrpcClient {
         const response =
             await this.client.worldClient.retrieveEventMessages(request)
                 .response;
-        return this.mappers.entitiesResponse(response);
+        return transformEntitiesResponse(response);
     }
 
     async onTransaction(
@@ -325,7 +247,7 @@ export class ToriiGrpcClient {
                 }),
             onMessage: (response: SubscribeTransactionsResponse) => {
                 if (response.transaction) {
-                    callback(this.mappers.transaction(response.transaction));
+                    callback(transformTransaction(response.transaction));
                 }
             },
         });
@@ -345,7 +267,7 @@ export class ToriiGrpcClient {
                 }),
             onMessage: (response: SubscribeTokensResponse) => {
                 if (response.token) {
-                    callback(this.mappers.token(response.token));
+                    callback(transformToken(response.token));
                 }
             },
         });
@@ -363,7 +285,7 @@ export class ToriiGrpcClient {
             onMessage: (response: SubscribeEntityResponse) => {
                 if (response.entity) {
                     callback(
-                        this.mappers.entity(response.entity),
+                        transformEntity(response.entity),
                         response.subscription_id
                     );
                 }
@@ -398,7 +320,7 @@ export class ToriiGrpcClient {
             onMessage: (response: SubscribeEntityResponse) => {
                 if (response.entity) {
                     callback(
-                        this.mappers.entity(response.entity),
+                        transformEntity(response.entity),
                         response.subscription_id
                     );
                 }
@@ -425,7 +347,6 @@ export class ToriiGrpcClient {
         clauses: KeysClause[],
         callback: Function
     ): Promise<Subscription> {
-        // Map KeysClause[] to a single clause
         const grpcClauses: GrpcKeysClause[] = clauses.map((clause) => ({
             keys: clause.keys.map((k) =>
                 k ? hexToBuffer(k) : new Uint8Array()
@@ -444,15 +365,14 @@ export class ToriiGrpcClient {
                 }),
             onMessage: (response: SubscribeEventsResponse) => {
                 if (response.event) {
-                    const hexConverter = this.useEffectSchema
-                        ? (buffer: Uint8Array) =>
-                              Schema.decodeSync(BufferToHex)(buffer)
-                        : bufferToHex;
-
                     callback({
-                        keys: response.event.keys.map(hexConverter),
-                        data: response.event.data.map(hexConverter),
-                        transaction_hash: hexConverter(
+                        keys: response.event.keys.map((k) =>
+                            Schema.decodeSync(BufferToHex)(k)
+                        ),
+                        data: response.event.data.map((d) =>
+                            Schema.decodeSync(BufferToHex)(d)
+                        ),
+                        transaction_hash: Schema.decodeSync(BufferToHex)(
                             response.event.transaction_hash
                         ),
                     });
@@ -473,7 +393,7 @@ export class ToriiGrpcClient {
                         : new Uint8Array(),
                 }),
             onMessage: (response: SubscribeIndexerResponse) => {
-                callback(this.mappers.indexerUpdate(response));
+                callback(transformIndexerUpdate(response));
             },
         });
     }
@@ -496,7 +416,7 @@ export class ToriiGrpcClient {
             onMessage: (response: SubscribeTokenBalancesResponse) => {
                 if (response.balance) {
                     callback(
-                        this.mappers.tokenBalance(response.balance),
+                        transformTokenBalance(response.balance),
                         response.subscription_id
                     );
                 }
@@ -524,24 +444,21 @@ export class ToriiGrpcClient {
     }
 
     async publishMessage(message: Message): Promise<string> {
-        const request = this.mappers.message(message);
+        const request = transformMessage(message);
         const response =
             await this.client.worldClient.publishMessage(request).response;
-        return this.useEffectSchema
-            ? Schema.decodeSync(BufferToHex)(response.entity_id)
-            : bufferToHex(response.entity_id);
+        return Schema.decodeSync(BufferToHex)(response.entity_id);
     }
 
     async publishMessageBatch(messages: Message[]): Promise<string[]> {
         const request: PublishMessageBatchRequest = {
-            messages: messages.map(this.mappers.message),
+            messages: messages.map(transformMessage),
         };
         const response =
             await this.client.worldClient.publishMessageBatch(request).response;
-        const hexConverter = this.useEffectSchema
-            ? (buffer: Uint8Array) => Schema.decodeSync(BufferToHex)(buffer)
-            : bufferToHex;
-        return response.responses.map((r) => hexConverter(r.entity_id));
+        return response.responses.map((r) =>
+            Schema.decodeSync(BufferToHex)(r.entity_id)
+        );
     }
 
     private findSubscription(
@@ -551,13 +468,10 @@ export class ToriiGrpcClient {
     }
 
     destroy() {
-        // Cancel all active subscriptions
         for (const [_, subscription] of this.subscriptions) {
             subscription.cancel();
         }
         this.subscriptions.clear();
-
-        // Destroy the underlying client
         this.client.destroy();
     }
 }

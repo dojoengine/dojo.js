@@ -1,0 +1,1426 @@
+{
+    "next_cursor": "",
+    "entities": [
+        {
+            "hashed_keys": "0x07fd69aca371204732bfb9772e84e1566dbffc3fbf04d4af378f9cee87f15141",
+            "models": [
+                {
+                    "name": "dojo_starter-Position",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x042b249d1633812d903f303d640a4261f58fead5aa24925a9efc1dd9d76fb555"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "vec",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "struct",
+                                    "struct": {
+                                        "name": "Vec2",
+                                        "children": [
+                                            {
+                                                "name": "x",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 9
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "y",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 9
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "dojo_starter-Moves",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x042b249d1633812d903f303d640a4261f58fead5aa24925a9efc1dd9d76fb555"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "remaining",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "u8",
+                                            "u8": 74
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "last_direction",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "enum",
+                                    "enum": {
+                                        "name": "Option<Direction>",
+                                        "option": 0,
+                                        "options": [
+                                            {
+                                                "name": "Some",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "enum",
+                                                        "enum": {
+                                                            "name": "Direction",
+                                                            "option": 2,
+                                                            "options": [
+                                                                {
+                                                                    "name": "Left",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Right",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Up",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Down",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "None",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "tuple",
+                                                        "tuple": {
+                                                            "children": []
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "can_move",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "bool",
+                                            "bool": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "hashed_keys": "0x04d5bb5e80053c6290ac108eacaf02e22242a40cd9992bcf205bfc79cf6f8aa3",
+            "models": [
+                {
+                    "name": "dojo_starter-Position",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x04184158a64a82eb982ff702e4041a49db16fa3a18229aac4ce88c832baf56e4"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "vec",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "struct",
+                                    "struct": {
+                                        "name": "Vec2",
+                                        "children": [
+                                            {
+                                                "name": "x",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 10
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "y",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 7
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "dojo_starter-Moves",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x04184158a64a82eb982ff702e4041a49db16fa3a18229aac4ce88c832baf56e4"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "remaining",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "u8",
+                                            "u8": 61
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "last_direction",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "enum",
+                                    "enum": {
+                                        "name": "Option<Direction>",
+                                        "option": 0,
+                                        "options": [
+                                            {
+                                                "name": "Some",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "enum",
+                                                        "enum": {
+                                                            "name": "Direction",
+                                                            "option": 0,
+                                                            "options": [
+                                                                {
+                                                                    "name": "Left",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Right",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Up",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Down",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "None",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "tuple",
+                                                        "tuple": {
+                                                            "children": []
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "can_move",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "bool",
+                                            "bool": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "hashed_keys": "0x077c0d66052c6d63066ddf8a8bf6b29b02571d36bd0655f0193cbd0197e1968c",
+            "models": [
+                {
+                    "name": "dojo_starter-Position",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x0359b9068eadcaaa449c08b79a367c6fdfba9448c29e96934e3552dab0fdd950"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "vec",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "struct",
+                                    "struct": {
+                                        "name": "Vec2",
+                                        "children": [
+                                            {
+                                                "name": "x",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 11
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "y",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 7
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "dojo_starter-Moves",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x0359b9068eadcaaa449c08b79a367c6fdfba9448c29e96934e3552dab0fdd950"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "remaining",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "u8",
+                                            "u8": 80
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "last_direction",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "enum",
+                                    "enum": {
+                                        "name": "Option<Direction>",
+                                        "option": 0,
+                                        "options": [
+                                            {
+                                                "name": "Some",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "enum",
+                                                        "enum": {
+                                                            "name": "Direction",
+                                                            "option": 2,
+                                                            "options": [
+                                                                {
+                                                                    "name": "Left",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Right",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Up",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Down",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "None",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "tuple",
+                                                        "tuple": {
+                                                            "children": []
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "can_move",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "bool",
+                                            "bool": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "hashed_keys": "0x0181c332f238fa60b1dcce07fbf5fbfc6229d2e662a092ec6f70c1e26ee7395c",
+            "models": [
+                {
+                    "name": "dojo_starter-Position",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x02af9427c5a277474c079a1283c880ee8a6f0f8fbf73ce969c08d88befec1bba"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "vec",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "struct",
+                                    "struct": {
+                                        "name": "Vec2",
+                                        "children": [
+                                            {
+                                                "name": "x",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 9
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "y",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 11
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "dojo_starter-Moves",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x02af9427c5a277474c079a1283c880ee8a6f0f8fbf73ce969c08d88befec1bba"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "remaining",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "u8",
+                                            "u8": 76
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "last_direction",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "enum",
+                                    "enum": {
+                                        "name": "Option<Direction>",
+                                        "option": 0,
+                                        "options": [
+                                            {
+                                                "name": "Some",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "enum",
+                                                        "enum": {
+                                                            "name": "Direction",
+                                                            "option": 3,
+                                                            "options": [
+                                                                {
+                                                                    "name": "Left",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Right",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Up",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Down",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "None",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "tuple",
+                                                        "tuple": {
+                                                            "children": []
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "can_move",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "bool",
+                                            "bool": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "hashed_keys": "0x03ef07b4aa24c2c0b03f42acac728e6b1de2901adacd1b677522437af7ff38a0",
+            "models": [
+                {
+                    "name": "dojo_starter-Position",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x017cc6ca902ed4e8baa8463a7009ff18cc294fa85a94b4ce6ac30a9ebd6057c7"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "vec",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "struct",
+                                    "struct": {
+                                        "name": "Vec2",
+                                        "children": [
+                                            {
+                                                "name": "x",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 16
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "y",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 7
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "dojo_starter-Moves",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x017cc6ca902ed4e8baa8463a7009ff18cc294fa85a94b4ce6ac30a9ebd6057c7"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "remaining",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "u8",
+                                            "u8": 63
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "last_direction",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "enum",
+                                    "enum": {
+                                        "name": "Option<Direction>",
+                                        "option": 0,
+                                        "options": [
+                                            {
+                                                "name": "Some",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "enum",
+                                                        "enum": {
+                                                            "name": "Direction",
+                                                            "option": 1,
+                                                            "options": [
+                                                                {
+                                                                    "name": "Left",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Right",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Up",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Down",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "None",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "tuple",
+                                                        "tuple": {
+                                                            "children": []
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "can_move",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "bool",
+                                            "bool": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "hashed_keys": "0x0681d68850e9c98f4383832aa206f00de22040754d6094f7b9a5a6802c25d2a3",
+            "models": [
+                {
+                    "name": "dojo_starter-Position",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x013d9ee239f33fea4f8785b9e3870ade909e20a9599ae7cd62c1c292b73af1b7"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "vec",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "struct",
+                                    "struct": {
+                                        "name": "Vec2",
+                                        "children": [
+                                            {
+                                                "name": "x",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 17
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "y",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 10
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "dojo_starter-Moves",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x013d9ee239f33fea4f8785b9e3870ade909e20a9599ae7cd62c1c292b73af1b7"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "remaining",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "u8",
+                                            "u8": 51
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "last_direction",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "enum",
+                                    "enum": {
+                                        "name": "Option<Direction>",
+                                        "option": 0,
+                                        "options": [
+                                            {
+                                                "name": "Some",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "enum",
+                                                        "enum": {
+                                                            "name": "Direction",
+                                                            "option": 1,
+                                                            "options": [
+                                                                {
+                                                                    "name": "Left",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Right",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Up",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Down",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "None",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "tuple",
+                                                        "tuple": {
+                                                            "children": []
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "can_move",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "bool",
+                                            "bool": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "hashed_keys": "0x043ebbfee0476dcc36cae36dfa9b47935cc20c36cb4dc7d014076e5f875cf164",
+            "models": [
+                {
+                    "name": "dojo_starter-Position",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x0127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "vec",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "struct",
+                                    "struct": {
+                                        "name": "Vec2",
+                                        "children": [
+                                            {
+                                                "name": "x",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 8
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "y",
+                                                "key": false,
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "primitive",
+                                                        "primitive": {
+                                                            "primitive_type": {
+                                                                "oneofKind": "u32",
+                                                                "u32": 9
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "dojo_starter-Moves",
+                    "children": [
+                        {
+                            "name": "player",
+                            "key": true,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "contract_address",
+                                            "contract_address": "0x0127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "remaining",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "u8",
+                                            "u8": 73
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "last_direction",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "enum",
+                                    "enum": {
+                                        "name": "Option<Direction>",
+                                        "option": 0,
+                                        "options": [
+                                            {
+                                                "name": "Some",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "enum",
+                                                        "enum": {
+                                                            "name": "Direction",
+                                                            "option": 1,
+                                                            "options": [
+                                                                {
+                                                                    "name": "Left",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Right",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Up",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "Down",
+                                                                    "ty": {
+                                                                        "ty_type": {
+                                                                            "oneofKind": "tuple",
+                                                                            "tuple": {
+                                                                                "children": []
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "name": "None",
+                                                "ty": {
+                                                    "ty_type": {
+                                                        "oneofKind": "tuple",
+                                                        "tuple": {
+                                                            "children": []
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "can_move",
+                            "key": false,
+                            "ty": {
+                                "ty_type": {
+                                    "oneofKind": "primitive",
+                                    "primitive": {
+                                        "primitive_type": {
+                                            "oneofKind": "bool",
+                                            "bool": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

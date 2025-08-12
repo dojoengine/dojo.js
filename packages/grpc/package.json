@@ -14,7 +14,7 @@
         "build": "bun run build:proto && bun run build:deps",
         "format:check": "biome format .",
         "format": "biome format . --write",
-        "test": "vitest run --passWithNoTests --coverage",
+        "test": "bun test",
         "bench": "vitest bench --config vitest.config.bench.ts",
         "bench:report": "bun run src/benchmarks/report.ts",
         "bench:full": "bun run bench && bun run bench:report",
@@ -34,6 +34,7 @@
         "@protobuf-ts/plugin": "^2.11.1",
         "@protobuf-ts/runtime": "^2.11.1",
         "@protobuf-ts/runtime-rpc": "^2.11.1",
+        "effect": "^3.12.6",
         "google-protobuf": "^3.21.4",
         "grpc-web": "^1.5.0"
     },
