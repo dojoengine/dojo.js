@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.4
+
+### Patch Changes
+
+- a3091a6: chore: fix publish workspace package version
+
 ## 1.6.3
 
 ### Patch Changes

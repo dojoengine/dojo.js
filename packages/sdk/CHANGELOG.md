@@ -1,5 +1,21 @@
 # Change Log
 
+## 1.6.7
+
+### Patch Changes
+
+- c82e607: fix(sdk): state dependency issue
+- a3091a6: chore: fix publish workspace package version
+- Updated dependencies [d791e06]
+- Updated dependencies [c82e607]
+- Updated dependencies [a3091a6]
+  - @dojoengine/grpc@1.6.4
+  - @dojoengine/state@1.6.4
+  - @dojoengine/core@1.6.4
+  - @dojoengine/torii-client@1.6.4
+  - @dojoengine/torii-wasm@1.6.4
+  - @dojoengine/utils@1.6.4
+
 ## 1.6.6
 
 ### Patch Changes

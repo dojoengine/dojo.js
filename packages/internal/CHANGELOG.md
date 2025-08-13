@@ -1,5 +1,16 @@
 # @dojoengine/internal
 
+## 1.6.5
+
+### Patch Changes
+
+- a3091a6: chore: fix publish workspace package version
+- Updated dependencies [a3091a6]
+  - @dojoengine/core@1.6.4
+  - @dojoengine/torii-client@1.6.4
+  - @dojoengine/torii-wasm@1.6.4
+  - @dojoengine/utils@1.6.4
+
 ## 1.6.4
 
 ### Patch Changes

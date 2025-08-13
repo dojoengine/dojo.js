@@ -1,5 +1,12 @@
 # @dojoengine/grpc
 
+## 1.6.4
+
+### Patch Changes
+
+- d791e06: fix(grpc): clean dist files
+- a3091a6: chore: fix publish workspace package version
+
 ## 1.6.3
 
 ### Patch Changes
