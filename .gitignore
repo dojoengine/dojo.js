@@ -12,3 +12,4 @@ lerna-debug.log
 **/**/vite.config.ts.timestamp-*
 **/**/tsup.config.bundled*
 
+.package-backups

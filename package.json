@@ -1,5 +1,6 @@
 {
     "name": "dojo.js",
+    "type": "module",
     "packageManager": "bun@1.2.19",
     "workspaces": {
         "packages": [
@@ -36,8 +37,10 @@
         "lint:check": "turbo lint:check",
         "changeset": "changeset",
         "version": "changeset version",
-        "release": "bun run build:deps && changeset publish",
-        "release:dry-run": "bun run build:deps && changeset publish --dry-run",
+        "prepare:publish": "bun scripts/prepare-publish.ts",
+        "restore:packages": "bun scripts/restore-packages.ts",
+        "release": "bun run build:deps && bun run prepare:publish && changeset publish && bun run restore:packages --cleanup",
+        "release:dry-run": "bun run build:deps && bun run prepare:publish && changeset publish --dry-run && bun run restore:packages --cleanup",
         "dev": "turbo watch dev --concurrency 20",
         "dev:deps": "turbo watch build:deps --concurrency 20",
         "docs": "turbo run docs --ui stream && typedoc --entryPointStrategy merge 'docs-json/*.json'",
@@ -61,5 +64,10 @@
     "dependencies": {
         "@changesets/cli": "^2.29.5",
         "@dojoengine/recs": "2.0.13"
+    },
+    "commitlint": {
+        "extends": [
+            "@commitlint/config-conventional"
+        ]
     }
 }
