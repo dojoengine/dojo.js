@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.6.5-alpha.0
+
+### Patch Changes
+
+- da0cae8: chore: bump package
+- Updated dependencies [da0cae8]
+  - @dojoengine/torii-wasm@1.6.5-alpha.0
+
 ## 1.6.4
 
 ### Patch Changes

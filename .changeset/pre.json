@@ -1,5 +1,5 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
     "example-node-worker": "0.0.1",
@@ -26,7 +26,7 @@
     "@dojoengine/internal": "1.6.5",
     "@dojoengine/predeployed-connector": "1.6.4",
     "@dojoengine/react": "1.6.4",
-    "@dojoengine/sdk": "1.6.7",
+    "@dojoengine/sdk": "1.6.8-alpha.0",
     "@dojoengine/state": "1.6.4",
     "@dojoengine/torii-client": "1.6.4",
     "@dojoengine/torii-wasm": "1.6.4",
@@ -34,6 +34,7 @@
     "@dojoengine/utils-wasm": "1.6.4"
   },
   "changesets": [
-    "chatty-ants-tell"
+    "chatty-ants-tell",
+    "dark-tires-brush"
   ]
 }

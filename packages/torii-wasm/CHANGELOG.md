@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.5-alpha.0
+
+### Patch Changes
+
+- da0cae8: chore: bump package
+
 ## 1.6.4
 
 ### Patch Changes

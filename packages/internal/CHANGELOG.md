@@ -1,5 +1,13 @@
 # @dojoengine/internal
 
+## 1.6.6-alpha.0
+
+### Patch Changes
+
+- Updated dependencies [da0cae8]
+  - @dojoengine/torii-client@1.6.5-alpha.0
+  - @dojoengine/torii-wasm@1.6.5-alpha.0
+
 ## 1.6.5
 
 ### Patch Changes
