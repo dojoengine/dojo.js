@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.6.8-alpha.1
+
+### Patch Changes
+
+- 39dfbe2: chore: bump package
+- Updated dependencies [39dfbe2]
+  - @dojoengine/torii-client@1.6.5-alpha.0
+  - @dojoengine/torii-wasm@1.6.5-alpha.0
+  - @dojoengine/state@1.6.5-alpha.0
+  - @dojoengine/grpc@1.6.4
+
 ## 1.6.8-alpha.0
 
 ### Patch Changes
