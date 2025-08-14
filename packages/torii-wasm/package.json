@@ -20,15 +20,8 @@
     "browser": "./pkg/web/dojo_c.js",
     "types": "./pkg/web/dojo_c.d.ts",
     "files": [
-        "./pkg/web/dojo_c_bg.wasm",
-        "./pkg/web/dojo_c.js",
-        "./pkg/web/dojo_c_bg.js",
-        "./pkg/web/dojo_c.d.ts",
-        "./pkg/node/dojo_c_bg.wasm",
-        "./pkg/node/dojo_c.js",
-        "./pkg/node/dojo_c_bg.js",
-        "./pkg/node/dojo_c.d.ts",
-        "./node.mjs"
+        "pkg/",
+        "node.mjs"
     ],
     "exports": {
         ".": {
