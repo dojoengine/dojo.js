@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.6.5-alpha.1
+
+### Patch Changes
+
+- fdb2351: chore(torii-wasm): fix package.json files
+- c989c75: chore(torii-wasm): bump client version
+- Updated dependencies [fdb2351]
+- Updated dependencies [c989c75]
+  - @dojoengine/torii-wasm@1.6.5-alpha.1
+
 ## 1.6.5-alpha.0
 
 ### Patch Changes

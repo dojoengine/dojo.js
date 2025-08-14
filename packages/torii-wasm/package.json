@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-wasm",
-    "version": "1.6.5-alpha.0",
+    "version": "1.6.5-alpha.1",
     "description": "dojo: WASM bindings for torii",
     "author": "ohayo",
     "license": "MIT",
