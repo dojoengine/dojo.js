@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.6.8-alpha.0
+
+### Patch Changes
+
+- 248a4f4: feat(sdk): enable grpc client
+
 ## 1.6.7
 
 ### Patch Changes
