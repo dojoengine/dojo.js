@@ -51,13 +51,13 @@ export async function init<T extends SchemaType>(
 ): Promise<SDK<T>> {
     // Only create torii client if grpcClient is not provided
     let client: torii.ToriiClient | undefined;
-    
+
     if (!options.grpcClient) {
         const clientConfig = {
             ...defaultClientConfig,
             ...options.client,
         } as torii.ClientConfig;
-        
+
         client = await new torii.ToriiClient(clientConfig);
     }
 
