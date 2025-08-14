@@ -190,6 +190,12 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' && steps.check-changesets.outputs.has_changesets == 'true' }}
         run: |
           echo "Publishing packages..."
+          # Ensure torii-wasm pkg directory exists (turbo cache might only replay logs)
+          if [ -d "packages/torii-wasm" ] && [ ! -d "packages/torii-wasm/pkg" ]; then
+            echo "Building torii-wasm to ensure pkg directory exists..."
+            cd packages/torii-wasm && bun run build:wasm
+            cd ../..
+          fi
           # Changesets will only publish packages that are not ignored in config
           bun run release
         env:

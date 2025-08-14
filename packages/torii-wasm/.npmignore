@@ -1,0 +1,11 @@
+# Don't use .gitignore for npm packaging
+# Include these files/directories
+dojo.c/
+target/
+dist/
+tsconfig.json
+tsup.config.ts
+.gitignore
+CHANGELOG.md
+
+# The pkg directory should be included (not ignored)
