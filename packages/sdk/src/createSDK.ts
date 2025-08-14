@@ -34,8 +34,73 @@ import type {
 } from "@dojoengine/internal";
 import { ToriiGrpcClient } from "@dojoengine/grpc";
 
+export interface GrpcClientInterface {
+    // Entity operations
+    getEntities(query: torii.Query): Promise<torii.Entities>;
+    onEntityUpdated(
+        clause: torii.Clause | undefined,
+        callback: (entityData: torii.Entity) => void
+    ): Promise<torii.Subscription>;
+    updateEntitySubscription(
+        subscription: torii.Subscription,
+        clauses: torii.Clause
+    ): Promise<void>;
+    
+    // Event operations
+    getEventMessages(query: torii.Query): Promise<torii.Entities>;
+    onEventMessageUpdated(
+        clause: torii.Clause | undefined,
+        callback: (entityData: torii.Entity) => void
+    ): Promise<torii.Subscription>;
+    updateEventMessageSubscription(
+        subscription: torii.Subscription,
+        clauses: torii.Clause
+    ): Promise<void>;
+    
+    // Token operations
+    getTokens(params: {
+        contract_addresses?: string[];
+        token_ids?: any[];
+        pagination?: torii.Pagination;
+    }): Promise<torii.Tokens>;
+    getTokenBalances(params: {
+        contract_addresses?: string[];
+        account_addresses?: string[];
+        token_ids?: any[];
+        pagination?: torii.Pagination;
+    }): Promise<torii.TokenBalances>;
+    onTokenBalanceUpdated(
+        contractAddresses: string[],
+        accountAddresses: string[],
+        tokenIds: any[],
+        callback: (res: torii.TokenBalance) => void
+    ): Promise<torii.Subscription>;
+    onTokenUpdated(
+        contractAddresses: string[],
+        tokenIds: any[],
+        callback: (res: torii.Token) => void
+    ): Promise<torii.Subscription>;
+    updateTokenBalanceSubscription(
+        subscription: torii.Subscription,
+        contract_addresses: string[],
+        account_addresses: string[],
+        token_ids: any[]
+    ): Promise<void>;
+    
+    // Message operations
+    publishMessage(message: torii.Message): Promise<string>;
+    publishMessageBatch(messages: torii.Message[]): Promise<string[]>;
+    
+    // Controller operations
+    getControllers(params: {
+        contract_addresses?: string[];
+        usernames?: string[];
+        pagination?: torii.Pagination;
+    }): Promise<torii.Controllers>;
+}
+
 export interface CreateSDKOptions {
-    client: torii.ToriiClient;
+    client?: torii.ToriiClient;
     config: SDKConfig;
     sendMessage: (
         data: TypedData,
@@ -45,6 +110,7 @@ export interface CreateSDKOptions {
         data: TypedData[],
         account?: Account
     ) => Promise<Result<string[], string>>;
+    grpcClient?: GrpcClientInterface;
 }
 
 /**
@@ -56,13 +122,21 @@ export function createSDK<T extends SchemaType>({
     config,
     sendMessage,
     sendMessageBatch,
+    grpcClient,
 }: CreateSDKOptions): SDK<T> {
-    const grpcClient = new ToriiGrpcClient({
+    // Use provided grpcClient or create default setup
+    const sdkClient = grpcClient ?? client;
+    if (!sdkClient) {
+        throw new Error("Either client or grpcClient must be provided");
+    }
+    
+    // Only create ToriiGrpcClient if no grpcClient was provided
+    const grpcClientInstance = grpcClient ?? new ToriiGrpcClient({
         toriiUrl: config.client.toriiUrl ?? "http://localhost:8080",
         worldAddress: config.client.worldAddress,
     });
     return {
-        client,
+        client: client!,
 
         /**
          * Subscribes to entity queries.
@@ -73,14 +147,14 @@ export function createSDK<T extends SchemaType>({
         subscribeEntityQuery: async ({ query, callback }) => {
             const q = query.build();
 
-            const entities = await client.getEntities(q);
+            const entities = await sdkClient.getEntities(q);
 
             const parsedEntities = parseEntities<T>(entities.items);
             return [
                 Pagination.fromQuery(query, entities.next_cursor).withItems(
                     parsedEntities
                 ),
-                await client.onEntityUpdated(
+                await sdkClient.onEntityUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
                 ),
@@ -99,13 +173,13 @@ export function createSDK<T extends SchemaType>({
         }: SubscribeParams<T>): Promise<SubscribeResponse<T>> => {
             const q = query.build();
 
-            const entities = await grpcClient.getEventMessages(q);
+            const entities = await grpcClientInstance.getEventMessages(q);
             const parsedEntities = parseEntities<T>(entities.items);
             return [
                 Pagination.fromQuery(query, entities.next_cursor).withItems(
                     parsedEntities
                 ),
-                await grpcClient.onEventMessageUpdated(
+                await grpcClientInstance.onEventMessageUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
                 ),
@@ -121,7 +195,24 @@ export function createSDK<T extends SchemaType>({
         subscribeTokenBalance: async (
             request: SubscribeTokenBalanceRequest
         ): Promise<[torii.TokenBalances, torii.Subscription]> => {
-            return await subscribeTokenBalance(client, request);
+            if (grpcClient) {
+                const { contractAddresses, accountAddresses, tokenIds, pagination } =
+                    parseTokenRequest(request);
+                const balances = await grpcClient.getTokenBalances({
+                    contract_addresses: contractAddresses,
+                    account_addresses: accountAddresses,
+                    token_ids: tokenIds,
+                    pagination,
+                });
+                const subscription = await grpcClient.onTokenBalanceUpdated(
+                    contractAddresses ?? [],
+                    accountAddresses ?? [],
+                    tokenIds ?? [],
+                    safeCallback(request.callback, defaultTokenBalance)
+                );
+                return [balances, subscription];
+            }
+            return await subscribeTokenBalance(client!, request);
         },
 
         /**
@@ -133,7 +224,7 @@ export function createSDK<T extends SchemaType>({
         getEntities: async ({ query }) => {
             const q = query.build();
 
-            const entities = await client.getEntities(q);
+            const entities = await sdkClient.getEntities(q);
 
             return Pagination.fromQuery(query, entities.next_cursor).withItems(
                 parseEntities(entities.items)
@@ -151,7 +242,7 @@ export function createSDK<T extends SchemaType>({
         }: GetParams<T>): Promise<ToriiResponse<T>> => {
             const q = query.build();
 
-            const entities = await client.getEventMessages(q);
+            const entities = await sdkClient.getEventMessages(q);
 
             return Pagination.fromQuery(query, entities.next_cursor).withItems(
                 parseEntities(entities.items)
@@ -215,7 +306,7 @@ export function createSDK<T extends SchemaType>({
         ): Promise<Result<string[], string>> => {
             try {
                 // Publish the batch of already signed messages
-                return ok(await client.publishMessageBatch(data));
+                return ok(await sdkClient.publishMessageBatch(data));
             } catch (error) {
                 console.error("Failed to send signed message batch:", error);
                 throw error;
@@ -229,7 +320,16 @@ export function createSDK<T extends SchemaType>({
          * @returns {Promise<torii.Tokens>}
          */
         getTokens: async (request: GetTokenRequest): Promise<torii.Tokens> => {
-            return await getTokens(client, request);
+            if (grpcClient) {
+                const { contractAddresses, tokenIds, pagination } =
+                    parseTokenRequest(request);
+                return await grpcClient.getTokens({
+                    contract_addresses: contractAddresses,
+                    token_ids: tokenIds,
+                    pagination,
+                });
+            }
+            return await getTokens(client!, request);
         },
 
         /**
@@ -241,7 +341,17 @@ export function createSDK<T extends SchemaType>({
         getTokenBalances: async (
             request: GetTokenBalanceRequest
         ): Promise<torii.TokenBalances> => {
-            return await getTokenBalances(client, request);
+            if (grpcClient) {
+                const { contractAddresses, accountAddresses, tokenIds, pagination } =
+                    parseTokenRequest(request);
+                return await grpcClient.getTokenBalances({
+                    contract_addresses: contractAddresses,
+                    account_addresses: accountAddresses,
+                    token_ids: tokenIds,
+                    pagination,
+                });
+            }
+            return await getTokenBalances(client!, request);
         },
 
         /**
@@ -255,7 +365,7 @@ export function createSDK<T extends SchemaType>({
         ): Promise<torii.Subscription> => {
             const { contractAddresses, accountAddresses, tokenIds } =
                 parseTokenRequest(request);
-            return await grpcClient.onTokenBalanceUpdated(
+            return await grpcClientInstance.onTokenBalanceUpdated(
                 contractAddresses ?? [],
                 accountAddresses ?? [],
                 tokenIds ?? [],
@@ -278,7 +388,7 @@ export function createSDK<T extends SchemaType>({
             request: SubscribeTokenRequest
         ): Promise<torii.Subscription> => {
             const { contractAddresses, tokenIds } = parseTokenRequest(request);
-            return await grpcClient.onTokenUpdated(
+            return await grpcClientInstance.onTokenUpdated(
                 contractAddresses ?? [],
                 tokenIds ?? [],
                 safeCallback(request.callback, defaultToken)
@@ -294,7 +404,17 @@ export function createSDK<T extends SchemaType>({
         updateTokenBalanceSubscription: async (
             request: UpdateTokenBalanceSubscriptionRequest
         ): Promise<void> => {
-            return await updateTokenBalanceSubscription(client, request);
+            if (grpcClient) {
+                const { contractAddresses, accountAddresses, tokenIds } =
+                    parseTokenRequest(request);
+                return await grpcClient.updateTokenBalanceSubscription(
+                    request.subscription,
+                    contractAddresses ?? [],
+                    accountAddresses ?? [],
+                    tokenIds ?? []
+                );
+            }
+            return await updateTokenBalanceSubscription(client!, request);
         },
 
         /**
@@ -308,7 +428,7 @@ export function createSDK<T extends SchemaType>({
             subscription: torii.Subscription,
             clauses: torii.Clause
         ): Promise<void> => {
-            return await client.updateEntitySubscription(subscription, clauses);
+            return await sdkClient.updateEntitySubscription(subscription, clauses);
         },
 
         /**
@@ -323,7 +443,7 @@ export function createSDK<T extends SchemaType>({
             clauses: torii.Clause,
             _historical: boolean
         ): Promise<void> => {
-            return await grpcClient.updateEventMessageSubscription(
+            return await grpcClientInstance.updateEventMessageSubscription(
                 subscription,
                 clauses
             );
@@ -341,7 +461,7 @@ export function createSDK<T extends SchemaType>({
             usernames: string[],
             pagination: torii.Pagination = defaultToriiPagination
         ): Promise<torii.Controllers> => {
-            return await client.getControllers({
+            return await sdkClient.getControllers({
                 contract_addresses,
                 usernames,
                 pagination,
@@ -358,7 +478,22 @@ export function createSDK<T extends SchemaType>({
         subscribeToken: async (
             request: SubscribeTokenRequest
         ): Promise<[torii.Tokens, torii.Subscription]> => {
-            return await subscribeToken(client, request);
+            if (grpcClient) {
+                const { contractAddresses, tokenIds, pagination } =
+                    parseTokenRequest(request);
+                const tokens = await grpcClient.getTokens({
+                    contract_addresses: contractAddresses,
+                    token_ids: tokenIds,
+                    pagination,
+                });
+                const subscription = await grpcClient.onTokenUpdated(
+                    contractAddresses ?? [],
+                    tokenIds ?? [],
+                    safeCallback(request.callback, defaultToken)
+                );
+                return [tokens, subscription];
+            }
+            return await subscribeToken(client!, request);
         },
     };
 }
