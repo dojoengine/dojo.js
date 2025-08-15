@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.6.5-alpha.2
+
+### Patch Changes
+
+- a8f2e5e: fix(torii-wasm): version bump
+- 41a1ee0: fix(torii-wasm): npm publish use .gitignore
+- Updated dependencies [a8f2e5e]
+- Updated dependencies [41a1ee0]
+  - @dojoengine/torii-wasm@1.6.5-alpha.2
+
 ## 1.6.5-alpha.1
 
 ### Patch Changes

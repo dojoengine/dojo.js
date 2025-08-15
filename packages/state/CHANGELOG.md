@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.6.5-alpha.2
+
+### Patch Changes
+
+- Updated dependencies [a8f2e5e]
+- Updated dependencies [41a1ee0]
+  - @dojoengine/torii-client@1.6.5-alpha.2
+
 ## 1.6.5-alpha.1
 
 ### Patch Changes
