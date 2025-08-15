@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-wasm",
-    "version": "1.6.4",
+    "version": "1.6.5-alpha.2",
     "description": "dojo: WASM bindings for torii",
     "author": "ohayo",
     "license": "MIT",
@@ -9,8 +9,8 @@
     "scripts": {
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
-        "build:web": "cd dojo.c && bunx wasm-pack build --out-dir ../pkg/web --release",
-        "build:node": "cd dojo.c && bunx wasm-pack build --out-dir ../pkg/node --release --target nodejs",
+        "build:web": "cd dojo.c && bunx wasm-pack build --out-dir ../pkg/web --release && rm -f ../pkg/web/.gitignore",
+        "build:node": "cd dojo.c && bunx wasm-pack build --out-dir ../pkg/node --release --target nodejs && rm -f ../pkg/node/.gitignore",
         "build:types": "rm -rf pkg/types && mkdir -p pkg/types && cp pkg/node/dojo_c.d.ts pkg/types/dojo_c.d.ts",
         "build:wasm": "bun run build:web && bun run build:node",
         "format:check": "biome format .",
@@ -20,15 +20,8 @@
     "browser": "./pkg/web/dojo_c.js",
     "types": "./pkg/web/dojo_c.d.ts",
     "files": [
-        "./pkg/web/dojo_c_bg.wasm",
-        "./pkg/web/dojo_c.js",
-        "./pkg/web/dojo_c_bg.js",
-        "./pkg/web/dojo_c.d.ts",
-        "./pkg/node/dojo_c_bg.wasm",
-        "./pkg/node/dojo_c.js",
-        "./pkg/node/dojo_c_bg.js",
-        "./pkg/node/dojo_c.d.ts",
-        "./node.mjs"
+        "pkg/**/*",
+        "node.mjs"
     ],
     "exports": {
         ".": {

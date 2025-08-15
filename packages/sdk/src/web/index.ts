@@ -7,9 +7,11 @@ import {
     type SDK,
     type SDKConfig,
 } from "@dojoengine/internal";
-import { createSDK } from "../createSDK";
+import { createSDK, type GrpcClientInterface } from "../createSDK.js";
 
 export * from "@dojoengine/internal";
+export { initGrpc, type InitGrpcOptions } from "../initGrpc.js";
+export type { GrpcClientInterface } from "../createSDK.js";
 
 /**
  * Creates a new Torii client instance.
@@ -53,14 +55,19 @@ export const defaultClientConfig: Partial<torii.ClientConfig> = {
  * ```
  */
 export async function init<T extends SchemaType>(
-    options: SDKConfig
+    options: SDKConfig & { grpcClient?: GrpcClientInterface }
 ): Promise<SDK<T>> {
-    const clientConfig = {
-        ...defaultClientConfig,
-        ...options.client,
-    } as torii.ClientConfig;
+    // Only create torii client if grpcClient is not provided
+    let client: torii.ToriiClient | undefined;
 
-    const client = await new torii.ToriiClient(clientConfig);
+    if (!options.grpcClient) {
+        const clientConfig = {
+            ...defaultClientConfig,
+            ...options.client,
+        } as torii.ClientConfig;
+
+        client = await new torii.ToriiClient(clientConfig);
+    }
 
     // Web-specific message signing implementation
     const sendMessage = async (
@@ -79,8 +86,9 @@ export async function init<T extends SchemaType>(
             const dataString = JSON.stringify(data);
 
             // Publish the signed message
+            const publishClient = options.grpcClient || client!;
             return ok(
-                await client.publishMessage({
+                await publishClient.publishMessage({
                     message: dataString,
                     signature: Array.isArray(signature)
                         ? signature
@@ -119,7 +127,8 @@ export async function init<T extends SchemaType>(
             }
 
             // Publish the batch of signed messages
-            return ok(await client.publishMessageBatch(messages));
+            const publishClient = options.grpcClient || client!;
+            return ok(await publishClient.publishMessageBatch(messages));
         } catch (error) {
             console.error("Failed to send message batch:", error);
             throw error;
@@ -131,5 +140,6 @@ export async function init<T extends SchemaType>(
         config: options,
         sendMessage,
         sendMessageBatch,
+        grpcClient: options.grpcClient,
     });
 }
