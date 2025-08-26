@@ -1,5 +1,18 @@
 # Change Log
 
+## 1.7.0-preview.1
+
+### Minor Changes
+
+- 4790942: chore: bump dojo.c version
+
+### Patch Changes
+
+- Updated dependencies [4790942]
+  - @dojoengine/state@1.7.0-preview.1
+  - @dojoengine/torii-client@1.7.0-preview.1
+  - @dojoengine/utils@1.7.0-preview.1
+
 ## 1.7.0-preview.0
 
 ### Minor Changes
