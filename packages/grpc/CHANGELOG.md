@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 0.1.0-preview.2
+
+### Minor Changes
+
+- c9a750e: fix(sdk): primitive parsing
+
 ## 0.1.0-preview.1
 
 ### Minor Changes

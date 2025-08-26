@@ -1,5 +1,19 @@
 # Change Log
 
+## 1.7.0-preview.2
+
+### Minor Changes
+
+- c9a750e: fix(sdk): primitive parsing
+
+### Patch Changes
+
+- Updated dependencies [c9a750e]
+  - @dojoengine/torii-client@1.7.0-preview.2
+  - @dojoengine/torii-wasm@1.7.0-preview.2
+  - @dojoengine/utils@1.7.0-preview.2
+  - @dojoengine/core@1.7.0-preview.2
+
 ## 1.7.0-preview.1
 
 ### Minor Changes

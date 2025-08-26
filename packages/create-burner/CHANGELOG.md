@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.7.0-preview.2
+
+### Minor Changes
+
+- c9a750e: fix(sdk): primitive parsing
+
+### Patch Changes
+
+- Updated dependencies [c9a750e]
+  - @dojoengine/core@1.7.0-preview.2
+
 ## 1.7.0-preview.1
 
 ### Minor Changes
