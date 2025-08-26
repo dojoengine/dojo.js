@@ -42,13 +42,11 @@ export async function setup({ ...config }: DojoConfig) {
 
     // create burner manager
     const burnerManager = new BurnerManager({
-        masterAccount: new Account(
-            {
-                nodeUrl: config.rpcUrl,
-            },
-            config.masterAddress,
-            config.masterPrivateKey
-        ),
+        masterAccount: new Account({
+            provider: dojoProvider.provider,
+            address: config.masterAddress,
+            signer: config.masterPrivateKey
+        }),
         accountClassHash: config.accountClassHash,
         rpcProvider: dojoProvider.provider,
         feeTokenAddress: config.feeTokenAddress,

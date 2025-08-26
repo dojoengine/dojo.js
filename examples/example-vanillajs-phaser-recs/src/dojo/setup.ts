@@ -77,11 +77,11 @@ export async function setup({ ...config }: Config) {
     let burnerManager = null;
     try {
         burnerManager = new BurnerManager({
-            masterAccount: new Account(
-                rpcProvider,
-                config.masterAddress,
-                config.masterPrivateKey
-            ),
+            masterAccount: new Account({
+                provider: rpcProvider,
+                address: config.masterAddress,
+                signer: config.masterPrivateKey,
+            }),
             feeTokenAddress: config.feeTokenAddress,
             accountClassHash: config.accountClassHash,
 
