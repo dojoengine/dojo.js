@@ -1,5 +1,19 @@
 # Change Log
 
+## 1.7.0-preview.0
+
+### Minor Changes
+
+- 88cac6e: chore: bump starknet versions
+
+### Patch Changes
+
+- Updated dependencies [88cac6e]
+  - @dojoengine/torii-wasm@1.7.0-preview.0
+  - @dojoengine/core@1.7.0-preview.0
+  - @dojoengine/torii-client@1.7.0-preview.0
+  - @dojoengine/utils@1.7.0-preview.0
+
 ## 1.6.0
 
 ### Minor Changes
@@ -28,10 +42,10 @@
 - Updated dependencies [69dcb43]
 - Updated dependencies [69dcb43]
 - Updated dependencies [69dcb43]
-    - @dojoengine/torii-client@1.6.0
-    - @dojoengine/torii-wasm@1.6.0
-    - @dojoengine/utils@1.6.0
-    - @dojoengine/core@1.6.0
+  - @dojoengine/torii-client@1.6.0
+  - @dojoengine/torii-wasm@1.6.0
+  - @dojoengine/utils@1.6.0
+  - @dojoengine/core@1.6.0
 
 ## 1.6.0-beta.7
 
@@ -57,10 +71,10 @@
 
 - ca4814b: chore: bump dojo.c
 - Updated dependencies [ca4814b]
-    - @dojoengine/torii-client@1.6.0-beta.4
-    - @dojoengine/torii-wasm@1.6.0-beta.4
-    - @dojoengine/utils@1.6.0-beta.4
-    - @dojoengine/core@1.6.0-beta.4
+  - @dojoengine/torii-client@1.6.0-beta.4
+  - @dojoengine/torii-wasm@1.6.0-beta.4
+  - @dojoengine/utils@1.6.0-beta.4
+  - @dojoengine/core@1.6.0-beta.4
 
 ## 1.6.0-beta.3
 
@@ -69,10 +83,10 @@
 - 9e163f4: chore: bump starknet.js to 7.6.2
 - Updated dependencies [9e163f4]
 - Updated dependencies [d8f7035]
-    - @dojoengine/torii-client@1.6.0-beta.3
-    - @dojoengine/torii-wasm@1.6.0-beta.3
-    - @dojoengine/utils@1.6.0-beta.3
-    - @dojoengine/core@1.6.0-beta.3
+  - @dojoengine/torii-client@1.6.0-beta.3
+  - @dojoengine/torii-wasm@1.6.0-beta.3
+  - @dojoengine/utils@1.6.0-beta.3
+  - @dojoengine/core@1.6.0-beta.3
 
 ## 1.6.0-beta.2
 
@@ -80,10 +94,10 @@
 
 - 19c9411: fix: github workflow fix
 - Updated dependencies [19c9411]
-    - @dojoengine/torii-client@1.6.0-beta.2
-    - @dojoengine/torii-wasm@1.6.0-beta.2
-    - @dojoengine/utils@1.6.0-beta.2
-    - @dojoengine/core@1.6.0-beta.2
+  - @dojoengine/torii-client@1.6.0-beta.2
+  - @dojoengine/torii-wasm@1.6.0-beta.2
+  - @dojoengine/utils@1.6.0-beta.2
+  - @dojoengine/core@1.6.0-beta.2
 
 ## 1.6.0-beta.1
 
@@ -91,10 +105,10 @@
 
 - ef76fca: fix: update release process
 - Updated dependencies [ef76fca]
-    - @dojoengine/torii-client@1.6.0-beta.1
-    - @dojoengine/torii-wasm@1.6.0-beta.1
-    - @dojoengine/utils@1.6.0-beta.1
-    - @dojoengine/core@1.6.0-beta.1
+  - @dojoengine/torii-client@1.6.0-beta.1
+  - @dojoengine/torii-wasm@1.6.0-beta.1
+  - @dojoengine/utils@1.6.0-beta.1
+  - @dojoengine/core@1.6.0-beta.1
 
 ## 1.6.0-beta.0
 
@@ -107,10 +121,10 @@
 - 30b6165: fix: add sendSignedMessageBatch util
 - Updated dependencies [b9817aa]
 - Updated dependencies [30b6165]
-    - @dojoengine/core@1.6.0-beta.0
-    - @dojoengine/torii-client@1.6.0-beta.0
-    - @dojoengine/torii-wasm@1.6.0-beta.0
-    - @dojoengine/utils@1.6.0-beta.0
+  - @dojoengine/core@1.6.0-beta.0
+  - @dojoengine/torii-client@1.6.0-beta.0
+  - @dojoengine/torii-wasm@1.6.0-beta.0
+  - @dojoengine/utils@1.6.0-beta.0
 
 ## 1.5.18
 
@@ -118,10 +132,10 @@
 
 - 7d93332: fix: add sendSignedMessageBatch util
 - Updated dependencies [7d93332]
-    - @dojoengine/core@1.5.17
-    - @dojoengine/torii-client@1.5.16
-    - @dojoengine/torii-wasm@1.5.16
-    - @dojoengine/utils@1.5.16
+  - @dojoengine/core@1.5.17
+  - @dojoengine/torii-client@1.5.16
+  - @dojoengine/torii-wasm@1.5.16
+  - @dojoengine/utils@1.5.16
 
 ## 1.5.17
 
@@ -129,10 +143,10 @@
 
 - 5b32060: fix: useTokens
 - Updated dependencies [5b32060]
-    - @dojoengine/core@1.5.16
-    - @dojoengine/torii-client@1.5.15
-    - @dojoengine/torii-wasm@1.5.15
-    - @dojoengine/utils@1.5.15
+  - @dojoengine/core@1.5.16
+  - @dojoengine/torii-client@1.5.15
+  - @dojoengine/torii-wasm@1.5.15
+  - @dojoengine/utils@1.5.15
 
 ## 1.5.16
 
@@ -140,10 +154,10 @@
 
 - 9ee999e: fix: remove promise.all from batch
 - Updated dependencies [9ee999e]
-    - @dojoengine/core@1.5.15
-    - @dojoengine/torii-client@1.5.14
-    - @dojoengine/torii-wasm@1.5.14
-    - @dojoengine/utils@1.5.14
+  - @dojoengine/core@1.5.15
+  - @dojoengine/torii-client@1.5.14
+  - @dojoengine/torii-wasm@1.5.14
+  - @dojoengine/utils@1.5.14
 
 ## 1.5.15
 
@@ -153,17 +167,17 @@
 - afd1b66: bump: package version 2
 - Updated dependencies [afd1b66]
 - Updated dependencies [afd1b66]
-    - @dojoengine/core@1.5.14
-    - @dojoengine/torii-client@1.5.13
-    - @dojoengine/torii-wasm@1.5.13
-    - @dojoengine/utils@1.5.13
+  - @dojoengine/core@1.5.14
+  - @dojoengine/torii-client@1.5.13
+  - @dojoengine/torii-wasm@1.5.13
+  - @dojoengine/utils@1.5.13
 
 ## 1.5.14
 
 ### Patch Changes
 
 - Updated dependencies [4a1bb53]
-    - @dojoengine/core@1.5.13
+  - @dojoengine/core@1.5.13
 
 ## 1.5.13
 
@@ -177,10 +191,10 @@
 
 - 5143b5e: fix: torii-wasm import from node-worker
 - Updated dependencies [5143b5e]
-    - @dojoengine/torii-wasm@1.5.12
-    - @dojoengine/core@1.5.12
-    - @dojoengine/torii-client@1.5.12
-    - @dojoengine/utils@1.5.12
+  - @dojoengine/torii-wasm@1.5.12
+  - @dojoengine/core@1.5.12
+  - @dojoengine/torii-client@1.5.12
+  - @dojoengine/utils@1.5.12
 
 ## 1.5.11
 
@@ -188,10 +202,10 @@
 
 - 1296ec1: fix: publish offchain messages
 - Updated dependencies [1296ec1]
-    - @dojoengine/torii-wasm@1.5.11
-    - @dojoengine/core@1.5.11
-    - @dojoengine/torii-client@1.5.11
-    - @dojoengine/utils@1.5.11
+  - @dojoengine/torii-wasm@1.5.11
+  - @dojoengine/core@1.5.11
+  - @dojoengine/torii-client@1.5.11
+  - @dojoengine/utils@1.5.11
 
 ## 1.5.10
 
@@ -199,10 +213,10 @@
 
 - 04cd161: chore: bump dojo.c to get latest publishMessage endpoint
 - Updated dependencies [04cd161]
-    - @dojoengine/torii-wasm@1.5.10
-    - @dojoengine/core@1.5.10
-    - @dojoengine/torii-client@1.5.10
-    - @dojoengine/utils@1.5.10
+  - @dojoengine/torii-wasm@1.5.10
+  - @dojoengine/core@1.5.10
+  - @dojoengine/torii-client@1.5.10
+  - @dojoengine/utils@1.5.10
 
 ## 1.5.9
 
@@ -212,10 +226,10 @@
 - 1bbe42e: feat: add subscribeToken endpoint
 - Updated dependencies [c8037ed]
 - Updated dependencies [1bbe42e]
-    - @dojoengine/core@1.5.9
-    - @dojoengine/torii-client@1.5.9
-    - @dojoengine/torii-wasm@1.5.9
-    - @dojoengine/utils@1.5.9
+  - @dojoengine/core@1.5.9
+  - @dojoengine/torii-client@1.5.9
+  - @dojoengine/torii-wasm@1.5.9
+  - @dojoengine/utils@1.5.9
 
 ## 1.5.8
 
@@ -223,10 +237,10 @@
 
 - fd36752: fix: use starknet.shortstring.encodeShortString instead of torii-wasm equivalent
 - Updated dependencies [fd36752]
-    - @dojoengine/core@1.5.8
-    - @dojoengine/torii-client@1.5.8
-    - @dojoengine/torii-wasm@1.5.8
-    - @dojoengine/utils@1.5.8
+  - @dojoengine/core@1.5.8
+  - @dojoengine/torii-client@1.5.8
+  - @dojoengine/torii-wasm@1.5.8
+  - @dojoengine/utils@1.5.8
 
 ## 1.5.7
 
@@ -234,10 +248,10 @@
 
 - e08880e: chore: bump dojo.c + fix node worker
 - Updated dependencies [e08880e]
-    - @dojoengine/torii-wasm@1.5.7
-    - @dojoengine/core@1.5.7
-    - @dojoengine/torii-client@1.5.7
-    - @dojoengine/utils@1.5.7
+  - @dojoengine/torii-wasm@1.5.7
+  - @dojoengine/core@1.5.7
+  - @dojoengine/torii-client@1.5.7
+  - @dojoengine/utils@1.5.7
 
 ## 1.5.6
 
@@ -245,10 +259,10 @@
 
 - a36e92a: fix: recs update single component
 - Updated dependencies [a36e92a]
-    - @dojoengine/core@1.5.6
-    - @dojoengine/torii-client@1.5.6
-    - @dojoengine/torii-wasm@1.5.6
-    - @dojoengine/utils@1.5.6
+  - @dojoengine/core@1.5.6
+  - @dojoengine/torii-client@1.5.6
+  - @dojoengine/torii-wasm@1.5.6
+  - @dojoengine/utils@1.5.6
 
 ## 1.5.5
 
@@ -256,10 +270,10 @@
 
 - e1be67a: fix: recs getEventMessages looping
 - Updated dependencies [e1be67a]
-    - @dojoengine/core@1.5.5
-    - @dojoengine/torii-client@1.5.5
-    - @dojoengine/torii-wasm@1.5.5
-    - @dojoengine/utils@1.5.5
+  - @dojoengine/core@1.5.5
+  - @dojoengine/torii-client@1.5.5
+  - @dojoengine/torii-wasm@1.5.5
+  - @dojoengine/utils@1.5.5
 
 ## 1.5.4
 
@@ -267,10 +281,10 @@
 
 - f846b79: fix: pagination missing next_cursor
 - Updated dependencies [f846b79]
-    - @dojoengine/core@1.5.4
-    - @dojoengine/torii-client@1.5.4
-    - @dojoengine/torii-wasm@1.5.4
-    - @dojoengine/utils@1.5.4
+  - @dojoengine/core@1.5.4
+  - @dojoengine/torii-client@1.5.4
+  - @dojoengine/torii-wasm@1.5.4
+  - @dojoengine/utils@1.5.4
 
 ## 1.5.3
 
@@ -278,10 +292,10 @@
 
 - recs
 - Updated dependencies
-    - @dojoengine/core@1.5.3
-    - @dojoengine/torii-client@1.5.3
-    - @dojoengine/torii-wasm@1.5.3
-    - @dojoengine/utils@1.5.3
+  - @dojoengine/core@1.5.3
+  - @dojoengine/torii-client@1.5.3
+  - @dojoengine/torii-wasm@1.5.3
+  - @dojoengine/utils@1.5.3
 
 ## 1.5.2
 
@@ -289,10 +303,10 @@
 
 - updates
 - Updated dependencies
-    - @dojoengine/core@1.5.2
-    - @dojoengine/torii-client@1.5.2
-    - @dojoengine/torii-wasm@1.5.2
-    - @dojoengine/utils@1.5.2
+  - @dojoengine/core@1.5.2
+  - @dojoengine/torii-client@1.5.2
+  - @dojoengine/torii-wasm@1.5.2
+  - @dojoengine/utils@1.5.2
 
 ## 1.5.1
 
@@ -300,10 +314,10 @@
 
 - 97aaa22: feat: Support torii pagination
 - Updated dependencies [97aaa22]
-    - @dojoengine/torii-wasm@1.5.1
-    - @dojoengine/core@1.5.1
-    - @dojoengine/torii-client@1.5.1
-    - @dojoengine/utils@1.5.1
+  - @dojoengine/torii-wasm@1.5.1
+  - @dojoengine/core@1.5.1
+  - @dojoengine/torii-client@1.5.1
+  - @dojoengine/utils@1.5.1
 
 ## 1.5.0
 
@@ -314,10 +328,10 @@
 ### Patch Changes
 
 - Updated dependencies [cb2f3ee]
-    - @dojoengine/torii-wasm@1.5.0
-    - @dojoengine/core@1.5.0
-    - @dojoengine/torii-client@1.5.0
-    - @dojoengine/utils@1.5.0
+  - @dojoengine/torii-wasm@1.5.0
+  - @dojoengine/core@1.5.0
+  - @dojoengine/torii-client@1.5.0
+  - @dojoengine/utils@1.5.0
 
 ## 1.4.4
 
@@ -325,10 +339,10 @@
 
 - a4ed667: feat: torii-wasm nodejs support
 - Updated dependencies [a4ed667]
-    - @dojoengine/torii-wasm@1.4.4
-    - @dojoengine/core@1.4.4
-    - @dojoengine/torii-client@1.4.4
-    - @dojoengine/utils@1.4.4
+  - @dojoengine/torii-wasm@1.4.4
+  - @dojoengine/core@1.4.4
+  - @dojoengine/torii-client@1.4.4
+  - @dojoengine/utils@1.4.4
 
 ## 1.4.3
 
@@ -336,9 +350,9 @@
 
 - 624523b: feat: reset store
 - Updated dependencies [624523b]
-    - @dojoengine/core@1.4.3
-    - @dojoengine/torii-client@1.4.3
-    - @dojoengine/utils@1.4.3
+  - @dojoengine/core@1.4.3
+  - @dojoengine/torii-client@1.4.3
+  - @dojoengine/utils@1.4.3
 
 ## 1.4.2
 
@@ -348,9 +362,9 @@
 - 84585bc: fix: remove torii-client from core
 - Updated dependencies [ed933bc]
 - Updated dependencies [84585bc]
-    - @dojoengine/core@1.4.2
-    - @dojoengine/torii-client@1.4.2
-    - @dojoengine/utils@1.4.2
+  - @dojoengine/core@1.4.2
+  - @dojoengine/torii-client@1.4.2
+  - @dojoengine/utils@1.4.2
 
 ## 1.4.1
 
@@ -358,9 +372,9 @@
 
 - c3fd338: fix: bump all packages
 - Updated dependencies [c3fd338]
-    - @dojoengine/core@1.4.1
-    - @dojoengine/torii-client@1.4.1
-    - @dojoengine/utils@1.4.1
+  - @dojoengine/core@1.4.1
+  - @dojoengine/torii-client@1.4.1
+  - @dojoengine/utils@1.4.1
 
 ## 1.4.0
 
@@ -372,9 +386,9 @@
 
 - a7a4ee6: feat: add torii tokens hooks + related example
 - Updated dependencies [d908fdf]
-    - @dojoengine/core@1.4.0
-    - @dojoengine/torii-client@1.4.0
-    - @dojoengine/utils@1.4.0
+  - @dojoengine/core@1.4.0
+  - @dojoengine/torii-client@1.4.0
+  - @dojoengine/utils@1.4.0
 
 ## 1.3.1
 
@@ -383,9 +397,9 @@
 - ff6eb12: chore: bump dojo 1.3.1
 - 0157fe1: feat: add way to create specific types to query torii
 - Updated dependencies [ff6eb12]
-    - @dojoengine/torii-client@1.3.1
-    - @dojoengine/utils@1.3.1
-    - @dojoengine/core@1.3.1
+  - @dojoengine/torii-client@1.3.1
+  - @dojoengine/utils@1.3.1
+  - @dojoengine/core@1.3.1
 
 ## 1.3.0
 
@@ -396,9 +410,9 @@
 ### Patch Changes
 
 - Updated dependencies [5e23a94]
-    - @dojoengine/core@1.3.0
-    - @dojoengine/torii-client@1.3.0
-    - @dojoengine/utils@1.3.0
+  - @dojoengine/core@1.3.0
+  - @dojoengine/torii-client@1.3.0
+  - @dojoengine/utils@1.3.0
 
 ## 1.2.7
 
@@ -406,9 +420,9 @@
 
 - 811ae57: fix: cairo option and enum ignore in zustand merge
 - Updated dependencies [811ae57]
-    - @dojoengine/utils@1.2.7
-    - @dojoengine/core@1.2.7
-    - @dojoengine/torii-client@1.2.7
+  - @dojoengine/utils@1.2.7
+  - @dojoengine/core@1.2.7
+  - @dojoengine/torii-client@1.2.7
 
 ## 1.2.6
 
@@ -417,9 +431,9 @@
 - 7f48d18: fix: generateTypedData optimization
 - aa70cc7: fix: argument order passed to dojo.c
 - Updated dependencies [7f48d18]
-    - @dojoengine/core@1.2.6
-    - @dojoengine/torii-client@1.2.6
-    - @dojoengine/utils@1.2.6
+  - @dojoengine/core@1.2.6
+  - @dojoengine/torii-client@1.2.6
+  - @dojoengine/utils@1.2.6
 
 ## 1.2.5
 
@@ -429,9 +443,9 @@
 - 691f1a3: fix: udpate package name + add build cache
 - Updated dependencies [fbc6a2e]
 - Updated dependencies [691f1a3]
-    - @dojoengine/core@1.2.5
-    - @dojoengine/torii-client@1.2.5
-    - @dojoengine/utils@1.2.5
+  - @dojoengine/core@1.2.5
+  - @dojoengine/torii-client@1.2.5
+  - @dojoengine/utils@1.2.5
 
 ## 1.2.4
 
@@ -439,9 +453,9 @@
 
 - 28398be: fix: recs convertValues do not set to null
 - Updated dependencies [28398be]
-    - @dojoengine/core@1.2.4
-    - @dojoengine/torii-client@1.2.4
-    - @dojoengine/utils@1.2.4
+  - @dojoengine/core@1.2.4
+  - @dojoengine/torii-client@1.2.4
+  - @dojoengine/utils@1.2.4
 
 ## 1.2.3
 
@@ -449,9 +463,9 @@
 
 - b94f26d: fix: recs component matching
 - Updated dependencies [b94f26d]
-    - @dojoengine/core@1.2.3
-    - @dojoengine/torii-client@1.2.3
-    - @dojoengine/utils@1.2.3
+  - @dojoengine/core@1.2.3
+  - @dojoengine/torii-client@1.2.3
+  - @dojoengine/utils@1.2.3
 
 ## 1.2.2
 
@@ -459,9 +473,9 @@
 
 - d8a9b0d: fix: recs `setEntities` now updates component if component exists
 - Updated dependencies [d8a9b0d]
-    - @dojoengine/core@1.2.2
-    - @dojoengine/torii-client@1.2.2
-    - @dojoengine/utils@1.2.2
+  - @dojoengine/core@1.2.2
+  - @dojoengine/torii-client@1.2.2
+  - @dojoengine/utils@1.2.2
 
 ## 1.2.1
 
@@ -471,9 +485,9 @@
 - e2a4ea5: fix: zustand updateEntity and mergeEntities deeply merge objects
 - Updated dependencies [1cd88c8]
 - Updated dependencies [e2a4ea5]
-    - @dojoengine/core@1.2.1
-    - @dojoengine/torii-client@1.2.1
-    - @dojoengine/utils@1.2.1
+  - @dojoengine/core@1.2.1
+  - @dojoengine/torii-client@1.2.1
+  - @dojoengine/utils@1.2.1
 
 ## 1.2.0
 
@@ -484,9 +498,9 @@
 ### Patch Changes
 
 - Updated dependencies [a9ccef3]
-    - @dojoengine/core@1.2.0
-    - @dojoengine/torii-client@1.2.0
-    - @dojoengine/utils@1.2.0
+  - @dojoengine/core@1.2.0
+  - @dojoengine/torii-client@1.2.0
+  - @dojoengine/utils@1.2.0
 
 ## 1.1.3
 
@@ -494,8 +508,8 @@
 
 - a4fc8e4: fix: predeployed warnings
 - Updated dependencies [a4fc8e4]
-    - @dojoengine/core@1.1.3
-    - @dojoengine/torii-client@1.1.3
+  - @dojoengine/core@1.1.3
+  - @dojoengine/torii-client@1.1.3
 
 ## 1.1.2
 
@@ -503,8 +517,8 @@
 
 - 9af1969: chore: bump dojo v1.2.1. Add token_ids to sdk
 - Updated dependencies [9af1969]
-    - @dojoengine/core@1.1.2
-    - @dojoengine/torii-client@1.1.2
+  - @dojoengine/core@1.1.2
+  - @dojoengine/torii-client@1.1.2
 
 ## 1.1.1
 
@@ -512,8 +526,8 @@
 
 - ded4be2: feat: remove field order and bump torii-client
 - Updated dependencies [ded4be2]
-    - @dojoengine/core@1.1.1
-    - @dojoengine/torii-client@1.1.1
+  - @dojoengine/core@1.1.1
+  - @dojoengine/torii-client@1.1.1
 
 ## 1.1.0
 
@@ -528,8 +542,8 @@
 - Updated dependencies [395e450]
 - Updated dependencies [d030ace]
 - Updated dependencies [27d0342]
-    - @dojoengine/core@1.1.0
-    - @dojoengine/torii-client@1.1.0
+  - @dojoengine/core@1.1.0
+  - @dojoengine/torii-client@1.1.0
 
 ## 1.0.13
 
@@ -539,8 +553,8 @@
 - 257d02a: Fix historical events ordering
 - Updated dependencies [4fa350a]
 - Updated dependencies [257d02a]
-    - @dojoengine/core@1.0.13
-    - @dojoengine/torii-client@1.0.13
+  - @dojoengine/core@1.0.13
+  - @dojoengine/torii-client@1.0.13
 
 ## 1.0.12
 
@@ -548,8 +562,8 @@
 
 - b4dc1e2: parseEntities now returns Array<ParsedEntity<T>> instead of Record<string, ParsedEntity<T>>
 - Updated dependencies [b4dc1e2]
-    - @dojoengine/core@1.0.12
-    - @dojoengine/torii-client@1.0.12
+  - @dojoengine/core@1.0.12
+  - @dojoengine/torii-client@1.0.12
 
 ## 1.0.11
 
@@ -557,8 +571,8 @@
 
 - 5f335d0: Added experimental ToriiQueryBuilder and ClauseBuilder to be closer to how we should query ECS through torii
 - Updated dependencies [5f335d0]
-    - @dojoengine/core@1.0.11
-    - @dojoengine/torii-client@1.0.11
+  - @dojoengine/core@1.0.11
+  - @dojoengine/torii-client@1.0.11
 
 ## 1.0.10
 
@@ -568,8 +582,8 @@
 - 42ab8cf: Add @dojoengine/sdk/state @dojoengine/sdk/react @dojoengine/sdk/sql // Moves hooks to sdk // Update examples
 - Updated dependencies [84dd776]
 - Updated dependencies [42ab8cf]
-    - @dojoengine/core@1.0.10
-    - @dojoengine/torii-client@1.0.10
+  - @dojoengine/core@1.0.10
+  - @dojoengine/torii-client@1.0.10
 
 ## 1.0.9
 
@@ -577,7 +591,7 @@
 
 - 987fcb6: change from lerna to changeset
 - Updated dependencies [987fcb6]
-    - @dojoengine/torii-client@1.0.9
+  - @dojoengine/torii-client@1.0.9
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.

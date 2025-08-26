@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/torii-client",
-    "version": "1.6.0",
+    "version": "1.7.0-preview.0",
     "description": "dojo: package bundles torii wasm into a helpful export for web",
     "author": "dojo",
     "license": "MIT",
