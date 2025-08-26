@@ -218,7 +218,7 @@ describe("parseEntities", () => {
                                 value: {
                                     type: "primitive",
                                     type_name: "u64",
-                                    value: "0x000000000000000000000000000000000000000000000000000000006762f013",
+                                    value: "1734537235",
                                     key: false,
                                 },
                             },
@@ -278,7 +278,7 @@ describe("parseEntities", () => {
                         timestamp: {
                             type: "primitive",
                             type_name: "u64",
-                            value: "0x000000000000000000000000000000000000000000000000000000006763f824",
+                            value: "1734605860",
                             key: false,
                         },
                     },
@@ -306,7 +306,7 @@ describe("parseEntities", () => {
                         timestamp: {
                             type: "primitive",
                             type_name: "u64",
-                            value: "0x000000000000000000000000000000000000000000000000000000006763f9e7",
+                            value: "1734606311",
                             key: false,
                         },
                         value: {
@@ -348,5 +348,226 @@ describe("parseEntities", () => {
             },
         });
         expect(res[0]?.models?.onchain_dash?.Theme?.value).toEqual(expected);
+    });
+
+    it("should parse timestamps as numbers from decimal strings", () => {
+        const toriiResult: torii.Entity[] = [
+            {
+                hashed_keys:
+                    "0x43ebbfee0476dcc36cae36dfa9b47935cc20c36cb4dc7d014076e5f875cf164",
+                models: {
+                    "test_namespace-TimestampModel": {
+                        id: {
+                            type: "primitive",
+                            type_name: "u32",
+                            value: 1,
+                            key: true,
+                        },
+                        created_at: {
+                            type: "primitive",
+                            type_name: "u64",
+                            value: "1734537235",
+                            key: false,
+                        },
+                        updated_at: {
+                            type: "primitive",
+                            type_name: "u64",
+                            value: "1734537300",
+                            key: false,
+                        },
+                        expires_at: {
+                            type: "primitive",
+                            type_name: "u64",
+                            value: "9999999999",
+                            key: false,
+                        },
+                    },
+                },
+            },
+        ];
+
+        const res = parseEntities(toriiResult);
+
+        expect(res[0]?.models?.test_namespace?.TimestampModel?.created_at).toBe(
+            1734537235
+        );
+        expect(res[0]?.models?.test_namespace?.TimestampModel?.updated_at).toBe(
+            1734537300
+        );
+        expect(res[0]?.models?.test_namespace?.TimestampModel?.expires_at).toBe(
+            9999999999
+        );
+
+        expect(
+            typeof res[0]?.models?.test_namespace?.TimestampModel?.created_at
+        ).toBe("number");
+        expect(
+            typeof res[0]?.models?.test_namespace?.TimestampModel?.updated_at
+        ).toBe("number");
+        expect(
+            typeof res[0]?.models?.test_namespace?.TimestampModel?.expires_at
+        ).toBe("number");
+    });
+
+    it("should parse all primitive types correctly according to Rust serialization", () => {
+        const toriiResult: torii.Entity[] = [
+            {
+                hashed_keys: "0x1234567890abcdef",
+                models: {
+                    "test-PrimitiveTypes": {
+                        // Small integers - come as JSON numbers
+                        u8_value: {
+                            type: "primitive",
+                            type_name: "u8",
+                            value: 255,
+                            key: false,
+                        },
+                        u16_value: {
+                            type: "primitive",
+                            type_name: "u16",
+                            value: 65535,
+                            key: false,
+                        },
+                        u32_value: {
+                            type: "primitive",
+                            type_name: "u32",
+                            value: 4294967295,
+                            key: false,
+                        },
+                        i8_value: {
+                            type: "primitive",
+                            type_name: "i8",
+                            value: -128,
+                            key: false,
+                        },
+                        i16_value: {
+                            type: "primitive",
+                            type_name: "i16",
+                            value: -32768,
+                            key: false,
+                        },
+                        i32_value: {
+                            type: "primitive",
+                            type_name: "i32",
+                            value: -2147483648,
+                            key: false,
+                        },
+                        bool_value: {
+                            type: "primitive",
+                            type_name: "bool",
+                            value: true,
+                            key: false,
+                        },
+                        // Large integers - come as decimal strings
+                        u64_value: {
+                            type: "primitive",
+                            type_name: "u64",
+                            value: "18446744073709551615",
+                            key: false,
+                        },
+                        i64_value: {
+                            type: "primitive",
+                            type_name: "i64",
+                            value: "-9223372036854775808",
+                            key: false,
+                        },
+                        u128_value: {
+                            type: "primitive",
+                            type_name: "u128",
+                            value: "340282366920938463463374607431768211455",
+                            key: false,
+                        },
+                        i128_value: {
+                            type: "primitive",
+                            type_name: "i128",
+                            value: "-170141183460469231731687303715884105728",
+                            key: false,
+                        },
+                        // u256 - comes as hex string
+                        u256_value: {
+                            type: "primitive",
+                            type_name: "u256",
+                            value: "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                            key: false,
+                        },
+                        // Blockchain types - come as hex strings
+                        contract_address: {
+                            type: "primitive",
+                            type_name: "ContractAddress",
+                            value: "0x0127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec",
+                            key: false,
+                        },
+                        class_hash: {
+                            type: "primitive",
+                            type_name: "ClassHash",
+                            value: "0x0000000000000000000000000000000000000000000000000000000000001234",
+                            key: false,
+                        },
+                        felt252_value: {
+                            type: "primitive",
+                            type_name: "felt252",
+                            value: "0x0000000000000000000000000000000000000000000000000000000000000042",
+                            key: false,
+                        },
+                        eth_address: {
+                            type: "primitive",
+                            type_name: "EthAddress",
+                            value: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb7",
+                            key: false,
+                        },
+                    },
+                },
+            },
+        ];
+
+        const res = parseEntities(toriiResult);
+        const model = res[0]?.models?.test?.PrimitiveTypes;
+
+        // Small integers should remain as numbers
+        expect(model?.u8_value).toBe(255);
+        expect(model?.u16_value).toBe(65535);
+        expect(model?.u32_value).toBe(4294967295);
+        expect(model?.i8_value).toBe(-128);
+        expect(model?.i16_value).toBe(-32768);
+        expect(model?.i32_value).toBe(-2147483648);
+        expect(model?.bool_value).toBe(true);
+
+        // u64 and i64 should be parsed from decimal strings to numbers
+        expect(model?.u64_value).toBe(18446744073709551615);
+        expect(model?.i64_value).toBe(-9223372036854775808);
+        expect(typeof model?.u64_value).toBe("number");
+        expect(typeof model?.i64_value).toBe("number");
+
+        // u128 and i128 should be parsed from decimal strings to BigInt
+        expect(model?.u128_value).toBe(
+            BigInt("340282366920938463463374607431768211455")
+        );
+        expect(model?.i128_value).toBe(
+            BigInt("-170141183460469231731687303715884105728")
+        );
+        expect(typeof model?.u128_value).toBe("bigint");
+        expect(typeof model?.i128_value).toBe("bigint");
+
+        // u256 should be parsed from hex string to BigInt
+        expect(model?.u256_value).toBe(
+            BigInt(
+                "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+            )
+        );
+        expect(typeof model?.u256_value).toBe("bigint");
+
+        // Blockchain types should remain as hex strings
+        expect(model?.contract_address).toBe(
+            "0x0127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
+        );
+        expect(model?.class_hash).toBe(
+            "0x0000000000000000000000000000000000000000000000000000000000001234"
+        );
+        expect(model?.felt252_value).toBe(
+            "0x0000000000000000000000000000000000000000000000000000000000000042"
+        );
+        expect(model?.eth_address).toBe(
+            "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb7"
+        );
     });
 });

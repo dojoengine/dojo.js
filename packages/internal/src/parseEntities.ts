@@ -124,12 +124,24 @@ function parseCustomEnum(value: torii.Ty): CairoCustomEnum | string {
 function parsePrimitive(value: torii.Ty): any {
     switch (value.type_name) {
         case "u64":
-            return Number.parseInt(value.value as string, 16);
-        case "i256":
-        case "i128":
-        case "u256":
+        case "i64":
+            return Number(value.value as string);
         case "u128":
+        case "i128":
             return BigInt(value.value as string);
+        case "u256":
+            return BigInt(value.value as string);
+        case "u8":
+        case "u16":
+        case "u32":
+        case "i8":
+        case "i16":
+        case "i32":
+        case "bool":
+        case "ContractAddress":
+        case "ClassHash":
+        case "felt252":
+        case "EthAddress":
         default:
             return value.value;
     }
