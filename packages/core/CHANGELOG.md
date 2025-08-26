@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.7.0-preview.1
+
+### Minor Changes
+
+- 4790942: chore: bump dojo.c version
+
 ## 1.7.0-preview.0
 
 ### Minor Changes

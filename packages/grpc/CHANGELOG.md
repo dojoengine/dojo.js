@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 0.1.0-preview.1
+
+### Minor Changes
+
+- 4790942: chore: bump dojo.c version
+
 ## 0.1.0-preview.0
 
 ### Minor Changes

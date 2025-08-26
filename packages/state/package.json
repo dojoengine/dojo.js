@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/state",
-    "version": "1.7.0-preview.0",
+    "version": "1.7.0-preview.1",
     "description": "dojo: State syncing for dojo games",
     "author": "dojo",
     "license": "MIT",
