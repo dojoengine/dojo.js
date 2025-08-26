@@ -55,12 +55,11 @@ export const getAccount = async (nodeUrl: string) => {
     if (!address) {
         return null;
     }
-    const account = new Account(
+    const account = new Account({
         provider,
         address,
-        burners[address].privateKey,
-        "1"
-    );
+        signer: burners[address].privateKey,
+    });
     return account;
 };
 
@@ -80,7 +79,7 @@ export const createAccount = async ({
         CallData.compile({ publicKey }),
         0
     );
-    const account = new Account(provider, address, privateKey, "1");
+    const account = new Account({ provider, address, signer: privateKey });
     const { transaction_hash } = await account.deployAccount({
         classHash,
         constructorCalldata: CallData.compile({ publicKey }),

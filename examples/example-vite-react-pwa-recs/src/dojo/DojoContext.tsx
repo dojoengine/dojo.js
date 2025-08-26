@@ -32,12 +32,11 @@ export const DojoProvider = ({
 
     const masterAccount = useMemo(
         () =>
-            new Account(
-                dojoProvider.provider,
-                masterAddress,
-                masterPrivateKey,
-                "1"
-            ),
+            new Account({
+                provider: dojoProvider.provider,
+                address: masterAddress,
+                signer: masterPrivateKey,
+            }),
         [masterAddress, masterPrivateKey, dojoProvider.provider]
     );
 
