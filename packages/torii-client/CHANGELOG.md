@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.7.0-preview.0
+
+### Minor Changes
+
+- 88cac6e: chore: bump starknet versions
+
+### Patch Changes
+
+- Updated dependencies [88cac6e]
+  - @dojoengine/torii-wasm@1.7.0-preview.0
+
 ## 1.6.5
 
 ### Patch Changes

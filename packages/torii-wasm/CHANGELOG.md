@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.7.0-preview.0
+
+### Minor Changes
+
+- 88cac6e: chore: bump starknet versions
+
 ## 1.6.5
 
 ### Patch Changes
