@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.7.0-preview.3
+
+### Minor Changes
+
+- 10314f1: fix(sdk): ensure entityIds are properly padded
+
 ## 1.7.0-preview.2
 
 ### Minor Changes
