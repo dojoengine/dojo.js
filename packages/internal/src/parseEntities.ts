@@ -1,5 +1,10 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
-import { CairoCustomEnum, CairoOption, CairoOptionVariant } from "starknet";
+import {
+    CairoCustomEnum,
+    CairoOption,
+    CairoOptionVariant,
+    addAddressPadding,
+} from "starknet";
 import type {
     ParsedEntity,
     SchemaType,
@@ -14,7 +19,7 @@ export function parseEntities<T extends SchemaType>(
     const result: ParsedEntity<T>[] = [];
 
     for (const entity of entities) {
-        const entityId = entity.hashed_keys;
+        const entityId = addAddressPadding(entity.hashed_keys);
         const entityData = entity.models;
         const parsedEntity: ParsedEntity<T> = {
             entityId,
