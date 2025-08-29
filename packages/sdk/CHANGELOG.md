@@ -1,5 +1,19 @@
 # Change Log
 
+## 1.7.0-preview.3
+
+### Minor Changes
+
+- 10314f1: fix(sdk): ensure entityIds are properly padded
+
+### Patch Changes
+
+- Updated dependencies [10314f1]
+  - @dojoengine/torii-client@1.7.0-preview.3
+  - @dojoengine/torii-wasm@1.7.0-preview.3
+  - @dojoengine/utils@1.7.0-preview.3
+  - @dojoengine/core@1.7.0-preview.3
+
 ## 1.7.0-preview.2
 
 ### Minor Changes
