@@ -148,7 +148,7 @@ describe("parseEntities", () => {
         expect(result).toEqual([
             {
                 entityId:
-                    "0x14c362c17947ef1d40152d6e3bedd859c98bebfad41f75ef3f26798556a4c85",
+                    "0x014c362c17947ef1d40152d6e3bedd859c98bebfad41f75ef3f26798556a4c85",
                 models: {
                     dojo_starter: {
                         Position: {
@@ -169,7 +169,7 @@ describe("parseEntities", () => {
             },
             {
                 entityId:
-                    "0x144c128b8ead7d0da39c6a150abbfdd38f572ba9418d3e36929eb6107b4ce4d",
+                    "0x0144c128b8ead7d0da39c6a150abbfdd38f572ba9418d3e36929eb6107b4ce4d",
                 models: {
                     dojo_starter: {
                         Moves: {
@@ -407,6 +407,72 @@ describe("parseEntities", () => {
         expect(
             typeof res[0]?.models?.test_namespace?.TimestampModel?.expires_at
         ).toBe("number");
+    });
+
+    it("should properly pad entity IDs to consistent length", () => {
+        const toriiResult: torii.Entity[] = [
+            {
+                // Unpadded entity ID (shorter)
+                hashed_keys: "0x1",
+                models: {
+                    "test-Model": {
+                        id: {
+                            type: "primitive",
+                            type_name: "u32",
+                            value: 1,
+                            key: true,
+                        },
+                    },
+                },
+            },
+            {
+                // Already padded entity ID
+                hashed_keys:
+                    "0x0000000000000000000000000000000000000000000000000000000000000002",
+                models: {
+                    "test-Model": {
+                        id: {
+                            type: "primitive",
+                            type_name: "u32",
+                            value: 2,
+                            key: true,
+                        },
+                    },
+                },
+            },
+            {
+                // Partially padded entity ID
+                hashed_keys: "0x00000003",
+                models: {
+                    "test-Model": {
+                        id: {
+                            type: "primitive",
+                            type_name: "u32",
+                            value: 3,
+                            key: true,
+                        },
+                    },
+                },
+            },
+        ];
+
+        const res = parseEntities(toriiResult);
+
+        // All entity IDs should be padded to 66 characters (0x + 64 hex chars)
+        expect(res[0]?.entityId).toBe(
+            "0x0000000000000000000000000000000000000000000000000000000000000001"
+        );
+        expect(res[1]?.entityId).toBe(
+            "0x0000000000000000000000000000000000000000000000000000000000000002"
+        );
+        expect(res[2]?.entityId).toBe(
+            "0x0000000000000000000000000000000000000000000000000000000000000003"
+        );
+
+        // Verify all have the same length
+        expect(res[0]?.entityId?.length).toBe(66);
+        expect(res[1]?.entityId?.length).toBe(66);
+        expect(res[2]?.entityId?.length).toBe(66);
     });
 
     it("should parse all primitive types correctly according to Rust serialization", () => {
