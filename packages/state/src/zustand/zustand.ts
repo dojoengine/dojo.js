@@ -314,6 +314,13 @@ export function createDojoStoreFactory<T extends SchemaType>(
                 waitForEntityChange: (entityId, predicate, timeout = 6000) => {
                     return new Promise<ParsedEntity<T> | undefined>(
                         (resolve, reject) => {
+                            // Check current state immediately
+                            const currentEntity = get().entities[entityId];
+                            if (predicate(currentEntity)) {
+                                resolve(currentEntity);
+                                return;
+                            }
+
                             const unsubscribe = useStore.subscribe((state) => {
                                 const entity = state.entities[entityId];
                                 if (predicate(entity)) {

@@ -310,6 +310,38 @@ describe("createDojoStore", () => {
         );
     });
 
+    test("waitForEntityChange should resolve immediately when entity exists and meets predicate", async () => {
+        // Set up entity that already meets the predicate
+        useStore.getState().setEntities([
+            {
+                ...initialGame,
+                models: {
+                    world: {
+                        game: {
+                            fieldOrder: ["id", "status"],
+                            id: "game1",
+                            status: "completed",
+                        },
+                    },
+                    universe: {},
+                },
+            },
+        ]);
+
+        // Call waitForEntityChange with a predicate that is already met
+        const result = await useStore
+            .getState()
+            .waitForEntityChange(
+                "game1",
+                (entity) => entity?.models.world?.game?.status === "completed",
+                1000
+            );
+
+        // Should resolve immediately without waiting
+        expect(result?.models.world?.game?.status).toBe("completed");
+        expect(result?.entityId).toBe("game1");
+    });
+
     test("getEntity should return the correct entity", () => {
         useStore.getState().setEntities([initialGalaxy]);
         const entity = useStore.getState().getEntity("galaxy1");
