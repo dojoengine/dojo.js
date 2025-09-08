@@ -8,7 +8,7 @@ import {
     setComponent,
 } from "@dojoengine/recs";
 import { poseidonHashMany } from "micro-starknet";
-import { type ByteArray, byteArray } from "starknet";
+import { type ByteArray, byteArray, addAddressPadding } from "starknet";
 
 const STORE_SET_RECORD_EVENT_NAME =
     "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d";
@@ -277,7 +277,8 @@ export function getEntityIdFromKeys(keys: bigint[]): Entity {
     // }
     // calculate the poseidon hash of the keys
     const poseidon = poseidonHashMany(keys);
-    return ("0x" + poseidon.toString(16)) as Entity;
+    // Ensure consistent padding for entity IDs
+    return addAddressPadding("0x" + poseidon.toString(16)) as Entity;
 }
 
 /**

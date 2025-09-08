@@ -6,6 +6,7 @@ import {
     computeByteArrayHash,
     convertToRelayUri,
     getComponentNameFromEvent,
+    getEntityIdFromKeys,
     getSelectorFromTag,
     splitEventTag,
 } from "../../utils/index";
@@ -136,5 +137,38 @@ describe("utils", () => {
         f("Hello", "0x48656c6c6f");
         f("A", "0x41");
         f("123", "0x313233");
+    });
+
+    describe("getEntityIdFromKeys", () => {
+        it("should return properly padded entity IDs", () => {
+            // Test with single key
+            const entityId1 = getEntityIdFromKeys([BigInt(1)]);
+            expect(entityId1).toMatch(/^0x[0-9a-f]{64}$/);
+            expect(entityId1.length).toBe(66); // 0x + 64 hex chars
+
+            // Test with multiple keys
+            const entityId2 = getEntityIdFromKeys([BigInt(123), BigInt(456)]);
+            expect(entityId2).toMatch(/^0x[0-9a-f]{64}$/);
+            expect(entityId2.length).toBe(66);
+
+            // Test with large number
+            const entityId3 = getEntityIdFromKeys([
+                BigInt("0xabcdef123456789"),
+            ]);
+            expect(entityId3).toMatch(/^0x[0-9a-f]{64}$/);
+            expect(entityId3.length).toBe(66);
+
+            // Ensure leading zeros are preserved
+            const entityId4 = getEntityIdFromKeys([BigInt(0)]);
+            expect(entityId4).toMatch(/^0x0+[0-9a-f]*$/); // Should have leading zeros
+            expect(entityId4.length).toBe(66);
+        });
+
+        it("should produce consistent entity IDs for the same keys", () => {
+            const keys = [BigInt(42), BigInt(100)];
+            const id1 = getEntityIdFromKeys(keys);
+            const id2 = getEntityIdFromKeys(keys);
+            expect(id1).toBe(id2);
+        });
     });
 });
