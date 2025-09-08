@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.7.0-preview.4
+
+### Patch Changes
+
+- Updated dependencies [c4b2fc0]
+  - @dojoengine/utils@1.7.0-preview.4
+
 ## 1.7.0-preview.3
 
 ### Minor Changes
