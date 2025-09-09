@@ -13,8 +13,8 @@
         "format": "biome format . --write"
     },
     "dependencies": {
-        "@cartridge/connector": "^0.7.6",
-        "@cartridge/controller": "^0.7.6",
+        "@cartridge/connector": "^0.10.0",
+        "@cartridge/controller": "^0.10.0",
         "@dojoengine/core": "workspace:*",
         "@dojoengine/predeployed-connector": "workspace:*",
         "@dojoengine/sdk": "workspace:*",

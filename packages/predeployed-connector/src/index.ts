@@ -11,7 +11,7 @@ import {
 } from "starknet";
 import {
     type AddInvokeTransactionParameters,
-    type Errors,
+    type UNKNOWN_ERROR,
     Permission,
     type RequestFn,
     type StarknetWindowObject,
@@ -122,43 +122,43 @@ class PredeployedWallet implements StarknetWindowObject {
 
             case "wallet_watchAsset":
                 throw {
-                    code: 63,
-                    message: "An unexpected error occurred",
+                    code: 163,
+                    message: "An error occurred (UNKNOWN_ERROR)",
                     data: "wallet_watchAsset not implemented",
-                } as Errors.UNEXPECTED_ERROR;
+                } as UNKNOWN_ERROR;
 
             case "wallet_addStarknetChain":
                 throw {
-                    code: 63,
-                    message: "An unexpected error occurred",
+                    code: 163,
+                    message: "An error occurred (UNKNOWN_ERROR)",
                     data: "wallet_addStarknetChain not implemented",
-                } as Errors.UNEXPECTED_ERROR;
+                } as UNKNOWN_ERROR;
 
             case "wallet_requestChainId":
                 if (!this.account) {
                     throw {
-                        code: 63,
-                        message: "An unexpected error occurred",
+                        code: 163,
+                        message: "An error occurred (UNKNOWN_ERROR)",
                         data: "wallet_deploymentData not implemented",
-                    } as Errors.UNEXPECTED_ERROR;
+                    } as UNKNOWN_ERROR;
                 }
 
                 return await this.account.getChainId();
 
             case "wallet_deploymentData":
                 throw {
-                    code: 63,
-                    message: "An unexpected error occurred",
+                    code: 163,
+                    message: "An error occurred (UNKNOWN_ERROR)",
                     data: "wallet_deploymentData not implemented",
-                } as Errors.UNEXPECTED_ERROR;
+                } as UNKNOWN_ERROR;
 
             case "wallet_addInvokeTransaction":
                 if (!this.account) {
                     throw {
-                        code: 63,
-                        message: "An unexpected error occurred",
+                        code: 163,
+                        message: "An error occurred (UNKNOWN_ERROR)",
                         data: "wallet_deploymentData not implemented",
-                    } as Errors.UNEXPECTED_ERROR;
+                    } as UNKNOWN_ERROR;
                 }
 
                 let params = call.params as AddInvokeTransactionParameters;
@@ -172,18 +172,18 @@ class PredeployedWallet implements StarknetWindowObject {
 
             case "wallet_addDeclareTransaction":
                 throw {
-                    code: 63,
-                    message: "An unexpected error occurred",
+                    code: 163,
+                    message: "An error occurred (UNKNOWN_ERROR)",
                     data: "wallet_addDeclareTransaction not implemented",
-                } as Errors.UNEXPECTED_ERROR;
+                } as UNKNOWN_ERROR;
 
             case "wallet_signTypedData": {
                 if (!this.account) {
                     throw {
-                        code: 63,
-                        message: "An unexpected error occurred",
+                        code: 163,
+                        message: "An error occurred (UNKNOWN_ERROR)",
                         data: "Account not initialized",
-                    } as Errors.UNEXPECTED_ERROR;
+                    } as UNKNOWN_ERROR;
                 }
 
                 return await this.account.signMessage(call.params as TypedData);
@@ -197,10 +197,10 @@ class PredeployedWallet implements StarknetWindowObject {
                 return new Promise((resolve) => resolve(true));
             default:
                 throw {
-                    code: 63,
-                    message: "An unexpected error occurred",
+                    code: 163,
+                    message: "An error occurred (UNKNOWN_ERROR)",
                     data: `Unknown RPC call type: ${call.type}`,
-                } as Errors.UNEXPECTED_ERROR;
+                } as UNKNOWN_ERROR;
         }
     };
 
