@@ -1,5 +1,25 @@
 # Change Log
 
+## 1.6.5-alpha.2
+
+### Patch Changes
+
+- a8f2e5e: fix(torii-wasm): version bump
+- 41a1ee0: fix(torii-wasm): npm publish use .gitignore
+
+## 1.6.5-alpha.1
+
+### Patch Changes
+
+- fdb2351: chore(torii-wasm): fix package.json files
+- c989c75: chore(torii-wasm): bump client version
+
+## 1.6.5-alpha.0
+
+### Patch Changes
+
+- da0cae8: chore: bump package
+
 ## 1.6.4
 
 ### Patch Changes

@@ -17,7 +17,8 @@
         "strictNullChecks": true,
         "esModuleInterop": true,
         "types": ["vitest/globals"],
-        "allowImportingTsExtensions": true
+        "allowImportingTsExtensions": true,
+        "rootDir": "src"
     },
     "include": ["src", "node_modules/@dojoengine/grpc"],
     "exclude": ["node_modules", "dist", "**/*.test.ts"]

@@ -1,5 +1,44 @@
 # Change Log
 
+## 1.6.8-alpha.3
+
+### Patch Changes
+
+- Updated dependencies [a8f2e5e]
+- Updated dependencies [41a1ee0]
+  - @dojoengine/torii-client@1.6.5-alpha.2
+  - @dojoengine/torii-wasm@1.6.5-alpha.2
+  - @dojoengine/state@1.6.5-alpha.2
+  - @dojoengine/grpc@1.6.4
+
+## 1.6.8-alpha.2
+
+### Patch Changes
+
+- Updated dependencies [fdb2351]
+- Updated dependencies [c989c75]
+  - @dojoengine/torii-client@1.6.5-alpha.1
+  - @dojoengine/torii-wasm@1.6.5-alpha.1
+  - @dojoengine/state@1.6.5-alpha.1
+  - @dojoengine/grpc@1.6.4
+
+## 1.6.8-alpha.1
+
+### Patch Changes
+
+- da0cae8: chore: bump package
+- Updated dependencies [da0cae8]
+  - @dojoengine/torii-client@1.6.5-alpha.0
+  - @dojoengine/torii-wasm@1.6.5-alpha.0
+  - @dojoengine/state@1.6.5-alpha.0
+  - @dojoengine/grpc@1.6.4
+
+## 1.6.8-alpha.0
+
+### Patch Changes
+
+- 248a4f4: feat(sdk): enable grpc client
+
 ## 1.6.7
 
 ### Patch Changes
