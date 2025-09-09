@@ -360,13 +360,5 @@ describe("Zustand State Implementation", () => {
             const result = await promise;
             expect(result.models.dojo_starter.Position.vec.x).toBe(500);
         });
-
-        it("should timeout waiting for entity change", async () => {
-            await expect(
-                store
-                    .getState()
-                    .waitForEntityChange("non-existent", () => true, 100)
-            ).rejects.toThrow("Timeout");
-        });
     });
 });

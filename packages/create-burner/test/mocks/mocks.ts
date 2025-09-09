@@ -9,11 +9,12 @@ import { BurnerManager } from "../../src/manager/burnerManager";
 
 export const getBurnerManager = (): BurnerManager => {
     const burnerManager = new BurnerManager({
-        masterAccount: new Account(
-            new RpcProvider({ nodeUrl: LOCAL_KATANA }),
-            KATANA_PREFUNDED_ADDRESS,
-            KATANA_PREFUNDED_PRIVATE_KEY
-        ),
+        masterAccount: new Account({
+            provider: new RpcProvider({ nodeUrl: LOCAL_KATANA }),
+            address: KATANA_PREFUNDED_ADDRESS,
+            signer: KATANA_PREFUNDED_PRIVATE_KEY,
+            cairoVersion: "1",
+        }),
         accountClassHash: KATANA_PREFUNDED_PRIVATE_KEY,
         rpcProvider: new RpcProvider({ nodeUrl: LOCAL_KATANA }),
         feeTokenAddress:
@@ -32,12 +33,12 @@ export const getBurnerConnector = (): BurnerConnector => {
                 light: "my-light-icon",
             },
         },
-        new Account(
-            new RpcProvider({ nodeUrl: LOCAL_KATANA }),
-            KATANA_PREFUNDED_ADDRESS,
-            KATANA_PREFUNDED_PRIVATE_KEY,
-            "1"
-        )
+        new Account({
+            provider: new RpcProvider({ nodeUrl: LOCAL_KATANA }),
+            address: KATANA_PREFUNDED_ADDRESS,
+            signer: KATANA_PREFUNDED_PRIVATE_KEY,
+            cairoVersion: "1",
+        })
     );
     return burnerObj;
 };
