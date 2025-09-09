@@ -1,5 +1,35 @@
 # Change Log
 
+## 1.7.0-1.7-rc.4
+
+### Minor Changes
+
+- 1a580dd: chore: bump minor version
+
+## 1.7.0-preview.3
+
+### Minor Changes
+
+- 10314f1: fix(sdk): ensure entityIds are properly padded
+
+## 1.7.0-preview.2
+
+### Minor Changes
+
+- c9a750e: fix(sdk): primitive parsing
+
+## 1.7.0-preview.1
+
+### Minor Changes
+
+- 4790942: chore: bump dojo.c version
+
+## 1.7.0-preview.0
+
+### Minor Changes
+
+- 88cac6e: chore: bump starknet versions
+
 ## 1.6.4
 
 ### Patch Changes

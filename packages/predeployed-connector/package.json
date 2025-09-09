@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/predeployed-connector",
-    "version": "1.6.4",
+    "version": "1.7.0-1.7-rc.4",
     "description": "Dojo SDK: Build onchain and provable apps faster",
     "author": "Dojo Team",
     "license": "MIT",
@@ -9,7 +9,7 @@
     "scripts": {
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
-        "build:deps": "tsup --dts-resolve",
+        "build:deps": "tsup ",
         "build": "bun run build:deps",
         "test": "vitest run --passWithNoTests --config ./vitest.config.ts",
         "coverage": "vitest run --coverage",
@@ -36,7 +36,7 @@
         "@vitest/coverage-v8": "^1.6.0",
         "eslint": "^8.57.1",
         "prettier": "^2.8.8",
-        "tsup": "^8.4.0",
+        "tsup": "^8.5.0",
         "typescript": "^5.6.2",
         "vite": "^3.2.11",
         "vitest": "^1.6.0"
@@ -66,10 +66,6 @@
         "node": ">=18.0.0"
     },
     "dependencies": {
-        "@starknet-io/types-js": "^0.7.10",
-        "@starknet-react/core": "catalog:",
-        "react": "catalog:",
-        "react-dom": "catalog:",
-        "starknet": "catalog:"
+        "@starknet-io/types-js": "catalog:"
     }
 }

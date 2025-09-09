@@ -1,0 +1,43 @@
+{
+  "mode": "exit",
+  "tag": "1.7-rc",
+  "initialVersions": {
+    "example-node-worker": "0.0.1",
+    "example-nodejs-bot": "0.0.0",
+    "example-predeployed-connector": "0.0.0",
+    "example-vanillajs-phaser-recs": "0.0.0",
+    "example-vite-experimental-sdk": "0.0.0",
+    "example-vite-grpc-playground": "0.0.0",
+    "example-vite-kitchen-sink": "0.1.0",
+    "example-vite-phaser-sdk": "1.5.4",
+    "example-vite-react-app-recs": "0.0.1",
+    "example-vite-react-phaser-recs": "0.1.0",
+    "example-vite-react-pwa-recs": "0.0.1",
+    "example-vite-react-sdk": "0.0.0",
+    "example-vite-react-sql": "1.0.0",
+    "example-vite-react-threejs-recs": "0.0.1",
+    "example-vite-svelte-recs": "0.0.0",
+    "example-vite-token-balance": "0.0.0",
+    "example-vue-app-recs": "0.0.0",
+    "@dojoengine/core": "1.7.0-preview.3",
+    "@dojoengine/create-burner": "1.7.0-preview.3",
+    "@dojoengine/create-dojo": "1.7.0-preview.3",
+    "@dojoengine/grpc": "0.1.0-preview.3",
+    "@dojoengine/predeployed-connector": "1.7.0-preview.3",
+    "@dojoengine/react": "1.7.0-preview.4",
+    "@dojoengine/sdk": "1.7.0-preview.4",
+    "@dojoengine/state": "1.7.0-preview.3",
+    "@dojoengine/torii-client": "1.7.0-preview.3",
+    "@dojoengine/torii-wasm": "1.7.0-preview.3",
+    "@dojoengine/utils": "1.7.0-preview.4",
+    "@dojoengine/utils-wasm": "1.7.0-preview.3"
+  },
+  "changesets": [
+    "fifty-moons-film",
+    "huge-paths-switch",
+    "orange-points-prove",
+    "plenty-women-read",
+    "smooth-dragons-write",
+    "tiny-suns-read"
+  ]
+}
