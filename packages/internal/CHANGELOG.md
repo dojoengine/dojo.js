@@ -1,5 +1,17 @@
 # @dojoengine/internal
 
+## 1.6.6
+
+### Patch Changes
+
+- Updated dependencies [4186e62]
+- Updated dependencies [4186e62]
+- Updated dependencies [4186e62]
+- Updated dependencies [4186e62]
+- Updated dependencies [4186e62]
+  - @dojoengine/torii-client@1.6.5
+  - @dojoengine/torii-wasm@1.6.5
+
 ## 1.6.6-alpha.2
 
 ### Patch Changes

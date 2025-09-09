@@ -1,5 +1,21 @@
 # Change Log
 
+## 1.6.8
+
+### Patch Changes
+
+- 4186e62: feat(sdk): enable grpc client
+- 4186e62: chore: bump package
+- Updated dependencies [4186e62]
+- Updated dependencies [4186e62]
+- Updated dependencies [4186e62]
+- Updated dependencies [4186e62]
+- Updated dependencies [4186e62]
+  - @dojoengine/torii-client@1.6.5
+  - @dojoengine/torii-wasm@1.6.5
+  - @dojoengine/state@1.6.5
+  - @dojoengine/grpc@1.6.4
+
 ## 1.6.8-alpha.3
 
 ### Patch Changes

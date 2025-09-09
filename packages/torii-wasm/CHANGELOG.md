@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.6.5
+
+### Patch Changes
+
+- 4186e62: chore(torii-wasm): fix package.json files
+- 4186e62: chore: bump package
+- 4186e62: chore(torii-wasm): bump client version
+- 4186e62: fix(torii-wasm): version bump
+- 4186e62: fix(torii-wasm): npm publish use .gitignore
+
 ## 1.6.5-alpha.2
 
 ### Patch Changes
