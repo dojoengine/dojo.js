@@ -1,5 +1,5 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "1.7-rc",
   "initialVersions": {
     "example-node-worker": "0.0.1",
@@ -35,6 +35,7 @@
   "changesets": [
     "fifty-moons-film",
     "huge-paths-switch",
+    "orange-points-prove",
     "plenty-women-read",
     "smooth-dragons-write",
     "tiny-suns-read"
