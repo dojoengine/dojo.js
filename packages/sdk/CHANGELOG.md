@@ -1,5 +1,19 @@
 # Change Log
 
+## 1.7.0-1.7-rc.5
+
+### Minor Changes
+
+- 1a580dd: chore: bump minor version
+
+### Patch Changes
+
+- Updated dependencies [1a580dd]
+  - @dojoengine/torii-client@1.7.0-1.7-rc.4
+  - @dojoengine/torii-wasm@1.7.0-1.7-rc.4
+  - @dojoengine/utils@1.7.0-1.7-rc.5
+  - @dojoengine/core@1.7.0-1.7-rc.4
+
 ## 1.7.0-preview.4
 
 ### Patch Changes

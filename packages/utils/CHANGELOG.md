@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.7.0-1.7-rc.5
+
+### Minor Changes
+
+- 1a580dd: chore: bump minor version
+
 ## 1.7.0-preview.4
 
 ### Patch Changes

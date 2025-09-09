@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/predeployed-connector",
-    "version": "1.7.0-preview.3",
+    "version": "1.7.0-1.7-rc.4",
     "description": "Dojo SDK: Build onchain and provable apps faster",
     "author": "Dojo Team",
     "license": "MIT",
