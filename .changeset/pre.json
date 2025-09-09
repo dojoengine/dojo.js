@@ -1,6 +1,6 @@
 {
   "mode": "exit",
-  "tag": "1.7-rc",
+  "tag": "preview",
   "initialVersions": {
     "example-node-worker": "0.0.1",
     "example-nodejs-bot": "0.0.0",

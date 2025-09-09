@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.7.0-1.7-rc.4
+## 1.7.0-preview.4
 
 ### Minor Changes
 
@@ -9,7 +9,7 @@
 ### Patch Changes
 
 - Updated dependencies [1a580dd]
-  - @dojoengine/core@1.7.0-1.7-rc.4
+  - @dojoengine/core@1.7.0-preview.4
 
 ## 1.7.0-preview.3
 

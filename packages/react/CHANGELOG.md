@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.7.0-1.7-rc.5
+## 1.7.0-preview.5
 
 ### Minor Changes
 
@@ -9,9 +9,9 @@
 ### Patch Changes
 
 - Updated dependencies [1a580dd]
-  - @dojoengine/torii-client@1.7.0-1.7-rc.4
-  - @dojoengine/state@1.7.0-1.7-rc.4
-  - @dojoengine/utils@1.7.0-1.7-rc.5
+  - @dojoengine/torii-client@1.7.0-preview.4
+  - @dojoengine/state@1.7.0-preview.4
+  - @dojoengine/utils@1.7.0-preview.5
 
 ## 1.7.0-preview.4
 

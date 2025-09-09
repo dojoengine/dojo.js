@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.7.0-1.7-rc.4
+## 1.7.0-preview.4
 
 ### Minor Changes
 
