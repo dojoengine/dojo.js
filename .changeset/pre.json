@@ -1,5 +1,5 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "1.7-rc",
   "initialVersions": {
     "example-node-worker": "0.0.1",
