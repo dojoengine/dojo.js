@@ -1,5 +1,20 @@
 # @dojoengine/internal
 
+## 1.6.7
+
+### Patch Changes
+
+- Updated dependencies [48f93d8]
+- Updated dependencies [48f93d8]
+- Updated dependencies [48f93d8]
+- Updated dependencies [48f93d8]
+- Updated dependencies [48f93d8]
+- Updated dependencies [48f93d8]
+  - @dojoengine/utils@1.7.0
+  - @dojoengine/torii-wasm@1.7.0
+  - @dojoengine/core@1.7.0
+  - @dojoengine/torii-client@1.7.0
+
 ## 1.6.6
 
 ### Patch Changes

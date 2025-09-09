@@ -1,5 +1,24 @@
 # Change Log
 
+## 1.7.0
+
+### Minor Changes
+
+- 48f93d8: chore: bump dojo.c version
+- 48f93d8: chore: bump minor version
+- 48f93d8: fix(sdk): primitive parsing
+- 48f93d8: chore: bump starknet versions
+- 48f93d8: fix(sdk): ensure entityIds are properly padded
+
+### Patch Changes
+
+- 48f93d8: fix: ensure entity IDs are consistently padded across SDK
+
+  - Updated `getEntityIdFromKeys` to return properly padded entity IDs (66 characters: 0x + 64 hex)
+  - This fixes the issue where `waitForEntityChange` would return `undefined` when using entity IDs from `getEntityIdFromKeys`
+  - Entity IDs are now consistently padded whether they come from Torii or are generated manually
+  - Resolves issues #484 and #485
+
 ## 1.7.0-preview.5
 
 ### Minor Changes
