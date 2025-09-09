@@ -8,10 +8,10 @@
             "examples/*"
         ],
         "catalog": {
-            "starknet": "^7.6.2",
+            "starknet": "^8.1.2",
             "@starknet-io/get-starknet-core": "4.0.7",
-            "@starknet-react/core": "^4.0.1-beta.4",
-            "@starknet-react/chains": "^4.0.1-beta.3",
+            "@starknet-react/core": "^5.0.1",
+            "@starknet-react/chains": "^5.0.1",
             "@starknet-io/types-js": "^0.8",
             "@types/react": "^18.3.1",
             "@types/react-dom": "^18.3.1",
