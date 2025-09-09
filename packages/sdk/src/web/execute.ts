@@ -107,11 +107,11 @@ export function createWorldProxy<T extends readonly ContractDefinition[]>(
             : never;
         type Functions = ContractFunctions<FunctionAbis>;
 
-        const contract = new Contract(
-            contractDef.abi as AbiItem[],
-            contractDef.address,
-            providerOrAccount
-        );
+        const contract = new Contract({
+            abi: contractDef.abi as AbiItem[],
+            address: contractDef.address,
+            providerOrAccount: providerOrAccount,
+        });
 
         const functions = {} as Functions;
 
