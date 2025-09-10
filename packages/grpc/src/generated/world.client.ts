@@ -10,6 +10,8 @@ import type { PublishMessageResponse } from "./world";
 import type { PublishMessageRequest } from "./world";
 import type { RetrieveTokenCollectionsResponse } from "./world";
 import type { RetrieveTokenCollectionsRequest } from "./world";
+import type { RetrieveContractsResponse } from "./world";
+import type { RetrieveContractsRequest } from "./world";
 import type { RetrieveControllersResponse } from "./world";
 import type { RetrieveControllersRequest } from "./world";
 import type { SubscribeTransactionsResponse } from "./world";
@@ -43,8 +45,8 @@ import type { WorldMetadataResponse } from "./world";
 import type { WorldMetadataRequest } from "./world";
 import type { UnaryCall } from "@protobuf-ts/runtime-rpc";
 import { stackIntercept } from "@protobuf-ts/runtime-rpc";
-import type { SubscribeIndexerResponse } from "./world";
-import type { SubscribeIndexerRequest } from "./world";
+import type { SubscribeContractsResponse } from "./world";
+import type { SubscribeContractsRequest } from "./world";
 import type { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
 import type { RpcOptions } from "@protobuf-ts/runtime-rpc";
 /**
@@ -54,11 +56,11 @@ import type { RpcOptions } from "@protobuf-ts/runtime-rpc";
  */
 export interface IWorldClient {
     /**
-     * Subscribes to updates about the indexer. Like the head block number, tps, etc.
+     * Subscribes to updates about contracts. Like the head block number, tps, etc.
      *
-     * @generated from protobuf rpc: SubscribeIndexer
+     * @generated from protobuf rpc: SubscribeContracts
      */
-    subscribeIndexer(input: SubscribeIndexerRequest, options?: RpcOptions): ServerStreamingCall<SubscribeIndexerRequest, SubscribeIndexerResponse>;
+    subscribeContracts(input: SubscribeContractsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeContractsRequest, SubscribeContractsResponse>;
     /**
      * Retrieves metadata about the World including all the registered components and systems.
      *
@@ -168,6 +170,12 @@ export interface IWorldClient {
      */
     retrieveControllers(input: RetrieveControllersRequest, options?: RpcOptions): UnaryCall<RetrieveControllersRequest, RetrieveControllersResponse>;
     /**
+     * Retrieve contracts
+     *
+     * @generated from protobuf rpc: RetrieveContracts
+     */
+    retrieveContracts(input: RetrieveContractsRequest, options?: RpcOptions): UnaryCall<RetrieveContractsRequest, RetrieveContractsResponse>;
+    /**
      * Retrieve tokens collections
      *
      * @generated from protobuf rpc: RetrieveTokenCollections
@@ -198,13 +206,13 @@ export class WorldClient implements IWorldClient, ServiceInfo {
     constructor(private readonly _transport: RpcTransport) {
     }
     /**
-     * Subscribes to updates about the indexer. Like the head block number, tps, etc.
+     * Subscribes to updates about contracts. Like the head block number, tps, etc.
      *
-     * @generated from protobuf rpc: SubscribeIndexer
+     * @generated from protobuf rpc: SubscribeContracts
      */
-    subscribeIndexer(input: SubscribeIndexerRequest, options?: RpcOptions): ServerStreamingCall<SubscribeIndexerRequest, SubscribeIndexerResponse> {
+    subscribeContracts(input: SubscribeContractsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeContractsRequest, SubscribeContractsResponse> {
         const method = this.methods[0], opt = this._transport.mergeOptions(options);
-        return stackIntercept<SubscribeIndexerRequest, SubscribeIndexerResponse>("serverStreaming", this._transport, method, opt, input);
+        return stackIntercept<SubscribeContractsRequest, SubscribeContractsResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
      * Retrieves metadata about the World including all the registered components and systems.
@@ -369,12 +377,21 @@ export class WorldClient implements IWorldClient, ServiceInfo {
         return stackIntercept<RetrieveControllersRequest, RetrieveControllersResponse>("unary", this._transport, method, opt, input);
     }
     /**
+     * Retrieve contracts
+     *
+     * @generated from protobuf rpc: RetrieveContracts
+     */
+    retrieveContracts(input: RetrieveContractsRequest, options?: RpcOptions): UnaryCall<RetrieveContractsRequest, RetrieveContractsResponse> {
+        const method = this.methods[19], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveContractsRequest, RetrieveContractsResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
      * Retrieve tokens collections
      *
      * @generated from protobuf rpc: RetrieveTokenCollections
      */
     retrieveTokenCollections(input: RetrieveTokenCollectionsRequest, options?: RpcOptions): UnaryCall<RetrieveTokenCollectionsRequest, RetrieveTokenCollectionsResponse> {
-        const method = this.methods[19], opt = this._transport.mergeOptions(options);
+        const method = this.methods[20], opt = this._transport.mergeOptions(options);
         return stackIntercept<RetrieveTokenCollectionsRequest, RetrieveTokenCollectionsResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -383,7 +400,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: PublishMessage
      */
     publishMessage(input: PublishMessageRequest, options?: RpcOptions): UnaryCall<PublishMessageRequest, PublishMessageResponse> {
-        const method = this.methods[20], opt = this._transport.mergeOptions(options);
+        const method = this.methods[21], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageRequest, PublishMessageResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -392,7 +409,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: PublishMessageBatch
      */
     publishMessageBatch(input: PublishMessageBatchRequest, options?: RpcOptions): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse> {
-        const method = this.methods[21], opt = this._transport.mergeOptions(options);
+        const method = this.methods[22], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageBatchRequest, PublishMessageBatchResponse>("unary", this._transport, method, opt, input);
     }
 }

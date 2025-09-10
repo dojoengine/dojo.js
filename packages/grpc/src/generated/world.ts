@@ -25,6 +25,8 @@ import { TokenBalanceQuery } from "./types";
 import { Token } from "./types";
 import { TokenQuery } from "./types";
 import { TokenBalance } from "./types";
+import { Contract } from "./types";
+import { ContractQuery } from "./types";
 import { Controller } from "./types";
 import { ControllerQuery } from "./types";
 import { Transaction } from "./types";
@@ -68,6 +70,24 @@ export interface RetrieveControllersResponse {
      * @generated from protobuf field: repeated types.Controller controllers = 2
      */
     controllers: Controller[];
+}
+/**
+ * @generated from protobuf message world.RetrieveContractsRequest
+ */
+export interface RetrieveContractsRequest {
+    /**
+     * @generated from protobuf field: types.ContractQuery query = 1
+     */
+    query?: ContractQuery;
+}
+/**
+ * @generated from protobuf message world.RetrieveContractsResponse
+ */
+export interface RetrieveContractsResponse {
+    /**
+     * @generated from protobuf field: repeated types.Contract contracts = 1
+     */
+    contracts: Contract[];
 }
 /**
  * A request to update a token balance subscription
@@ -312,38 +332,26 @@ export interface RetrieveTokenCollectionsResponse {
     tokens: TokenCollection[];
 }
 /**
- * A request to subscribe to indexer updates.
+ * A request to subscribe to contract updates.
  *
- * @generated from protobuf message world.SubscribeIndexerRequest
+ * @generated from protobuf message world.SubscribeContractsRequest
  */
-export interface SubscribeIndexerRequest {
+export interface SubscribeContractsRequest {
     /**
-     * @generated from protobuf field: bytes contract_address = 1
+     * @generated from protobuf field: types.ContractQuery query = 1
      */
-    contract_address: Uint8Array;
+    query?: ContractQuery;
 }
 /**
- * A response containing indexer updates.
+ * A response containing contract updates.
  *
- * @generated from protobuf message world.SubscribeIndexerResponse
+ * @generated from protobuf message world.SubscribeContractsResponse
  */
-export interface SubscribeIndexerResponse {
+export interface SubscribeContractsResponse {
     /**
-     * @generated from protobuf field: int64 head = 1
+     * @generated from protobuf field: types.Contract contract = 1
      */
-    head: bigint;
-    /**
-     * @generated from protobuf field: int64 tps = 2
-     */
-    tps: bigint;
-    /**
-     * @generated from protobuf field: int64 last_block_timestamp = 3
-     */
-    last_block_timestamp: bigint;
-    /**
-     * @generated from protobuf field: bytes contract_address = 4
-     */
-    contract_address: Uint8Array;
+    contract?: Contract;
 }
 /**
  * A request to retrieve metadata for a specific world ID.
@@ -730,6 +738,99 @@ class RetrieveControllersResponse$Type extends MessageType<RetrieveControllersRe
  * @generated MessageType for protobuf message world.RetrieveControllersResponse
  */
 export const RetrieveControllersResponse = new RetrieveControllersResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RetrieveContractsRequest$Type extends MessageType<RetrieveContractsRequest> {
+    constructor() {
+        super("world.RetrieveContractsRequest", [
+            { no: 1, name: "query", kind: "message", T: () => ContractQuery }
+        ]);
+    }
+    create(value?: PartialMessage<RetrieveContractsRequest>): RetrieveContractsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<RetrieveContractsRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveContractsRequest): RetrieveContractsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* types.ContractQuery query */ 1:
+                    message.query = ContractQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RetrieveContractsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* types.ContractQuery query = 1; */
+        if (message.query)
+            ContractQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.RetrieveContractsRequest
+ */
+export const RetrieveContractsRequest = new RetrieveContractsRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RetrieveContractsResponse$Type extends MessageType<RetrieveContractsResponse> {
+    constructor() {
+        super("world.RetrieveContractsResponse", [
+            { no: 1, name: "contracts", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Contract }
+        ]);
+    }
+    create(value?: PartialMessage<RetrieveContractsResponse>): RetrieveContractsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.contracts = [];
+        if (value !== undefined)
+            reflectionMergePartial<RetrieveContractsResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveContractsResponse): RetrieveContractsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated types.Contract contracts */ 1:
+                    message.contracts.push(Contract.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RetrieveContractsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated types.Contract contracts = 1; */
+        for (let i = 0; i < message.contracts.length; i++)
+            Contract.internalBinaryWrite(message.contracts[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.RetrieveContractsResponse
+ */
+export const RetrieveContractsResponse = new RetrieveContractsResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class UpdateTokenBalancesSubscriptionRequest$Type extends MessageType<UpdateTokenBalancesSubscriptionRequest> {
     constructor() {
@@ -1495,26 +1596,25 @@ class RetrieveTokenCollectionsResponse$Type extends MessageType<RetrieveTokenCol
  */
 export const RetrieveTokenCollectionsResponse = new RetrieveTokenCollectionsResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class SubscribeIndexerRequest$Type extends MessageType<SubscribeIndexerRequest> {
+class SubscribeContractsRequest$Type extends MessageType<SubscribeContractsRequest> {
     constructor() {
-        super("world.SubscribeIndexerRequest", [
-            { no: 1, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ }
+        super("world.SubscribeContractsRequest", [
+            { no: 1, name: "query", kind: "message", T: () => ContractQuery }
         ]);
     }
-    create(value?: PartialMessage<SubscribeIndexerRequest>): SubscribeIndexerRequest {
+    create(value?: PartialMessage<SubscribeContractsRequest>): SubscribeContractsRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.contract_address = new Uint8Array(0);
         if (value !== undefined)
-            reflectionMergePartial<SubscribeIndexerRequest>(this, message, value);
+            reflectionMergePartial<SubscribeContractsRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeIndexerRequest): SubscribeIndexerRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeContractsRequest): SubscribeContractsRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* bytes contract_address */ 1:
-                    message.contract_address = reader.bytes();
+                case /* types.ContractQuery query */ 1:
+                    message.query = ContractQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1527,10 +1627,10 @@ class SubscribeIndexerRequest$Type extends MessageType<SubscribeIndexerRequest> 
         }
         return message;
     }
-    internalBinaryWrite(message: SubscribeIndexerRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* bytes contract_address = 1; */
-        if (message.contract_address.length)
-            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_address);
+    internalBinaryWrite(message: SubscribeContractsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* types.ContractQuery query = 1; */
+        if (message.query)
+            ContractQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1538,45 +1638,29 @@ class SubscribeIndexerRequest$Type extends MessageType<SubscribeIndexerRequest> 
     }
 }
 /**
- * @generated MessageType for protobuf message world.SubscribeIndexerRequest
+ * @generated MessageType for protobuf message world.SubscribeContractsRequest
  */
-export const SubscribeIndexerRequest = new SubscribeIndexerRequest$Type();
+export const SubscribeContractsRequest = new SubscribeContractsRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class SubscribeIndexerResponse$Type extends MessageType<SubscribeIndexerResponse> {
+class SubscribeContractsResponse$Type extends MessageType<SubscribeContractsResponse> {
     constructor() {
-        super("world.SubscribeIndexerResponse", [
-            { no: 1, name: "head", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 2, name: "tps", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 3, name: "last_block_timestamp", kind: "scalar", localName: "last_block_timestamp", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 4, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ }
+        super("world.SubscribeContractsResponse", [
+            { no: 1, name: "contract", kind: "message", T: () => Contract }
         ]);
     }
-    create(value?: PartialMessage<SubscribeIndexerResponse>): SubscribeIndexerResponse {
+    create(value?: PartialMessage<SubscribeContractsResponse>): SubscribeContractsResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.head = 0n;
-        message.tps = 0n;
-        message.last_block_timestamp = 0n;
-        message.contract_address = new Uint8Array(0);
         if (value !== undefined)
-            reflectionMergePartial<SubscribeIndexerResponse>(this, message, value);
+            reflectionMergePartial<SubscribeContractsResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeIndexerResponse): SubscribeIndexerResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeContractsResponse): SubscribeContractsResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* int64 head */ 1:
-                    message.head = reader.int64().toBigInt();
-                    break;
-                case /* int64 tps */ 2:
-                    message.tps = reader.int64().toBigInt();
-                    break;
-                case /* int64 last_block_timestamp */ 3:
-                    message.last_block_timestamp = reader.int64().toBigInt();
-                    break;
-                case /* bytes contract_address */ 4:
-                    message.contract_address = reader.bytes();
+                case /* types.Contract contract */ 1:
+                    message.contract = Contract.internalBinaryRead(reader, reader.uint32(), options, message.contract);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1589,19 +1673,10 @@ class SubscribeIndexerResponse$Type extends MessageType<SubscribeIndexerResponse
         }
         return message;
     }
-    internalBinaryWrite(message: SubscribeIndexerResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* int64 head = 1; */
-        if (message.head !== 0n)
-            writer.tag(1, WireType.Varint).int64(message.head);
-        /* int64 tps = 2; */
-        if (message.tps !== 0n)
-            writer.tag(2, WireType.Varint).int64(message.tps);
-        /* int64 last_block_timestamp = 3; */
-        if (message.last_block_timestamp !== 0n)
-            writer.tag(3, WireType.Varint).int64(message.last_block_timestamp);
-        /* bytes contract_address = 4; */
-        if (message.contract_address.length)
-            writer.tag(4, WireType.LengthDelimited).bytes(message.contract_address);
+    internalBinaryWrite(message: SubscribeContractsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* types.Contract contract = 1; */
+        if (message.contract)
+            Contract.internalBinaryWrite(message.contract, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1609,9 +1684,9 @@ class SubscribeIndexerResponse$Type extends MessageType<SubscribeIndexerResponse
     }
 }
 /**
- * @generated MessageType for protobuf message world.SubscribeIndexerResponse
+ * @generated MessageType for protobuf message world.SubscribeContractsResponse
  */
-export const SubscribeIndexerResponse = new SubscribeIndexerResponse$Type();
+export const SubscribeContractsResponse = new SubscribeContractsResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class WorldMetadataRequest$Type extends MessageType<WorldMetadataRequest> {
     constructor() {
@@ -2491,7 +2566,7 @@ export const PublishMessageBatchResponse = new PublishMessageBatchResponse$Type(
  * @generated ServiceType for protobuf service world.World
  */
 export const World = new ServiceType("world.World", [
-    { name: "SubscribeIndexer", serverStreaming: true, options: {}, I: SubscribeIndexerRequest, O: SubscribeIndexerResponse },
+    { name: "SubscribeContracts", serverStreaming: true, options: {}, I: SubscribeContractsRequest, O: SubscribeContractsResponse },
     { name: "WorldMetadata", options: {}, I: WorldMetadataRequest, O: WorldMetadataResponse },
     { name: "SubscribeEntities", serverStreaming: true, options: {}, I: SubscribeEntitiesRequest, O: SubscribeEntityResponse },
     { name: "UpdateEntitiesSubscription", options: {}, I: UpdateEntitiesSubscriptionRequest, O: Empty },
@@ -2510,6 +2585,7 @@ export const World = new ServiceType("world.World", [
     { name: "RetrieveTransactions", options: {}, I: RetrieveTransactionsRequest, O: RetrieveTransactionsResponse },
     { name: "SubscribeTransactions", serverStreaming: true, options: {}, I: SubscribeTransactionsRequest, O: SubscribeTransactionsResponse },
     { name: "RetrieveControllers", options: {}, I: RetrieveControllersRequest, O: RetrieveControllersResponse },
+    { name: "RetrieveContracts", options: {}, I: RetrieveContractsRequest, O: RetrieveContractsResponse },
     { name: "RetrieveTokenCollections", options: {}, I: RetrieveTokenCollectionsRequest, O: RetrieveTokenCollectionsResponse },
     { name: "PublishMessage", options: {}, I: PublishMessageRequest, O: PublishMessageResponse },
     { name: "PublishMessageBatch", options: {}, I: PublishMessageBatchRequest, O: PublishMessageBatchResponse }

@@ -13,6 +13,7 @@ import type {
     TokenBalanceQuery as ToriiTokenBalanceQuery,
     TransactionQuery as ToriiTransactionQuery,
     TransactionFilter as ToriiTransactionFilter,
+    KeysClause as ToriiKeysClause,
 } from "@dojoengine/torii-wasm";
 
 import type {
@@ -30,6 +31,8 @@ import type {
     TokenBalanceQuery as GrpcTokenBalanceQuery,
     TransactionQuery as GrpcTransactionQuery,
     TransactionFilter as GrpcTransactionFilter,
+    EventQuery as GrpcEventQuery,
+    ContractQuery as GrpcContractQuery,
 } from "../generated/types";
 
 import {
@@ -48,6 +51,8 @@ import type {
     RetrieveTokenCollectionsRequest,
     RetrieveControllersRequest,
     RetrieveTransactionsRequest,
+    RetrieveEventsRequest,
+    RetrieveContractsRequest,
 } from "../generated/world";
 
 function hexToBuffer(hex: string): Uint8Array {
@@ -335,5 +340,43 @@ export function createRetrieveTransactionsRequest(
 ): RetrieveTransactionsRequest {
     return {
         query: mapTransactionQuery(query),
+    };
+}
+
+export function createRetrieveEventsRequest(query: {
+    keys?: ToriiKeysClause;
+    pagination?: ToriiPagination;
+}): RetrieveEventsRequest {
+    return {
+        query: {
+            keys: query.keys
+                ? {
+                      keys: query.keys.keys.map((k) =>
+                          k ? hexToBuffer(k) : new Uint8Array()
+                      ),
+                      pattern_matching:
+                          query.keys.pattern_matching === "FixedLen"
+                              ? GrpcPatternMatching.FixedLen
+                              : GrpcPatternMatching.VariableLen,
+                      models: query.keys.models || [],
+                  }
+                : undefined,
+            pagination: query.pagination
+                ? mapPagination(query.pagination)
+                : undefined,
+        },
+    };
+}
+
+export function createRetrieveContractsRequest(query: {
+    contract_addresses?: string[];
+    contract_types?: any[];
+}): RetrieveContractsRequest {
+    return {
+        query: {
+            contract_addresses:
+                query.contract_addresses?.map(hexToBuffer) || [],
+            contract_types: query.contract_types || [],
+        },
     };
 }

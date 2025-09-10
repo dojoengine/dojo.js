@@ -87,6 +87,10 @@ export interface Model {
      * @generated from protobuf field: bytes contract_address = 9
      */
     contract_address: Uint8Array;
+    /**
+     * @generated from protobuf field: bool use_legacy_store = 10
+     */
+    use_legacy_store: boolean;
 }
 /**
  * @generated from protobuf message types.Entity
@@ -104,6 +108,24 @@ export interface Entity {
      * @generated from protobuf field: repeated types.Struct models = 2
      */
     models: Struct[];
+    /**
+     * Created at timestamp
+     *
+     * @generated from protobuf field: uint64 created_at = 3
+     */
+    created_at: bigint;
+    /**
+     * Updated at timestamp
+     *
+     * @generated from protobuf field: uint64 updated_at = 4
+     */
+    updated_at: bigint;
+    /**
+     * Block timestamp when the entity was updated
+     *
+     * @generated from protobuf field: uint64 executed_at = 5
+     */
+    executed_at: bigint;
 }
 /**
  * @generated from protobuf message types.Event
@@ -327,6 +349,10 @@ export interface Token {
      * @generated from protobuf field: bytes metadata = 6
      */
     metadata: Uint8Array;
+    /**
+     * @generated from protobuf field: optional bytes total_supply = 7
+     */
+    total_supply?: Uint8Array;
 }
 /**
  * @generated from protobuf message types.TokenCollection
@@ -677,6 +703,78 @@ export interface TransactionQuery {
     pagination?: Pagination;
 }
 /**
+ * @generated from protobuf message types.Contract
+ */
+export interface Contract {
+    /**
+     * The contract address
+     *
+     * @generated from protobuf field: bytes contract_address = 1
+     */
+    contract_address: Uint8Array;
+    /**
+     * The type of contract
+     *
+     * @generated from protobuf field: types.ContractType contract_type = 2
+     */
+    contract_type: ContractType;
+    /**
+     * Current block height
+     *
+     * @generated from protobuf field: optional uint64 head = 3
+     */
+    head?: bigint;
+    /**
+     * Transactions per second
+     *
+     * @generated from protobuf field: optional uint64 tps = 4
+     */
+    tps?: bigint;
+    /**
+     * Last block timestamp
+     *
+     * @generated from protobuf field: optional uint64 last_block_timestamp = 5
+     */
+    last_block_timestamp?: bigint;
+    /**
+     * Last pending block transaction
+     *
+     * @generated from protobuf field: optional bytes last_pending_block_tx = 6
+     */
+    last_pending_block_tx?: Uint8Array;
+    /**
+     * When the contract was last updated
+     *
+     * @generated from protobuf field: uint64 updated_at = 7
+     */
+    updated_at: bigint;
+    /**
+     * When the contract was first tracked
+     *
+     * @generated from protobuf field: uint64 created_at = 8
+     */
+    created_at: bigint;
+}
+/**
+ * A request to retrieve contracts
+ *
+ * @generated from protobuf message types.ContractQuery
+ */
+export interface ContractQuery {
+    /**
+     * The list of contract addresses to retrieve
+     *
+     * @generated from protobuf field: repeated bytes contract_addresses = 1
+     */
+    contract_addresses: Uint8Array[];
+    /**
+     * The list of contract types to filter by
+     *
+     * @generated from protobuf field: repeated types.ContractType contract_types = 2
+     */
+    contract_types: ContractType[];
+}
+/**
  * @generated from protobuf enum types.PatternMatching
  */
 export enum PatternMatching {
@@ -737,7 +835,45 @@ export enum ComparisonOperator {
     /**
      * @generated from protobuf enum value: NOT_IN = 7;
      */
-    NOT_IN = 7
+    NOT_IN = 7,
+    /**
+     * Array-specific operators
+     *
+     * Array contains value
+     *
+     * @generated from protobuf enum value: CONTAINS = 8;
+     */
+    CONTAINS = 8,
+    /**
+     * Array contains all values
+     *
+     * @generated from protobuf enum value: CONTAINS_ALL = 9;
+     */
+    CONTAINS_ALL = 9,
+    /**
+     * Array contains any of the values
+     *
+     * @generated from protobuf enum value: CONTAINS_ANY = 10;
+     */
+    CONTAINS_ANY = 10,
+    /**
+     * Array length equals
+     *
+     * @generated from protobuf enum value: ARRAY_LENGTH_EQ = 11;
+     */
+    ARRAY_LENGTH_EQ = 11,
+    /**
+     * Array length greater than
+     *
+     * @generated from protobuf enum value: ARRAY_LENGTH_GT = 12;
+     */
+    ARRAY_LENGTH_GT = 12,
+    /**
+     * Array length less than
+     *
+     * @generated from protobuf enum value: ARRAY_LENGTH_LT = 13;
+     */
+    ARRAY_LENGTH_LT = 13
 }
 /**
  * @generated from protobuf enum types.OrderDirection
@@ -777,6 +913,35 @@ export enum CallType {
      * @generated from protobuf enum value: EXECUTE_FROM_OUTSIDE = 1;
      */
     EXECUTE_FROM_OUTSIDE = 1
+}
+/**
+ * @generated from protobuf enum types.ContractType
+ */
+export enum ContractType {
+    /**
+     * @generated from protobuf enum value: WORLD = 0;
+     */
+    WORLD = 0,
+    /**
+     * @generated from protobuf enum value: ERC20 = 1;
+     */
+    ERC20 = 1,
+    /**
+     * @generated from protobuf enum value: ERC721 = 2;
+     */
+    ERC721 = 2,
+    /**
+     * @generated from protobuf enum value: ERC1155 = 3;
+     */
+    ERC1155 = 3,
+    /**
+     * @generated from protobuf enum value: UDC = 4;
+     */
+    UDC = 4,
+    /**
+     * @generated from protobuf enum value: OTHER = 5;
+     */
+    OTHER = 5
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class World$Type extends MessageType<World> {
@@ -845,7 +1010,8 @@ class Model$Type extends MessageType<Model> {
             { no: 6, name: "class_hash", kind: "scalar", localName: "class_hash", T: 12 /*ScalarType.BYTES*/ },
             { no: 7, name: "layout", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
             { no: 8, name: "schema", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
-            { no: 9, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ }
+            { no: 9, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 10, name: "use_legacy_store", kind: "scalar", localName: "use_legacy_store", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<Model>): Model {
@@ -859,6 +1025,7 @@ class Model$Type extends MessageType<Model> {
         message.layout = new Uint8Array(0);
         message.schema = new Uint8Array(0);
         message.contract_address = new Uint8Array(0);
+        message.use_legacy_store = false;
         if (value !== undefined)
             reflectionMergePartial<Model>(this, message, value);
         return message;
@@ -894,6 +1061,9 @@ class Model$Type extends MessageType<Model> {
                     break;
                 case /* bytes contract_address */ 9:
                     message.contract_address = reader.bytes();
+                    break;
+                case /* bool use_legacy_store */ 10:
+                    message.use_legacy_store = reader.bool();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -934,6 +1104,9 @@ class Model$Type extends MessageType<Model> {
         /* bytes contract_address = 9; */
         if (message.contract_address.length)
             writer.tag(9, WireType.LengthDelimited).bytes(message.contract_address);
+        /* bool use_legacy_store = 10; */
+        if (message.use_legacy_store !== false)
+            writer.tag(10, WireType.Varint).bool(message.use_legacy_store);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -949,13 +1122,19 @@ class Entity$Type extends MessageType<Entity> {
     constructor() {
         super("types.Entity", [
             { no: 1, name: "hashed_keys", kind: "scalar", localName: "hashed_keys", T: 12 /*ScalarType.BYTES*/ },
-            { no: 2, name: "models", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Struct }
+            { no: 2, name: "models", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Struct },
+            { no: 3, name: "created_at", kind: "scalar", localName: "created_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 4, name: "updated_at", kind: "scalar", localName: "updated_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 5, name: "executed_at", kind: "scalar", localName: "executed_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
         ]);
     }
     create(value?: PartialMessage<Entity>): Entity {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.hashed_keys = new Uint8Array(0);
         message.models = [];
+        message.created_at = 0n;
+        message.updated_at = 0n;
+        message.executed_at = 0n;
         if (value !== undefined)
             reflectionMergePartial<Entity>(this, message, value);
         return message;
@@ -970,6 +1149,15 @@ class Entity$Type extends MessageType<Entity> {
                     break;
                 case /* repeated types.Struct models */ 2:
                     message.models.push(Struct.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                case /* uint64 created_at */ 3:
+                    message.created_at = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 updated_at */ 4:
+                    message.updated_at = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 executed_at */ 5:
+                    message.executed_at = reader.uint64().toBigInt();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -989,6 +1177,15 @@ class Entity$Type extends MessageType<Entity> {
         /* repeated types.Struct models = 2; */
         for (let i = 0; i < message.models.length; i++)
             Struct.internalBinaryWrite(message.models[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        /* uint64 created_at = 3; */
+        if (message.created_at !== 0n)
+            writer.tag(3, WireType.Varint).uint64(message.created_at);
+        /* uint64 updated_at = 4; */
+        if (message.updated_at !== 0n)
+            writer.tag(4, WireType.Varint).uint64(message.updated_at);
+        /* uint64 executed_at = 5; */
+        if (message.executed_at !== 0n)
+            writer.tag(5, WireType.Varint).uint64(message.executed_at);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1633,7 +1830,8 @@ class Token$Type extends MessageType<Token> {
             { no: 3, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "symbol", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 5, name: "decimals", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
-            { no: 6, name: "metadata", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
+            { no: 6, name: "metadata", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 7, name: "total_supply", kind: "scalar", localName: "total_supply", opt: true, T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<Token>): Token {
@@ -1670,6 +1868,9 @@ class Token$Type extends MessageType<Token> {
                 case /* bytes metadata */ 6:
                     message.metadata = reader.bytes();
                     break;
+                case /* optional bytes total_supply */ 7:
+                    message.total_supply = reader.bytes();
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -1700,6 +1901,9 @@ class Token$Type extends MessageType<Token> {
         /* bytes metadata = 6; */
         if (message.metadata.length)
             writer.tag(6, WireType.LengthDelimited).bytes(message.metadata);
+        /* optional bytes total_supply = 7; */
+        if (message.total_supply !== undefined)
+            writer.tag(7, WireType.LengthDelimited).bytes(message.total_supply);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -2602,3 +2806,165 @@ class TransactionQuery$Type extends MessageType<TransactionQuery> {
  * @generated MessageType for protobuf message types.TransactionQuery
  */
 export const TransactionQuery = new TransactionQuery$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Contract$Type extends MessageType<Contract> {
+    constructor() {
+        super("types.Contract", [
+            { no: 1, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "contract_type", kind: "enum", localName: "contract_type", T: () => ["types.ContractType", ContractType] },
+            { no: 3, name: "head", kind: "scalar", opt: true, T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 4, name: "tps", kind: "scalar", opt: true, T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 5, name: "last_block_timestamp", kind: "scalar", localName: "last_block_timestamp", opt: true, T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 6, name: "last_pending_block_tx", kind: "scalar", localName: "last_pending_block_tx", opt: true, T: 12 /*ScalarType.BYTES*/ },
+            { no: 7, name: "updated_at", kind: "scalar", localName: "updated_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 8, name: "created_at", kind: "scalar", localName: "created_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Contract>): Contract {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.contract_address = new Uint8Array(0);
+        message.contract_type = 0;
+        message.updated_at = 0n;
+        message.created_at = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<Contract>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Contract): Contract {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bytes contract_address */ 1:
+                    message.contract_address = reader.bytes();
+                    break;
+                case /* types.ContractType contract_type */ 2:
+                    message.contract_type = reader.int32();
+                    break;
+                case /* optional uint64 head */ 3:
+                    message.head = reader.uint64().toBigInt();
+                    break;
+                case /* optional uint64 tps */ 4:
+                    message.tps = reader.uint64().toBigInt();
+                    break;
+                case /* optional uint64 last_block_timestamp */ 5:
+                    message.last_block_timestamp = reader.uint64().toBigInt();
+                    break;
+                case /* optional bytes last_pending_block_tx */ 6:
+                    message.last_pending_block_tx = reader.bytes();
+                    break;
+                case /* uint64 updated_at */ 7:
+                    message.updated_at = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 created_at */ 8:
+                    message.created_at = reader.uint64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Contract, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bytes contract_address = 1; */
+        if (message.contract_address.length)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_address);
+        /* types.ContractType contract_type = 2; */
+        if (message.contract_type !== 0)
+            writer.tag(2, WireType.Varint).int32(message.contract_type);
+        /* optional uint64 head = 3; */
+        if (message.head !== undefined)
+            writer.tag(3, WireType.Varint).uint64(message.head);
+        /* optional uint64 tps = 4; */
+        if (message.tps !== undefined)
+            writer.tag(4, WireType.Varint).uint64(message.tps);
+        /* optional uint64 last_block_timestamp = 5; */
+        if (message.last_block_timestamp !== undefined)
+            writer.tag(5, WireType.Varint).uint64(message.last_block_timestamp);
+        /* optional bytes last_pending_block_tx = 6; */
+        if (message.last_pending_block_tx !== undefined)
+            writer.tag(6, WireType.LengthDelimited).bytes(message.last_pending_block_tx);
+        /* uint64 updated_at = 7; */
+        if (message.updated_at !== 0n)
+            writer.tag(7, WireType.Varint).uint64(message.updated_at);
+        /* uint64 created_at = 8; */
+        if (message.created_at !== 0n)
+            writer.tag(8, WireType.Varint).uint64(message.created_at);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.Contract
+ */
+export const Contract = new Contract$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class ContractQuery$Type extends MessageType<ContractQuery> {
+    constructor() {
+        super("types.ContractQuery", [
+            { no: 1, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "contract_types", kind: "enum", localName: "contract_types", repeat: 1 /*RepeatType.PACKED*/, T: () => ["types.ContractType", ContractType] }
+        ]);
+    }
+    create(value?: PartialMessage<ContractQuery>): ContractQuery {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.contract_addresses = [];
+        message.contract_types = [];
+        if (value !== undefined)
+            reflectionMergePartial<ContractQuery>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ContractQuery): ContractQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated bytes contract_addresses */ 1:
+                    message.contract_addresses.push(reader.bytes());
+                    break;
+                case /* repeated types.ContractType contract_types */ 2:
+                    if (wireType === WireType.LengthDelimited)
+                        for (let e = reader.int32() + reader.pos; reader.pos < e;)
+                            message.contract_types.push(reader.int32());
+                    else
+                        message.contract_types.push(reader.int32());
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: ContractQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated bytes contract_addresses = 1; */
+        for (let i = 0; i < message.contract_addresses.length; i++)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
+        /* repeated types.ContractType contract_types = 2; */
+        if (message.contract_types.length) {
+            writer.tag(2, WireType.LengthDelimited).fork();
+            for (let i = 0; i < message.contract_types.length; i++)
+                writer.int32(message.contract_types[i]);
+            writer.join();
+        }
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.ContractQuery
+ */
+export const ContractQuery = new ContractQuery$Type();

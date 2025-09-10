@@ -7,8 +7,8 @@ import "google/protobuf/empty.proto";
 
 // The World service provides information about the world.
 service World {
-    // Subscribes to updates about the indexer. Like the head block number, tps, etc.
-    rpc SubscribeIndexer (SubscribeIndexerRequest) returns (stream SubscribeIndexerResponse);
+    // Subscribes to updates about contracts. Like the head block number, tps, etc.
+    rpc SubscribeContracts (SubscribeContractsRequest) returns (stream SubscribeContractsResponse);
 
     // Retrieves metadata about the World including all the registered components and systems.
     rpc WorldMetadata (WorldMetadataRequest) returns (WorldMetadataResponse);
@@ -64,6 +64,9 @@ service World {
     // Retrieve controllers
     rpc RetrieveControllers (RetrieveControllersRequest) returns (RetrieveControllersResponse);
 
+    // Retrieve contracts
+    rpc RetrieveContracts (RetrieveContractsRequest) returns (RetrieveContractsResponse);
+
     // Retrieve tokens collections
     rpc RetrieveTokenCollections (RetrieveTokenCollectionsRequest) returns (RetrieveTokenCollectionsResponse);
 
@@ -89,6 +92,14 @@ message RetrieveControllersRequest {
 message RetrieveControllersResponse {
     string next_cursor = 1;
     repeated types.Controller controllers = 2;
+}
+
+message RetrieveContractsRequest {
+    types.ContractQuery query = 1;
+}
+
+message RetrieveContractsResponse {
+    repeated types.Contract contracts = 1;
 }
 
 // A request to update a token balance subscription
@@ -191,17 +202,14 @@ message RetrieveTokenCollectionsResponse {
     repeated types.TokenCollection tokens = 2;
 }
 
-// A request to subscribe to indexer updates.
-message SubscribeIndexerRequest {
-    bytes contract_address = 1;
+// A request to subscribe to contract updates.
+message SubscribeContractsRequest {
+    types.ContractQuery query = 1;
 }
 
-// A response containing indexer updates.
-message SubscribeIndexerResponse {
-    int64 head = 1;
-    int64 tps = 2;
-    int64 last_block_timestamp = 3;
-    bytes contract_address = 4;
+// A response containing contract updates.
+message SubscribeContractsResponse {
+    types.Contract contract = 1;
 }
 
 // A request to retrieve metadata for a specific world ID.

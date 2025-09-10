@@ -42,6 +42,11 @@ message Array {
     repeated Ty children = 1;
 }
 
+message FixedSizeArray {
+    repeated Ty children = 1;
+    uint32 size = 2;
+}
+
 message Ty {
     oneof ty_type {
         Primitive primitive = 2;
@@ -50,6 +55,7 @@ message Ty {
         Array tuple = 5;
         Array array = 6;
         string bytearray = 7;
+        FixedSizeArray fixed_size_array = 8;
     }
 }
 
