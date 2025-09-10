@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/internal",
-    "version": "1.6.7",
+    "version": "1.6.8-preview.0",
     "private": true,
     "description": "Internal APIs for Dojo Engine packages",
     "author": "Dojo Team",

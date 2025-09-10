@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.7.1-preview.0
+
+### Patch Changes
+
+- 4060bc6: feat(grpc): upgrade torii to preview.6
+
 ## 1.7.0
 
 ### Minor Changes

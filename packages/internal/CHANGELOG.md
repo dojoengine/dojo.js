@@ -1,5 +1,14 @@
 # @dojoengine/internal
 
+## 1.6.8-preview.0
+
+### Patch Changes
+
+- 4060bc6: feat(grpc): upgrade torii to preview.6
+- Updated dependencies [4060bc6]
+  - @dojoengine/torii-wasm@1.7.1-preview.0
+  - @dojoengine/torii-client@1.7.1-preview.0
+
 ## 1.6.7
 
 ### Patch Changes
