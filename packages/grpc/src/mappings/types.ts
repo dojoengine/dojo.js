@@ -27,6 +27,10 @@ import type {
     Controller as GrpcController,
     Transaction as GrpcTransaction,
     TransactionCall as GrpcTransactionCall,
+    Event as GrpcEvent,
+    Contract as GrpcContract,
+    World as GrpcWorld,
+    ContractType as GrpcContractType,
 } from "../generated/types";
 
 import { CallType as GrpcCallType } from "../generated/types";
@@ -48,6 +52,9 @@ import type {
     RetrieveTransactionsResponse,
     SubscribeIndexerResponse,
     PublishMessageRequest,
+    RetrieveEventsResponse,
+    RetrieveContractsResponse,
+    WorldMetadataResponse,
 } from "../generated/world";
 
 let textDecoder: TextDecoder | undefined = undefined;
@@ -406,4 +413,64 @@ export function mapCallTypeToGrpc(callType: ToriiCallType): GrpcCallType {
         default:
             return GrpcCallType.EXECUTE;
     }
+}
+
+export function mapEvent(event: GrpcEvent): any {
+    return {
+        keys: event.keys.map(bufferToHex),
+        data: event.data.map(bufferToHex),
+        transaction_hash: bufferToHex(event.transaction_hash),
+    };
+}
+
+export function mapEventsResponse(response: RetrieveEventsResponse): any {
+    return {
+        items: response.events.map(mapEvent),
+        next_cursor: response.next_cursor || undefined,
+    };
+}
+
+export function mapContract(contract: GrpcContract): any {
+    return {
+        contract_address: bufferToHex(contract.contract_address),
+        contract_type: contract.contract_type,
+        head: contract.head ? Number(contract.head) : undefined,
+        tps: contract.tps ? Number(contract.tps) : undefined,
+        last_block_timestamp: contract.last_block_timestamp
+            ? Number(contract.last_block_timestamp)
+            : undefined,
+        last_pending_block_tx: contract.last_pending_block_tx
+            ? bufferToHex(contract.last_pending_block_tx)
+            : undefined,
+        updated_at: Number(contract.updated_at),
+        created_at: Number(contract.created_at),
+    };
+}
+
+export function mapContractsResponse(response: RetrieveContractsResponse): any {
+    return {
+        items: response.contracts.map(mapContract),
+    };
+}
+
+export function mapWorldMetadataResponse(response: WorldMetadataResponse): any {
+    if (!response.world) {
+        return null;
+    }
+
+    return {
+        world_address: bufferToHex(response.world.world_address),
+        models: response.world.models.map((model: any) => ({
+            selector: bufferToHex(model.selector),
+            namespace: model.namespace,
+            name: model.name,
+            packed_size: model.packed_size,
+            unpacked_size: model.unpacked_size,
+            class_hash: bufferToHex(model.class_hash),
+            layout: bufferToHex(model.layout),
+            schema: bufferToHex(model.schema),
+            contract_address: bufferToHex(model.contract_address),
+            use_legacy_store: model.use_legacy_store,
+        })),
+    };
 }

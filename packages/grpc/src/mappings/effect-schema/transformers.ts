@@ -107,3 +107,75 @@ export function transformMessage(
         ),
     };
 }
+
+export function transformEvent(event: any): any {
+    return {
+        keys: event.keys.map((key: Uint8Array) =>
+            Schema.decodeSync(BufferToHex)(key)
+        ),
+        data: event.data.map((d: Uint8Array) =>
+            Schema.decodeSync(BufferToHex)(d)
+        ),
+        transaction_hash: Schema.decodeSync(BufferToHex)(
+            event.transaction_hash
+        ),
+    };
+}
+
+export function transformEventsResponse(response: any): any {
+    return {
+        items: response.events.map(transformEvent),
+        next_cursor: response.next_cursor || undefined,
+    };
+}
+
+export function transformContract(contract: any): any {
+    return {
+        contract_address: Schema.decodeSync(BufferToHex)(
+            contract.contract_address
+        ),
+        contract_type: contract.contract_type,
+        head: contract.head ? Number(contract.head) : undefined,
+        tps: contract.tps ? Number(contract.tps) : undefined,
+        last_block_timestamp: contract.last_block_timestamp
+            ? Number(contract.last_block_timestamp)
+            : undefined,
+        last_pending_block_tx: contract.last_pending_block_tx
+            ? Schema.decodeSync(BufferToHex)(contract.last_pending_block_tx)
+            : undefined,
+        updated_at: Number(contract.updated_at),
+        created_at: Number(contract.created_at),
+    };
+}
+
+export function transformContractsResponse(response: any): any {
+    return {
+        items: response.contracts.map(transformContract),
+    };
+}
+
+export function transformWorldMetadataResponse(response: any): any {
+    if (!response.world) {
+        return null;
+    }
+
+    return {
+        world_address: Schema.decodeSync(BufferToHex)(
+            response.world.world_address
+        ),
+        models: response.world.models.map((model: any) => ({
+            selector: Schema.decodeSync(BufferToHex)(model.selector),
+            namespace: model.namespace,
+            name: model.name,
+            packed_size: model.packed_size,
+            unpacked_size: model.unpacked_size,
+            class_hash: Schema.decodeSync(BufferToHex)(model.class_hash),
+            layout: Schema.decodeSync(BufferToHex)(model.layout),
+            schema: Schema.decodeSync(BufferToHex)(model.schema),
+            contract_address: Schema.decodeSync(BufferToHex)(
+                model.contract_address
+            ),
+            use_legacy_store: model.use_legacy_store,
+        })),
+    };
+}

@@ -16,11 +16,15 @@ import type {
     KeysClause,
     Message,
     WasmU256,
+    Pagination,
 } from "@dojoengine/torii-wasm";
 
 import type { KeysClause as GrpcKeysClause } from "./generated/types";
 
-import { PatternMatching as GrpcPatternMatching } from "./generated/types";
+import {
+    PatternMatching as GrpcPatternMatching,
+    ContractType,
+} from "./generated/types";
 
 import {
     createRetrieveEntitiesRequest,
@@ -30,6 +34,8 @@ import {
     createRetrieveTokenCollectionsRequest,
     createRetrieveControllersRequest,
     createRetrieveTransactionsRequest,
+    createRetrieveEventsRequest,
+    createRetrieveContractsRequest,
     mapTransactionFilter,
     mapClause,
 } from "./mappings/query";
@@ -47,6 +53,11 @@ import {
     mapEntity,
     mapToken,
     mapTokenBalance,
+    mapEventsResponse,
+    mapContractsResponse,
+    mapWorldMetadataResponse,
+    mapEvent,
+    mapContract,
 } from "./mappings/types";
 
 import {
@@ -62,6 +73,11 @@ import {
     transformEntity,
     transformToken,
     transformTokenBalance,
+    transformEventsResponse,
+    transformContractsResponse,
+    transformWorldMetadataResponse,
+    transformEvent,
+    transformContract,
 } from "./mappings/effect-schema/transformers";
 
 import { Schema } from "effect";
@@ -75,7 +91,7 @@ import type {
     SubscribeTokensResponse,
     SubscribeTokenBalancesResponse,
     SubscribeEventsResponse,
-    SubscribeIndexerResponse,
+    SubscribeContractsResponse,
     PublishMessageBatchRequest,
 } from "./generated/world";
 
@@ -158,6 +174,11 @@ export class ToriiGrpcClient {
         entity: (entity: any) => any;
         token: (token: any) => any;
         tokenBalance: (balance: any) => any;
+        eventsResponse: (response: any) => any;
+        contractsResponse: (response: any) => any;
+        worldMetadataResponse: (response: any) => any;
+        event: (event: any) => any;
+        contract: (contract: any) => any;
     };
 
     constructor(config: ToriiGrpcClientConfig) {
@@ -181,6 +202,11 @@ export class ToriiGrpcClient {
                   entity: transformEntity,
                   token: transformToken,
                   tokenBalance: transformTokenBalance,
+                  eventsResponse: transformEventsResponse,
+                  contractsResponse: transformContractsResponse,
+                  worldMetadataResponse: transformWorldMetadataResponse,
+                  event: transformEvent,
+                  contract: transformContract,
               }
             : {
                   entitiesResponse: mapEntitiesResponse,
@@ -195,6 +221,11 @@ export class ToriiGrpcClient {
                   entity: mapEntity,
                   token: mapToken,
                   tokenBalance: mapTokenBalance,
+                  eventsResponse: mapEventsResponse,
+                  contractsResponse: mapContractsResponse,
+                  worldMetadataResponse: mapWorldMetadataResponse,
+                  event: mapEvent,
+                  contract: mapContract,
               };
     }
 
@@ -461,23 +492,6 @@ export class ToriiGrpcClient {
         });
     }
 
-    async onIndexerUpdated(
-        contract_address: string | null | undefined,
-        callback: Function
-    ): Promise<Subscription> {
-        return this.createStreamSubscription({
-            createStream: () =>
-                this.client.worldClient.subscribeIndexer({
-                    contract_address: contract_address
-                        ? hexToBuffer(contract_address)
-                        : new Uint8Array(),
-                }),
-            onMessage: (response: SubscribeIndexerResponse) => {
-                callback(this.mappers.indexerUpdate(response));
-            },
-        });
-    }
-
     async onTokenBalanceUpdated(
         contract_addresses: string[] | null | undefined,
         account_addresses: string[] | null | undefined,
@@ -542,6 +556,73 @@ export class ToriiGrpcClient {
             ? (buffer: Uint8Array) => Schema.decodeSync(BufferToHex)(buffer)
             : bufferToHex;
         return response.responses.map((r) => hexConverter(r.entity_id));
+    }
+
+    async getWorldMetadata(): Promise<any> {
+        const response = await this.client.worldClient.worldMetadata({})
+            .response;
+        return this.mappers.worldMetadataResponse(response);
+    }
+
+    async getEvents(query: {
+        keys?: KeysClause;
+        pagination?: Pagination;
+    }): Promise<any> {
+        const request = createRetrieveEventsRequest(query);
+        const response =
+            await this.client.worldClient.retrieveEvents(request).response;
+        return this.mappers.eventsResponse(response);
+    }
+
+    async getContracts(query?: {
+        contract_addresses?: string[];
+        contract_types?: ContractType[];
+    }): Promise<any> {
+        const request = createRetrieveContractsRequest(query || {});
+        const response =
+            await this.client.worldClient.retrieveContracts(request).response;
+        return this.mappers.contractsResponse(response);
+    }
+
+    async updateTokensSubscription(
+        subscription: Subscription,
+        contractAddresses?: string[],
+        tokenIds?: WasmU256[]
+    ): Promise<void> {
+        const grpcSubscription = this.findSubscription(subscription);
+        if (!grpcSubscription) {
+            throw new Error("Subscription not found");
+        }
+
+        await this.client.worldClient.updateTokensSubscription({
+            subscription_id: BigInt(grpcSubscription.id),
+            contract_addresses: contractAddresses?.map(hexToBuffer) || [],
+            token_ids: tokenIds?.map(hexToBuffer) || [],
+        }).response;
+    }
+
+    async onContractsUpdated(
+        query: {
+            contract_addresses?: string[];
+            contract_types?: ContractType[];
+        },
+        callback: Function
+    ): Promise<Subscription> {
+        return this.createStreamSubscription({
+            createStream: () =>
+                this.client.worldClient.subscribeContracts({
+                    query: {
+                        contract_addresses:
+                            query.contract_addresses?.map(hexToBuffer) || [],
+                        contract_types: query.contract_types || [],
+                    },
+                }),
+            onMessage: (response: SubscribeContractsResponse) => {
+                if (response.contract) {
+                    callback(this.mappers.contract(response.contract));
+                }
+            },
+        });
     }
 
     private findSubscription(

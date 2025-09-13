@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.7.1-preview.0
+
+### Patch Changes
+
+- Updated dependencies [4060bc6]
+  - @dojoengine/torii-wasm@1.7.1-preview.0
+
 ## 1.7.0
 
 ### Minor Changes

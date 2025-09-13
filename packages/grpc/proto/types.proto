@@ -6,7 +6,7 @@ import "schema.proto";
 message World {
     // The hex-encoded address of the world.
     string world_address = 1;
-    // A list of metadata for all registered components in the world. 
+    // A list of metadata for all registered components in the world.
     repeated Model models = 2;
 }
 
@@ -29,6 +29,8 @@ message Model {
     bytes schema = 8;
     // felt bytes of the contract address of the component
     bytes contract_address = 9;
+
+    bool use_legacy_store = 10;
 }
 
 message Entity {
@@ -36,6 +38,12 @@ message Entity {
     bytes hashed_keys = 1;
     // Models of the entity
     repeated Struct models = 2;
+    // Created at timestamp
+    uint64 created_at = 3;
+    // Updated at timestamp
+    uint64 updated_at = 4;
+    // Block timestamp when the entity was updated
+    uint64 executed_at = 5;
 }
 
 message Event {
@@ -122,6 +130,13 @@ enum ComparisonOperator {
     LTE = 5;
     IN = 6;
     NOT_IN = 7;
+    // Array-specific operators
+    CONTAINS = 8;           // Array contains value
+    CONTAINS_ALL = 9;       // Array contains all values
+    CONTAINS_ANY = 10;      // Array contains any of the values
+    ARRAY_LENGTH_EQ = 11;   // Array length equals
+    ARRAY_LENGTH_GT = 12;   // Array length greater than
+    ARRAY_LENGTH_LT = 13;   // Array length less than
 }
 
 message Token {
@@ -131,6 +146,7 @@ message Token {
     string symbol = 4;
     uint32 decimals = 5;
     bytes metadata = 6;
+    optional bytes total_supply = 7;
 }
 
 message TokenCollection {
@@ -272,4 +288,40 @@ message TransactionQuery {
     TransactionFilter filter = 1;
     // Pagination
     Pagination pagination = 2;
+}
+
+enum ContractType {
+    WORLD = 0;
+    ERC20 = 1;
+    ERC721 = 2;
+    ERC1155 = 3;
+    UDC = 4;
+    OTHER = 5;
+}
+
+message Contract {
+    // The contract address
+    bytes contract_address = 1;
+    // The type of contract
+    ContractType contract_type = 2;
+    // Current block height
+    optional uint64 head = 3;
+    // Transactions per second
+    optional uint64 tps = 4;
+    // Last block timestamp
+    optional uint64 last_block_timestamp = 5;
+    // Last pending block transaction
+    optional bytes last_pending_block_tx = 6;
+    // When the contract was last updated
+    uint64 updated_at = 7;
+    // When the contract was first tracked
+    uint64 created_at = 8;
+}
+
+// A request to retrieve contracts
+message ContractQuery {
+    // The list of contract addresses to retrieve
+    repeated bytes contract_addresses = 1;
+    // The list of contract types to filter by
+    repeated ContractType contract_types = 2;
 }

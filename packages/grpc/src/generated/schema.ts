@@ -170,6 +170,19 @@ export interface Array$ {
     children: Ty[];
 }
 /**
+ * @generated from protobuf message types.FixedSizeArray
+ */
+export interface FixedSizeArray {
+    /**
+     * @generated from protobuf field: repeated types.Ty children = 1
+     */
+    children: Ty[];
+    /**
+     * @generated from protobuf field: uint32 size = 2
+     */
+    size: number;
+}
+/**
  * @generated from protobuf message types.Ty
  */
 export interface Ty {
@@ -212,6 +225,12 @@ export interface Ty {
          * @generated from protobuf field: string bytearray = 7
          */
         bytearray: string;
+    } | {
+        oneofKind: "fixed_size_array";
+        /**
+         * @generated from protobuf field: types.FixedSizeArray fixed_size_array = 8
+         */
+        fixed_size_array: FixedSizeArray;
     } | {
         oneofKind: undefined;
     };
@@ -653,6 +672,61 @@ class Array$$Type extends MessageType<Array$> {
  */
 export const Array$ = new Array$$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class FixedSizeArray$Type extends MessageType<FixedSizeArray> {
+    constructor() {
+        super("types.FixedSizeArray", [
+            { no: 1, name: "children", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Ty },
+            { no: 2, name: "size", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<FixedSizeArray>): FixedSizeArray {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.children = [];
+        message.size = 0;
+        if (value !== undefined)
+            reflectionMergePartial<FixedSizeArray>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: FixedSizeArray): FixedSizeArray {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated types.Ty children */ 1:
+                    message.children.push(Ty.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                case /* uint32 size */ 2:
+                    message.size = reader.uint32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: FixedSizeArray, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated types.Ty children = 1; */
+        for (let i = 0; i < message.children.length; i++)
+            Ty.internalBinaryWrite(message.children[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* uint32 size = 2; */
+        if (message.size !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.size);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.FixedSizeArray
+ */
+export const FixedSizeArray = new FixedSizeArray$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class Ty$Type extends MessageType<Ty> {
     constructor() {
         super("types.Ty", [
@@ -661,7 +735,8 @@ class Ty$Type extends MessageType<Ty> {
             { no: 4, name: "struct", kind: "message", oneof: "ty_type", T: () => Struct },
             { no: 5, name: "tuple", kind: "message", oneof: "ty_type", T: () => Array$ },
             { no: 6, name: "array", kind: "message", oneof: "ty_type", T: () => Array$ },
-            { no: 7, name: "bytearray", kind: "scalar", oneof: "ty_type", T: 9 /*ScalarType.STRING*/ }
+            { no: 7, name: "bytearray", kind: "scalar", oneof: "ty_type", T: 9 /*ScalarType.STRING*/ },
+            { no: 8, name: "fixed_size_array", kind: "message", localName: "fixed_size_array", oneof: "ty_type", T: () => FixedSizeArray }
         ]);
     }
     create(value?: PartialMessage<Ty>): Ty {
@@ -712,6 +787,12 @@ class Ty$Type extends MessageType<Ty> {
                         bytearray: reader.string()
                     };
                     break;
+                case /* types.FixedSizeArray fixed_size_array */ 8:
+                    message.ty_type = {
+                        oneofKind: "fixed_size_array",
+                        fixed_size_array: FixedSizeArray.internalBinaryRead(reader, reader.uint32(), options, (message.ty_type as any).fixed_size_array)
+                    };
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -742,6 +823,9 @@ class Ty$Type extends MessageType<Ty> {
         /* string bytearray = 7; */
         if (message.ty_type.oneofKind === "bytearray")
             writer.tag(7, WireType.LengthDelimited).string(message.ty_type.bytearray);
+        /* types.FixedSizeArray fixed_size_array = 8; */
+        if (message.ty_type.oneofKind === "fixed_size_array")
+            FixedSizeArray.internalBinaryWrite(message.ty_type.fixed_size_array, writer.tag(8, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

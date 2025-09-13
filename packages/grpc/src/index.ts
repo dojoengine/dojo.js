@@ -31,6 +31,8 @@ export type {
     Transaction,
     TransactionFilter,
     TransactionQuery,
+    Contract,
+    ContractQuery,
     // World is intentionally excluded to avoid conflict
 } from "./generated/types";
 
@@ -42,6 +44,7 @@ export {
     OrderDirection,
     CallType,
     PaginationDirection,
+    ContractType,
 } from "./generated/types";
 
 // Re-export world proto types (excluding the World service)
@@ -64,8 +67,10 @@ export type {
     RetrieveTransactionsResponse,
     RetrieveTokenCollectionsRequest,
     RetrieveTokenCollectionsResponse,
-    SubscribeIndexerRequest,
-    SubscribeIndexerResponse,
+    RetrieveContractsRequest,
+    RetrieveContractsResponse,
+    SubscribeContractsRequest,
+    SubscribeContractsResponse,
     WorldMetadataRequest,
     WorldMetadataResponse,
     SubscribeEntitiesRequest,

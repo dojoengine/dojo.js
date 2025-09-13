@@ -198,6 +198,7 @@ export const defaultToken: torii.Token = {
     symbol: "",
     decimals: 0,
     metadata: "",
+    total_supply: "",
 };
 
 /**

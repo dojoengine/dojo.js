@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.7.1-preview.0
+
+### Patch Changes
+
+- @dojoengine/torii-client@1.7.1-preview.0
+- @dojoengine/state@1.7.1-preview.0
+
 ## 1.7.0
 
 ### Minor Changes

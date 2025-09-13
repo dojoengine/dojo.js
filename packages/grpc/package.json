@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/grpc",
-    "version": "1.7.0",
+    "version": "1.7.1-preview.0",
     "author": "Dojo Team",
     "license": "MIT",
     "description": "Dojo SDK: Build onchain and provable apps faster",
