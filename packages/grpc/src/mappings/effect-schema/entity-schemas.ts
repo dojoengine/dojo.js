@@ -224,7 +224,7 @@ export const TokenBalanceSchema = Schema.transform(
     }
 );
 
-export const TokenCollectionSchema = Schema.transform(
+export const TokenContractSchema = Schema.transform(
     Schema.Struct({
         contract_address: Schema.Uint8ArrayFromSelf,
         name: Schema.String,
@@ -345,13 +345,13 @@ export const TokenBalancesResponseSchema = Schema.transform(
     }
 );
 
-export const TokenCollectionsResponseSchema = Schema.transform(
+export const TokenContractsResponseSchema = Schema.transform(
     Schema.Struct({
-        tokens: Schema.Array(TokenCollectionSchema),
+        tokens: Schema.Array(TokenContractSchema),
         next_cursor: OptionalString,
     }),
     Schema.Struct({
-        items: Schema.Array(TokenCollectionSchema),
+        items: Schema.Array(TokenContractSchema),
         next_cursor: Schema.optional(Schema.String),
     }),
     {

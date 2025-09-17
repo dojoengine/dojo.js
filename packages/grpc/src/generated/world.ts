@@ -19,7 +19,7 @@ import { Query } from "./types";
 import { Entity } from "./types";
 import { Clause } from "./types";
 import { World as World$ } from "./types";
-import { TokenCollection } from "./types";
+import { TokenContract } from "./types";
 import { TransactionQuery } from "./types";
 import { TokenBalanceQuery } from "./types";
 import { Token } from "./types";
@@ -306,11 +306,11 @@ export interface RetrieveTransactionsResponse {
     transactions: Transaction[];
 }
 /**
- * A request to retrieve token collections
+ * A request to retrieve token contracts
  *
- * @generated from protobuf message world.RetrieveTokenCollectionsRequest
+ * @generated from protobuf message world.RetrieveTokenContractsRequest
  */
-export interface RetrieveTokenCollectionsRequest {
+export interface RetrieveTokenContractsRequest {
     /**
      * @generated from protobuf field: types.TokenBalanceQuery query = 1
      */
@@ -319,17 +319,17 @@ export interface RetrieveTokenCollectionsRequest {
 /**
  * A response containing token balances
  *
- * @generated from protobuf message world.RetrieveTokenCollectionsResponse
+ * @generated from protobuf message world.RetrieveTokenContractsResponse
  */
-export interface RetrieveTokenCollectionsResponse {
+export interface RetrieveTokenContractsResponse {
     /**
      * @generated from protobuf field: string next_cursor = 1
      */
     next_cursor: string;
     /**
-     * @generated from protobuf field: repeated types.TokenCollection tokens = 2
+     * @generated from protobuf field: repeated types.TokenContract tokens = 2
      */
-    tokens: TokenCollection[];
+    tokens: TokenContract[];
 }
 /**
  * A request to subscribe to contract updates.
@@ -1495,19 +1495,19 @@ class RetrieveTransactionsResponse$Type extends MessageType<RetrieveTransactions
  */
 export const RetrieveTransactionsResponse = new RetrieveTransactionsResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class RetrieveTokenCollectionsRequest$Type extends MessageType<RetrieveTokenCollectionsRequest> {
+class RetrieveTokenContractsRequest$Type extends MessageType<RetrieveTokenContractsRequest> {
     constructor() {
-        super("world.RetrieveTokenCollectionsRequest", [
+        super("world.RetrieveTokenContractsRequest", [
             { no: 1, name: "query", kind: "message", T: () => TokenBalanceQuery }
         ]);
     }
-    create(value?: PartialMessage<RetrieveTokenCollectionsRequest>): RetrieveTokenCollectionsRequest {
+    create(value?: PartialMessage<RetrieveTokenContractsRequest>): RetrieveTokenContractsRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         if (value !== undefined)
-            reflectionMergePartial<RetrieveTokenCollectionsRequest>(this, message, value);
+            reflectionMergePartial<RetrieveTokenContractsRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenCollectionsRequest): RetrieveTokenCollectionsRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenContractsRequest): RetrieveTokenContractsRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -1526,7 +1526,7 @@ class RetrieveTokenCollectionsRequest$Type extends MessageType<RetrieveTokenColl
         }
         return message;
     }
-    internalBinaryWrite(message: RetrieveTokenCollectionsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTokenContractsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* types.TokenBalanceQuery query = 1; */
         if (message.query)
             TokenBalanceQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
@@ -1537,26 +1537,26 @@ class RetrieveTokenCollectionsRequest$Type extends MessageType<RetrieveTokenColl
     }
 }
 /**
- * @generated MessageType for protobuf message world.RetrieveTokenCollectionsRequest
+ * @generated MessageType for protobuf message world.RetrieveTokenContractsRequest
  */
-export const RetrieveTokenCollectionsRequest = new RetrieveTokenCollectionsRequest$Type();
+export const RetrieveTokenContractsRequest = new RetrieveTokenContractsRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class RetrieveTokenCollectionsResponse$Type extends MessageType<RetrieveTokenCollectionsResponse> {
+class RetrieveTokenContractsResponse$Type extends MessageType<RetrieveTokenContractsResponse> {
     constructor() {
-        super("world.RetrieveTokenCollectionsResponse", [
+        super("world.RetrieveTokenContractsResponse", [
             { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "tokens", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TokenCollection }
+            { no: 2, name: "tokens", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TokenContract }
         ]);
     }
-    create(value?: PartialMessage<RetrieveTokenCollectionsResponse>): RetrieveTokenCollectionsResponse {
+    create(value?: PartialMessage<RetrieveTokenContractsResponse>): RetrieveTokenContractsResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.next_cursor = "";
         message.tokens = [];
         if (value !== undefined)
-            reflectionMergePartial<RetrieveTokenCollectionsResponse>(this, message, value);
+            reflectionMergePartial<RetrieveTokenContractsResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenCollectionsResponse): RetrieveTokenCollectionsResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenContractsResponse): RetrieveTokenContractsResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -1564,8 +1564,8 @@ class RetrieveTokenCollectionsResponse$Type extends MessageType<RetrieveTokenCol
                 case /* string next_cursor */ 1:
                     message.next_cursor = reader.string();
                     break;
-                case /* repeated types.TokenCollection tokens */ 2:
-                    message.tokens.push(TokenCollection.internalBinaryRead(reader, reader.uint32(), options));
+                case /* repeated types.TokenContract tokens */ 2:
+                    message.tokens.push(TokenContract.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1578,13 +1578,13 @@ class RetrieveTokenCollectionsResponse$Type extends MessageType<RetrieveTokenCol
         }
         return message;
     }
-    internalBinaryWrite(message: RetrieveTokenCollectionsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: RetrieveTokenContractsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string next_cursor = 1; */
         if (message.next_cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
-        /* repeated types.TokenCollection tokens = 2; */
+        /* repeated types.TokenContract tokens = 2; */
         for (let i = 0; i < message.tokens.length; i++)
-            TokenCollection.internalBinaryWrite(message.tokens[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+            TokenContract.internalBinaryWrite(message.tokens[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1592,9 +1592,9 @@ class RetrieveTokenCollectionsResponse$Type extends MessageType<RetrieveTokenCol
     }
 }
 /**
- * @generated MessageType for protobuf message world.RetrieveTokenCollectionsResponse
+ * @generated MessageType for protobuf message world.RetrieveTokenContractsResponse
  */
-export const RetrieveTokenCollectionsResponse = new RetrieveTokenCollectionsResponse$Type();
+export const RetrieveTokenContractsResponse = new RetrieveTokenContractsResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class SubscribeContractsRequest$Type extends MessageType<SubscribeContractsRequest> {
     constructor() {
@@ -2586,7 +2586,7 @@ export const World = new ServiceType("world.World", [
     { name: "SubscribeTransactions", serverStreaming: true, options: {}, I: SubscribeTransactionsRequest, O: SubscribeTransactionsResponse },
     { name: "RetrieveControllers", options: {}, I: RetrieveControllersRequest, O: RetrieveControllersResponse },
     { name: "RetrieveContracts", options: {}, I: RetrieveContractsRequest, O: RetrieveContractsResponse },
-    { name: "RetrieveTokenCollections", options: {}, I: RetrieveTokenCollectionsRequest, O: RetrieveTokenCollectionsResponse },
+    { name: "RetrieveTokenContracts", options: {}, I: RetrieveTokenContractsRequest, O: RetrieveTokenContractsResponse },
     { name: "PublishMessage", options: {}, I: PublishMessageRequest, O: PublishMessageResponse },
     { name: "PublishMessageBatch", options: {}, I: PublishMessageBatchRequest, O: PublishMessageBatchResponse }
 ]);

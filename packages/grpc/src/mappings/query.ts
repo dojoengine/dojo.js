@@ -48,7 +48,7 @@ import type {
     RetrieveEventMessagesRequest,
     RetrieveTokensRequest,
     RetrieveTokenBalancesRequest,
-    RetrieveTokenCollectionsRequest,
+    RetrieveTokenContractsRequest,
     RetrieveControllersRequest,
     RetrieveTransactionsRequest,
     RetrieveEventsRequest,
@@ -319,9 +319,9 @@ export function createRetrieveTokenBalancesRequest(
     };
 }
 
-export function createRetrieveTokenCollectionsRequest(
+export function createRetrieveTokenContractsRequest(
     query: ToriiTokenBalanceQuery
-): RetrieveTokenCollectionsRequest {
+): RetrieveTokenContractsRequest {
     return {
         query: mapTokenBalanceQuery(query),
     };

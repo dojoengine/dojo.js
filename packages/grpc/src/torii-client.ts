@@ -7,7 +7,7 @@ import type {
     Tokens,
     TokenBalanceQuery,
     TokenBalances,
-    TokenCollections,
+    TokenContracts,
     Query,
     Clause,
     Transactions,
@@ -31,7 +31,7 @@ import {
     createRetrieveEventMessagesRequest,
     createRetrieveTokensRequest,
     createRetrieveTokenBalancesRequest,
-    createRetrieveTokenCollectionsRequest,
+    createRetrieveTokenContractsRequest,
     createRetrieveControllersRequest,
     createRetrieveTransactionsRequest,
     createRetrieveEventsRequest,
@@ -45,7 +45,7 @@ import {
     mapControllersResponse,
     mapTokensResponse,
     mapTokenBalancesResponse,
-    mapTokenCollectionsResponse,
+    mapTokenContractsResponse,
     mapTransactionsResponse,
     mapIndexerUpdate,
     mapMessage,
@@ -65,7 +65,7 @@ import {
     transformControllersResponse,
     transformTokensResponse,
     transformTokenBalancesResponse,
-    transformTokenCollectionsResponse,
+    transformTokenContractsResponse,
     transformTransactionsResponse,
     transformIndexerUpdate,
     transformMessage,
@@ -166,7 +166,7 @@ export class ToriiGrpcClient {
         controllersResponse: (response: any) => any;
         tokensResponse: (response: any) => any;
         tokenBalancesResponse: (response: any) => any;
-        tokenCollectionsResponse: (response: any) => any;
+        tokenContractsResponse: (response: any) => any;
         transactionsResponse: (response: any) => any;
         indexerUpdate: (response: any) => any;
         message: (message: any) => any;
@@ -194,7 +194,7 @@ export class ToriiGrpcClient {
                   controllersResponse: transformControllersResponse,
                   tokensResponse: transformTokensResponse,
                   tokenBalancesResponse: transformTokenBalancesResponse,
-                  tokenCollectionsResponse: transformTokenCollectionsResponse,
+                  tokenContractsResponse: transformTokenContractsResponse,
                   transactionsResponse: transformTransactionsResponse,
                   indexerUpdate: transformIndexerUpdate,
                   message: transformMessage,
@@ -213,7 +213,7 @@ export class ToriiGrpcClient {
                   controllersResponse: mapControllersResponse,
                   tokensResponse: mapTokensResponse,
                   tokenBalancesResponse: mapTokenBalancesResponse,
-                  tokenCollectionsResponse: mapTokenCollectionsResponse,
+                  tokenContractsResponse: mapTokenContractsResponse,
                   transactionsResponse: mapTransactionsResponse,
                   indexerUpdate: mapIndexerUpdate,
                   message: mapMessage,
@@ -301,14 +301,12 @@ export class ToriiGrpcClient {
         return this.mappers.tokenBalancesResponse(response);
     }
 
-    async getTokenCollections(
-        query: TokenBalanceQuery
-    ): Promise<TokenCollections> {
-        const request = createRetrieveTokenCollectionsRequest(query);
+    async getTokenContracts(query: TokenBalanceQuery): Promise<TokenContracts> {
+        const request = createRetrieveTokenContractsRequest(query);
         const response =
-            await this.client.worldClient.retrieveTokenCollections(request)
+            await this.client.worldClient.retrieveTokenContracts(request)
                 .response;
-        return this.mappers.tokenCollectionsResponse(response);
+        return this.mappers.tokenContractsResponse(response);
     }
 
     async getEntities(query: Query): Promise<Entities> {
