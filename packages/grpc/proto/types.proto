@@ -149,7 +149,7 @@ message Token {
     optional bytes total_supply = 7;
 }
 
-message TokenCollection {
+message TokenContract {
     bytes contract_address = 2;
     string name = 3;
     string symbol = 4;

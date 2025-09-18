@@ -5,8 +5,8 @@ import type {
     Tokens as ToriiTokens,
     TokenBalance as ToriiTokenBalance,
     TokenBalances as ToriiTokenBalances,
-    TokenCollection as ToriiTokenCollection,
-    TokenCollections as ToriiTokenCollections,
+    TokenContract as ToriiTokenContract,
+    TokenContracts as ToriiTokenContracts,
     Controller as ToriiController,
     Controllers as ToriiControllers,
     Transaction as ToriiTransaction,
@@ -23,7 +23,7 @@ import type {
     Entity as GrpcEntity,
     Token as GrpcToken,
     TokenBalance as GrpcTokenBalance,
-    TokenCollection as GrpcTokenCollection,
+    TokenContract as GrpcTokenContract,
     Controller as GrpcController,
     Transaction as GrpcTransaction,
     TransactionCall as GrpcTransactionCall,
@@ -47,7 +47,7 @@ import type {
     RetrieveEntitiesResponse,
     RetrieveTokensResponse,
     RetrieveTokenBalancesResponse,
-    RetrieveTokenCollectionsResponse,
+    RetrieveTokenContractsResponse,
     RetrieveControllersResponse,
     RetrieveTransactionsResponse,
     SubscribeIndexerResponse,
@@ -196,9 +196,9 @@ export function mapTokenBalancesResponse(
     };
 }
 
-export function mapTokenCollection(
-    collection: GrpcTokenCollection
-): ToriiTokenCollection {
+export function mapTokenContract(
+    collection: GrpcTokenContract
+): ToriiTokenContract {
     return {
         contract_address: bufferToHex(collection.contract_address),
         name: collection.name,
@@ -209,11 +209,11 @@ export function mapTokenCollection(
     };
 }
 
-export function mapTokenCollectionsResponse(
-    response: RetrieveTokenCollectionsResponse
-): ToriiTokenCollections {
+export function mapTokenContractsResponse(
+    response: RetrieveTokenContractsResponse
+): ToriiTokenContracts {
     return {
-        items: response.tokens.map(mapTokenCollection),
+        items: response.tokens.map(mapTokenContract),
         next_cursor: response.next_cursor || undefined,
     };
 }
