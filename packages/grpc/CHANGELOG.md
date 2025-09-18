@@ -1,5 +1,12 @@
 # @dojoengine/grpc
 
+## 1.7.1
+
+### Patch Changes
+
+- 1a00ae4: feat(grpc): upgrade torii to preview.6
+- 97a476a: chore: bump torii to rc-7
+
 ## 1.7.1-preview.0
 
 ### Patch Changes

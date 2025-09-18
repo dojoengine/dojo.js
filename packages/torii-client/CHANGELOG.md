@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.7.1
+
+### Patch Changes
+
+- 97a476a: chore: bump torii to rc-7
+- Updated dependencies [1a00ae4]
+- Updated dependencies [97a476a]
+  - @dojoengine/torii-wasm@1.7.1
+
 ## 1.7.1-preview.0
 
 ### Patch Changes

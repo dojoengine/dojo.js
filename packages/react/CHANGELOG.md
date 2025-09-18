@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.7.1
+
+### Patch Changes
+
+- 97a476a: chore: bump torii to rc-7
+- Updated dependencies [97a476a]
+  - @dojoengine/torii-client@1.7.1
+  - @dojoengine/state@1.7.1
+
 ## 1.7.1-preview.0
 
 ### Patch Changes

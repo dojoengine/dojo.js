@@ -1,5 +1,16 @@
 # @dojoengine/internal
 
+## 1.6.8
+
+### Patch Changes
+
+- 1a00ae4: feat(grpc): upgrade torii to preview.6
+- 97a476a: chore: bump torii to rc-7
+- Updated dependencies [1a00ae4]
+- Updated dependencies [97a476a]
+  - @dojoengine/torii-wasm@1.7.1
+  - @dojoengine/torii-client@1.7.1
+
 ## 1.6.8-preview.0
 
 ### Patch Changes
