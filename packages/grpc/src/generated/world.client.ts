@@ -8,8 +8,8 @@ import type { PublishMessageBatchResponse } from "./world";
 import type { PublishMessageBatchRequest } from "./world";
 import type { PublishMessageResponse } from "./world";
 import type { PublishMessageRequest } from "./world";
-import type { RetrieveTokenCollectionsResponse } from "./world";
-import type { RetrieveTokenCollectionsRequest } from "./world";
+import type { RetrieveTokenContractsResponse } from "./world";
+import type { RetrieveTokenContractsRequest } from "./world";
 import type { RetrieveContractsResponse } from "./world";
 import type { RetrieveContractsRequest } from "./world";
 import type { RetrieveControllersResponse } from "./world";
@@ -176,11 +176,11 @@ export interface IWorldClient {
      */
     retrieveContracts(input: RetrieveContractsRequest, options?: RpcOptions): UnaryCall<RetrieveContractsRequest, RetrieveContractsResponse>;
     /**
-     * Retrieve tokens collections
+     * Retrieve tokens contracts
      *
-     * @generated from protobuf rpc: RetrieveTokenCollections
+     * @generated from protobuf rpc: RetrieveTokenContracts
      */
-    retrieveTokenCollections(input: RetrieveTokenCollectionsRequest, options?: RpcOptions): UnaryCall<RetrieveTokenCollectionsRequest, RetrieveTokenCollectionsResponse>;
+    retrieveTokenContracts(input: RetrieveTokenContractsRequest, options?: RpcOptions): UnaryCall<RetrieveTokenContractsRequest, RetrieveTokenContractsResponse>;
     /**
      * Publish a torii offchain message
      *
@@ -386,13 +386,13 @@ export class WorldClient implements IWorldClient, ServiceInfo {
         return stackIntercept<RetrieveContractsRequest, RetrieveContractsResponse>("unary", this._transport, method, opt, input);
     }
     /**
-     * Retrieve tokens collections
+     * Retrieve tokens contracts
      *
-     * @generated from protobuf rpc: RetrieveTokenCollections
+     * @generated from protobuf rpc: RetrieveTokenContracts
      */
-    retrieveTokenCollections(input: RetrieveTokenCollectionsRequest, options?: RpcOptions): UnaryCall<RetrieveTokenCollectionsRequest, RetrieveTokenCollectionsResponse> {
+    retrieveTokenContracts(input: RetrieveTokenContractsRequest, options?: RpcOptions): UnaryCall<RetrieveTokenContractsRequest, RetrieveTokenContractsResponse> {
         const method = this.methods[20], opt = this._transport.mergeOptions(options);
-        return stackIntercept<RetrieveTokenCollectionsRequest, RetrieveTokenCollectionsResponse>("unary", this._transport, method, opt, input);
+        return stackIntercept<RetrieveTokenContractsRequest, RetrieveTokenContractsResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Publish a torii offchain message

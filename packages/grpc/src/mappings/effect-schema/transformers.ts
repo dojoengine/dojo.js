@@ -10,8 +10,8 @@ import {
     TokensResponseSchema,
     TokenBalanceSchema,
     TokenBalancesResponseSchema,
-    TokenCollectionSchema,
-    TokenCollectionsResponseSchema,
+    TokenContractSchema,
+    TokenContractsResponseSchema,
 } from "./entity-schemas";
 import { EntitySchema, EntitiesResponseSchema } from "./model-schemas";
 import { BufferToHex } from "./base-schemas";
@@ -62,16 +62,16 @@ export function transformTokenBalancesResponse(
     return Schema.decodeSync(TokenBalancesResponseSchema)(response);
 }
 
-export function transformTokenCollection(
-    collection: GrpcTypes.TokenCollection
-): ToriiTypes.TokenCollection {
-    return Schema.decodeSync(TokenCollectionSchema)(collection);
+export function transformTokenContract(
+    collection: GrpcTypes.TokenContract
+): ToriiTypes.TokenContract {
+    return Schema.decodeSync(TokenContractSchema)(collection);
 }
 
-export function transformTokenCollectionsResponse(
-    response: GrpcTypes.RetrieveTokenCollectionsResponse
-): ToriiTypes.TokenCollections {
-    return Schema.decodeSync(TokenCollectionsResponseSchema)(response);
+export function transformTokenContractsResponse(
+    response: GrpcTypes.RetrieveTokenContractsResponse
+): ToriiTypes.TokenContracts {
+    return Schema.decodeSync(TokenContractsResponseSchema)(response);
 }
 
 export function transformEntity(entity: GrpcTypes.Entity): ToriiTypes.Entity {

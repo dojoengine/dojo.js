@@ -355,9 +355,9 @@ export interface Token {
     total_supply?: Uint8Array;
 }
 /**
- * @generated from protobuf message types.TokenCollection
+ * @generated from protobuf message types.TokenContract
  */
-export interface TokenCollection {
+export interface TokenContract {
     /**
      * @generated from protobuf field: bytes contract_address = 2
      */
@@ -1915,9 +1915,9 @@ class Token$Type extends MessageType<Token> {
  */
 export const Token = new Token$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class TokenCollection$Type extends MessageType<TokenCollection> {
+class TokenContract$Type extends MessageType<TokenContract> {
     constructor() {
-        super("types.TokenCollection", [
+        super("types.TokenContract", [
             { no: 2, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
             { no: 3, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "symbol", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
@@ -1926,7 +1926,7 @@ class TokenCollection$Type extends MessageType<TokenCollection> {
             { no: 7, name: "metadata", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
-    create(value?: PartialMessage<TokenCollection>): TokenCollection {
+    create(value?: PartialMessage<TokenContract>): TokenContract {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.contract_address = new Uint8Array(0);
         message.name = "";
@@ -1935,10 +1935,10 @@ class TokenCollection$Type extends MessageType<TokenCollection> {
         message.count = 0;
         message.metadata = new Uint8Array(0);
         if (value !== undefined)
-            reflectionMergePartial<TokenCollection>(this, message, value);
+            reflectionMergePartial<TokenContract>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenCollection): TokenCollection {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenContract): TokenContract {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -1972,7 +1972,7 @@ class TokenCollection$Type extends MessageType<TokenCollection> {
         }
         return message;
     }
-    internalBinaryWrite(message: TokenCollection, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: TokenContract, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bytes contract_address = 2; */
         if (message.contract_address.length)
             writer.tag(2, WireType.LengthDelimited).bytes(message.contract_address);
@@ -1998,9 +1998,9 @@ class TokenCollection$Type extends MessageType<TokenCollection> {
     }
 }
 /**
- * @generated MessageType for protobuf message types.TokenCollection
+ * @generated MessageType for protobuf message types.TokenContract
  */
-export const TokenCollection = new TokenCollection$Type();
+export const TokenContract = new TokenContract$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class TokenBalance$Type extends MessageType<TokenBalance> {
     constructor() {

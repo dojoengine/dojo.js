@@ -7,7 +7,7 @@ import type {
     Tokens,
     TokenBalanceQuery,
     TokenBalances,
-    TokenCollections,
+    TokenContracts,
     Query,
     Clause,
     Transactions,
@@ -26,7 +26,7 @@ import {
     createRetrieveEventMessagesRequest,
     createRetrieveTokensRequest,
     createRetrieveTokenBalancesRequest,
-    createRetrieveTokenCollectionsRequest,
+    createRetrieveTokenContractsRequest,
     createRetrieveControllersRequest,
     createRetrieveTransactionsRequest,
     mapTransactionFilter,
@@ -192,14 +192,12 @@ export class ToriiGrpcClientEffect {
         return transformTokenBalancesResponse(response);
     }
 
-    async getTokenCollections(
-        query: TokenBalanceQuery
-    ): Promise<TokenCollections> {
-        const request = createRetrieveTokenCollectionsRequest(query);
+    async getTokenContracts(query: TokenBalanceQuery): Promise<TokenContracts> {
+        const request = createRetrieveTokenContractsRequest(query);
         const response =
-            await this.client.worldClient.retrieveTokenCollections(request)
+            await this.client.worldClient.retrieveTokenContracts(request)
                 .response;
-        return transformTokenCollectionsResponse(response);
+        return transformTokenContractsResponse(response);
     }
 
     async getEntities(query: Query): Promise<Entities> {
