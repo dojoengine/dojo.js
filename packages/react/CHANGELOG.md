@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.7.2
+
+### Patch Changes
+
+- 683da96: chore: update torii to 1.7.0
+- Updated dependencies [683da96]
+  - @dojoengine/state@1.7.2
+  - @dojoengine/torii-client@1.7.2
+  - @dojoengine/utils@1.7.1
+
 ## 1.7.1
 
 ### Patch Changes

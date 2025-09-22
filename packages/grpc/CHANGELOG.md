@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 1.7.2
+
+### Patch Changes
+
+- 683da96: chore: update torii to 1.7.0
+
 ## 1.7.1
 
 ### Patch Changes
