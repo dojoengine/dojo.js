@@ -2,7 +2,9 @@ import type * as torii from "@dojoengine/torii-wasm/types";
 import { addAddressPadding } from "starknet";
 import { defaultToriiPagination } from "./pagination";
 import type {
+    AttributesFilter,
     GetTokenBalanceRequest,
+    GetTokenContracts,
     GetTokenRequest,
     SubscribeTokenBalanceRequest,
     SubscribeTokenRequest,
@@ -52,7 +54,7 @@ export const defaultTokenBalance: torii.TokenBalance = {
 };
 
 export function parseTokenRequest<
-    T extends GetTokenRequest & GetTokenBalanceRequest,
+    T extends GetTokenRequest & GetTokenBalanceRequest & GetTokenContracts,
 >(req: T): Strict<T> {
     if (req.contractAddresses) {
         req.contractAddresses = req.contractAddresses.map((r) =>
@@ -69,9 +71,19 @@ export function parseTokenRequest<
     return {
         contractAddresses: req.contractAddresses ?? [],
         accountAddresses: req.accountAddresses ?? [],
+        attributesFilter: req.attributesFilter ?? [],
+        contractTypes: req.contractTypes ?? [],
         tokenIds: req.tokenIds ?? [],
         pagination: req.pagination ?? defaultToriiPagination,
     } as Strict<T>;
+}
+function toAttributesFilter(
+    attributes: AttributesFilter[]
+): torii.AttributeFilter[] {
+    return attributes.map((a) => ({
+        trait_name: a.name,
+        trait_value: a.value,
+    }));
 }
 /**
  * @param {GetTokenRequest} request
@@ -81,11 +93,28 @@ export async function getTokens(
     client: torii.ToriiClient,
     request: GetTokenRequest
 ): Promise<torii.Tokens> {
-    const { contractAddresses, tokenIds, pagination } =
+    const { contractAddresses, tokenIds, pagination, attributesFilter } =
         parseTokenRequest(request);
     return await client.getTokens({
         contract_addresses: contractAddresses,
         token_ids: tokenIds,
+        attribute_filters: toAttributesFilter(attributesFilter),
+        pagination,
+    });
+}
+/**
+ * @param {GetTokenContracts} request
+ * @returns {Promise<torii.Tokens>}
+ */
+export async function getTokenContracts(
+    client: torii.ToriiClient,
+    request: GetTokenContracts
+): Promise<torii.TokenContracts> {
+    const { contractAddresses, contractTypes, pagination } =
+        parseTokenRequest(request);
+    return await client.getTokenContracts({
+        contract_addresses: contractAddresses,
+        contract_types: contractTypes as torii.ContractType[],
         pagination,
     });
 }
