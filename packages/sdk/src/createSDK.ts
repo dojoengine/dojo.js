@@ -16,11 +16,13 @@ import {
     subscribeTokenBalance,
     updateTokenBalanceSubscription,
     defaultToken,
+    getTokenContracts,
 } from "@dojoengine/internal";
 import type {
     GetParams,
     GetTokenBalanceRequest,
     GetTokenRequest,
+    GetTokenContracts,
     SchemaType,
     SDK,
     SDKConfig,
@@ -63,6 +65,12 @@ export interface GrpcClientInterface {
         token_ids?: any[];
         pagination?: torii.Pagination;
     }): Promise<torii.Tokens>;
+    // Token operations
+    getTokenContracts(params: {
+        contract_addresses?: string[];
+        contract_types?: torii.ContractType[];
+        pagination?: torii.Pagination;
+    }): Promise<torii.TokenContracts>;
     getTokenBalances(params: {
         contract_addresses?: string[];
         account_addresses?: string[];
@@ -336,6 +344,27 @@ export function createSDK<T extends SchemaType>({
                 });
             }
             return await getTokens(client!, request);
+        },
+
+        /**
+         * Gets tokens based on the provided request.
+         *
+         * @param {GetTokenContracts} request
+         * @returns {Promise<torii.Tokens>}
+         */
+        getTokenContracts: async (
+            request: GetTokenContracts
+        ): Promise<torii.TokenContracts> => {
+            if (grpcClient) {
+                const { contractAddresses, contractTypes, pagination } =
+                    parseTokenRequest(request);
+                return await grpcClient.getTokenContracts({
+                    contract_addresses: contractAddresses,
+                    contract_types: contractTypes as torii.ContractType[],
+                    pagination,
+                });
+            }
+            return await getTokenContracts(client!, request);
         },
 
         /**

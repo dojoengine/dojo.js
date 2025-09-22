@@ -124,11 +124,17 @@ export type SubscribeResponse<T extends SchemaType> = [
     torii.Subscription,
 ];
 
+export type AttributesFilter = {
+    name: string;
+    value: string;
+};
+
 /**
  * Request type for getting tokens.
  */
 export interface GetTokenRequest {
     contractAddresses?: string[];
+    attributesFilter?: AttributesFilter[];
     tokenIds?: string[];
     pagination?: torii.Pagination;
 }
@@ -139,6 +145,20 @@ export interface GetTokenRequest {
 export interface GetTokenBalanceRequest extends GetTokenRequest {
     accountAddresses?: string[];
 }
+
+export type ContractType =
+    | "WORLD"
+    | "ERC20"
+    | "ERC721"
+    | "ERC1155"
+    | "UDC"
+    | "OTHER";
+
+export type GetTokenContracts = {
+    contractAddresses?: string[];
+    contractTypes?: string[];
+    pagination?: torii.Pagination;
+};
 
 /**
  * Success result for subscription callbacks.
@@ -373,6 +393,16 @@ export interface SDK<T extends SchemaType> {
      * @returns {Promise<torii.Tokens>} - Token information
      */
     getTokens(request: GetTokenRequest): Promise<torii.Tokens>;
+
+    /**
+     * Gets token contracts.
+     *
+     * @param {GetTokenContracts} request - Filter parameters
+     * @returns {Promise<torii.TokenContracts>} - Token information
+     */
+    getTokenContracts(
+        request: GetTokenContracts
+    ): Promise<torii.TokenContracts>;
 
     /**
      * Gets token balances for specified accounts.
