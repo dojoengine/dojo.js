@@ -19,17 +19,70 @@ import { type DojoCall, WorldEntryPoints } from "../types";
 import { getContractByName, parseDojoCall } from "../utils";
 import { Provider } from "./provider";
 
+type DojoActionInputs<Fn> = Fn extends { inputs: infer Inputs }
+    ? keyof Inputs extends never
+        ? undefined
+        : Inputs
+    : undefined;
+
+type ActionSignature = {
+    inputs: object;
+    outputs: unknown;
+};
+
+export type DojoActionInterface = Record<string, ActionSignature>;
+
+type UnionToIntersection<U> = (
+    U extends unknown
+        ? (k: U) => void
+        : never
+) extends (k: infer I) => void
+    ? I
+    : never;
+
+type EnsureActionInterface<T> = T extends object
+    ? {
+          [K in keyof T]: T[K] extends ActionSignature ? T[K] : never;
+      } extends T
+        ? { [K in keyof T]: T[K] }
+        : never
+    : never;
+
+type ExtractActionUnion<Actions> = Actions extends ReadonlyArray<infer Item>
+    ? EnsureActionInterface<Item>
+    : EnsureActionInterface<Actions>;
+
+type NormalizeActions<Actions> = EnsureActionInterface<
+    UnionToIntersection<ExtractActionUnion<Actions>>
+> extends infer Result
+    ? Result extends never
+        ? Record<never, ActionSignature>
+        : Result
+    : Record<never, ActionSignature>;
+
+type DojoActionMethod<Fn> = DojoActionInputs<Fn> extends undefined
+    ? (account: Account | AccountInterface) => Promise<InvokeFunctionResponse>
+    : (
+          account: Account | AccountInterface,
+          args: DojoActionInputs<Fn>
+      ) => Promise<InvokeFunctionResponse>;
+
+type DojoActionMethodMap<Actions> = {
+    [K in keyof NormalizeActions<Actions> & string]: DojoActionMethod<
+        NormalizeActions<Actions>[K]
+    >;
+};
+
+type ActionMethodImplementation = (
+    account: Account | AccountInterface,
+    args?: Record<string, unknown>
+) => Promise<InvokeFunctionResponse>;
+
 /**
- * DojoProvider: The DojoProvider is an execution provider for dojo worlds. It allows you to easily interact with a dojo world via the Starknet.js library.
- * ```ts
- * import { DojoProvider } from "@dojoengine/core";
- *
- * const provider = new DojoProvider(
- *      manifest
- * );
- * ```
+ * Core runtime implementation for the Dojo provider. Prefer using the exported `DojoProvider`
+ * constructor which augments this base instance with strongly typed action methods.
  */
-export class DojoProvider extends Provider {
+class DojoProviderBase extends Provider {
     public provider: RpcProvider;
     public contract: Contract;
     public manifest: any;
@@ -58,6 +111,8 @@ export class DojoProvider extends Provider {
         });
         this.manifest = manifest;
         this.logger = new ConsoleLogger({ level: logLevel });
+
+        this.initializeActionMethods();
     }
 
     /**
@@ -270,4 +325,109 @@ export class DojoProvider extends Provider {
             );
         }
     }
+
+    private initializeActionMethods(): void {
+        if (!this.manifest?.contracts) {
+            return;
+        }
+
+        const host = this as unknown as Record<
+            string,
+            ActionMethodImplementation
+        >;
+
+        for (const contract of this.manifest.contracts as Array<any>) {
+            if (
+                !contract?.systems?.length ||
+                typeof contract.tag !== "string"
+            ) {
+                continue;
+            }
+
+            const names = this.parseContractTag(contract.tag);
+            if (!names) {
+                continue;
+            }
+
+            const abiItems = Array.isArray(contract.abi) ? contract.abi : [];
+
+            for (const systemName of contract.systems as Array<string>) {
+                if (systemName in host) {
+                    continue;
+                }
+
+                // check here in interfaces and then in function having name matching
+                const interfaceAbi = abiItems.find(
+                    (item: any) =>
+                        item?.type === "interface" &&
+                        item?.items.find(
+                            (i: any) =>
+                                i?.type === "function" && i?.name === systemName
+                        )
+                    // item?.type === "function" && item?.name === systemName
+                );
+
+                if (!interfaceAbi) {
+                    continue;
+                }
+                const functionAbi = interfaceAbi.items.find(
+                    (i: any) => i?.type === "function" && i?.name === systemName
+                );
+                if (!functionAbi) {
+                    continue;
+                }
+
+                const expectsArgs = Array.isArray(functionAbi.inputs)
+                    ? functionAbi.inputs.length > 0
+                    : false;
+
+                host[systemName] = async (
+                    account: Account | AccountInterface,
+                    args?: Record<string, unknown>
+                ) => {
+                    if (expectsArgs && args === undefined) {
+                        throw new Error(
+                            `Missing arguments for action "${systemName}"`
+                        );
+                    }
+
+                    return this.execute(
+                        account,
+                        {
+                            contractName: names.contractName,
+                            entrypoint: systemName,
+                            calldata: (args ?? []) as unknown as ArgsOrCalldata,
+                        },
+                        names.namespace
+                    );
+                };
+            }
+        }
+    }
+
+    private parseContractTag(
+        tag: string
+    ): { namespace: string; contractName: string } | null {
+        const separatorIndex = tag.lastIndexOf("-");
+        if (separatorIndex === -1) {
+            return null;
+        }
+
+        return {
+            namespace: tag.slice(0, separatorIndex),
+            contractName: tag.slice(separatorIndex + 1),
+        };
+    }
 }
+
+export type DojoProviderInstance<Actions = never> = DojoProviderBase &
+    DojoActionMethodMap<Actions>;
+
+type DojoProviderConstructor = new <Actions = never>(
+    manifest?: any,
+    url?: string,
+    logLevel?: LogLevel
+) => DojoProviderInstance<Actions>;
+
+export const DojoProvider =
+    DojoProviderBase as unknown as DojoProviderConstructor;

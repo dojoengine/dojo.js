@@ -24,7 +24,7 @@ export interface DojoContextType<
     /** SDK client instance **/
     sdk: SDK<Schema>;
     /** The Dojo provider */
-    provider: DojoProvider;
+    provider: typeof DojoProvider;
     /** The dojo zustand store */
     useDojoStore: DojoStoreHook<Schema>;
 }

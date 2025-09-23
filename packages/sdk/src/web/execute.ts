@@ -1,4 +1,4 @@
-import { type AccountInterface, Contract } from "starknet";
+import { type AccountInterface, CairoCustomEnum, Contract } from "starknet";
 
 type AbiType =
     | "felt"
@@ -27,7 +27,7 @@ interface TypeMapping {
     "core::array::Array<felt>": string[];
     "core::array::Array<u256>": bigint[];
     // Add custom type mappings here
-    "dojo_starter::models::Direction": "Left" | "Right" | "Up" | "Down";
+    "dojo_starter::models::Direction": CairoCustomEnum;
 }
 
 type MapAbiType<T extends AbiType> = T extends keyof TypeMapping
@@ -180,7 +180,9 @@ export function createWorldProxy<T extends readonly ContractDefinition[]>(
 // // Usage example
 // async function useWorld() {
 //     await world.actions.spawn({});
-//     await world.actions.move({ direction: "Left" });
+//     await world.actions.move({
+//         direction: new CairoCustomEnum({ Left: "()" }),
+//     });
 
 //     // TypeScript will catch these errors:
 //     // @ts-expect-error

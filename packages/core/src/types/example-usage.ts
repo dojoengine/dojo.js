@@ -1,3 +1,4 @@
+import { DojoProvider } from "../provider";
 import {
     ExtractAbiTypes,
     ModelsFromAbi,
@@ -6,8 +7,13 @@ import {
 } from "./index";
 
 // Solution 1: Import the generated TypeScript file instead
-// import { compiledAbi } from "../../../../worlds/dojo-starter/compiled-abi";
-import { compiledAbi } from "./nums_dev";
+import { compiledAbi } from "../../../../worlds/dojo-starter/compiled-abi";
+import {
+    Account,
+    CairoCustomEnum,
+    ETransactionVersion,
+    ProviderInterface,
+} from "starknet";
 
 // Extract ABI types from the TypeScript version (this works!)
 type MyAbi = ExtractAbiTypes<typeof compiledAbi>;
@@ -34,6 +40,36 @@ type MyAbiEnums = MyAbi["enums"];
 type MyAbiFunctions = MyAbi["functions"];
 type MyAbiInterfaces = MyAbi["interfaces"];
 
+type DojoStarterActions =
+    MyAbiInterfaces["dojo_starter::systems::actions::IActions"];
+type WorldActions = MyAbiInterfaces["dojo::world::iworld::IWorld"];
+
+const provider = new DojoProvider<[DojoStarterActions, WorldActions]>(
+    compiledAbi
+);
+const account = new Account({
+    provider: provider as unknown as ProviderInterface,
+    address: "0x0",
+    signer: "0x0",
+    cairoVersion: "1",
+    transactionVersion: ETransactionVersion.V3,
+});
+
+provider.spawn(account);
+provider.move(account, {
+    direction: new CairoCustomEnum({ Left: "()" }),
+});
+provider.register_contract(account, {
+    salt: "",
+    class_hash: "class_hash",
+    namespace: "dojo_starter",
+});
+provider.delete_entities(account, {
+    model_selector: "test",
+    indexes: ["Keys"],
+    layout: "Fixed",
+});
+
 // Now you can use the extracted types
 type Vec2 = Schema["dojo_starter"]["Vec2"];
 type Position = GetModel<typeof compiledAbi, "dojo_starter-Position">;
@@ -46,10 +82,12 @@ type PositionCount = Schema["dojo_starter"]["PositionCount"];
 type Direction = MyAbi["enums"]["dojo_starter::models::Direction"];
 // Direction will be: {
 //   variants: { None: void; Up: void; Down: void; Left: void; Right: void };
-//   type: "None" | "Up" | "Down" | "Left" | "Right";
+//   variantNames: "None" | "Up" | "Down" | "Left" | "Right";
+//   type: CairoCustomEnum;
 // }
-type DirectionType = Direction["type"]; // Union type: "None" | "Up" | "Down" | "Left" | "Right"
-type DirectionVariants = Direction["variants"]; // Object with variant names as keys
+type DirectionValue = Direction["type"]; // CairoCustomEnum
+type DirectionVariantNames = Direction["variantNames"]; // "None" | "Up" | "Down" | "Left" | "Right"
+type DirectionVariantMap = Direction["variants"]; // Object with variant names as keys
 
 // Interface types - access interface functions
 type IWorld = MyAbi["interfaces"]["dojo::world::iworld::IWorld"];

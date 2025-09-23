@@ -12,6 +12,7 @@ import { WalletAccount } from "./wallet-account.tsx";
 import { useSystemCalls } from "./useSystemCalls.ts";
 import { Events } from "./events.tsx";
 import { HistoricalEvents } from "./historical-events.tsx";
+import { dojoProvider } from "./types.ts";
 
 /**
  * Main application component that provides game functionality and UI.
@@ -23,7 +24,6 @@ function App() {
     const { useDojoStore, client } = useDojoSDK();
     const { account } = useAccount();
     const entities = useDojoStore((state) => state.entities);
-    console.log(entities);
 
     const { spawn } = useSystemCalls();
 
@@ -117,10 +117,9 @@ function App() {
                                     className={`${col} h-12 w-12 bg-gray-600 rounded-full shadow-md active:shadow-inner active:bg-gray-500 focus:outline-none text-2xl font-bold text-gray-200`}
                                     key={idx}
                                     onClick={async () => {
-                                        await client.actions.move(
-                                            account!,
-                                            direction
-                                        );
+                                        await dojoProvider.move(account!, {
+                                            direction: direction,
+                                        });
                                     }}
                                 >
                                     {label}

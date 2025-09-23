@@ -1,4 +1,5 @@
 import { describe, it, expectTypeOf } from "vitest";
+import { CairoCustomEnum } from "starknet";
 import {
     ExtractAbiTypes,
     ModelPathFromAbi,
@@ -96,9 +97,17 @@ describe("ExtractAbiTypes", () => {
     });
 
     it("exposes enums and actions with typed members", () => {
-        expectTypeOf<
-            Extracted["enums"]["demo::models::Direction"]["type"]
-        >().toEqualTypeOf<"Up" | "Down" | "Left" | "Right">();
+        type DirectionEnum = Extracted["enums"]["demo::models::Direction"];
+
+        expectTypeOf<DirectionEnum["type"]>().toMatchTypeOf<CairoCustomEnum>();
+        expectTypeOf<CairoCustomEnum>().toMatchTypeOf<DirectionEnum["type"]>();
+
+        expectTypeOf<DirectionEnum["variantNames"]>().toEqualTypeOf<
+            "Up" | "Down" | "Left" | "Right"
+        >();
+        expectTypeOf<keyof DirectionEnum["variants"]>().toEqualTypeOf<
+            "Up" | "Down" | "Left" | "Right"
+        >();
 
         type Actions = ActionsFromAbi<typeof sampleAbi>;
         expectTypeOf<keyof Actions>().toEqualTypeOf<"demo">();
@@ -113,7 +122,7 @@ describe("ExtractAbiTypes", () => {
 
         expectTypeOf<Move["inputs"]>().toEqualTypeOf<{
             entity: ModelsFromAbi<typeof sampleAbi>["demo"]["Position"];
-            direction: "Up" | "Down" | "Left" | "Right";
+            direction: DirectionEnum["type"];
         }>();
         expectTypeOf<Move["outputs"]>().toEqualTypeOf<void>();
     });
