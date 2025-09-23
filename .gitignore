@@ -13,3 +13,5 @@ lerna-debug.log
 **/**/tsup.config.bundled*
 
 .package-backups
+# Local JJ workspaces
+/ws/
