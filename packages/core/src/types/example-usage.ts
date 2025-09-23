@@ -1,13 +1,17 @@
-import { ExtractAbiTypes } from "./index";
+import {
+    ExtractAbiTypes,
+    ModelsFromAbi,
+    GetModel,
+    GetActionFunction,
+} from "./index";
 
 // Solution 1: Import the generated TypeScript file instead
-import {
-    CompiledAbi,
-    compiledAbi,
-} from "../../../../worlds/dojo-starter/compiled-abi";
+// import { compiledAbi } from "../../../../worlds/dojo-starter/compiled-abi";
+import { compiledAbi } from "./nums_dev";
 
 // Extract ABI types from the TypeScript version (this works!)
 type MyAbi = ExtractAbiTypes<typeof compiledAbi>;
+type Schema = ModelsFromAbi<typeof compiledAbi>;
 
 // Note: If you need the JSON at runtime, you can still import it separately
 // The types come from the TypeScript file, the runtime data from JSON
@@ -31,9 +35,9 @@ type MyAbiFunctions = MyAbi["functions"];
 type MyAbiInterfaces = MyAbi["interfaces"];
 
 // Now you can use the extracted types
-type Vec2 = MyAbi["structs"]["dojo_starter::models::Vec2"]; // { x: number; y: number }
-type Position = MyAbi["structs"]["dojo_starter::models::Position"]; // { player: string; vec: Vec2 }
-type PositionCount = MyAbi["structs"]["dojo_starter::models::PositionCount"];
+type Vec2 = Schema["dojo_starter"]["Vec2"];
+type Position = GetModel<typeof compiledAbi, "dojo_starter-Position">;
+type PositionCount = Schema["dojo_starter"]["PositionCount"];
 
 // Note: Nested struct references are resolved through the ABI context.
 // The type system now supports cross-references between structs in the same ABI.
@@ -53,9 +57,12 @@ type WorldResourceFunction = IWorld["resource"]; // { inputs: { selector: string
 type WorldUuidFunction = IWorld["uuid"]; // { inputs: {}, outputs: number }
 
 // Action interface example
-type IActions = MyAbi["interfaces"]["dojo_starter::systems::actions::IActions"];
-type SpawnFunction = IActions["spawn"]; // { inputs: {}, outputs: void }
-type MoveFunction = IActions["move"]; // { inputs: { direction: Direction["type"] }, outputs: void }
+type MoveFunction = GetActionFunction<
+    typeof compiledAbi,
+    "dojo_starter",
+    "IActions",
+    "move"
+>; // { inputs: { direction: Direction["type"] }, outputs: void }
 
 // To make this work with your actual compiled-abi.json, you need to:
 // 1. Create a script that converts compiled-abi.json to a TypeScript file with proper const assertions

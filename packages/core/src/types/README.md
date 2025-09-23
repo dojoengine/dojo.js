@@ -1,115 +1,67 @@
-# Dynamic Type System for Dojo Manifests
+# Dynamic Type System for Dojo ABIs
 
-This module provides a powerful TypeScript type system that dynamically extracts types from Dojo manifest files, providing full type safety when working with contracts, models, and events.
+This module turns a Dojo world's ABI into rich TypeScript types that can be used across the SDK. After aggregating your world's JSON ABIs into a single `compiled-abi.json`, you can generate a TypeScript file with literal-preserving `const` data and derive types directly from it.
 
-## Features
+## Generate the aggregated ABI
 
-- **Automatic Type Extraction**: Extracts types from manifest JSON files
-- **Cairo to TypeScript Mapping**: Automatically converts Cairo types to TypeScript equivalents
-- **Full ABI Support**: Extracts structs, enums, functions, and events from ABIs
-- **Type-Safe Contract Calls**: Get typed function inputs and outputs
-- **Model Type Generation**: Generate TypeScript interfaces for your Dojo models
+Run the bundled CLI from the root of your Dojo world:
 
-## Usage
-
-### Basic Setup
-
-```typescript
-import { ExtractManifestTypes } from "@dojoengine/core";
-import manifest from "./manifest_dev.json";
-
-// Extract all types from the manifest
-type MyTypes = ExtractManifestTypes<typeof manifest>;
+```bash
+npx @dojoengine/core compile-abi --generate-types
 ```
 
-### Working with Contracts
+Need a custom location? Append `--output path/to/compiled-abi.json` (relative paths are resolved from your Dojo root). The TypeScript file will be emitted alongside the JSON with a `.ts` extension.
 
-```typescript
-// Access contract types
-type Contracts = MyTypes["contracts"];
-type ActionsContract = Contracts["dojo_starter-actions"];
+The command collects every ABI entry from `manifest_<env>.json` and `target/<env>/**/*.json`, deduplicates them, writes a consolidated `compiled-abi.json`, and emits a matching `compiled-abi.ts` that exports the ABI with `as const`.
 
-// Get function types
-type MoveFunction = ActionsContract["abi"]["functions"]["move"];
-type MoveInputs = MoveFunction["inputs"]; // { direction: Direction }
-type MoveOutput = MoveFunction["outputs"]; // void
+## Getting started in TypeScript
 
-// Use in your code
-function callMove(inputs: MoveInputs): MoveOutput {
-    // Type-safe contract call
-}
-```
+```ts
+import { compiledAbi } from "./compiled-abi";
+import {
+    ExtractAbiTypes,
+    ModelsFromAbi,
+    ModelPathFromAbi,
+    GetModel,
+    GetActionFunction,
+} from "@dojoengine/core";
 
-### Working with Models
+// Primary entry point – exposes structs, enums, interfaces, models, and actions
+type Abi = ExtractAbiTypes<typeof compiledAbi>;
 
-```typescript
-// Access model types
-type Models = MyTypes["models"];
-type Position = Models["dojo_starter-Position"];
-type PositionFields = Position["fields"];
+// Schema of Dojo models keyed by namespace → model name
+type Schema = ModelsFromAbi<typeof compiledAbi>;
 
-// Or use the helper
-import { GetModel } from "@dojoengine/core";
-type PositionData = GetModel<typeof manifest, "dojo_starter-Position">;
-```
+type Position = GetModel<typeof compiledAbi, "dojo_starter-Position">;
 
-### Working with Events
-
-```typescript
-// Access event types
-type Events = MyTypes["events"];
-type MovedEvent = Events["dojo_starter-Moved"];
-type MovedEventData = MovedEvent["data"];
-
-// Type-safe event handler
-function handleMoved(data: MovedEventData) {
-    // Handle event with typed data
-}
-```
-
-## Type Mappings
-
-The system automatically maps Cairo types to TypeScript:
-
-| Cairo Type                                          | TypeScript Type |
-| --------------------------------------------------- | --------------- |
-| `core::felt252`                                     | `string`        |
-| `core::integer::u8`                                 | `number`        |
-| `core::integer::u16`                                | `number`        |
-| `core::integer::u32`                                | `number`        |
-| `core::integer::u64`                                | `bigint`        |
-| `core::integer::u128`                               | `bigint`        |
-| `core::bool`                                        | `boolean`       |
-| `core::starknet::contract_address::ContractAddress` | `string`        |
-| `core::byte_array::ByteArray`                       | `string`        |
-| `core::array::Array<T>`                             | `T[]`           |
-| `core::array::Span<T>`                              | `T[]`           |
-
-## Advanced Usage
-
-### Extract Specific Function Type
-
-```typescript
-import { GetContractFunction } from "@dojoengine/core";
-
-type SpawnFunction = GetContractFunction<
-    typeof manifest,
-    "dojo_starter-actions",
-    "spawn"
+type Move = GetActionFunction<
+    typeof compiledAbi,
+    "dojo_starter",
+    "IActions",
+    "move"
 >;
+
+// Use strongly typed model paths with torii query builders
+type ModelPath = ModelPathFromAbi<typeof compiledAbi>; // e.g. "dojo_starter-Position"
 ```
 
-### Working with Enums
+## Extracted type groups
 
-```typescript
-// Access enum types from ABI
-type Direction =
-    ActionsContract["abi"]["enums"]["dojo_starter::models::Direction"];
+- **`structs`** – Cairo structs mapped to TypeScript objects with nested references resolved.
+- **`enums`** – Cairo enums with both the variant union (`type`) and a `variants` object.
+- **`interfaces`** – Contract interfaces keyed by fully qualified name with typed function signatures.
+- **`models`** – Dojo models grouped by namespace; the shape aligns with `SchemaType` used throughout the SDK.
+- **`actions`** – System action interfaces grouped by namespace, preserving typed inputs and outputs.
 
-// Use in your code
-const direction: Direction = { Left: {} };
+```ts
+type Direction = Abi["enums"]["dojo_starter::models::Direction"]["type"]; // "Up" | "Down" | ...
+
+type Actions = Abi["actions"]["dojo_starter"]["IActions"];
+type SpawnInputs = Actions["spawn"]["inputs"]; // { entity: Position; ... }
 ```
 
-## Example
+## From types to runtime helpers
 
-See `example-usage.ts` for a complete example of using the type system with a real manifest file.
+All helpers operate purely on types, so the generated `compiled-abi.ts` can be tree-shaken in applications that only need compile-time support. At runtime you can still import the JSON version alongside it if required.
+
+The derived schema satisfies the `SchemaType` consumed by internal utilities, allowing seamless wiring with query builders and the SDK's entity helpers without manually writing model definitions.

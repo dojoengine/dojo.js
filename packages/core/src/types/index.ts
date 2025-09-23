@@ -232,6 +232,16 @@ type MapTupleTypes<
       ? []
       : [MapCairoType<T, ABI>];
 
+type Simplify<T> = T extends object ? { [K in keyof T]: T[K] } : T;
+
+type UnionToIntersection<U> = (
+    U extends any
+        ? (arg: U) => void
+        : never
+) extends (arg: infer I) => void
+    ? I
+    : never;
+
 // ========================
 // ABI Type Extraction
 // ========================
@@ -282,6 +292,8 @@ export type ExtractAbiTypesFromArray<ABI> = ABI extends readonly any[]
           enums: ExtractEnums<ABI>;
           functions: ExtractFunctions<ABI>;
           interfaces: ExtractInterfaces<ABI>;
+          models: ExtractModels<ABI>;
+          actions: ExtractActions<ABI, ExtractInterfaces<ABI>>;
       }
     : never;
 
@@ -435,6 +447,52 @@ type ExtractInterfaces<ABI extends readonly any[]> = {
         : never;
 };
 
+type ModelStructNames<ABI extends readonly any[]> = Extract<
+    ExtractStructNames<ABI>,
+    `${string}::models::${string}`
+>;
+
+type MergeModelEntries<ABI extends readonly any[]> = UnionToIntersection<
+    ModelStructNames<ABI> extends infer Name
+        ? Name extends `${infer Namespace}::models::${infer Model}`
+            ? {
+                  [K in Namespace]: {
+                      [P in Model]: ExtractStructType<Name, ABI>;
+                  };
+              }
+            : {}
+        : {}
+>;
+
+type ExtractModels<ABI extends readonly any[]> = Simplify<
+    MergeModelEntries<ABI>
+>;
+
+type ActionInterfaceNames<ABI extends readonly any[]> = Extract<
+    ExtractInterfaceNames<ABI>,
+    `${string}::systems::actions::${string}`
+>;
+
+type MergeActionEntries<
+    ABI extends readonly any[],
+    Interfaces extends Record<string, any>,
+> = UnionToIntersection<
+    ActionInterfaceNames<ABI> extends infer Name
+        ? Name extends `${infer Namespace}::systems::actions::${infer Interface}`
+            ? {
+                  [K in Namespace]: {
+                      [P in Interface]: Interfaces[Name & keyof Interfaces];
+                  };
+              }
+            : {}
+        : {}
+>;
+
+type ExtractActions<
+    ABI extends readonly any[],
+    Interfaces extends Record<string, any>,
+> = Simplify<MergeActionEntries<ABI, Interfaces>>;
+
 /**
  * Main exported type for extracting ABI types
  * Usage:
@@ -448,3 +506,53 @@ export type ExtractAbiTypes<T> = T extends { abi: infer ABI }
     : T extends readonly any[]
       ? ExtractAbiTypesFromArray<T>
       : never;
+
+type ModelCollection<T> = ExtractAbiTypes<T>["models"];
+
+type ActionCollection<T> = ExtractAbiTypes<T>["actions"];
+
+export type ModelsFromAbi<T> = ModelCollection<T>;
+
+export type ActionsFromAbi<T> = ActionCollection<T>;
+
+type ModelPathUnion<Models> = Models extends Record<string, Record<string, any>>
+    ? {
+          [Namespace in keyof Models & string]: {
+              [Model in keyof Models[Namespace] &
+                  string]: `${Namespace}-${Model}`;
+          }[keyof Models[Namespace] & string];
+      }[keyof Models & string]
+    : never;
+
+export type ModelPathFromAbi<T> = ModelPathUnion<ModelCollection<T>>;
+
+export type GetModel<
+    T,
+    Path extends ModelPathFromAbi<T>,
+> = ModelCollection<T> extends Record<string, Record<string, any>>
+    ? Path extends `${infer Namespace}-${infer Model}`
+        ? Namespace extends keyof ModelCollection<T>
+            ? Model extends keyof ModelCollection<T>[Namespace]
+                ? ModelCollection<T>[Namespace][Model]
+                : never
+            : never
+        : never
+    : never;
+
+export type GetActions<
+    T,
+    Namespace extends keyof ActionCollection<T>,
+> = ActionCollection<T>[Namespace];
+
+export type GetActionInterface<
+    T,
+    Namespace extends keyof ActionCollection<T>,
+    InterfaceName extends keyof ActionCollection<T>[Namespace],
+> = ActionCollection<T>[Namespace][InterfaceName];
+
+export type GetActionFunction<
+    T,
+    Namespace extends keyof ActionCollection<T>,
+    InterfaceName extends keyof ActionCollection<T>[Namespace],
+    FunctionName extends keyof ActionCollection<T>[Namespace][InterfaceName],
+> = ActionCollection<T>[Namespace][InterfaceName][FunctionName];
