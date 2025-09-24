@@ -356,7 +356,6 @@ class DojoProviderBase extends Provider {
                     continue;
                 }
 
-                // check here in interfaces and then in function having name matching
                 const interfaceAbi = abiItems.find(
                     (item: any) =>
                         item?.type === "interface" &&
@@ -364,7 +363,6 @@ class DojoProviderBase extends Provider {
                             (i: any) =>
                                 i?.type === "function" && i?.name === systemName
                         )
-                    // item?.type === "function" && item?.name === systemName
                 );
 
                 if (!interfaceAbi) {

@@ -1,4 +1,4 @@
-import { Calldata, CairoCustomEnum, RawArgs } from "starknet";
+import { Calldata, CairoCustomEnum, CairoOption, RawArgs } from "starknet";
 
 /**
  * Enumeration representing various entry points or functions available in the World.
@@ -355,10 +355,12 @@ type ExtractEnumType<
 > = ExtractEnumVariants<Name, ABI> extends infer VariantMap
     ? [VariantMap] extends [never]
         ? never
-        : CairoCustomEnum & {
-              readonly __variantMap?: VariantMap;
-              readonly __variantNames?: keyof VariantMap & string;
-          }
+        : Name extends `core::option::Option::<${infer Inner}>`
+          ? CairoOption<MapCairoType<Inner, ABI>>
+          : CairoCustomEnum & {
+                readonly __variantMap?: VariantMap;
+                readonly __variantNames?: keyof VariantMap & string;
+            }
     : never;
 
 /**

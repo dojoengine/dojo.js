@@ -52,7 +52,6 @@ export const useSystemCalls = () => {
         try {
             // Execute the spawn action from the client
             // await client.actions.spawn(account!);
-            console.log(dojoProvider.spawn);
             await dojoProvider.spawn(account!);
 
             // Wait for the entity to be updated with the new state

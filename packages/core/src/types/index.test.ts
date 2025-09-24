@@ -1,5 +1,5 @@
 import { describe, it, expectTypeOf } from "vitest";
-import { CairoCustomEnum } from "starknet";
+import { CairoCustomEnum, CairoOption } from "starknet";
 import {
     ExtractAbiTypes,
     ModelPathFromAbi,
@@ -36,6 +36,22 @@ const sampleAbi = {
                 { name: "Down", type: "()" },
                 { name: "Left", type: "()" },
                 { name: "Right", type: "()" },
+            ],
+        },
+        {
+            type: "enum",
+            name: "core::option::Option::<demo::models::Direction>",
+            variants: [
+                { name: "Some", type: "demo::models::Direction" },
+                { name: "None", type: "()" },
+            ],
+        },
+        {
+            type: "enum",
+            name: "core::option::Option::<core::integer::u32>",
+            variants: [
+                { name: "Some", type: "core::integer::u32" },
+                { name: "None", type: "()" },
             ],
         },
         {
@@ -108,6 +124,32 @@ describe("ExtractAbiTypes", () => {
         expectTypeOf<keyof DirectionEnum["variants"]>().toEqualTypeOf<
             "Up" | "Down" | "Left" | "Right"
         >();
+
+        type OptionalDirection =
+            Extracted["enums"]["core::option::Option::<demo::models::Direction>"];
+
+        expectTypeOf<OptionalDirection["type"]>().toEqualTypeOf<
+            CairoOption<DirectionEnum["type"]>
+        >();
+        expectTypeOf<OptionalDirection["variantNames"]>().toEqualTypeOf<
+            "Some" | "None"
+        >();
+        expectTypeOf<OptionalDirection["variants"]["Some"]>().toEqualTypeOf<
+            DirectionEnum["type"]
+        >();
+        expectTypeOf<
+            OptionalDirection["variants"]["None"]
+        >().toEqualTypeOf<void>();
+
+        type OptionalScore =
+            Extracted["enums"]["core::option::Option::<core::integer::u32>"];
+
+        expectTypeOf<OptionalScore["type"]>().toEqualTypeOf<
+            CairoOption<number>
+        >();
+        expectTypeOf<
+            OptionalScore["variants"]["Some"]
+        >().toEqualTypeOf<number>();
 
         type Actions = ActionsFromAbi<typeof sampleAbi>;
         expectTypeOf<keyof Actions>().toEqualTypeOf<"demo">();

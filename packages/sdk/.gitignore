@@ -1,3 +1,4 @@
 node_modules
 dist
 tsup.node.bundled_*
+tsup.web.bundled_*

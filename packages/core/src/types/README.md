@@ -48,7 +48,7 @@ type ModelPath = ModelPathFromAbi<typeof compiledAbi>; // e.g. "dojo_starter-Pos
 ## Extracted type groups
 
 - **`structs`** – Cairo structs mapped to TypeScript objects with nested references resolved.
-- **`enums`** – Cairo enums with a `CairoCustomEnum` instance type, a `variantNames` union, and a strongly typed `variants` map.
+- **`enums`** – Cairo enums with a `CairoCustomEnum` instance type (or `CairoOption` for `core::option::Option`), a `variantNames` union, and a strongly typed `variants` map.
 - **`interfaces`** – Contract interfaces keyed by fully qualified name with typed function signatures.
 - **`models`** – Dojo models grouped by namespace; the shape aligns with `SchemaType` used throughout the SDK.
 - **`actions`** – System action interfaces grouped by namespace, preserving typed inputs and outputs.
@@ -57,6 +57,10 @@ type ModelPath = ModelPathFromAbi<typeof compiledAbi>; // e.g. "dojo_starter-Pos
 type Direction = Abi["enums"]["dojo_starter::models::Direction"];
 type DirectionValue = Direction["type"]; // CairoCustomEnum
 type DirectionVariants = Direction["variantNames"]; // "Up" | "Down" | ...
+
+type OptionalDirection =
+    Abi["enums"]["core::option::Option::<dojo_starter::models::Direction>"];
+type OptionalDirectionValue = OptionalDirection["type"]; // CairoOption<DirectionValue>
 
 type Actions = Abi["actions"]["dojo_starter"]["IActions"];
 type SpawnInputs = Actions["spawn"]["inputs"]; // { entity: Position; ... }

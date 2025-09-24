@@ -11,6 +11,8 @@ import { compiledAbi } from "../../../../worlds/dojo-starter/compiled-abi";
 import {
     Account,
     CairoCustomEnum,
+    CairoOption,
+    CairoOptionVariant,
     ETransactionVersion,
     ProviderInterface,
 } from "starknet";
@@ -39,6 +41,8 @@ type MyAbiStructs = MyAbi["structs"];
 type MyAbiEnums = MyAbi["enums"];
 type MyAbiFunctions = MyAbi["functions"];
 type MyAbiInterfaces = MyAbi["interfaces"];
+type OptionnalNumber = MyAbiEnums["core::option::Option::<core::integer::u32>"];
+const e = new CairoOption(CairoOptionVariant.Some, 12);
 
 type DojoStarterActions =
     MyAbiInterfaces["dojo_starter::systems::actions::IActions"];
@@ -66,8 +70,8 @@ provider.register_contract(account, {
 });
 provider.delete_entities(account, {
     model_selector: "test",
-    indexes: ["Keys"],
-    layout: "Fixed",
+    indexes: new CairoCustomEnum({ Id: "()" }),
+    layout: new CairoCustomEnum({ Fixed: "()" }),
 });
 
 // Now you can use the extracted types
@@ -88,6 +92,16 @@ type Direction = MyAbi["enums"]["dojo_starter::models::Direction"];
 type DirectionValue = Direction["type"]; // CairoCustomEnum
 type DirectionVariantNames = Direction["variantNames"]; // "None" | "Up" | "Down" | "Left" | "Right"
 type DirectionVariantMap = Direction["variants"]; // Object with variant names as keys
+
+type OptionalDirection =
+    MyAbi["enums"]["core::option::Option::<dojo_starter::models::Direction>"];
+type OptionalDirectionValue = OptionalDirection["type"]; // CairoOption<DirectionValue>
+const od: OptionalDirectionValue = new CairoOption(CairoOptionVariant.None);
+
+const maybeDirection: OptionalDirectionValue = new CairoOption(
+    CairoOptionVariant.Some,
+    new CairoCustomEnum({ Up: "()" })
+);
 
 // Interface types - access interface functions
 type IWorld = MyAbi["interfaces"]["dojo::world::iworld::IWorld"];
