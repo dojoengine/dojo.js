@@ -1,4 +1,5 @@
 import { describe, it, expectTypeOf } from "vitest";
+import { CairoCustomEnum, CairoOption } from "starknet";
 import {
     ExtractAbiTypes,
     ModelPathFromAbi,
@@ -35,6 +36,22 @@ const sampleAbi = {
                 { name: "Down", type: "()" },
                 { name: "Left", type: "()" },
                 { name: "Right", type: "()" },
+            ],
+        },
+        {
+            type: "enum",
+            name: "core::option::Option::<demo::models::Direction>",
+            variants: [
+                { name: "Some", type: "demo::models::Direction" },
+                { name: "None", type: "()" },
+            ],
+        },
+        {
+            type: "enum",
+            name: "core::option::Option::<core::integer::u32>",
+            variants: [
+                { name: "Some", type: "core::integer::u32" },
+                { name: "None", type: "()" },
             ],
         },
         {
@@ -96,9 +113,43 @@ describe("ExtractAbiTypes", () => {
     });
 
     it("exposes enums and actions with typed members", () => {
+        type DirectionEnum = Extracted["enums"]["demo::models::Direction"];
+
+        expectTypeOf<DirectionEnum["type"]>().toMatchTypeOf<CairoCustomEnum>();
+        expectTypeOf<CairoCustomEnum>().toMatchTypeOf<DirectionEnum["type"]>();
+
+        expectTypeOf<DirectionEnum["variantNames"]>().toEqualTypeOf<
+            "Up" | "Down" | "Left" | "Right"
+        >();
+        expectTypeOf<keyof DirectionEnum["variants"]>().toEqualTypeOf<
+            "Up" | "Down" | "Left" | "Right"
+        >();
+
+        type OptionalDirection =
+            Extracted["enums"]["core::option::Option::<demo::models::Direction>"];
+
+        expectTypeOf<OptionalDirection["type"]>().toEqualTypeOf<
+            CairoOption<DirectionEnum["type"]>
+        >();
+        expectTypeOf<OptionalDirection["variantNames"]>().toEqualTypeOf<
+            "Some" | "None"
+        >();
+        expectTypeOf<OptionalDirection["variants"]["Some"]>().toEqualTypeOf<
+            DirectionEnum["type"]
+        >();
         expectTypeOf<
-            Extracted["enums"]["demo::models::Direction"]["type"]
-        >().toEqualTypeOf<"Up" | "Down" | "Left" | "Right">();
+            OptionalDirection["variants"]["None"]
+        >().toEqualTypeOf<void>();
+
+        type OptionalScore =
+            Extracted["enums"]["core::option::Option::<core::integer::u32>"];
+
+        expectTypeOf<OptionalScore["type"]>().toEqualTypeOf<
+            CairoOption<number>
+        >();
+        expectTypeOf<
+            OptionalScore["variants"]["Some"]
+        >().toEqualTypeOf<number>();
 
         type Actions = ActionsFromAbi<typeof sampleAbi>;
         expectTypeOf<keyof Actions>().toEqualTypeOf<"demo">();
@@ -113,7 +164,7 @@ describe("ExtractAbiTypes", () => {
 
         expectTypeOf<Move["inputs"]>().toEqualTypeOf<{
             entity: ModelsFromAbi<typeof sampleAbi>["demo"]["Position"];
-            direction: "Up" | "Down" | "Left" | "Right";
+            direction: DirectionEnum["type"];
         }>();
         expectTypeOf<Move["outputs"]>().toEqualTypeOf<void>();
     });

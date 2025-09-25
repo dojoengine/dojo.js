@@ -1,4 +1,4 @@
-import { Calldata, RawArgs } from "starknet";
+import { Calldata, CairoCustomEnum, CairoOption, RawArgs } from "starknet";
 
 /**
  * Enumeration representing various entry points or functions available in the World.
@@ -325,11 +325,14 @@ type ExtractEnumNames<ABI extends readonly any[]> = Extract<
     { type: "enum"; name: string }
 >["name"];
 
-/**
- * Extract just the type union of an enum by name
- * This is used for type mapping in function parameters
- */
-type ExtractEnumType<
+type CairoEnumVariantMap<
+    Variants extends readonly { name: string; type: string }[],
+    ABI extends readonly any[],
+> = {
+    [P in Variants[number] as P["name"]]: MapCairoType<P["type"], ABI>;
+};
+
+type ExtractEnumVariants<
     Name extends string,
     ABI extends readonly any[],
 > = FindFirstEnumByName<ABI, Name> extends {
@@ -338,8 +341,26 @@ type ExtractEnumType<
     variants: infer V;
 }
     ? V extends readonly { name: string; type: string }[]
-        ? V[number]["name"]
+        ? CairoEnumVariantMap<V, ABI>
         : never
+    : never;
+
+/**
+ * Extract just the type union of an enum by name
+ * This is used for type mapping in function parameters
+ */
+type ExtractEnumType<
+    Name extends string,
+    ABI extends readonly any[],
+> = ExtractEnumVariants<Name, ABI> extends infer VariantMap
+    ? [VariantMap] extends [never]
+        ? never
+        : Name extends `core::option::Option::<${infer Inner}>`
+          ? CairoOption<MapCairoType<Inner, ABI>>
+          : CairoCustomEnum & {
+                readonly __variantMap?: VariantMap;
+                readonly __variantNames?: keyof VariantMap & string;
+            }
     : never;
 
 /**
@@ -356,13 +377,9 @@ type ExtractEnums<ABI extends readonly any[]> = {
     }
         ? V extends readonly { name: string; type: string }[]
             ? {
-                  variants: {
-                      [P in V[number] as P["name"]]: MapCairoType<
-                          P["type"],
-                          ABI
-                      >;
-                  };
-                  type: V[number]["name"];
+                  variants: CairoEnumVariantMap<V, ABI>;
+                  type: ExtractEnumType<EnumName, ABI>;
+                  variantNames: V[number]["name"];
               }
             : never
         : never;

@@ -2,6 +2,7 @@ import { useDojoSDK } from "@dojoengine/sdk/react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
 import { v4 as uuidv4 } from "uuid";
+import { dojoProvider } from "./types";
 
 /**
  * Custom hook to handle system calls and state management in the Dojo application.
@@ -11,7 +12,7 @@ import { v4 as uuidv4 } from "uuid";
  *   - spawn: Function to spawn a new entity with initial moves
  */
 export const useSystemCalls = () => {
-    const { useDojoStore, client } = useDojoSDK();
+    const { useDojoStore } = useDojoSDK();
     const state = useDojoStore((state) => state);
 
     const { account } = useAccount();
@@ -50,7 +51,8 @@ export const useSystemCalls = () => {
 
         try {
             // Execute the spawn action from the client
-            await client.actions.spawn(account!);
+            // await client.actions.spawn(account!);
+            await dojoProvider.spawn(account!);
 
             // Wait for the entity to be updated with the new state
             await state.waitForEntityChange(entityId, (entity) => {
