@@ -12,7 +12,7 @@ import { dojoProvider } from "./types";
  *   - spawn: Function to spawn a new entity with initial moves
  */
 export const useSystemCalls = () => {
-    const { useDojoStore, client } = useDojoSDK();
+    const { useDojoStore } = useDojoSDK();
     const state = useDojoStore((state) => state);
 
     const { account } = useAccount();

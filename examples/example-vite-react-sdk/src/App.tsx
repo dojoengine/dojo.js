@@ -21,7 +21,7 @@ import { dojoProvider } from "./types.ts";
  * @param props.sdk - The Dojo SDK instance configured with the game schema
  */
 function App() {
-    const { useDojoStore, client } = useDojoSDK();
+    const { useDojoStore } = useDojoSDK();
     const { account } = useAccount();
     const entities = useDojoStore((state) => state.entities);
 

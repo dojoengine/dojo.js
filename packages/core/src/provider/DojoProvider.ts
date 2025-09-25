@@ -421,11 +421,13 @@ class DojoProviderBase extends Provider {
 export type DojoProviderInstance<Actions = never> = DojoProviderBase &
     DojoActionMethodMap<Actions>;
 
+export type DojoProvider<Actions = never> = DojoProviderInstance<Actions>;
+
 type DojoProviderConstructor = new <Actions = never>(
     manifest?: any,
     url?: string,
     logLevel?: LogLevel
-) => DojoProviderInstance<Actions>;
+) => DojoProvider<Actions>;
 
 export const DojoProvider =
     DojoProviderBase as unknown as DojoProviderConstructor;
