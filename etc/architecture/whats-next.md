@@ -29,7 +29,7 @@ This roadmap captures the near-to-mid term architecture initiatives planned for 
   3. Provide dependency injection hooks in SDK/provider constructors and document how to supply alternative transports.
 - **Deliverables**: Adapter interfaces, default Starknet.js implementation, updated dependency guidelines.
 
-## 4. TanStack/DB Integration
+## 4. TanStack DB Integration
 
 - **Objective**: Leverage TanStack DB for richer client-side entity persistence, caching, and querying.
 - **Key Steps**:
@@ -58,5 +58,6 @@ This roadmap captures the near-to-mid term architecture initiatives planned for 
 
 ## Cross-Cutting Considerations
 
+- Maintain incremental delivery via stacked `jj` changes to keep reviews focused.
 - Prioritise documentation and migration notes alongside each feature.
 - Invest in automated tests and benchmarks as new abstractions are introduced to safeguard performance and developer experience.

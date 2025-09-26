@@ -15,39 +15,39 @@ Dojo.js is organized as a set of focused packages that cooperate to index, query
 
 ```mermaid
 flowchart LR
-    subgraph OnChain
+    subgraph "On Chain"
         World[Dojo World Contracts]
     end
 
-    subgraph Indexer & Messaging
-        ToriiIndexer[Torii Service\nHTTP/WebSocket/gRPC]
+    subgraph "Indexer & Messaging"
+        ToriiIndexer["Torii Service<br/>HTTP / WebSocket / gRPC"]
     end
 
-    subgraph CoreClient
-        CoreProvider[@dojoengine/core\nRpcProvider & World ABI]
-        ToriiWasm[@dojoengine/torii-wasm\n+ torii-client shim]
-        GrpcClient[@dojoengine/grpc\nToriiGrpcClient]
-        Internal[@dojoengine/internal\nSchema & Query Toolkit]
-        SDK[@dojoengine/sdk\ninit/createSDK]
+    subgraph "Core Client"
+        CoreProvider["@dojoengine/core<br/>RPC Provider & World ABI"]
+        ToriiWasm["@dojoengine/torii-wasm<br/>+ torii-client shim"]
+        GrpcClient["@dojoengine/grpc<br/>ToriiGrpcClient"]
+        Internal["@dojoengine/internal<br/>Schema & Query Toolkit"]
+        SDK["@dojoengine/sdk<br/>init/createSDK"]
     end
 
-    subgraph App Integrations
-        StatePkg[@dojoengine/state\nZustand & RECS stores]
-        ReactPkg[@dojoengine/react\nHooks & RX bindings]
-        Burner[@dojoengine/create-burner\nLocal wallets]
-        Predeployed[@dojoengine/predeployed-connector\nInjected connector]
-        UtilsPkg[@dojoengine/utils]
+    subgraph "App Integrations"
+        StatePkg["@dojoengine/state<br/>Zustand & RECS stores"]
+        ReactPkg["@dojoengine/react<br/>Hooks & RX bindings"]
+        Burner["@dojoengine/create-burner<br/>Local wallets"]
+        Predeployed["@dojoengine/predeployed-connector<br/>Injected connector"]
+        UtilsPkg["@dojoengine/utils"]
     end
 
-    subgraph Tooling
-        Scaffolder[@dojoengine/create-dojo\nCLI scaffolds]
+    subgraph "Tooling"
+        Scaffolder["@dojoengine/create-dojo<br/>CLI scaffolds"]
         Examples[Examples & Templates]
     end
 
-    World -- events & state --> ToriiIndexer
-    CoreProvider -- invoke/call --> World
-    ToriiIndexer -- queries/subscriptions --> ToriiWasm
-    ToriiIndexer -- gRPC streams --> GrpcClient
+    World -- "events & state" --> ToriiIndexer
+    CoreProvider -- "invoke / call" --> World
+    ToriiIndexer -- "queries / subscriptions" --> ToriiWasm
+    ToriiIndexer -- "gRPC streams" --> GrpcClient
     ToriiWasm --> SDK
     GrpcClient --> SDK
     Internal --> SDK
