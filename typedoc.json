@@ -11,7 +11,7 @@
     "name": "dojo.js docs",
     "entryPoints": ["packages/*"],
     "entryPointStrategy": "packages",
-    "out": "docs",
+    "out": "docs-temp",
     "sort": ["source-order"],
     "categorizeByGroup": true,
     "searchCategoryBoosts": {

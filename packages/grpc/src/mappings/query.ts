@@ -10,12 +10,12 @@ import type {
     LogicalOperator as ToriiLogicalOperator,
     ControllerQuery as ToriiControllerQuery,
     TokenQuery as ToriiTokenQuery,
+    TokenAttributeFilter as ToriiTokenAttributeFilter,
     TokenBalanceQuery as ToriiTokenBalanceQuery,
     TokenContractQuery as ToriiTokenContractQuery,
     TransactionQuery as ToriiTransactionQuery,
     TransactionFilter as ToriiTransactionFilter,
     KeysClause as ToriiKeysClause,
-    ContractType,
     ContractType as ToriiContractType,
 } from "@dojoengine/torii-wasm";
 
@@ -31,6 +31,7 @@ import type {
     MemberValue as GrpcMemberValue,
     ControllerQuery as GrpcControllerQuery,
     TokenQuery as GrpcTokenQuery,
+    TokenAttributeFilter as GrpcTokenAttributeFilter,
     TokenBalanceQuery as GrpcTokenBalanceQuery,
     TokenContractQuery as GrpcTokenContractQuery,
     TransactionQuery as GrpcTransactionQuery,
@@ -70,8 +71,8 @@ function hexToBuffer(hex: string): Uint8Array {
 }
 
 const grpcContractTypeByName = Object.fromEntries(
-    Object.entries(GrpcContractType).filter(([, value]) =>
-        typeof value === "number"
+    Object.entries(GrpcContractType).filter(
+        ([, value]) => typeof value === "number"
     )
 ) as Record<string, GrpcContractType>;
 
@@ -310,8 +311,22 @@ export function mapTokenQuery(query: ToriiTokenQuery): GrpcTokenQuery {
     return {
         contract_addresses: query.contract_addresses.map(hexToBuffer),
         token_ids: query.token_ids.map(hexToBuffer),
+        attribute_filters: mapTokenAttributeFilters(query.attribute_filters),
         pagination: mapPagination(query.pagination),
     };
+}
+
+function mapTokenAttributeFilters(
+    filters: ToriiTokenAttributeFilter[] | null | undefined
+): GrpcTokenAttributeFilter[] {
+    if (!filters) {
+        return [];
+    }
+
+    return filters.map((filter) => ({
+        trait_name: filter.trait_name,
+        trait_value: filter.trait_value,
+    }));
 }
 
 export function mapTokenBalanceQuery(
@@ -321,16 +336,6 @@ export function mapTokenBalanceQuery(
         contract_addresses: query.contract_addresses.map(hexToBuffer),
         account_addresses: query.account_addresses.map(hexToBuffer),
         token_ids: query.token_ids.map(hexToBuffer),
-        pagination: mapPagination(query.pagination),
-    };
-}
-
-export function mapTokenContractQuery(
-    query: ToriiTokenContractQuery
-): GrpcTokenContractQuery {
-    return {
-        contract_addresses: query.contract_addresses.map(hexToBuffer),
-        contract_types: query.contract_types as ContractType[],
         pagination: mapPagination(query.pagination),
     };
 }
