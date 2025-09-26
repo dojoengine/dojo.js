@@ -17,6 +17,7 @@ import type {
     Message,
     WasmU256,
     Pagination,
+    TokenContractQuery,
 } from "@dojoengine/torii-wasm";
 
 import type { KeysClause as GrpcKeysClause } from "./generated/types";
@@ -301,7 +302,9 @@ export class ToriiGrpcClient {
         return this.mappers.tokenBalancesResponse(response);
     }
 
-    async getTokenContracts(query: TokenBalanceQuery): Promise<TokenContracts> {
+    async getTokenContracts(
+        query: TokenContractQuery
+    ): Promise<TokenContracts> {
         const request = createRetrieveTokenContractsRequest(query);
         const response =
             await this.client.worldClient.retrieveTokenContracts(request)

@@ -198,14 +198,16 @@ export function mapTokenBalancesResponse(
 
 export function mapTokenContract(
     collection: GrpcTokenContract
-): ToriiTokenContract {
+): GrpcTokenContract {
     return {
         contract_address: bufferToHex(collection.contract_address),
         name: collection.name,
         symbol: collection.symbol,
         decimals: collection.decimals,
-        count: collection.count,
+        total_supply: bufferToHex(collection.total_supply),
         metadata: parseJsonMetadata(collection.metadata),
+        traits: JSON.parse(collection.traits),
+        token_metadata: parseJsonMetadata(collection.token_metadata),
     };
 }
 
@@ -213,7 +215,7 @@ export function mapTokenContractsResponse(
     response: RetrieveTokenContractsResponse
 ): ToriiTokenContracts {
     return {
-        items: response.tokens.map(mapTokenContract),
+        items: response.token_contracts.map(mapTokenContract),
         next_cursor: response.next_cursor || undefined,
     };
 }

@@ -20,6 +20,8 @@ import type { RetrieveTransactionsResponse } from "./world";
 import type { RetrieveTransactionsRequest } from "./world";
 import type { RetrieveTokenBalancesResponse } from "./world";
 import type { RetrieveTokenBalancesRequest } from "./world";
+import type { RetrieveTokenTransfersResponse } from "./world";
+import type { RetrieveTokenTransfersRequest } from "./world";
 import type { RetrieveTokensResponse } from "./world";
 import type { RetrieveTokensRequest } from "./world";
 import type { SubscribeEventsResponse } from "./world";
@@ -27,6 +29,9 @@ import type { SubscribeEventsRequest } from "./world";
 import type { RetrieveEventsResponse } from "./world";
 import type { RetrieveEventsRequest } from "./world";
 import type { RetrieveEventMessagesRequest } from "./world";
+import type { UpdateTokenTransfersSubscriptionRequest } from "./world";
+import type { SubscribeTokenTransfersResponse } from "./world";
+import type { SubscribeTokenTransfersRequest } from "./world";
 import type { UpdateTokenSubscriptionRequest } from "./world";
 import type { SubscribeTokensResponse } from "./world";
 import type { SubscribeTokensRequest } from "./world";
@@ -122,6 +127,18 @@ export interface IWorldClient {
      */
     updateTokensSubscription(input: UpdateTokenSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateTokenSubscriptionRequest, Empty>;
     /**
+     * Subscribe to token transfer updates.
+     *
+     * @generated from protobuf rpc: SubscribeTokenTransfers
+     */
+    subscribeTokenTransfers(input: SubscribeTokenTransfersRequest, options?: RpcOptions): ServerStreamingCall<SubscribeTokenTransfersRequest, SubscribeTokenTransfersResponse>;
+    /**
+     * Update token transfer subscription
+     *
+     * @generated from protobuf rpc: UpdateTokenTransfersSubscription
+     */
+    updateTokenTransfersSubscription(input: UpdateTokenTransfersSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateTokenTransfersSubscriptionRequest, Empty>;
+    /**
      * Retrieve entities
      *
      * @generated from protobuf rpc: RetrieveEventMessages
@@ -145,6 +162,12 @@ export interface IWorldClient {
      * @generated from protobuf rpc: RetrieveTokens
      */
     retrieveTokens(input: RetrieveTokensRequest, options?: RpcOptions): UnaryCall<RetrieveTokensRequest, RetrieveTokensResponse>;
+    /**
+     * Retrieve token transfers
+     *
+     * @generated from protobuf rpc: RetrieveTokenTransfers
+     */
+    retrieveTokenTransfers(input: RetrieveTokenTransfersRequest, options?: RpcOptions): UnaryCall<RetrieveTokenTransfersRequest, RetrieveTokenTransfersResponse>;
     /**
      * Retrieve token balances
      *
@@ -176,7 +199,7 @@ export interface IWorldClient {
      */
     retrieveContracts(input: RetrieveContractsRequest, options?: RpcOptions): UnaryCall<RetrieveContractsRequest, RetrieveContractsResponse>;
     /**
-     * Retrieve tokens contracts
+     * Retrieve token contracts
      *
      * @generated from protobuf rpc: RetrieveTokenContracts
      */
@@ -305,12 +328,30 @@ export class WorldClient implements IWorldClient, ServiceInfo {
         return stackIntercept<UpdateTokenSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
+     * Subscribe to token transfer updates.
+     *
+     * @generated from protobuf rpc: SubscribeTokenTransfers
+     */
+    subscribeTokenTransfers(input: SubscribeTokenTransfersRequest, options?: RpcOptions): ServerStreamingCall<SubscribeTokenTransfersRequest, SubscribeTokenTransfersResponse> {
+        const method = this.methods[11], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeTokenTransfersRequest, SubscribeTokenTransfersResponse>("serverStreaming", this._transport, method, opt, input);
+    }
+    /**
+     * Update token transfer subscription
+     *
+     * @generated from protobuf rpc: UpdateTokenTransfersSubscription
+     */
+    updateTokenTransfersSubscription(input: UpdateTokenTransfersSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateTokenTransfersSubscriptionRequest, Empty> {
+        const method = this.methods[12], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateTokenTransfersSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
+    }
+    /**
      * Retrieve entities
      *
      * @generated from protobuf rpc: RetrieveEventMessages
      */
     retrieveEventMessages(input: RetrieveEventMessagesRequest, options?: RpcOptions): UnaryCall<RetrieveEventMessagesRequest, RetrieveEntitiesResponse> {
-        const method = this.methods[11], opt = this._transport.mergeOptions(options);
+        const method = this.methods[13], opt = this._transport.mergeOptions(options);
         return stackIntercept<RetrieveEventMessagesRequest, RetrieveEntitiesResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -319,7 +360,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: RetrieveEvents
      */
     retrieveEvents(input: RetrieveEventsRequest, options?: RpcOptions): UnaryCall<RetrieveEventsRequest, RetrieveEventsResponse> {
-        const method = this.methods[12], opt = this._transport.mergeOptions(options);
+        const method = this.methods[14], opt = this._transport.mergeOptions(options);
         return stackIntercept<RetrieveEventsRequest, RetrieveEventsResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -328,7 +369,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: SubscribeEvents
      */
     subscribeEvents(input: SubscribeEventsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEventsRequest, SubscribeEventsResponse> {
-        const method = this.methods[13], opt = this._transport.mergeOptions(options);
+        const method = this.methods[15], opt = this._transport.mergeOptions(options);
         return stackIntercept<SubscribeEventsRequest, SubscribeEventsResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
@@ -337,8 +378,17 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: RetrieveTokens
      */
     retrieveTokens(input: RetrieveTokensRequest, options?: RpcOptions): UnaryCall<RetrieveTokensRequest, RetrieveTokensResponse> {
-        const method = this.methods[14], opt = this._transport.mergeOptions(options);
+        const method = this.methods[16], opt = this._transport.mergeOptions(options);
         return stackIntercept<RetrieveTokensRequest, RetrieveTokensResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * Retrieve token transfers
+     *
+     * @generated from protobuf rpc: RetrieveTokenTransfers
+     */
+    retrieveTokenTransfers(input: RetrieveTokenTransfersRequest, options?: RpcOptions): UnaryCall<RetrieveTokenTransfersRequest, RetrieveTokenTransfersResponse> {
+        const method = this.methods[17], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveTokenTransfersRequest, RetrieveTokenTransfersResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Retrieve token balances
@@ -346,7 +396,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: RetrieveTokenBalances
      */
     retrieveTokenBalances(input: RetrieveTokenBalancesRequest, options?: RpcOptions): UnaryCall<RetrieveTokenBalancesRequest, RetrieveTokenBalancesResponse> {
-        const method = this.methods[15], opt = this._transport.mergeOptions(options);
+        const method = this.methods[18], opt = this._transport.mergeOptions(options);
         return stackIntercept<RetrieveTokenBalancesRequest, RetrieveTokenBalancesResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -355,7 +405,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: RetrieveTransactions
      */
     retrieveTransactions(input: RetrieveTransactionsRequest, options?: RpcOptions): UnaryCall<RetrieveTransactionsRequest, RetrieveTransactionsResponse> {
-        const method = this.methods[16], opt = this._transport.mergeOptions(options);
+        const method = this.methods[19], opt = this._transport.mergeOptions(options);
         return stackIntercept<RetrieveTransactionsRequest, RetrieveTransactionsResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -364,7 +414,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: SubscribeTransactions
      */
     subscribeTransactions(input: SubscribeTransactionsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeTransactionsRequest, SubscribeTransactionsResponse> {
-        const method = this.methods[17], opt = this._transport.mergeOptions(options);
+        const method = this.methods[20], opt = this._transport.mergeOptions(options);
         return stackIntercept<SubscribeTransactionsRequest, SubscribeTransactionsResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
@@ -373,7 +423,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: RetrieveControllers
      */
     retrieveControllers(input: RetrieveControllersRequest, options?: RpcOptions): UnaryCall<RetrieveControllersRequest, RetrieveControllersResponse> {
-        const method = this.methods[18], opt = this._transport.mergeOptions(options);
+        const method = this.methods[21], opt = this._transport.mergeOptions(options);
         return stackIntercept<RetrieveControllersRequest, RetrieveControllersResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -382,16 +432,16 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: RetrieveContracts
      */
     retrieveContracts(input: RetrieveContractsRequest, options?: RpcOptions): UnaryCall<RetrieveContractsRequest, RetrieveContractsResponse> {
-        const method = this.methods[19], opt = this._transport.mergeOptions(options);
+        const method = this.methods[22], opt = this._transport.mergeOptions(options);
         return stackIntercept<RetrieveContractsRequest, RetrieveContractsResponse>("unary", this._transport, method, opt, input);
     }
     /**
-     * Retrieve tokens contracts
+     * Retrieve token contracts
      *
      * @generated from protobuf rpc: RetrieveTokenContracts
      */
     retrieveTokenContracts(input: RetrieveTokenContractsRequest, options?: RpcOptions): UnaryCall<RetrieveTokenContractsRequest, RetrieveTokenContractsResponse> {
-        const method = this.methods[20], opt = this._transport.mergeOptions(options);
+        const method = this.methods[23], opt = this._transport.mergeOptions(options);
         return stackIntercept<RetrieveTokenContractsRequest, RetrieveTokenContractsResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -400,7 +450,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: PublishMessage
      */
     publishMessage(input: PublishMessageRequest, options?: RpcOptions): UnaryCall<PublishMessageRequest, PublishMessageResponse> {
-        const method = this.methods[21], opt = this._transport.mergeOptions(options);
+        const method = this.methods[24], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageRequest, PublishMessageResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -409,7 +459,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: PublishMessageBatch
      */
     publishMessageBatch(input: PublishMessageBatchRequest, options?: RpcOptions): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse> {
-        const method = this.methods[22], opt = this._transport.mergeOptions(options);
+        const method = this.methods[25], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageBatchRequest, PublishMessageBatchResponse>("unary", this._transport, method, opt, input);
     }
 }
