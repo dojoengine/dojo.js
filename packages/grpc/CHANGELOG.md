@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 1.7.3
+
+### Patch Changes
+
+- 8597cd4: feat(grpc): add token contract informations
+
 ## 1.7.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.7.2
+
+### Patch Changes
+
+- 17df0bb: feat(core): add ABI tooling for schema generation
+
 ## 1.7.1
 
 ### Patch Changes

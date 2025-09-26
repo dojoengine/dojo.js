@@ -1,5 +1,12 @@
 # @dojoengine/internal
 
+## 1.6.10
+
+### Patch Changes
+
+- Updated dependencies [17df0bb]
+  - @dojoengine/core@1.7.2
+
 ## 1.6.9
 
 ### Patch Changes
