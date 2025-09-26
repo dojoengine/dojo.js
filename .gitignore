@@ -1,5 +1,6 @@
 node_modules
 docs
+docs-temp
 docs-json
 **/docs-json
 

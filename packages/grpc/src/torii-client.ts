@@ -288,7 +288,11 @@ export class ToriiGrpcClient {
     }
 
     async getTokens(query: TokenQuery): Promise<Tokens> {
-        const request = createRetrieveTokensRequest(query);
+        const normalizedQuery: TokenQuery = {
+            ...query,
+            attribute_filters: query.attribute_filters ?? [],
+        };
+        const request = createRetrieveTokensRequest(normalizedQuery);
         const response =
             await this.client.worldClient.retrieveTokens(request).response;
         return this.mappers.tokensResponse(response);

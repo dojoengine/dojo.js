@@ -43,7 +43,7 @@
         "release:dry-run": "bun run build:deps && bun run prepare:publish && changeset publish --dry-run && bun run restore:packages --cleanup",
         "dev": "turbo watch dev --concurrency 20",
         "dev:deps": "turbo watch build:deps --concurrency 20",
-        "docs": "turbo run docs --ui stream && typedoc --entryPointStrategy merge 'docs-json/*.json'",
+        "docs": "turbo run docs --ui stream && typedoc --out docs --entryPointStrategy merge 'docs-json/*.json'",
         "typedoc": "typedoc --options typedoc.json && typedoc",
         "test": "turbo test",
         "test:watch": "turbo watch test"

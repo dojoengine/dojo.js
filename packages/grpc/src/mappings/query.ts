@@ -10,12 +10,13 @@ import type {
     LogicalOperator as ToriiLogicalOperator,
     ControllerQuery as ToriiControllerQuery,
     TokenQuery as ToriiTokenQuery,
+    TokenAttributeFilter as ToriiTokenAttributeFilter,
     TokenBalanceQuery as ToriiTokenBalanceQuery,
     TokenContractQuery as ToriiTokenContractQuery,
     TransactionQuery as ToriiTransactionQuery,
     TransactionFilter as ToriiTransactionFilter,
     KeysClause as ToriiKeysClause,
-    ContractType,
+    ContractType as ToriiContractType,
 } from "@dojoengine/torii-wasm";
 
 import type {
@@ -30,6 +31,7 @@ import type {
     MemberValue as GrpcMemberValue,
     ControllerQuery as GrpcControllerQuery,
     TokenQuery as GrpcTokenQuery,
+    TokenAttributeFilter as GrpcTokenAttributeFilter,
     TokenBalanceQuery as GrpcTokenBalanceQuery,
     TokenContractQuery as GrpcTokenContractQuery,
     TransactionQuery as GrpcTransactionQuery,
@@ -44,6 +46,7 @@ import {
     PatternMatching as GrpcPatternMatching,
     ComparisonOperator as GrpcComparisonOperator,
     LogicalOperator as GrpcLogicalOperator,
+    ContractType as GrpcContractType,
 } from "../generated/types";
 
 import type {
@@ -65,6 +68,62 @@ function hexToBuffer(hex: string): Uint8Array {
         bytes[i / 2] = parseInt(cleanHex.substr(i, 2), 16);
     }
     return bytes;
+}
+
+const grpcContractTypeByName = Object.fromEntries(
+    Object.entries(GrpcContractType).filter(
+        ([, value]) => typeof value === "number"
+    )
+) as Record<string, GrpcContractType>;
+
+const grpcContractTypeValues = new Set<GrpcContractType>(
+    Object.values(grpcContractTypeByName)
+);
+
+function normalizeGrpcContractTypeValue(value: unknown): GrpcContractType {
+    if (typeof value === "number") {
+        if (grpcContractTypeValues.has(value as GrpcContractType)) {
+            return value as GrpcContractType;
+        }
+    } else if (typeof value === "string") {
+        const normalized = value
+            .replace(/^contracttype\./i, "")
+            .replace(/\s+/g, "")
+            .toUpperCase();
+
+        const byName = grpcContractTypeByName[normalized];
+        if (byName !== undefined) {
+            return byName;
+        }
+
+        const numeric = Number(value);
+        if (
+            !Number.isNaN(numeric) &&
+            grpcContractTypeValues.has(numeric as GrpcContractType)
+        ) {
+            return numeric as GrpcContractType;
+        }
+    }
+
+    throw new Error(`Unsupported contract type value: ${String(value)}`);
+}
+
+function normalizeGrpcContractTypes(
+    contractTypes: unknown
+): GrpcContractType[] {
+    if (contractTypes == null) {
+        return [];
+    }
+
+    const values = Array.isArray(contractTypes)
+        ? contractTypes
+        : [contractTypes];
+
+    if (values.length === 0) {
+        return [];
+    }
+
+    return values.map((value) => normalizeGrpcContractTypeValue(value));
 }
 
 function mapOrderDirection(direction: ToriiOrderDirection): GrpcOrderDirection {
@@ -252,8 +311,22 @@ export function mapTokenQuery(query: ToriiTokenQuery): GrpcTokenQuery {
     return {
         contract_addresses: query.contract_addresses.map(hexToBuffer),
         token_ids: query.token_ids.map(hexToBuffer),
+        attribute_filters: mapTokenAttributeFilters(query.attribute_filters),
         pagination: mapPagination(query.pagination),
     };
+}
+
+function mapTokenAttributeFilters(
+    filters: ToriiTokenAttributeFilter[] | null | undefined
+): GrpcTokenAttributeFilter[] {
+    if (!filters) {
+        return [];
+    }
+
+    return filters.map((filter) => ({
+        trait_name: filter.trait_name,
+        trait_value: filter.trait_value,
+    }));
 }
 
 export function mapTokenBalanceQuery(
@@ -272,7 +345,7 @@ export function mapTokenContractQuery(
 ): GrpcTokenContractQuery {
     return {
         contract_addresses: query.contract_addresses.map(hexToBuffer),
-        contract_types: query.contract_types as ContractType[],
+        contract_types: normalizeGrpcContractTypes(query.contract_types),
         pagination: mapPagination(query.pagination),
     };
 }
@@ -383,13 +456,19 @@ export function createRetrieveEventsRequest(query: {
 
 export function createRetrieveContractsRequest(query: {
     contract_addresses?: string[];
-    contract_types?: any[];
+    contract_types?:
+        | ToriiContractType
+        | ToriiContractType[]
+        | GrpcContractType
+        | GrpcContractType[]
+        | string
+        | string[];
 }): RetrieveContractsRequest {
     return {
         query: {
             contract_addresses:
                 query.contract_addresses?.map(hexToBuffer) || [],
-            contract_types: query.contract_types || [],
+            contract_types: normalizeGrpcContractTypes(query.contract_types),
         },
     };
 }
