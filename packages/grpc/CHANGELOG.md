@@ -1,5 +1,12 @@
 # @dojoengine/grpc
 
+## 1.7.4
+
+### Patch Changes
+
+- 485ebf1: fix: getTokens & getTokenContracts
+- 485ebf1: feat(grpc): add token contract informations
+
 ## 1.7.3
 
 ### Patch Changes
