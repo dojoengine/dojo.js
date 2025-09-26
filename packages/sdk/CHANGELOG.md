@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.7.5
+
+### Patch Changes
+
+- Updated dependencies [10f97fe]
+  - @dojoengine/core@1.7.3
+  - @dojoengine/grpc@1.7.4
+  - @dojoengine/state@1.7.2
+
 ## 1.7.4
 
 ### Patch Changes

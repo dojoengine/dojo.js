@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.7.3
+
+### Patch Changes
+
+- 10f97fe: chore(types): add new ts types
+
 ## 1.7.2
 
 ### Patch Changes

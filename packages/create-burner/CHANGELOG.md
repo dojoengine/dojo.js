@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.7.3
+
+### Patch Changes
+
+- Updated dependencies [10f97fe]
+  - @dojoengine/core@1.7.3
+
 ## 1.7.2
 
 ### Patch Changes
