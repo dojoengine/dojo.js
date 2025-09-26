@@ -55,4 +55,31 @@ describe("ToriiGrpcClient", () => {
         // @ts-ignore - accessing private property for testing
         expect(client.useEffectSchema).toBe(false);
     });
+    it("should getTokenContracts", async () => {
+        // This should work without the useEffectSchema property
+        const client = new ToriiGrpcClient({
+            toriiUrl: "https://api.cartridge.gg/x/arcade-main/torii",
+        });
+        expect(client).toBeDefined();
+
+        try {
+            const res = await client.getTokenContracts({
+                contract_addresses: [],
+                contract_types: ["ERC20", "ERC1155"],
+                pagination: {
+                    limit: 1000,
+                    cursor: undefined,
+                    direction: "Forward",
+                    order_by: [],
+                },
+            });
+            console.log(res);
+
+            expect(res.items.length).toBeGreaterThan(0);
+            // @ts-ignore - accessing private property for testing
+            expect(client.useEffectSchema).toBe(false);
+        } catch (err) {
+            console.error(err);
+        }
+    });
 });

@@ -114,6 +114,86 @@ function bufferToHex(buffer: Uint8Array): string {
     );
 }
 
+type ToriiContractTypeName = TokenContractQuery["contract_types"][number];
+
+const contractTypeByName = Object.fromEntries(
+    Object.entries(ContractType).filter(([, value]) =>
+        typeof value === "number"
+    )
+) as Record<string, ContractType>;
+
+const contractTypeNameByValue = new Map<ContractType, ToriiContractTypeName>(
+    Object.entries(contractTypeByName).map(
+        ([name, value]) => [value, name as ToriiContractTypeName]
+    )
+);
+
+type TokenContractTypeInput =
+    | ToriiContractTypeName
+    | ContractType
+    | string
+    | number;
+
+export type TokenContractQueryInput = Omit<TokenContractQuery, "contract_types"> & {
+    contract_types?:
+        | TokenContractTypeInput
+        | ReadonlyArray<TokenContractTypeInput>
+        | null;
+};
+
+function normalizeTokenContractTypesInput(
+    contractTypes: TokenContractQueryInput["contract_types"]
+): TokenContractQuery["contract_types"] {
+    if (contractTypes == null) {
+        return [];
+    }
+
+    const values = Array.isArray(contractTypes)
+        ? contractTypes
+        : [contractTypes];
+
+    if (values.length === 0) {
+        return [];
+    }
+
+    return values.map((value) => {
+        if (typeof value === "number") {
+            const name = contractTypeNameByValue.get(value as ContractType);
+            if (name) {
+                return name;
+            }
+        } else if (typeof value === "string") {
+            const normalized = value
+                .replace(/^contracttype\./i, "")
+                .replace(/\s+/g, "")
+                .toUpperCase();
+
+            const enumValue = contractTypeByName[normalized];
+            if (enumValue !== undefined) {
+                const name = contractTypeNameByValue.get(enumValue);
+                if (name) {
+                    return name;
+                }
+            }
+
+            const numeric = Number(value);
+            if (
+                !Number.isNaN(numeric) &&
+                contractTypeNameByValue.has(numeric as ContractType)
+            ) {
+                const name = contractTypeNameByValue.get(
+                    numeric as ContractType
+                );
+                if (name) {
+                    return name;
+                }
+            }
+        }
+
+        throw new Error(`Unsupported contract type value: ${String(value)}`);
+    });
+}
+
 interface ToriiSubscription {
     id: bigint;
     stream: ServerStreamingCall<object, object>;
@@ -306,6 +386,16 @@ export class ToriiGrpcClient {
         query: TokenContractQuery
     ): Promise<TokenContracts> {
         const request = createRetrieveTokenContractsRequest(query);
+    async getTokenContracts(
+        query: TokenContractQueryInput
+    ): Promise<TokenContracts> {
+        const normalizedQuery: TokenContractQuery = {
+            ...query,
+            contract_types: normalizeTokenContractTypesInput(
+                query.contract_types
+            ),
+        };
+        const request = createRetrieveTokenContractsRequest(normalizedQuery);
         const response =
             await this.client.worldClient.retrieveTokenContracts(request)
                 .response;
