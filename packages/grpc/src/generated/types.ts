@@ -355,35 +355,6 @@ export interface Token {
     total_supply?: Uint8Array;
 }
 /**
- * @generated from protobuf message types.TokenContract
- */
-export interface TokenContract {
-    /**
-     * @generated from protobuf field: bytes contract_address = 2
-     */
-    contract_address: Uint8Array;
-    /**
-     * @generated from protobuf field: string name = 3
-     */
-    name: string;
-    /**
-     * @generated from protobuf field: string symbol = 4
-     */
-    symbol: string;
-    /**
-     * @generated from protobuf field: uint32 decimals = 5
-     */
-    decimals: number;
-    /**
-     * @generated from protobuf field: uint32 count = 6
-     */
-    count: number;
-    /**
-     * @generated from protobuf field: bytes metadata = 7
-     */
-    metadata: Uint8Array;
-}
-/**
  * @generated from protobuf message types.TokenBalance
  */
 export interface TokenBalance {
@@ -479,6 +450,25 @@ export interface ControllerQuery {
     pagination?: Pagination;
 }
 /**
+ * Token attribute filter for filtering tokens by their metadata attributes
+ *
+ * @generated from protobuf message types.TokenAttributeFilter
+ */
+export interface TokenAttributeFilter {
+    /**
+     * The name of the trait/attribute to filter by
+     *
+     * @generated from protobuf field: string trait_name = 1
+     */
+    trait_name: string;
+    /**
+     * The value of the trait/attribute to filter by
+     *
+     * @generated from protobuf field: string trait_value = 2
+     */
+    trait_value: string;
+}
+/**
  * A request to retrieve tokens
  *
  * @generated from protobuf message types.TokenQuery
@@ -497,9 +487,15 @@ export interface TokenQuery {
      */
     token_ids: Uint8Array[];
     /**
+     * The list of attribute filters to apply
+     *
+     * @generated from protobuf field: repeated types.TokenAttributeFilter attribute_filters = 3
+     */
+    attribute_filters: TokenAttributeFilter[];
+    /**
      * Pagination
      *
-     * @generated from protobuf field: types.Pagination pagination = 3
+     * @generated from protobuf field: types.Pagination pagination = 4
      */
     pagination?: Pagination;
 }
@@ -523,6 +519,117 @@ export interface TokenBalanceQuery {
     contract_addresses: Uint8Array[];
     /**
      * The list of token IDs to retrieve balances for
+     *
+     * @generated from protobuf field: repeated bytes token_ids = 3
+     */
+    token_ids: Uint8Array[];
+    /**
+     * Pagination
+     *
+     * @generated from protobuf field: types.Pagination pagination = 4
+     */
+    pagination?: Pagination;
+}
+/**
+ * A request to retrieve token contracts
+ *
+ * @generated from protobuf message types.TokenContractQuery
+ */
+export interface TokenContractQuery {
+    /**
+     * The list of contract addresses to retrieve token contracts for
+     *
+     * @generated from protobuf field: repeated bytes contract_addresses = 1
+     */
+    contract_addresses: Uint8Array[];
+    /**
+     * The list of contract types to filter by
+     *
+     * @generated from protobuf field: repeated types.ContractType contract_types = 2
+     */
+    contract_types: ContractType[];
+    /**
+     * Pagination
+     *
+     * @generated from protobuf field: types.Pagination pagination = 3
+     */
+    pagination?: Pagination;
+}
+/**
+ * A token transfer record
+ *
+ * @generated from protobuf message types.TokenTransfer
+ */
+export interface TokenTransfer {
+    /**
+     * Unique identifier for the transfer (event_id:token_id key)
+     *
+     * @generated from protobuf field: string id = 1
+     */
+    id: string;
+    /**
+     * Contract address of the token
+     *
+     * @generated from protobuf field: bytes contract_address = 2
+     */
+    contract_address: Uint8Array;
+    /**
+     * Sender address
+     *
+     * @generated from protobuf field: bytes from_address = 3
+     */
+    from_address: Uint8Array;
+    /**
+     * Recipient address
+     *
+     * @generated from protobuf field: bytes to_address = 4
+     */
+    to_address: Uint8Array;
+    /**
+     * Amount transferred (big-endian bytes)
+     *
+     * @generated from protobuf field: bytes amount = 5
+     */
+    amount: Uint8Array;
+    /**
+     * Token ID when applicable (ERC721/1155); omitted for ERC20
+     *
+     * @generated from protobuf field: optional bytes token_id = 6
+     */
+    token_id?: Uint8Array;
+    /**
+     * Executed at timestamp (seconds since epoch)
+     *
+     * @generated from protobuf field: uint64 executed_at = 7
+     */
+    executed_at: bigint;
+    /**
+     * Optional event id that originated this transfer
+     *
+     * @generated from protobuf field: optional string event_id = 8
+     */
+    event_id?: string;
+}
+/**
+ * A request to retrieve token transfers
+ *
+ * @generated from protobuf message types.TokenTransferQuery
+ */
+export interface TokenTransferQuery {
+    /**
+     * Filter by any of these account addresses (as sender or recipient)
+     *
+     * @generated from protobuf field: repeated bytes account_addresses = 1
+     */
+    account_addresses: Uint8Array[];
+    /**
+     * Filter by token contract addresses
+     *
+     * @generated from protobuf field: repeated bytes contract_addresses = 2
+     */
+    contract_addresses: Uint8Array[];
+    /**
+     * Filter by token IDs (bytes of numeric id)
      *
      * @generated from protobuf field: repeated bytes token_ids = 3
      */
@@ -773,6 +880,65 @@ export interface ContractQuery {
      * @generated from protobuf field: repeated types.ContractType contract_types = 2
      */
     contract_types: ContractType[];
+}
+/**
+ * @generated from protobuf message types.TokenContract
+ */
+export interface TokenContract {
+    /**
+     * The contract address
+     *
+     * @generated from protobuf field: bytes contract_address = 1
+     */
+    contract_address: Uint8Array;
+    /**
+     * The type of contract
+     *
+     * @generated from protobuf field: types.ContractType contract_type = 2
+     */
+    contract_type: ContractType;
+    /**
+     * The name of the contract
+     *
+     * @generated from protobuf field: string name = 3
+     */
+    name: string;
+    /**
+     * The symbol of the contract
+     *
+     * @generated from protobuf field: string symbol = 4
+     */
+    symbol: string;
+    /**
+     * The decimals of the contract
+     *
+     * @generated from protobuf field: uint32 decimals = 5
+     */
+    decimals: number;
+    /**
+     * The metadata of the contract
+     *
+     * @generated from protobuf field: bytes metadata = 6
+     */
+    metadata: Uint8Array;
+    /**
+     * The total supply of the contract
+     *
+     * @generated from protobuf field: optional bytes total_supply = 7
+     */
+    total_supply?: Uint8Array;
+    /**
+     * The traits of the contract (JSON object with trait types and possible values)
+     *
+     * @generated from protobuf field: string traits = 8
+     */
+    traits: string;
+    /**
+     * The first token metadata of the contract
+     *
+     * @generated from protobuf field: bytes token_metadata = 9
+     */
+    token_metadata: Uint8Array;
 }
 /**
  * @generated from protobuf enum types.PatternMatching
@@ -1915,93 +2081,6 @@ class Token$Type extends MessageType<Token> {
  */
 export const Token = new Token$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class TokenContract$Type extends MessageType<TokenContract> {
-    constructor() {
-        super("types.TokenContract", [
-            { no: 2, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
-            { no: 3, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "symbol", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 5, name: "decimals", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
-            { no: 6, name: "count", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
-            { no: 7, name: "metadata", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
-        ]);
-    }
-    create(value?: PartialMessage<TokenContract>): TokenContract {
-        const message = globalThis.Object.create((this.messagePrototype!));
-        message.contract_address = new Uint8Array(0);
-        message.name = "";
-        message.symbol = "";
-        message.decimals = 0;
-        message.count = 0;
-        message.metadata = new Uint8Array(0);
-        if (value !== undefined)
-            reflectionMergePartial<TokenContract>(this, message, value);
-        return message;
-    }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenContract): TokenContract {
-        let message = target ?? this.create(), end = reader.pos + length;
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag();
-            switch (fieldNo) {
-                case /* bytes contract_address */ 2:
-                    message.contract_address = reader.bytes();
-                    break;
-                case /* string name */ 3:
-                    message.name = reader.string();
-                    break;
-                case /* string symbol */ 4:
-                    message.symbol = reader.string();
-                    break;
-                case /* uint32 decimals */ 5:
-                    message.decimals = reader.uint32();
-                    break;
-                case /* uint32 count */ 6:
-                    message.count = reader.uint32();
-                    break;
-                case /* bytes metadata */ 7:
-                    message.metadata = reader.bytes();
-                    break;
-                default:
-                    let u = options.readUnknownField;
-                    if (u === "throw")
-                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
-                    let d = reader.skip(wireType);
-                    if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
-            }
-        }
-        return message;
-    }
-    internalBinaryWrite(message: TokenContract, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* bytes contract_address = 2; */
-        if (message.contract_address.length)
-            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_address);
-        /* string name = 3; */
-        if (message.name !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.name);
-        /* string symbol = 4; */
-        if (message.symbol !== "")
-            writer.tag(4, WireType.LengthDelimited).string(message.symbol);
-        /* uint32 decimals = 5; */
-        if (message.decimals !== 0)
-            writer.tag(5, WireType.Varint).uint32(message.decimals);
-        /* uint32 count = 6; */
-        if (message.count !== 0)
-            writer.tag(6, WireType.Varint).uint32(message.count);
-        /* bytes metadata = 7; */
-        if (message.metadata.length)
-            writer.tag(7, WireType.LengthDelimited).bytes(message.metadata);
-        let u = options.writeUnknownFields;
-        if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
-        return writer;
-    }
-}
-/**
- * @generated MessageType for protobuf message types.TokenContract
- */
-export const TokenContract = new TokenContract$Type();
-// @generated message type with reflection information, may provide speed optimized methods
 class TokenBalance$Type extends MessageType<TokenBalance> {
     constructor() {
         super("types.TokenBalance", [
@@ -2323,18 +2402,75 @@ class ControllerQuery$Type extends MessageType<ControllerQuery> {
  */
 export const ControllerQuery = new ControllerQuery$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class TokenAttributeFilter$Type extends MessageType<TokenAttributeFilter> {
+    constructor() {
+        super("types.TokenAttributeFilter", [
+            { no: 1, name: "trait_name", kind: "scalar", localName: "trait_name", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "trait_value", kind: "scalar", localName: "trait_value", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<TokenAttributeFilter>): TokenAttributeFilter {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.trait_name = "";
+        message.trait_value = "";
+        if (value !== undefined)
+            reflectionMergePartial<TokenAttributeFilter>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenAttributeFilter): TokenAttributeFilter {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string trait_name */ 1:
+                    message.trait_name = reader.string();
+                    break;
+                case /* string trait_value */ 2:
+                    message.trait_value = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: TokenAttributeFilter, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string trait_name = 1; */
+        if (message.trait_name !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.trait_name);
+        /* string trait_value = 2; */
+        if (message.trait_value !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.trait_value);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.TokenAttributeFilter
+ */
+export const TokenAttributeFilter = new TokenAttributeFilter$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class TokenQuery$Type extends MessageType<TokenQuery> {
     constructor() {
         super("types.TokenQuery", [
             { no: 1, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
             { no: 2, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
-            { no: 3, name: "pagination", kind: "message", T: () => Pagination }
+            { no: 3, name: "attribute_filters", kind: "message", localName: "attribute_filters", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TokenAttributeFilter },
+            { no: 4, name: "pagination", kind: "message", T: () => Pagination }
         ]);
     }
     create(value?: PartialMessage<TokenQuery>): TokenQuery {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.contract_addresses = [];
         message.token_ids = [];
+        message.attribute_filters = [];
         if (value !== undefined)
             reflectionMergePartial<TokenQuery>(this, message, value);
         return message;
@@ -2350,7 +2486,10 @@ class TokenQuery$Type extends MessageType<TokenQuery> {
                 case /* repeated bytes token_ids */ 2:
                     message.token_ids.push(reader.bytes());
                     break;
-                case /* types.Pagination pagination */ 3:
+                case /* repeated types.TokenAttributeFilter attribute_filters */ 3:
+                    message.attribute_filters.push(TokenAttributeFilter.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                case /* types.Pagination pagination */ 4:
                     message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
                     break;
                 default:
@@ -2371,9 +2510,12 @@ class TokenQuery$Type extends MessageType<TokenQuery> {
         /* repeated bytes token_ids = 2; */
         for (let i = 0; i < message.token_ids.length; i++)
             writer.tag(2, WireType.LengthDelimited).bytes(message.token_ids[i]);
-        /* types.Pagination pagination = 3; */
+        /* repeated types.TokenAttributeFilter attribute_filters = 3; */
+        for (let i = 0; i < message.attribute_filters.length; i++)
+            TokenAttributeFilter.internalBinaryWrite(message.attribute_filters[i], writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        /* types.Pagination pagination = 4; */
         if (message.pagination)
-            Pagination.internalBinaryWrite(message.pagination, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -2454,6 +2596,247 @@ class TokenBalanceQuery$Type extends MessageType<TokenBalanceQuery> {
  * @generated MessageType for protobuf message types.TokenBalanceQuery
  */
 export const TokenBalanceQuery = new TokenBalanceQuery$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class TokenContractQuery$Type extends MessageType<TokenContractQuery> {
+    constructor() {
+        super("types.TokenContractQuery", [
+            { no: 1, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "contract_types", kind: "enum", localName: "contract_types", repeat: 1 /*RepeatType.PACKED*/, T: () => ["types.ContractType", ContractType] },
+            { no: 3, name: "pagination", kind: "message", T: () => Pagination }
+        ]);
+    }
+    create(value?: PartialMessage<TokenContractQuery>): TokenContractQuery {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.contract_addresses = [];
+        message.contract_types = [];
+        if (value !== undefined)
+            reflectionMergePartial<TokenContractQuery>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenContractQuery): TokenContractQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated bytes contract_addresses */ 1:
+                    message.contract_addresses.push(reader.bytes());
+                    break;
+                case /* repeated types.ContractType contract_types */ 2:
+                    if (wireType === WireType.LengthDelimited)
+                        for (let e = reader.int32() + reader.pos; reader.pos < e;)
+                            message.contract_types.push(reader.int32());
+                    else
+                        message.contract_types.push(reader.int32());
+                    break;
+                case /* types.Pagination pagination */ 3:
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: TokenContractQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated bytes contract_addresses = 1; */
+        for (let i = 0; i < message.contract_addresses.length; i++)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
+        /* repeated types.ContractType contract_types = 2; */
+        if (message.contract_types.length) {
+            writer.tag(2, WireType.LengthDelimited).fork();
+            for (let i = 0; i < message.contract_types.length; i++)
+                writer.int32(message.contract_types[i]);
+            writer.join();
+        }
+        /* types.Pagination pagination = 3; */
+        if (message.pagination)
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.TokenContractQuery
+ */
+export const TokenContractQuery = new TokenContractQuery$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class TokenTransfer$Type extends MessageType<TokenTransfer> {
+    constructor() {
+        super("types.TokenTransfer", [
+            { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "from_address", kind: "scalar", localName: "from_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "to_address", kind: "scalar", localName: "to_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 5, name: "amount", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 6, name: "token_id", kind: "scalar", localName: "token_id", opt: true, T: 12 /*ScalarType.BYTES*/ },
+            { no: 7, name: "executed_at", kind: "scalar", localName: "executed_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 8, name: "event_id", kind: "scalar", localName: "event_id", opt: true, T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<TokenTransfer>): TokenTransfer {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = "";
+        message.contract_address = new Uint8Array(0);
+        message.from_address = new Uint8Array(0);
+        message.to_address = new Uint8Array(0);
+        message.amount = new Uint8Array(0);
+        message.executed_at = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<TokenTransfer>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenTransfer): TokenTransfer {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string id */ 1:
+                    message.id = reader.string();
+                    break;
+                case /* bytes contract_address */ 2:
+                    message.contract_address = reader.bytes();
+                    break;
+                case /* bytes from_address */ 3:
+                    message.from_address = reader.bytes();
+                    break;
+                case /* bytes to_address */ 4:
+                    message.to_address = reader.bytes();
+                    break;
+                case /* bytes amount */ 5:
+                    message.amount = reader.bytes();
+                    break;
+                case /* optional bytes token_id */ 6:
+                    message.token_id = reader.bytes();
+                    break;
+                case /* uint64 executed_at */ 7:
+                    message.executed_at = reader.uint64().toBigInt();
+                    break;
+                case /* optional string event_id */ 8:
+                    message.event_id = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: TokenTransfer, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string id = 1; */
+        if (message.id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.id);
+        /* bytes contract_address = 2; */
+        if (message.contract_address.length)
+            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_address);
+        /* bytes from_address = 3; */
+        if (message.from_address.length)
+            writer.tag(3, WireType.LengthDelimited).bytes(message.from_address);
+        /* bytes to_address = 4; */
+        if (message.to_address.length)
+            writer.tag(4, WireType.LengthDelimited).bytes(message.to_address);
+        /* bytes amount = 5; */
+        if (message.amount.length)
+            writer.tag(5, WireType.LengthDelimited).bytes(message.amount);
+        /* optional bytes token_id = 6; */
+        if (message.token_id !== undefined)
+            writer.tag(6, WireType.LengthDelimited).bytes(message.token_id);
+        /* uint64 executed_at = 7; */
+        if (message.executed_at !== 0n)
+            writer.tag(7, WireType.Varint).uint64(message.executed_at);
+        /* optional string event_id = 8; */
+        if (message.event_id !== undefined)
+            writer.tag(8, WireType.LengthDelimited).string(message.event_id);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.TokenTransfer
+ */
+export const TokenTransfer = new TokenTransfer$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class TokenTransferQuery$Type extends MessageType<TokenTransferQuery> {
+    constructor() {
+        super("types.TokenTransferQuery", [
+            { no: 1, name: "account_addresses", kind: "scalar", localName: "account_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "pagination", kind: "message", T: () => Pagination }
+        ]);
+    }
+    create(value?: PartialMessage<TokenTransferQuery>): TokenTransferQuery {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.account_addresses = [];
+        message.contract_addresses = [];
+        message.token_ids = [];
+        if (value !== undefined)
+            reflectionMergePartial<TokenTransferQuery>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenTransferQuery): TokenTransferQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated bytes account_addresses */ 1:
+                    message.account_addresses.push(reader.bytes());
+                    break;
+                case /* repeated bytes contract_addresses */ 2:
+                    message.contract_addresses.push(reader.bytes());
+                    break;
+                case /* repeated bytes token_ids */ 3:
+                    message.token_ids.push(reader.bytes());
+                    break;
+                case /* types.Pagination pagination */ 4:
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: TokenTransferQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated bytes account_addresses = 1; */
+        for (let i = 0; i < message.account_addresses.length; i++)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.account_addresses[i]);
+        /* repeated bytes contract_addresses = 2; */
+        for (let i = 0; i < message.contract_addresses.length; i++)
+            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
+        /* repeated bytes token_ids = 3; */
+        for (let i = 0; i < message.token_ids.length; i++)
+            writer.tag(3, WireType.LengthDelimited).bytes(message.token_ids[i]);
+        /* types.Pagination pagination = 4; */
+        if (message.pagination)
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.TokenTransferQuery
+ */
+export const TokenTransferQuery = new TokenTransferQuery$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class TransactionCall$Type extends MessageType<TransactionCall> {
     constructor() {
@@ -2968,3 +3351,113 @@ class ContractQuery$Type extends MessageType<ContractQuery> {
  * @generated MessageType for protobuf message types.ContractQuery
  */
 export const ContractQuery = new ContractQuery$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class TokenContract$Type extends MessageType<TokenContract> {
+    constructor() {
+        super("types.TokenContract", [
+            { no: 1, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "contract_type", kind: "enum", localName: "contract_type", T: () => ["types.ContractType", ContractType] },
+            { no: 3, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "symbol", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "decimals", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 6, name: "metadata", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 7, name: "total_supply", kind: "scalar", localName: "total_supply", opt: true, T: 12 /*ScalarType.BYTES*/ },
+            { no: 8, name: "traits", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 9, name: "token_metadata", kind: "scalar", localName: "token_metadata", T: 12 /*ScalarType.BYTES*/ }
+        ]);
+    }
+    create(value?: PartialMessage<TokenContract>): TokenContract {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.contract_address = new Uint8Array(0);
+        message.contract_type = 0;
+        message.name = "";
+        message.symbol = "";
+        message.decimals = 0;
+        message.metadata = new Uint8Array(0);
+        message.traits = "";
+        message.token_metadata = new Uint8Array(0);
+        if (value !== undefined)
+            reflectionMergePartial<TokenContract>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TokenContract): TokenContract {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bytes contract_address */ 1:
+                    message.contract_address = reader.bytes();
+                    break;
+                case /* types.ContractType contract_type */ 2:
+                    message.contract_type = reader.int32();
+                    break;
+                case /* string name */ 3:
+                    message.name = reader.string();
+                    break;
+                case /* string symbol */ 4:
+                    message.symbol = reader.string();
+                    break;
+                case /* uint32 decimals */ 5:
+                    message.decimals = reader.uint32();
+                    break;
+                case /* bytes metadata */ 6:
+                    message.metadata = reader.bytes();
+                    break;
+                case /* optional bytes total_supply */ 7:
+                    message.total_supply = reader.bytes();
+                    break;
+                case /* string traits */ 8:
+                    message.traits = reader.string();
+                    break;
+                case /* bytes token_metadata */ 9:
+                    message.token_metadata = reader.bytes();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: TokenContract, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bytes contract_address = 1; */
+        if (message.contract_address.length)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_address);
+        /* types.ContractType contract_type = 2; */
+        if (message.contract_type !== 0)
+            writer.tag(2, WireType.Varint).int32(message.contract_type);
+        /* string name = 3; */
+        if (message.name !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.name);
+        /* string symbol = 4; */
+        if (message.symbol !== "")
+            writer.tag(4, WireType.LengthDelimited).string(message.symbol);
+        /* uint32 decimals = 5; */
+        if (message.decimals !== 0)
+            writer.tag(5, WireType.Varint).uint32(message.decimals);
+        /* bytes metadata = 6; */
+        if (message.metadata.length)
+            writer.tag(6, WireType.LengthDelimited).bytes(message.metadata);
+        /* optional bytes total_supply = 7; */
+        if (message.total_supply !== undefined)
+            writer.tag(7, WireType.LengthDelimited).bytes(message.total_supply);
+        /* string traits = 8; */
+        if (message.traits !== "")
+            writer.tag(8, WireType.LengthDelimited).string(message.traits);
+        /* bytes token_metadata = 9; */
+        if (message.token_metadata.length)
+            writer.tag(9, WireType.LengthDelimited).bytes(message.token_metadata);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.TokenContract
+ */
+export const TokenContract = new TokenContract$Type();

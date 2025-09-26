@@ -12,6 +12,8 @@ import { UnknownFieldHandler } from "@protobuf-ts/runtime";
 import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { TokenTransferQuery } from "./types";
+import { TokenTransfer } from "./types";
 import { KeysClause } from "./types";
 import { Event } from "./types";
 import { EventQuery } from "./types";
@@ -20,6 +22,7 @@ import { Entity } from "./types";
 import { Clause } from "./types";
 import { World as World$ } from "./types";
 import { TokenContract } from "./types";
+import { TokenContractQuery } from "./types";
 import { TransactionQuery } from "./types";
 import { TokenBalanceQuery } from "./types";
 import { Token } from "./types";
@@ -312,12 +315,12 @@ export interface RetrieveTransactionsResponse {
  */
 export interface RetrieveTokenContractsRequest {
     /**
-     * @generated from protobuf field: types.TokenBalanceQuery query = 1
+     * @generated from protobuf field: types.TokenContractQuery query = 1
      */
-    query?: TokenBalanceQuery;
+    query?: TokenContractQuery;
 }
 /**
- * A response containing token balances
+ * A response containing token contracts
  *
  * @generated from protobuf message world.RetrieveTokenContractsResponse
  */
@@ -327,9 +330,9 @@ export interface RetrieveTokenContractsResponse {
      */
     next_cursor: string;
     /**
-     * @generated from protobuf field: repeated types.TokenContract tokens = 2
+     * @generated from protobuf field: repeated types.TokenContract token_contracts = 2
      */
-    tokens: TokenContract[];
+    token_contracts: TokenContract[];
 }
 /**
  * A request to subscribe to contract updates.
@@ -544,6 +547,107 @@ export interface PublishMessageBatchResponse {
      * @generated from protobuf field: repeated world.PublishMessageResponse responses = 1
      */
     responses: PublishMessageResponse[];
+}
+/**
+ * A request to subscribe to token transfer updates
+ *
+ * @generated from protobuf message world.SubscribeTokenTransfersRequest
+ */
+export interface SubscribeTokenTransfersRequest {
+    /**
+     * The list of contract addresses to subscribe to
+     *
+     * @generated from protobuf field: repeated bytes contract_addresses = 1
+     */
+    contract_addresses: Uint8Array[];
+    /**
+     * The list of account addresses to subscribe to (as sender or recipient)
+     *
+     * @generated from protobuf field: repeated bytes account_addresses = 2
+     */
+    account_addresses: Uint8Array[];
+    /**
+     * The list of token IDs to subscribe to
+     *
+     * @generated from protobuf field: repeated bytes token_ids = 3
+     */
+    token_ids: Uint8Array[];
+}
+/**
+ * A response containing token transfer updates
+ *
+ * @generated from protobuf message world.SubscribeTokenTransfersResponse
+ */
+export interface SubscribeTokenTransfersResponse {
+    /**
+     * The subscription ID
+     *
+     * @generated from protobuf field: uint64 subscription_id = 1
+     */
+    subscription_id: bigint;
+    /**
+     * The token transfer
+     *
+     * @generated from protobuf field: types.TokenTransfer transfer = 2
+     */
+    transfer?: TokenTransfer;
+}
+/**
+ * A request to update a token transfer subscription
+ *
+ * @generated from protobuf message world.UpdateTokenTransfersSubscriptionRequest
+ */
+export interface UpdateTokenTransfersSubscriptionRequest {
+    /**
+     * The subscription ID
+     *
+     * @generated from protobuf field: uint64 subscription_id = 1
+     */
+    subscription_id: bigint;
+    /**
+     * The list of contract addresses to subscribe to
+     *
+     * @generated from protobuf field: repeated bytes contract_addresses = 2
+     */
+    contract_addresses: Uint8Array[];
+    /**
+     * The list of account addresses to subscribe to (as sender or recipient)
+     *
+     * @generated from protobuf field: repeated bytes account_addresses = 3
+     */
+    account_addresses: Uint8Array[];
+    /**
+     * The list of token IDs to subscribe to
+     *
+     * @generated from protobuf field: repeated bytes token_ids = 4
+     */
+    token_ids: Uint8Array[];
+}
+/**
+ * A request to retrieve token transfers
+ *
+ * @generated from protobuf message world.RetrieveTokenTransfersRequest
+ */
+export interface RetrieveTokenTransfersRequest {
+    /**
+     * @generated from protobuf field: types.TokenTransferQuery query = 1
+     */
+    query?: TokenTransferQuery;
+}
+/**
+ * A response containing token transfers
+ *
+ * @generated from protobuf message world.RetrieveTokenTransfersResponse
+ */
+export interface RetrieveTokenTransfersResponse {
+    /**
+     * @generated from protobuf field: string next_cursor = 1
+     */
+    next_cursor: string;
+    /**
+     * @generated from protobuf field: repeated types.TokenTransfer transfers = 2
+     */
+    transfers: TokenTransfer[];
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class SubscribeTransactionsRequest$Type extends MessageType<SubscribeTransactionsRequest> {
@@ -1498,7 +1602,7 @@ export const RetrieveTransactionsResponse = new RetrieveTransactionsResponse$Typ
 class RetrieveTokenContractsRequest$Type extends MessageType<RetrieveTokenContractsRequest> {
     constructor() {
         super("world.RetrieveTokenContractsRequest", [
-            { no: 1, name: "query", kind: "message", T: () => TokenBalanceQuery }
+            { no: 1, name: "query", kind: "message", T: () => TokenContractQuery }
         ]);
     }
     create(value?: PartialMessage<RetrieveTokenContractsRequest>): RetrieveTokenContractsRequest {
@@ -1512,8 +1616,8 @@ class RetrieveTokenContractsRequest$Type extends MessageType<RetrieveTokenContra
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* types.TokenBalanceQuery query */ 1:
-                    message.query = TokenBalanceQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
+                case /* types.TokenContractQuery query */ 1:
+                    message.query = TokenContractQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1527,9 +1631,9 @@ class RetrieveTokenContractsRequest$Type extends MessageType<RetrieveTokenContra
         return message;
     }
     internalBinaryWrite(message: RetrieveTokenContractsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* types.TokenBalanceQuery query = 1; */
+        /* types.TokenContractQuery query = 1; */
         if (message.query)
-            TokenBalanceQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+            TokenContractQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1545,13 +1649,13 @@ class RetrieveTokenContractsResponse$Type extends MessageType<RetrieveTokenContr
     constructor() {
         super("world.RetrieveTokenContractsResponse", [
             { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "tokens", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TokenContract }
+            { no: 2, name: "token_contracts", kind: "message", localName: "token_contracts", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TokenContract }
         ]);
     }
     create(value?: PartialMessage<RetrieveTokenContractsResponse>): RetrieveTokenContractsResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.next_cursor = "";
-        message.tokens = [];
+        message.token_contracts = [];
         if (value !== undefined)
             reflectionMergePartial<RetrieveTokenContractsResponse>(this, message, value);
         return message;
@@ -1564,8 +1668,8 @@ class RetrieveTokenContractsResponse$Type extends MessageType<RetrieveTokenContr
                 case /* string next_cursor */ 1:
                     message.next_cursor = reader.string();
                     break;
-                case /* repeated types.TokenContract tokens */ 2:
-                    message.tokens.push(TokenContract.internalBinaryRead(reader, reader.uint32(), options));
+                case /* repeated types.TokenContract token_contracts */ 2:
+                    message.token_contracts.push(TokenContract.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1582,9 +1686,9 @@ class RetrieveTokenContractsResponse$Type extends MessageType<RetrieveTokenContr
         /* string next_cursor = 1; */
         if (message.next_cursor !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
-        /* repeated types.TokenContract tokens = 2; */
-        for (let i = 0; i < message.tokens.length; i++)
-            TokenContract.internalBinaryWrite(message.tokens[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        /* repeated types.TokenContract token_contracts = 2; */
+        for (let i = 0; i < message.token_contracts.length; i++)
+            TokenContract.internalBinaryWrite(message.token_contracts[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -2562,6 +2666,295 @@ class PublishMessageBatchResponse$Type extends MessageType<PublishMessageBatchRe
  * @generated MessageType for protobuf message world.PublishMessageBatchResponse
  */
 export const PublishMessageBatchResponse = new PublishMessageBatchResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SubscribeTokenTransfersRequest$Type extends MessageType<SubscribeTokenTransfersRequest> {
+    constructor() {
+        super("world.SubscribeTokenTransfersRequest", [
+            { no: 1, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "account_addresses", kind: "scalar", localName: "account_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ }
+        ]);
+    }
+    create(value?: PartialMessage<SubscribeTokenTransfersRequest>): SubscribeTokenTransfersRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.contract_addresses = [];
+        message.account_addresses = [];
+        message.token_ids = [];
+        if (value !== undefined)
+            reflectionMergePartial<SubscribeTokenTransfersRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeTokenTransfersRequest): SubscribeTokenTransfersRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated bytes contract_addresses */ 1:
+                    message.contract_addresses.push(reader.bytes());
+                    break;
+                case /* repeated bytes account_addresses */ 2:
+                    message.account_addresses.push(reader.bytes());
+                    break;
+                case /* repeated bytes token_ids */ 3:
+                    message.token_ids.push(reader.bytes());
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SubscribeTokenTransfersRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated bytes contract_addresses = 1; */
+        for (let i = 0; i < message.contract_addresses.length; i++)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
+        /* repeated bytes account_addresses = 2; */
+        for (let i = 0; i < message.account_addresses.length; i++)
+            writer.tag(2, WireType.LengthDelimited).bytes(message.account_addresses[i]);
+        /* repeated bytes token_ids = 3; */
+        for (let i = 0; i < message.token_ids.length; i++)
+            writer.tag(3, WireType.LengthDelimited).bytes(message.token_ids[i]);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.SubscribeTokenTransfersRequest
+ */
+export const SubscribeTokenTransfersRequest = new SubscribeTokenTransfersRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SubscribeTokenTransfersResponse$Type extends MessageType<SubscribeTokenTransfersResponse> {
+    constructor() {
+        super("world.SubscribeTokenTransfersResponse", [
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "transfer", kind: "message", T: () => TokenTransfer }
+        ]);
+    }
+    create(value?: PartialMessage<SubscribeTokenTransfersResponse>): SubscribeTokenTransfersResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.subscription_id = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<SubscribeTokenTransfersResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeTokenTransfersResponse): SubscribeTokenTransfersResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint64 subscription_id */ 1:
+                    message.subscription_id = reader.uint64().toBigInt();
+                    break;
+                case /* types.TokenTransfer transfer */ 2:
+                    message.transfer = TokenTransfer.internalBinaryRead(reader, reader.uint32(), options, message.transfer);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SubscribeTokenTransfersResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint64 subscription_id = 1; */
+        if (message.subscription_id !== 0n)
+            writer.tag(1, WireType.Varint).uint64(message.subscription_id);
+        /* types.TokenTransfer transfer = 2; */
+        if (message.transfer)
+            TokenTransfer.internalBinaryWrite(message.transfer, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.SubscribeTokenTransfersResponse
+ */
+export const SubscribeTokenTransfersResponse = new SubscribeTokenTransfersResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class UpdateTokenTransfersSubscriptionRequest$Type extends MessageType<UpdateTokenTransfersSubscriptionRequest> {
+    constructor() {
+        super("world.UpdateTokenTransfersSubscriptionRequest", [
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "contract_addresses", kind: "scalar", localName: "contract_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "account_addresses", kind: "scalar", localName: "account_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "token_ids", kind: "scalar", localName: "token_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ }
+        ]);
+    }
+    create(value?: PartialMessage<UpdateTokenTransfersSubscriptionRequest>): UpdateTokenTransfersSubscriptionRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.subscription_id = 0n;
+        message.contract_addresses = [];
+        message.account_addresses = [];
+        message.token_ids = [];
+        if (value !== undefined)
+            reflectionMergePartial<UpdateTokenTransfersSubscriptionRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UpdateTokenTransfersSubscriptionRequest): UpdateTokenTransfersSubscriptionRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint64 subscription_id */ 1:
+                    message.subscription_id = reader.uint64().toBigInt();
+                    break;
+                case /* repeated bytes contract_addresses */ 2:
+                    message.contract_addresses.push(reader.bytes());
+                    break;
+                case /* repeated bytes account_addresses */ 3:
+                    message.account_addresses.push(reader.bytes());
+                    break;
+                case /* repeated bytes token_ids */ 4:
+                    message.token_ids.push(reader.bytes());
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: UpdateTokenTransfersSubscriptionRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint64 subscription_id = 1; */
+        if (message.subscription_id !== 0n)
+            writer.tag(1, WireType.Varint).uint64(message.subscription_id);
+        /* repeated bytes contract_addresses = 2; */
+        for (let i = 0; i < message.contract_addresses.length; i++)
+            writer.tag(2, WireType.LengthDelimited).bytes(message.contract_addresses[i]);
+        /* repeated bytes account_addresses = 3; */
+        for (let i = 0; i < message.account_addresses.length; i++)
+            writer.tag(3, WireType.LengthDelimited).bytes(message.account_addresses[i]);
+        /* repeated bytes token_ids = 4; */
+        for (let i = 0; i < message.token_ids.length; i++)
+            writer.tag(4, WireType.LengthDelimited).bytes(message.token_ids[i]);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.UpdateTokenTransfersSubscriptionRequest
+ */
+export const UpdateTokenTransfersSubscriptionRequest = new UpdateTokenTransfersSubscriptionRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RetrieveTokenTransfersRequest$Type extends MessageType<RetrieveTokenTransfersRequest> {
+    constructor() {
+        super("world.RetrieveTokenTransfersRequest", [
+            { no: 1, name: "query", kind: "message", T: () => TokenTransferQuery }
+        ]);
+    }
+    create(value?: PartialMessage<RetrieveTokenTransfersRequest>): RetrieveTokenTransfersRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<RetrieveTokenTransfersRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenTransfersRequest): RetrieveTokenTransfersRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* types.TokenTransferQuery query */ 1:
+                    message.query = TokenTransferQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RetrieveTokenTransfersRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* types.TokenTransferQuery query = 1; */
+        if (message.query)
+            TokenTransferQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.RetrieveTokenTransfersRequest
+ */
+export const RetrieveTokenTransfersRequest = new RetrieveTokenTransfersRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RetrieveTokenTransfersResponse$Type extends MessageType<RetrieveTokenTransfersResponse> {
+    constructor() {
+        super("world.RetrieveTokenTransfersResponse", [
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "transfers", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TokenTransfer }
+        ]);
+    }
+    create(value?: PartialMessage<RetrieveTokenTransfersResponse>): RetrieveTokenTransfersResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.next_cursor = "";
+        message.transfers = [];
+        if (value !== undefined)
+            reflectionMergePartial<RetrieveTokenTransfersResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveTokenTransfersResponse): RetrieveTokenTransfersResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string next_cursor */ 1:
+                    message.next_cursor = reader.string();
+                    break;
+                case /* repeated types.TokenTransfer transfers */ 2:
+                    message.transfers.push(TokenTransfer.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RetrieveTokenTransfersResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string next_cursor = 1; */
+        if (message.next_cursor !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
+        /* repeated types.TokenTransfer transfers = 2; */
+        for (let i = 0; i < message.transfers.length; i++)
+            TokenTransfer.internalBinaryWrite(message.transfers[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.RetrieveTokenTransfersResponse
+ */
+export const RetrieveTokenTransfersResponse = new RetrieveTokenTransfersResponse$Type();
 /**
  * @generated ServiceType for protobuf service world.World
  */
@@ -2577,10 +2970,13 @@ export const World = new ServiceType("world.World", [
     { name: "UpdateTokenBalancesSubscription", options: {}, I: UpdateTokenBalancesSubscriptionRequest, O: Empty },
     { name: "SubscribeTokens", serverStreaming: true, options: {}, I: SubscribeTokensRequest, O: SubscribeTokensResponse },
     { name: "UpdateTokensSubscription", options: {}, I: UpdateTokenSubscriptionRequest, O: Empty },
+    { name: "SubscribeTokenTransfers", serverStreaming: true, options: {}, I: SubscribeTokenTransfersRequest, O: SubscribeTokenTransfersResponse },
+    { name: "UpdateTokenTransfersSubscription", options: {}, I: UpdateTokenTransfersSubscriptionRequest, O: Empty },
     { name: "RetrieveEventMessages", options: {}, I: RetrieveEventMessagesRequest, O: RetrieveEntitiesResponse },
     { name: "RetrieveEvents", options: {}, I: RetrieveEventsRequest, O: RetrieveEventsResponse },
     { name: "SubscribeEvents", serverStreaming: true, options: {}, I: SubscribeEventsRequest, O: SubscribeEventsResponse },
     { name: "RetrieveTokens", options: {}, I: RetrieveTokensRequest, O: RetrieveTokensResponse },
+    { name: "RetrieveTokenTransfers", options: {}, I: RetrieveTokenTransfersRequest, O: RetrieveTokenTransfersResponse },
     { name: "RetrieveTokenBalances", options: {}, I: RetrieveTokenBalancesRequest, O: RetrieveTokenBalancesResponse },
     { name: "RetrieveTransactions", options: {}, I: RetrieveTransactionsRequest, O: RetrieveTransactionsResponse },
     { name: "SubscribeTransactions", serverStreaming: true, options: {}, I: SubscribeTransactionsRequest, O: SubscribeTransactionsResponse },

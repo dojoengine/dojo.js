@@ -11,9 +11,11 @@ import type {
     ControllerQuery as ToriiControllerQuery,
     TokenQuery as ToriiTokenQuery,
     TokenBalanceQuery as ToriiTokenBalanceQuery,
+    TokenContractQuery as ToriiTokenContractQuery,
     TransactionQuery as ToriiTransactionQuery,
     TransactionFilter as ToriiTransactionFilter,
     KeysClause as ToriiKeysClause,
+    ContractType,
 } from "@dojoengine/torii-wasm";
 
 import type {
@@ -29,6 +31,7 @@ import type {
     ControllerQuery as GrpcControllerQuery,
     TokenQuery as GrpcTokenQuery,
     TokenBalanceQuery as GrpcTokenBalanceQuery,
+    TokenContractQuery as GrpcTokenContractQuery,
     TransactionQuery as GrpcTransactionQuery,
     TransactionFilter as GrpcTransactionFilter,
     EventQuery as GrpcEventQuery,
@@ -264,6 +267,16 @@ export function mapTokenBalanceQuery(
     };
 }
 
+export function mapTokenContractQuery(
+    query: ToriiTokenContractQuery
+): GrpcTokenContractQuery {
+    return {
+        contract_addresses: query.contract_addresses.map(hexToBuffer),
+        contract_types: query.contract_types as ContractType[],
+        pagination: mapPagination(query.pagination),
+    };
+}
+
 export function mapTransactionFilter(
     filter: ToriiTransactionFilter
 ): GrpcTransactionFilter {
@@ -320,10 +333,10 @@ export function createRetrieveTokenBalancesRequest(
 }
 
 export function createRetrieveTokenContractsRequest(
-    query: ToriiTokenBalanceQuery
+    query: ToriiTokenContractQuery
 ): RetrieveTokenContractsRequest {
     return {
-        query: mapTokenBalanceQuery(query),
+        query: mapTokenContractQuery(query),
     };
 }
 

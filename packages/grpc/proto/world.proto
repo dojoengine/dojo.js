@@ -40,6 +40,12 @@ service World {
     // Update token subscription
     rpc UpdateTokensSubscription (UpdateTokenSubscriptionRequest) returns (google.protobuf.Empty);
 
+    // Subscribe to token transfer updates.
+    rpc SubscribeTokenTransfers (SubscribeTokenTransfersRequest) returns (stream SubscribeTokenTransfersResponse);
+
+    // Update token transfer subscription
+    rpc UpdateTokenTransfersSubscription (UpdateTokenTransfersSubscriptionRequest) returns (google.protobuf.Empty);
+
     // Retrieve entities
     rpc RetrieveEventMessages (RetrieveEventMessagesRequest) returns (RetrieveEntitiesResponse);
 
@@ -51,6 +57,9 @@ service World {
 
     // Retrieve tokens
     rpc RetrieveTokens (RetrieveTokensRequest) returns (RetrieveTokensResponse);
+
+    // Retrieve token transfers
+    rpc RetrieveTokenTransfers (RetrieveTokenTransfersRequest) returns (RetrieveTokenTransfersResponse);
 
     // Retrieve token balances
     rpc RetrieveTokenBalances (RetrieveTokenBalancesRequest) returns (RetrieveTokenBalancesResponse);
@@ -67,7 +76,7 @@ service World {
     // Retrieve contracts
     rpc RetrieveContracts (RetrieveContractsRequest) returns (RetrieveContractsResponse);
 
-    // Retrieve tokens contracts
+    // Retrieve token contracts
     rpc RetrieveTokenContracts (RetrieveTokenContractsRequest) returns (RetrieveTokenContractsResponse);
 
     // Publish a torii offchain message
@@ -193,13 +202,13 @@ message RetrieveTransactionsResponse {
 
 // A request to retrieve token contracts
 message RetrieveTokenContractsRequest {
-    types.TokenBalanceQuery query = 1;
+    types.TokenContractQuery query = 1;
 }
 
-// A response containing token balances
+// A response containing token contracts
 message RetrieveTokenContractsResponse {
     string next_cursor = 1;
-    repeated types.TokenContract tokens = 2;
+    repeated types.TokenContract token_contracts = 2;
 }
 
 // A request to subscribe to contract updates.
@@ -293,4 +302,45 @@ message PublishMessageBatchRequest {
 
 message PublishMessageBatchResponse {
     repeated PublishMessageResponse responses = 1;
+}
+
+// A request to subscribe to token transfer updates
+message SubscribeTokenTransfersRequest {
+    // The list of contract addresses to subscribe to
+    repeated bytes contract_addresses = 1;
+    // The list of account addresses to subscribe to (as sender or recipient)
+    repeated bytes account_addresses = 2;
+    // The list of token IDs to subscribe to
+    repeated bytes token_ids = 3;
+}
+
+// A response containing token transfer updates
+message SubscribeTokenTransfersResponse {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // The token transfer
+    types.TokenTransfer transfer = 2;
+}
+
+// A request to update a token transfer subscription
+message UpdateTokenTransfersSubscriptionRequest {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // The list of contract addresses to subscribe to
+    repeated bytes contract_addresses = 2;
+    // The list of account addresses to subscribe to (as sender or recipient)
+    repeated bytes account_addresses = 3;
+    // The list of token IDs to subscribe to
+    repeated bytes token_ids = 4;
+}
+
+// A request to retrieve token transfers
+message RetrieveTokenTransfersRequest {
+    types.TokenTransferQuery query = 1;
+}
+
+// A response containing token transfers
+message RetrieveTokenTransfersResponse {
+    string next_cursor = 1;
+    repeated types.TokenTransfer transfers = 2;
 }
