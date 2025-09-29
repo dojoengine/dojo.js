@@ -13,6 +13,7 @@ import type {
     TokenAttributeFilter as ToriiTokenAttributeFilter,
     TokenBalanceQuery as ToriiTokenBalanceQuery,
     TokenContractQuery as ToriiTokenContractQuery,
+    TokenTransferQuery as ToriiTokenTransferQuery,
     TransactionQuery as ToriiTransactionQuery,
     TransactionFilter as ToriiTransactionFilter,
     KeysClause as ToriiKeysClause,
@@ -34,6 +35,7 @@ import type {
     TokenAttributeFilter as GrpcTokenAttributeFilter,
     TokenBalanceQuery as GrpcTokenBalanceQuery,
     TokenContractQuery as GrpcTokenContractQuery,
+    TokenTransferQuery as GrpcTokenTransferQuery,
     TransactionQuery as GrpcTransactionQuery,
     TransactionFilter as GrpcTransactionFilter,
     EventQuery as GrpcEventQuery,
@@ -55,6 +57,7 @@ import type {
     RetrieveTokensRequest,
     RetrieveTokenBalancesRequest,
     RetrieveTokenContractsRequest,
+    RetrieveTokenTransfersRequest,
     RetrieveControllersRequest,
     RetrieveTransactionsRequest,
     RetrieveEventsRequest,
@@ -350,6 +353,17 @@ export function mapTokenContractQuery(
     };
 }
 
+export function mapTokenTransferQuery(
+    query: ToriiTokenTransferQuery
+): GrpcTokenTransferQuery {
+    return {
+        account_addresses: query.account_addresses.map(hexToBuffer),
+        contract_addresses: query.contract_addresses.map(hexToBuffer),
+        token_ids: query.token_ids.map(hexToBuffer),
+        pagination: mapPagination(query.pagination),
+    };
+}
+
 export function mapTransactionFilter(
     filter: ToriiTransactionFilter
 ): GrpcTransactionFilter {
@@ -410,6 +424,14 @@ export function createRetrieveTokenContractsRequest(
 ): RetrieveTokenContractsRequest {
     return {
         query: mapTokenContractQuery(query),
+    };
+}
+
+export function createRetrieveTokenTransfersRequest(
+    query: ToriiTokenTransferQuery
+): RetrieveTokenTransfersRequest {
+    return {
+        query: mapTokenTransferQuery(query),
     };
 }
 

@@ -12,6 +12,8 @@ import {
     TokenBalancesResponseSchema,
     TokenContractSchema,
     TokenContractsResponseSchema,
+    TokenTransferSchema,
+    TokenTransfersResponseSchema,
 } from "./entity-schemas";
 import { EntitySchema, EntitiesResponseSchema } from "./model-schemas";
 import { BufferToHex } from "./base-schemas";
@@ -74,6 +76,18 @@ export function transformTokenContractsResponse(
     return Schema.decodeSync(TokenContractsResponseSchema)(response);
 }
 
+export function transformTokenTransfer(
+    transfer: GrpcTypes.TokenTransfer
+): ToriiTypes.TokenTransfer {
+    return Schema.decodeSync(TokenTransferSchema)(transfer);
+}
+
+export function transformTokenTransfersResponse(
+    response: GrpcTypes.RetrieveTokenTransfersResponse
+): ToriiTypes.TokenTransfers {
+    return Schema.decodeSync(TokenTransfersResponseSchema)(response);
+}
+
 export function transformEntity(entity: GrpcTypes.Entity): ToriiTypes.Entity {
     return Schema.decodeSync(EntitySchema)(entity);
 }
@@ -82,19 +96,6 @@ export function transformEntitiesResponse(
     response: GrpcTypes.RetrieveEntitiesResponse
 ): ToriiTypes.Entities {
     return Schema.decodeSync(EntitiesResponseSchema)(response);
-}
-
-export function transformIndexerUpdate(
-    update: GrpcTypes.SubscribeIndexerResponse
-): ToriiTypes.IndexerUpdate {
-    return {
-        head: Number(update.head),
-        tps: Number(update.tps),
-        last_block_timestamp: Number(update.last_block_timestamp),
-        contract_address: Schema.decodeSync(BufferToHex)(
-            update.contract_address
-        ),
-    };
 }
 
 export function transformMessage(
