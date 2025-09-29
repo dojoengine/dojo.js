@@ -1,5 +1,16 @@
 # @dojoengine/internal
 
+## 1.6.12
+
+### Patch Changes
+
+- 29c10f7: chore: bump torii 1.7.2
+- Updated dependencies [29c10f7]
+  - @dojoengine/core@1.7.4
+  - @dojoengine/torii-client@1.7.3
+  - @dojoengine/torii-wasm@1.7.3
+  - @dojoengine/utils@1.7.2
+
 ## 1.6.11
 
 ### Patch Changes

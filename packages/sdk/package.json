@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/sdk",
-    "version": "1.7.5",
+    "version": "1.7.6",
     "description": "Dojo SDK: Build onchain and provable apps faster",
     "author": "Dojo Team",
     "license": "MIT",

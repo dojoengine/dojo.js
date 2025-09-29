@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.7.3
+
+### Patch Changes
+
+- 29c10f7: chore: bump torii 1.7.2
+- Updated dependencies [29c10f7]
+  - @dojoengine/torii-client@1.7.3
+
 ## 1.7.2
 
 ### Patch Changes

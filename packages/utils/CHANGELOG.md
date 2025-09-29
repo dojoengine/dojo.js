@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.7.2
+
+### Patch Changes
+
+- 29c10f7: chore: bump torii 1.7.2
+
 ## 1.7.1
 
 ### Patch Changes
