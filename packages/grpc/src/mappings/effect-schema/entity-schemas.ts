@@ -261,6 +261,51 @@ export const TokenContractSchema = Schema.transform(
     }
 );
 
+export const TokenTransferSchema = Schema.transform(
+    Schema.Struct({
+        id: Schema.String,
+        contract_address: Schema.Uint8ArrayFromSelf,
+        from_address: Schema.Uint8ArrayFromSelf,
+        to_address: Schema.Uint8ArrayFromSelf,
+        amount: Schema.Uint8ArrayFromSelf,
+        token_id: Schema.optional(Schema.Uint8ArrayFromSelf),
+        executed_at: Schema.BigIntFromSelf,
+        event_id: Schema.optional(Schema.String),
+    }),
+    Schema.Struct({
+        id: Schema.String,
+        contract_address: BufferToHex,
+        from_address: BufferToHex,
+        to_address: BufferToHex,
+        amount: BufferToHex,
+        token_id: OptionalBufferToHex,
+        executed_at: BigIntToNumber,
+        event_id: OptionalString,
+    }),
+    {
+        decode: (grpc) => ({
+            id: grpc.id,
+            contract_address: grpc.contract_address,
+            from_address: grpc.from_address,
+            to_address: grpc.to_address,
+            amount: grpc.amount,
+            token_id: grpc.token_id,
+            executed_at: grpc.executed_at,
+            event_id: grpc.event_id,
+        }),
+        encode: (torii) => ({
+            id: torii.id,
+            contract_address: torii.contract_address,
+            from_address: torii.from_address,
+            to_address: torii.to_address,
+            amount: torii.amount,
+            token_id: torii.token_id,
+            executed_at: BigInt(torii.executed_at),
+            event_id: torii.event_id,
+        }),
+    }
+);
+
 export const TransactionsResponseSchema = Schema.transform(
     Schema.Struct({
         transactions: Schema.Array(TransactionSchema),
@@ -340,6 +385,27 @@ export const TokenBalancesResponseSchema = Schema.transform(
         }),
         encode: (torii) => ({
             balances: torii.items,
+            next_cursor: torii.next_cursor,
+        }),
+    }
+);
+
+export const TokenTransfersResponseSchema = Schema.transform(
+    Schema.Struct({
+        transfers: Schema.Array(TokenTransferSchema),
+        next_cursor: OptionalString,
+    }),
+    Schema.Struct({
+        items: Schema.Array(TokenTransferSchema),
+        next_cursor: Schema.optional(Schema.String),
+    }),
+    {
+        decode: (grpc) => ({
+            items: grpc.transfers,
+            next_cursor: grpc.next_cursor,
+        }),
+        encode: (torii) => ({
+            transfers: torii.items,
             next_cursor: torii.next_cursor,
         }),
     }

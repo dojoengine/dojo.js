@@ -8,6 +8,7 @@ import type {
     TokenBalanceQuery,
     TokenBalances,
     TokenContracts,
+    TokenTransfers,
     Query,
     Clause,
     Transactions,
@@ -18,6 +19,7 @@ import type {
     WasmU256,
     Pagination,
     TokenContractQuery,
+    TokenTransferQuery,
 } from "@dojoengine/torii-wasm";
 
 import type { KeysClause as GrpcKeysClause } from "./generated/types";
@@ -33,6 +35,7 @@ import {
     createRetrieveTokensRequest,
     createRetrieveTokenBalancesRequest,
     createRetrieveTokenContractsRequest,
+    createRetrieveTokenTransfersRequest,
     createRetrieveControllersRequest,
     createRetrieveTransactionsRequest,
     createRetrieveEventsRequest,
@@ -47,13 +50,14 @@ import {
     mapTokensResponse,
     mapTokenBalancesResponse,
     mapTokenContractsResponse,
+    mapTokenTransfersResponse,
     mapTransactionsResponse,
-    mapIndexerUpdate,
     mapMessage,
     mapTransaction,
     mapEntity,
     mapToken,
     mapTokenBalance,
+    mapTokenTransfer,
     mapEventsResponse,
     mapContractsResponse,
     mapWorldMetadataResponse,
@@ -67,13 +71,14 @@ import {
     transformTokensResponse,
     transformTokenBalancesResponse,
     transformTokenContractsResponse,
+    transformTokenTransfersResponse,
     transformTransactionsResponse,
-    transformIndexerUpdate,
     transformMessage,
     transformTransaction,
     transformEntity,
     transformToken,
     transformTokenBalance,
+    transformTokenTransfer,
     transformEventsResponse,
     transformContractsResponse,
     transformWorldMetadataResponse,
@@ -91,6 +96,7 @@ import type {
     SubscribeTransactionsResponse,
     SubscribeTokensResponse,
     SubscribeTokenBalancesResponse,
+    SubscribeTokenTransfersResponse,
     SubscribeEventsResponse,
     SubscribeContractsResponse,
     PublishMessageBatchRequest,
@@ -168,13 +174,14 @@ export class ToriiGrpcClient {
         tokensResponse: (response: any) => any;
         tokenBalancesResponse: (response: any) => any;
         tokenContractsResponse: (response: any) => any;
+        tokenTransfersResponse: (response: any) => any;
         transactionsResponse: (response: any) => any;
-        indexerUpdate: (response: any) => any;
         message: (message: any) => any;
         transaction: (tx: any) => any;
         entity: (entity: any) => any;
         token: (token: any) => any;
         tokenBalance: (balance: any) => any;
+        tokenTransfer: (transfer: any) => any;
         eventsResponse: (response: any) => any;
         contractsResponse: (response: any) => any;
         worldMetadataResponse: (response: any) => any;
@@ -196,13 +203,14 @@ export class ToriiGrpcClient {
                   tokensResponse: transformTokensResponse,
                   tokenBalancesResponse: transformTokenBalancesResponse,
                   tokenContractsResponse: transformTokenContractsResponse,
+                  tokenTransfersResponse: transformTokenTransfersResponse,
                   transactionsResponse: transformTransactionsResponse,
-                  indexerUpdate: transformIndexerUpdate,
                   message: transformMessage,
                   transaction: transformTransaction,
                   entity: transformEntity,
                   token: transformToken,
                   tokenBalance: transformTokenBalance,
+                  tokenTransfer: transformTokenTransfer,
                   eventsResponse: transformEventsResponse,
                   contractsResponse: transformContractsResponse,
                   worldMetadataResponse: transformWorldMetadataResponse,
@@ -215,13 +223,14 @@ export class ToriiGrpcClient {
                   tokensResponse: mapTokensResponse,
                   tokenBalancesResponse: mapTokenBalancesResponse,
                   tokenContractsResponse: mapTokenContractsResponse,
+                  tokenTransfersResponse: mapTokenTransfersResponse,
                   transactionsResponse: mapTransactionsResponse,
-                  indexerUpdate: mapIndexerUpdate,
                   message: mapMessage,
                   transaction: mapTransaction,
                   entity: mapEntity,
                   token: mapToken,
                   tokenBalance: mapTokenBalance,
+                  tokenTransfer: mapTokenTransfer,
                   eventsResponse: mapEventsResponse,
                   contractsResponse: mapContractsResponse,
                   worldMetadataResponse: mapWorldMetadataResponse,
@@ -314,6 +323,16 @@ export class ToriiGrpcClient {
             await this.client.worldClient.retrieveTokenContracts(request)
                 .response;
         return this.mappers.tokenContractsResponse(response);
+    }
+
+    async getTokenTransfers(
+        query: TokenTransferQuery
+    ): Promise<TokenTransfers> {
+        const request = createRetrieveTokenTransfersRequest(query);
+        const response =
+            await this.client.worldClient.retrieveTokenTransfers(request)
+                .response;
+        return this.mappers.tokenTransfersResponse(response);
     }
 
     async getEntities(query: Query): Promise<Entities> {
@@ -497,6 +516,16 @@ export class ToriiGrpcClient {
         });
     }
 
+    async onIndexerUpdated(
+        contract_address: string | null | undefined,
+        callback: Function
+    ): Promise<Subscription> {
+        const query = contract_address
+            ? { contract_addresses: [contract_address] }
+            : {};
+        return this.onContractsUpdated(query, callback);
+    }
+
     async onTokenBalanceUpdated(
         contract_addresses: string[] | null | undefined,
         account_addresses: string[] | null | undefined,
@@ -535,6 +564,51 @@ export class ToriiGrpcClient {
         }
 
         await this.client.worldClient.updateTokenBalancesSubscription({
+            subscription_id: BigInt(grpcSubscription.id),
+            contract_addresses: contract_addresses.map(hexToBuffer),
+            account_addresses: account_addresses.map(hexToBuffer),
+            token_ids: token_ids.map(hexToBuffer),
+        }).response;
+    }
+
+    async onTokenTransferUpdated(
+        contract_addresses: string[] | null | undefined,
+        account_addresses: string[] | null | undefined,
+        token_ids: WasmU256[] | null | undefined,
+        callback: Function
+    ): Promise<Subscription> {
+        return this.createStreamSubscription({
+            createStream: () =>
+                this.client.worldClient.subscribeTokenTransfers({
+                    contract_addresses:
+                        contract_addresses?.map(hexToBuffer) || [],
+                    account_addresses:
+                        account_addresses?.map(hexToBuffer) || [],
+                    token_ids: token_ids?.map(hexToBuffer) || [],
+                }),
+            onMessage: (response: SubscribeTokenTransfersResponse) => {
+                if (response.transfer) {
+                    callback(
+                        this.mappers.tokenTransfer(response.transfer),
+                        response.subscription_id
+                    );
+                }
+            },
+        });
+    }
+
+    async updateTokenTransferSubscription(
+        subscription: Subscription,
+        contract_addresses: string[],
+        account_addresses: string[],
+        token_ids: WasmU256[]
+    ): Promise<void> {
+        const grpcSubscription = this.findSubscription(subscription);
+        if (!grpcSubscription) {
+            throw new Error("Subscription not found");
+        }
+
+        await this.client.worldClient.updateTokenTransfersSubscription({
             subscription_id: BigInt(grpcSubscription.id),
             contract_addresses: contract_addresses.map(hexToBuffer),
             account_addresses: account_addresses.map(hexToBuffer),

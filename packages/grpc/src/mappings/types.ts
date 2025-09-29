@@ -7,6 +7,8 @@ import type {
     TokenBalances as ToriiTokenBalances,
     TokenContract as ToriiTokenContract,
     TokenContracts as ToriiTokenContracts,
+    TokenTransfer as ToriiTokenTransfer,
+    TokenTransfers as ToriiTokenTransfers,
     Controller as ToriiController,
     Controllers as ToriiControllers,
     Transaction as ToriiTransaction,
@@ -15,7 +17,6 @@ import type {
     CallType as ToriiCallType,
     Model as ToriiModel,
     Ty,
-    IndexerUpdate as ToriiIndexerUpdate,
     Message as ToriiMessage,
 } from "@dojoengine/torii-wasm";
 
@@ -24,13 +25,12 @@ import type {
     Token as GrpcToken,
     TokenBalance as GrpcTokenBalance,
     TokenContract as GrpcTokenContract,
+    TokenTransfer as GrpcTokenTransfer,
     Controller as GrpcController,
     Transaction as GrpcTransaction,
     TransactionCall as GrpcTransactionCall,
     Event as GrpcEvent,
     Contract as GrpcContract,
-    World as GrpcWorld,
-    ContractType as GrpcContractType,
 } from "../generated/types";
 
 import { CallType as GrpcCallType } from "../generated/types";
@@ -48,9 +48,9 @@ import type {
     RetrieveTokensResponse,
     RetrieveTokenBalancesResponse,
     RetrieveTokenContractsResponse,
+    RetrieveTokenTransfersResponse,
     RetrieveControllersResponse,
     RetrieveTransactionsResponse,
-    SubscribeIndexerResponse,
     PublishMessageRequest,
     RetrieveEventsResponse,
     RetrieveContractsResponse,
@@ -220,6 +220,32 @@ export function mapTokenContractsResponse(
     };
 }
 
+export function mapTokenTransfer(
+    transfer: GrpcTokenTransfer
+): ToriiTokenTransfer {
+    return {
+        id: transfer.id,
+        contract_address: bufferToHex(transfer.contract_address),
+        from_address: bufferToHex(transfer.from_address),
+        to_address: bufferToHex(transfer.to_address),
+        amount: bufferToHex(transfer.amount),
+        token_id: transfer.token_id
+            ? bufferToHex(transfer.token_id)
+            : undefined,
+        executed_at: Number(transfer.executed_at),
+        event_id: transfer.event_id || undefined,
+    };
+}
+
+export function mapTokenTransfersResponse(
+    response: RetrieveTokenTransfersResponse
+): ToriiTokenTransfers {
+    return {
+        items: response.transfers.map(mapTokenTransfer),
+        next_cursor: response.next_cursor || undefined,
+    };
+}
+
 function mapPrimitive(primitive: GrpcPrimitive): any {
     if (!primitive.primitive_type) return null;
 
@@ -385,17 +411,6 @@ export function mapEntitiesResponse(
     return {
         items: response.entities.map(mapEntity),
         next_cursor: response.next_cursor || undefined,
-    };
-}
-
-export function mapIndexerUpdate(
-    update: SubscribeIndexerResponse
-): ToriiIndexerUpdate {
-    return {
-        head: Number(update.head),
-        tps: Number(update.tps),
-        last_block_timestamp: Number(update.last_block_timestamp),
-        contract_address: bufferToHex(update.contract_address),
     };
 }
 
