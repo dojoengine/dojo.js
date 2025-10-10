@@ -1,5 +1,18 @@
 # Change Log
 
+## 1.8.0
+
+### Minor Changes
+
+- 23457a3: chore: bump torii to 1.8.2
+
+### Patch Changes
+
+- Updated dependencies [23457a3]
+  - @dojoengine/state@1.8.0
+  - @dojoengine/torii-client@1.8.0
+  - @dojoengine/utils@1.8.0
+
 ## 1.7.3
 
 ### Patch Changes
