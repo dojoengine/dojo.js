@@ -33,6 +33,14 @@ import type {
     ToriiResponse,
     UnionOfModelData,
     UpdateTokenBalanceSubscriptionRequest,
+    AggregationQueryInput,
+    AggregationsPage,
+    AggregationEntryView,
+    ActivityQueryInput,
+    ActivitySubscriptionQuery,
+    ActivitiesPage,
+    ActivityEntry,
+    SqlQueryResponse,
 } from "@dojoengine/internal";
 import { ToriiGrpcClient } from "@dojoengine/grpc";
 
@@ -105,6 +113,34 @@ export interface GrpcClientInterface {
         usernames?: string[];
         pagination?: torii.Pagination;
     }): Promise<torii.Controllers>;
+
+    // Aggregations operations
+    getAggregations(query?: AggregationQueryInput): Promise<AggregationsPage>;
+    onAggregationsUpdated(
+        query: AggregationQueryInput,
+        callback: (entry: AggregationEntryView, subscriptionId: bigint) => void
+    ): Promise<torii.Subscription>;
+    updateAggregationsSubscription(
+        subscription: torii.Subscription,
+        query?: AggregationQueryInput
+    ): Promise<void>;
+
+    // Activities operations
+    getActivities(query?: ActivityQueryInput): Promise<ActivitiesPage>;
+    onActivitiesUpdated(
+        query: ActivitySubscriptionQuery,
+        callback: (activity: ActivityEntry, subscriptionId: bigint) => void
+    ): Promise<torii.Subscription>;
+    updateActivitiesSubscription(
+        subscription: torii.Subscription,
+        query?: ActivitySubscriptionQuery
+    ): Promise<void>;
+
+    // SQL execution
+    executeSql(query: string): Promise<SqlQueryResponse>;
+
+    // World metadata
+    getWorlds(worldAddresses?: string[]): Promise<any[]>;
 }
 
 export interface CreateSDKOptions {
@@ -536,6 +572,69 @@ export function createSDK<T extends SchemaType>({
                 return [tokens, subscription];
             }
             return await subscribeToken(client!, request);
+        },
+
+        getAggregations: async (
+            query?: AggregationQueryInput
+        ): Promise<AggregationsPage> => {
+            return await grpcClientInstance.getAggregations(query);
+        },
+
+        onAggregationsUpdated: async (
+            query: AggregationQueryInput,
+            callback: (
+                entry: AggregationEntryView,
+                subscriptionId: bigint
+            ) => void
+        ): Promise<torii.Subscription> => {
+            return (await grpcClientInstance.onAggregationsUpdated(
+                query,
+                callback
+            )) as unknown as torii.Subscription;
+        },
+
+        updateAggregationsSubscription: async (
+            subscription: torii.Subscription,
+            query?: AggregationQueryInput
+        ): Promise<void> => {
+            return await grpcClientInstance.updateAggregationsSubscription(
+                subscription as any,
+                query
+            );
+        },
+
+        getActivities: async (
+            query?: ActivityQueryInput
+        ): Promise<ActivitiesPage> => {
+            return await grpcClientInstance.getActivities(query);
+        },
+
+        onActivitiesUpdated: async (
+            query: ActivitySubscriptionQuery,
+            callback: (activity: ActivityEntry, subscriptionId: bigint) => void
+        ): Promise<torii.Subscription> => {
+            return (await grpcClientInstance.onActivitiesUpdated(
+                query,
+                callback
+            )) as unknown as torii.Subscription;
+        },
+
+        updateActivitiesSubscription: async (
+            subscription: torii.Subscription,
+            query?: ActivitySubscriptionQuery
+        ): Promise<void> => {
+            return await grpcClientInstance.updateActivitiesSubscription(
+                subscription as any,
+                query
+            );
+        },
+
+        executeSql: async (query: string): Promise<SqlQueryResponse> => {
+            return await grpcClientInstance.executeSql(query);
+        },
+
+        getWorlds: async (worldAddresses?: string[]): Promise<any[]> => {
+            return await grpcClientInstance.getWorlds(worldAddresses);
         },
     };
 }

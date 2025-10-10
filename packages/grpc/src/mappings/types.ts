@@ -31,9 +31,21 @@ import type {
     TransactionCall as GrpcTransactionCall,
     Event as GrpcEvent,
     Contract as GrpcContract,
+    AggregationEntry as GrpcAggregationEntry,
+    Activity as GrpcActivity,
+    SqlQueryResponse as GrpcSqlQueryResponse,
+    SqlValue as GrpcSqlValue,
 } from "../generated/types";
 
 import { CallType as GrpcCallType } from "../generated/types";
+import type {
+    AggregationEntryView,
+    AggregationsPage,
+    ActivityEntry,
+    ActivitiesPage,
+    SqlQueryScalar,
+    SqlQueryResponse as ClientSqlQueryResponse,
+} from "../types";
 import type {
     Ty as GrpcTy,
     Primitive as GrpcPrimitive,
@@ -54,7 +66,9 @@ import type {
     PublishMessageRequest,
     RetrieveEventsResponse,
     RetrieveContractsResponse,
-    WorldMetadataResponse,
+    WorldsResponse,
+    RetrieveAggregationsResponse,
+    RetrieveActivitiesResponse,
 } from "../generated/world";
 
 let textDecoder: TextDecoder | undefined = undefined;
@@ -75,6 +89,24 @@ function hexToBuffer(hex: string): Uint8Array {
         bytes[i / 2] = parseInt(cleanHex.substr(i, 2), 16);
     }
     return bytes;
+}
+
+function parseTimestampToSeconds(value: string): number {
+    if (!value) {
+        return 0;
+    }
+
+    const numeric = Number(value);
+    if (!Number.isNaN(numeric)) {
+        return numeric;
+    }
+
+    const parsed = Date.parse(value);
+    if (!Number.isNaN(parsed)) {
+        return Math.floor(parsed / 1000);
+    }
+
+    return 0;
 }
 
 export function mapCallType(callType: GrpcCallType): ToriiCallType {
@@ -402,6 +434,10 @@ export function mapEntity(entity: GrpcEntity): ToriiEntity {
     return {
         hashed_keys: bufferToHex(entity.hashed_keys),
         models,
+        created_at: Number(entity.created_at),
+        updated_at: Number(entity.updated_at),
+        executed_at: Number(entity.executed_at),
+        world_address: bufferToHex(entity.world_address),
     };
 }
 
@@ -470,24 +506,141 @@ export function mapContractsResponse(response: RetrieveContractsResponse): any {
     };
 }
 
-export function mapWorldMetadataResponse(response: WorldMetadataResponse): any {
-    if (!response.world) {
+function mapWorldModel(model: any) {
+    return {
+        selector: bufferToHex(model.selector),
+        namespace: model.namespace,
+        name: model.name,
+        packed_size: model.packed_size,
+        unpacked_size: model.unpacked_size,
+        class_hash: bufferToHex(model.class_hash),
+        layout: bufferToHex(model.layout),
+        schema: bufferToHex(model.schema),
+        contract_address: bufferToHex(model.contract_address),
+        use_legacy_store: model.use_legacy_store,
+        world_address: bufferToHex(model.world_address),
+    };
+}
+
+function mapWorld(world: any) {
+    return {
+        world_address: world.world_address,
+        models: world.models.map(mapWorldModel),
+    };
+}
+
+export function mapWorldMetadataResponse(
+    response: WorldsResponse,
+    preferredWorldAddress?: string
+): any {
+    if (!response.worlds || response.worlds.length === 0) {
         return null;
     }
 
+    const normalizedPreferred = preferredWorldAddress
+        ? preferredWorldAddress.toLowerCase()
+        : undefined;
+
+    const world =
+        (normalizedPreferred
+            ? response.worlds.find(
+                  (candidate) =>
+                      candidate.world_address.toLowerCase() ===
+                      normalizedPreferred
+              )
+            : undefined) ?? response.worlds[0];
+
+    return mapWorld(world);
+}
+
+export function mapWorldsResponse(response: WorldsResponse): any[] {
+    if (!response.worlds) {
+        return [];
+    }
+    return response.worlds.map(mapWorld);
+}
+
+export function mapAggregationEntry(
+    entry: GrpcAggregationEntry
+): AggregationEntryView {
     return {
-        world_address: bufferToHex(response.world.world_address),
-        models: response.world.models.map((model: any) => ({
-            selector: bufferToHex(model.selector),
-            namespace: model.namespace,
-            name: model.name,
-            packed_size: model.packed_size,
-            unpacked_size: model.unpacked_size,
-            class_hash: bufferToHex(model.class_hash),
-            layout: bufferToHex(model.layout),
-            schema: bufferToHex(model.schema),
-            contract_address: bufferToHex(model.contract_address),
-            use_legacy_store: model.use_legacy_store,
-        })),
+        id: entry.id,
+        aggregatorId: entry.aggregator_id,
+        entityId: entry.entity_id,
+        value: bufferToHex(entry.value),
+        displayValue: entry.display_value,
+        position: Number(entry.position),
+        modelId: entry.model_id,
+        createdAt: parseTimestampToSeconds(entry.created_at),
+        updatedAt: parseTimestampToSeconds(entry.updated_at),
     };
+}
+
+export function mapAggregationsResponse(
+    response: RetrieveAggregationsResponse
+): AggregationsPage {
+    const nextCursor = response.next_cursor || undefined;
+    return {
+        items: response.entries.map(mapAggregationEntry),
+        nextCursor,
+        next_cursor: nextCursor,
+    };
+}
+
+export function mapActivity(activity: GrpcActivity): ActivityEntry {
+    return {
+        id: activity.id,
+        worldAddress: bufferToHex(activity.world_address),
+        namespace: activity.namespace,
+        callerAddress: bufferToHex(activity.caller_address),
+        sessionStart: Number(activity.session_start),
+        sessionEnd: Number(activity.session_end),
+        actionCount: activity.action_count,
+        actions: activity.actions,
+        updatedAt: Number(activity.updated_at),
+    };
+}
+
+export function mapActivitiesResponse(
+    response: RetrieveActivitiesResponse
+): ActivitiesPage {
+    const nextCursor = response.next_cursor || undefined;
+    return {
+        items: response.activities.map(mapActivity),
+        nextCursor,
+        next_cursor: nextCursor,
+    };
+}
+
+function mapSqlValue(value: GrpcSqlValue): SqlQueryScalar {
+    if (!value.value_type || value.value_type.oneofKind === undefined) {
+        return null;
+    }
+
+    switch (value.value_type.oneofKind) {
+        case "text":
+            return value.value_type.text;
+        case "integer":
+            return value.value_type.integer;
+        case "real":
+            return value.value_type.real;
+        case "blob":
+            return bufferToHex(value.value_type.blob);
+        case "null":
+            return null;
+        default:
+            return null;
+    }
+}
+
+export function mapSqlQueryResponse(
+    response: GrpcSqlQueryResponse
+): ClientSqlQueryResponse {
+    return response.rows.map((row) => {
+        const mapped: Record<string, SqlQueryScalar> = {};
+        for (const [column, value] of Object.entries(row.fields)) {
+            mapped[column] = mapSqlValue(value);
+        }
+        return mapped;
+    });
 }

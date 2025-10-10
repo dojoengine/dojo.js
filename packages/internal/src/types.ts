@@ -1,4 +1,12 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
+import type {
+    Aggregations as ToriiAggregations,
+    AggregationEntry as ToriiAggregationEntry,
+    AggregationQuery as ToriiAggregationQuery,
+    Activities as ToriiActivities,
+    Activity as ToriiActivity,
+    ActivityQuery as ToriiActivityQuery,
+} from "@dojoengine/torii-wasm/types";
 import type { Result } from "neverthrow";
 import type { Account, StarknetDomain, TypedData } from "starknet";
 import type { Pagination } from "./pagination";
@@ -188,6 +196,91 @@ export type SubscriptionCallbackArgs<T, E = Error> = Success<T> | Failure<E>;
 export type SubscriptionCallback<T> = (
     response: SubscriptionCallbackArgs<T>
 ) => void;
+
+/**
+ * Input shape for aggregation queries.
+ */
+export interface AggregationQueryInput {
+    aggregatorIds?: ToriiAggregationQuery["aggregator_ids"];
+    entityIds?: ToriiAggregationQuery["entity_ids"];
+    pagination?: torii.Pagination;
+}
+
+/**
+ * Aggregation entry returned by Torii aggregations endpoint.
+ */
+export interface AggregationEntryView {
+    id: ToriiAggregationEntry["id"];
+    aggregatorId: ToriiAggregationEntry["aggregator_id"];
+    entityId: ToriiAggregationEntry["entity_id"];
+    value: ToriiAggregationEntry["value"];
+    displayValue: ToriiAggregationEntry["display_value"];
+    position: ToriiAggregationEntry["position"];
+    modelId: ToriiAggregationEntry["model_id"];
+    createdAt: ToriiAggregationEntry["created_at"];
+    updatedAt: ToriiAggregationEntry["updated_at"];
+}
+
+/**
+ * Aggregations page response with cursor support.
+ */
+export interface AggregationsPage {
+    items: AggregationEntryView[];
+    nextCursor?: ToriiAggregations["next_cursor"];
+    next_cursor?: ToriiAggregations["next_cursor"];
+}
+
+/**
+ * Input shape for activity queries.
+ */
+export interface ActivityQueryInput {
+    worldAddresses?: ToriiActivityQuery["world_addresses"];
+    namespaces?: ToriiActivityQuery["namespaces"];
+    callerAddresses?: ToriiActivityQuery["caller_addresses"];
+    fromTime?: ToriiActivityQuery["from_time"];
+    toTime?: ToriiActivityQuery["to_time"];
+    pagination?: torii.Pagination;
+}
+
+/**
+ * Subscription filters for activity updates.
+ */
+export interface ActivitySubscriptionQuery {
+    worldAddresses?: ToriiActivityQuery["world_addresses"];
+    namespaces?: ToriiActivityQuery["namespaces"];
+    callerAddresses?: ToriiActivityQuery["caller_addresses"];
+}
+
+/**
+ * Activity entry returned by Torii activities endpoint.
+ */
+export interface ActivityEntry {
+    id: ToriiActivity["id"];
+    worldAddress: ToriiActivity["world_address"];
+    namespace: ToriiActivity["namespace"];
+    callerAddress: ToriiActivity["caller_address"];
+    sessionStart: ToriiActivity["session_start"];
+    sessionEnd: ToriiActivity["session_end"];
+    actionCount: ToriiActivity["action_count"];
+    actions: ToriiActivity["actions"];
+    updatedAt: ToriiActivity["updated_at"];
+}
+
+/**
+ * Activities page response with cursor support.
+ */
+export interface ActivitiesPage {
+    items: ActivityEntry[];
+    nextCursor?: ToriiActivities["next_cursor"];
+    next_cursor?: ToriiActivities["next_cursor"];
+}
+
+/**
+ * SQL query result rows returned by Torii.
+ */
+export type SqlQueryIntegerValue = bigint | string;
+export type SqlQueryValue = string | number | SqlQueryIntegerValue | null;
+export type SqlQueryResponse = Array<Record<string, SqlQueryValue>>;
 
 /**
  * Request type for subscribing to token balance updates.
@@ -489,6 +582,60 @@ export interface SDK<T extends SchemaType> {
         usernames: string[],
         pagination?: torii.Pagination
     ) => Promise<torii.Controllers>;
+
+    /**
+     * Gets aggregation entries (leaderboards, rankings, stats).
+     */
+    getAggregations: (
+        query?: AggregationQueryInput
+    ) => Promise<AggregationsPage>;
+
+    /**
+     * Subscribes to aggregation updates (leaderboards, rankings).
+     */
+    onAggregationsUpdated: (
+        query: AggregationQueryInput,
+        callback: (entry: AggregationEntryView, subscriptionId: bigint) => void
+    ) => Promise<torii.Subscription>;
+
+    /**
+     * Updates an existing aggregations subscription.
+     */
+    updateAggregationsSubscription: (
+        subscription: torii.Subscription,
+        query?: AggregationQueryInput
+    ) => Promise<void>;
+
+    /**
+     * Gets activity data (user session tracking).
+     */
+    getActivities: (query?: ActivityQueryInput) => Promise<ActivitiesPage>;
+
+    /**
+     * Subscribes to activity updates (user sessions).
+     */
+    onActivitiesUpdated: (
+        query: ActivitySubscriptionQuery,
+        callback: (activity: ActivityEntry, subscriptionId: bigint) => void
+    ) => Promise<torii.Subscription>;
+
+    /**
+     * Updates an existing activities subscription.
+     */
+    updateActivitiesSubscription: (
+        subscription: torii.Subscription,
+        query?: ActivitySubscriptionQuery
+    ) => Promise<void>;
+
+    /**
+     * Executes a SQL query against the Torii database.
+     */
+    executeSql: (query: string) => Promise<SqlQueryResponse>;
+
+    /**
+     * Gets metadata for multiple worlds.
+     */
+    getWorlds: (worldAddresses?: string[]) => Promise<any[]>;
 }
 
 /**

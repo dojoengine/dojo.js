@@ -18,6 +18,8 @@ import type {
     TransactionFilter as ToriiTransactionFilter,
     KeysClause as ToriiKeysClause,
     ContractType as ToriiContractType,
+    AggregationQuery as ToriiAggregationQuery,
+    ActivityQuery as ToriiActivityQuery,
 } from "@dojoengine/torii-wasm";
 
 import type {
@@ -40,6 +42,8 @@ import type {
     TransactionFilter as GrpcTransactionFilter,
     EventQuery as GrpcEventQuery,
     ContractQuery as GrpcContractQuery,
+    AggregationQuery as GrpcAggregationQuery,
+    ActivityQuery as GrpcActivityQuery,
 } from "../generated/types";
 
 import {
@@ -53,7 +57,6 @@ import {
 
 import type {
     RetrieveEntitiesRequest,
-    RetrieveEventMessagesRequest,
     RetrieveTokensRequest,
     RetrieveTokenBalancesRequest,
     RetrieveTokenContractsRequest,
@@ -62,6 +65,8 @@ import type {
     RetrieveTransactionsRequest,
     RetrieveEventsRequest,
     RetrieveContractsRequest,
+    RetrieveAggregationsRequest,
+    RetrieveActivitiesRequest,
 } from "../generated/world";
 
 function hexToBuffer(hex: string): Uint8Array {
@@ -290,13 +295,32 @@ export function mapClause(clause: ToriiClause): GrpcClause {
     throw new Error("Unknown clause type");
 }
 
+type QueryWithWorldAddresses = ToriiQuery & {
+    world_addresses?: string[];
+    worldAddresses?: string[];
+};
+
+function mapWorldAddresses(
+    addresses: string[] | undefined | null
+): Uint8Array[] {
+    if (!addresses || addresses.length === 0) {
+        return [];
+    }
+    return addresses.map((address) => hexToBuffer(address));
+}
+
 export function mapQuery(query: ToriiQuery): GrpcQuery {
+    const queryWithWorlds = query as QueryWithWorldAddresses;
+    const worldAddresses =
+        queryWithWorlds.world_addresses ?? queryWithWorlds.worldAddresses;
+
     return {
         pagination: mapPagination(query.pagination),
         clause: query.clause ? mapClause(query.clause) : undefined,
         no_hashed_keys: query.no_hashed_keys,
         models: query.models,
         historical: query.historical,
+        world_addresses: mapWorldAddresses(worldAddresses),
     };
 }
 
@@ -397,7 +421,7 @@ export function createRetrieveEntitiesRequest(
 
 export function createRetrieveEventMessagesRequest(
     query: ToriiQuery
-): RetrieveEventMessagesRequest {
+): RetrieveEntitiesRequest {
     return {
         query: mapQuery(query),
     };
@@ -492,5 +516,63 @@ export function createRetrieveContractsRequest(query: {
                 query.contract_addresses?.map(hexToBuffer) || [],
             contract_types: normalizeGrpcContractTypes(query.contract_types),
         },
+    };
+}
+
+function mapAggregationQuery(
+    query?: ToriiAggregationQuery
+): GrpcAggregationQuery | undefined {
+    if (!query) {
+        return undefined;
+    }
+    return {
+        aggregator_ids: query.aggregator_ids ?? [],
+        entity_ids: query.entity_ids ?? [],
+        pagination: query.pagination
+            ? mapPagination(query.pagination)
+            : undefined,
+    };
+}
+
+export function createRetrieveAggregationsRequest(
+    query?: ToriiAggregationQuery
+): RetrieveAggregationsRequest {
+    return {
+        query: mapAggregationQuery(query),
+    };
+}
+
+function mapActivityQuery(
+    query?: ToriiActivityQuery
+): GrpcActivityQuery | undefined {
+    if (!query) {
+        return undefined;
+    }
+    const toOptionalBigInt = (
+        value: string | number | undefined | null
+    ): bigint | undefined => {
+        if (value === undefined || value === null) {
+            return undefined;
+        }
+        return BigInt(value);
+    };
+
+    return {
+        world_addresses: (query.world_addresses ?? []).map(hexToBuffer),
+        namespaces: query.namespaces ?? [],
+        caller_addresses: (query.caller_addresses ?? []).map(hexToBuffer),
+        from_time: toOptionalBigInt(query.from_time),
+        to_time: toOptionalBigInt(query.to_time),
+        pagination: query.pagination
+            ? mapPagination(query.pagination)
+            : undefined,
+    };
+}
+
+export function createRetrieveActivitiesRequest(
+    query?: ToriiActivityQuery
+): RetrieveActivitiesRequest {
+    return {
+        query: mapActivityQuery(query),
     };
 }

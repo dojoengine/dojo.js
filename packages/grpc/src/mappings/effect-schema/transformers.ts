@@ -15,8 +15,21 @@ import {
     TokenTransferSchema,
     TokenTransfersResponseSchema,
 } from "./entity-schemas";
-import { EntitySchema, EntitiesResponseSchema } from "./model-schemas";
+import {
+    EntitySchema,
+    EntitiesResponseSchema,
+    AggregationEntrySchema,
+    AggregationsResponseSchema,
+    ActivitySchema,
+    ActivitiesResponseSchema,
+} from "./model-schemas";
 import { BufferToHex } from "./base-schemas";
+import type {
+    AggregationEntryView,
+    AggregationsPage,
+    ActivityEntry,
+    ActivitiesPage,
+} from "../../types";
 
 export function transformTransaction(
     tx: GrpcTypes.Transaction
@@ -98,6 +111,28 @@ export function transformEntitiesResponse(
     return Schema.decodeSync(EntitiesResponseSchema)(response);
 }
 
+export function transformAggregationEntry(
+    entry: GrpcTypes.AggregationEntry
+): AggregationEntryView {
+    return Schema.decodeSync(AggregationEntrySchema)(entry);
+}
+
+export function transformAggregationsResponse(
+    response: GrpcTypes.RetrieveAggregationsResponse
+): AggregationsPage {
+    return Schema.decodeSync(AggregationsResponseSchema)(response);
+}
+
+export function transformActivity(activity: GrpcTypes.Activity): ActivityEntry {
+    return Schema.decodeSync(ActivitySchema)(activity);
+}
+
+export function transformActivitiesResponse(
+    response: GrpcTypes.RetrieveActivitiesResponse
+): ActivitiesPage {
+    return Schema.decodeSync(ActivitiesResponseSchema)(response);
+}
+
 export function transformMessage(
     message: ToriiTypes.Message
 ): GrpcTypes.PublishMessageRequest {
@@ -155,16 +190,30 @@ export function transformContractsResponse(response: any): any {
     };
 }
 
-export function transformWorldMetadataResponse(response: any): any {
-    if (!response.world) {
+export function transformWorldMetadataResponse(
+    response: GrpcTypes.WorldsResponse,
+    preferredWorldAddress?: string
+): any {
+    if (!response.worlds || response.worlds.length === 0) {
         return null;
     }
 
+    const normalizedPreferred = preferredWorldAddress
+        ? preferredWorldAddress.toLowerCase()
+        : undefined;
+
+    const world =
+        (normalizedPreferred
+            ? response.worlds.find(
+                  (candidate) =>
+                      candidate.world_address.toLowerCase() ===
+                      normalizedPreferred
+              )
+            : undefined) ?? response.worlds[0];
+
     return {
-        world_address: Schema.decodeSync(BufferToHex)(
-            response.world.world_address
-        ),
-        models: response.world.models.map((model: any) => ({
+        world_address: world.world_address,
+        models: world.models.map((model: any) => ({
             selector: Schema.decodeSync(BufferToHex)(model.selector),
             namespace: model.namespace,
             name: model.name,
@@ -177,6 +226,7 @@ export function transformWorldMetadataResponse(response: any): any {
                 model.contract_address
             ),
             use_legacy_store: model.use_legacy_store,
+            world_address: Schema.decodeSync(BufferToHex)(model.world_address),
         })),
     };
 }

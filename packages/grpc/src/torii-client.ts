@@ -20,7 +20,20 @@ import type {
     Pagination,
     TokenContractQuery,
     TokenTransferQuery,
+    AggregationQuery,
+    ActivityQuery,
 } from "@dojoengine/torii-wasm";
+
+import type {
+    AggregationQueryInput,
+    AggregationsPage,
+    AggregationEntryView,
+    ActivityQueryInput,
+    ActivitySubscriptionQuery,
+    ActivitiesPage,
+    ActivityEntry,
+    SqlQueryResponse,
+} from "./types";
 
 import type { KeysClause as GrpcKeysClause } from "./generated/types";
 
@@ -40,6 +53,8 @@ import {
     createRetrieveTransactionsRequest,
     createRetrieveEventsRequest,
     createRetrieveContractsRequest,
+    createRetrieveAggregationsRequest,
+    createRetrieveActivitiesRequest,
     mapTransactionFilter,
     mapClause,
 } from "./mappings/query";
@@ -61,8 +76,14 @@ import {
     mapEventsResponse,
     mapContractsResponse,
     mapWorldMetadataResponse,
+    mapWorldsResponse,
     mapEvent,
     mapContract,
+    mapAggregationsResponse,
+    mapAggregationEntry,
+    mapActivitiesResponse,
+    mapActivity,
+    mapSqlQueryResponse,
 } from "./mappings/types";
 
 import {
@@ -84,6 +105,10 @@ import {
     transformWorldMetadataResponse,
     transformEvent,
     transformContract,
+    transformAggregationsResponse,
+    transformAggregationEntry,
+    transformActivitiesResponse,
+    transformActivity,
 } from "./mappings/effect-schema/transformers";
 
 import { Schema } from "effect";
@@ -99,6 +124,8 @@ import type {
     SubscribeTokenTransfersResponse,
     SubscribeEventsResponse,
     SubscribeContractsResponse,
+    SubscribeAggregationsResponse,
+    SubscribeActivitiesResponse,
     PublishMessageBatchRequest,
 } from "./generated/world";
 
@@ -168,6 +195,9 @@ export class ToriiGrpcClient {
     private nextSubscriptionId = 1n;
     private subscriptions = new Map<bigint, ToriiSubscription>();
     private useEffectSchema: boolean;
+    private worldAddress: string | undefined;
+    private worldAddressBytes: Uint8Array | undefined;
+    private defaultWorldAddresses: Uint8Array[];
     private mappers: {
         entitiesResponse: (response: any) => any;
         controllersResponse: (response: any) => any;
@@ -184,15 +214,27 @@ export class ToriiGrpcClient {
         tokenTransfer: (transfer: any) => any;
         eventsResponse: (response: any) => any;
         contractsResponse: (response: any) => any;
-        worldMetadataResponse: (response: any) => any;
+        worldMetadataResponse: (response: any, worldAddress?: string) => any;
         event: (event: any) => any;
         contract: (contract: any) => any;
+        aggregationsResponse: (response: any) => AggregationsPage;
+        aggregationEntry: (entry: any) => AggregationEntryView;
+        activitiesResponse: (response: any) => ActivitiesPage;
+        activity: (activity: any) => ActivityEntry;
+        sqlQueryResponse: (response: any) => SqlQueryResponse;
     };
 
     constructor(config: ToriiGrpcClientConfig) {
         this.client = new DojoGrpcClient({
             url: config.toriiUrl,
         });
+        this.worldAddress = config.worldAddress ?? undefined;
+        this.worldAddressBytes = this.worldAddress
+            ? hexToBuffer(this.worldAddress)
+            : undefined;
+        this.defaultWorldAddresses = this.worldAddressBytes
+            ? [this.worldAddressBytes]
+            : [];
         this.useEffectSchema = config.useEffectSchema ?? false;
 
         // Initialize mappers based on schema preference
@@ -216,6 +258,11 @@ export class ToriiGrpcClient {
                   worldMetadataResponse: transformWorldMetadataResponse,
                   event: transformEvent,
                   contract: transformContract,
+                  aggregationsResponse: transformAggregationsResponse,
+                  aggregationEntry: transformAggregationEntry,
+                  activitiesResponse: transformActivitiesResponse,
+                  activity: transformActivity,
+                  sqlQueryResponse: mapSqlQueryResponse,
               }
             : {
                   entitiesResponse: mapEntitiesResponse,
@@ -236,6 +283,11 @@ export class ToriiGrpcClient {
                   worldMetadataResponse: mapWorldMetadataResponse,
                   event: mapEvent,
                   contract: mapContract,
+                  aggregationsResponse: mapAggregationsResponse,
+                  aggregationEntry: mapAggregationEntry,
+                  activitiesResponse: mapActivitiesResponse,
+                  activity: mapActivity,
+                  sqlQueryResponse: mapSqlQueryResponse,
               };
     }
 
@@ -279,6 +331,97 @@ export class ToriiGrpcClient {
         }
 
         return new Subscription(subscription);
+    }
+
+    private cloneWorldAddresses(addresses: Uint8Array[]): Uint8Array[] {
+        return addresses.map((addr) => new Uint8Array(addr));
+    }
+
+    private normalizeWorldAddresses(addresses?: string[] | null): Uint8Array[] {
+        if (addresses && addresses.length > 0) {
+            return addresses.map((address) => hexToBuffer(address));
+        }
+        return this.cloneWorldAddresses(this.defaultWorldAddresses);
+    }
+
+    private ensureWorldAddressesList(list?: Uint8Array[] | null): Uint8Array[] {
+        if (list && list.length > 0) {
+            return list;
+        }
+        return this.cloneWorldAddresses(this.defaultWorldAddresses);
+    }
+
+    private toAggregationQueryInput(
+        query?: AggregationQueryInput
+    ): AggregationQuery | undefined {
+        if (!query) {
+            return undefined;
+        }
+        const result: Partial<AggregationQuery> = {
+            aggregator_ids: query.aggregatorIds ?? [],
+            entity_ids: query.entityIds ?? [],
+        };
+        if (query.pagination) {
+            result.pagination = query.pagination;
+        }
+        return result as AggregationQuery;
+    }
+
+    private toActivityQueryInput(
+        query?: ActivityQueryInput
+    ): ActivityQuery | undefined {
+        const worldAddresses =
+            query?.worldAddresses && query.worldAddresses.length > 0
+                ? query.worldAddresses
+                : this.worldAddress
+                  ? [this.worldAddress]
+                  : [];
+
+        const hasAdditionalFilters = Boolean(
+            query?.namespaces?.length ||
+                query?.callerAddresses?.length ||
+                query?.fromTime !== undefined ||
+                query?.toTime !== undefined ||
+                query?.pagination
+        );
+
+        if (!worldAddresses.length && !hasAdditionalFilters) {
+            return undefined;
+        }
+
+        const result: Partial<ActivityQuery> = {
+            world_addresses: worldAddresses,
+            namespaces: query?.namespaces ?? [],
+            caller_addresses: query?.callerAddresses ?? [],
+        };
+
+        if (query?.fromTime !== undefined && query.fromTime !== null) {
+            result.from_time = query.fromTime.toString();
+        }
+
+        if (query?.toTime !== undefined && query.toTime !== null) {
+            result.to_time = query.toTime.toString();
+        }
+
+        if (query?.pagination) {
+            result.pagination = query.pagination;
+        }
+
+        return result as ActivityQuery;
+    }
+
+    private toActivitySubscriptionFilters(query?: ActivitySubscriptionQuery): {
+        world_addresses: Uint8Array[];
+        namespaces: string[];
+        caller_addresses: Uint8Array[];
+    } {
+        return {
+            world_addresses: this.normalizeWorldAddresses(
+                query?.worldAddresses
+            ),
+            namespaces: query?.namespaces ?? [],
+            caller_addresses: query?.callerAddresses?.map(hexToBuffer) ?? [],
+        };
     }
 
     async getControllers(query: ControllerQuery): Promise<Controllers> {
@@ -337,6 +480,11 @@ export class ToriiGrpcClient {
 
     async getEntities(query: Query): Promise<Entities> {
         const request = createRetrieveEntitiesRequest(query);
+        if (request.query) {
+            request.query.world_addresses = this.ensureWorldAddressesList(
+                request.query.world_addresses
+            );
+        }
         const response =
             await this.client.worldClient.retrieveEntities(request).response;
         return this.mappers.entitiesResponse(response);
@@ -363,6 +511,11 @@ export class ToriiGrpcClient {
 
     async getEventMessages(query: Query): Promise<Entities> {
         const request = createRetrieveEventMessagesRequest(query);
+        if (request.query) {
+            request.query.world_addresses = this.ensureWorldAddressesList(
+                request.query.world_addresses
+            );
+        }
         const response =
             await this.client.worldClient.retrieveEventMessages(request)
                 .response;
@@ -408,12 +561,16 @@ export class ToriiGrpcClient {
 
     async onEntityUpdated(
         clause: Clause | null | undefined,
-        callback: Function
+        callback: Function,
+        worldAddresses?: string[]
     ): Promise<Subscription> {
+        const worldAddressesBytes =
+            this.normalizeWorldAddresses(worldAddresses);
         return this.createStreamSubscription({
             createStream: () =>
                 this.client.worldClient.subscribeEntities({
                     clause: clause ? mapClause(clause) : undefined,
+                    world_addresses: worldAddressesBytes,
                 }),
             onMessage: (response: SubscribeEntityResponse) => {
                 if (response.entity) {
@@ -428,7 +585,8 @@ export class ToriiGrpcClient {
 
     async updateEntitySubscription(
         subscription: Subscription,
-        clause?: Clause | null
+        clause?: Clause | null,
+        worldAddresses?: string[]
     ): Promise<void> {
         const grpcSubscription = this.findSubscription(subscription);
         if (!grpcSubscription) {
@@ -438,17 +596,22 @@ export class ToriiGrpcClient {
         await this.client.worldClient.updateEntitiesSubscription({
             subscription_id: BigInt(grpcSubscription.id),
             clause: clause ? mapClause(clause) : undefined,
+            world_addresses: this.normalizeWorldAddresses(worldAddresses),
         }).response;
     }
 
     async onEventMessageUpdated(
         clause: Clause | null | undefined,
-        callback: Function
+        callback: Function,
+        worldAddresses?: string[]
     ): Promise<Subscription> {
+        const worldAddressesBytes =
+            this.normalizeWorldAddresses(worldAddresses);
         return this.createStreamSubscription({
             createStream: () =>
                 this.client.worldClient.subscribeEventMessages({
                     clause: clause ? mapClause(clause) : undefined,
+                    world_addresses: worldAddressesBytes,
                 }),
             onMessage: (response: SubscribeEntityResponse) => {
                 if (response.entity) {
@@ -462,8 +625,9 @@ export class ToriiGrpcClient {
     }
 
     async updateEventMessageSubscription(
-        subscription: GrpcSubscription,
-        clause?: Clause | null
+        subscription: GrpcSubscription | Subscription,
+        clause?: Clause | null,
+        worldAddresses?: string[]
     ): Promise<void> {
         const grpcSubscription = this.findSubscription(subscription);
         if (!grpcSubscription) {
@@ -473,6 +637,7 @@ export class ToriiGrpcClient {
         await this.client.worldClient.updateEventMessagesSubscription({
             subscription_id: BigInt(grpcSubscription.id),
             clause: clause ? mapClause(clause) : undefined,
+            world_addresses: this.normalizeWorldAddresses(worldAddresses),
         }).response;
     }
 
@@ -617,30 +782,54 @@ export class ToriiGrpcClient {
     }
 
     async publishMessage(message: Message): Promise<string> {
-        const request = this.mappers.message(message);
+        if (!this.worldAddressBytes) {
+            throw new Error("World address is required to publish messages");
+        }
+
+        const worldAddressBytes = this.worldAddressBytes;
+        const request = {
+            ...this.mappers.message(message),
+            world_address: new Uint8Array(worldAddressBytes),
+        };
         const response =
             await this.client.worldClient.publishMessage(request).response;
-        return this.useEffectSchema
-            ? Schema.decodeSync(BufferToHex)(response.entity_id)
-            : bufferToHex(response.entity_id);
+        return response.id;
     }
 
     async publishMessageBatch(messages: Message[]): Promise<string[]> {
+        if (!this.worldAddressBytes) {
+            throw new Error("World address is required to publish messages");
+        }
+
+        const worldAddressBytes = this.worldAddressBytes;
         const request: PublishMessageBatchRequest = {
-            messages: messages.map(this.mappers.message),
+            messages: messages.map((message) => ({
+                ...this.mappers.message(message),
+                world_address: new Uint8Array(worldAddressBytes),
+            })),
         };
         const response =
             await this.client.worldClient.publishMessageBatch(request).response;
-        const hexConverter = this.useEffectSchema
-            ? (buffer: Uint8Array) => Schema.decodeSync(BufferToHex)(buffer)
-            : bufferToHex;
-        return response.responses.map((r) => hexConverter(r.entity_id));
+        return response.responses.map((r) => r.id);
     }
 
     async getWorldMetadata(): Promise<any> {
-        const response = await this.client.worldClient.worldMetadata({})
-            .response;
-        return this.mappers.worldMetadataResponse(response);
+        const response = await this.client.worldClient.worlds({
+            world_addresses: this.cloneWorldAddresses(
+                this.defaultWorldAddresses
+            ),
+        }).response;
+        return this.mappers.worldMetadataResponse(response, this.worldAddress);
+    }
+
+    async getWorlds(worldAddresses?: string[]): Promise<any[]> {
+        const response = await this.client.worldClient.worlds({
+            world_addresses: worldAddresses
+                ? worldAddresses.map((address) => hexToBuffer(address))
+                : [],
+        }).response;
+
+        return mapWorldsResponse(response);
     }
 
     async getEvents(query: {
@@ -661,6 +850,18 @@ export class ToriiGrpcClient {
         const response =
             await this.client.worldClient.retrieveContracts(request).response;
         return this.mappers.contractsResponse(response);
+    }
+
+    async getAggregations(
+        query?: AggregationQueryInput
+    ): Promise<AggregationsPage> {
+        const request = createRetrieveAggregationsRequest(
+            this.toAggregationQueryInput(query)
+        );
+        const response =
+            await this.client.worldClient.retrieveAggregations(request)
+                .response;
+        return this.mappers.aggregationsResponse(response) as AggregationsPage;
     }
 
     async updateTokensSubscription(
@@ -704,10 +905,120 @@ export class ToriiGrpcClient {
         });
     }
 
+    async onAggregationsUpdated(
+        query: AggregationQueryInput | undefined,
+        callback: (entry: AggregationEntryView, subscriptionId: bigint) => void
+    ): Promise<Subscription> {
+        const aggregationQuery = this.toAggregationQueryInput(query);
+        const aggregatorIds = aggregationQuery?.aggregator_ids ?? [];
+        const entityIds = aggregationQuery?.entity_ids ?? [];
+
+        return this.createStreamSubscription({
+            createStream: () =>
+                this.client.worldClient.subscribeAggregations({
+                    aggregator_ids: aggregatorIds ?? [],
+                    entity_ids: entityIds ?? [],
+                }),
+            onMessage: (response: SubscribeAggregationsResponse) => {
+                if (response.entry) {
+                    callback(
+                        this.mappers.aggregationEntry(
+                            response.entry
+                        ) as AggregationEntryView,
+                        response.subscription_id
+                    );
+                }
+            },
+        });
+    }
+
+    async updateAggregationsSubscription(
+        subscription: Subscription,
+        query?: AggregationQueryInput
+    ): Promise<void> {
+        const grpcSubscription = this.findSubscription(subscription);
+        if (!grpcSubscription) {
+            throw new Error("Subscription not found");
+        }
+
+        const aggregationQuery = this.toAggregationQueryInput(query);
+
+        await this.client.worldClient.updateAggregationsSubscription({
+            subscription_id: BigInt(grpcSubscription.id),
+            aggregator_ids: aggregationQuery?.aggregator_ids ?? [],
+            entity_ids: aggregationQuery?.entity_ids ?? [],
+        }).response;
+    }
+
+    async getActivities(query?: ActivityQueryInput): Promise<ActivitiesPage> {
+        const request = createRetrieveActivitiesRequest(
+            this.toActivityQueryInput(query)
+        );
+        const response =
+            await this.client.worldClient.retrieveActivities(request).response;
+        return this.mappers.activitiesResponse(response) as ActivitiesPage;
+    }
+
+    async onActivitiesUpdated(
+        query: ActivitySubscriptionQuery | undefined,
+        callback: (activity: ActivityEntry, subscriptionId: bigint) => void
+    ): Promise<Subscription> {
+        const filters = this.toActivitySubscriptionFilters(query);
+
+        return this.createStreamSubscription({
+            createStream: () =>
+                this.client.worldClient.subscribeActivities({
+                    world_addresses: filters.world_addresses,
+                    namespaces: filters.namespaces,
+                    caller_addresses: filters.caller_addresses,
+                }),
+            onMessage: (response: SubscribeActivitiesResponse) => {
+                if (response.activity) {
+                    callback(
+                        this.mappers.activity(
+                            response.activity
+                        ) as ActivityEntry,
+                        response.subscription_id
+                    );
+                }
+            },
+        });
+    }
+
+    async updateActivitiesSubscription(
+        subscription: Subscription,
+        query?: ActivitySubscriptionQuery
+    ): Promise<void> {
+        const grpcSubscription = this.findSubscription(subscription);
+        if (!grpcSubscription) {
+            throw new Error("Subscription not found");
+        }
+
+        const filters = this.toActivitySubscriptionFilters(query);
+
+        await this.client.worldClient.updateActivitiesSubscription({
+            subscription_id: BigInt(grpcSubscription.id),
+            world_addresses: filters.world_addresses,
+            namespaces: filters.namespaces,
+            caller_addresses: filters.caller_addresses,
+        }).response;
+    }
+
+    async executeSql(query: string): Promise<SqlQueryResponse> {
+        const response = await this.client.worldClient.executeSql({
+            query,
+        }).response;
+        return this.mappers.sqlQueryResponse(response) as SqlQueryResponse;
+    }
+
     private findSubscription(
-        subscription: GrpcSubscription
+        subscription: GrpcSubscription | Subscription
     ): ToriiSubscription | undefined {
-        return this.subscriptions.get(subscription.id);
+        const subscriptionId =
+            subscription instanceof Subscription
+                ? subscription.id
+                : subscription.id;
+        return this.subscriptions.get(subscriptionId);
     }
 
     destroy() {

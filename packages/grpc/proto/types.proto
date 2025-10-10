@@ -29,8 +29,9 @@ message Model {
     bytes schema = 8;
     // felt bytes of the contract address of the component
     bytes contract_address = 9;
-
     bool use_legacy_store = 10;
+    // The world address of the model
+    bytes world_address = 11;
 }
 
 message Entity {
@@ -44,6 +45,8 @@ message Entity {
     uint64 updated_at = 4;
     // Block timestamp when the entity was updated
     uint64 executed_at = 5;
+    // The world address of the entity
+    bytes world_address = 6;
 }
 
 message Event {
@@ -61,6 +64,7 @@ message Query {
     repeated string models = 3;
     Pagination pagination = 4;
     bool historical = 5;
+    repeated bytes world_addresses = 6;
 }
 
 message EventQuery {
@@ -333,6 +337,42 @@ message TransactionQuery {
     Pagination pagination = 2;
 }
 
+// Activity tracking for user sessions
+message Activity {
+    // Unique identifier: world_address:namespace:caller_address:session_start_timestamp
+    string id = 1;
+    // World contract address
+    bytes world_address = 2;
+    // Namespace
+    string namespace = 3;
+    // Caller address
+    bytes caller_address = 4;
+    // Session start time
+    uint64 session_start = 5;
+    // Session end time
+    uint64 session_end = 6;
+    // Total action count in session
+    uint32 action_count = 7;
+    // Map of action names to call counts
+    map<string, uint32> actions = 8;
+    // Last update timestamp
+    uint64 updated_at = 9;
+}
+
+message ActivityQuery {
+    // Filter by world addresses
+    repeated bytes world_addresses = 1;
+    // Filter by namespaces
+    repeated string namespaces = 2;
+    // Filter by caller addresses
+    repeated bytes caller_addresses = 3;
+    // Filter by time range (unix timestamps)
+    optional uint64 from_time = 4;
+    optional uint64 to_time = 5;
+    // Pagination
+    Pagination pagination = 6;
+}
+
 enum ContractType {
     WORLD = 0;
     ERC20 = 1;
@@ -340,6 +380,35 @@ enum ContractType {
     ERC1155 = 3;
     UDC = 4;
     OTHER = 5;
+}
+
+// SQL query value types
+message SqlValue {
+    oneof value_type {
+        string text = 1;
+        int64 integer = 2;
+        double real = 3;
+        bytes blob = 4;
+        bool null = 5;
+    }
+}
+
+// A single row from SQL query results
+message SqlRow {
+    // Map of column name to value
+    map<string, SqlValue> fields = 1;
+}
+
+// A request to execute a SQL query
+message SqlQueryRequest {
+    // The SQL query to execute
+    string query = 1;
+}
+
+// A response containing SQL query results
+message SqlQueryResponse {
+    // The rows returned by the query
+    repeated SqlRow rows = 1;
 }
 
 message Contract {
@@ -388,4 +457,36 @@ message TokenContract {
     string traits = 8;
     // The first token metadata of the contract
     bytes token_metadata = 9;
+}
+
+// A query for aggregations (leaderboards, stats, rankings)
+message AggregationQuery {
+    // The list of aggregator IDs to retrieve (e.g., "top_scores", "most_wins")
+    repeated string aggregator_ids = 1;
+    // The list of entity IDs to filter by (optional)
+    repeated string entity_ids = 2;
+    // Pagination
+    Pagination pagination = 3;
+}
+
+// An entry in an aggregation with its calculated position
+message AggregationEntry {
+    // Unique identifier for this entry
+    string id = 1;
+    // The aggregator this entry belongs to
+    string aggregator_id = 2;
+    // The entity being ranked
+    string entity_id = 3;
+    // Normalized value for ordering (zero-padded hex)
+    bytes value = 4;
+    // Display value for presentation (original format)
+    string display_value = 5;
+    // Calculated position/rank (1-indexed)
+    uint64 position = 6;
+    // The model ID this aggregation is based on
+    string model_id = 7;
+    // When the entry was created (RFC3339 timestamp)
+    string created_at = 8;
+    // When the entry was last updated (RFC3339 timestamp)
+    string updated_at = 9;
 }
