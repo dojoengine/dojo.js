@@ -91,6 +91,12 @@ export interface Model {
      * @generated from protobuf field: bool use_legacy_store = 10
      */
     use_legacy_store: boolean;
+    /**
+     * The world address of the model
+     *
+     * @generated from protobuf field: bytes world_address = 11
+     */
+    world_address: Uint8Array;
 }
 /**
  * @generated from protobuf message types.Entity
@@ -126,6 +132,12 @@ export interface Entity {
      * @generated from protobuf field: uint64 executed_at = 5
      */
     executed_at: bigint;
+    /**
+     * The world address of the entity
+     *
+     * @generated from protobuf field: bytes world_address = 6
+     */
+    world_address: Uint8Array;
 }
 /**
  * @generated from protobuf message types.Event
@@ -174,6 +186,10 @@ export interface Query {
      * @generated from protobuf field: bool historical = 5
      */
     historical: boolean;
+    /**
+     * @generated from protobuf field: repeated bytes world_addresses = 6
+     */
+    world_addresses: Uint8Array[];
 }
 /**
  * @generated from protobuf message types.EventQuery
@@ -810,6 +826,192 @@ export interface TransactionQuery {
     pagination?: Pagination;
 }
 /**
+ * Activity tracking for user sessions
+ *
+ * @generated from protobuf message types.Activity
+ */
+export interface Activity {
+    /**
+     * Unique identifier: world_address:namespace:caller_address:session_start_timestamp
+     *
+     * @generated from protobuf field: string id = 1
+     */
+    id: string;
+    /**
+     * World contract address
+     *
+     * @generated from protobuf field: bytes world_address = 2
+     */
+    world_address: Uint8Array;
+    /**
+     * Namespace
+     *
+     * @generated from protobuf field: string namespace = 3
+     */
+    namespace: string;
+    /**
+     * Caller address
+     *
+     * @generated from protobuf field: bytes caller_address = 4
+     */
+    caller_address: Uint8Array;
+    /**
+     * Session start time
+     *
+     * @generated from protobuf field: uint64 session_start = 5
+     */
+    session_start: bigint;
+    /**
+     * Session end time
+     *
+     * @generated from protobuf field: uint64 session_end = 6
+     */
+    session_end: bigint;
+    /**
+     * Total action count in session
+     *
+     * @generated from protobuf field: uint32 action_count = 7
+     */
+    action_count: number;
+    /**
+     * Map of action names to call counts
+     *
+     * @generated from protobuf field: map<string, uint32> actions = 8
+     */
+    actions: {
+        [key: string]: number;
+    };
+    /**
+     * Last update timestamp
+     *
+     * @generated from protobuf field: uint64 updated_at = 9
+     */
+    updated_at: bigint;
+}
+/**
+ * @generated from protobuf message types.ActivityQuery
+ */
+export interface ActivityQuery {
+    /**
+     * Filter by world addresses
+     *
+     * @generated from protobuf field: repeated bytes world_addresses = 1
+     */
+    world_addresses: Uint8Array[];
+    /**
+     * Filter by namespaces
+     *
+     * @generated from protobuf field: repeated string namespaces = 2
+     */
+    namespaces: string[];
+    /**
+     * Filter by caller addresses
+     *
+     * @generated from protobuf field: repeated bytes caller_addresses = 3
+     */
+    caller_addresses: Uint8Array[];
+    /**
+     * Filter by time range (unix timestamps)
+     *
+     * @generated from protobuf field: optional uint64 from_time = 4
+     */
+    from_time?: bigint;
+    /**
+     * @generated from protobuf field: optional uint64 to_time = 5
+     */
+    to_time?: bigint;
+    /**
+     * Pagination
+     *
+     * @generated from protobuf field: types.Pagination pagination = 6
+     */
+    pagination?: Pagination;
+}
+/**
+ * SQL query value types
+ *
+ * @generated from protobuf message types.SqlValue
+ */
+export interface SqlValue {
+    /**
+     * @generated from protobuf oneof: value_type
+     */
+    value_type: {
+        oneofKind: "text";
+        /**
+         * @generated from protobuf field: string text = 1
+         */
+        text: string;
+    } | {
+        oneofKind: "integer";
+        /**
+         * @generated from protobuf field: int64 integer = 2
+         */
+        integer: bigint;
+    } | {
+        oneofKind: "real";
+        /**
+         * @generated from protobuf field: double real = 3
+         */
+        real: number;
+    } | {
+        oneofKind: "blob";
+        /**
+         * @generated from protobuf field: bytes blob = 4
+         */
+        blob: Uint8Array;
+    } | {
+        oneofKind: "null";
+        /**
+         * @generated from protobuf field: bool null = 5
+         */
+        null: boolean;
+    } | {
+        oneofKind: undefined;
+    };
+}
+/**
+ * A single row from SQL query results
+ *
+ * @generated from protobuf message types.SqlRow
+ */
+export interface SqlRow {
+    /**
+     * Map of column name to value
+     *
+     * @generated from protobuf field: map<string, types.SqlValue> fields = 1
+     */
+    fields: {
+        [key: string]: SqlValue;
+    };
+}
+/**
+ * A request to execute a SQL query
+ *
+ * @generated from protobuf message types.SqlQueryRequest
+ */
+export interface SqlQueryRequest {
+    /**
+     * The SQL query to execute
+     *
+     * @generated from protobuf field: string query = 1
+     */
+    query: string;
+}
+/**
+ * A response containing SQL query results
+ *
+ * @generated from protobuf message types.SqlQueryResponse
+ */
+export interface SqlQueryResponse {
+    /**
+     * The rows returned by the query
+     *
+     * @generated from protobuf field: repeated types.SqlRow rows = 1
+     */
+    rows: SqlRow[];
+}
+/**
  * @generated from protobuf message types.Contract
  */
 export interface Contract {
@@ -939,6 +1141,92 @@ export interface TokenContract {
      * @generated from protobuf field: bytes token_metadata = 9
      */
     token_metadata: Uint8Array;
+}
+/**
+ * A query for aggregations (leaderboards, stats, rankings)
+ *
+ * @generated from protobuf message types.AggregationQuery
+ */
+export interface AggregationQuery {
+    /**
+     * The list of aggregator IDs to retrieve (e.g., "top_scores", "most_wins")
+     *
+     * @generated from protobuf field: repeated string aggregator_ids = 1
+     */
+    aggregator_ids: string[];
+    /**
+     * The list of entity IDs to filter by (optional)
+     *
+     * @generated from protobuf field: repeated string entity_ids = 2
+     */
+    entity_ids: string[];
+    /**
+     * Pagination
+     *
+     * @generated from protobuf field: types.Pagination pagination = 3
+     */
+    pagination?: Pagination;
+}
+/**
+ * An entry in an aggregation with its calculated position
+ *
+ * @generated from protobuf message types.AggregationEntry
+ */
+export interface AggregationEntry {
+    /**
+     * Unique identifier for this entry
+     *
+     * @generated from protobuf field: string id = 1
+     */
+    id: string;
+    /**
+     * The aggregator this entry belongs to
+     *
+     * @generated from protobuf field: string aggregator_id = 2
+     */
+    aggregator_id: string;
+    /**
+     * The entity being ranked
+     *
+     * @generated from protobuf field: string entity_id = 3
+     */
+    entity_id: string;
+    /**
+     * Normalized value for ordering (zero-padded hex)
+     *
+     * @generated from protobuf field: bytes value = 4
+     */
+    value: Uint8Array;
+    /**
+     * Display value for presentation (original format)
+     *
+     * @generated from protobuf field: string display_value = 5
+     */
+    display_value: string;
+    /**
+     * Calculated position/rank (1-indexed)
+     *
+     * @generated from protobuf field: uint64 position = 6
+     */
+    position: bigint;
+    /**
+     * The model ID this aggregation is based on
+     *
+     * @generated from protobuf field: string model_id = 7
+     */
+    model_id: string;
+    /**
+     * When the entry was created (RFC3339 timestamp)
+     *
+     * @generated from protobuf field: string created_at = 8
+     */
+    created_at: string;
+    /**
+     * When the entry was last updated (RFC3339 timestamp)
+     *
+     * @generated from protobuf field: string updated_at = 9
+     */
+    updated_at: string;
 }
 /**
  * @generated from protobuf enum types.PatternMatching
@@ -1177,7 +1465,8 @@ class Model$Type extends MessageType<Model> {
             { no: 7, name: "layout", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
             { no: 8, name: "schema", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
             { no: 9, name: "contract_address", kind: "scalar", localName: "contract_address", T: 12 /*ScalarType.BYTES*/ },
-            { no: 10, name: "use_legacy_store", kind: "scalar", localName: "use_legacy_store", T: 8 /*ScalarType.BOOL*/ }
+            { no: 10, name: "use_legacy_store", kind: "scalar", localName: "use_legacy_store", T: 8 /*ScalarType.BOOL*/ },
+            { no: 11, name: "world_address", kind: "scalar", localName: "world_address", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<Model>): Model {
@@ -1192,6 +1481,7 @@ class Model$Type extends MessageType<Model> {
         message.schema = new Uint8Array(0);
         message.contract_address = new Uint8Array(0);
         message.use_legacy_store = false;
+        message.world_address = new Uint8Array(0);
         if (value !== undefined)
             reflectionMergePartial<Model>(this, message, value);
         return message;
@@ -1230,6 +1520,9 @@ class Model$Type extends MessageType<Model> {
                     break;
                 case /* bool use_legacy_store */ 10:
                     message.use_legacy_store = reader.bool();
+                    break;
+                case /* bytes world_address */ 11:
+                    message.world_address = reader.bytes();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1273,6 +1566,9 @@ class Model$Type extends MessageType<Model> {
         /* bool use_legacy_store = 10; */
         if (message.use_legacy_store !== false)
             writer.tag(10, WireType.Varint).bool(message.use_legacy_store);
+        /* bytes world_address = 11; */
+        if (message.world_address.length)
+            writer.tag(11, WireType.LengthDelimited).bytes(message.world_address);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1291,7 +1587,8 @@ class Entity$Type extends MessageType<Entity> {
             { no: 2, name: "models", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Struct },
             { no: 3, name: "created_at", kind: "scalar", localName: "created_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
             { no: 4, name: "updated_at", kind: "scalar", localName: "updated_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 5, name: "executed_at", kind: "scalar", localName: "executed_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
+            { no: 5, name: "executed_at", kind: "scalar", localName: "executed_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 6, name: "world_address", kind: "scalar", localName: "world_address", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<Entity>): Entity {
@@ -1301,6 +1598,7 @@ class Entity$Type extends MessageType<Entity> {
         message.created_at = 0n;
         message.updated_at = 0n;
         message.executed_at = 0n;
+        message.world_address = new Uint8Array(0);
         if (value !== undefined)
             reflectionMergePartial<Entity>(this, message, value);
         return message;
@@ -1324,6 +1622,9 @@ class Entity$Type extends MessageType<Entity> {
                     break;
                 case /* uint64 executed_at */ 5:
                     message.executed_at = reader.uint64().toBigInt();
+                    break;
+                case /* bytes world_address */ 6:
+                    message.world_address = reader.bytes();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1352,6 +1653,9 @@ class Entity$Type extends MessageType<Entity> {
         /* uint64 executed_at = 5; */
         if (message.executed_at !== 0n)
             writer.tag(5, WireType.Varint).uint64(message.executed_at);
+        /* bytes world_address = 6; */
+        if (message.world_address.length)
+            writer.tag(6, WireType.LengthDelimited).bytes(message.world_address);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1433,7 +1737,8 @@ class Query$Type extends MessageType<Query> {
             { no: 2, name: "no_hashed_keys", kind: "scalar", localName: "no_hashed_keys", T: 8 /*ScalarType.BOOL*/ },
             { no: 3, name: "models", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "pagination", kind: "message", T: () => Pagination },
-            { no: 5, name: "historical", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+            { no: 5, name: "historical", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 6, name: "world_addresses", kind: "scalar", localName: "world_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<Query>): Query {
@@ -1441,6 +1746,7 @@ class Query$Type extends MessageType<Query> {
         message.no_hashed_keys = false;
         message.models = [];
         message.historical = false;
+        message.world_addresses = [];
         if (value !== undefined)
             reflectionMergePartial<Query>(this, message, value);
         return message;
@@ -1464,6 +1770,9 @@ class Query$Type extends MessageType<Query> {
                     break;
                 case /* bool historical */ 5:
                     message.historical = reader.bool();
+                    break;
+                case /* repeated bytes world_addresses */ 6:
+                    message.world_addresses.push(reader.bytes());
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1492,6 +1801,9 @@ class Query$Type extends MessageType<Query> {
         /* bool historical = 5; */
         if (message.historical !== false)
             writer.tag(5, WireType.Varint).bool(message.historical);
+        /* repeated bytes world_addresses = 6; */
+        for (let i = 0; i < message.world_addresses.length; i++)
+            writer.tag(6, WireType.LengthDelimited).bytes(message.world_addresses[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -3190,6 +3502,468 @@ class TransactionQuery$Type extends MessageType<TransactionQuery> {
  */
 export const TransactionQuery = new TransactionQuery$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class Activity$Type extends MessageType<Activity> {
+    constructor() {
+        super("types.Activity", [
+            { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "world_address", kind: "scalar", localName: "world_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "namespace", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "caller_address", kind: "scalar", localName: "caller_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 5, name: "session_start", kind: "scalar", localName: "session_start", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 6, name: "session_end", kind: "scalar", localName: "session_end", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 7, name: "action_count", kind: "scalar", localName: "action_count", T: 13 /*ScalarType.UINT32*/ },
+            { no: 8, name: "actions", kind: "map", K: 9 /*ScalarType.STRING*/, V: { kind: "scalar", T: 13 /*ScalarType.UINT32*/ } },
+            { no: 9, name: "updated_at", kind: "scalar", localName: "updated_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Activity>): Activity {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = "";
+        message.world_address = new Uint8Array(0);
+        message.namespace = "";
+        message.caller_address = new Uint8Array(0);
+        message.session_start = 0n;
+        message.session_end = 0n;
+        message.action_count = 0;
+        message.actions = {};
+        message.updated_at = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<Activity>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Activity): Activity {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string id */ 1:
+                    message.id = reader.string();
+                    break;
+                case /* bytes world_address */ 2:
+                    message.world_address = reader.bytes();
+                    break;
+                case /* string namespace */ 3:
+                    message.namespace = reader.string();
+                    break;
+                case /* bytes caller_address */ 4:
+                    message.caller_address = reader.bytes();
+                    break;
+                case /* uint64 session_start */ 5:
+                    message.session_start = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 session_end */ 6:
+                    message.session_end = reader.uint64().toBigInt();
+                    break;
+                case /* uint32 action_count */ 7:
+                    message.action_count = reader.uint32();
+                    break;
+                case /* map<string, uint32> actions */ 8:
+                    this.binaryReadMap8(message.actions, reader, options);
+                    break;
+                case /* uint64 updated_at */ 9:
+                    message.updated_at = reader.uint64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    private binaryReadMap8(map: Activity["actions"], reader: IBinaryReader, options: BinaryReadOptions): void {
+        let len = reader.uint32(), end = reader.pos + len, key: keyof Activity["actions"] | undefined, val: Activity["actions"][any] | undefined;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case 1:
+                    key = reader.string();
+                    break;
+                case 2:
+                    val = reader.uint32();
+                    break;
+                default: throw new globalThis.Error("unknown map entry field for types.Activity.actions");
+            }
+        }
+        map[key ?? ""] = val ?? 0;
+    }
+    internalBinaryWrite(message: Activity, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string id = 1; */
+        if (message.id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.id);
+        /* bytes world_address = 2; */
+        if (message.world_address.length)
+            writer.tag(2, WireType.LengthDelimited).bytes(message.world_address);
+        /* string namespace = 3; */
+        if (message.namespace !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.namespace);
+        /* bytes caller_address = 4; */
+        if (message.caller_address.length)
+            writer.tag(4, WireType.LengthDelimited).bytes(message.caller_address);
+        /* uint64 session_start = 5; */
+        if (message.session_start !== 0n)
+            writer.tag(5, WireType.Varint).uint64(message.session_start);
+        /* uint64 session_end = 6; */
+        if (message.session_end !== 0n)
+            writer.tag(6, WireType.Varint).uint64(message.session_end);
+        /* uint32 action_count = 7; */
+        if (message.action_count !== 0)
+            writer.tag(7, WireType.Varint).uint32(message.action_count);
+        /* map<string, uint32> actions = 8; */
+        for (let k of globalThis.Object.keys(message.actions))
+            writer.tag(8, WireType.LengthDelimited).fork().tag(1, WireType.LengthDelimited).string(k).tag(2, WireType.Varint).uint32(message.actions[k]).join();
+        /* uint64 updated_at = 9; */
+        if (message.updated_at !== 0n)
+            writer.tag(9, WireType.Varint).uint64(message.updated_at);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.Activity
+ */
+export const Activity = new Activity$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class ActivityQuery$Type extends MessageType<ActivityQuery> {
+    constructor() {
+        super("types.ActivityQuery", [
+            { no: 1, name: "world_addresses", kind: "scalar", localName: "world_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "namespaces", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "caller_addresses", kind: "scalar", localName: "caller_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "from_time", kind: "scalar", localName: "from_time", opt: true, T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 5, name: "to_time", kind: "scalar", localName: "to_time", opt: true, T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 6, name: "pagination", kind: "message", T: () => Pagination }
+        ]);
+    }
+    create(value?: PartialMessage<ActivityQuery>): ActivityQuery {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.world_addresses = [];
+        message.namespaces = [];
+        message.caller_addresses = [];
+        if (value !== undefined)
+            reflectionMergePartial<ActivityQuery>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ActivityQuery): ActivityQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated bytes world_addresses */ 1:
+                    message.world_addresses.push(reader.bytes());
+                    break;
+                case /* repeated string namespaces */ 2:
+                    message.namespaces.push(reader.string());
+                    break;
+                case /* repeated bytes caller_addresses */ 3:
+                    message.caller_addresses.push(reader.bytes());
+                    break;
+                case /* optional uint64 from_time */ 4:
+                    message.from_time = reader.uint64().toBigInt();
+                    break;
+                case /* optional uint64 to_time */ 5:
+                    message.to_time = reader.uint64().toBigInt();
+                    break;
+                case /* types.Pagination pagination */ 6:
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: ActivityQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated bytes world_addresses = 1; */
+        for (let i = 0; i < message.world_addresses.length; i++)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.world_addresses[i]);
+        /* repeated string namespaces = 2; */
+        for (let i = 0; i < message.namespaces.length; i++)
+            writer.tag(2, WireType.LengthDelimited).string(message.namespaces[i]);
+        /* repeated bytes caller_addresses = 3; */
+        for (let i = 0; i < message.caller_addresses.length; i++)
+            writer.tag(3, WireType.LengthDelimited).bytes(message.caller_addresses[i]);
+        /* optional uint64 from_time = 4; */
+        if (message.from_time !== undefined)
+            writer.tag(4, WireType.Varint).uint64(message.from_time);
+        /* optional uint64 to_time = 5; */
+        if (message.to_time !== undefined)
+            writer.tag(5, WireType.Varint).uint64(message.to_time);
+        /* types.Pagination pagination = 6; */
+        if (message.pagination)
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(6, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.ActivityQuery
+ */
+export const ActivityQuery = new ActivityQuery$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SqlValue$Type extends MessageType<SqlValue> {
+    constructor() {
+        super("types.SqlValue", [
+            { no: 1, name: "text", kind: "scalar", oneof: "value_type", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "integer", kind: "scalar", oneof: "value_type", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 3, name: "real", kind: "scalar", oneof: "value_type", T: 1 /*ScalarType.DOUBLE*/ },
+            { no: 4, name: "blob", kind: "scalar", oneof: "value_type", T: 12 /*ScalarType.BYTES*/ },
+            { no: 5, name: "null", kind: "scalar", oneof: "value_type", T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<SqlValue>): SqlValue {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.value_type = { oneofKind: undefined };
+        if (value !== undefined)
+            reflectionMergePartial<SqlValue>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SqlValue): SqlValue {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string text */ 1:
+                    message.value_type = {
+                        oneofKind: "text",
+                        text: reader.string()
+                    };
+                    break;
+                case /* int64 integer */ 2:
+                    message.value_type = {
+                        oneofKind: "integer",
+                        integer: reader.int64().toBigInt()
+                    };
+                    break;
+                case /* double real */ 3:
+                    message.value_type = {
+                        oneofKind: "real",
+                        real: reader.double()
+                    };
+                    break;
+                case /* bytes blob */ 4:
+                    message.value_type = {
+                        oneofKind: "blob",
+                        blob: reader.bytes()
+                    };
+                    break;
+                case /* bool null */ 5:
+                    message.value_type = {
+                        oneofKind: "null",
+                        null: reader.bool()
+                    };
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SqlValue, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string text = 1; */
+        if (message.value_type.oneofKind === "text")
+            writer.tag(1, WireType.LengthDelimited).string(message.value_type.text);
+        /* int64 integer = 2; */
+        if (message.value_type.oneofKind === "integer")
+            writer.tag(2, WireType.Varint).int64(message.value_type.integer);
+        /* double real = 3; */
+        if (message.value_type.oneofKind === "real")
+            writer.tag(3, WireType.Bit64).double(message.value_type.real);
+        /* bytes blob = 4; */
+        if (message.value_type.oneofKind === "blob")
+            writer.tag(4, WireType.LengthDelimited).bytes(message.value_type.blob);
+        /* bool null = 5; */
+        if (message.value_type.oneofKind === "null")
+            writer.tag(5, WireType.Varint).bool(message.value_type.null);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.SqlValue
+ */
+export const SqlValue = new SqlValue$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SqlRow$Type extends MessageType<SqlRow> {
+    constructor() {
+        super("types.SqlRow", [
+            { no: 1, name: "fields", kind: "map", K: 9 /*ScalarType.STRING*/, V: { kind: "message", T: () => SqlValue } }
+        ]);
+    }
+    create(value?: PartialMessage<SqlRow>): SqlRow {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.fields = {};
+        if (value !== undefined)
+            reflectionMergePartial<SqlRow>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SqlRow): SqlRow {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* map<string, types.SqlValue> fields */ 1:
+                    this.binaryReadMap1(message.fields, reader, options);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    private binaryReadMap1(map: SqlRow["fields"], reader: IBinaryReader, options: BinaryReadOptions): void {
+        let len = reader.uint32(), end = reader.pos + len, key: keyof SqlRow["fields"] | undefined, val: SqlRow["fields"][any] | undefined;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case 1:
+                    key = reader.string();
+                    break;
+                case 2:
+                    val = SqlValue.internalBinaryRead(reader, reader.uint32(), options);
+                    break;
+                default: throw new globalThis.Error("unknown map entry field for types.SqlRow.fields");
+            }
+        }
+        map[key ?? ""] = val ?? SqlValue.create();
+    }
+    internalBinaryWrite(message: SqlRow, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* map<string, types.SqlValue> fields = 1; */
+        for (let k of globalThis.Object.keys(message.fields)) {
+            writer.tag(1, WireType.LengthDelimited).fork().tag(1, WireType.LengthDelimited).string(k);
+            writer.tag(2, WireType.LengthDelimited).fork();
+            SqlValue.internalBinaryWrite(message.fields[k], writer, options);
+            writer.join().join();
+        }
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.SqlRow
+ */
+export const SqlRow = new SqlRow$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SqlQueryRequest$Type extends MessageType<SqlQueryRequest> {
+    constructor() {
+        super("types.SqlQueryRequest", [
+            { no: 1, name: "query", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<SqlQueryRequest>): SqlQueryRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.query = "";
+        if (value !== undefined)
+            reflectionMergePartial<SqlQueryRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SqlQueryRequest): SqlQueryRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string query */ 1:
+                    message.query = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SqlQueryRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string query = 1; */
+        if (message.query !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.query);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.SqlQueryRequest
+ */
+export const SqlQueryRequest = new SqlQueryRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SqlQueryResponse$Type extends MessageType<SqlQueryResponse> {
+    constructor() {
+        super("types.SqlQueryResponse", [
+            { no: 1, name: "rows", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => SqlRow }
+        ]);
+    }
+    create(value?: PartialMessage<SqlQueryResponse>): SqlQueryResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.rows = [];
+        if (value !== undefined)
+            reflectionMergePartial<SqlQueryResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SqlQueryResponse): SqlQueryResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated types.SqlRow rows */ 1:
+                    message.rows.push(SqlRow.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SqlQueryResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated types.SqlRow rows = 1; */
+        for (let i = 0; i < message.rows.length; i++)
+            SqlRow.internalBinaryWrite(message.rows[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.SqlQueryResponse
+ */
+export const SqlQueryResponse = new SqlQueryResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class Contract$Type extends MessageType<Contract> {
     constructor() {
         super("types.Contract", [
@@ -3461,3 +4235,176 @@ class TokenContract$Type extends MessageType<TokenContract> {
  * @generated MessageType for protobuf message types.TokenContract
  */
 export const TokenContract = new TokenContract$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class AggregationQuery$Type extends MessageType<AggregationQuery> {
+    constructor() {
+        super("types.AggregationQuery", [
+            { no: 1, name: "aggregator_ids", kind: "scalar", localName: "aggregator_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "entity_ids", kind: "scalar", localName: "entity_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "pagination", kind: "message", T: () => Pagination }
+        ]);
+    }
+    create(value?: PartialMessage<AggregationQuery>): AggregationQuery {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.aggregator_ids = [];
+        message.entity_ids = [];
+        if (value !== undefined)
+            reflectionMergePartial<AggregationQuery>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: AggregationQuery): AggregationQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated string aggregator_ids */ 1:
+                    message.aggregator_ids.push(reader.string());
+                    break;
+                case /* repeated string entity_ids */ 2:
+                    message.entity_ids.push(reader.string());
+                    break;
+                case /* types.Pagination pagination */ 3:
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: AggregationQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated string aggregator_ids = 1; */
+        for (let i = 0; i < message.aggregator_ids.length; i++)
+            writer.tag(1, WireType.LengthDelimited).string(message.aggregator_ids[i]);
+        /* repeated string entity_ids = 2; */
+        for (let i = 0; i < message.entity_ids.length; i++)
+            writer.tag(2, WireType.LengthDelimited).string(message.entity_ids[i]);
+        /* types.Pagination pagination = 3; */
+        if (message.pagination)
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.AggregationQuery
+ */
+export const AggregationQuery = new AggregationQuery$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class AggregationEntry$Type extends MessageType<AggregationEntry> {
+    constructor() {
+        super("types.AggregationEntry", [
+            { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "aggregator_id", kind: "scalar", localName: "aggregator_id", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "entity_id", kind: "scalar", localName: "entity_id", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "value", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 5, name: "display_value", kind: "scalar", localName: "display_value", T: 9 /*ScalarType.STRING*/ },
+            { no: 6, name: "position", kind: "scalar", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 7, name: "model_id", kind: "scalar", localName: "model_id", T: 9 /*ScalarType.STRING*/ },
+            { no: 8, name: "created_at", kind: "scalar", localName: "created_at", T: 9 /*ScalarType.STRING*/ },
+            { no: 9, name: "updated_at", kind: "scalar", localName: "updated_at", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<AggregationEntry>): AggregationEntry {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = "";
+        message.aggregator_id = "";
+        message.entity_id = "";
+        message.value = new Uint8Array(0);
+        message.display_value = "";
+        message.position = 0n;
+        message.model_id = "";
+        message.created_at = "";
+        message.updated_at = "";
+        if (value !== undefined)
+            reflectionMergePartial<AggregationEntry>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: AggregationEntry): AggregationEntry {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string id */ 1:
+                    message.id = reader.string();
+                    break;
+                case /* string aggregator_id */ 2:
+                    message.aggregator_id = reader.string();
+                    break;
+                case /* string entity_id */ 3:
+                    message.entity_id = reader.string();
+                    break;
+                case /* bytes value */ 4:
+                    message.value = reader.bytes();
+                    break;
+                case /* string display_value */ 5:
+                    message.display_value = reader.string();
+                    break;
+                case /* uint64 position */ 6:
+                    message.position = reader.uint64().toBigInt();
+                    break;
+                case /* string model_id */ 7:
+                    message.model_id = reader.string();
+                    break;
+                case /* string created_at */ 8:
+                    message.created_at = reader.string();
+                    break;
+                case /* string updated_at */ 9:
+                    message.updated_at = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: AggregationEntry, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string id = 1; */
+        if (message.id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.id);
+        /* string aggregator_id = 2; */
+        if (message.aggregator_id !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.aggregator_id);
+        /* string entity_id = 3; */
+        if (message.entity_id !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.entity_id);
+        /* bytes value = 4; */
+        if (message.value.length)
+            writer.tag(4, WireType.LengthDelimited).bytes(message.value);
+        /* string display_value = 5; */
+        if (message.display_value !== "")
+            writer.tag(5, WireType.LengthDelimited).string(message.display_value);
+        /* uint64 position = 6; */
+        if (message.position !== 0n)
+            writer.tag(6, WireType.Varint).uint64(message.position);
+        /* string model_id = 7; */
+        if (message.model_id !== "")
+            writer.tag(7, WireType.LengthDelimited).string(message.model_id);
+        /* string created_at = 8; */
+        if (message.created_at !== "")
+            writer.tag(8, WireType.LengthDelimited).string(message.created_at);
+        /* string updated_at = 9; */
+        if (message.updated_at !== "")
+            writer.tag(9, WireType.LengthDelimited).string(message.updated_at);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.AggregationEntry
+ */
+export const AggregationEntry = new AggregationEntry$Type();

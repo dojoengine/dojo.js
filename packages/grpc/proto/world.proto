@@ -11,7 +11,7 @@ service World {
     rpc SubscribeContracts (SubscribeContractsRequest) returns (stream SubscribeContractsResponse);
 
     // Retrieves metadata about the World including all the registered components and systems.
-    rpc WorldMetadata (WorldMetadataRequest) returns (WorldMetadataResponse);
+    rpc Worlds (WorldsRequest) returns (WorldsResponse);
    
     // Subscribe to entity updates.
     rpc SubscribeEntities (SubscribeEntitiesRequest) returns (stream SubscribeEntityResponse);
@@ -23,10 +23,10 @@ service World {
     rpc RetrieveEntities (RetrieveEntitiesRequest) returns (RetrieveEntitiesResponse);
 
     // Subscribe to entity updates.
-    rpc SubscribeEventMessages (SubscribeEventMessagesRequest) returns (stream SubscribeEntityResponse);
+    rpc SubscribeEventMessages (SubscribeEntitiesRequest) returns (stream SubscribeEntityResponse);
 
     // Update entity subscription
-    rpc UpdateEventMessagesSubscription (UpdateEventMessagesSubscriptionRequest) returns (google.protobuf.Empty);
+    rpc UpdateEventMessagesSubscription (UpdateEntitiesSubscriptionRequest) returns (google.protobuf.Empty);
 
     // Subscribe to token balance updates.
     rpc SubscribeTokenBalances (SubscribeTokenBalancesRequest) returns (stream SubscribeTokenBalancesResponse);
@@ -47,7 +47,7 @@ service World {
     rpc UpdateTokenTransfersSubscription (UpdateTokenTransfersSubscriptionRequest) returns (google.protobuf.Empty);
 
     // Retrieve entities
-    rpc RetrieveEventMessages (RetrieveEventMessagesRequest) returns (RetrieveEntitiesResponse);
+    rpc RetrieveEventMessages (RetrieveEntitiesRequest) returns (RetrieveEntitiesResponse);
 
     // Retrieve events
     rpc RetrieveEvents (RetrieveEventsRequest) returns (RetrieveEventsResponse);
@@ -79,11 +79,32 @@ service World {
     // Retrieve token contracts
     rpc RetrieveTokenContracts (RetrieveTokenContractsRequest) returns (RetrieveTokenContractsResponse);
 
+    // Retrieve aggregations (leaderboards, stats, rankings)
+    rpc RetrieveAggregations (RetrieveAggregationsRequest) returns (RetrieveAggregationsResponse);
+
+    // Subscribe to aggregation updates (leaderboards, stats, rankings)
+    rpc SubscribeAggregations (SubscribeAggregationsRequest) returns (stream SubscribeAggregationsResponse);
+
+    // Update an aggregations subscription
+    rpc UpdateAggregationsSubscription (UpdateAggregationsSubscriptionRequest) returns (UpdateAggregationsSubscriptionResponse);
+
+    // Retrieve activities (user session tracking)
+    rpc RetrieveActivities (RetrieveActivitiesRequest) returns (RetrieveActivitiesResponse);
+
+    // Subscribe to activity updates (user session tracking)
+    rpc SubscribeActivities (SubscribeActivitiesRequest) returns (stream SubscribeActivitiesResponse);
+
+    // Update an activities subscription
+    rpc UpdateActivitiesSubscription (UpdateActivitiesSubscriptionRequest) returns (google.protobuf.Empty);
+
     // Publish a torii offchain message
     rpc PublishMessage (PublishMessageRequest) returns (PublishMessageResponse);
 
     // Publish a set of torii offchain messages
     rpc PublishMessageBatch (PublishMessageBatchRequest) returns (PublishMessageBatchResponse);
+
+    // Execute a SQL query and return results
+    rpc ExecuteSql (types.SqlQueryRequest) returns (types.SqlQueryResponse);
 }
 
 message SubscribeTransactionsRequest {
@@ -222,31 +243,24 @@ message SubscribeContractsResponse {
 }
 
 // A request to retrieve metadata for a specific world ID.
-message WorldMetadataRequest {
-
+message WorldsRequest {
+    repeated bytes world_addresses = 1;
 }
 
 // The metadata response contains addresses and class hashes for the world.
-message WorldMetadataResponse {
-   types.World world = 1;
+message WorldsResponse {
+   repeated types.World worlds = 1;
 }
 
 message SubscribeEntitiesRequest {
     types.Clause clause = 1;
-}
-
-message SubscribeEventMessagesRequest {
-    types.Clause clause = 1;
+    repeated bytes world_addresses = 2;
 }
 
 message UpdateEntitiesSubscriptionRequest {
     uint64 subscription_id = 1;
     types.Clause clause = 2;
-}
-
-message UpdateEventMessagesSubscriptionRequest {
-    uint64 subscription_id = 1;
-    types.Clause clause = 2;
+    repeated bytes world_addresses = 3;
 }
 
 message SubscribeEntityResponse {
@@ -256,11 +270,6 @@ message SubscribeEntityResponse {
 
 message RetrieveEntitiesRequest {
     // The entities to retrieve
-    types.Query query = 1;
-}
-
-message RetrieveEventMessagesRequest {
-    // The event messages to retrieve
     types.Query query = 1;
 }
 
@@ -290,10 +299,11 @@ message SubscribeEventsResponse {
 message PublishMessageRequest {
     repeated bytes signature = 1;
     string message = 2;
+    bytes world_address = 3;
 }
 
 message PublishMessageResponse {
-    bytes entity_id = 1;
+    string id = 1;
 }
 
 message PublishMessageBatchRequest {
@@ -343,4 +353,83 @@ message RetrieveTokenTransfersRequest {
 message RetrieveTokenTransfersResponse {
     string next_cursor = 1;
     repeated types.TokenTransfer transfers = 2;
+}
+
+// A request to retrieve aggregations (leaderboards, stats, rankings)
+message RetrieveAggregationsRequest {
+    types.AggregationQuery query = 1;
+}
+
+// A response containing aggregation entries
+message RetrieveAggregationsResponse {
+    string next_cursor = 1;
+    repeated types.AggregationEntry entries = 2;
+}
+
+// A request to subscribe to aggregations updates
+message SubscribeAggregationsRequest {
+    // Filter by aggregator IDs (e.g., "top_scores", "most_wins")
+    repeated string aggregator_ids = 1;
+    // Filter by entity IDs (e.g., specific player addresses)
+    repeated string entity_ids = 2;
+}
+
+// A response containing aggregation update
+message SubscribeAggregationsResponse {
+    uint64 subscription_id = 1;
+    types.AggregationEntry entry = 2;
+}
+
+// A request to update an aggregations subscription
+message UpdateAggregationsSubscriptionRequest {
+    uint64 subscription_id = 1;
+    // Filter by aggregator IDs
+    repeated string aggregator_ids = 2;
+    // Filter by entity IDs
+    repeated string entity_ids = 3;
+}
+
+// A response for updating an aggregations subscription
+message UpdateAggregationsSubscriptionResponse {
+}
+
+// A request to retrieve activities
+message RetrieveActivitiesRequest {
+    types.ActivityQuery query = 1;
+}
+
+// A response containing activities
+message RetrieveActivitiesResponse {
+    string next_cursor = 1;
+    repeated types.Activity activities = 2;
+}
+
+// A request to subscribe to activity updates
+message SubscribeActivitiesRequest {
+    // Filter by world addresses
+    repeated bytes world_addresses = 1;
+    // Filter by namespaces
+    repeated string namespaces = 2;
+    // Filter by caller addresses
+    repeated bytes caller_addresses = 3;
+}
+
+// A response containing activity updates
+message SubscribeActivitiesResponse {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // The activity update
+    types.Activity activity = 2;
+}
+
+// A request to update an activities subscription
+message UpdateActivitiesSubscriptionRequest {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // Filter by world addresses
+    repeated bytes world_addresses = 2;
+    // Filter by namespaces
+    repeated string namespaces = 3;
+    // Filter by caller addresses
+    repeated bytes caller_addresses = 4;
 }

@@ -1,7 +1,23 @@
 import { Schema } from "effect";
 import type * as GrpcSchema from "../../generated/schema";
 import type * as ToriiTypes from "@dojoengine/torii-wasm";
-import { BufferToHex } from "./base-schemas";
+import { BufferToHex, BigIntToNumber } from "./base-schemas";
+
+const parseTimestampString = (
+    value: string | number | bigint | null | undefined
+): number => {
+    if (value === null || value === undefined || value === "") {
+        return 0;
+    }
+
+    const numeric = Number(value);
+    if (!Number.isNaN(numeric)) {
+        return numeric;
+    }
+
+    const parsed = Date.parse(String(value));
+    return Number.isNaN(parsed) ? 0 : Math.floor(parsed / 1000);
+};
 
 const PrimitiveSchema = Schema.transform(
     Schema.Struct({
@@ -328,6 +344,10 @@ export const ModelSchema = Schema.transform(
 export const EntitySchema = Schema.transform(
     Schema.Struct({
         hashed_keys: Schema.Uint8ArrayFromSelf,
+        created_at: Schema.BigIntFromSelf,
+        updated_at: Schema.BigIntFromSelf,
+        executed_at: Schema.BigIntFromSelf,
+        world_address: Schema.Uint8ArrayFromSelf,
         models: Schema.Array(
             Schema.Struct({
                 name: Schema.String,
@@ -337,6 +357,10 @@ export const EntitySchema = Schema.transform(
     }),
     Schema.Struct({
         hashed_keys: BufferToHex,
+        created_at: BigIntToNumber,
+        updated_at: BigIntToNumber,
+        executed_at: BigIntToNumber,
+        world_address: BufferToHex,
         models: Schema.Record({ key: Schema.String, value: ModelSchema }),
     }),
     {
@@ -350,6 +374,12 @@ export const EntitySchema = Schema.transform(
             return {
                 hashed_keys: BufferToHex.pipe(Schema.decodeSync)(
                     grpc.hashed_keys
+                ),
+                created_at: parseTimestampString(grpc.created_at),
+                updated_at: parseTimestampString(grpc.updated_at),
+                executed_at: parseTimestampString(grpc.executed_at),
+                world_address: BufferToHex.pipe(Schema.decodeSync)(
+                    grpc.world_address
                 ),
                 models,
             };
@@ -377,6 +407,146 @@ export const EntitiesResponseSchema = Schema.transform(
         encode: (torii) => ({
             entities: torii.items,
             next_cursor: torii.next_cursor,
+        }),
+    }
+);
+
+export const AggregationEntrySchema = Schema.transform(
+    Schema.Struct({
+        id: Schema.String,
+        aggregator_id: Schema.String,
+        entity_id: Schema.String,
+        value: Schema.Uint8ArrayFromSelf,
+        display_value: Schema.String,
+        position: Schema.BigIntFromSelf,
+        model_id: Schema.String,
+        created_at: Schema.String,
+        updated_at: Schema.String,
+    }),
+    Schema.Struct({
+        id: Schema.String,
+        aggregatorId: Schema.String,
+        entityId: Schema.String,
+        value: Schema.String,
+        displayValue: Schema.String,
+        position: Schema.Number,
+        modelId: Schema.String,
+        createdAt: Schema.Number,
+        updatedAt: Schema.Number,
+    }),
+    {
+        decode: (grpc) => ({
+            id: grpc.id,
+            aggregatorId: grpc.aggregator_id,
+            entityId: grpc.entity_id,
+            value: BufferToHex.pipe(Schema.decodeSync)(grpc.value),
+            displayValue: grpc.display_value,
+            position: Number(grpc.position),
+            modelId: grpc.model_id,
+            createdAt: parseTimestampString(grpc.created_at),
+            updatedAt: parseTimestampString(grpc.updated_at),
+        }),
+        encode: () => {
+            throw new Error(
+                "Encoding not implemented for AggregationEntrySchema"
+            );
+        },
+    }
+);
+
+export const AggregationsResponseSchema = Schema.transform(
+    Schema.Struct({
+        entries: Schema.Array(AggregationEntrySchema),
+        next_cursor: Schema.optional(Schema.String),
+    }),
+    Schema.Struct({
+        items: Schema.Array(AggregationEntrySchema),
+        nextCursor: Schema.optional(Schema.String),
+        next_cursor: Schema.optional(Schema.String),
+    }),
+    {
+        decode: (grpc) => ({
+            items: grpc.entries,
+            nextCursor: grpc.next_cursor,
+            next_cursor: grpc.next_cursor,
+        }),
+        encode: (torii) => ({
+            entries: torii.items,
+            next_cursor: torii.nextCursor,
+        }),
+    }
+);
+
+export const ActivitySchema = Schema.transform(
+    Schema.Struct({
+        id: Schema.String,
+        world_address: Schema.Uint8ArrayFromSelf,
+        namespace: Schema.String,
+        caller_address: Schema.Uint8ArrayFromSelf,
+        session_start: Schema.BigIntFromSelf,
+        session_end: Schema.BigIntFromSelf,
+        action_count: Schema.Number,
+        actions: Schema.Record({
+            key: Schema.String,
+            value: Schema.Number,
+        }),
+        updated_at: Schema.BigIntFromSelf,
+    }),
+    Schema.Struct({
+        id: Schema.String,
+        worldAddress: Schema.String,
+        namespace: Schema.String,
+        callerAddress: Schema.String,
+        sessionStart: Schema.Number,
+        sessionEnd: Schema.Number,
+        actionCount: Schema.Number,
+        actions: Schema.Record({
+            key: Schema.String,
+            value: Schema.Number,
+        }),
+        updatedAt: Schema.Number,
+    }),
+    {
+        decode: (grpc) => ({
+            id: grpc.id,
+            worldAddress: BufferToHex.pipe(Schema.decodeSync)(
+                grpc.world_address
+            ),
+            namespace: grpc.namespace,
+            callerAddress: BufferToHex.pipe(Schema.decodeSync)(
+                grpc.caller_address
+            ),
+            sessionStart: Number(grpc.session_start),
+            sessionEnd: Number(grpc.session_end),
+            actionCount: grpc.action_count,
+            actions: grpc.actions,
+            updatedAt: parseTimestampString(grpc.updated_at),
+        }),
+        encode: () => {
+            throw new Error("Encoding not implemented for ActivitySchema");
+        },
+    }
+);
+
+export const ActivitiesResponseSchema = Schema.transform(
+    Schema.Struct({
+        activities: Schema.Array(ActivitySchema),
+        next_cursor: Schema.optional(Schema.String),
+    }),
+    Schema.Struct({
+        items: Schema.Array(ActivitySchema),
+        nextCursor: Schema.optional(Schema.String),
+        next_cursor: Schema.optional(Schema.String),
+    }),
+    {
+        decode: (grpc) => ({
+            items: grpc.activities,
+            nextCursor: grpc.next_cursor,
+            next_cursor: grpc.next_cursor,
+        }),
+        encode: (torii) => ({
+            activities: torii.items,
+            next_cursor: torii.nextCursor,
         }),
     }
 );

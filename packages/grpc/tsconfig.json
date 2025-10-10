@@ -6,14 +6,20 @@
         "outDir": "./dist",
         "sourceMap": true,
         "noImplicitAny": true,
-        "noUnusedLocals": true,
+        "noUnusedLocals": false,
         "moduleResolution": "node",
-        "noUnusedParameters": true,
+        "noUnusedParameters": false,
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "strict": true,
         "strictNullChecks": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "paths": {
+            "@packages/grpc/*": ["./src/*"],
+            "@packages/grpc/generated": ["./src/generated/index.ts"],
+            "@packages/grpc/generated/*": ["./src/generated/*"]
+        }
     },
     "include": ["src/**/*.ts"],
     "skipLibCheck": true,

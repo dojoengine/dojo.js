@@ -4,10 +4,23 @@
 import type { RpcTransport } from "@protobuf-ts/runtime-rpc";
 import type { ServiceInfo } from "@protobuf-ts/runtime-rpc";
 import { World } from "./world";
+import type { SqlQueryResponse } from "./types";
+import type { SqlQueryRequest } from "./types";
 import type { PublishMessageBatchResponse } from "./world";
 import type { PublishMessageBatchRequest } from "./world";
 import type { PublishMessageResponse } from "./world";
 import type { PublishMessageRequest } from "./world";
+import type { UpdateActivitiesSubscriptionRequest } from "./world";
+import type { SubscribeActivitiesResponse } from "./world";
+import type { SubscribeActivitiesRequest } from "./world";
+import type { RetrieveActivitiesResponse } from "./world";
+import type { RetrieveActivitiesRequest } from "./world";
+import type { UpdateAggregationsSubscriptionResponse } from "./world";
+import type { UpdateAggregationsSubscriptionRequest } from "./world";
+import type { SubscribeAggregationsResponse } from "./world";
+import type { SubscribeAggregationsRequest } from "./world";
+import type { RetrieveAggregationsResponse } from "./world";
+import type { RetrieveAggregationsRequest } from "./world";
 import type { RetrieveTokenContractsResponse } from "./world";
 import type { RetrieveTokenContractsRequest } from "./world";
 import type { RetrieveContractsResponse } from "./world";
@@ -28,7 +41,6 @@ import type { SubscribeEventsResponse } from "./world";
 import type { SubscribeEventsRequest } from "./world";
 import type { RetrieveEventsResponse } from "./world";
 import type { RetrieveEventsRequest } from "./world";
-import type { RetrieveEventMessagesRequest } from "./world";
 import type { UpdateTokenTransfersSubscriptionRequest } from "./world";
 import type { SubscribeTokenTransfersResponse } from "./world";
 import type { SubscribeTokenTransfersRequest } from "./world";
@@ -38,16 +50,14 @@ import type { SubscribeTokensRequest } from "./world";
 import type { UpdateTokenBalancesSubscriptionRequest } from "./world";
 import type { SubscribeTokenBalancesResponse } from "./world";
 import type { SubscribeTokenBalancesRequest } from "./world";
-import type { UpdateEventMessagesSubscriptionRequest } from "./world";
-import type { SubscribeEventMessagesRequest } from "./world";
 import type { RetrieveEntitiesResponse } from "./world";
 import type { RetrieveEntitiesRequest } from "./world";
 import type { Empty } from "./google/protobuf/empty";
 import type { UpdateEntitiesSubscriptionRequest } from "./world";
 import type { SubscribeEntityResponse } from "./world";
 import type { SubscribeEntitiesRequest } from "./world";
-import type { WorldMetadataResponse } from "./world";
-import type { WorldMetadataRequest } from "./world";
+import type { WorldsResponse } from "./world";
+import type { WorldsRequest } from "./world";
 import type { UnaryCall } from "@protobuf-ts/runtime-rpc";
 import { stackIntercept } from "@protobuf-ts/runtime-rpc";
 import type { SubscribeContractsResponse } from "./world";
@@ -69,9 +79,9 @@ export interface IWorldClient {
     /**
      * Retrieves metadata about the World including all the registered components and systems.
      *
-     * @generated from protobuf rpc: WorldMetadata
+     * @generated from protobuf rpc: Worlds
      */
-    worldMetadata(input: WorldMetadataRequest, options?: RpcOptions): UnaryCall<WorldMetadataRequest, WorldMetadataResponse>;
+    worlds(input: WorldsRequest, options?: RpcOptions): UnaryCall<WorldsRequest, WorldsResponse>;
     /**
      * Subscribe to entity updates.
      *
@@ -95,13 +105,13 @@ export interface IWorldClient {
      *
      * @generated from protobuf rpc: SubscribeEventMessages
      */
-    subscribeEventMessages(input: SubscribeEventMessagesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEventMessagesRequest, SubscribeEntityResponse>;
+    subscribeEventMessages(input: SubscribeEntitiesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEntitiesRequest, SubscribeEntityResponse>;
     /**
      * Update entity subscription
      *
      * @generated from protobuf rpc: UpdateEventMessagesSubscription
      */
-    updateEventMessagesSubscription(input: UpdateEventMessagesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateEventMessagesSubscriptionRequest, Empty>;
+    updateEventMessagesSubscription(input: UpdateEntitiesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateEntitiesSubscriptionRequest, Empty>;
     /**
      * Subscribe to token balance updates.
      *
@@ -143,7 +153,7 @@ export interface IWorldClient {
      *
      * @generated from protobuf rpc: RetrieveEventMessages
      */
-    retrieveEventMessages(input: RetrieveEventMessagesRequest, options?: RpcOptions): UnaryCall<RetrieveEventMessagesRequest, RetrieveEntitiesResponse>;
+    retrieveEventMessages(input: RetrieveEntitiesRequest, options?: RpcOptions): UnaryCall<RetrieveEntitiesRequest, RetrieveEntitiesResponse>;
     /**
      * Retrieve events
      *
@@ -205,6 +215,42 @@ export interface IWorldClient {
      */
     retrieveTokenContracts(input: RetrieveTokenContractsRequest, options?: RpcOptions): UnaryCall<RetrieveTokenContractsRequest, RetrieveTokenContractsResponse>;
     /**
+     * Retrieve aggregations (leaderboards, stats, rankings)
+     *
+     * @generated from protobuf rpc: RetrieveAggregations
+     */
+    retrieveAggregations(input: RetrieveAggregationsRequest, options?: RpcOptions): UnaryCall<RetrieveAggregationsRequest, RetrieveAggregationsResponse>;
+    /**
+     * Subscribe to aggregation updates (leaderboards, stats, rankings)
+     *
+     * @generated from protobuf rpc: SubscribeAggregations
+     */
+    subscribeAggregations(input: SubscribeAggregationsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeAggregationsRequest, SubscribeAggregationsResponse>;
+    /**
+     * Update an aggregations subscription
+     *
+     * @generated from protobuf rpc: UpdateAggregationsSubscription
+     */
+    updateAggregationsSubscription(input: UpdateAggregationsSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateAggregationsSubscriptionRequest, UpdateAggregationsSubscriptionResponse>;
+    /**
+     * Retrieve activities (user session tracking)
+     *
+     * @generated from protobuf rpc: RetrieveActivities
+     */
+    retrieveActivities(input: RetrieveActivitiesRequest, options?: RpcOptions): UnaryCall<RetrieveActivitiesRequest, RetrieveActivitiesResponse>;
+    /**
+     * Subscribe to activity updates (user session tracking)
+     *
+     * @generated from protobuf rpc: SubscribeActivities
+     */
+    subscribeActivities(input: SubscribeActivitiesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeActivitiesRequest, SubscribeActivitiesResponse>;
+    /**
+     * Update an activities subscription
+     *
+     * @generated from protobuf rpc: UpdateActivitiesSubscription
+     */
+    updateActivitiesSubscription(input: UpdateActivitiesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateActivitiesSubscriptionRequest, Empty>;
+    /**
      * Publish a torii offchain message
      *
      * @generated from protobuf rpc: PublishMessage
@@ -216,6 +262,12 @@ export interface IWorldClient {
      * @generated from protobuf rpc: PublishMessageBatch
      */
     publishMessageBatch(input: PublishMessageBatchRequest, options?: RpcOptions): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse>;
+    /**
+     * Execute a SQL query and return results
+     *
+     * @generated from protobuf rpc: ExecuteSql
+     */
+    executeSql(input: SqlQueryRequest, options?: RpcOptions): UnaryCall<SqlQueryRequest, SqlQueryResponse>;
 }
 /**
  * The World service provides information about the world.
@@ -240,11 +292,11 @@ export class WorldClient implements IWorldClient, ServiceInfo {
     /**
      * Retrieves metadata about the World including all the registered components and systems.
      *
-     * @generated from protobuf rpc: WorldMetadata
+     * @generated from protobuf rpc: Worlds
      */
-    worldMetadata(input: WorldMetadataRequest, options?: RpcOptions): UnaryCall<WorldMetadataRequest, WorldMetadataResponse> {
+    worlds(input: WorldsRequest, options?: RpcOptions): UnaryCall<WorldsRequest, WorldsResponse> {
         const method = this.methods[1], opt = this._transport.mergeOptions(options);
-        return stackIntercept<WorldMetadataRequest, WorldMetadataResponse>("unary", this._transport, method, opt, input);
+        return stackIntercept<WorldsRequest, WorldsResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Subscribe to entity updates.
@@ -278,18 +330,18 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      *
      * @generated from protobuf rpc: SubscribeEventMessages
      */
-    subscribeEventMessages(input: SubscribeEventMessagesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEventMessagesRequest, SubscribeEntityResponse> {
+    subscribeEventMessages(input: SubscribeEntitiesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeEntitiesRequest, SubscribeEntityResponse> {
         const method = this.methods[5], opt = this._transport.mergeOptions(options);
-        return stackIntercept<SubscribeEventMessagesRequest, SubscribeEntityResponse>("serverStreaming", this._transport, method, opt, input);
+        return stackIntercept<SubscribeEntitiesRequest, SubscribeEntityResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
      * Update entity subscription
      *
      * @generated from protobuf rpc: UpdateEventMessagesSubscription
      */
-    updateEventMessagesSubscription(input: UpdateEventMessagesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateEventMessagesSubscriptionRequest, Empty> {
+    updateEventMessagesSubscription(input: UpdateEntitiesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateEntitiesSubscriptionRequest, Empty> {
         const method = this.methods[6], opt = this._transport.mergeOptions(options);
-        return stackIntercept<UpdateEventMessagesSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
+        return stackIntercept<UpdateEntitiesSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * Subscribe to token balance updates.
@@ -350,9 +402,9 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      *
      * @generated from protobuf rpc: RetrieveEventMessages
      */
-    retrieveEventMessages(input: RetrieveEventMessagesRequest, options?: RpcOptions): UnaryCall<RetrieveEventMessagesRequest, RetrieveEntitiesResponse> {
+    retrieveEventMessages(input: RetrieveEntitiesRequest, options?: RpcOptions): UnaryCall<RetrieveEntitiesRequest, RetrieveEntitiesResponse> {
         const method = this.methods[13], opt = this._transport.mergeOptions(options);
-        return stackIntercept<RetrieveEventMessagesRequest, RetrieveEntitiesResponse>("unary", this._transport, method, opt, input);
+        return stackIntercept<RetrieveEntitiesRequest, RetrieveEntitiesResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * Retrieve events
@@ -445,12 +497,66 @@ export class WorldClient implements IWorldClient, ServiceInfo {
         return stackIntercept<RetrieveTokenContractsRequest, RetrieveTokenContractsResponse>("unary", this._transport, method, opt, input);
     }
     /**
+     * Retrieve aggregations (leaderboards, stats, rankings)
+     *
+     * @generated from protobuf rpc: RetrieveAggregations
+     */
+    retrieveAggregations(input: RetrieveAggregationsRequest, options?: RpcOptions): UnaryCall<RetrieveAggregationsRequest, RetrieveAggregationsResponse> {
+        const method = this.methods[24], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveAggregationsRequest, RetrieveAggregationsResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * Subscribe to aggregation updates (leaderboards, stats, rankings)
+     *
+     * @generated from protobuf rpc: SubscribeAggregations
+     */
+    subscribeAggregations(input: SubscribeAggregationsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeAggregationsRequest, SubscribeAggregationsResponse> {
+        const method = this.methods[25], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeAggregationsRequest, SubscribeAggregationsResponse>("serverStreaming", this._transport, method, opt, input);
+    }
+    /**
+     * Update an aggregations subscription
+     *
+     * @generated from protobuf rpc: UpdateAggregationsSubscription
+     */
+    updateAggregationsSubscription(input: UpdateAggregationsSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateAggregationsSubscriptionRequest, UpdateAggregationsSubscriptionResponse> {
+        const method = this.methods[26], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateAggregationsSubscriptionRequest, UpdateAggregationsSubscriptionResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * Retrieve activities (user session tracking)
+     *
+     * @generated from protobuf rpc: RetrieveActivities
+     */
+    retrieveActivities(input: RetrieveActivitiesRequest, options?: RpcOptions): UnaryCall<RetrieveActivitiesRequest, RetrieveActivitiesResponse> {
+        const method = this.methods[27], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveActivitiesRequest, RetrieveActivitiesResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * Subscribe to activity updates (user session tracking)
+     *
+     * @generated from protobuf rpc: SubscribeActivities
+     */
+    subscribeActivities(input: SubscribeActivitiesRequest, options?: RpcOptions): ServerStreamingCall<SubscribeActivitiesRequest, SubscribeActivitiesResponse> {
+        const method = this.methods[28], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeActivitiesRequest, SubscribeActivitiesResponse>("serverStreaming", this._transport, method, opt, input);
+    }
+    /**
+     * Update an activities subscription
+     *
+     * @generated from protobuf rpc: UpdateActivitiesSubscription
+     */
+    updateActivitiesSubscription(input: UpdateActivitiesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateActivitiesSubscriptionRequest, Empty> {
+        const method = this.methods[29], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateActivitiesSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
+    }
+    /**
      * Publish a torii offchain message
      *
      * @generated from protobuf rpc: PublishMessage
      */
     publishMessage(input: PublishMessageRequest, options?: RpcOptions): UnaryCall<PublishMessageRequest, PublishMessageResponse> {
-        const method = this.methods[24], opt = this._transport.mergeOptions(options);
+        const method = this.methods[30], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageRequest, PublishMessageResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -459,7 +565,16 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: PublishMessageBatch
      */
     publishMessageBatch(input: PublishMessageBatchRequest, options?: RpcOptions): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse> {
-        const method = this.methods[25], opt = this._transport.mergeOptions(options);
+        const method = this.methods[31], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageBatchRequest, PublishMessageBatchResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * Execute a SQL query and return results
+     *
+     * @generated from protobuf rpc: ExecuteSql
+     */
+    executeSql(input: SqlQueryRequest, options?: RpcOptions): UnaryCall<SqlQueryRequest, SqlQueryResponse> {
+        const method = this.methods[32], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SqlQueryRequest, SqlQueryResponse>("unary", this._transport, method, opt, input);
     }
 }
