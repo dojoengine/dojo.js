@@ -40,6 +40,7 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                 entities,
                 client.onEntityUpdated(
                     query.clause,
+                    undefined,
                     (_: string, entityData: torii.Entity) => {
                         try {
                             if (callback) {
@@ -82,6 +83,7 @@ export async function init<T extends SchemaType>(options: SDKConfig) {
                 events,
                 client.onEventMessageUpdated(
                     query.clause,
+                    undefined,
                     (_: string, entityData: any) => {
                         try {
                             if (callback) {

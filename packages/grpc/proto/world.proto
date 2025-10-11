@@ -97,6 +97,18 @@ service World {
     // Update an activities subscription
     rpc UpdateActivitiesSubscription (UpdateActivitiesSubscriptionRequest) returns (google.protobuf.Empty);
 
+    // Retrieve achievements
+    rpc RetrieveAchievements (RetrieveAchievementsRequest) returns (RetrieveAchievementsResponse);
+
+    // Retrieve player achievements (stats + progress)
+    rpc RetrievePlayerAchievements (RetrievePlayerAchievementsRequest) returns (RetrievePlayerAchievementsResponse);
+
+    // Subscribe to achievement progression updates
+    rpc SubscribeAchievementProgressions (SubscribeAchievementProgressionsRequest) returns (stream SubscribeAchievementProgressionsResponse);
+
+    // Update an achievement progressions subscription
+    rpc UpdateAchievementProgressionsSubscription (UpdateAchievementProgressionsSubscriptionRequest) returns (google.protobuf.Empty);
+
     // Publish a torii offchain message
     rpc PublishMessage (PublishMessageRequest) returns (PublishMessageResponse);
 
@@ -432,4 +444,60 @@ message UpdateActivitiesSubscriptionRequest {
     repeated string namespaces = 3;
     // Filter by caller addresses
     repeated bytes caller_addresses = 4;
+}
+
+// A request to subscribe to achievement progression updates
+message SubscribeAchievementProgressionsRequest {
+    // Filter by world addresses
+    repeated bytes world_addresses = 1;
+    // Filter by namespaces
+    repeated string namespaces = 2;
+    // Filter by player addresses
+    repeated bytes player_addresses = 3;
+    // Filter by achievement IDs
+    repeated string achievement_ids = 4;
+}
+
+// A response containing achievement progression updates
+message SubscribeAchievementProgressionsResponse {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // The achievement progression update
+    types.AchievementProgression progression = 2;
+}
+
+// A request to update an achievement progressions subscription
+message UpdateAchievementProgressionsSubscriptionRequest {
+    // The subscription ID
+    uint64 subscription_id = 1;
+    // Filter by world addresses
+    repeated bytes world_addresses = 2;
+    // Filter by namespaces
+    repeated string namespaces = 3;
+    // Filter by player addresses
+    repeated bytes player_addresses = 4;
+    // Filter by achievement IDs
+    repeated string achievement_ids = 5;
+}
+
+// A request to retrieve achievements
+message RetrieveAchievementsRequest {
+    types.AchievementQuery query = 1;
+}
+
+// A response containing achievements
+message RetrieveAchievementsResponse {
+    string next_cursor = 1;
+    repeated types.Achievement achievements = 2;
+}
+
+// A request to retrieve player achievements
+message RetrievePlayerAchievementsRequest {
+    types.PlayerAchievementQuery query = 1;
+}
+
+// A response containing player achievement data (paginated)
+message RetrievePlayerAchievementsResponse {
+    string next_cursor = 1;
+    repeated types.PlayerAchievementEntry players = 2;
 }

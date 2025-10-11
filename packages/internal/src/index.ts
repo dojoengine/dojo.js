@@ -8,6 +8,7 @@ export * from "./pagination";
 export * from "./parseEntities";
 export * from "./subscribeQueryModel";
 export * from "./token";
+export * from "./achievements";
 export * from "./toriiQueryBuilder";
 export { HistoricalToriiQueryBuilder } from "./toriiQueryBuilder";
 export * from "./types";

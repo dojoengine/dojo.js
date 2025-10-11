@@ -8,13 +8,22 @@ import {
     Pagination,
     parseEntities,
     defaultTokenBalance,
+    defaultTokenTransfer,
     getTokenBalances,
+    getAchievements,
+    getPlayerAchievements,
+    getTokenTransfers,
     getTokens,
     parseTokenRequest,
     safeCallback,
     subscribeToken,
     subscribeTokenBalance,
+    subscribeTokenTransfer,
     updateTokenBalanceSubscription,
+    onAchievementProgressionUpdated as onAchievementProgressionUpdatedInternal,
+    updateAchievementProgressionSubscription as updateAchievementProgressionSubscriptionInternal,
+    updateTokenTransferSubscription,
+    defaultAchievementProgression,
     defaultToken,
     getTokenContracts,
 } from "@dojoengine/internal";
@@ -23,6 +32,7 @@ import type {
     GetTokenBalanceRequest,
     GetTokenRequest,
     GetTokenContracts,
+    GetTokenTransferRequest,
     SchemaType,
     SDK,
     SDKConfig,
@@ -30,9 +40,11 @@ import type {
     SubscribeResponse,
     SubscribeTokenBalanceRequest,
     SubscribeTokenRequest,
+    SubscribeTokenTransferRequest,
     ToriiResponse,
     UnionOfModelData,
     UpdateTokenBalanceSubscriptionRequest,
+    UpdateTokenTransferSubscriptionRequest,
     AggregationQueryInput,
     AggregationsPage,
     AggregationEntryView,
@@ -41,6 +53,14 @@ import type {
     ActivitiesPage,
     ActivityEntry,
     SqlQueryResponse,
+    AchievementQueryInput,
+    PlayerAchievementQueryInput,
+    AchievementsPage,
+    PlayerAchievementsPage,
+    AchievementProgressionView,
+    AchievementProgressionSubscriptionQuery,
+    SubscribeAchievementProgressionRequest,
+    UpdateAchievementProgressionSubscriptionRequest,
 } from "@dojoengine/internal";
 import { ToriiGrpcClient } from "@dojoengine/grpc";
 
@@ -49,7 +69,8 @@ export interface GrpcClientInterface {
     getEntities(query: torii.Query): Promise<torii.Entities>;
     onEntityUpdated(
         clause: torii.Clause | undefined,
-        callback: (entityData: torii.Entity) => void
+        callback: (entityData: torii.Entity) => void,
+        worldAddresses?: string[]
     ): Promise<torii.Subscription>;
     updateEntitySubscription(
         subscription: torii.Subscription,
@@ -60,7 +81,8 @@ export interface GrpcClientInterface {
     getEventMessages(query: torii.Query): Promise<torii.Entities>;
     onEventMessageUpdated(
         clause: torii.Clause | undefined,
-        callback: (entityData: torii.Entity) => void
+        callback: (entityData: torii.Entity) => void,
+        worldAddresses?: string[]
     ): Promise<torii.Subscription>;
     updateEventMessageSubscription(
         subscription: torii.Subscription,
@@ -85,6 +107,12 @@ export interface GrpcClientInterface {
         token_ids?: any[];
         pagination?: torii.Pagination;
     }): Promise<torii.TokenBalances>;
+    getTokenTransfers(params: {
+        contract_addresses?: string[];
+        account_addresses?: string[];
+        token_ids?: any[];
+        pagination?: torii.Pagination;
+    }): Promise<torii.TokenTransfers>;
     onTokenBalanceUpdated(
         contractAddresses: string[],
         accountAddresses: string[],
@@ -96,11 +124,38 @@ export interface GrpcClientInterface {
         tokenIds: any[],
         callback: (res: torii.Token) => void
     ): Promise<torii.Subscription>;
+    onTokenTransferUpdated(
+        contractAddresses: string[],
+        accountAddresses: string[],
+        tokenIds: any[],
+        callback: (res: torii.TokenTransfer) => void
+    ): Promise<torii.Subscription>;
     updateTokenBalanceSubscription(
         subscription: torii.Subscription,
         contract_addresses: string[],
         account_addresses: string[],
         token_ids: any[]
+    ): Promise<void>;
+    updateTokenTransferSubscription(
+        subscription: torii.Subscription,
+        contract_addresses: string[],
+        account_addresses: string[],
+        token_ids: any[]
+    ): Promise<void>;
+    getAchievements(params?: AchievementQueryInput): Promise<AchievementsPage>;
+    getPlayerAchievements(
+        params?: PlayerAchievementQueryInput
+    ): Promise<PlayerAchievementsPage>;
+    onAchievementProgressionUpdated(
+        query: AchievementProgressionSubscriptionQuery | undefined,
+        callback: (
+            progression: AchievementProgressionView,
+            subscriptionId: bigint
+        ) => void
+    ): Promise<torii.Subscription>;
+    updateAchievementProgressionSubscription(
+        subscription: torii.Subscription,
+        query?: AchievementProgressionSubscriptionQuery
     ): Promise<void>;
 
     // Message operations
@@ -200,7 +255,7 @@ export function createSDK<T extends SchemaType>({
                 Pagination.fromQuery(query, entities.next_cursor).withItems(
                     parsedEntities
                 ),
-                await sdkClient.onEntityUpdated(
+                await grpcClientInstance.onEntityUpdated(
                     q.clause,
                     subscribeQueryModelCallback(callback)
                 ),
@@ -263,6 +318,39 @@ export function createSDK<T extends SchemaType>({
                 return [balances, subscription];
             }
             return await subscribeTokenBalance(client!, request);
+        },
+
+        /**
+         * Subscribes to token transfer updates.
+         *
+         * @param {SubscribeTokenTransferRequest} request
+         * @returns {Promise<[torii.TokenTransfers, torii.Subscription]>}
+         */
+        subscribeTokenTransfer: async (
+            request: SubscribeTokenTransferRequest
+        ): Promise<[torii.TokenTransfers, torii.Subscription]> => {
+            if (grpcClient) {
+                const {
+                    contractAddresses,
+                    accountAddresses,
+                    tokenIds,
+                    pagination,
+                } = parseTokenRequest(request);
+                const transfers = await grpcClient.getTokenTransfers({
+                    contract_addresses: contractAddresses,
+                    account_addresses: accountAddresses,
+                    token_ids: tokenIds,
+                    pagination,
+                });
+                const subscription = await grpcClient.onTokenTransferUpdated(
+                    contractAddresses ?? [],
+                    accountAddresses ?? [],
+                    tokenIds ?? [],
+                    safeCallback(request.callback, defaultTokenTransfer)
+                );
+                return [transfers, subscription];
+            }
+            return await subscribeTokenTransfer(client!, request);
         },
 
         /**
@@ -430,6 +518,50 @@ export function createSDK<T extends SchemaType>({
         },
 
         /**
+         * Gets token transfers based on the provided request.
+         *
+         * @param {GetTokenTransferRequest} request
+         * @returns {Promise<torii.TokenTransfers>}
+         */
+        getTokenTransfers: async (
+            request: GetTokenTransferRequest
+        ): Promise<torii.TokenTransfers> => {
+            if (grpcClient) {
+                const {
+                    contractAddresses,
+                    accountAddresses,
+                    tokenIds,
+                    pagination,
+                } = parseTokenRequest(request);
+                return await grpcClient.getTokenTransfers({
+                    contract_addresses: contractAddresses,
+                    account_addresses: accountAddresses,
+                    token_ids: tokenIds,
+                    pagination,
+                });
+            }
+            return await getTokenTransfers(client!, request);
+        },
+
+        getAchievements: async (
+            query?: AchievementQueryInput
+        ): Promise<AchievementsPage> => {
+            if (grpcClient) {
+                return await grpcClientInstance.getAchievements(query);
+            }
+            return await getAchievements(client!, query);
+        },
+
+        getPlayerAchievements: async (
+            query?: PlayerAchievementQueryInput
+        ): Promise<PlayerAchievementsPage> => {
+            if (grpcClient) {
+                return await grpcClientInstance.getPlayerAchievements(query);
+            }
+            return await getPlayerAchievements(client!, query);
+        },
+
+        /**
          * Subscribes to token balance updates
          *
          * @param {SubscribeTokenBalanceRequest} request
@@ -471,6 +603,25 @@ export function createSDK<T extends SchemaType>({
         },
 
         /**
+         * Subscribes to token transfer updates.
+         *
+         * @param {SubscribeTokenTransferRequest} request
+         * @returns {torii.Subscription}
+         */
+        onTokenTransferUpdated: async (
+            request: SubscribeTokenTransferRequest
+        ): Promise<torii.Subscription> => {
+            const { contractAddresses, accountAddresses, tokenIds } =
+                parseTokenRequest(request);
+            return await grpcClientInstance.onTokenTransferUpdated(
+                contractAddresses ?? [],
+                accountAddresses ?? [],
+                tokenIds ?? [],
+                safeCallback(request.callback, defaultTokenTransfer)
+            );
+        },
+
+        /**
          * Updates an existing token balance subscription
          *
          * @param {UpdateTokenBalanceSubscriptionRequest} request
@@ -490,6 +641,68 @@ export function createSDK<T extends SchemaType>({
                 );
             }
             return await updateTokenBalanceSubscription(client!, request);
+        },
+
+        /**
+         * Updates an existing token transfer subscription
+         *
+         * @param {UpdateTokenTransferSubscriptionRequest} request
+         * @returns {Promise<void>}
+         */
+        updateTokenTransferSubscription: async (
+            request: UpdateTokenTransferSubscriptionRequest
+        ): Promise<void> => {
+            if (grpcClient) {
+                const { contractAddresses, accountAddresses, tokenIds } =
+                    parseTokenRequest(request);
+                return await grpcClient.updateTokenTransferSubscription(
+                    request.subscription,
+                    contractAddresses ?? [],
+                    accountAddresses ?? [],
+                    tokenIds ?? []
+                );
+            }
+            return await updateTokenTransferSubscription(client!, request);
+        },
+
+        onAchievementProgressionUpdated: async (
+            request: SubscribeAchievementProgressionRequest
+        ): Promise<torii.Subscription> => {
+            const { callback, ...filters } = request;
+            const handler = safeCallback(
+                callback,
+                defaultAchievementProgression
+            );
+
+            if (grpcClient) {
+                return (await grpcClientInstance.onAchievementProgressionUpdated(
+                    filters,
+                    (progression) => handler(progression as any)
+                )) as unknown as torii.Subscription;
+            }
+
+            return await onAchievementProgressionUpdatedInternal(
+                client!,
+                request
+            );
+        },
+
+        updateAchievementProgressionSubscription: async (
+            request: UpdateAchievementProgressionSubscriptionRequest
+        ): Promise<void> => {
+            if (grpcClient) {
+                const { subscription, ...filters } = request;
+                await grpcClientInstance.updateAchievementProgressionSubscription(
+                    subscription as any,
+                    filters
+                );
+                return;
+            }
+
+            await updateAchievementProgressionSubscriptionInternal(
+                client!,
+                request
+            );
         },
 
         /**

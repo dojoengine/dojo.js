@@ -37,14 +37,49 @@ const createMockClient = (): torii.ToriiClient =>
             items: [],
             next_cursor: null,
         }),
+        getTokens: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        getTokenContracts: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        getTokenBalances: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        getTokenTransfers: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        getAchievements: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        getPlayerAchievements: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
         onEntityUpdated: vi.fn().mockReturnValue({ cancel: vi.fn() }),
         onEventMessageUpdated: vi.fn().mockReturnValue({ cancel: vi.fn() }),
+        onTokenUpdated: vi.fn().mockResolvedValue({ cancel: vi.fn() }),
+        onTokenBalanceUpdated: vi.fn().mockResolvedValue({ cancel: vi.fn() }),
+        onTokenTransferUpdated: vi.fn().mockResolvedValue({ cancel: vi.fn() }),
         publishMessage: vi.fn().mockResolvedValue("0x123"),
         publishMessageBatch: vi
             .fn()
             .mockResolvedValue(["0x123", "0x456", "0x789"]),
         updateEntitySubscription: vi.fn().mockResolvedValue(undefined),
         updateEventMessageSubscription: vi.fn().mockResolvedValue(undefined),
+        updateTokenBalanceSubscription: vi.fn().mockResolvedValue(undefined),
+        updateTokenTransferSubscription: vi.fn().mockResolvedValue(undefined),
+        onAchievementProgressionUpdated: vi
+            .fn()
+            .mockResolvedValue({ cancel: vi.fn() }),
+        updateAchievementProgressionSubscription: vi
+            .fn()
+            .mockResolvedValue(undefined),
         getControllers: vi.fn().mockResolvedValue(["0x123", "0x456"]),
         // Add other required methods as needed
     }) as unknown as torii.ToriiClient;
@@ -102,8 +137,16 @@ describe("createSDK", () => {
         expect(sdk.sendMessageBatch).toBeDefined();
         expect(sdk.getTokens).toBeDefined();
         expect(sdk.getTokenBalances).toBeDefined();
+        expect(sdk.getTokenTransfers).toBeDefined();
+        expect(sdk.getAchievements).toBeDefined();
+        expect(sdk.getPlayerAchievements).toBeDefined();
         expect(sdk.onTokenBalanceUpdated).toBeDefined();
+        expect(sdk.onTokenTransferUpdated).toBeDefined();
         expect(sdk.updateTokenBalanceSubscription).toBeDefined();
+        expect(sdk.updateTokenTransferSubscription).toBeDefined();
+        expect(sdk.onAchievementProgressionUpdated).toBeDefined();
+        expect(sdk.updateAchievementProgressionSubscription).toBeDefined();
+        expect(sdk.subscribeTokenTransfer).toBeDefined();
         expect(sdk.updateEntitySubscription).toBeDefined();
         expect(sdk.updateEventMessageSubscription).toBeDefined();
         expect(sdk.getControllers).toBeDefined();
@@ -240,8 +283,17 @@ describe("createSDK", () => {
     it("should handle entity queries", async () => {
         const mockQuery = {
             build: vi.fn().mockReturnValue({
-                clause: {},
-                limit: 10,
+                clause: undefined,
+                pagination: {
+                    limit: 10,
+                    cursor: undefined,
+                    direction: "Forward",
+                    order_by: [],
+                },
+                no_hashed_keys: true,
+                models: [],
+                historical: false,
+                world_addresses: [],
             }),
             getPagination: vi.fn().mockReturnValue({
                 limit: 10,
@@ -268,8 +320,17 @@ describe("createSDK", () => {
     it("should handle subscriptions with callbacks", async () => {
         const mockQuery = {
             build: vi.fn().mockReturnValue({
-                clause: {},
-                limit: 10,
+                clause: undefined,
+                pagination: {
+                    limit: 10,
+                    cursor: undefined,
+                    direction: "Forward",
+                    order_by: [],
+                },
+                no_hashed_keys: true,
+                models: [],
+                historical: false,
+                world_addresses: [],
             }),
             getPagination: vi.fn().mockReturnValue({
                 limit: 10,
@@ -279,11 +340,16 @@ describe("createSDK", () => {
 
         const mockCallback = vi.fn();
 
+        const mockGrpcClient = {
+            ...mockClient,
+        } as unknown as torii.ToriiClient;
+
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,
             config: mockConfig,
             sendMessage: mockSignMessage,
             sendMessageBatch: mockSignMessageBatch,
+            grpcClient: mockGrpcClient as any,
         });
 
         const [initial, subscription] = await sdk.subscribeEntityQuery({
@@ -291,8 +357,8 @@ describe("createSDK", () => {
             callback: mockCallback,
         });
 
-        expect(mockClient.getEntities).toHaveBeenCalled();
-        expect(mockClient.onEntityUpdated).toHaveBeenCalled();
+        expect(mockGrpcClient.getEntities).toHaveBeenCalled();
+        expect(mockGrpcClient.onEntityUpdated).toHaveBeenCalled();
         // Use public method to check items
         expect(initial.getItems()).toEqual([]);
         expect(subscription).toBeDefined();

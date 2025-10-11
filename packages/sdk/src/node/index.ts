@@ -91,6 +91,7 @@ export async function init<T extends SchemaType>(
                     signature: Array.isArray(signature)
                         ? signature
                         : [signature.r.toString(), signature.s.toString()],
+                    world_address: options.client!.worldAddress!,
                 })
             );
         } catch (error) {
@@ -127,6 +128,7 @@ export async function init<T extends SchemaType>(
                     signature: Array.isArray(signature)
                         ? signature
                         : [signature.r.toString(), signature.s.toString()],
+                    world_address: options.client!.worldAddress!,
                 });
             }
 

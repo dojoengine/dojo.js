@@ -1229,6 +1229,435 @@ export interface AggregationEntry {
     updated_at: string;
 }
 /**
+ * Achievement definition
+ *
+ * @generated from protobuf message types.Achievement
+ */
+export interface Achievement {
+    /**
+     * Achievement ID (unique identifier)
+     *
+     * @generated from protobuf field: string id = 1
+     */
+    id: string;
+    /**
+     * World contract address
+     *
+     * @generated from protobuf field: bytes world_address = 2
+     */
+    world_address: Uint8Array;
+    /**
+     * Namespace
+     *
+     * @generated from protobuf field: string namespace = 3
+     */
+    namespace: string;
+    /**
+     * Entity ID from on-chain
+     *
+     * @generated from protobuf field: string entity_id = 4
+     */
+    entity_id: string;
+    /**
+     * Is this achievement hidden
+     *
+     * @generated from protobuf field: bool hidden = 5
+     */
+    hidden: boolean;
+    /**
+     * Display index/order
+     *
+     * @generated from protobuf field: uint32 index = 6
+     */
+    index: number;
+    /**
+     * Points awarded for completion
+     *
+     * @generated from protobuf field: uint32 points = 7
+     */
+    points: number;
+    /**
+     * Start time
+     *
+     * @generated from protobuf field: string start = 8
+     */
+    start: string;
+    /**
+     * End time
+     *
+     * @generated from protobuf field: string end = 9
+     */
+    end: string;
+    /**
+     * Achievement group
+     *
+     * @generated from protobuf field: string group = 10
+     */
+    group: string;
+    /**
+     * Icon identifier
+     *
+     * @generated from protobuf field: string icon = 11
+     */
+    icon: string;
+    /**
+     * Achievement title
+     *
+     * @generated from protobuf field: string title = 12
+     */
+    title: string;
+    /**
+     * Achievement description
+     *
+     * @generated from protobuf field: string description = 13
+     */
+    description: string;
+    /**
+     * Tasks to complete for this achievement
+     *
+     * @generated from protobuf field: repeated types.AchievementTask tasks = 14
+     */
+    tasks: AchievementTask[];
+    /**
+     * Additional data (JSON)
+     *
+     * @generated from protobuf field: optional string data = 15
+     */
+    data?: string;
+    /**
+     * Total completions across all players
+     *
+     * @generated from protobuf field: uint32 total_completions = 16
+     */
+    total_completions: number;
+    /**
+     * Completion rate (percentage 0-100)
+     *
+     * @generated from protobuf field: double completion_rate = 17
+     */
+    completion_rate: number;
+    /**
+     * When the achievement was created
+     *
+     * @generated from protobuf field: uint64 created_at = 18
+     */
+    created_at: bigint;
+    /**
+     * When the achievement was last updated
+     *
+     * @generated from protobuf field: uint64 updated_at = 19
+     */
+    updated_at: bigint;
+}
+/**
+ * A task within an achievement
+ *
+ * @generated from protobuf message types.AchievementTask
+ */
+export interface AchievementTask {
+    /**
+     * Task ID from on-chain (unique within achievement)
+     *
+     * @generated from protobuf field: string task_id = 1
+     */
+    task_id: string;
+    /**
+     * Task description
+     *
+     * @generated from protobuf field: string description = 2
+     */
+    description: string;
+    /**
+     * Target count to complete this task
+     *
+     * @generated from protobuf field: uint32 total = 3
+     */
+    total: number;
+    /**
+     * Total completions across all players
+     *
+     * @generated from protobuf field: uint32 total_completions = 4
+     */
+    total_completions: number;
+    /**
+     * Completion rate (percentage 0-100)
+     *
+     * @generated from protobuf field: double completion_rate = 5
+     */
+    completion_rate: number;
+    /**
+     * When the task was created
+     *
+     * @generated from protobuf field: uint64 created_at = 6
+     */
+    created_at: bigint;
+}
+/**
+ * Player's global achievement statistics (across all worlds/namespaces)
+ *
+ * @generated from protobuf message types.PlayerAchievementStats
+ */
+export interface PlayerAchievementStats {
+    /**
+     * Total points earned across all games
+     *
+     * @generated from protobuf field: uint32 total_points = 1
+     */
+    total_points: number;
+    /**
+     * Number of achievements completed across all games
+     *
+     * @generated from protobuf field: uint32 completed_achievements = 2
+     */
+    completed_achievements: number;
+    /**
+     * Total achievements available across all games
+     *
+     * @generated from protobuf field: uint32 total_achievements = 3
+     */
+    total_achievements: number;
+    /**
+     * Overall completion percentage
+     *
+     * @generated from protobuf field: double completion_percentage = 4
+     */
+    completion_percentage: number;
+    /**
+     * Last achievement completion time (across all games)
+     *
+     * @generated from protobuf field: optional uint64 last_achievement_at = 5
+     */
+    last_achievement_at?: bigint;
+    /**
+     * When the stats were first created
+     *
+     * @generated from protobuf field: uint64 created_at = 6
+     */
+    created_at: bigint;
+    /**
+     * When the stats were last updated
+     *
+     * @generated from protobuf field: uint64 updated_at = 7
+     */
+    updated_at: bigint;
+}
+/**
+ * Achievement progression for a specific player and task
+ *
+ * @generated from protobuf message types.AchievementProgression
+ */
+export interface AchievementProgression {
+    /**
+     * Unique identifier (world:namespace:task_id:player_id)
+     *
+     * @generated from protobuf field: string id = 1
+     */
+    id: string;
+    /**
+     * Achievement ID this task belongs to
+     *
+     * @generated from protobuf field: string achievement_id = 2
+     */
+    achievement_id: string;
+    /**
+     * Task ID
+     *
+     * @generated from protobuf field: string task_id = 3
+     */
+    task_id: string;
+    /**
+     * World address
+     *
+     * @generated from protobuf field: bytes world_address = 4
+     */
+    world_address: Uint8Array;
+    /**
+     * Namespace
+     *
+     * @generated from protobuf field: string namespace = 5
+     */
+    namespace: string;
+    /**
+     * Player address
+     *
+     * @generated from protobuf field: bytes player_id = 6
+     */
+    player_id: Uint8Array;
+    /**
+     * Current count/progress
+     *
+     * @generated from protobuf field: uint32 count = 7
+     */
+    count: number;
+    /**
+     * Is the task completed
+     *
+     * @generated from protobuf field: bool completed = 8
+     */
+    completed: boolean;
+    /**
+     * When the task was completed
+     *
+     * @generated from protobuf field: optional uint64 completed_at = 9
+     */
+    completed_at?: bigint;
+    /**
+     * When the progression was created
+     *
+     * @generated from protobuf field: uint64 created_at = 10
+     */
+    created_at: bigint;
+    /**
+     * When the progression was last updated
+     *
+     * @generated from protobuf field: uint64 updated_at = 11
+     */
+    updated_at: bigint;
+}
+/**
+ * Query for achievements
+ *
+ * @generated from protobuf message types.AchievementQuery
+ */
+export interface AchievementQuery {
+    /**
+     * Filter by world addresses
+     *
+     * @generated from protobuf field: repeated bytes world_addresses = 1
+     */
+    world_addresses: Uint8Array[];
+    /**
+     * Filter by namespaces
+     *
+     * @generated from protobuf field: repeated string namespaces = 2
+     */
+    namespaces: string[];
+    /**
+     * Filter by hidden status (optional)
+     *
+     * @generated from protobuf field: optional bool hidden = 3
+     */
+    hidden?: boolean;
+    /**
+     * Pagination
+     *
+     * @generated from protobuf field: types.Pagination pagination = 4
+     */
+    pagination?: Pagination;
+}
+/**
+ * Query for player achievements
+ *
+ * @generated from protobuf message types.PlayerAchievementQuery
+ */
+export interface PlayerAchievementQuery {
+    /**
+     * Filter by world addresses
+     *
+     * @generated from protobuf field: repeated bytes world_addresses = 1
+     */
+    world_addresses: Uint8Array[];
+    /**
+     * Filter by namespaces
+     *
+     * @generated from protobuf field: repeated string namespaces = 2
+     */
+    namespaces: string[];
+    /**
+     * Filter by player addresses
+     *
+     * @generated from protobuf field: repeated bytes player_addresses = 3
+     */
+    player_addresses: Uint8Array[];
+    /**
+     * Pagination
+     *
+     * @generated from protobuf field: types.Pagination pagination = 4
+     */
+    pagination?: Pagination;
+}
+/**
+ * Player's progress on a specific achievement
+ *
+ * @generated from protobuf message types.PlayerAchievementProgress
+ */
+export interface PlayerAchievementProgress {
+    /**
+     * The achievement definition (includes task definitions)
+     *
+     * @generated from protobuf field: types.Achievement achievement = 1
+     */
+    achievement?: Achievement;
+    /**
+     * Progress on each task (references tasks by ID)
+     *
+     * @generated from protobuf field: repeated types.TaskProgress taskProgress = 2
+     */
+    taskProgress: TaskProgress[];
+    /**
+     * Is the achievement completed
+     *
+     * @generated from protobuf field: bool completed = 3
+     */
+    completed: boolean;
+    /**
+     * Progress percentage (0-100)
+     *
+     * @generated from protobuf field: double progress_percentage = 4
+     */
+    progress_percentage: number;
+}
+/**
+ * Progress on a specific task (reference only, no duplication)
+ *
+ * @generated from protobuf message types.TaskProgress
+ */
+export interface TaskProgress {
+    /**
+     * Task ID reference (matches task_id in Achievement.tasks)
+     *
+     * @generated from protobuf field: string task_id = 1
+     */
+    task_id: string;
+    /**
+     * Current count
+     *
+     * @generated from protobuf field: uint32 count = 2
+     */
+    count: number;
+    /**
+     * Is the task completed
+     *
+     * @generated from protobuf field: bool completed = 3
+     */
+    completed: boolean;
+}
+/**
+ * Player achievement entry (for a specific world/namespace/player combination)
+ *
+ * @generated from protobuf message types.PlayerAchievementEntry
+ */
+export interface PlayerAchievementEntry {
+    /**
+     * Player address (global identifier)
+     *
+     * @generated from protobuf field: bytes player_address = 1
+     */
+    player_address: Uint8Array;
+    /**
+     * Player's overall statistics (across all worlds/namespaces)
+     *
+     * @generated from protobuf field: types.PlayerAchievementStats stats = 2
+     */
+    stats?: PlayerAchievementStats;
+    /**
+     * Progress on each achievement (each achievement has its own world/namespace scope)
+     *
+     * @generated from protobuf field: repeated types.PlayerAchievementProgress achievements = 3
+     */
+    achievements: PlayerAchievementProgress[];
+}
+/**
  * @generated from protobuf enum types.PatternMatching
  */
 export enum PatternMatching {
@@ -4408,3 +4837,834 @@ class AggregationEntry$Type extends MessageType<AggregationEntry> {
  * @generated MessageType for protobuf message types.AggregationEntry
  */
 export const AggregationEntry = new AggregationEntry$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Achievement$Type extends MessageType<Achievement> {
+    constructor() {
+        super("types.Achievement", [
+            { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "world_address", kind: "scalar", localName: "world_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "namespace", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "entity_id", kind: "scalar", localName: "entity_id", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "hidden", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 6, name: "index", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 7, name: "points", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 8, name: "start", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 9, name: "end", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 10, name: "group", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 11, name: "icon", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 12, name: "title", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 13, name: "description", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 14, name: "tasks", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => AchievementTask },
+            { no: 15, name: "data", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 16, name: "total_completions", kind: "scalar", localName: "total_completions", T: 13 /*ScalarType.UINT32*/ },
+            { no: 17, name: "completion_rate", kind: "scalar", localName: "completion_rate", T: 1 /*ScalarType.DOUBLE*/ },
+            { no: 18, name: "created_at", kind: "scalar", localName: "created_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 19, name: "updated_at", kind: "scalar", localName: "updated_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Achievement>): Achievement {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = "";
+        message.world_address = new Uint8Array(0);
+        message.namespace = "";
+        message.entity_id = "";
+        message.hidden = false;
+        message.index = 0;
+        message.points = 0;
+        message.start = "";
+        message.end = "";
+        message.group = "";
+        message.icon = "";
+        message.title = "";
+        message.description = "";
+        message.tasks = [];
+        message.total_completions = 0;
+        message.completion_rate = 0;
+        message.created_at = 0n;
+        message.updated_at = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<Achievement>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Achievement): Achievement {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string id */ 1:
+                    message.id = reader.string();
+                    break;
+                case /* bytes world_address */ 2:
+                    message.world_address = reader.bytes();
+                    break;
+                case /* string namespace */ 3:
+                    message.namespace = reader.string();
+                    break;
+                case /* string entity_id */ 4:
+                    message.entity_id = reader.string();
+                    break;
+                case /* bool hidden */ 5:
+                    message.hidden = reader.bool();
+                    break;
+                case /* uint32 index */ 6:
+                    message.index = reader.uint32();
+                    break;
+                case /* uint32 points */ 7:
+                    message.points = reader.uint32();
+                    break;
+                case /* string start */ 8:
+                    message.start = reader.string();
+                    break;
+                case /* string end */ 9:
+                    message.end = reader.string();
+                    break;
+                case /* string group */ 10:
+                    message.group = reader.string();
+                    break;
+                case /* string icon */ 11:
+                    message.icon = reader.string();
+                    break;
+                case /* string title */ 12:
+                    message.title = reader.string();
+                    break;
+                case /* string description */ 13:
+                    message.description = reader.string();
+                    break;
+                case /* repeated types.AchievementTask tasks */ 14:
+                    message.tasks.push(AchievementTask.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                case /* optional string data */ 15:
+                    message.data = reader.string();
+                    break;
+                case /* uint32 total_completions */ 16:
+                    message.total_completions = reader.uint32();
+                    break;
+                case /* double completion_rate */ 17:
+                    message.completion_rate = reader.double();
+                    break;
+                case /* uint64 created_at */ 18:
+                    message.created_at = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 updated_at */ 19:
+                    message.updated_at = reader.uint64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Achievement, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string id = 1; */
+        if (message.id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.id);
+        /* bytes world_address = 2; */
+        if (message.world_address.length)
+            writer.tag(2, WireType.LengthDelimited).bytes(message.world_address);
+        /* string namespace = 3; */
+        if (message.namespace !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.namespace);
+        /* string entity_id = 4; */
+        if (message.entity_id !== "")
+            writer.tag(4, WireType.LengthDelimited).string(message.entity_id);
+        /* bool hidden = 5; */
+        if (message.hidden !== false)
+            writer.tag(5, WireType.Varint).bool(message.hidden);
+        /* uint32 index = 6; */
+        if (message.index !== 0)
+            writer.tag(6, WireType.Varint).uint32(message.index);
+        /* uint32 points = 7; */
+        if (message.points !== 0)
+            writer.tag(7, WireType.Varint).uint32(message.points);
+        /* string start = 8; */
+        if (message.start !== "")
+            writer.tag(8, WireType.LengthDelimited).string(message.start);
+        /* string end = 9; */
+        if (message.end !== "")
+            writer.tag(9, WireType.LengthDelimited).string(message.end);
+        /* string group = 10; */
+        if (message.group !== "")
+            writer.tag(10, WireType.LengthDelimited).string(message.group);
+        /* string icon = 11; */
+        if (message.icon !== "")
+            writer.tag(11, WireType.LengthDelimited).string(message.icon);
+        /* string title = 12; */
+        if (message.title !== "")
+            writer.tag(12, WireType.LengthDelimited).string(message.title);
+        /* string description = 13; */
+        if (message.description !== "")
+            writer.tag(13, WireType.LengthDelimited).string(message.description);
+        /* repeated types.AchievementTask tasks = 14; */
+        for (let i = 0; i < message.tasks.length; i++)
+            AchievementTask.internalBinaryWrite(message.tasks[i], writer.tag(14, WireType.LengthDelimited).fork(), options).join();
+        /* optional string data = 15; */
+        if (message.data !== undefined)
+            writer.tag(15, WireType.LengthDelimited).string(message.data);
+        /* uint32 total_completions = 16; */
+        if (message.total_completions !== 0)
+            writer.tag(16, WireType.Varint).uint32(message.total_completions);
+        /* double completion_rate = 17; */
+        if (message.completion_rate !== 0)
+            writer.tag(17, WireType.Bit64).double(message.completion_rate);
+        /* uint64 created_at = 18; */
+        if (message.created_at !== 0n)
+            writer.tag(18, WireType.Varint).uint64(message.created_at);
+        /* uint64 updated_at = 19; */
+        if (message.updated_at !== 0n)
+            writer.tag(19, WireType.Varint).uint64(message.updated_at);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.Achievement
+ */
+export const Achievement = new Achievement$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class AchievementTask$Type extends MessageType<AchievementTask> {
+    constructor() {
+        super("types.AchievementTask", [
+            { no: 1, name: "task_id", kind: "scalar", localName: "task_id", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "description", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "total", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 4, name: "total_completions", kind: "scalar", localName: "total_completions", T: 13 /*ScalarType.UINT32*/ },
+            { no: 5, name: "completion_rate", kind: "scalar", localName: "completion_rate", T: 1 /*ScalarType.DOUBLE*/ },
+            { no: 6, name: "created_at", kind: "scalar", localName: "created_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<AchievementTask>): AchievementTask {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.task_id = "";
+        message.description = "";
+        message.total = 0;
+        message.total_completions = 0;
+        message.completion_rate = 0;
+        message.created_at = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<AchievementTask>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: AchievementTask): AchievementTask {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string task_id */ 1:
+                    message.task_id = reader.string();
+                    break;
+                case /* string description */ 2:
+                    message.description = reader.string();
+                    break;
+                case /* uint32 total */ 3:
+                    message.total = reader.uint32();
+                    break;
+                case /* uint32 total_completions */ 4:
+                    message.total_completions = reader.uint32();
+                    break;
+                case /* double completion_rate */ 5:
+                    message.completion_rate = reader.double();
+                    break;
+                case /* uint64 created_at */ 6:
+                    message.created_at = reader.uint64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: AchievementTask, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string task_id = 1; */
+        if (message.task_id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.task_id);
+        /* string description = 2; */
+        if (message.description !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.description);
+        /* uint32 total = 3; */
+        if (message.total !== 0)
+            writer.tag(3, WireType.Varint).uint32(message.total);
+        /* uint32 total_completions = 4; */
+        if (message.total_completions !== 0)
+            writer.tag(4, WireType.Varint).uint32(message.total_completions);
+        /* double completion_rate = 5; */
+        if (message.completion_rate !== 0)
+            writer.tag(5, WireType.Bit64).double(message.completion_rate);
+        /* uint64 created_at = 6; */
+        if (message.created_at !== 0n)
+            writer.tag(6, WireType.Varint).uint64(message.created_at);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.AchievementTask
+ */
+export const AchievementTask = new AchievementTask$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayerAchievementStats$Type extends MessageType<PlayerAchievementStats> {
+    constructor() {
+        super("types.PlayerAchievementStats", [
+            { no: 1, name: "total_points", kind: "scalar", localName: "total_points", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "completed_achievements", kind: "scalar", localName: "completed_achievements", T: 13 /*ScalarType.UINT32*/ },
+            { no: 3, name: "total_achievements", kind: "scalar", localName: "total_achievements", T: 13 /*ScalarType.UINT32*/ },
+            { no: 4, name: "completion_percentage", kind: "scalar", localName: "completion_percentage", T: 1 /*ScalarType.DOUBLE*/ },
+            { no: 5, name: "last_achievement_at", kind: "scalar", localName: "last_achievement_at", opt: true, T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 6, name: "created_at", kind: "scalar", localName: "created_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 7, name: "updated_at", kind: "scalar", localName: "updated_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<PlayerAchievementStats>): PlayerAchievementStats {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.total_points = 0;
+        message.completed_achievements = 0;
+        message.total_achievements = 0;
+        message.completion_percentage = 0;
+        message.created_at = 0n;
+        message.updated_at = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<PlayerAchievementStats>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayerAchievementStats): PlayerAchievementStats {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint32 total_points */ 1:
+                    message.total_points = reader.uint32();
+                    break;
+                case /* uint32 completed_achievements */ 2:
+                    message.completed_achievements = reader.uint32();
+                    break;
+                case /* uint32 total_achievements */ 3:
+                    message.total_achievements = reader.uint32();
+                    break;
+                case /* double completion_percentage */ 4:
+                    message.completion_percentage = reader.double();
+                    break;
+                case /* optional uint64 last_achievement_at */ 5:
+                    message.last_achievement_at = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 created_at */ 6:
+                    message.created_at = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 updated_at */ 7:
+                    message.updated_at = reader.uint64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayerAchievementStats, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint32 total_points = 1; */
+        if (message.total_points !== 0)
+            writer.tag(1, WireType.Varint).uint32(message.total_points);
+        /* uint32 completed_achievements = 2; */
+        if (message.completed_achievements !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.completed_achievements);
+        /* uint32 total_achievements = 3; */
+        if (message.total_achievements !== 0)
+            writer.tag(3, WireType.Varint).uint32(message.total_achievements);
+        /* double completion_percentage = 4; */
+        if (message.completion_percentage !== 0)
+            writer.tag(4, WireType.Bit64).double(message.completion_percentage);
+        /* optional uint64 last_achievement_at = 5; */
+        if (message.last_achievement_at !== undefined)
+            writer.tag(5, WireType.Varint).uint64(message.last_achievement_at);
+        /* uint64 created_at = 6; */
+        if (message.created_at !== 0n)
+            writer.tag(6, WireType.Varint).uint64(message.created_at);
+        /* uint64 updated_at = 7; */
+        if (message.updated_at !== 0n)
+            writer.tag(7, WireType.Varint).uint64(message.updated_at);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.PlayerAchievementStats
+ */
+export const PlayerAchievementStats = new PlayerAchievementStats$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class AchievementProgression$Type extends MessageType<AchievementProgression> {
+    constructor() {
+        super("types.AchievementProgression", [
+            { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "achievement_id", kind: "scalar", localName: "achievement_id", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "task_id", kind: "scalar", localName: "task_id", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "world_address", kind: "scalar", localName: "world_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 5, name: "namespace", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 6, name: "player_id", kind: "scalar", localName: "player_id", T: 12 /*ScalarType.BYTES*/ },
+            { no: 7, name: "count", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 8, name: "completed", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 9, name: "completed_at", kind: "scalar", localName: "completed_at", opt: true, T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 10, name: "created_at", kind: "scalar", localName: "created_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 11, name: "updated_at", kind: "scalar", localName: "updated_at", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<AchievementProgression>): AchievementProgression {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = "";
+        message.achievement_id = "";
+        message.task_id = "";
+        message.world_address = new Uint8Array(0);
+        message.namespace = "";
+        message.player_id = new Uint8Array(0);
+        message.count = 0;
+        message.completed = false;
+        message.created_at = 0n;
+        message.updated_at = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<AchievementProgression>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: AchievementProgression): AchievementProgression {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string id */ 1:
+                    message.id = reader.string();
+                    break;
+                case /* string achievement_id */ 2:
+                    message.achievement_id = reader.string();
+                    break;
+                case /* string task_id */ 3:
+                    message.task_id = reader.string();
+                    break;
+                case /* bytes world_address */ 4:
+                    message.world_address = reader.bytes();
+                    break;
+                case /* string namespace */ 5:
+                    message.namespace = reader.string();
+                    break;
+                case /* bytes player_id */ 6:
+                    message.player_id = reader.bytes();
+                    break;
+                case /* uint32 count */ 7:
+                    message.count = reader.uint32();
+                    break;
+                case /* bool completed */ 8:
+                    message.completed = reader.bool();
+                    break;
+                case /* optional uint64 completed_at */ 9:
+                    message.completed_at = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 created_at */ 10:
+                    message.created_at = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 updated_at */ 11:
+                    message.updated_at = reader.uint64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: AchievementProgression, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string id = 1; */
+        if (message.id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.id);
+        /* string achievement_id = 2; */
+        if (message.achievement_id !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.achievement_id);
+        /* string task_id = 3; */
+        if (message.task_id !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.task_id);
+        /* bytes world_address = 4; */
+        if (message.world_address.length)
+            writer.tag(4, WireType.LengthDelimited).bytes(message.world_address);
+        /* string namespace = 5; */
+        if (message.namespace !== "")
+            writer.tag(5, WireType.LengthDelimited).string(message.namespace);
+        /* bytes player_id = 6; */
+        if (message.player_id.length)
+            writer.tag(6, WireType.LengthDelimited).bytes(message.player_id);
+        /* uint32 count = 7; */
+        if (message.count !== 0)
+            writer.tag(7, WireType.Varint).uint32(message.count);
+        /* bool completed = 8; */
+        if (message.completed !== false)
+            writer.tag(8, WireType.Varint).bool(message.completed);
+        /* optional uint64 completed_at = 9; */
+        if (message.completed_at !== undefined)
+            writer.tag(9, WireType.Varint).uint64(message.completed_at);
+        /* uint64 created_at = 10; */
+        if (message.created_at !== 0n)
+            writer.tag(10, WireType.Varint).uint64(message.created_at);
+        /* uint64 updated_at = 11; */
+        if (message.updated_at !== 0n)
+            writer.tag(11, WireType.Varint).uint64(message.updated_at);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.AchievementProgression
+ */
+export const AchievementProgression = new AchievementProgression$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class AchievementQuery$Type extends MessageType<AchievementQuery> {
+    constructor() {
+        super("types.AchievementQuery", [
+            { no: 1, name: "world_addresses", kind: "scalar", localName: "world_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "namespaces", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "hidden", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+            { no: 4, name: "pagination", kind: "message", T: () => Pagination }
+        ]);
+    }
+    create(value?: PartialMessage<AchievementQuery>): AchievementQuery {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.world_addresses = [];
+        message.namespaces = [];
+        if (value !== undefined)
+            reflectionMergePartial<AchievementQuery>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: AchievementQuery): AchievementQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated bytes world_addresses */ 1:
+                    message.world_addresses.push(reader.bytes());
+                    break;
+                case /* repeated string namespaces */ 2:
+                    message.namespaces.push(reader.string());
+                    break;
+                case /* optional bool hidden */ 3:
+                    message.hidden = reader.bool();
+                    break;
+                case /* types.Pagination pagination */ 4:
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: AchievementQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated bytes world_addresses = 1; */
+        for (let i = 0; i < message.world_addresses.length; i++)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.world_addresses[i]);
+        /* repeated string namespaces = 2; */
+        for (let i = 0; i < message.namespaces.length; i++)
+            writer.tag(2, WireType.LengthDelimited).string(message.namespaces[i]);
+        /* optional bool hidden = 3; */
+        if (message.hidden !== undefined)
+            writer.tag(3, WireType.Varint).bool(message.hidden);
+        /* types.Pagination pagination = 4; */
+        if (message.pagination)
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.AchievementQuery
+ */
+export const AchievementQuery = new AchievementQuery$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayerAchievementQuery$Type extends MessageType<PlayerAchievementQuery> {
+    constructor() {
+        super("types.PlayerAchievementQuery", [
+            { no: 1, name: "world_addresses", kind: "scalar", localName: "world_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "namespaces", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "player_addresses", kind: "scalar", localName: "player_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "pagination", kind: "message", T: () => Pagination }
+        ]);
+    }
+    create(value?: PartialMessage<PlayerAchievementQuery>): PlayerAchievementQuery {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.world_addresses = [];
+        message.namespaces = [];
+        message.player_addresses = [];
+        if (value !== undefined)
+            reflectionMergePartial<PlayerAchievementQuery>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayerAchievementQuery): PlayerAchievementQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated bytes world_addresses */ 1:
+                    message.world_addresses.push(reader.bytes());
+                    break;
+                case /* repeated string namespaces */ 2:
+                    message.namespaces.push(reader.string());
+                    break;
+                case /* repeated bytes player_addresses */ 3:
+                    message.player_addresses.push(reader.bytes());
+                    break;
+                case /* types.Pagination pagination */ 4:
+                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayerAchievementQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated bytes world_addresses = 1; */
+        for (let i = 0; i < message.world_addresses.length; i++)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.world_addresses[i]);
+        /* repeated string namespaces = 2; */
+        for (let i = 0; i < message.namespaces.length; i++)
+            writer.tag(2, WireType.LengthDelimited).string(message.namespaces[i]);
+        /* repeated bytes player_addresses = 3; */
+        for (let i = 0; i < message.player_addresses.length; i++)
+            writer.tag(3, WireType.LengthDelimited).bytes(message.player_addresses[i]);
+        /* types.Pagination pagination = 4; */
+        if (message.pagination)
+            Pagination.internalBinaryWrite(message.pagination, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.PlayerAchievementQuery
+ */
+export const PlayerAchievementQuery = new PlayerAchievementQuery$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayerAchievementProgress$Type extends MessageType<PlayerAchievementProgress> {
+    constructor() {
+        super("types.PlayerAchievementProgress", [
+            { no: 1, name: "achievement", kind: "message", T: () => Achievement },
+            { no: 2, name: "taskProgress", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TaskProgress },
+            { no: 3, name: "completed", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 4, name: "progress_percentage", kind: "scalar", localName: "progress_percentage", T: 1 /*ScalarType.DOUBLE*/ }
+        ]);
+    }
+    create(value?: PartialMessage<PlayerAchievementProgress>): PlayerAchievementProgress {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.taskProgress = [];
+        message.completed = false;
+        message.progress_percentage = 0;
+        if (value !== undefined)
+            reflectionMergePartial<PlayerAchievementProgress>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayerAchievementProgress): PlayerAchievementProgress {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* types.Achievement achievement */ 1:
+                    message.achievement = Achievement.internalBinaryRead(reader, reader.uint32(), options, message.achievement);
+                    break;
+                case /* repeated types.TaskProgress taskProgress */ 2:
+                    message.taskProgress.push(TaskProgress.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                case /* bool completed */ 3:
+                    message.completed = reader.bool();
+                    break;
+                case /* double progress_percentage */ 4:
+                    message.progress_percentage = reader.double();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayerAchievementProgress, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* types.Achievement achievement = 1; */
+        if (message.achievement)
+            Achievement.internalBinaryWrite(message.achievement, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* repeated types.TaskProgress taskProgress = 2; */
+        for (let i = 0; i < message.taskProgress.length; i++)
+            TaskProgress.internalBinaryWrite(message.taskProgress[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        /* bool completed = 3; */
+        if (message.completed !== false)
+            writer.tag(3, WireType.Varint).bool(message.completed);
+        /* double progress_percentage = 4; */
+        if (message.progress_percentage !== 0)
+            writer.tag(4, WireType.Bit64).double(message.progress_percentage);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.PlayerAchievementProgress
+ */
+export const PlayerAchievementProgress = new PlayerAchievementProgress$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class TaskProgress$Type extends MessageType<TaskProgress> {
+    constructor() {
+        super("types.TaskProgress", [
+            { no: 1, name: "task_id", kind: "scalar", localName: "task_id", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "count", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 3, name: "completed", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<TaskProgress>): TaskProgress {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.task_id = "";
+        message.count = 0;
+        message.completed = false;
+        if (value !== undefined)
+            reflectionMergePartial<TaskProgress>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TaskProgress): TaskProgress {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string task_id */ 1:
+                    message.task_id = reader.string();
+                    break;
+                case /* uint32 count */ 2:
+                    message.count = reader.uint32();
+                    break;
+                case /* bool completed */ 3:
+                    message.completed = reader.bool();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: TaskProgress, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string task_id = 1; */
+        if (message.task_id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.task_id);
+        /* uint32 count = 2; */
+        if (message.count !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.count);
+        /* bool completed = 3; */
+        if (message.completed !== false)
+            writer.tag(3, WireType.Varint).bool(message.completed);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.TaskProgress
+ */
+export const TaskProgress = new TaskProgress$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayerAchievementEntry$Type extends MessageType<PlayerAchievementEntry> {
+    constructor() {
+        super("types.PlayerAchievementEntry", [
+            { no: 1, name: "player_address", kind: "scalar", localName: "player_address", T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "stats", kind: "message", T: () => PlayerAchievementStats },
+            { no: 3, name: "achievements", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => PlayerAchievementProgress }
+        ]);
+    }
+    create(value?: PartialMessage<PlayerAchievementEntry>): PlayerAchievementEntry {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.player_address = new Uint8Array(0);
+        message.achievements = [];
+        if (value !== undefined)
+            reflectionMergePartial<PlayerAchievementEntry>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayerAchievementEntry): PlayerAchievementEntry {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bytes player_address */ 1:
+                    message.player_address = reader.bytes();
+                    break;
+                case /* types.PlayerAchievementStats stats */ 2:
+                    message.stats = PlayerAchievementStats.internalBinaryRead(reader, reader.uint32(), options, message.stats);
+                    break;
+                case /* repeated types.PlayerAchievementProgress achievements */ 3:
+                    message.achievements.push(PlayerAchievementProgress.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayerAchievementEntry, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bytes player_address = 1; */
+        if (message.player_address.length)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.player_address);
+        /* types.PlayerAchievementStats stats = 2; */
+        if (message.stats)
+            PlayerAchievementStats.internalBinaryWrite(message.stats, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        /* repeated types.PlayerAchievementProgress achievements = 3; */
+        for (let i = 0; i < message.achievements.length; i++)
+            PlayerAchievementProgress.internalBinaryWrite(message.achievements[i], writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.PlayerAchievementEntry
+ */
+export const PlayerAchievementEntry = new PlayerAchievementEntry$Type();

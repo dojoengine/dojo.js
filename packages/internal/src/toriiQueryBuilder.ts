@@ -20,6 +20,7 @@ const defaultToriiOptions = () => ({
     no_hashed_keys: true,
     models: [],
     historical: false,
+    world_addresses: [],
 });
 
 type ToriiQueryBuilderOptions = Omit<Partial<Query>, "clause">;

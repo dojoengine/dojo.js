@@ -20,6 +20,8 @@ import type {
     ContractType as ToriiContractType,
     AggregationQuery as ToriiAggregationQuery,
     ActivityQuery as ToriiActivityQuery,
+    AchievementQuery as ToriiAchievementQuery,
+    PlayerAchievementQuery as ToriiPlayerAchievementQuery,
 } from "@dojoengine/torii-wasm";
 
 import type {
@@ -44,6 +46,8 @@ import type {
     ContractQuery as GrpcContractQuery,
     AggregationQuery as GrpcAggregationQuery,
     ActivityQuery as GrpcActivityQuery,
+    AchievementQuery as GrpcAchievementQuery,
+    PlayerAchievementQuery as GrpcPlayerAchievementQuery,
 } from "../generated/types";
 
 import {
@@ -67,7 +71,18 @@ import type {
     RetrieveContractsRequest,
     RetrieveAggregationsRequest,
     RetrieveActivitiesRequest,
+    RetrieveAchievementsRequest,
+    RetrievePlayerAchievementsRequest,
+    SubscribeAchievementProgressionsRequest,
+    UpdateAchievementProgressionsSubscriptionRequest,
 } from "../generated/world";
+
+interface AchievementProgressionFilters {
+    worldAddresses?: string[];
+    namespaces?: string[];
+    playerAddresses?: string[];
+    achievementIds?: string[];
+}
 
 function hexToBuffer(hex: string): Uint8Array {
     const cleanHex = hex.startsWith("0x") ? hex.slice(2) : hex;
@@ -574,5 +589,79 @@ export function createRetrieveActivitiesRequest(
 ): RetrieveActivitiesRequest {
     return {
         query: mapActivityQuery(query),
+    };
+}
+
+function mapAchievementQuery(
+    query?: ToriiAchievementQuery
+): GrpcAchievementQuery | undefined {
+    if (!query) {
+        return undefined;
+    }
+
+    return {
+        world_addresses: (query.world_addresses ?? []).map(hexToBuffer),
+        namespaces: query.namespaces ?? [],
+        hidden: query.hidden,
+        pagination: query.pagination
+            ? mapPagination(query.pagination)
+            : undefined,
+    };
+}
+
+export function createRetrieveAchievementsRequest(
+    query?: ToriiAchievementQuery
+): RetrieveAchievementsRequest {
+    return {
+        query: mapAchievementQuery(query),
+    };
+}
+
+function mapPlayerAchievementQuery(
+    query?: ToriiPlayerAchievementQuery
+): GrpcPlayerAchievementQuery | undefined {
+    if (!query) {
+        return undefined;
+    }
+
+    return {
+        world_addresses: (query.world_addresses ?? []).map(hexToBuffer),
+        namespaces: query.namespaces ?? [],
+        player_addresses: (query.player_addresses ?? []).map(hexToBuffer),
+        pagination: query.pagination
+            ? mapPagination(query.pagination)
+            : undefined,
+    };
+}
+
+export function createRetrievePlayerAchievementsRequest(
+    query?: ToriiPlayerAchievementQuery
+): RetrievePlayerAchievementsRequest {
+    return {
+        query: mapPlayerAchievementQuery(query),
+    };
+}
+
+export function createSubscribeAchievementProgressionsRequest(
+    filters: AchievementProgressionFilters
+): SubscribeAchievementProgressionsRequest {
+    return {
+        world_addresses: (filters.worldAddresses ?? []).map(hexToBuffer),
+        namespaces: filters.namespaces ?? [],
+        player_addresses: (filters.playerAddresses ?? []).map(hexToBuffer),
+        achievement_ids: filters.achievementIds ?? [],
+    };
+}
+
+export function createUpdateAchievementProgressionsSubscriptionRequest(
+    subscriptionId: bigint,
+    filters: AchievementProgressionFilters
+): UpdateAchievementProgressionsSubscriptionRequest {
+    return {
+        subscription_id: subscriptionId,
+        world_addresses: (filters.worldAddresses ?? []).map(hexToBuffer),
+        namespaces: filters.namespaces ?? [],
+        player_addresses: (filters.playerAddresses ?? []).map(hexToBuffer),
+        achievement_ids: filters.achievementIds ?? [],
     };
 }
