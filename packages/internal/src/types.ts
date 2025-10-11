@@ -168,6 +168,13 @@ export type GetTokenContracts = {
     pagination?: torii.Pagination;
 };
 
+export interface GetTokenTransferRequest {
+    contractAddresses?: string[];
+    accountAddresses?: string[];
+    tokenIds?: string[];
+    pagination?: torii.Pagination;
+}
+
 /**
  * Success result for subscription callbacks.
  */
@@ -300,6 +307,14 @@ export type SubscribeTokenRequest = GetTokenRequest & {
     callback: SubscriptionCallback<torii.Token>;
 };
 
+export type SubscribeTokenTransferRequest = GetTokenTransferRequest & {
+    callback: SubscriptionCallback<torii.TokenTransfer>;
+};
+
+export type UpdateTokenTransferSubscriptionRequest = GetTokenTransferRequest & {
+    subscription: torii.Subscription;
+};
+
 /**
  * SDK interface for interacting with the DojoEngine.
  * Provides methods for querying, subscribing, and managing your Dojo world.
@@ -389,6 +404,16 @@ export interface SDK<T extends SchemaType> {
     subscribeToken: (
         request: SubscribeTokenRequest
     ) => Promise<[torii.Tokens, torii.Subscription]>;
+
+    /**
+     * Subscribes to token transfer updates.
+     *
+     * @param {SubscribeTokenTransferRequest} request - Filter and callback parameters
+     * @returns {Promise<[torii.TokenTransfers, torii.Subscription]>}
+     */
+    subscribeTokenTransfer: (
+        request: SubscribeTokenTransferRequest
+    ) => Promise<[torii.TokenTransfers, torii.Subscription]>;
 
     /**
      * Fetches entities from the Torii client based on the provided query.
@@ -508,6 +533,16 @@ export interface SDK<T extends SchemaType> {
     ): Promise<torii.TokenBalances>;
 
     /**
+     * Gets token transfer history.
+     *
+     * @param {GetTokenTransferRequest} request - Filter parameters
+     * @returns {Promise<torii.TokenTransfers>} - Token transfers
+     */
+    getTokenTransfers(
+        request: GetTokenTransferRequest
+    ): Promise<torii.TokenTransfers>;
+
+    /**
      * Creates a subscription for token balance updates.
      * Unlike `subscribeTokenBalance`, this only returns the subscription handle.
      *
@@ -535,6 +570,16 @@ export interface SDK<T extends SchemaType> {
     ) => Promise<torii.Subscription>;
 
     /**
+     * Creates a subscription for token transfer updates.
+     *
+     * @param {SubscribeTokenTransferRequest} request - Filter and callback parameters
+     * @returns {torii.Subscription} - Subscription handle
+     */
+    onTokenTransferUpdated: (
+        request: SubscribeTokenTransferRequest
+    ) => Promise<torii.Subscription>;
+
+    /**
      * Updates an existing token balance subscription with new filters.
      *
      * @param {UpdateTokenBalanceSubscriptionRequest} request - New filter parameters
@@ -542,6 +587,16 @@ export interface SDK<T extends SchemaType> {
      */
     updateTokenBalanceSubscription: (
         request: UpdateTokenBalanceSubscriptionRequest
+    ) => Promise<void>;
+
+    /**
+     * Updates an existing token transfer subscription with new filters.
+     *
+     * @param {UpdateTokenTransferSubscriptionRequest} request - New filter parameters
+     * @returns {Promise<void>}
+     */
+    updateTokenTransferSubscription: (
+        request: UpdateTokenTransferSubscriptionRequest
     ) => Promise<void>;
 
     /**

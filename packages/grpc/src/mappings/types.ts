@@ -182,14 +182,6 @@ export function uint8ArrayToString(input: Uint8Array): string {
     return textDecoder.decode(input);
 }
 
-export function parseJsonMetadata(input: Uint8Array): any {
-    try {
-        return JSON.parse(uint8ArrayToString(input));
-    } catch (_err) {
-        return uint8ArrayToString(input);
-    }
-}
-
 export function mapToken(token: GrpcToken): ToriiToken {
     return {
         contract_address: bufferToHex(token.contract_address),
@@ -197,7 +189,10 @@ export function mapToken(token: GrpcToken): ToriiToken {
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,
-        metadata: parseJsonMetadata(token.metadata),
+        metadata: uint8ArrayToString(token.metadata),
+        total_supply: token.total_supply
+            ? bufferToHex(token.total_supply)
+            : undefined,
     };
 }
 
@@ -230,16 +225,22 @@ export function mapTokenBalancesResponse(
 
 export function mapTokenContract(
     collection: GrpcTokenContract
-): GrpcTokenContract {
+): ToriiTokenContract & {
+    contract_type: ContractType;
+    traits: unknown;
+} {
     return {
         contract_address: bufferToHex(collection.contract_address),
         name: collection.name,
         symbol: collection.symbol,
         decimals: collection.decimals,
-        total_supply: bufferToHex(collection.total_supply),
-        metadata: parseJsonMetadata(collection.metadata),
+        total_supply: collection.total_supply
+            ? bufferToHex(collection.total_supply)
+            : undefined,
+        metadata: uint8ArrayToString(collection.metadata),
         traits: JSON.parse(collection.traits),
-        token_metadata: parseJsonMetadata(collection.token_metadata),
+        token_metadata: uint8ArrayToString(collection.token_metadata),
+        contract_type: collection.contract_type,
     };
 }
 
