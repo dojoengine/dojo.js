@@ -37,14 +37,35 @@ const createMockClient = (): torii.ToriiClient =>
             items: [],
             next_cursor: null,
         }),
+        getTokens: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        getTokenContracts: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        getTokenBalances: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
+        getTokenTransfers: vi.fn().mockResolvedValue({
+            items: [],
+            next_cursor: null,
+        }),
         onEntityUpdated: vi.fn().mockReturnValue({ cancel: vi.fn() }),
         onEventMessageUpdated: vi.fn().mockReturnValue({ cancel: vi.fn() }),
+        onTokenUpdated: vi.fn().mockResolvedValue({ cancel: vi.fn() }),
+        onTokenBalanceUpdated: vi.fn().mockResolvedValue({ cancel: vi.fn() }),
+        onTokenTransferUpdated: vi.fn().mockResolvedValue({ cancel: vi.fn() }),
         publishMessage: vi.fn().mockResolvedValue("0x123"),
         publishMessageBatch: vi
             .fn()
             .mockResolvedValue(["0x123", "0x456", "0x789"]),
         updateEntitySubscription: vi.fn().mockResolvedValue(undefined),
         updateEventMessageSubscription: vi.fn().mockResolvedValue(undefined),
+        updateTokenBalanceSubscription: vi.fn().mockResolvedValue(undefined),
+        updateTokenTransferSubscription: vi.fn().mockResolvedValue(undefined),
         getControllers: vi.fn().mockResolvedValue(["0x123", "0x456"]),
         // Add other required methods as needed
     }) as unknown as torii.ToriiClient;
@@ -102,8 +123,12 @@ describe("createSDK", () => {
         expect(sdk.sendMessageBatch).toBeDefined();
         expect(sdk.getTokens).toBeDefined();
         expect(sdk.getTokenBalances).toBeDefined();
+        expect(sdk.getTokenTransfers).toBeDefined();
         expect(sdk.onTokenBalanceUpdated).toBeDefined();
+        expect(sdk.onTokenTransferUpdated).toBeDefined();
         expect(sdk.updateTokenBalanceSubscription).toBeDefined();
+        expect(sdk.updateTokenTransferSubscription).toBeDefined();
+        expect(sdk.subscribeTokenTransfer).toBeDefined();
         expect(sdk.updateEntitySubscription).toBeDefined();
         expect(sdk.updateEventMessageSubscription).toBeDefined();
         expect(sdk.getControllers).toBeDefined();

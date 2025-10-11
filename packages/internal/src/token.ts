@@ -6,10 +6,13 @@ import type {
     GetTokenBalanceRequest,
     GetTokenContracts,
     GetTokenRequest,
+    GetTokenTransferRequest,
     SubscribeTokenBalanceRequest,
     SubscribeTokenRequest,
+    SubscribeTokenTransferRequest,
     SubscriptionCallback,
     UpdateTokenBalanceSubscriptionRequest,
+    UpdateTokenTransferSubscriptionRequest,
 } from "./types";
 
 type Strict<T> = {
@@ -53,8 +56,22 @@ export const defaultTokenBalance: torii.TokenBalance = {
         "0x0000000000000000000000000000000000000000000000000000000000000000",
 };
 
+export const defaultTokenTransfer: torii.TokenTransfer = {
+    id: "",
+    contract_address: "0x0",
+    from_address: "0x0",
+    to_address: "0x0",
+    amount: "0x0000000000000000000000000000000000000000000000000000000000000000",
+    token_id: undefined,
+    executed_at: 0,
+    event_id: undefined,
+};
+
 export function parseTokenRequest<
-    T extends GetTokenRequest & GetTokenBalanceRequest & GetTokenContracts,
+    T extends GetTokenRequest &
+        Partial<GetTokenBalanceRequest> &
+        Partial<GetTokenContracts> &
+        Partial<GetTokenTransferRequest>,
 >(req: T): Strict<T> {
     if (req.contractAddresses) {
         req.contractAddresses = req.contractAddresses.map((r) =>
@@ -138,6 +155,24 @@ export async function getTokenBalances(
 }
 
 /**
+ * @param {GetTokenTransferRequest} request
+ * @returns {Promise<torii.TokenTransfers>}
+ */
+export async function getTokenTransfers(
+    client: torii.ToriiClient,
+    request: GetTokenTransferRequest
+): Promise<torii.TokenTransfers> {
+    const { contractAddresses, accountAddresses, tokenIds, pagination } =
+        parseTokenRequest(request);
+    return await client.getTokenTransfers({
+        contract_addresses: contractAddresses,
+        account_addresses: accountAddresses,
+        token_ids: tokenIds,
+        pagination,
+    });
+}
+
+/**
  * Subscribes to token balance updates
  *
  * # Parameters
@@ -162,6 +197,26 @@ export async function onTokenBalanceUpdated(
 }
 
 /**
+ * Subscribes to token transfer updates
+ *
+ * @param {SubscribeTokenTransferRequest} request
+ * @returns torii.Subscription
+ */
+export async function onTokenTransferUpdated(
+    client: torii.ToriiClient,
+    request: SubscribeTokenTransferRequest
+): Promise<torii.Subscription> {
+    const { contractAddresses, accountAddresses, tokenIds } =
+        parseTokenRequest(request);
+    return await client.onTokenTransferUpdated(
+        contractAddresses ?? [],
+        accountAddresses ?? [],
+        tokenIds ?? [],
+        safeCallback(request.callback, defaultTokenTransfer)
+    );
+}
+
+/**
  * Updates an existing token balance subscription
  *
  * # Parameters
@@ -179,6 +234,26 @@ export async function updateTokenBalanceSubscription(
     const { subscription, contractAddresses, accountAddresses, tokenIds } =
         request;
     return await client.updateTokenBalanceSubscription(
+        subscription,
+        contractAddresses ?? [],
+        accountAddresses ?? [],
+        tokenIds ?? []
+    );
+}
+
+/**
+ * Updates an existing token transfer subscription.
+ *
+ * @param {UpdateTokenTransferSubscriptionRequest} request
+ * @returns {Promise<void>}
+ */
+export async function updateTokenTransferSubscription(
+    client: torii.ToriiClient,
+    request: UpdateTokenTransferSubscriptionRequest
+): Promise<void> {
+    const { subscription, contractAddresses, accountAddresses, tokenIds } =
+        request;
+    return await client.updateTokenTransferSubscription(
         subscription,
         contractAddresses ?? [],
         accountAddresses ?? [],
@@ -217,6 +292,34 @@ export async function subscribeTokenBalance(
     );
 
     return [initialBalances, subscription];
+}
+
+/**
+ * Subscribes to token transfer updates and returns initial data with subscription.
+ *
+ * @param {SubscribeTokenTransferRequest} request
+ * @returns {Promise<[torii.TokenTransfers, torii.Subscription]>}
+ */
+export async function subscribeTokenTransfer(
+    client: torii.ToriiClient,
+    request: SubscribeTokenTransferRequest
+): Promise<[torii.TokenTransfers, torii.Subscription]> {
+    const { contractAddresses, accountAddresses, tokenIds, callback } = request;
+
+    const initialTransfers = await getTokenTransfers(client, {
+        contractAddresses: contractAddresses ?? [],
+        accountAddresses: accountAddresses ?? [],
+        tokenIds: tokenIds ?? [],
+    });
+
+    const subscription = await client.onTokenTransferUpdated(
+        contractAddresses ?? [],
+        accountAddresses ?? [],
+        tokenIds ?? [],
+        safeCallback(callback, defaultTokenTransfer)
+    );
+
+    return [initialTransfers, subscription];
 }
 
 export const defaultToken: torii.Token = {
