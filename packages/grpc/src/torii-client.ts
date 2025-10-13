@@ -22,6 +22,8 @@ import type {
     TokenTransferQuery,
     AggregationQuery,
     ActivityQuery,
+    AchievementQuery as ToriiAchievementQuery,
+    PlayerAchievementQuery as ToriiPlayerAchievementQuery,
 } from "@dojoengine/torii-wasm";
 
 import type {
@@ -33,6 +35,12 @@ import type {
     ActivitiesPage,
     ActivityEntry,
     SqlQueryResponse,
+    AchievementQueryInput,
+    PlayerAchievementQueryInput,
+    AchievementsPage,
+    PlayerAchievementsPage,
+    AchievementProgressionView,
+    AchievementProgressionSubscriptionQuery,
 } from "./types";
 
 import type { KeysClause as GrpcKeysClause } from "./generated/types";
@@ -55,6 +63,10 @@ import {
     createRetrieveContractsRequest,
     createRetrieveAggregationsRequest,
     createRetrieveActivitiesRequest,
+    createRetrieveAchievementsRequest,
+    createRetrievePlayerAchievementsRequest,
+    createSubscribeAchievementProgressionsRequest,
+    createUpdateAchievementProgressionsSubscriptionRequest,
     mapTransactionFilter,
     mapClause,
 } from "./mappings/query";
@@ -84,6 +96,9 @@ import {
     mapActivitiesResponse,
     mapActivity,
     mapSqlQueryResponse,
+    mapAchievementsResponse,
+    mapPlayerAchievementsResponse,
+    mapAchievementProgression,
 } from "./mappings/types";
 
 import {
@@ -127,6 +142,7 @@ import type {
     SubscribeAggregationsResponse,
     SubscribeActivitiesResponse,
     PublishMessageBatchRequest,
+    SubscribeAchievementProgressionsResponse,
 } from "./generated/world";
 
 function hexToBuffer(hex: string): Uint8Array {
@@ -221,6 +237,11 @@ export class ToriiGrpcClient {
         aggregationEntry: (entry: any) => AggregationEntryView;
         activitiesResponse: (response: any) => ActivitiesPage;
         activity: (activity: any) => ActivityEntry;
+        achievementsResponse: (response: any) => AchievementsPage;
+        playerAchievementsResponse: (response: any) => PlayerAchievementsPage;
+        achievementProgression: (
+            progression: any
+        ) => AchievementProgressionView;
         sqlQueryResponse: (response: any) => SqlQueryResponse;
     };
 
@@ -262,6 +283,9 @@ export class ToriiGrpcClient {
                   aggregationEntry: transformAggregationEntry,
                   activitiesResponse: transformActivitiesResponse,
                   activity: transformActivity,
+                  achievementsResponse: mapAchievementsResponse,
+                  playerAchievementsResponse: mapPlayerAchievementsResponse,
+                  achievementProgression: mapAchievementProgression,
                   sqlQueryResponse: mapSqlQueryResponse,
               }
             : {
@@ -287,6 +311,9 @@ export class ToriiGrpcClient {
                   aggregationEntry: mapAggregationEntry,
                   activitiesResponse: mapActivitiesResponse,
                   activity: mapActivity,
+                  achievementsResponse: mapAchievementsResponse,
+                  playerAchievementsResponse: mapPlayerAchievementsResponse,
+                  achievementProgression: mapAchievementProgression,
                   sqlQueryResponse: mapSqlQueryResponse,
               };
     }
@@ -351,6 +378,17 @@ export class ToriiGrpcClient {
         return this.cloneWorldAddresses(this.defaultWorldAddresses);
     }
 
+    private buildPagination(pagination?: Pagination): Pagination {
+        return (
+            pagination ?? {
+                limit: undefined,
+                cursor: undefined,
+                direction: "Forward",
+                order_by: [],
+            }
+        );
+    }
+
     private toAggregationQueryInput(
         query?: AggregationQueryInput
     ): AggregationQuery | undefined {
@@ -408,6 +446,100 @@ export class ToriiGrpcClient {
         }
 
         return result as ActivityQuery;
+    }
+
+    private toAchievementQueryInput(
+        query?: AchievementQueryInput
+    ): ToriiAchievementQuery | undefined {
+        const worldAddresses =
+            query?.worldAddresses && query.worldAddresses.length > 0
+                ? query.worldAddresses
+                : this.worldAddress
+                  ? [this.worldAddress]
+                  : [];
+
+        const namespaces = query?.namespaces ?? [];
+        const hidden = query?.hidden;
+        const pagination = this.buildPagination(query?.pagination);
+
+        if (
+            worldAddresses.length === 0 &&
+            namespaces.length === 0 &&
+            hidden === undefined &&
+            query?.pagination === undefined
+        ) {
+            return this.worldAddress
+                ? {
+                      world_addresses: [this.worldAddress],
+                      namespaces: [],
+                      hidden: undefined,
+                      pagination,
+                  }
+                : undefined;
+        }
+
+        return {
+            world_addresses: worldAddresses,
+            namespaces,
+            hidden,
+            pagination,
+        };
+    }
+
+    private toPlayerAchievementQueryInput(
+        query?: PlayerAchievementQueryInput
+    ): ToriiPlayerAchievementQuery | undefined {
+        const worldAddresses =
+            query?.worldAddresses && query.worldAddresses.length > 0
+                ? query.worldAddresses
+                : this.worldAddress
+                  ? [this.worldAddress]
+                  : [];
+
+        const namespaces = query?.namespaces ?? [];
+        const playerAddresses = query?.playerAddresses ?? [];
+        const pagination = this.buildPagination(query?.pagination);
+
+        if (
+            worldAddresses.length === 0 &&
+            namespaces.length === 0 &&
+            playerAddresses.length === 0 &&
+            query?.pagination === undefined
+        ) {
+            return this.worldAddress
+                ? {
+                      world_addresses: [this.worldAddress],
+                      namespaces: [],
+                      player_addresses: [],
+                      pagination,
+                  }
+                : undefined;
+        }
+
+        return {
+            world_addresses: worldAddresses,
+            namespaces,
+            player_addresses: playerAddresses,
+            pagination,
+        };
+    }
+
+    private toAchievementProgressionFilters(
+        query?: AchievementProgressionSubscriptionQuery
+    ): AchievementProgressionSubscriptionQuery {
+        const worldAddresses =
+            query?.worldAddresses && query.worldAddresses.length > 0
+                ? query.worldAddresses
+                : this.worldAddress
+                  ? [this.worldAddress]
+                  : [];
+
+        return {
+            worldAddresses,
+            namespaces: query?.namespaces ?? [],
+            playerAddresses: query?.playerAddresses ?? [],
+            achievementIds: query?.achievementIds ?? [],
+        };
     }
 
     private toActivitySubscriptionFilters(query?: ActivitySubscriptionQuery): {
@@ -478,6 +610,30 @@ export class ToriiGrpcClient {
         return this.mappers.tokenTransfersResponse(response);
     }
 
+    async getAchievements(
+        query?: AchievementQueryInput
+    ): Promise<AchievementsPage> {
+        const request = createRetrieveAchievementsRequest(
+            this.toAchievementQueryInput(query)
+        );
+        const response =
+            await this.client.worldClient.retrieveAchievements(request)
+                .response;
+        return this.mappers.achievementsResponse(response);
+    }
+
+    async getPlayerAchievements(
+        query?: PlayerAchievementQueryInput
+    ): Promise<PlayerAchievementsPage> {
+        const request = createRetrievePlayerAchievementsRequest(
+            this.toPlayerAchievementQueryInput(query)
+        );
+        const response =
+            await this.client.worldClient.retrievePlayerAchievements(request)
+                .response;
+        return this.mappers.playerAchievementsResponse(response);
+    }
+
     async getEntities(query: Query): Promise<Entities> {
         const request = createRetrieveEntitiesRequest(query);
         if (request.query) {
@@ -505,6 +661,7 @@ export class ToriiGrpcClient {
             no_hashed_keys: true,
             models: [],
             historical: false,
+            world_addresses: [],
         };
         return this.getEntities(query);
     }
@@ -779,6 +936,62 @@ export class ToriiGrpcClient {
             account_addresses: account_addresses.map(hexToBuffer),
             token_ids: token_ids.map(hexToBuffer),
         }).response;
+    }
+
+    async onAchievementProgressionUpdated(
+        query: AchievementProgressionSubscriptionQuery | undefined,
+        callback: (
+            progression: AchievementProgressionView,
+            subscriptionId: bigint
+        ) => void
+    ): Promise<Subscription> {
+        const filters = this.toAchievementProgressionFilters(query);
+
+        return this.createStreamSubscription({
+            createStream: () =>
+                this.client.worldClient.subscribeAchievementProgressions(
+                    createSubscribeAchievementProgressionsRequest({
+                        worldAddresses: filters.worldAddresses,
+                        namespaces: filters.namespaces,
+                        playerAddresses: filters.playerAddresses,
+                        achievementIds: filters.achievementIds,
+                    })
+                ),
+            onMessage: (response: SubscribeAchievementProgressionsResponse) => {
+                if (response.progression) {
+                    callback(
+                        this.mappers.achievementProgression(
+                            response.progression
+                        ),
+                        response.subscription_id
+                    );
+                }
+            },
+        });
+    }
+
+    async updateAchievementProgressionSubscription(
+        subscription: Subscription,
+        query?: AchievementProgressionSubscriptionQuery
+    ): Promise<void> {
+        const grpcSubscription = this.findSubscription(subscription);
+        if (!grpcSubscription) {
+            throw new Error("Subscription not found");
+        }
+
+        const filters = this.toAchievementProgressionFilters(query);
+
+        await this.client.worldClient.updateAchievementProgressionsSubscription(
+            createUpdateAchievementProgressionsSubscriptionRequest(
+                BigInt(grpcSubscription.id),
+                {
+                    worldAddresses: filters.worldAddresses,
+                    namespaces: filters.namespaces,
+                    playerAddresses: filters.playerAddresses,
+                    achievementIds: filters.achievementIds,
+                }
+            )
+        ).response;
     }
 
     async publishMessage(message: Message): Promise<string> {

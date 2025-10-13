@@ -118,6 +118,12 @@ export type {
     SqlQueryRow,
     SqlQueryScalar,
     SqlIntegerValue,
+    AchievementQueryInput,
+    PlayerAchievementQueryInput,
+    AchievementsPage,
+    PlayerAchievementsPage,
+    AchievementProgressionView,
+    AchievementProgressionSubscriptionQuery,
 } from "./types";
 
 // Re-export World types with aliases to avoid conflicts

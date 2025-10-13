@@ -490,3 +490,163 @@ message AggregationEntry {
     // When the entry was last updated (RFC3339 timestamp)
     string updated_at = 9;
 }
+
+// Achievement definition
+message Achievement {
+    // Achievement ID (unique identifier)
+    string id = 1;
+    // World contract address
+    bytes world_address = 2;
+    // Namespace
+    string namespace = 3;
+    // Entity ID from on-chain
+    string entity_id = 4;
+    // Is this achievement hidden
+    bool hidden = 5;
+    // Display index/order
+    uint32 index = 6;
+    // Points awarded for completion
+    uint32 points = 7;
+    // Start time
+    string start = 8;
+    // End time
+    string end = 9;
+    // Achievement group
+    string group = 10;
+    // Icon identifier
+    string icon = 11;
+    // Achievement title
+    string title = 12;
+    // Achievement description
+    string description = 13;
+    // Tasks to complete for this achievement
+    repeated AchievementTask tasks = 14;
+    // Additional data (JSON)
+    optional string data = 15;
+    // Total completions across all players
+    uint32 total_completions = 16;
+    // Completion rate (percentage 0-100)
+    double completion_rate = 17;
+    // When the achievement was created
+    uint64 created_at = 18;
+    // When the achievement was last updated
+    uint64 updated_at = 19;
+}
+
+// A task within an achievement
+message AchievementTask {
+    // Task ID from on-chain (unique within achievement)
+    string task_id = 1;
+    // Task description
+    string description = 2;
+    // Target count to complete this task
+    uint32 total = 3;
+    // Total completions across all players
+    uint32 total_completions = 4;
+    // Completion rate (percentage 0-100)
+    double completion_rate = 5;
+    // When the task was created
+    uint64 created_at = 6;
+}
+
+// Player's global achievement statistics (across all worlds/namespaces)
+message PlayerAchievementStats {
+    // Total points earned across all games
+    uint32 total_points = 1;
+    // Number of achievements completed across all games
+    uint32 completed_achievements = 2;
+    // Total achievements available across all games
+    uint32 total_achievements = 3;
+    // Overall completion percentage
+    double completion_percentage = 4;
+    // Last achievement completion time (across all games)
+    optional uint64 last_achievement_at = 5;
+    // When the stats were first created
+    uint64 created_at = 6;
+    // When the stats were last updated
+    uint64 updated_at = 7;
+}
+
+// Achievement progression for a specific player and task
+message AchievementProgression {
+    // Unique identifier (world:namespace:task_id:player_id)
+    string id = 1;
+    // Achievement ID this task belongs to
+    string achievement_id = 2;
+    // Task ID
+    string task_id = 3;
+    // World address
+    bytes world_address = 4;
+    // Namespace
+    string namespace = 5;
+    // Player address
+    bytes player_id = 6;
+    // Current count/progress
+    uint32 count = 7;
+    // Is the task completed
+    bool completed = 8;
+    // When the task was completed
+    optional uint64 completed_at = 9;
+    // When the progression was created
+    uint64 created_at = 10;
+    // When the progression was last updated
+    uint64 updated_at = 11;
+}
+
+// Query for achievements
+message AchievementQuery {
+    // Filter by world addresses
+    repeated bytes world_addresses = 1;
+    // Filter by namespaces
+    repeated string namespaces = 2;
+    // Filter by hidden status (optional)
+    optional bool hidden = 3;
+    // Pagination
+    Pagination pagination = 4;
+}
+
+// Query for player achievements
+message PlayerAchievementQuery {
+    // Filter by world addresses
+    repeated bytes world_addresses = 1;
+    // Filter by namespaces
+    repeated string namespaces = 2;
+    // Filter by player addresses
+    repeated bytes player_addresses = 3;
+    // Pagination
+    Pagination pagination = 4;
+}
+
+// Player's progress on a specific achievement
+message PlayerAchievementProgress {
+    // The achievement definition (includes task definitions)
+    Achievement achievement = 1;
+    // Progress on each task (references tasks by ID)
+    repeated TaskProgress taskProgress = 2;
+    // Is the achievement completed
+    bool completed = 3;
+    // Progress percentage (0-100)
+    double progress_percentage = 4;
+}
+
+// Progress on a specific task (reference only, no duplication)
+message TaskProgress {
+    // Task ID reference (matches task_id in Achievement.tasks)
+    string task_id = 1;
+    // Current count
+    uint32 count = 2;
+    // Is the task completed
+    bool completed = 3;
+}
+
+// Player achievement entry (for a specific world/namespace/player combination)
+message PlayerAchievementEntry {
+    // Player address (global identifier)
+    bytes player_address = 1;
+    // Player's overall statistics (across all worlds/namespaces)
+    PlayerAchievementStats stats = 2;
+    // Progress on each achievement (each achievement has its own world/namespace scope)
+    repeated PlayerAchievementProgress achievements = 3;
+}
+
+// Player achievement data (list of player entries)

@@ -36,6 +36,7 @@ describe("ToriiQueryBuilder", () => {
                 no_hashed_keys: true,
                 models: [],
                 historical: false,
+                world_addresses: [],
             });
         });
 
@@ -54,6 +55,7 @@ describe("ToriiQueryBuilder", () => {
                 no_hashed_keys: true,
                 models: [],
                 historical: false,
+                world_addresses: [],
             });
         });
 
@@ -176,6 +178,7 @@ describe("ToriiQueryBuilder", () => {
                 no_hashed_keys: false,
                 models: ["dojo_starter-Position"],
                 historical: false,
+                world_addresses: [],
             });
         });
     });
@@ -207,6 +210,7 @@ describe("HistoricalToriiQueryBuilder", () => {
             no_hashed_keys: false,
             models: ["dojo_starter-Position"],
             historical: true,
+            world_addresses: [],
         });
     });
 });

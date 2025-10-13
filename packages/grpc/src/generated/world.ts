@@ -14,6 +14,11 @@ import { UnknownFieldHandler } from "@protobuf-ts/runtime";
 import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { PlayerAchievementEntry } from "./types";
+import { PlayerAchievementQuery } from "./types";
+import { Achievement } from "./types";
+import { AchievementQuery } from "./types";
+import { AchievementProgression } from "./types";
 import { Activity } from "./types";
 import { ActivityQuery } from "./types";
 import { AggregationEntry } from "./types";
@@ -828,6 +833,145 @@ export interface UpdateActivitiesSubscriptionRequest {
      * @generated from protobuf field: repeated bytes caller_addresses = 4
      */
     caller_addresses: Uint8Array[];
+}
+/**
+ * A request to subscribe to achievement progression updates
+ *
+ * @generated from protobuf message world.SubscribeAchievementProgressionsRequest
+ */
+export interface SubscribeAchievementProgressionsRequest {
+    /**
+     * Filter by world addresses
+     *
+     * @generated from protobuf field: repeated bytes world_addresses = 1
+     */
+    world_addresses: Uint8Array[];
+    /**
+     * Filter by namespaces
+     *
+     * @generated from protobuf field: repeated string namespaces = 2
+     */
+    namespaces: string[];
+    /**
+     * Filter by player addresses
+     *
+     * @generated from protobuf field: repeated bytes player_addresses = 3
+     */
+    player_addresses: Uint8Array[];
+    /**
+     * Filter by achievement IDs
+     *
+     * @generated from protobuf field: repeated string achievement_ids = 4
+     */
+    achievement_ids: string[];
+}
+/**
+ * A response containing achievement progression updates
+ *
+ * @generated from protobuf message world.SubscribeAchievementProgressionsResponse
+ */
+export interface SubscribeAchievementProgressionsResponse {
+    /**
+     * The subscription ID
+     *
+     * @generated from protobuf field: uint64 subscription_id = 1
+     */
+    subscription_id: bigint;
+    /**
+     * The achievement progression update
+     *
+     * @generated from protobuf field: types.AchievementProgression progression = 2
+     */
+    progression?: AchievementProgression;
+}
+/**
+ * A request to update an achievement progressions subscription
+ *
+ * @generated from protobuf message world.UpdateAchievementProgressionsSubscriptionRequest
+ */
+export interface UpdateAchievementProgressionsSubscriptionRequest {
+    /**
+     * The subscription ID
+     *
+     * @generated from protobuf field: uint64 subscription_id = 1
+     */
+    subscription_id: bigint;
+    /**
+     * Filter by world addresses
+     *
+     * @generated from protobuf field: repeated bytes world_addresses = 2
+     */
+    world_addresses: Uint8Array[];
+    /**
+     * Filter by namespaces
+     *
+     * @generated from protobuf field: repeated string namespaces = 3
+     */
+    namespaces: string[];
+    /**
+     * Filter by player addresses
+     *
+     * @generated from protobuf field: repeated bytes player_addresses = 4
+     */
+    player_addresses: Uint8Array[];
+    /**
+     * Filter by achievement IDs
+     *
+     * @generated from protobuf field: repeated string achievement_ids = 5
+     */
+    achievement_ids: string[];
+}
+/**
+ * A request to retrieve achievements
+ *
+ * @generated from protobuf message world.RetrieveAchievementsRequest
+ */
+export interface RetrieveAchievementsRequest {
+    /**
+     * @generated from protobuf field: types.AchievementQuery query = 1
+     */
+    query?: AchievementQuery;
+}
+/**
+ * A response containing achievements
+ *
+ * @generated from protobuf message world.RetrieveAchievementsResponse
+ */
+export interface RetrieveAchievementsResponse {
+    /**
+     * @generated from protobuf field: string next_cursor = 1
+     */
+    next_cursor: string;
+    /**
+     * @generated from protobuf field: repeated types.Achievement achievements = 2
+     */
+    achievements: Achievement[];
+}
+/**
+ * A request to retrieve player achievements
+ *
+ * @generated from protobuf message world.RetrievePlayerAchievementsRequest
+ */
+export interface RetrievePlayerAchievementsRequest {
+    /**
+     * @generated from protobuf field: types.PlayerAchievementQuery query = 1
+     */
+    query?: PlayerAchievementQuery;
+}
+/**
+ * A response containing player achievement data (paginated)
+ *
+ * @generated from protobuf message world.RetrievePlayerAchievementsResponse
+ */
+export interface RetrievePlayerAchievementsResponse {
+    /**
+     * @generated from protobuf field: string next_cursor = 1
+     */
+    next_cursor: string;
+    /**
+     * @generated from protobuf field: repeated types.PlayerAchievementEntry players = 2
+     */
+    players: PlayerAchievementEntry[];
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class SubscribeTransactionsRequest$Type extends MessageType<SubscribeTransactionsRequest> {
@@ -3623,6 +3767,412 @@ class UpdateActivitiesSubscriptionRequest$Type extends MessageType<UpdateActivit
  * @generated MessageType for protobuf message world.UpdateActivitiesSubscriptionRequest
  */
 export const UpdateActivitiesSubscriptionRequest = new UpdateActivitiesSubscriptionRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SubscribeAchievementProgressionsRequest$Type extends MessageType<SubscribeAchievementProgressionsRequest> {
+    constructor() {
+        super("world.SubscribeAchievementProgressionsRequest", [
+            { no: 1, name: "world_addresses", kind: "scalar", localName: "world_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 2, name: "namespaces", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "player_addresses", kind: "scalar", localName: "player_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "achievement_ids", kind: "scalar", localName: "achievement_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<SubscribeAchievementProgressionsRequest>): SubscribeAchievementProgressionsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.world_addresses = [];
+        message.namespaces = [];
+        message.player_addresses = [];
+        message.achievement_ids = [];
+        if (value !== undefined)
+            reflectionMergePartial<SubscribeAchievementProgressionsRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeAchievementProgressionsRequest): SubscribeAchievementProgressionsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated bytes world_addresses */ 1:
+                    message.world_addresses.push(reader.bytes());
+                    break;
+                case /* repeated string namespaces */ 2:
+                    message.namespaces.push(reader.string());
+                    break;
+                case /* repeated bytes player_addresses */ 3:
+                    message.player_addresses.push(reader.bytes());
+                    break;
+                case /* repeated string achievement_ids */ 4:
+                    message.achievement_ids.push(reader.string());
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SubscribeAchievementProgressionsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated bytes world_addresses = 1; */
+        for (let i = 0; i < message.world_addresses.length; i++)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.world_addresses[i]);
+        /* repeated string namespaces = 2; */
+        for (let i = 0; i < message.namespaces.length; i++)
+            writer.tag(2, WireType.LengthDelimited).string(message.namespaces[i]);
+        /* repeated bytes player_addresses = 3; */
+        for (let i = 0; i < message.player_addresses.length; i++)
+            writer.tag(3, WireType.LengthDelimited).bytes(message.player_addresses[i]);
+        /* repeated string achievement_ids = 4; */
+        for (let i = 0; i < message.achievement_ids.length; i++)
+            writer.tag(4, WireType.LengthDelimited).string(message.achievement_ids[i]);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.SubscribeAchievementProgressionsRequest
+ */
+export const SubscribeAchievementProgressionsRequest = new SubscribeAchievementProgressionsRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SubscribeAchievementProgressionsResponse$Type extends MessageType<SubscribeAchievementProgressionsResponse> {
+    constructor() {
+        super("world.SubscribeAchievementProgressionsResponse", [
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "progression", kind: "message", T: () => AchievementProgression }
+        ]);
+    }
+    create(value?: PartialMessage<SubscribeAchievementProgressionsResponse>): SubscribeAchievementProgressionsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.subscription_id = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<SubscribeAchievementProgressionsResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SubscribeAchievementProgressionsResponse): SubscribeAchievementProgressionsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint64 subscription_id */ 1:
+                    message.subscription_id = reader.uint64().toBigInt();
+                    break;
+                case /* types.AchievementProgression progression */ 2:
+                    message.progression = AchievementProgression.internalBinaryRead(reader, reader.uint32(), options, message.progression);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SubscribeAchievementProgressionsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint64 subscription_id = 1; */
+        if (message.subscription_id !== 0n)
+            writer.tag(1, WireType.Varint).uint64(message.subscription_id);
+        /* types.AchievementProgression progression = 2; */
+        if (message.progression)
+            AchievementProgression.internalBinaryWrite(message.progression, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.SubscribeAchievementProgressionsResponse
+ */
+export const SubscribeAchievementProgressionsResponse = new SubscribeAchievementProgressionsResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class UpdateAchievementProgressionsSubscriptionRequest$Type extends MessageType<UpdateAchievementProgressionsSubscriptionRequest> {
+    constructor() {
+        super("world.UpdateAchievementProgressionsSubscriptionRequest", [
+            { no: 1, name: "subscription_id", kind: "scalar", localName: "subscription_id", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "world_addresses", kind: "scalar", localName: "world_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "namespaces", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "player_addresses", kind: "scalar", localName: "player_addresses", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 5, name: "achievement_ids", kind: "scalar", localName: "achievement_ids", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<UpdateAchievementProgressionsSubscriptionRequest>): UpdateAchievementProgressionsSubscriptionRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.subscription_id = 0n;
+        message.world_addresses = [];
+        message.namespaces = [];
+        message.player_addresses = [];
+        message.achievement_ids = [];
+        if (value !== undefined)
+            reflectionMergePartial<UpdateAchievementProgressionsSubscriptionRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UpdateAchievementProgressionsSubscriptionRequest): UpdateAchievementProgressionsSubscriptionRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint64 subscription_id */ 1:
+                    message.subscription_id = reader.uint64().toBigInt();
+                    break;
+                case /* repeated bytes world_addresses */ 2:
+                    message.world_addresses.push(reader.bytes());
+                    break;
+                case /* repeated string namespaces */ 3:
+                    message.namespaces.push(reader.string());
+                    break;
+                case /* repeated bytes player_addresses */ 4:
+                    message.player_addresses.push(reader.bytes());
+                    break;
+                case /* repeated string achievement_ids */ 5:
+                    message.achievement_ids.push(reader.string());
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: UpdateAchievementProgressionsSubscriptionRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint64 subscription_id = 1; */
+        if (message.subscription_id !== 0n)
+            writer.tag(1, WireType.Varint).uint64(message.subscription_id);
+        /* repeated bytes world_addresses = 2; */
+        for (let i = 0; i < message.world_addresses.length; i++)
+            writer.tag(2, WireType.LengthDelimited).bytes(message.world_addresses[i]);
+        /* repeated string namespaces = 3; */
+        for (let i = 0; i < message.namespaces.length; i++)
+            writer.tag(3, WireType.LengthDelimited).string(message.namespaces[i]);
+        /* repeated bytes player_addresses = 4; */
+        for (let i = 0; i < message.player_addresses.length; i++)
+            writer.tag(4, WireType.LengthDelimited).bytes(message.player_addresses[i]);
+        /* repeated string achievement_ids = 5; */
+        for (let i = 0; i < message.achievement_ids.length; i++)
+            writer.tag(5, WireType.LengthDelimited).string(message.achievement_ids[i]);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.UpdateAchievementProgressionsSubscriptionRequest
+ */
+export const UpdateAchievementProgressionsSubscriptionRequest = new UpdateAchievementProgressionsSubscriptionRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RetrieveAchievementsRequest$Type extends MessageType<RetrieveAchievementsRequest> {
+    constructor() {
+        super("world.RetrieveAchievementsRequest", [
+            { no: 1, name: "query", kind: "message", T: () => AchievementQuery }
+        ]);
+    }
+    create(value?: PartialMessage<RetrieveAchievementsRequest>): RetrieveAchievementsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<RetrieveAchievementsRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveAchievementsRequest): RetrieveAchievementsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* types.AchievementQuery query */ 1:
+                    message.query = AchievementQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RetrieveAchievementsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* types.AchievementQuery query = 1; */
+        if (message.query)
+            AchievementQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.RetrieveAchievementsRequest
+ */
+export const RetrieveAchievementsRequest = new RetrieveAchievementsRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RetrieveAchievementsResponse$Type extends MessageType<RetrieveAchievementsResponse> {
+    constructor() {
+        super("world.RetrieveAchievementsResponse", [
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "achievements", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Achievement }
+        ]);
+    }
+    create(value?: PartialMessage<RetrieveAchievementsResponse>): RetrieveAchievementsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.next_cursor = "";
+        message.achievements = [];
+        if (value !== undefined)
+            reflectionMergePartial<RetrieveAchievementsResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrieveAchievementsResponse): RetrieveAchievementsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string next_cursor */ 1:
+                    message.next_cursor = reader.string();
+                    break;
+                case /* repeated types.Achievement achievements */ 2:
+                    message.achievements.push(Achievement.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RetrieveAchievementsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string next_cursor = 1; */
+        if (message.next_cursor !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
+        /* repeated types.Achievement achievements = 2; */
+        for (let i = 0; i < message.achievements.length; i++)
+            Achievement.internalBinaryWrite(message.achievements[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.RetrieveAchievementsResponse
+ */
+export const RetrieveAchievementsResponse = new RetrieveAchievementsResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RetrievePlayerAchievementsRequest$Type extends MessageType<RetrievePlayerAchievementsRequest> {
+    constructor() {
+        super("world.RetrievePlayerAchievementsRequest", [
+            { no: 1, name: "query", kind: "message", T: () => PlayerAchievementQuery }
+        ]);
+    }
+    create(value?: PartialMessage<RetrievePlayerAchievementsRequest>): RetrievePlayerAchievementsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<RetrievePlayerAchievementsRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrievePlayerAchievementsRequest): RetrievePlayerAchievementsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* types.PlayerAchievementQuery query */ 1:
+                    message.query = PlayerAchievementQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RetrievePlayerAchievementsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* types.PlayerAchievementQuery query = 1; */
+        if (message.query)
+            PlayerAchievementQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.RetrievePlayerAchievementsRequest
+ */
+export const RetrievePlayerAchievementsRequest = new RetrievePlayerAchievementsRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RetrievePlayerAchievementsResponse$Type extends MessageType<RetrievePlayerAchievementsResponse> {
+    constructor() {
+        super("world.RetrievePlayerAchievementsResponse", [
+            { no: 1, name: "next_cursor", kind: "scalar", localName: "next_cursor", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "players", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => PlayerAchievementEntry }
+        ]);
+    }
+    create(value?: PartialMessage<RetrievePlayerAchievementsResponse>): RetrievePlayerAchievementsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.next_cursor = "";
+        message.players = [];
+        if (value !== undefined)
+            reflectionMergePartial<RetrievePlayerAchievementsResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RetrievePlayerAchievementsResponse): RetrievePlayerAchievementsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string next_cursor */ 1:
+                    message.next_cursor = reader.string();
+                    break;
+                case /* repeated types.PlayerAchievementEntry players */ 2:
+                    message.players.push(PlayerAchievementEntry.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RetrievePlayerAchievementsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string next_cursor = 1; */
+        if (message.next_cursor !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.next_cursor);
+        /* repeated types.PlayerAchievementEntry players = 2; */
+        for (let i = 0; i < message.players.length; i++)
+            PlayerAchievementEntry.internalBinaryWrite(message.players[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.RetrievePlayerAchievementsResponse
+ */
+export const RetrievePlayerAchievementsResponse = new RetrievePlayerAchievementsResponse$Type();
 /**
  * @generated ServiceType for protobuf service world.World
  */
@@ -3657,6 +4207,10 @@ export const World = new ServiceType("world.World", [
     { name: "RetrieveActivities", options: {}, I: RetrieveActivitiesRequest, O: RetrieveActivitiesResponse },
     { name: "SubscribeActivities", serverStreaming: true, options: {}, I: SubscribeActivitiesRequest, O: SubscribeActivitiesResponse },
     { name: "UpdateActivitiesSubscription", options: {}, I: UpdateActivitiesSubscriptionRequest, O: Empty },
+    { name: "RetrieveAchievements", options: {}, I: RetrieveAchievementsRequest, O: RetrieveAchievementsResponse },
+    { name: "RetrievePlayerAchievements", options: {}, I: RetrievePlayerAchievementsRequest, O: RetrievePlayerAchievementsResponse },
+    { name: "SubscribeAchievementProgressions", serverStreaming: true, options: {}, I: SubscribeAchievementProgressionsRequest, O: SubscribeAchievementProgressionsResponse },
+    { name: "UpdateAchievementProgressionsSubscription", options: {}, I: UpdateAchievementProgressionsSubscriptionRequest, O: Empty },
     { name: "PublishMessage", options: {}, I: PublishMessageRequest, O: PublishMessageResponse },
     { name: "PublishMessageBatch", options: {}, I: PublishMessageBatchRequest, O: PublishMessageBatchResponse },
     { name: "ExecuteSql", options: {}, I: SqlQueryRequest, O: SqlQueryResponse }

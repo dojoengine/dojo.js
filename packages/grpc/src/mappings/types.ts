@@ -35,6 +35,13 @@ import type {
     Activity as GrpcActivity,
     SqlQueryResponse as GrpcSqlQueryResponse,
     SqlValue as GrpcSqlValue,
+    Achievement as GrpcAchievement,
+    AchievementTask as GrpcAchievementTask,
+    PlayerAchievementEntry as GrpcPlayerAchievementEntry,
+    PlayerAchievementStats as GrpcPlayerAchievementStats,
+    PlayerAchievementProgress as GrpcPlayerAchievementProgress,
+    TaskProgress as GrpcTaskProgress,
+    AchievementProgression as GrpcAchievementProgression,
 } from "../generated/types";
 
 import { CallType as GrpcCallType } from "../generated/types";
@@ -45,6 +52,16 @@ import type {
     ActivitiesPage,
     SqlQueryScalar,
     SqlQueryResponse as ClientSqlQueryResponse,
+    PlayerAchievementEntryView,
+    AchievementsPage,
+    PlayerAchievementsPage,
+    AchievementProgressionView,
+    AchievementData,
+    PlayerAchievementStatsData,
+    PlayerAchievementProgressData,
+    PlayerAchievementEntryData,
+    AchievementTaskData,
+    TaskProgressData,
 } from "../types";
 import type {
     Ty as GrpcTy,
@@ -69,6 +86,8 @@ import type {
     WorldsResponse,
     RetrieveAggregationsResponse,
     RetrieveActivitiesResponse,
+    RetrieveAchievementsResponse,
+    RetrievePlayerAchievementsResponse,
 } from "../generated/world";
 
 let textDecoder: TextDecoder | undefined = undefined;
@@ -80,6 +99,12 @@ function bufferToHex(buffer: Uint8Array): string {
             .map((b) => b.toString(16).padStart(2, "0"))
             .join("")
     );
+}
+
+function toOptionalNumber(
+    value: bigint | number | undefined
+): number | undefined {
+    return value === undefined ? undefined : Number(value);
 }
 
 function hexToBuffer(hex: string): Uint8Array {
@@ -198,6 +223,9 @@ export function mapToken(token: GrpcToken): ToriiToken {
         symbol: token.symbol,
         decimals: token.decimals,
         metadata: parseJsonMetadata(token.metadata),
+        total_supply: token.total_supply
+            ? bufferToHex(token.total_supply)
+            : undefined,
     };
 }
 
@@ -230,16 +258,22 @@ export function mapTokenBalancesResponse(
 
 export function mapTokenContract(
     collection: GrpcTokenContract
-): GrpcTokenContract {
+): ToriiTokenContract & {
+    contract_type: ContractType;
+    traits: unknown;
+} {
     return {
         contract_address: bufferToHex(collection.contract_address),
         name: collection.name,
         symbol: collection.symbol,
         decimals: collection.decimals,
-        total_supply: bufferToHex(collection.total_supply),
+        total_supply: collection.total_supply
+            ? bufferToHex(collection.total_supply)
+            : undefined,
         metadata: parseJsonMetadata(collection.metadata),
         traits: JSON.parse(collection.traits),
         token_metadata: parseJsonMetadata(collection.token_metadata),
+        contract_type: collection.contract_type,
     };
 }
 
@@ -609,6 +643,176 @@ export function mapActivitiesResponse(
         items: response.activities.map(mapActivity),
         nextCursor,
         next_cursor: nextCursor,
+    };
+}
+
+function mapAchievementTask(task: GrpcAchievementTask): AchievementTaskData {
+    return {
+        task_id: task.task_id,
+        description: task.description,
+        total: task.total,
+        total_completions: task.total_completions,
+        completion_rate: task.completion_rate,
+        created_at: Number(task.created_at),
+    };
+}
+
+function mapTaskProgress(task: GrpcTaskProgress): TaskProgressData {
+    return {
+        task_id: task.task_id,
+        count: task.count,
+        completed: task.completed,
+    };
+}
+
+function mapPlayerAchievementStats(
+    stats: GrpcPlayerAchievementStats
+): PlayerAchievementStatsData {
+    return {
+        total_points: stats.total_points,
+        completed_achievements: stats.completed_achievements,
+        total_achievements: stats.total_achievements,
+        completion_percentage: stats.completion_percentage,
+        last_achievement_at: toOptionalNumber(stats.last_achievement_at),
+        created_at: Number(stats.created_at),
+        updated_at: Number(stats.updated_at),
+    };
+}
+
+function mapAchievement(achievement?: GrpcAchievement): AchievementData {
+    if (!achievement) {
+        return {
+            id: "",
+            world_address: "0x0",
+            namespace: "",
+            entity_id: "",
+            hidden: false,
+            index: 0,
+            points: 0,
+            start: "",
+            end: "",
+            group: "",
+            icon: "",
+            title: "",
+            description: "",
+            tasks: [],
+            data: "",
+            total_completions: 0,
+            completion_rate: 0,
+            created_at: 0,
+            updated_at: 0,
+        };
+    }
+
+    return {
+        id: achievement.id,
+        world_address: bufferToHex(achievement.world_address),
+        namespace: achievement.namespace,
+        entity_id: achievement.entity_id,
+        hidden: achievement.hidden,
+        index: achievement.index,
+        points: achievement.points,
+        start: achievement.start,
+        end: achievement.end,
+        group: achievement.group,
+        icon: achievement.icon,
+        title: achievement.title,
+        description: achievement.description,
+        tasks: achievement.tasks.map(mapAchievementTask),
+        data: achievement.data ?? "",
+        total_completions: achievement.total_completions,
+        completion_rate: achievement.completion_rate,
+        created_at: Number(achievement.created_at),
+        updated_at: Number(achievement.updated_at),
+    };
+}
+
+function mapPlayerAchievementProgress(
+    progress: GrpcPlayerAchievementProgress
+): PlayerAchievementProgressData {
+    return {
+        achievement: mapAchievement(progress.achievement),
+        task_progress: progress.taskProgress.map(mapTaskProgress),
+        completed: progress.completed,
+        progress_percentage: progress.progress_percentage,
+    };
+}
+
+function mapPlayerAchievementEntry(
+    entry: GrpcPlayerAchievementEntry
+): PlayerAchievementEntryData {
+    const stats = entry.stats
+        ? mapPlayerAchievementStats(entry.stats)
+        : {
+              total_points: 0,
+              completed_achievements: 0,
+              total_achievements: 0,
+              completion_percentage: 0,
+              last_achievement_at: undefined,
+              created_at: 0,
+              updated_at: 0,
+          };
+
+    return {
+        player_address: bufferToHex(entry.player_address),
+        stats,
+        achievements: entry.achievements.map(mapPlayerAchievementProgress),
+    };
+}
+
+export function mapAchievementsResponse(
+    response: RetrieveAchievementsResponse
+): AchievementsPage {
+    const nextCursor = response.next_cursor || undefined;
+    return {
+        items: response.achievements.map(mapAchievement),
+        nextCursor,
+        next_cursor: nextCursor,
+    };
+}
+
+export function mapPlayerAchievementsResponse(
+    response: RetrievePlayerAchievementsResponse
+): PlayerAchievementsPage {
+    const nextCursor = response.next_cursor || undefined;
+    return {
+        items: response.players.map(mapPlayerAchievementEntry),
+        nextCursor,
+        next_cursor: nextCursor,
+    };
+}
+
+export function mapAchievementProgression(
+    progression?: GrpcAchievementProgression
+): AchievementProgressionView {
+    if (!progression) {
+        return {
+            id: "",
+            achievementId: "",
+            taskId: "",
+            worldAddress: "0x0",
+            namespace: "",
+            playerId: "0x0",
+            count: 0,
+            completed: false,
+            completedAt: undefined,
+            createdAt: 0,
+            updatedAt: 0,
+        };
+    }
+
+    return {
+        id: progression.id,
+        achievementId: progression.achievement_id,
+        taskId: progression.task_id,
+        worldAddress: bufferToHex(progression.world_address),
+        namespace: progression.namespace,
+        playerId: bufferToHex(progression.player_id),
+        count: progression.count,
+        completed: progression.completed,
+        completedAt: toOptionalNumber(progression.completed_at),
+        createdAt: Number(progression.created_at),
+        updatedAt: Number(progression.updated_at),
     };
 }
 

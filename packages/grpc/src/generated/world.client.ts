@@ -10,6 +10,13 @@ import type { PublishMessageBatchResponse } from "./world";
 import type { PublishMessageBatchRequest } from "./world";
 import type { PublishMessageResponse } from "./world";
 import type { PublishMessageRequest } from "./world";
+import type { UpdateAchievementProgressionsSubscriptionRequest } from "./world";
+import type { SubscribeAchievementProgressionsResponse } from "./world";
+import type { SubscribeAchievementProgressionsRequest } from "./world";
+import type { RetrievePlayerAchievementsResponse } from "./world";
+import type { RetrievePlayerAchievementsRequest } from "./world";
+import type { RetrieveAchievementsResponse } from "./world";
+import type { RetrieveAchievementsRequest } from "./world";
 import type { UpdateActivitiesSubscriptionRequest } from "./world";
 import type { SubscribeActivitiesResponse } from "./world";
 import type { SubscribeActivitiesRequest } from "./world";
@@ -250,6 +257,30 @@ export interface IWorldClient {
      * @generated from protobuf rpc: UpdateActivitiesSubscription
      */
     updateActivitiesSubscription(input: UpdateActivitiesSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateActivitiesSubscriptionRequest, Empty>;
+    /**
+     * Retrieve achievements
+     *
+     * @generated from protobuf rpc: RetrieveAchievements
+     */
+    retrieveAchievements(input: RetrieveAchievementsRequest, options?: RpcOptions): UnaryCall<RetrieveAchievementsRequest, RetrieveAchievementsResponse>;
+    /**
+     * Retrieve player achievements (stats + progress)
+     *
+     * @generated from protobuf rpc: RetrievePlayerAchievements
+     */
+    retrievePlayerAchievements(input: RetrievePlayerAchievementsRequest, options?: RpcOptions): UnaryCall<RetrievePlayerAchievementsRequest, RetrievePlayerAchievementsResponse>;
+    /**
+     * Subscribe to achievement progression updates
+     *
+     * @generated from protobuf rpc: SubscribeAchievementProgressions
+     */
+    subscribeAchievementProgressions(input: SubscribeAchievementProgressionsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeAchievementProgressionsRequest, SubscribeAchievementProgressionsResponse>;
+    /**
+     * Update an achievement progressions subscription
+     *
+     * @generated from protobuf rpc: UpdateAchievementProgressionsSubscription
+     */
+    updateAchievementProgressionsSubscription(input: UpdateAchievementProgressionsSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateAchievementProgressionsSubscriptionRequest, Empty>;
     /**
      * Publish a torii offchain message
      *
@@ -551,12 +582,48 @@ export class WorldClient implements IWorldClient, ServiceInfo {
         return stackIntercept<UpdateActivitiesSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
+     * Retrieve achievements
+     *
+     * @generated from protobuf rpc: RetrieveAchievements
+     */
+    retrieveAchievements(input: RetrieveAchievementsRequest, options?: RpcOptions): UnaryCall<RetrieveAchievementsRequest, RetrieveAchievementsResponse> {
+        const method = this.methods[30], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrieveAchievementsRequest, RetrieveAchievementsResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * Retrieve player achievements (stats + progress)
+     *
+     * @generated from protobuf rpc: RetrievePlayerAchievements
+     */
+    retrievePlayerAchievements(input: RetrievePlayerAchievementsRequest, options?: RpcOptions): UnaryCall<RetrievePlayerAchievementsRequest, RetrievePlayerAchievementsResponse> {
+        const method = this.methods[31], opt = this._transport.mergeOptions(options);
+        return stackIntercept<RetrievePlayerAchievementsRequest, RetrievePlayerAchievementsResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * Subscribe to achievement progression updates
+     *
+     * @generated from protobuf rpc: SubscribeAchievementProgressions
+     */
+    subscribeAchievementProgressions(input: SubscribeAchievementProgressionsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeAchievementProgressionsRequest, SubscribeAchievementProgressionsResponse> {
+        const method = this.methods[32], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SubscribeAchievementProgressionsRequest, SubscribeAchievementProgressionsResponse>("serverStreaming", this._transport, method, opt, input);
+    }
+    /**
+     * Update an achievement progressions subscription
+     *
+     * @generated from protobuf rpc: UpdateAchievementProgressionsSubscription
+     */
+    updateAchievementProgressionsSubscription(input: UpdateAchievementProgressionsSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateAchievementProgressionsSubscriptionRequest, Empty> {
+        const method = this.methods[33], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateAchievementProgressionsSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
+    }
+    /**
      * Publish a torii offchain message
      *
      * @generated from protobuf rpc: PublishMessage
      */
     publishMessage(input: PublishMessageRequest, options?: RpcOptions): UnaryCall<PublishMessageRequest, PublishMessageResponse> {
-        const method = this.methods[30], opt = this._transport.mergeOptions(options);
+        const method = this.methods[34], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageRequest, PublishMessageResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -565,7 +632,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: PublishMessageBatch
      */
     publishMessageBatch(input: PublishMessageBatchRequest, options?: RpcOptions): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse> {
-        const method = this.methods[31], opt = this._transport.mergeOptions(options);
+        const method = this.methods[35], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageBatchRequest, PublishMessageBatchResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -574,7 +641,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: ExecuteSql
      */
     executeSql(input: SqlQueryRequest, options?: RpcOptions): UnaryCall<SqlQueryRequest, SqlQueryResponse> {
-        const method = this.methods[32], opt = this._transport.mergeOptions(options);
+        const method = this.methods[36], opt = this._transport.mergeOptions(options);
         return stackIntercept<SqlQueryRequest, SqlQueryResponse>("unary", this._transport, method, opt, input);
     }
 }

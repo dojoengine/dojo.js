@@ -172,6 +172,7 @@ export const getEntities = async <S extends Schema>(
             no_hashed_keys: false,
             models: entityModels,
             historical,
+            world_addresses: [],
         });
 
         if (dbConnection) {
@@ -233,6 +234,7 @@ export const getEvents = async <S extends Schema>(
             no_hashed_keys: false,
             models: entityModels,
             historical,
+            world_addresses: [],
         });
 
         if (logging) console.log("entities", entities.items);
@@ -300,6 +302,7 @@ export const getEntitiesQuery = async <S extends Schema>(
             no_hashed_keys: false,
             models: entityModels,
             historical,
+            world_addresses: [],
         });
         if (logging)
             console.log(
@@ -345,6 +348,7 @@ export const syncEntities = async <S extends Schema>(
     if (logging) console.log("Starting syncEntities");
     return await client.onEntityUpdated(
         entityKeyClause,
+        undefined,
         (fetchedEntities: any, data: any) => {
             if (logging) console.log("Entity updated", fetchedEntities);
 
@@ -375,6 +379,7 @@ export const syncEvents = async <S extends Schema>(
     if (logging) console.log("Starting syncEvents");
     return await client.onEventMessageUpdated(
         entityKeyClause,
+        undefined,
         (fetchedEntities: any, data: any) => {
             if (logging) console.log("Event message updated", fetchedEntities);
 

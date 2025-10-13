@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { shortAddress, toValidAscii } from "@/lib/utils";
 import type { setupWorld } from "@/typescript/contracts.gen";
 import type { Message, SchemaType } from "@/typescript/models.gen";
+import { dojoConfig } from "../../dojoConfig";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
@@ -59,6 +60,7 @@ export default function Chat() {
                     await db.client.publishMessage({
                         message: JSON.stringify(msg),
                         signature: signature as string[],
+                        world_address: dojoConfig.manifest.world.address || "",
                     });
                     reset();
                 } catch (error) {

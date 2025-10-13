@@ -49,7 +49,11 @@ export async function setup({ ...config }: DojoConfig) {
             clientComponents
         ),
         publish: (typedData: string, signature: ArraySignatureType) => {
-            toriiClient.publishMessage({ message: typedData, signature });
+            toriiClient.publishMessage({
+                message: typedData,
+                signature,
+                world_address: config.manifest.world.address || "",
+            });
         },
         config,
         dojoProvider,
