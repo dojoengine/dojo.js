@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 1.8.1
+
+### Patch Changes
+
+- d93f585: chore: bump torii to 1.8.3
+
 ## 1.8.0
 
 ### Minor Changes
