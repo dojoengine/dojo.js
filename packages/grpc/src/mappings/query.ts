@@ -76,6 +76,7 @@ import type {
     SubscribeAchievementProgressionsRequest,
     UpdateAchievementProgressionsSubscriptionRequest,
 } from "../generated/world";
+import { addAddressPadding } from "starknet";
 
 interface AchievementProgressionFilters {
     worldAddresses?: string[];
@@ -321,7 +322,7 @@ function mapWorldAddresses(
     if (!addresses || addresses.length === 0) {
         return [];
     }
-    return addresses.map((address) => hexToBuffer(address));
+    return addresses.map((address) => hexToBuffer(addAddressPadding(address)));
 }
 
 export function mapQuery(query: ToriiQuery): GrpcQuery {
