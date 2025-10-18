@@ -127,6 +127,7 @@ import {
 } from "./mappings/effect-schema/transformers";
 
 import { Schema } from "effect";
+import { addAddressPadding } from "starknet";
 import { BufferToHex } from "./mappings/effect-schema/base-schemas";
 
 import { DojoGrpcClient } from "./client";
@@ -249,7 +250,7 @@ export class ToriiGrpcClient {
         this.client = new DojoGrpcClient({
             url: config.toriiUrl,
         });
-        this.worldAddress = config.worldAddress ?? undefined;
+        this.worldAddress = addAddressPadding(config.worldAddress) ?? undefined;
         this.worldAddressBytes = this.worldAddress
             ? hexToBuffer(this.worldAddress)
             : undefined;
@@ -1038,7 +1039,9 @@ export class ToriiGrpcClient {
     async getWorlds(worldAddresses?: string[]): Promise<any[]> {
         const response = await this.client.worldClient.worlds({
             world_addresses: worldAddresses
-                ? worldAddresses.map((address) => hexToBuffer(address))
+                ? worldAddresses.map((address) =>
+                      hexToBuffer(addAddressPadding(address))
+                  )
                 : [],
         }).response;
 

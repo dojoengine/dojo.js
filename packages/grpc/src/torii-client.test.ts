@@ -4,6 +4,7 @@ import { ToriiGrpcClient, ToriiGrpcClientConfig } from "./torii-client";
 describe("ToriiGrpcClient", () => {
     const mockConfig: ToriiGrpcClientConfig = {
         toriiUrl: "http://localhost:8080",
+        worldAddress: "0x0",
     };
 
     it("should create client with default (standard) mapper", () => {
@@ -50,6 +51,7 @@ describe("ToriiGrpcClient", () => {
         // This should work without the useEffectSchema property
         const client = new ToriiGrpcClient({
             toriiUrl: "http://localhost:8080",
+            worldAddress: "0x0",
         });
         expect(client).toBeDefined();
         // @ts-ignore - accessing private property for testing
