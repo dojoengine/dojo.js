@@ -1,6 +1,6 @@
 import type * as torii from "@dojoengine/torii-wasm/types";
 import { ok, type Result } from "neverthrow";
-import type { Account, TypedData } from "starknet";
+import { addAddressPadding, type Account, type TypedData } from "starknet";
 import {
     subscribeQueryModelCallback,
     generateTypedData,
@@ -234,7 +234,7 @@ export function createSDK<T extends SchemaType>({
         grpcClient ??
         new ToriiGrpcClient({
             toriiUrl: config.client.toriiUrl ?? "http://localhost:8080",
-            worldAddress: config.client.worldAddress,
+            worldAddress: addAddressPadding(config.client.worldAddress),
         });
     return {
         client: client!,
