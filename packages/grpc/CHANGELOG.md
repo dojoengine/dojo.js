@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 1.8.2
+
+### Patch Changes
+
+- 387ee18: fix(grpc): addAddressPadding on worldAddress
+
 ## 1.8.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.8.2
+
+### Patch Changes
+
+- 387ee18: fix(grpc): addAddressPadding on worldAddress
+- Updated dependencies [387ee18]
+  - @dojoengine/grpc@1.8.2
+
 ## 1.8.1
 
 ### Patch Changes
