@@ -7,8 +7,7 @@ import {
     existsSync,
     mkdirSync,
 } from "fs";
-import { join, isAbsolute, dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+import { join, isAbsolute, dirname } from "path";
 import type { Dirent } from "fs";
 
 type AbiEntry = {
@@ -307,17 +306,11 @@ function parseArgs(argv: string[]): CollectOptions {
     };
 }
 
-const __filename = resolve(fileURLToPath(import.meta.url));
-const entryPoint = process.argv[1] ? resolve(process.argv[1]) : undefined;
-const isDirectExecution = entryPoint === __filename;
+const options = parseArgs(process.argv.slice(2));
 
-if (isDirectExecution) {
-    const options = parseArgs(process.argv.slice(2));
-
-    try {
-        collectAbis(options);
-    } catch (error) {
-        console.error(`Unexpected error: ${error}`);
-        process.exit(1);
-    }
+try {
+    collectAbis(options);
+} catch (error) {
+    console.error(`Unexpected error: ${error}`);
+    process.exit(1);
 }

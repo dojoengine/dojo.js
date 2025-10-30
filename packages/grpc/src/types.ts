@@ -171,3 +171,24 @@ export interface PlayerAchievementEntryData {
     stats: PlayerAchievementStatsData;
     achievements: PlayerAchievementProgressData[];
 }
+
+export interface SearchQueryInput {
+    query: string;
+    limit?: number;
+}
+
+export interface SearchMatch {
+    id: string;
+    fields: Record<string, string>;
+    score?: number;
+}
+
+export interface TableSearchResults {
+    table: string;
+    matches: SearchMatch[];
+}
+
+export interface SearchResultsView {
+    total: number;
+    results: TableSearchResults[];
+}

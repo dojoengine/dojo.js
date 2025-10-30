@@ -7,7 +7,7 @@ import {
 } from "./index";
 
 // Solution 1: Import the generated TypeScript file instead
-import { compiledAbi } from "../../../../worlds/dojo-starter/compiled-abi";
+import { compiledAbi } from "../../../../worlds/dojo-starter/compiled-abi.ts";
 import {
     Account,
     CairoCustomEnum,
@@ -48,9 +48,7 @@ type DojoStarterActions =
     MyAbiInterfaces["dojo_starter::systems::actions::IActions"];
 type WorldActions = MyAbiInterfaces["dojo::world::iworld::IWorld"];
 
-const provider = new DojoProvider<[DojoStarterActions, WorldActions]>(
-    compiledAbi
-);
+const provider = new DojoProvider<[DojoStarterActions, WorldActions]>(abi);
 const account = new Account({
     provider: provider as unknown as ProviderInterface,
     address: "0x0",

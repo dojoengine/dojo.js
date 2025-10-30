@@ -1,17 +1,29 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
-import Cookies from "js-cookie";
+import { describe, expect, it, mock, beforeEach } from "bun:test";
 import { BurnerStorage } from "../../src/types";
-import Storage from "../../src/utils/storage";
 
-vi.mock("js-cookie");
+const mockGet = mock();
+const mockSet = mock();
+const mockRemove = mock();
+
+mock.module("js-cookie", () => ({
+    default: {
+        get: mockGet,
+        set: mockSet,
+        remove: mockRemove,
+    },
+}));
+
+import Storage from "../../src/utils/storage";
 
 describe("Storage", () => {
     beforeEach(() => {
-        vi.resetAllMocks();
+        mockGet.mockReset();
+        mockSet.mockReset();
+        mockRemove.mockReset();
     });
 
     it("should return empty keys when no data is present", () => {
-        Cookies.get = vi.fn().mockReturnValue({});
+        mockGet.mockReturnValue({});
         expect(Storage.keys()).toStrictEqual([]);
     });
 
@@ -26,13 +38,13 @@ describe("Storage", () => {
                 masterAccount: "0x1234567890123456789012345678901234567890",
             },
         };
-        Cookies.get = vi.fn().mockReturnValue(JSON.stringify(storageObj));
+        mockGet.mockReturnValue(JSON.stringify(storageObj));
         expect(Storage.get("test")).toStrictEqual(storageObj);
     });
 
     it("should set storage successfully", () => {
         Storage.set("test", 10);
-        expect(Cookies.set).toHaveBeenCalledWith("test", "10", {
+        expect(mockSet).toHaveBeenCalledWith("test", "10", {
             secure: true,
             sameSite: "strict",
         });
@@ -40,18 +52,15 @@ describe("Storage", () => {
 
     it("should remove a key successfully", () => {
         Storage.remove("test");
-        expect(Cookies.remove).toHaveBeenCalledWith("test");
+        expect(mockRemove).toHaveBeenCalledWith("test");
     });
 
     it("should clear all storage successfully", () => {
-        // Mock Cookies.get to return only the burners_katana_test key
-        Cookies.get = vi
-            .fn()
-            .mockReturnValue({ burners_katana_test: "someValue" });
+        mockGet.mockReturnValue({ burners_katana_test: "someValue" });
 
         Storage.clear();
 
-        expect(Cookies.remove).toHaveBeenCalledWith("burners_katana_test");
-        expect(Cookies.remove).toHaveBeenCalledTimes(1);
+        expect(mockRemove).toHaveBeenCalledWith("burners_katana_test");
+        expect(mockRemove).toHaveBeenCalledTimes(1);
     });
 });

@@ -14,6 +14,8 @@ import { UnknownFieldHandler } from "@protobuf-ts/runtime";
 import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { SearchResponse as SearchResponse$ } from "./types";
+import { SearchQuery } from "./types";
 import { PlayerAchievementEntry } from "./types";
 import { PlayerAchievementQuery } from "./types";
 import { Achievement } from "./types";
@@ -972,6 +974,28 @@ export interface RetrievePlayerAchievementsResponse {
      * @generated from protobuf field: repeated types.PlayerAchievementEntry players = 2
      */
     players: PlayerAchievementEntry[];
+}
+/**
+ * A request to search across FTS5-indexed tables
+ *
+ * @generated from protobuf message world.SearchRequest
+ */
+export interface SearchRequest {
+    /**
+     * @generated from protobuf field: types.SearchQuery query = 1
+     */
+    query?: SearchQuery;
+}
+/**
+ * A response containing search results grouped by table
+ *
+ * @generated from protobuf message world.SearchResponse
+ */
+export interface SearchResponse {
+    /**
+     * @generated from protobuf field: types.SearchResponse response = 1
+     */
+    response?: SearchResponse$;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class SubscribeTransactionsRequest$Type extends MessageType<SubscribeTransactionsRequest> {
@@ -4173,6 +4197,98 @@ class RetrievePlayerAchievementsResponse$Type extends MessageType<RetrievePlayer
  * @generated MessageType for protobuf message world.RetrievePlayerAchievementsResponse
  */
 export const RetrievePlayerAchievementsResponse = new RetrievePlayerAchievementsResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SearchRequest$Type extends MessageType<SearchRequest> {
+    constructor() {
+        super("world.SearchRequest", [
+            { no: 1, name: "query", kind: "message", T: () => SearchQuery }
+        ]);
+    }
+    create(value?: PartialMessage<SearchRequest>): SearchRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<SearchRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SearchRequest): SearchRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* types.SearchQuery query */ 1:
+                    message.query = SearchQuery.internalBinaryRead(reader, reader.uint32(), options, message.query);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SearchRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* types.SearchQuery query = 1; */
+        if (message.query)
+            SearchQuery.internalBinaryWrite(message.query, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.SearchRequest
+ */
+export const SearchRequest = new SearchRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SearchResponse$Type extends MessageType<SearchResponse> {
+    constructor() {
+        super("world.SearchResponse", [
+            { no: 1, name: "response", kind: "message", T: () => SearchResponse$ }
+        ]);
+    }
+    create(value?: PartialMessage<SearchResponse>): SearchResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<SearchResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SearchResponse): SearchResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* types.SearchResponse response */ 1:
+                    message.response = SearchResponse$.internalBinaryRead(reader, reader.uint32(), options, message.response);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SearchResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* types.SearchResponse response = 1; */
+        if (message.response)
+            SearchResponse$.internalBinaryWrite(message.response, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message world.SearchResponse
+ */
+export const SearchResponse = new SearchResponse$Type();
 /**
  * @generated ServiceType for protobuf service world.World
  */
@@ -4209,6 +4325,7 @@ export const World = new ServiceType("world.World", [
     { name: "UpdateActivitiesSubscription", options: {}, I: UpdateActivitiesSubscriptionRequest, O: Empty },
     { name: "RetrieveAchievements", options: {}, I: RetrieveAchievementsRequest, O: RetrieveAchievementsResponse },
     { name: "RetrievePlayerAchievements", options: {}, I: RetrievePlayerAchievementsRequest, O: RetrievePlayerAchievementsResponse },
+    { name: "Search", options: {}, I: SearchRequest, O: SearchResponse },
     { name: "SubscribeAchievementProgressions", serverStreaming: true, options: {}, I: SubscribeAchievementProgressionsRequest, O: SubscribeAchievementProgressionsResponse },
     { name: "UpdateAchievementProgressionsSubscription", options: {}, I: UpdateAchievementProgressionsSubscriptionRequest, O: Empty },
     { name: "PublishMessage", options: {}, I: PublishMessageRequest, O: PublishMessageResponse },

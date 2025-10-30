@@ -20,8 +20,8 @@ import type {
     Pagination,
     TokenContractQuery,
     TokenTransferQuery,
-    AggregationQuery,
-    ActivityQuery,
+    AggregationQuery as ToriiAggregationQuery,
+    ActivityQuery as ToriiActivityQuery,
     AchievementQuery as ToriiAchievementQuery,
     PlayerAchievementQuery as ToriiPlayerAchievementQuery,
 } from "@dojoengine/torii-wasm";
@@ -41,6 +41,8 @@ import type {
     PlayerAchievementsPage,
     AchievementProgressionView,
     AchievementProgressionSubscriptionQuery,
+    SearchQueryInput,
+    SearchResultsView,
 } from "./types";
 
 import type { KeysClause as GrpcKeysClause } from "./generated/types";
@@ -67,6 +69,7 @@ import {
     createRetrievePlayerAchievementsRequest,
     createSubscribeAchievementProgressionsRequest,
     createUpdateAchievementProgressionsSubscriptionRequest,
+    createSearchRequest,
     mapTransactionFilter,
     mapClause,
 } from "./mappings/query";
@@ -99,6 +102,7 @@ import {
     mapAchievementsResponse,
     mapPlayerAchievementsResponse,
     mapAchievementProgression,
+    mapSearchResponse,
 } from "./mappings/types";
 
 import {
@@ -191,6 +195,10 @@ export class Subscription {
         this._subscription.cancel();
     }
 
+    [Symbol.dispose]() {
+        this._subscription.cancel();
+    }
+
     get id(): bigint {
         return this._subscription.id;
     }
@@ -244,6 +252,7 @@ export class ToriiGrpcClient {
             progression: any
         ) => AchievementProgressionView;
         sqlQueryResponse: (response: any) => SqlQueryResponse;
+        searchResponse: (response: any) => SearchResultsView;
     };
 
     constructor(config: ToriiGrpcClientConfig) {
@@ -288,6 +297,7 @@ export class ToriiGrpcClient {
                   playerAchievementsResponse: mapPlayerAchievementsResponse,
                   achievementProgression: mapAchievementProgression,
                   sqlQueryResponse: mapSqlQueryResponse,
+                  searchResponse: mapSearchResponse,
               }
             : {
                   entitiesResponse: mapEntitiesResponse,
@@ -316,6 +326,7 @@ export class ToriiGrpcClient {
                   playerAchievementsResponse: mapPlayerAchievementsResponse,
                   achievementProgression: mapAchievementProgression,
                   sqlQueryResponse: mapSqlQueryResponse,
+                  searchResponse: mapSearchResponse,
               };
     }
 
@@ -388,65 +399,6 @@ export class ToriiGrpcClient {
                 order_by: [],
             }
         );
-    }
-
-    private toAggregationQueryInput(
-        query?: AggregationQueryInput
-    ): AggregationQuery | undefined {
-        if (!query) {
-            return undefined;
-        }
-        const result: Partial<AggregationQuery> = {
-            aggregator_ids: query.aggregatorIds ?? [],
-            entity_ids: query.entityIds ?? [],
-        };
-        if (query.pagination) {
-            result.pagination = query.pagination;
-        }
-        return result as AggregationQuery;
-    }
-
-    private toActivityQueryInput(
-        query?: ActivityQueryInput
-    ): ActivityQuery | undefined {
-        const worldAddresses =
-            query?.worldAddresses && query.worldAddresses.length > 0
-                ? query.worldAddresses
-                : this.worldAddress
-                  ? [this.worldAddress]
-                  : [];
-
-        const hasAdditionalFilters = Boolean(
-            query?.namespaces?.length ||
-                query?.callerAddresses?.length ||
-                query?.fromTime !== undefined ||
-                query?.toTime !== undefined ||
-                query?.pagination
-        );
-
-        if (!worldAddresses.length && !hasAdditionalFilters) {
-            return undefined;
-        }
-
-        const result: Partial<ActivityQuery> = {
-            world_addresses: worldAddresses,
-            namespaces: query?.namespaces ?? [],
-            caller_addresses: query?.callerAddresses ?? [],
-        };
-
-        if (query?.fromTime !== undefined && query.fromTime !== null) {
-            result.from_time = query.fromTime.toString();
-        }
-
-        if (query?.toTime !== undefined && query.toTime !== null) {
-            result.to_time = query.toTime.toString();
-        }
-
-        if (query?.pagination) {
-            result.pagination = query.pagination;
-        }
-
-        return result as ActivityQuery;
     }
 
     private toAchievementQueryInput(
@@ -612,11 +564,9 @@ export class ToriiGrpcClient {
     }
 
     async getAchievements(
-        query?: AchievementQueryInput
+        query: ToriiAchievementQuery
     ): Promise<AchievementsPage> {
-        const request = createRetrieveAchievementsRequest(
-            this.toAchievementQueryInput(query)
-        );
+        const request = createRetrieveAchievementsRequest(query);
         const response =
             await this.client.worldClient.retrieveAchievements(request)
                 .response;
@@ -624,11 +574,9 @@ export class ToriiGrpcClient {
     }
 
     async getPlayerAchievements(
-        query?: PlayerAchievementQueryInput
+        query: ToriiPlayerAchievementQuery
     ): Promise<PlayerAchievementsPage> {
-        const request = createRetrievePlayerAchievementsRequest(
-            this.toPlayerAchievementQueryInput(query)
-        );
+        const request = createRetrievePlayerAchievementsRequest(query);
         const response =
             await this.client.worldClient.retrievePlayerAchievements(request)
                 .response;
@@ -719,11 +667,11 @@ export class ToriiGrpcClient {
 
     async onEntityUpdated(
         clause: Clause | null | undefined,
-        callback: Function,
-        worldAddresses?: string[]
+        world_addresses: string[] | null | undefined,
+        callback: Function
     ): Promise<Subscription> {
         const worldAddressesBytes =
-            this.normalizeWorldAddresses(worldAddresses);
+            this.normalizeWorldAddresses(world_addresses);
         return this.createStreamSubscription({
             createStream: () =>
                 this.client.worldClient.subscribeEntities({
@@ -744,7 +692,7 @@ export class ToriiGrpcClient {
     async updateEntitySubscription(
         subscription: Subscription,
         clause?: Clause | null,
-        worldAddresses?: string[]
+        world_addresses?: string[] | null
     ): Promise<void> {
         const grpcSubscription = this.findSubscription(subscription);
         if (!grpcSubscription) {
@@ -754,17 +702,17 @@ export class ToriiGrpcClient {
         await this.client.worldClient.updateEntitiesSubscription({
             subscription_id: BigInt(grpcSubscription.id),
             clause: clause ? mapClause(clause) : undefined,
-            world_addresses: this.normalizeWorldAddresses(worldAddresses),
+            world_addresses: this.normalizeWorldAddresses(world_addresses),
         }).response;
     }
 
     async onEventMessageUpdated(
         clause: Clause | null | undefined,
-        callback: Function,
-        worldAddresses?: string[]
+        world_addresses: string[] | null | undefined,
+        callback: Function
     ): Promise<Subscription> {
         const worldAddressesBytes =
-            this.normalizeWorldAddresses(worldAddresses);
+            this.normalizeWorldAddresses(world_addresses);
         return this.createStreamSubscription({
             createStream: () =>
                 this.client.worldClient.subscribeEventMessages({
@@ -783,9 +731,9 @@ export class ToriiGrpcClient {
     }
 
     async updateEventMessageSubscription(
-        subscription: GrpcSubscription | Subscription,
+        subscription: Subscription,
         clause?: Clause | null,
-        worldAddresses?: string[]
+        world_addresses?: string[] | null
     ): Promise<void> {
         const grpcSubscription = this.findSubscription(subscription);
         if (!grpcSubscription) {
@@ -795,7 +743,7 @@ export class ToriiGrpcClient {
         await this.client.worldClient.updateEventMessagesSubscription({
             subscription_id: BigInt(grpcSubscription.id),
             clause: clause ? mapClause(clause) : undefined,
-            world_addresses: this.normalizeWorldAddresses(worldAddresses),
+            world_addresses: this.normalizeWorldAddresses(world_addresses),
         }).response;
     }
 
@@ -940,22 +888,20 @@ export class ToriiGrpcClient {
     }
 
     async onAchievementProgressionUpdated(
-        query: AchievementProgressionSubscriptionQuery | undefined,
-        callback: (
-            progression: AchievementProgressionView,
-            subscriptionId: bigint
-        ) => void
+        world_addresses: string[] | null | undefined,
+        namespaces: string[] | null | undefined,
+        player_addresses: string[] | null | undefined,
+        achievement_ids: string[] | null | undefined,
+        callback: Function
     ): Promise<Subscription> {
-        const filters = this.toAchievementProgressionFilters(query);
-
         return this.createStreamSubscription({
             createStream: () =>
                 this.client.worldClient.subscribeAchievementProgressions(
                     createSubscribeAchievementProgressionsRequest({
-                        worldAddresses: filters.worldAddresses,
-                        namespaces: filters.namespaces,
-                        playerAddresses: filters.playerAddresses,
-                        achievementIds: filters.achievementIds,
+                        worldAddresses: world_addresses ?? [],
+                        namespaces: namespaces ?? [],
+                        playerAddresses: player_addresses ?? [],
+                        achievementIds: achievement_ids ?? [],
                     })
                 ),
             onMessage: (response: SubscribeAchievementProgressionsResponse) => {
@@ -973,23 +919,24 @@ export class ToriiGrpcClient {
 
     async updateAchievementProgressionSubscription(
         subscription: Subscription,
-        query?: AchievementProgressionSubscriptionQuery
+        world_addresses: string[],
+        namespaces: string[],
+        player_addresses: string[],
+        achievement_ids: string[]
     ): Promise<void> {
         const grpcSubscription = this.findSubscription(subscription);
         if (!grpcSubscription) {
             throw new Error("Subscription not found");
         }
 
-        const filters = this.toAchievementProgressionFilters(query);
-
         await this.client.worldClient.updateAchievementProgressionsSubscription(
             createUpdateAchievementProgressionsSubscriptionRequest(
                 BigInt(grpcSubscription.id),
                 {
-                    worldAddresses: filters.worldAddresses,
-                    namespaces: filters.namespaces,
-                    playerAddresses: filters.playerAddresses,
-                    achievementIds: filters.achievementIds,
+                    worldAddresses: world_addresses,
+                    namespaces: namespaces,
+                    playerAddresses: player_addresses,
+                    achievementIds: achievement_ids,
                 }
             )
         ).response;
@@ -1069,11 +1016,9 @@ export class ToriiGrpcClient {
     }
 
     async getAggregations(
-        query?: AggregationQueryInput
+        query: ToriiAggregationQuery
     ): Promise<AggregationsPage> {
-        const request = createRetrieveAggregationsRequest(
-            this.toAggregationQueryInput(query)
-        );
+        const request = createRetrieveAggregationsRequest(query);
         const response =
             await this.client.worldClient.retrieveAggregations(request)
                 .response;
@@ -1121,19 +1066,16 @@ export class ToriiGrpcClient {
         });
     }
 
-    async onAggregationsUpdated(
-        query: AggregationQueryInput | undefined,
-        callback: (entry: AggregationEntryView, subscriptionId: bigint) => void
+    async onAggregationUpdated(
+        aggregator_ids: string[] | null | undefined,
+        entity_ids: string[] | null | undefined,
+        callback: Function
     ): Promise<Subscription> {
-        const aggregationQuery = this.toAggregationQueryInput(query);
-        const aggregatorIds = aggregationQuery?.aggregator_ids ?? [];
-        const entityIds = aggregationQuery?.entity_ids ?? [];
-
         return this.createStreamSubscription({
             createStream: () =>
                 this.client.worldClient.subscribeAggregations({
-                    aggregator_ids: aggregatorIds ?? [],
-                    entity_ids: entityIds ?? [],
+                    aggregator_ids: aggregator_ids ?? [],
+                    entity_ids: entity_ids ?? [],
                 }),
             onMessage: (response: SubscribeAggregationsResponse) => {
                 if (response.entry) {
@@ -1148,45 +1090,43 @@ export class ToriiGrpcClient {
         });
     }
 
-    async updateAggregationsSubscription(
+    async updateAggregationSubscription(
         subscription: Subscription,
-        query?: AggregationQueryInput
+        aggregator_ids: string[],
+        entity_ids: string[]
     ): Promise<void> {
         const grpcSubscription = this.findSubscription(subscription);
         if (!grpcSubscription) {
             throw new Error("Subscription not found");
         }
 
-        const aggregationQuery = this.toAggregationQueryInput(query);
-
         await this.client.worldClient.updateAggregationsSubscription({
             subscription_id: BigInt(grpcSubscription.id),
-            aggregator_ids: aggregationQuery?.aggregator_ids ?? [],
-            entity_ids: aggregationQuery?.entity_ids ?? [],
+            aggregator_ids: aggregator_ids,
+            entity_ids: entity_ids,
         }).response;
     }
 
-    async getActivities(query?: ActivityQueryInput): Promise<ActivitiesPage> {
-        const request = createRetrieveActivitiesRequest(
-            this.toActivityQueryInput(query)
-        );
+    async getActivities(query: ToriiActivityQuery): Promise<ActivitiesPage> {
+        const request = createRetrieveActivitiesRequest(query);
         const response =
             await this.client.worldClient.retrieveActivities(request).response;
         return this.mappers.activitiesResponse(response) as ActivitiesPage;
     }
 
-    async onActivitiesUpdated(
-        query: ActivitySubscriptionQuery | undefined,
-        callback: (activity: ActivityEntry, subscriptionId: bigint) => void
+    async onActivityUpdated(
+        world_addresses: string[] | null | undefined,
+        namespaces: string[] | null | undefined,
+        caller_addresses: string[] | null | undefined,
+        callback: Function
     ): Promise<Subscription> {
-        const filters = this.toActivitySubscriptionFilters(query);
-
         return this.createStreamSubscription({
             createStream: () =>
                 this.client.worldClient.subscribeActivities({
-                    world_addresses: filters.world_addresses,
-                    namespaces: filters.namespaces,
-                    caller_addresses: filters.caller_addresses,
+                    world_addresses:
+                        this.normalizeWorldAddresses(world_addresses),
+                    namespaces: namespaces ?? [],
+                    caller_addresses: caller_addresses?.map(hexToBuffer) ?? [],
                 }),
             onMessage: (response: SubscribeActivitiesResponse) => {
                 if (response.activity) {
@@ -1201,22 +1141,22 @@ export class ToriiGrpcClient {
         });
     }
 
-    async updateActivitiesSubscription(
+    async updateActivitySubscription(
         subscription: Subscription,
-        query?: ActivitySubscriptionQuery
+        world_addresses: string[],
+        namespaces: string[],
+        caller_addresses: string[]
     ): Promise<void> {
         const grpcSubscription = this.findSubscription(subscription);
         if (!grpcSubscription) {
             throw new Error("Subscription not found");
         }
 
-        const filters = this.toActivitySubscriptionFilters(query);
-
         await this.client.worldClient.updateActivitiesSubscription({
             subscription_id: BigInt(grpcSubscription.id),
-            world_addresses: filters.world_addresses,
-            namespaces: filters.namespaces,
-            caller_addresses: filters.caller_addresses,
+            world_addresses: world_addresses.map(hexToBuffer),
+            namespaces: namespaces,
+            caller_addresses: caller_addresses.map(hexToBuffer),
         }).response;
     }
 
@@ -1225,6 +1165,12 @@ export class ToriiGrpcClient {
             query,
         }).response;
         return this.mappers.sqlQueryResponse(response) as SqlQueryResponse;
+    }
+
+    async search(query: SearchQueryInput): Promise<SearchResultsView> {
+        const request = createSearchRequest(query.query, query.limit);
+        const response = await this.client.worldClient.search(request).response;
+        return this.mappers.searchResponse(response);
     }
 
     private findSubscription(

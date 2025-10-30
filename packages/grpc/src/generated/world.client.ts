@@ -13,6 +13,8 @@ import type { PublishMessageRequest } from "./world";
 import type { UpdateAchievementProgressionsSubscriptionRequest } from "./world";
 import type { SubscribeAchievementProgressionsResponse } from "./world";
 import type { SubscribeAchievementProgressionsRequest } from "./world";
+import type { SearchResponse } from "./world";
+import type { SearchRequest } from "./world";
 import type { RetrievePlayerAchievementsResponse } from "./world";
 import type { RetrievePlayerAchievementsRequest } from "./world";
 import type { RetrieveAchievementsResponse } from "./world";
@@ -269,6 +271,12 @@ export interface IWorldClient {
      * @generated from protobuf rpc: RetrievePlayerAchievements
      */
     retrievePlayerAchievements(input: RetrievePlayerAchievementsRequest, options?: RpcOptions): UnaryCall<RetrievePlayerAchievementsRequest, RetrievePlayerAchievementsResponse>;
+    /**
+     * Global FTS5 search across indexed tables
+     *
+     * @generated from protobuf rpc: Search
+     */
+    search(input: SearchRequest, options?: RpcOptions): UnaryCall<SearchRequest, SearchResponse>;
     /**
      * Subscribe to achievement progression updates
      *
@@ -600,12 +608,21 @@ export class WorldClient implements IWorldClient, ServiceInfo {
         return stackIntercept<RetrievePlayerAchievementsRequest, RetrievePlayerAchievementsResponse>("unary", this._transport, method, opt, input);
     }
     /**
+     * Global FTS5 search across indexed tables
+     *
+     * @generated from protobuf rpc: Search
+     */
+    search(input: SearchRequest, options?: RpcOptions): UnaryCall<SearchRequest, SearchResponse> {
+        const method = this.methods[32], opt = this._transport.mergeOptions(options);
+        return stackIntercept<SearchRequest, SearchResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
      * Subscribe to achievement progression updates
      *
      * @generated from protobuf rpc: SubscribeAchievementProgressions
      */
     subscribeAchievementProgressions(input: SubscribeAchievementProgressionsRequest, options?: RpcOptions): ServerStreamingCall<SubscribeAchievementProgressionsRequest, SubscribeAchievementProgressionsResponse> {
-        const method = this.methods[32], opt = this._transport.mergeOptions(options);
+        const method = this.methods[33], opt = this._transport.mergeOptions(options);
         return stackIntercept<SubscribeAchievementProgressionsRequest, SubscribeAchievementProgressionsResponse>("serverStreaming", this._transport, method, opt, input);
     }
     /**
@@ -614,7 +631,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: UpdateAchievementProgressionsSubscription
      */
     updateAchievementProgressionsSubscription(input: UpdateAchievementProgressionsSubscriptionRequest, options?: RpcOptions): UnaryCall<UpdateAchievementProgressionsSubscriptionRequest, Empty> {
-        const method = this.methods[33], opt = this._transport.mergeOptions(options);
+        const method = this.methods[34], opt = this._transport.mergeOptions(options);
         return stackIntercept<UpdateAchievementProgressionsSubscriptionRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
@@ -623,7 +640,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: PublishMessage
      */
     publishMessage(input: PublishMessageRequest, options?: RpcOptions): UnaryCall<PublishMessageRequest, PublishMessageResponse> {
-        const method = this.methods[34], opt = this._transport.mergeOptions(options);
+        const method = this.methods[35], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageRequest, PublishMessageResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -632,7 +649,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: PublishMessageBatch
      */
     publishMessageBatch(input: PublishMessageBatchRequest, options?: RpcOptions): UnaryCall<PublishMessageBatchRequest, PublishMessageBatchResponse> {
-        const method = this.methods[35], opt = this._transport.mergeOptions(options);
+        const method = this.methods[36], opt = this._transport.mergeOptions(options);
         return stackIntercept<PublishMessageBatchRequest, PublishMessageBatchResponse>("unary", this._transport, method, opt, input);
     }
     /**
@@ -641,7 +658,7 @@ export class WorldClient implements IWorldClient, ServiceInfo {
      * @generated from protobuf rpc: ExecuteSql
      */
     executeSql(input: SqlQueryRequest, options?: RpcOptions): UnaryCall<SqlQueryRequest, SqlQueryResponse> {
-        const method = this.methods[36], opt = this._transport.mergeOptions(options);
+        const method = this.methods[37], opt = this._transport.mergeOptions(options);
         return stackIntercept<SqlQueryRequest, SqlQueryResponse>("unary", this._transport, method, opt, input);
     }
 }

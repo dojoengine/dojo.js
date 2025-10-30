@@ -47,7 +47,7 @@ function toPlayerAchievementsPage(page: any): PlayerAchievementsPage {
     };
 }
 
-function toAchievementQuery(input?: AchievementQueryInput) {
+export function toAchievementQuery(input?: AchievementQueryInput) {
     return {
         world_addresses: normalizeAddresses(input?.worldAddresses),
         namespaces: input?.namespaces ?? [],
@@ -56,7 +56,7 @@ function toAchievementQuery(input?: AchievementQueryInput) {
     };
 }
 
-function toPlayerAchievementQuery(input?: PlayerAchievementQueryInput) {
+export function toPlayerAchievementQuery(input?: PlayerAchievementQueryInput) {
     return {
         world_addresses: normalizeAddresses(input?.worldAddresses),
         namespaces: input?.namespaces ?? [],

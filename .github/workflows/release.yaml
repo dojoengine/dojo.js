@@ -39,6 +39,8 @@ jobs:
           fetch-depth: 0
 
       - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
 
       - name: Cache Bun modules
         uses: actions/cache@v4

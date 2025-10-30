@@ -21,6 +21,11 @@ fi
 # Find the protobuf-ts plugin
 PROTOC_GEN_TS="$GRPC_DIR/../../node_modules/.bin/protoc-gen-ts"
 
+# If not found in .bin, search in bun's installation directory
+if [ ! -f "$PROTOC_GEN_TS" ]; then
+  PROTOC_GEN_TS=$(find "$GRPC_DIR/../../node_modules/.bun" -name "protoc-gen-ts" -type f 2>/dev/null | head -1)
+fi
+
 if [ ! -f "$PROTOC_GEN_TS" ]; then
   echo "Error: @protobuf-ts/plugin not found. Run 'bun install' first."
   exit 1

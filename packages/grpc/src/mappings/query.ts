@@ -48,6 +48,7 @@ import type {
     ActivityQuery as GrpcActivityQuery,
     AchievementQuery as GrpcAchievementQuery,
     PlayerAchievementQuery as GrpcPlayerAchievementQuery,
+    SearchQuery as GrpcSearchQuery,
 } from "../generated/types";
 
 import {
@@ -75,6 +76,7 @@ import type {
     RetrievePlayerAchievementsRequest,
     SubscribeAchievementProgressionsRequest,
     UpdateAchievementProgressionsSubscriptionRequest,
+    SearchRequest,
 } from "../generated/world";
 import { addAddressPadding } from "starknet";
 
@@ -551,7 +553,7 @@ function mapAggregationQuery(
 }
 
 export function createRetrieveAggregationsRequest(
-    query?: ToriiAggregationQuery
+    query: ToriiAggregationQuery
 ): RetrieveAggregationsRequest {
     return {
         query: mapAggregationQuery(query),
@@ -586,7 +588,7 @@ function mapActivityQuery(
 }
 
 export function createRetrieveActivitiesRequest(
-    query?: ToriiActivityQuery
+    query: ToriiActivityQuery
 ): RetrieveActivitiesRequest {
     return {
         query: mapActivityQuery(query),
@@ -611,7 +613,7 @@ function mapAchievementQuery(
 }
 
 export function createRetrieveAchievementsRequest(
-    query?: ToriiAchievementQuery
+    query: ToriiAchievementQuery
 ): RetrieveAchievementsRequest {
     return {
         query: mapAchievementQuery(query),
@@ -636,7 +638,7 @@ function mapPlayerAchievementQuery(
 }
 
 export function createRetrievePlayerAchievementsRequest(
-    query?: ToriiPlayerAchievementQuery
+    query: ToriiPlayerAchievementQuery
 ): RetrievePlayerAchievementsRequest {
     return {
         query: mapPlayerAchievementQuery(query),
@@ -664,5 +666,18 @@ export function createUpdateAchievementProgressionsSubscriptionRequest(
         namespaces: filters.namespaces ?? [],
         player_addresses: (filters.playerAddresses ?? []).map(hexToBuffer),
         achievement_ids: filters.achievementIds ?? [],
+    };
+}
+
+export function createSearchRequest(
+    query: string,
+    limit?: number
+): SearchRequest {
+    const searchQuery: GrpcSearchQuery = {
+        query,
+        limit: limit ?? 10,
+    };
+    return {
+        query: searchQuery,
     };
 }

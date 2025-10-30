@@ -813,44 +813,50 @@ export interface SDK<T extends SchemaType> {
      * Gets aggregation entries (leaderboards, rankings, stats).
      */
     getAggregations: (
-        query?: AggregationQueryInput
+        query: ToriiAggregationQuery
     ) => Promise<AggregationsPage>;
 
     /**
      * Subscribes to aggregation updates (leaderboards, rankings).
      */
-    onAggregationsUpdated: (
-        query: AggregationQueryInput,
-        callback: (entry: AggregationEntryView, subscriptionId: bigint) => void
+    onAggregationUpdated: (
+        aggregator_ids: string[] | null | undefined,
+        entity_ids: string[] | null | undefined,
+        callback: Function
     ) => Promise<torii.Subscription>;
 
     /**
      * Updates an existing aggregations subscription.
      */
-    updateAggregationsSubscription: (
+    updateAggregationSubscription: (
         subscription: torii.Subscription,
-        query?: AggregationQueryInput
+        aggregator_ids: string[],
+        entity_ids: string[]
     ) => Promise<void>;
 
     /**
      * Gets activity data (user session tracking).
      */
-    getActivities: (query?: ActivityQueryInput) => Promise<ActivitiesPage>;
+    getActivities: (query: ToriiActivityQuery) => Promise<ActivitiesPage>;
 
     /**
      * Subscribes to activity updates (user sessions).
      */
-    onActivitiesUpdated: (
-        query: ActivitySubscriptionQuery,
-        callback: (activity: ActivityEntry, subscriptionId: bigint) => void
+    onActivityUpdated: (
+        world_addresses: string[] | null | undefined,
+        namespaces: string[] | null | undefined,
+        caller_addresses: string[] | null | undefined,
+        callback: Function
     ) => Promise<torii.Subscription>;
 
     /**
      * Updates an existing activities subscription.
      */
-    updateActivitiesSubscription: (
+    updateActivitySubscription: (
         subscription: torii.Subscription,
-        query?: ActivitySubscriptionQuery
+        world_addresses: string[],
+        namespaces: string[],
+        caller_addresses: string[]
     ) => Promise<void>;
 
     /**
