@@ -1,14 +1,14 @@
-name: 'Setup Dojo and Scarb'
-description: 'Install and cache Dojo and Scarb toolchain'
+name: "Setup Dojo and Scarb"
+description: "Install and cache Dojo and Scarb toolchain"
 inputs:
   dojo-version:
-    description: 'Dojo version to install'
+    description: "Dojo version to install"
     required: false
-    default: 'v1.5.0-alpha.2'
+    default: "v1.7.2"
   scarb-version:
-    description: 'Scarb version to install'
+    description: "Scarb version to install"
     required: false
-    default: '2.10.1'
+    default: "2.12.2"
 
 runs:
   using: "composite"
@@ -20,19 +20,14 @@ runs:
         path: |
           ~/.config/.dojo
         key: ${{ runner.os }}-dojo-${{ inputs.dojo-version }}
-    
-    - name: Install Dojo
-      if: steps.cache-dojo.outputs.cache-hit != 'true'
-      shell: bash
-      run: |
-        curl -L https://install.dojoengine.org | bash
-        /home/runner/.config/.dojo/dojoup/dojoup install ${{ inputs.dojo-version }}
-    
-    - name: Setup Scarb with cache
-      uses: software-mansion/setup-scarb@v1
+
+    - uses: software-mansion/setup-scarb@v1
       with:
         scarb-version: ${{ inputs.scarb-version }}
-    
-    - name: Add Dojo to PATH
+
+    - name: Install dojo
+      run: |
+        curl -L -o dojo-linux-x86_64.tar.gz https://github.com/dojoengine/dojo/releases/download/${{ inputs.dojo-version }}/dojo_${{ inputs.dojo-version }}_linux_amd64.tar.gz
+        tar -xzf dojo-linux-x86_64.tar.gz
+        sudo mv sozo /usr/local/bin/
       shell: bash
-      run: echo "/home/runner/.config/.dojo/bin" >> $GITHUB_PATH

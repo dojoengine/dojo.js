@@ -103,6 +103,9 @@ service World {
     // Retrieve player achievements (stats + progress)
     rpc RetrievePlayerAchievements (RetrievePlayerAchievementsRequest) returns (RetrievePlayerAchievementsResponse);
 
+    // Global FTS5 search across indexed tables
+    rpc Search (SearchRequest) returns (SearchResponse);
+
     // Subscribe to achievement progression updates
     rpc SubscribeAchievementProgressions (SubscribeAchievementProgressionsRequest) returns (stream SubscribeAchievementProgressionsResponse);
 
@@ -500,4 +503,14 @@ message RetrievePlayerAchievementsRequest {
 message RetrievePlayerAchievementsResponse {
     string next_cursor = 1;
     repeated types.PlayerAchievementEntry players = 2;
+}
+
+// A request to search across FTS5-indexed tables
+message SearchRequest {
+    types.SearchQuery query = 1;
+}
+
+// A response containing search results grouped by table
+message SearchResponse {
+    types.SearchResponse response = 1;
 }

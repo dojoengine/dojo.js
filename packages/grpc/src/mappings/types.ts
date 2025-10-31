@@ -42,6 +42,7 @@ import type {
     PlayerAchievementProgress as GrpcPlayerAchievementProgress,
     TaskProgress as GrpcTaskProgress,
     AchievementProgression as GrpcAchievementProgression,
+    SearchQuery as GrpcSearchQuery,
 } from "../generated/types";
 
 import { CallType as GrpcCallType } from "../generated/types";
@@ -62,6 +63,7 @@ import type {
     PlayerAchievementEntryData,
     AchievementTaskData,
     TaskProgressData,
+    SearchResultsView,
 } from "../types";
 import type {
     Ty as GrpcTy,
@@ -88,6 +90,7 @@ import type {
     RetrieveActivitiesResponse,
     RetrieveAchievementsResponse,
     RetrievePlayerAchievementsResponse,
+    SearchResponse as GrpcSearchResponse,
 } from "../generated/world";
 
 let textDecoder: TextDecoder | undefined = undefined;
@@ -847,4 +850,19 @@ export function mapSqlQueryResponse(
         }
         return mapped;
     });
+}
+
+export function mapSearchResponse(
+    response: GrpcSearchResponse
+): SearchResultsView {
+    if (!response.response) {
+        return {
+            total: 0,
+            results: [],
+        };
+    }
+    return {
+        total: response.response.total,
+        results: response.response.results,
+    };
 }

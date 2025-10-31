@@ -1657,6 +1657,98 @@ export interface PlayerAchievementEntry {
      */
     achievements: PlayerAchievementProgress[];
 }
+// Player achievement data (list of player entries)
+
+/**
+ * Global search query
+ *
+ * @generated from protobuf message types.SearchQuery
+ */
+export interface SearchQuery {
+    /**
+     * The search query string (FTS5 syntax supported: phrases, prefix matching, boolean operators)
+     *
+     * @generated from protobuf field: string query = 1
+     */
+    query: string;
+    /**
+     * Maximum results to return per table
+     *
+     * @generated from protobuf field: uint32 limit = 2
+     */
+    limit: number;
+}
+/**
+ * A single search result match
+ *
+ * @generated from protobuf message types.SearchMatch
+ */
+export interface SearchMatch {
+    /**
+     * The unique identifier of the matching record
+     *
+     * @generated from protobuf field: string id = 1
+     */
+    id: string;
+    /**
+     * The matched fields and their values
+     *
+     * @generated from protobuf field: map<string, string> fields = 2
+     */
+    fields: {
+        [key: string]: string;
+    };
+    /**
+     * Relevance score (optional, for future ranking)
+     *
+     * @generated from protobuf field: optional double score = 3
+     */
+    score?: number;
+}
+/**
+ * Search results grouped by table
+ *
+ * @generated from protobuf message types.TableSearchResults
+ */
+export interface TableSearchResults {
+    /**
+     * The table name
+     *
+     * @generated from protobuf field: string table = 1
+     */
+    table: string;
+    /**
+     * Total count of matches in this table
+     *
+     * @generated from protobuf field: uint32 count = 2
+     */
+    count: number;
+    /**
+     * The matching records
+     *
+     * @generated from protobuf field: repeated types.SearchMatch matches = 3
+     */
+    matches: SearchMatch[];
+}
+/**
+ * Global search response
+ *
+ * @generated from protobuf message types.SearchResponse
+ */
+export interface SearchResponse {
+    /**
+     * Total count across all tables
+     *
+     * @generated from protobuf field: uint32 total = 1
+     */
+    total: number;
+    /**
+     * Results grouped by table
+     *
+     * @generated from protobuf field: repeated types.TableSearchResults results = 2
+     */
+    results: TableSearchResults[];
+}
 /**
  * @generated from protobuf enum types.PatternMatching
  */
@@ -5668,3 +5760,254 @@ class PlayerAchievementEntry$Type extends MessageType<PlayerAchievementEntry> {
  * @generated MessageType for protobuf message types.PlayerAchievementEntry
  */
 export const PlayerAchievementEntry = new PlayerAchievementEntry$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SearchQuery$Type extends MessageType<SearchQuery> {
+    constructor() {
+        super("types.SearchQuery", [
+            { no: 1, name: "query", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "limit", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<SearchQuery>): SearchQuery {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.query = "";
+        message.limit = 0;
+        if (value !== undefined)
+            reflectionMergePartial<SearchQuery>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SearchQuery): SearchQuery {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string query */ 1:
+                    message.query = reader.string();
+                    break;
+                case /* uint32 limit */ 2:
+                    message.limit = reader.uint32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SearchQuery, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string query = 1; */
+        if (message.query !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.query);
+        /* uint32 limit = 2; */
+        if (message.limit !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.limit);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.SearchQuery
+ */
+export const SearchQuery = new SearchQuery$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SearchMatch$Type extends MessageType<SearchMatch> {
+    constructor() {
+        super("types.SearchMatch", [
+            { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "fields", kind: "map", K: 9 /*ScalarType.STRING*/, V: { kind: "scalar", T: 9 /*ScalarType.STRING*/ } },
+            { no: 3, name: "score", kind: "scalar", opt: true, T: 1 /*ScalarType.DOUBLE*/ }
+        ]);
+    }
+    create(value?: PartialMessage<SearchMatch>): SearchMatch {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = "";
+        message.fields = {};
+        if (value !== undefined)
+            reflectionMergePartial<SearchMatch>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SearchMatch): SearchMatch {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string id */ 1:
+                    message.id = reader.string();
+                    break;
+                case /* map<string, string> fields */ 2:
+                    this.binaryReadMap2(message.fields, reader, options);
+                    break;
+                case /* optional double score */ 3:
+                    message.score = reader.double();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    private binaryReadMap2(map: SearchMatch["fields"], reader: IBinaryReader, options: BinaryReadOptions): void {
+        let len = reader.uint32(), end = reader.pos + len, key: keyof SearchMatch["fields"] | undefined, val: SearchMatch["fields"][any] | undefined;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case 1:
+                    key = reader.string();
+                    break;
+                case 2:
+                    val = reader.string();
+                    break;
+                default: throw new globalThis.Error("unknown map entry field for types.SearchMatch.fields");
+            }
+        }
+        map[key ?? ""] = val ?? "";
+    }
+    internalBinaryWrite(message: SearchMatch, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string id = 1; */
+        if (message.id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.id);
+        /* map<string, string> fields = 2; */
+        for (let k of globalThis.Object.keys(message.fields))
+            writer.tag(2, WireType.LengthDelimited).fork().tag(1, WireType.LengthDelimited).string(k).tag(2, WireType.LengthDelimited).string(message.fields[k]).join();
+        /* optional double score = 3; */
+        if (message.score !== undefined)
+            writer.tag(3, WireType.Bit64).double(message.score);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.SearchMatch
+ */
+export const SearchMatch = new SearchMatch$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class TableSearchResults$Type extends MessageType<TableSearchResults> {
+    constructor() {
+        super("types.TableSearchResults", [
+            { no: 1, name: "table", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "count", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 3, name: "matches", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => SearchMatch }
+        ]);
+    }
+    create(value?: PartialMessage<TableSearchResults>): TableSearchResults {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.table = "";
+        message.count = 0;
+        message.matches = [];
+        if (value !== undefined)
+            reflectionMergePartial<TableSearchResults>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: TableSearchResults): TableSearchResults {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string table */ 1:
+                    message.table = reader.string();
+                    break;
+                case /* uint32 count */ 2:
+                    message.count = reader.uint32();
+                    break;
+                case /* repeated types.SearchMatch matches */ 3:
+                    message.matches.push(SearchMatch.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: TableSearchResults, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string table = 1; */
+        if (message.table !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.table);
+        /* uint32 count = 2; */
+        if (message.count !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.count);
+        /* repeated types.SearchMatch matches = 3; */
+        for (let i = 0; i < message.matches.length; i++)
+            SearchMatch.internalBinaryWrite(message.matches[i], writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.TableSearchResults
+ */
+export const TableSearchResults = new TableSearchResults$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SearchResponse$Type extends MessageType<SearchResponse> {
+    constructor() {
+        super("types.SearchResponse", [
+            { no: 1, name: "total", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "results", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => TableSearchResults }
+        ]);
+    }
+    create(value?: PartialMessage<SearchResponse>): SearchResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.total = 0;
+        message.results = [];
+        if (value !== undefined)
+            reflectionMergePartial<SearchResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SearchResponse): SearchResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint32 total */ 1:
+                    message.total = reader.uint32();
+                    break;
+                case /* repeated types.TableSearchResults results */ 2:
+                    message.results.push(TableSearchResults.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SearchResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint32 total = 1; */
+        if (message.total !== 0)
+            writer.tag(1, WireType.Varint).uint32(message.total);
+        /* repeated types.TableSearchResults results = 2; */
+        for (let i = 0; i < message.results.length; i++)
+            TableSearchResults.internalBinaryWrite(message.results[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message types.SearchResponse
+ */
+export const SearchResponse = new SearchResponse$Type();

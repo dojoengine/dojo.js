@@ -650,3 +650,39 @@ message PlayerAchievementEntry {
 }
 
 // Player achievement data (list of player entries)
+
+// Global search query
+message SearchQuery {
+    // The search query string (FTS5 syntax supported: phrases, prefix matching, boolean operators)
+    string query = 1;
+    // Maximum results to return per table
+    uint32 limit = 2;
+}
+
+// A single search result match
+message SearchMatch {
+    // The unique identifier of the matching record
+    string id = 1;
+    // The matched fields and their values
+    map<string, string> fields = 2;
+    // Relevance score (optional, for future ranking)
+    optional double score = 3;
+}
+
+// Search results grouped by table
+message TableSearchResults {
+    // The table name
+    string table = 1;
+    // Total count of matches in this table
+    uint32 count = 2;
+    // The matching records
+    repeated SearchMatch matches = 3;
+}
+
+// Global search response
+message SearchResponse {
+    // Total count across all tables
+    uint32 total = 1;
+    // Results grouped by table
+    repeated TableSearchResults results = 2;
+}
