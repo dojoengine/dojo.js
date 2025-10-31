@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.2
+
+### Patch Changes
+
+- 2ea2531: chore(torii-wasm): update torii version
+
 ## 1.8.1
 
 ### Patch Changes

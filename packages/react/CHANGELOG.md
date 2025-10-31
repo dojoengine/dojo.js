@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.8.2
+
+### Patch Changes
+
+- 2ea2531: chore(torii-wasm): update torii version
+- Updated dependencies [2ea2531]
+  - @dojoengine/state@1.8.2
+  - @dojoengine/torii-client@1.8.2
+  - @dojoengine/utils@1.8.2
+
 ## 1.8.1
 
 ### Patch Changes
