@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.3
+
+### Patch Changes
+
+- 2a05fd2: chore(core): update type to new manifest
+
 ## 1.8.2
 
 ### Patch Changes
