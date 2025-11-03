@@ -167,5 +167,6 @@ describe("ExtractAbiTypes", () => {
             direction: DirectionEnum["type"];
         }>();
         expectTypeOf<Move["outputs"]>().toEqualTypeOf<void>();
+        expectTypeOf<Move["stateMutability"]>().toEqualTypeOf<"external">();
     });
 });

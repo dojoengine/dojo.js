@@ -1,35 +1,17 @@
 #!/usr/bin/env node
 
-import {
-    readFileSync,
-    writeFileSync,
-    readdirSync,
-    existsSync,
-    mkdirSync,
-} from "fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import { join, isAbsolute, dirname } from "path";
-import type { Dirent } from "fs";
 
 type AbiEntry = {
     [key: string]: any;
 };
 
-type ManifestContract = {
-    abi?: AbiEntry[];
-    [key: string]: any;
-};
-
-type Manifest = {
-    world?: {
-        abi?: AbiEntry[];
-        [key: string]: any;
-    };
-    contracts?: ManifestContract[];
-    [key: string]: any;
-};
-
-type TargetFile = {
-    abi?: AbiEntry[];
+type LegacyManifest = {
+    world?: { abi?: AbiEntry[]; [key: string]: any };
+    base?: { abi?: AbiEntry[] | null; [key: string]: any };
+    contracts?: Array<{ abi?: AbiEntry[]; [key: string]: any }>;
+    models?: Array<{ abi?: AbiEntry[]; [key: string]: any }>;
     [key: string]: any;
 };
 
@@ -41,6 +23,7 @@ type OutputPaths = {
 type CollectOptions = {
     generateTypes: boolean;
     outputPath?: string;
+    manifestPath?: string;
 };
 
 /**
@@ -87,106 +70,63 @@ export type CompiledAbi = typeof compiledAbi;
         ensureDirectory(outputPath);
         writeFileSync(outputPath, tsContent);
 
-        console.log(`✅ Generated TypeScript types!`);
-        console.log(`📄 Type output written to: ${outputPath}`);
-        console.log(`
-Usage in your code:`);
-        console.log(`
-import { compiledAbi } from './compiled-abi';`);
-        console.log(`import { ExtractAbiTypes } from '@dojoengine/core';`);
-        console.log(`
-type MyAbi = ExtractAbiTypes<typeof compiledAbi>;`);
-        console.log(
-            `type Position = MyAbi["structs"]["dojo_starter::models::Position"];`
-        );
+        console.log(`✅ Generated TypeScript types at ${outputPath}`);
     } catch (error) {
         console.error(`Error generating types: ${error}`);
         process.exit(1);
     }
 }
 
-function walkJsonFiles(root: string, entries: Dirent[] = []): string[] {
-    const collected: string[] = [];
-
-    for (const entry of entries) {
-        const fullPath = join(root, entry.name);
-
-        if (entry.isDirectory()) {
-            const childEntries = readdirSync(fullPath, { withFileTypes: true });
-            collected.push(...walkJsonFiles(fullPath, childEntries));
-            continue;
-        }
-
-        if (entry.isFile() && entry.name.endsWith(".json")) {
-            collected.push(fullPath);
-        }
-    }
-
-    return collected;
-}
-
 function collectAbis(options: CollectOptions): void {
     const dojoRoot = process.env.DOJO_ROOT || process.cwd();
     const dojoEnv = process.env.DOJO_ENV || "dev";
 
-    const manifestPath = join(dojoRoot, `manifest_${dojoEnv}.json`);
-    const targetDir = join(dojoRoot, "target", dojoEnv);
+    const resolvedManifestPath = options.manifestPath
+        ? isAbsolute(options.manifestPath)
+            ? options.manifestPath
+            : join(dojoRoot, options.manifestPath)
+        : join(dojoRoot, `manifest_${dojoEnv}.json`);
 
     const allAbis: AbiEntry[] = [];
-    let manifest: Manifest | null = null;
+    let manifest: LegacyManifest | null = null;
 
     // Read manifest file
-    if (!existsSync(manifestPath)) {
-        console.error(`Manifest file not found: ${manifestPath}`);
+    if (!existsSync(resolvedManifestPath)) {
+        console.error(`Manifest file not found: ${resolvedManifestPath}`);
         process.exit(1);
     }
 
     try {
-        const manifestContent = readFileSync(manifestPath, "utf-8");
-        manifest = JSON.parse(manifestContent) as Manifest;
+        const manifestContent = readFileSync(resolvedManifestPath, "utf-8");
+        manifest = JSON.parse(manifestContent);
 
-        // Extract ABIs from world
-        if (manifest.world?.abi) {
+        if (manifest?.world?.abi) {
             allAbis.push(...manifest.world.abi);
         }
 
-        // Extract ABIs from contracts
-        if (manifest.contracts) {
+        if (manifest?.abis) {
+            allAbis.push(...manifest.abis);
+        }
+
+        if (manifest?.contracts) {
             for (const contract of manifest.contracts) {
-                if (contract.abi) {
+                if (Array.isArray(contract.abi)) {
                     allAbis.push(...contract.abi);
                 }
             }
         }
+
+        if (manifest?.models) {
+            for (const model of manifest.models) {
+                if (Array.isArray(model.abi)) {
+                    allAbis.push(...model.abi);
+                }
+            }
+        }
+        // console.log(manifest, allAbis);
     } catch (error) {
         console.error(`Error reading manifest file: ${error}`);
         process.exit(1);
-    }
-
-    // Read target directory files
-    if (!existsSync(targetDir)) {
-        console.warn(`Target directory not found: ${targetDir}`);
-    } else {
-        try {
-            const dirEntries = readdirSync(targetDir, { withFileTypes: true });
-            const files = walkJsonFiles(targetDir, dirEntries);
-
-            for (const filePath of files) {
-                try {
-                    const fileContent = readFileSync(filePath, "utf-8");
-                    const targetFile: TargetFile = JSON.parse(fileContent);
-
-                    // Extract only the abi key
-                    if (targetFile.abi) {
-                        allAbis.push(...targetFile.abi);
-                    }
-                } catch (error) {
-                    console.error(`Error reading file ${filePath}: ${error}`);
-                }
-            }
-        } catch (error) {
-            console.error(`Error reading target directory: ${error}`);
-        }
     }
 
     const dedupedAbis = new Map<string, AbiEntry>();
@@ -228,31 +168,23 @@ function collectAbis(options: CollectOptions): void {
     // Write output
     const output = {
         abi: mergedAbis,
-        manifest: manifest && {
-            world: manifest.world,
-            base: manifest.base,
-            contracts: manifest.contracts ?? [],
-            models: manifest.models ?? [],
-        },
+        manifest: manifest
+            ? {
+                  ...manifest,
+                  contracts: manifest.contracts ?? [],
+                  models: manifest.models ?? [],
+              }
+            : undefined,
     };
 
     const paths = resolveOutputPaths(options.outputPath);
     ensureDirectory(paths.json);
     writeFileSync(paths.json, JSON.stringify(output, null, 2));
 
-    console.log(`✅ ABI compilation complete!`);
-    console.log(`📄 Output written to: ${paths.json}`);
-    console.log(`📊 Total ABI entries: ${mergedAbis.length}`);
-
-    const typeStats = mergedAbis.reduce<Record<string, number>>((acc, item) => {
-        const key = typeof item.type === "string" ? item.type : "unknown";
-        acc[key] = (acc[key] ?? 0) + 1;
-        return acc;
-    }, {});
-
-    for (const [abiType, count] of Object.entries(typeStats)) {
-        console.log(`   • ${abiType}: ${count}`);
-    }
+    console.log(
+        `✅ ABI compilation complete with ${mergedAbis.length} entries`
+    );
+    console.log(`📄 ABI written to ${paths.json}`);
 
     // Generate TypeScript types if requested
     if (options.generateTypes) {
@@ -263,6 +195,7 @@ function collectAbis(options: CollectOptions): void {
 function parseArgs(argv: string[]): CollectOptions {
     let generateTypes = false;
     let outputPath: string | undefined;
+    let manifestPath: string | undefined;
     let index = 0;
 
     while (index < argv.length) {
@@ -296,6 +229,28 @@ function parseArgs(argv: string[]): CollectOptions {
             continue;
         }
 
+        if (arg === "--manifest-path") {
+            const value = argv[index + 1];
+            if (!value || value.startsWith("--")) {
+                console.error("Missing value for --manifest-path option");
+                process.exit(1);
+            }
+            manifestPath = value;
+            index += 2;
+            continue;
+        }
+
+        if (arg.startsWith("--manifest-path=")) {
+            const value = arg.slice("--manifest-path=".length);
+            if (!value) {
+                console.error("Missing value for --manifest-path option");
+                process.exit(1);
+            }
+            manifestPath = value;
+            index += 1;
+            continue;
+        }
+
         console.warn(`!  Unknown argument ignored: ${arg}`);
         index += 1;
     }
@@ -303,6 +258,7 @@ function parseArgs(argv: string[]): CollectOptions {
     return {
         generateTypes,
         outputPath,
+        manifestPath,
     };
 }
 

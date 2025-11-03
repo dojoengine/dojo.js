@@ -280,6 +280,11 @@ type ExtractFunctionSignature<
                               : never;
                       }
               : void;
+          stateMutability: F extends { state_mutability: infer Mut }
+              ? Mut extends string
+                  ? Mut
+                  : "external"
+              : "external";
       }
     : never;
 
