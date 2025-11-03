@@ -25,9 +25,12 @@ type DojoActionInputs<Fn> = Fn extends { inputs: infer Inputs }
         : Inputs
     : undefined;
 
+type KnownStateMutability = "view" | "external";
+
 type ActionSignature = {
     inputs: object;
     outputs: unknown;
+    stateMutability: KnownStateMutability | (string & {});
 };
 
 export type DojoActionInterface = Record<string, ActionSignature>;
@@ -60,12 +63,25 @@ type NormalizeActions<Actions> = EnsureActionInterface<
         : Result
     : Record<never, ActionSignature>;
 
-type DojoActionMethod<Fn> = DojoActionInputs<Fn> extends undefined
-    ? (account: Account | AccountInterface) => Promise<InvokeFunctionResponse>
-    : (
-          account: Account | AccountInterface,
-          args: DojoActionInputs<Fn>
-      ) => Promise<InvokeFunctionResponse>;
+type DojoActionMethod<Fn> = Fn extends { stateMutability: infer Mut }
+    ? Mut extends "view"
+        ? DojoActionInputs<Fn> extends undefined
+            ? () => Promise<CallResult>
+            : (args: DojoActionInputs<Fn>) => Promise<CallResult>
+        : DojoActionInputs<Fn> extends undefined
+          ? (
+                account: Account | AccountInterface
+            ) => Promise<InvokeFunctionResponse>
+          : (
+                account: Account | AccountInterface,
+                args: DojoActionInputs<Fn>
+            ) => Promise<InvokeFunctionResponse>
+    : DojoActionInputs<Fn> extends undefined
+      ? (account: Account | AccountInterface) => Promise<InvokeFunctionResponse>
+      : (
+            account: Account | AccountInterface,
+            args: DojoActionInputs<Fn>
+        ) => Promise<InvokeFunctionResponse>;
 
 type DojoActionMethodMap<Actions> = {
     [K in keyof NormalizeActions<Actions> & string]: DojoActionMethod<
@@ -74,9 +90,8 @@ type DojoActionMethodMap<Actions> = {
 };
 
 type ActionMethodImplementation = (
-    account: Account | AccountInterface,
-    args?: Record<string, unknown>
-) => Promise<InvokeFunctionResponse>;
+    ...parameters: Array<unknown>
+) => Promise<unknown>;
 
 /**
  * Core runtime implementation for the Dojo provider. Prefer using the exported `DojoProvider`
@@ -335,6 +350,12 @@ class DojoProviderBase extends Provider {
             string,
             ActionMethodImplementation
         >;
+        const isAccountLike = (
+            value: unknown
+        ): value is Account | AccountInterface =>
+            typeof value === "object" &&
+            value !== null &&
+            "execute" in (value as Record<string, unknown>);
 
         for (const contract of this.manifest.contracts as Array<any>) {
             if (
@@ -378,11 +399,51 @@ class DojoProviderBase extends Provider {
                 const expectsArgs = Array.isArray(functionAbi.inputs)
                     ? functionAbi.inputs.length > 0
                     : false;
+                const stateMutability =
+                    typeof functionAbi.state_mutability === "string"
+                        ? functionAbi.state_mutability
+                        : "external";
 
-                host[systemName] = async (
-                    account: Account | AccountInterface,
-                    args?: Record<string, unknown>
-                ) => {
+                if (stateMutability === "view") {
+                    host[systemName] = async (
+                        ...parameters: Array<unknown>
+                    ) => {
+                        const [maybeAccountOrArgs, maybeArgs] = parameters;
+                        const args = isAccountLike(maybeAccountOrArgs)
+                            ? (maybeArgs as Record<string, unknown> | undefined)
+                            : (maybeAccountOrArgs as
+                                  | Record<string, unknown>
+                                  | undefined);
+
+                        if (expectsArgs && args === undefined) {
+                            throw new Error(
+                                `Missing arguments for action "${systemName}"`
+                            );
+                        }
+
+                        return this.call(names.namespace, {
+                            contractName: names.contractName,
+                            entrypoint: systemName,
+                            calldata: (args ?? []) as unknown as ArgsOrCalldata,
+                        });
+                    };
+
+                    continue;
+                }
+
+                host[systemName] = async (...parameters: Array<unknown>) => {
+                    const [maybeAccount, maybeArgs] = parameters;
+
+                    if (!isAccountLike(maybeAccount)) {
+                        throw new Error(
+                            `Account is required for action "${systemName}"`
+                        );
+                    }
+
+                    const args = maybeArgs as
+                        | Record<string, unknown>
+                        | undefined;
+
                     if (expectsArgs && args === undefined) {
                         throw new Error(
                             `Missing arguments for action "${systemName}"`
@@ -390,7 +451,7 @@ class DojoProviderBase extends Provider {
                     }
 
                     return this.execute(
-                        account,
+                        maybeAccount,
                         {
                             contractName: names.contractName,
                             entrypoint: systemName,
