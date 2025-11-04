@@ -1,0 +1,23 @@
+{
+    "extends": "@tsconfig/svelte/tsconfig.json",
+    "compilerOptions": {
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "checkJs": true,
+        "isolatedModules": true,
+        "moduleDetection": "force",
+        "allowSyntheticDefaultImports": true,
+        "types": ["svelte", "vite/client"],
+        "baseUrl": ".",
+        "paths": {
+            "@showcase/dojo": ["../../core/dojo"],
+            "@showcase/dojo/*": ["../../core/dojo/*"],
+            "@showcase/utils/*": ["../../core/utils/*"]
+        }
+    },
+    "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
+    "references": [{ "path": "./tsconfig.node.json" }]
+}

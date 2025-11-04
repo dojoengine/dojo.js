@@ -168,9 +168,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            examples/*/dist
-            examples/*/.next
-          key: ${{ runner.os }}-build-examples-${{ hashFiles('examples/**/src/**') }}-${{ hashFiles('examples/**/package.json') }}
+            example/dist
+          key: ${{ runner.os }}-build-examples-${{ hashFiles('example/**/src/**') }}-${{ hashFiles('example/package.json') }}
           restore-keys: |
             ${{ runner.os }}-build-examples-
 

@@ -30,7 +30,7 @@ If you are not familiar with Dojo, then you should read the [book](https://book.
 Start a new react app with (You will need [dojo](https://github.com/dojoengine/dojo) installed):
 
 ```bash
-npx @dojoengine/create-dojo start -t example-vite-react-sdk
+npx @dojoengine/create-dojo start -t example-dojo-showcase
 ```
 
 > This command initializes a new directory with the template alongside the `dojo-starter` Cairo app. It offers a streamlined way to explore Dojo from end to end, providing a comprehensive overview of its capabilities. Additionally, this setup serves as an excellent foundation for building the next big thing.
@@ -75,8 +75,7 @@ Dojo.js provides an instant and easy way to interface with your world you can si
 pnpm i @dojoengine/sdk
 ```
 
-> Basic example: [example-vite-react-sdk](./examples/example-vite-react-sdk/)
-> More complex: [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/)
+> Unified showcase: [example-dojo-showcase](./examples/example-dojo-showcase/)
 
 ```js
 import { init } from "@dojoengine/sdk";
@@ -139,25 +138,17 @@ Other packages:
 
 ## All Examples
 
-Spin any of these examples locally
+The repository now ships a single consolidated showcase in `examples/example-dojo-showcase`. It exposes framework-specific shells that all consume the same shared Dojo core, letting you compare integrations without juggling multiple projects.
 
-```bash
-npx @dojoengine/create-dojo start
-```
+Available runtime wrappers:
 
-- [example-vite-react-sdk](./examples/example-vite-react-sdk/)
-- [example-vite-grpc-playground](./examples/example-vite-grpc-playground/)
-- [example-vite-kitchen-sink](./examples/example-vite-kitchen-sink/)
-- [example-vite-react-phaser-sdk](./examples/example-vite-react-phaser-sdk/)
-- [example-vite-react-app-sdk](./examples/example-vite-react-app-sdk/)
-- [example-vite-react-phaser-recs](./examples/example-vite-react-phaser-recs/)
-- [example-vite-react-pwa-recs](./examples/example-vite-react-pwa-recs/)
-- [example-vite-react-sdk](./examples/example-vite-react-sdk/)
-- [example-vite-react-sql](./examples/example-vite-react-sql/)
-- [example-vite-react-threejs-recs](./examples/example-vite-react-threejs-recs/)
-- [example-vanillajs-phaser-recs](./examples/example-vanillajs-phaser-recs/)
-- [example-vue-app-recs](./examples/example-vue-app-recs/)
-- [example-nodejs-bot](./examples/example-nodejs-bot/)
+- React UI: `bun run dev:react --cwd examples/example-dojo-showcase`
+- Svelte UI: `bun run dev:svelte --cwd examples/example-dojo-showcase`
+- Vue UI: `bun run dev:vue --cwd examples/example-dojo-showcase`
+- Node CLI: `bun run dev:node --cwd examples/example-dojo-showcase`
+- Web Worker harness: `bun run dev:worker --cwd examples/example-dojo-showcase`
+
+Use `bun run build --cwd examples/example-dojo-showcase` to compile every target at once.
 
 ## Contributing to dojo.js
 
@@ -197,9 +188,10 @@ Before running examples, you need to build the packages:
 
 - Try out a specific example :
 
-    ```bash
-    pnpm run dev --filter example-vite-react-sdk
-    ```
+```bash
+bun run dev --filter example-dojo-showcase
+```
+
 
 ### Running The Examples
 
@@ -251,26 +243,24 @@ To run the examples, you'll need to set up three terminal windows:
 
     Note: The world address may change. Ensure you're using the correct address from your migration output.
 
-**Terminal 3**: Start the example application
+**Terminal 3**: Start the showcase application
 
-1. Navigate to the specific example package you want to run:
+1. Navigate to the consolidated example:
 
     ```bash
-    cd examples/<package-name>
+    cd examples/example-dojo-showcase
     ```
 
-    Replace `<package-name>` with the name of the example you want to run (e.g., `example-vite-react-sdk`).
-
-2. Install dependencies:
+2. From the repository root, ensure dependencies are installed:
 
     ```bash
-    pnpm install
+    bun install
     ```
 
-3. Start the development server:
+3. Launch the desired variant:
 
     ```bash
-    pnpm run dev
+    bun run dev:react   # or dev:svelte, dev:vue, dev:node, dev:worker
     ```
 
 After completing these steps, your example application should be running and connected to the local Dojo environment.

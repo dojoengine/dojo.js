@@ -16,3 +16,4 @@ lerna-debug.log
 .package-backups
 # Local JJ workspaces
 /ws/
+example/dist/
