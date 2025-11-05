@@ -5,11 +5,11 @@ import { getSyncEntities } from "@dojoengine/state";
 import * as torii from "@dojoengine/torii-client";
 import { Account, type ArraySignatureType } from "starknet";
 
-import { createClientComponents } from "../createClientComponents.js";
-import { createSystemCalls } from "../createSystemCalls.js";
-import { defineContractComponents } from "./contractComponents.js";
-import { setupWorld } from "./generated.js";
-import { world } from "./world.js";
+import { createClientComponents } from "../createClientComponents";
+import { createSystemCalls } from "../createSystemCalls";
+import { defineContractComponents } from "./contractComponents";
+import { setupWorld } from "./generated";
+import { world } from "./world";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 

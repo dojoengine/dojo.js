@@ -31,6 +31,9 @@ export function createDojoConfig({ manifest, ...config }: DojoConfigParams) {
             config.masterPrivateKey ?? KATANA_PREFUNDED_PRIVATE_KEY,
         accountClassHash: config.accountClassHash ?? KATANA_CLASS_HASH,
         feeTokenAddress: config.feeTokenAddress ?? KATANA_ETH_CONTRACT_ADDRESS,
-        manifest,
+        manifest: {
+            ...manifest,
+            world: { ...manifest.world, abi: manifest.abis },
+        },
     };
 }

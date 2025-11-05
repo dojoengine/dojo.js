@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 import { useDojo } from "./dojo/useDojo";
-import { DirectionValue } from "@showcase/dojo";
 
 import "./app.css";
+import { DirectionValue } from "core/types";
 
 function App() {
     const {

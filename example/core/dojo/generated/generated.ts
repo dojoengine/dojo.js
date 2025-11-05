@@ -1,7 +1,7 @@
 import type { DojoProvider } from "@dojoengine/core";
 import type { Account, AccountInterface } from "starknet";
 
-import type { Direction, SpawnAction, MoveAction } from "../../types.js";
+import type { Direction, SpawnAction, MoveAction } from "../../types";
 
 const NAMESPACE = "dojo_starter";
 

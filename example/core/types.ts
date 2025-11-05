@@ -5,7 +5,7 @@ import {
     GetActionFunction,
     DojoProvider,
 } from "@dojoengine/core";
-import { compiledAbi } from "./compiled-abi.js";
+import { compiledAbi } from "./compiled-abi";
 import { CairoCustomEnum } from "starknet";
 
 export type DojoStarterAbi = ExtractAbiTypes<typeof compiledAbi>;
