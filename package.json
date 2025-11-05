@@ -9,6 +9,8 @@
         ],
         "catalog": {
             "starknet": "^8.1.2",
+            "@dojoengine/torii-wasm": "1.8.2",
+            "@dojoengine/torii-client": "1.8.2",
             "@starknet-io/get-starknet-core": "4.0.7",
             "@starknet-react/core": "^5.0.1",
             "@starknet-react/chains": "^5.0.1",

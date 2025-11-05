@@ -29,7 +29,7 @@
         "@dojoengine/create-burner": "workspace:*",
         "@dojoengine/recs": "^2.0.13",
         "@dojoengine/state": "workspace:*",
-        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/torii-client": "catalog:",
         "@dojoengine/utils": "workspace:*",
         "@latticexyz/utils": "^2.1.1",
         "starknet": "catalog:",

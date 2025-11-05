@@ -15,7 +15,7 @@
     "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@dojoengine/sdk": "workspace:*",
-        "@dojoengine/torii-wasm": "workspace:*",
+        "@dojoengine/torii-wasm": "catalog:",
         "dotenv": "^16.4.7",
         "starknet": "catalog:",
         "websocket": "^1.0.35",

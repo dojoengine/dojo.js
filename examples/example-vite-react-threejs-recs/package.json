@@ -20,7 +20,7 @@
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/sdk": "workspace:*",
         "@dojoengine/state": "workspace:*",
-        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/torii-client": "catalog:",
         "@dojoengine/utils": "workspace:*",
         "@fortawesome/fontawesome-svg-core": "^6.6.0",
         "@fortawesome/free-brands-svg-icons": "^6.6.0",

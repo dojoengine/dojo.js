@@ -21,7 +21,7 @@
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/state": "workspace:*",
         "@dojoengine/sdk": "workspace:*",
-        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/torii-client": "catalog:",
         "@dojoengine/utils": "workspace:*",
         "@latticexyz/utils": "^2.2.8",
         "starknet": "catalog:",
