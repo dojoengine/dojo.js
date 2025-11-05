@@ -7,7 +7,7 @@ import {
  * Simple function to query Torii instance over sql endpoint.
  *
  * This endpoint is mainly meant to be used as analytical query system.
- * For more informations and examples, head over to `examples/example-vite-react-sql` example
+ * Explore `examples/example-dojo-showcase` for end-to-end usage patterns.
  *
  *
  * @template Input - The type your data have raw, just straight out of sql

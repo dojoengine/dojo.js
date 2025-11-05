@@ -5,7 +5,7 @@
         "ignoreUnknown": false,
         "includes": [
             "packages/**/*.{ts,tsx,js,jsx,mjs,cjs,json}",
-            "examples/**/*.{ts,tsx,js,jsx,mjs,cjs,json}",
+            "example/**/*.{ts,tsx,js,jsx,mjs,cjs,json}",
             "scripts/**/*.{ts,tsx}",
             "*.{ts,tsx,js,jsx,mjs,cjs,json}",
             "!**/*/target/**",

@@ -1,0 +1,54 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: system-ui, sans-serif;
+    background: radial-gradient(circle at top, #10172a, #060914 60%);
+    color: white;
+}
+
+#app {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+section {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    background: rgba(4, 7, 14, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+button {
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(20, 27, 44, 0.9);
+    color: white;
+}
+
+button:hover {
+    background: rgba(43, 55, 85, 0.9);
+}
+
+select {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.feedback {
+    color: #2ecc71;
+}
+
+.feedback.error {
+    color: #e74c3c;
+}

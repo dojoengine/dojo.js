@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@showcase/dojo": ["core/dojo/index.ts"],
+            "@showcase/dojo/*": ["core/dojo/*"],
+            "@showcase/config": ["core/dojo/config.ts"],
+            "@showcase/utils/*": ["core/utils/*"]
+        },
+        "outDir": "dist",
+        "module": "esnext",
+        "target": "es2020",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "noEmit": false
+    },
+    "include": ["core", "frameworks"],
+    "exclude": ["dist", "node_modules"]
+}
