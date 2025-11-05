@@ -18,7 +18,7 @@
         "@dojoengine/core": "workspace:*",
         "@dojoengine/predeployed-connector": "workspace:*",
         "@dojoengine/sdk": "workspace:*",
-        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/torii-client": "catalog:",
         "@dojoengine/utils": "workspace:*",
         "@starknet-react/chains": "catalog:",
         "@starknet-react/core": "catalog:",

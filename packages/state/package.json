@@ -42,7 +42,7 @@
     },
     "dependencies": {
         "@dojoengine/recs": "2.0.13",
-        "@dojoengine/torii-client": "workspace:*",
+        "@dojoengine/torii-client": "catalog:",
         "immer": "^10.1.1",
         "zustand": "^5.0.2"
     }

@@ -42,6 +42,8 @@ jobs:
         with:
           bun-version: latest
 
+      - uses: arduino/setup-protoc@v3
+
       - name: Cache Bun modules
         uses: actions/cache@v4
         with:
@@ -71,17 +73,6 @@ jobs:
           key: ${{ runner.os }}-build-${{ hashFiles('**/src/**') }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-build-
-
-      - name: Cache Cargo dependencies and build artifacts
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            packages/torii-wasm/dojo.c/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('packages/torii-wasm/**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
 
       - uses: ./.github/actions/setup-dojo
         with:
@@ -125,9 +116,6 @@ jobs:
           npm config set registry https://registry.npmjs.org/
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-
-      - name: Install Protobuf Compiler
-        run: sudo apt-get install -y protobuf-compiler
 
       - name: Install dependencies
         run: bun install

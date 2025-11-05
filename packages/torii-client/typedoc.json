@@ -1,7 +1,0 @@
-{
-    "name": "@dojoengine/torii-client",
-    "entryPoints": ["src/index.ts"],
-    "entryPointStrategy": "expand",
-    "extends": ["../../typedoc.json"],
-    "json": "../../docs-json/torii-client.json"
-}

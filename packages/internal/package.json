@@ -33,8 +33,8 @@
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
-        "@dojoengine/torii-client": "workspace:*",
-        "@dojoengine/torii-wasm": "workspace:*",
+        "@dojoengine/torii-client": "catalog:",
+        "@dojoengine/torii-wasm": "catalog:",
         "@dojoengine/utils": "workspace:*",
         "starknet": "catalog:",
         "neverthrow": "^8.2.0"
