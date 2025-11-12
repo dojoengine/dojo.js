@@ -1,15 +1,15 @@
 //
-export { setup, type SetupResult } from "./generated/setup.js";
+export { setup, type SetupResult } from "./generated/setup";
 export {
     createClientComponents,
     type ClientComponents,
-} from "./createClientComponents.js";
-export { createSystemCalls, type SystemCalls } from "./createSystemCalls.js";
+} from "./createClientComponents";
+export { createSystemCalls, type SystemCalls } from "./createSystemCalls";
 export {
     Direction,
     DirectionValue,
     updatePositionWithDirection,
-} from "../types.js";
+} from "../types";
 export type {
     Vec2,
     Position,
@@ -18,6 +18,6 @@ export type {
     DirectionVariant,
     SpawnAction,
     MoveAction,
-} from "../types.js";
-export { dojoConfig } from "./config.js";
-export type { ContractComponents } from "./generated/contractComponents.js";
+} from "../types";
+export { dojoConfig } from "./config";
+export type { ContractComponents } from "./generated/contractComponents";

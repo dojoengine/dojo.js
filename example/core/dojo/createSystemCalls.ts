@@ -7,10 +7,10 @@ import {
 import { uuid } from "@latticexyz/utils";
 import { type AccountInterface } from "starknet";
 
-import { Direction, updatePositionWithDirection } from "../types.js";
-import type { ClientComponents } from "./createClientComponents.js";
-import type { ContractComponents } from "./generated/contractComponents.js";
-import type { IWorld } from "./generated/generated.js";
+import { Direction, updatePositionWithDirection } from "../types";
+import type { ClientComponents } from "./createClientComponents";
+import type { ContractComponents } from "./generated/contractComponents";
+import type { IWorld } from "./generated/generated";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 

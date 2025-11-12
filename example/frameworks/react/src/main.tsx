@@ -2,33 +2,13 @@ import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import App from "./App";
-import { DojoProvider } from "./dojo/DojoContext";
-import { dojoConfig, setup, type SetupResult } from "@showcase/dojo";
+import { DojoProvider } from "@dojoengine/core";
+import manifest from "../../../core/manifest_dev.json" with { type: "json" };
+import { createDojoConfig } from "@dojoengine/core";
+const dojoConfig = createDojoConfig({ manifest: manifest });
 
-// function Root() {
-//     const [value, setValue] = useState<SetupResult | null>(null);
-//
-//     useEffect(() => {
-//         let mounted = true;
-//         setup(dojoConfig).then((result) => {
-//             if (mounted) setValue(result);
-//         });
-//         return () => {
-//             mounted = false;
-//         };
-//     }, []);
-//
-//     if (!value) {
-//         return <div className="loading">Connecting to dojo…</div>;
-//     }
-//
-//     return (
-//         <DojoProvider value={value}>
-//             <App />
-//         </DojoProvider>
-//     );
-// }
 function Root() {
+    const provider = new DojoProvider(dojoConfig.manifest);
     return <div>Hello Dojo</div>;
 }
 

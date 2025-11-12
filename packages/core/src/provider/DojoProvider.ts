@@ -120,7 +120,7 @@ class DojoProviderBase extends Provider {
         });
 
         this.contract = new Contract({
-            abi: manifest.world.abi,
+            abi: manifest.abis,
             address: this.getWorldAddress(),
             providerOrAccount: this.provider,
         });
