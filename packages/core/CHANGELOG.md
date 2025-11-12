@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.4
+
+### Patch Changes
+
+- 79ba4c0: fix(core): abi parser issue
+
 ## 1.8.3
 
 ### Patch Changes

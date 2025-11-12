@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.8.5
+
+### Patch Changes
+
+- Updated dependencies [79ba4c0]
+  - @dojoengine/core@1.8.4
+  - @dojoengine/grpc@1.8.3
+  - @dojoengine/state@1.8.2
+
 ## 1.8.4
 
 ### Patch Changes
