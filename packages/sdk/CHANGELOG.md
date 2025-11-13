@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.8.6
+
+### Patch Changes
+
+- 1bf346b: fix: update @dojoengine/core package version
+- Updated dependencies [1bf346b]
+  - @dojoengine/grpc@1.8.4
+  - @dojoengine/state@1.8.3
+  - @dojoengine/utils@1.8.3
+
 ## 1.8.5
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.8.3
+
+### Patch Changes
+
+- 1bf346b: fix: update @dojoengine/core package version
+- Updated dependencies [1bf346b]
+  - @dojoengine/state@1.8.3
+  - @dojoengine/utils@1.8.3
+
 ## 1.8.2
 
 ### Patch Changes

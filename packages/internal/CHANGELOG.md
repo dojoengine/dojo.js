@@ -1,5 +1,13 @@
 # @dojoengine/internal
 
+## 1.7.5
+
+### Patch Changes
+
+- 1bf346b: fix: update @dojoengine/core package version
+- Updated dependencies [1bf346b]
+  - @dojoengine/utils@1.8.3
+
 ## 1.7.4
 
 ### Patch Changes

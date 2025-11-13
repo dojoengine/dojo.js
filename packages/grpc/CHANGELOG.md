@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 1.8.4
+
+### Patch Changes
+
+- 1bf346b: fix: update @dojoengine/core package version
+
 ## 1.8.3
 
 ### Patch Changes
