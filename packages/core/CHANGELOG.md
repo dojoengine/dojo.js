@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.5
+
+### Patch Changes
+
+- c0d2ae2: fix(core): use correct abi
+
 ## 1.8.4
 
 ### Patch Changes
