@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 1.8.5
+
+### Patch Changes
+
+- ccd73c9: feat(grpc): gracefully handle subscription network error
+
 ## 1.8.4
 
 ### Patch Changes

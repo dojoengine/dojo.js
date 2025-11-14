@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.8.9
+
+### Patch Changes
+
+- Updated dependencies [ccd73c9]
+  - @dojoengine/grpc@1.8.5
+
 ## 1.8.8
 
 ### Patch Changes
