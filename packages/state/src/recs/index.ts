@@ -349,10 +349,14 @@ export const syncEntities = async <S extends Schema>(
     return await client.onEntityUpdated(
         entityKeyClause,
         undefined,
-        (fetchedEntities: any, data: any) => {
-            if (logging) console.log("Entity updated", fetchedEntities);
+        (entityData: ToriiEntity) => {
+            if (logging) console.log("Entity updated", entityData);
 
-            setEntities({ [fetchedEntities]: data }, components, logging);
+            setEntities(
+                { [entityData.hashed_keys]: entityData },
+                components,
+                logging
+            );
         }
     );
 };
