@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.4
+
+### Patch Changes
+
+- ec30bc3: fix(state): torii callback args
+
 ## 1.8.3
 
 ### Patch Changes

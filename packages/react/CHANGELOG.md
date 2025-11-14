@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.8.4
+
+### Patch Changes
+
+- Updated dependencies [ec30bc3]
+  - @dojoengine/state@1.8.4
+
 ## 1.8.3
 
 ### Patch Changes
