@@ -135,7 +135,7 @@ import { addAddressPadding } from "starknet";
 import { BufferToHex } from "./mappings/effect-schema/base-schemas";
 
 import { DojoGrpcClient } from "./client";
-import type { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
+import { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
 import type {
     SubscribeEntityResponse,
     SubscribeTransactionsResponse,
@@ -172,6 +172,7 @@ interface ToriiSubscription {
     id: bigint;
     stream: ServerStreamingCall<object, object>;
     cancel: () => void;
+    lastMessage?: object;
 }
 
 type GrpcSubscription = {
@@ -209,6 +210,7 @@ interface StreamHandlerOptions<TReq extends object, TRes extends object> {
     onMessage: (response: TRes) => void;
     onError?: (error: Error) => void;
     onComplete?: () => void;
+    onReconnect?: () => void;
 }
 
 export interface ToriiGrpcClientConfig extends ClientConfig {
@@ -334,40 +336,85 @@ export class ToriiGrpcClient {
         options: StreamHandlerOptions<TReq, TRes>
     ): Subscription {
         const subscriptionId = this.nextSubscriptionId++;
-        const stream = options.createStream();
+        let isCancelled = false;
 
         const subscription: ToriiSubscription = {
             id: subscriptionId,
-            stream: stream as ServerStreamingCall<object, object>,
+            stream: null as any,
             cancel: () => {
-                // ServerStreamingCall doesn't have a cancel method, so we just clean up
+                isCancelled = true;
                 this.subscriptions.delete(subscriptionId);
             },
         };
 
         this.subscriptions.set(subscriptionId, subscription);
 
-        // Set up stream event handlers
-        stream.responses.onMessage(options.onMessage);
+        const setupStream = (isReconnect = false) => {
+            if (isCancelled) return;
 
-        if (options.onError) {
-            stream.responses.onError(options.onError);
-        } else {
-            stream.responses.onError((error) => {
-                console.error(
-                    `Stream error (subscription ${subscriptionId}):`,
-                    error
-                );
+            const stream = options.createStream();
+            subscription.stream = stream as ServerStreamingCall<object, object>;
+
+            if (isReconnect) {
+                // TODO: Add proper debug log configuration
+                // console.log(
+                //     `Stream reconnected (subscription ${subscriptionId})`
+                // );
+                if (options.onReconnect) {
+                    options.onReconnect();
+                }
+                if (subscription.lastMessage) {
+                    options.onMessage(subscription.lastMessage as TRes);
+                }
+            }
+
+            stream.responses.onMessage((response: TRes) => {
+                subscription.lastMessage = response;
+                options.onMessage(response);
             });
-        }
 
-        if (options.onComplete) {
-            stream.responses.onComplete(options.onComplete);
-        } else {
-            stream.responses.onComplete(() => {
+            const handleError = (error: Error) => {
+                if (isCancelled) return;
+
+                const isNetworkError =
+                    error.message.includes("network") ||
+                    error.message.includes("fetch") ||
+                    error.message.includes("body stream") ||
+                    error.message.includes("connection");
+
+                if (isNetworkError) {
+                    // TODO: Add proper debug log configuration
+                    // console.log(
+                    //     `Network error detected (subscription ${subscriptionId}), reconnecting...`
+                    // );
+                    setupStream(true);
+                } else {
+                    if (options.onError) {
+                        options.onError(error);
+                    } else {
+                        console.error(
+                            `Stream error (subscription ${subscriptionId}):`,
+                            error
+                        );
+                    }
+                }
+            };
+
+            stream.responses.onError(handleError);
+
+            const handleComplete = () => {
+                if (isCancelled) return;
+
+                if (options.onComplete) {
+                    options.onComplete();
+                }
                 this.subscriptions.delete(subscriptionId);
-            });
-        }
+            };
+
+            stream.responses.onComplete(handleComplete);
+        };
+
+        setupStream(false);
 
         return new Subscription(subscription);
     }
