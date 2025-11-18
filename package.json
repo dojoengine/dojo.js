@@ -15,10 +15,10 @@
             "@starknet-react/core": "^5.0.1",
             "@starknet-react/chains": "^5.0.1",
             "@starknet-io/types-js": "^0.9.1",
-            "@types/react": "^18.3.1",
-            "@types/react-dom": "^18.3.1",
-            "react": "^18.3.1",
-            "react-dom": "^18.3.1"
+            "@types/react": "^18.0.0 || ^19.0.0",
+            "@types/react-dom": "^18.0.0 || ^19.0.0",
+            "react": "^18.0.0 || ^19.0.0",
+            "react-dom": "^18.0.0 || ^19.0.0"
         }
     },
     "scripts": {

@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from "react";
+import React, { createContext, ReactNode } from "react";
 
 import { BurnerManagerOptions } from "../types";
 
@@ -38,7 +38,7 @@ export interface BurnerProviderProps {
 export const BurnerProvider = ({
     children,
     initOptions,
-}: BurnerProviderProps): JSX.Element => {
+}: BurnerProviderProps): React.ReactNode => {
     return (
         <BurnerContext.Provider value={initOptions}>
             {children}
