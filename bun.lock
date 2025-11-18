@@ -1,6 +1,5 @@
 {
   "lockfileVersion": 1,
-  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "dojo.js",
@@ -112,8 +111,8 @@
         "vitest": "^1.6.0",
       },
       "peerDependencies": {
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0",
         "starknet": "catalog:",
       },
     },
@@ -143,7 +142,7 @@
     },
     "packages/grpc": {
       "name": "@dojoengine/grpc",
-      "version": "1.8.4",
+      "version": "1.8.5",
       "dependencies": {
         "@grpc/grpc-js": "^1.13.4",
         "@protobuf-ts/grpcweb-transport": "^2.11.1",
@@ -244,14 +243,14 @@
         "vitest": "^3.1.2",
       },
       "peerDependencies": {
-        "react": "^18.2.0",
+        "react": "^18.0.0 || ^19.0.0",
         "starknet": "catalog:",
         "type-fest": "^2.14.0",
       },
     },
     "packages/sdk": {
       "name": "@dojoengine/sdk",
-      "version": "1.8.8",
+      "version": "1.8.9",
       "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@dojoengine/grpc": "workspace:*",
@@ -341,10 +340,10 @@
     "@starknet-io/types-js": "^0.9.1",
     "@starknet-react/chains": "^5.0.1",
     "@starknet-react/core": "^5.0.1",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "@types/react": "^18.0.0 || ^19.0.0",
+    "@types/react-dom": "^18.0.0 || ^19.0.0",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
     "starknet": "^8.1.2",
   },
   "packages": {

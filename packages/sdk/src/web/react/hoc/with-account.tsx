@@ -9,7 +9,7 @@ interface WithAccountProps {
 export function WithAccount<P extends object>(
     Component: React.ComponentType<P>,
     Fallback: React.ComponentType = () => <div>Please connect your wallet</div>
-): React.FC<Omit<P, keyof WithAccountProps>> {
+): (props: Omit<P, keyof WithAccountProps>) => React.ReactNode {
     return (props) => {
         const { account, address } = useAccount();
         if (!address) {
