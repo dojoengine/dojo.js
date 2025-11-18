@@ -29,6 +29,7 @@
         "@dojoengine/core": "workspace:*",
         "@dojoengine/create-burner": "workspace:*",
         "@dojoengine/grpc": "workspace:*",
+        "@dojoengine/internal": "workspace:*",
         "@dojoengine/react": "workspace:*",
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/sdk": "workspace:*",
