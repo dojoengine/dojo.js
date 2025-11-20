@@ -701,7 +701,8 @@ export class ToriiGrpcClient {
     async onTokenUpdated(
         contract_addresses: string[] | null | undefined,
         token_ids: WasmU256[] | null | undefined,
-        callback: Function
+        callback: Function,
+        onError?: (error: Error) => void
     ): Promise<Subscription> {
         return this.createStreamSubscription({
             createStream: () =>
@@ -715,6 +716,7 @@ export class ToriiGrpcClient {
                     callback(this.mappers.token(response.token));
                 }
             },
+            onError,
         });
     }
 
@@ -804,7 +806,8 @@ export class ToriiGrpcClient {
 
     async onStarknetEvent(
         clauses: KeysClause[],
-        callback: Function
+        callback: Function,
+        onError?: (error: Error) => void
     ): Promise<Subscription> {
         // Map KeysClause[] to a single clause
         const grpcClauses: GrpcKeysClause[] = clauses.map((clause) => ({
@@ -839,6 +842,7 @@ export class ToriiGrpcClient {
                     });
                 }
             },
+            onError,
         });
     }
 

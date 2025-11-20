@@ -2,7 +2,11 @@ import { Atom } from "@effect-atom/atom-react";
 import { Effect, Stream, Console, Schedule, Duration } from "effect";
 import type { ToriiGrpcClient as BaseToriiGrpcClient } from "@dojoengine/grpc";
 import type { Clause, Entities } from "@dojoengine/torii-client";
-import { ToriiGrpcClient, ToriiGrpcClientError } from "../services/torii";
+import {
+    ToriiGrpcClient,
+    ToriiGrpcClientError,
+    makeToriiLayer,
+} from "../services/torii";
 import { SchemaType, ToriiQueryBuilder } from "@dojoengine/sdk";
 import {
     CairoCustomEnum,
@@ -11,6 +15,9 @@ import {
     addAddressPadding,
 } from "starknet";
 import type * as torii from "@dojoengine/torii-wasm/types";
+import manifest from "../../../../../../worlds/dojo-starter/manifest_dev.json" with {
+    type: "json",
+};
 
 type EntityUpdate = {
     hashed_keys: string;
@@ -97,7 +104,12 @@ function parseValue(value: torii.Ty): unknown {
     }
 }
 
-const toriiRuntime = Atom.runtime(ToriiGrpcClient.Default);
+const toriiRuntime = Atom.runtime(
+    makeToriiLayer(
+        { manifest },
+        { autoReconnect: false, maxReconnectAttempts: 5 }
+    )
+);
 
 export function createEntityUpdatesAtom(
     clause: Clause | null | undefined,
@@ -199,13 +211,9 @@ const parseEntity = (entity: EntityUpdate) =>
     });
 
 const parseEntities = (entities: Entities) =>
-    Effect.forEach(
-        entities.items as unknown as EntityUpdate[],
-        parseEntity,
-        {
-            concurrency: "unbounded",
-        }
-    ).pipe(
+    Effect.forEach(entities.items as unknown as EntityUpdate[], parseEntity, {
+        concurrency: "unbounded",
+    }).pipe(
         Effect.map((items) => ({ items, next_cursor: entities.next_cursor }))
     );
 

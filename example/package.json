@@ -36,6 +36,7 @@
         "@dojoengine/internal": "workspace:*",
         "@effect-atom/atom-react": "^0.4.0",
         "@latticexyz/utils": "^2.2.8",
+        "@tanstack/react-router": "^1.87.3",
         "effect": "^3.19.4",
         "react": "catalog:",
         "react-dom": "catalog:",

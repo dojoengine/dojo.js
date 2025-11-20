@@ -1,13 +1,8 @@
 import { ToriiGrpcClient as BaseToriiGrpcClient } from "@dojoengine/grpc";
+import type { ToriiGrpcClientConfig } from "@dojoengine/grpc";
 import { createDojoConfig } from "@dojoengine/core";
-import { Effect, Data } from "effect";
-import manifest from "../../../../../../worlds/dojo-starter/manifest_dev.json" with {
-    type: "json",
-};
-
-const dojoConfig = createDojoConfig({
-    manifest: manifest,
-});
+import type { DojoConfig } from "@dojoengine/core";
+import { Effect, Data, Layer, Context } from "effect";
 
 export class ToriiGrpcClientError extends Data.TaggedError(
     "ToriiGrpcClientError"
@@ -15,6 +10,34 @@ export class ToriiGrpcClientError extends Data.TaggedError(
     cause?: unknown;
     message?: string;
 }> {}
+
+export interface DojoConfigParams {
+    manifest: any;
+    rpcUrl?: string;
+    toriiUrl?: string;
+    masterAddress?: string;
+    masterPrivateKey?: string;
+    accountClassHash?: string;
+    feeTokenAddress?: string;
+}
+
+export interface ToriiClientConfig {
+    toriiUrl?: string;
+    worldAddress?: string;
+    autoReconnect?: boolean;
+    maxReconnectAttempts?: number;
+    useEffectSchema?: boolean;
+}
+
+export interface DojoConfigServiceImpl {
+    readonly dojoConfig: DojoConfig;
+    readonly toriiClientConfig: ToriiClientConfig;
+}
+
+export class DojoConfigService extends Context.Tag("DojoConfigService")<
+    DojoConfigService,
+    DojoConfigServiceImpl
+>() {}
 
 export interface ToriiGrpcClientImpl {
     use: <T>(
@@ -27,11 +50,19 @@ export class ToriiGrpcClient extends Effect.Service<ToriiGrpcClient>()(
     "ToriiGrpcClient",
     {
         effect: Effect.gen(function* () {
+            const { dojoConfig, toriiClientConfig } =
+                yield* DojoConfigService;
             const client = new BaseToriiGrpcClient({
-                toriiUrl: dojoConfig.toriiUrl,
-                worldAddress: dojoConfig.manifest.world.address,
-                autoReconnect: false,
-            });
+                toriiUrl:
+                    toriiClientConfig.toriiUrl ?? dojoConfig.toriiUrl,
+                worldAddress:
+                    toriiClientConfig.worldAddress ??
+                    dojoConfig.manifest.world.address,
+                autoReconnect: toriiClientConfig.autoReconnect ?? true,
+                maxReconnectAttempts:
+                    toriiClientConfig.maxReconnectAttempts ?? 5,
+                useEffectSchema: toriiClientConfig.useEffectSchema ?? false,
+            } as ToriiGrpcClientConfig);
             return {
                 use: <T>(
                     fn: (client: BaseToriiGrpcClient) => PromiseLike<T>
@@ -50,4 +81,20 @@ export class ToriiGrpcClient extends Effect.Service<ToriiGrpcClient>()(
     }
 ) {}
 
-export { dojoConfig };
+export function makeDojoConfigLayer(
+    params: DojoConfigParams,
+    toriiClientConfig: ToriiClientConfig = {}
+): Layer.Layer<DojoConfigService> {
+    return Layer.succeed(DojoConfigService, {
+        dojoConfig: createDojoConfig(params),
+        toriiClientConfig,
+    });
+}
+
+export function makeToriiLayer(
+    params: DojoConfigParams,
+    toriiClientConfig: ToriiClientConfig = {}
+): Layer.Layer<ToriiGrpcClient> {
+    const configLayer = makeDojoConfigLayer(params, toriiClientConfig);
+    return Layer.provide(ToriiGrpcClient.Default, configLayer);
+}
