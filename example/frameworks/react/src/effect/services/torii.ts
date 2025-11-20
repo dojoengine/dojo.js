@@ -18,8 +18,9 @@ export class ToriiGrpcClientError extends Data.TaggedError(
 
 export interface ToriiGrpcClientImpl {
     use: <T>(
-        fn: (client: BaseToriiGrpcClient) => T
-    ) => Effect.Effect<Awaited<T>, ToriiGrpcClientError>;
+        fn: (client: BaseToriiGrpcClient) => PromiseLike<T>
+    ) => Effect.Effect<T, ToriiGrpcClientError>;
+    client: BaseToriiGrpcClient;
 }
 
 export class ToriiGrpcClient extends Effect.Service<ToriiGrpcClient>()(
@@ -29,19 +30,21 @@ export class ToriiGrpcClient extends Effect.Service<ToriiGrpcClient>()(
             const client = new BaseToriiGrpcClient({
                 toriiUrl: dojoConfig.toriiUrl,
                 worldAddress: dojoConfig.manifest.world.address,
+                autoReconnect: false,
             });
             return {
                 use: <T>(
-                    fn: (client: BaseToriiGrpcClient) => T
-                ): Effect.Effect<Awaited<T>, ToriiGrpcClientError> =>
+                    fn: (client: BaseToriiGrpcClient) => PromiseLike<T>
+                ): Effect.Effect<T, ToriiGrpcClientError> =>
                     Effect.tryPromise({
-                        try: async () => await fn(client),
-                        catch: (e) =>
+                        try: () => fn(client),
+                        catch: (unknown) =>
                             new ToriiGrpcClientError({
-                                cause: e,
+                                cause: unknown,
                                 message: "Torii gRPC Client Error",
                             }),
-                    }) as Effect.Effect<Awaited<T>, ToriiGrpcClientError>,
+                    }),
+                client,
             } satisfies ToriiGrpcClientImpl;
         }),
     }

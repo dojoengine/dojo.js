@@ -30,6 +30,7 @@
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/sdk": "workspace:*",
         "@dojoengine/state": "workspace:*",
+        "@dojoengine/torii-wasm": "catalog:",
         "@dojoengine/torii-client": "catalog:",
         "@dojoengine/utils": "workspace:*",
         "@dojoengine/internal": "workspace:*",

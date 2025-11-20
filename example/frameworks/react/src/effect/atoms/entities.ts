@@ -1,11 +1,8 @@
 import { Atom } from "@effect-atom/atom-react";
-import { Effect, Stream, Chunk, Console, Schedule } from "effect";
-import type {
-    ToriiGrpcClient as BaseToriiGrpcClient,
-    Subscription,
-} from "@dojoengine/grpc";
+import { Effect, Stream, Console, Schedule, Duration } from "effect";
+import type { ToriiGrpcClient as BaseToriiGrpcClient } from "@dojoengine/grpc";
 import type { Clause, Entities } from "@dojoengine/torii-client";
-import { ToriiGrpcClient } from "../services/torii";
+import { ToriiGrpcClient, ToriiGrpcClientError } from "../services/torii";
 import { SchemaType, ToriiQueryBuilder } from "@dojoengine/sdk";
 import {
     CairoCustomEnum,
@@ -15,7 +12,7 @@ import {
 } from "starknet";
 import type * as torii from "@dojoengine/torii-wasm/types";
 
-type Entity = {
+type EntityUpdate = {
     hashed_keys: string;
     models: Record<string, torii.Ty>;
 };
@@ -110,71 +107,72 @@ export function createEntityUpdatesAtom(
         .atom(
             Stream.unwrap(
                 Effect.gen(function* () {
-                    const { use } = yield* ToriiGrpcClient;
+                    const { client } = yield* ToriiGrpcClient;
 
-                    const stream = Stream.asyncEffect((emit) => {
-                        let subscription: Subscription | null = null;
-
-                        Effect.runPromise(
-                            use((client: BaseToriiGrpcClient) =>
-                                client.onEntityUpdated(
-                                    clause,
-                                    worldAddresses,
-                                    (
-                                        entity: unknown,
-                                        subscriptionId: bigint
-                                    ) => {
-                                        emit(
-                                            Effect.succeed(
-                                                Chunk.of({
-                                                    entity,
-                                                    subscriptionId,
+                    const stream = Stream.asyncPush<
+                        {
+                            entity: unknown;
+                            subscriptionId: bigint;
+                        },
+                        ToriiGrpcClientError
+                    >((emit) =>
+                        Effect.acquireRelease(
+                            Effect.tryPromise({
+                                try: () =>
+                                    client.onEntityUpdated(
+                                        clause,
+                                        worldAddresses,
+                                        (
+                                            entity: unknown,
+                                            subscriptionId: bigint
+                                        ) => {
+                                            emit.single({
+                                                entity,
+                                                subscriptionId,
+                                            });
+                                        },
+                                        (error) => {
+                                            emit.fail(
+                                                new ToriiGrpcClientError({
+                                                    cause: error,
+                                                    message:
+                                                        "Entity subscription error",
                                                 })
-                                            )
-                                        );
-                                    }
-                                )
-                            )
-                        ).then(async (sub) => {
-                            subscription = (await sub) as Subscription;
-                        });
-
-                        return Effect.sync(() => {
-                            subscription?.cancel();
-                        });
-                    });
+                                            );
+                                        }
+                                    ),
+                                catch: (error) =>
+                                    new ToriiGrpcClientError({
+                                        cause: error,
+                                        message:
+                                            "Failed to subscribe to entities",
+                                    }),
+                            }),
+                            (subscription) =>
+                                Effect.sync(() => subscription.cancel())
+                        )
+                    );
 
                     return stream.pipe(
                         Stream.scan(
-                            new Map<string, Entity>(),
+                            new Map<string, EntityUpdate>(),
                             (entities, data) => {
-                                const e = data.entity as Entity;
+                                const e = data.entity as EntityUpdate;
                                 const newMap = new Map(entities);
                                 newMap.set(e.hashed_keys, e);
                                 return newMap;
                             }
-                        )
+                        ),
+                        Stream.retry(Schedule.exponential("1 second", 2))
                     );
-                }).pipe(
-                    Effect.retry(
-                        Schedule.addDelay(Schedule.recurs(5), () => "3 seconds")
-                    ),
-                    Effect.catchAll((error) =>
-                        Effect.gen(function* () {
-                            yield* Console.error(
-                                "createEntityUpdatesAtom failed after 5 retries:",
-                                error
-                            );
-                            return Stream.empty;
-                        })
-                    )
-                )
+                })
             ),
-            { initialValue: new Map<string, Entity>() }
+            { initialValue: new Map<string, EntityUpdate>() }
         )
         .pipe(Atom.keepAlive);
 }
-const parseEntity = (entity: Entity) =>
+
+const parseEntity = (entity: EntityUpdate) =>
     Effect.sync(() => {
         const entityId = addAddressPadding(entity.hashed_keys);
         const parsedEntity: ParsedEntity = {
@@ -193,7 +191,7 @@ const parseEntity = (entity: Entity) =>
             (parsedEntity.models[schemaKey] as Record<string, unknown>)[
                 modelKey
             ] = parseStruct(
-                entity.models[modelName] as Record<string, torii.Ty>
+                entity.models[modelName] as unknown as Record<string, torii.Ty>
             );
         }
 
@@ -201,9 +199,13 @@ const parseEntity = (entity: Entity) =>
     });
 
 const parseEntities = (entities: Entities) =>
-    Effect.forEach(entities.items, parseEntity, {
-        concurrency: "unbounded",
-    }).pipe(
+    Effect.forEach(
+        entities.items as unknown as EntityUpdate[],
+        parseEntity,
+        {
+            concurrency: "unbounded",
+        }
+    ).pipe(
         Effect.map((items) => ({ items, next_cursor: entities.next_cursor }))
     );
 

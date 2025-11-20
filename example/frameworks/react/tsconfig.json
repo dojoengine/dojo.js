@@ -3,7 +3,13 @@
     "compilerOptions": {
         "jsx": "react-jsx",
         "types": ["vite/client"],
-        "outDir": "../../dist/react"
+        "outDir": "../../dist/react",
+        "plugins": [
+            {
+                "name": "@effect/language-service"
+            }
+        ],
+        "moduleResolution": "bundler"
     },
     "include": ["src"],
     "exclude": ["../../dist", "../../../node_modules"]

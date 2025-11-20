@@ -65,7 +65,12 @@ function EntitySubscriber() {
                 </div>
             );
         },
-        onFailure: (error) => <div>Failed to subscribe to entities</div>,
+        onFailure: (error) => (
+            <div>
+                Failed to subscribe to entities updates
+                <pre>{error.cause.toString()}</pre>
+            </div>
+        ),
         onInitial: () => <div> Initial</div>,
     });
 }
