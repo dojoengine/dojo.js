@@ -1,12 +1,8 @@
 import { Atom } from "@effect-atom/atom-react";
-import { Effect, Stream, Console, Schedule, Duration } from "effect";
-import type { ToriiGrpcClient as BaseToriiGrpcClient } from "@dojoengine/grpc";
+import { Effect, Stream, Schedule } from "effect";
+import type { ToriiClient } from "@dojoengine/grpc";
 import type { Clause, Entities } from "@dojoengine/torii-client";
-import {
-    ToriiGrpcClient,
-    ToriiGrpcClientError,
-    makeToriiLayer,
-} from "../services/torii";
+import { ToriiGrpcClient, ToriiGrpcClientError } from "../services/torii";
 import { SchemaType, ToriiQueryBuilder } from "@dojoengine/sdk";
 import {
     CairoCustomEnum,
@@ -15,9 +11,7 @@ import {
     addAddressPadding,
 } from "starknet";
 import type * as torii from "@dojoengine/torii-wasm/types";
-import manifest from "../../../../../../worlds/dojo-starter/manifest_dev.json" with {
-    type: "json",
-};
+import { toriiRuntime } from ".";
 
 type EntityUpdate = {
     hashed_keys: string;
@@ -104,13 +98,6 @@ function parseValue(value: torii.Ty): unknown {
     }
 }
 
-const toriiRuntime = Atom.runtime(
-    makeToriiLayer(
-        { manifest },
-        { autoReconnect: false, maxReconnectAttempts: 5 }
-    )
-);
-
 export function createEntityUpdatesAtom(
     clause: Clause | null | undefined,
     worldAddresses: string[] | null | undefined = null
@@ -121,23 +108,25 @@ export function createEntityUpdatesAtom(
                 Effect.gen(function* () {
                     const { client } = yield* ToriiGrpcClient;
 
-                    const stream = Stream.asyncPush<
+                    const stream = Stream.asyncScoped<
                         {
                             entity: unknown;
                             subscriptionId: bigint;
                         },
                         ToriiGrpcClientError
                     >((emit) =>
-                        Effect.acquireRelease(
-                            Effect.tryPromise({
-                                try: () =>
-                                    client.onEntityUpdated(
+                        Effect.gen(function* () {
+                            const subscription = yield* Effect.tryPromise({
+                                try: () => {
+                                    console.log("here in the handle");
+                                    return client.onEntityUpdated(
                                         clause,
                                         worldAddresses,
                                         (
                                             entity: unknown,
                                             subscriptionId: bigint
                                         ) => {
+                                            console.log(entity, subscriptionId);
                                             emit.single({
                                                 entity,
                                                 subscriptionId,
@@ -152,17 +141,20 @@ export function createEntityUpdatesAtom(
                                                 })
                                             );
                                         }
-                                    ),
+                                    );
+                                },
                                 catch: (error) =>
                                     new ToriiGrpcClientError({
                                         cause: error,
                                         message:
                                             "Failed to subscribe to entities",
                                     }),
-                            }),
-                            (subscription) =>
-                                Effect.sync(() => subscription.cancel())
-                        )
+                            });
+                            yield* Effect.addFinalizer(() => {
+                                console.log("cancel called");
+                                return Effect.sync(() => subscription.cancel());
+                            });
+                        })
                     );
 
                     return stream.pipe(
@@ -222,7 +214,7 @@ export function createEntityQueryAtom(query: ToriiQueryBuilder<SchemaType>) {
         .atom(
             Effect.gen(function* () {
                 const { use } = yield* ToriiGrpcClient;
-                return yield* use((client: BaseToriiGrpcClient) =>
+                return yield* use((client: ToriiClient) =>
                     client.getEntities(query.build())
                 );
             }).pipe(Effect.flatMap(parseEntities))

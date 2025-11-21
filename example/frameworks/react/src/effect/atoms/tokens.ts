@@ -1,29 +1,16 @@
 import { Atom } from "@effect-atom/atom-react";
 import { Effect, Stream, Schedule } from "effect";
-import type { ToriiGrpcClient as BaseToriiGrpcClient } from "@dojoengine/grpc";
+import type { ToriiClient } from "@dojoengine/grpc";
 import type { TokenQuery, Tokens } from "@dojoengine/torii-client";
-import {
-    ToriiGrpcClient,
-    ToriiGrpcClientError,
-    makeToriiLayer,
-} from "../services/torii";
-import manifest from "../../../../../../worlds/dojo-starter/manifest_dev.json" with {
-    type: "json",
-};
-
-const toriiRuntime = Atom.runtime(
-    makeToriiLayer(
-        { manifest },
-        { autoReconnect: false, maxReconnectAttempts: 5 }
-    )
-);
+import { ToriiGrpcClient, ToriiGrpcClientError } from "../services/torii";
+import { toriiRuntime } from ".";
 
 export function createTokenQueryAtom(query: TokenQuery) {
     return toriiRuntime
         .atom(
             Effect.gen(function* () {
                 const { use } = yield* ToriiGrpcClient;
-                return yield* use((client: BaseToriiGrpcClient) =>
+                return yield* use((client: ToriiClient) =>
                     client.getTokens(query)
                 );
             })
@@ -67,12 +54,15 @@ export function createTokenUpdatesAtom(
                                 catch: (error) =>
                                     new ToriiGrpcClientError({
                                         cause: error,
-                                        message: "Failed to subscribe to tokens",
+                                        message:
+                                            "Failed to subscribe to tokens",
                                     }),
                             }),
                             (subscription: unknown) =>
                                 Effect.sync(() =>
-                                    (subscription as { cancel: () => void }).cancel()
+                                    (
+                                        subscription as { cancel: () => void }
+                                    ).cancel()
                                 )
                         )
                     );

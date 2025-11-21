@@ -13,7 +13,7 @@ function EventList() {
     const events = useAtomValue(eventsAtom);
     return Result.match(events, {
         onSuccess: ({ value: events }) => {
-            const items = Array.isArray(events) ? events : events.items ?? [];
+            const items = Array.isArray(events) ? events : (events.items ?? []);
             return (
                 <div>
                     <h2>Registered Events</h2>
@@ -40,6 +40,7 @@ function EventList() {
 
 function EventSubscriber() {
     const sub = useAtomValue(eventSubscriptionAtom);
+    console.log(sub);
 
     return Result.match(sub, {
         onSuccess: ({ value: events }) => {
