@@ -1,13 +1,14 @@
 import { Atom } from "@effect-atom/atom-react";
-import { makeToriiLayer } from "../services/torii";
-// import manifest from "../../../../../../worlds/dojo-starter/manifest_dev.json" with {
-//     type: "json",
-// };
+import { Layer } from "effect";
+import { makeToriiLayer } from "@dojoengine/react/effect";
+import { TracingLive } from "../tracing";
 import manifest from "../../manifest_sepolia.json" with { type: "json" };
 
-export const toriiRuntime = Atom.runtime(
-    makeToriiLayer(
-        { manifest, toriiUrl: "https://api.cartridge.gg/x/nums-bal/torii" },
-        { autoReconnect: false, maxReconnectAttempts: 5 }
-    )
+const toriiLayer = makeToriiLayer(
+    { manifest, toriiUrl: "https://api.cartridge.gg/x/nums-bal/torii" },
+    { autoReconnect: false, maxReconnectAttempts: 5 }
 );
+
+const AppLayer = Layer.merge(toriiLayer, TracingLive);
+
+export const toriiRuntime = Atom.runtime(AppLayer);

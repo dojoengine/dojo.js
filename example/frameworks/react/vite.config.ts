@@ -14,6 +14,16 @@ export default defineConfig({
             "@showcase/utils": path.resolve(__dirname, "../../core/utils"),
         },
     },
+    optimizeDeps: {
+        include: [
+            "@opentelemetry/sdk-trace-base",
+            "@opentelemetry/sdk-trace-node",
+            "@opentelemetry/api",
+            "@opentelemetry/sdk-logs",
+            "@opentelemetry/sdk-metrics",
+            "@effect/opentelemetry",
+        ],
+    },
     build: {
         outDir: path.resolve(__dirname, "../../dist/react"),
         emptyOutDir: true,

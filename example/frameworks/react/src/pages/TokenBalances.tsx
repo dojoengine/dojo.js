@@ -2,21 +2,25 @@ import { Result, useAtomValue } from "@effect-atom/atom-react";
 import {
     createTokenBalanceQueryAtom,
     createTokenBalanceUpdatesAtom,
-} from "../effect/atoms/token-balances";
+} from "@dojoengine/react/effect";
 import { defaultToriiPagination } from "@dojoengine/sdk";
+import { toriiRuntime } from "../effect";
 
-const tokenBalancesAtom = createTokenBalanceQueryAtom({
+const tokenBalancesAtom = createTokenBalanceQueryAtom(toriiRuntime, {
     account_addresses: [],
     contract_addresses: [],
     token_ids: [],
     pagination: defaultToriiPagination,
 });
-const tokenBalanceSubscriptionAtom = createTokenBalanceUpdatesAtom({
-    account_addresses: [],
-    contract_addresses: [],
-    token_ids: [],
-    pagination: defaultToriiPagination,
-});
+const tokenBalanceSubscriptionAtom = createTokenBalanceUpdatesAtom(
+    toriiRuntime,
+    {
+        account_addresses: [],
+        contract_addresses: [],
+        token_ids: [],
+        pagination: defaultToriiPagination,
+    }
+);
 
 function TokenBalanceList() {
     const balances = useAtomValue(tokenBalancesAtom);

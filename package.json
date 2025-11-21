@@ -69,7 +69,9 @@
     },
     "dependencies": {
         "@changesets/cli": "^2.29.6",
-        "@dojoengine/recs": "2.0.13"
+        "@dojoengine/recs": "2.0.13",
+        "@opentelemetry/sdk-logs": "^0.208.0",
+        "@opentelemetry/sdk-trace-node": "^2.2.0"
     },
     "commitlint": {
         "extends": [

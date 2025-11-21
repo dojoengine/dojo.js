@@ -9,7 +9,7 @@
     "scripts": {
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",
-        "build:deps": "tsup --dts-resolve",
+        "build:deps": "tsup",
         "build": "bun run build:deps",
         "test": "vitest run --passWithNoTests",
         "format:check": "biome format .",
@@ -20,12 +20,23 @@
     "peerDependencies": {
         "react": "^18.0.0 || ^19.0.0",
         "starknet": "catalog:",
-        "type-fest": "^2.14.0"
+        "type-fest": "^2.14.0",
+        "effect": "^3.19.0",
+        "@effect-atom/atom": "^0.4.0",
+        "@effect-atom/atom-react": "^0.4.0",
+        "@effect/opentelemetry": "^0.59.0",
+        "@opentelemetry/api": "^1.9.0",
+        "@opentelemetry/core": "^2.2.0",
+        "@opentelemetry/sdk-trace-base": "^2.0.0"
     },
     "exports": {
         ".": {
             "import": "./dist/index.js",
             "types": "./dist/index.d.ts"
+        },
+        "./effect": {
+            "import": "./dist/effect/index.js",
+            "types": "./src/effect/index.ts"
         }
     },
     "devDependencies": {
@@ -42,9 +53,13 @@
         "vitest": "^3.1.2"
     },
     "dependencies": {
+        "@dojoengine/core": "workspace:*",
+        "@dojoengine/grpc": "workspace:*",
         "@dojoengine/recs": "2.0.13",
+        "@dojoengine/sdk": "workspace:*",
         "@dojoengine/state": "workspace:*",
         "@dojoengine/torii-client": "catalog:",
+        "@dojoengine/torii-wasm": "catalog:",
         "@dojoengine/utils": "workspace:*",
         "@latticexyz/utils": "^2.2.8",
         "@starknet-io/get-starknet-core": "catalog:",

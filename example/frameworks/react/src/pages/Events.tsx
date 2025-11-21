@@ -2,12 +2,13 @@ import { Result, useAtomValue } from "@effect-atom/atom-react";
 import {
     createEventQueryAtom,
     createEventUpdatesAtom,
-} from "../effect/atoms/events";
+} from "@dojoengine/react/effect";
+import { toriiRuntime } from "../effect";
 
-const eventsAtom = createEventQueryAtom({
+const eventsAtom = createEventQueryAtom(toriiRuntime, {
     keys: undefined,
 });
-const eventSubscriptionAtom = createEventUpdatesAtom([]);
+const eventSubscriptionAtom = createEventUpdatesAtom(toriiRuntime, []);
 
 function EventList() {
     const events = useAtomValue(eventsAtom);

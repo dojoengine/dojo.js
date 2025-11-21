@@ -2,16 +2,17 @@ import { Result, useAtomValue } from "@effect-atom/atom-react";
 import {
     createTokenQueryAtom,
     createTokenUpdatesAtom,
-} from "../effect/atoms/tokens";
+} from "@dojoengine/react/effect";
 import { defaultToriiPagination } from "@dojoengine/sdk";
+import { toriiRuntime } from "../effect";
 
-const tokensAtom = createTokenQueryAtom({
+const tokensAtom = createTokenQueryAtom(toriiRuntime, {
     contract_addresses: [],
     token_ids: [],
     attribute_filters: [],
     pagination: defaultToriiPagination,
 });
-const tokenSubscriptionAtom = createTokenUpdatesAtom(null, null);
+const tokenSubscriptionAtom = createTokenUpdatesAtom(toriiRuntime, null, null);
 
 function TokenList() {
     const tokens = useAtomValue(tokensAtom);

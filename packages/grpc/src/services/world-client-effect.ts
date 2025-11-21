@@ -267,15 +267,14 @@ const mapError = (error: unknown): GrpcError => {
 
 const retryPolicy = Schedule.exponential("1 seconds").pipe(
     Schedule.compose(Schedule.recurs(5)),
-    Schedule.whileInput((error: GrpcError) =>
-        isNetworkError(error.details)
-    )
+    Schedule.whileInput((error: GrpcError) => isNetworkError(error.details))
 );
 
-const wrapUnary = <TReq, TRes>(
-    fn: (req: TReq) => { response: Promise<TRes> },
-    methodName: string
-) =>
+const wrapUnary =
+    <TReq, TRes>(
+        fn: (req: TReq) => { response: Promise<TRes> },
+        methodName: string
+    ) =>
     (request: TReq): Effect.Effect<TRes, GrpcError> =>
         Effect.tryPromise({
             try: () => fn(request).response,
@@ -292,18 +291,20 @@ const wrapUnary = <TReq, TRes>(
             })
         );
 
-const wrapStream = <TReq, TRes>(
-    fn: (req: TReq) => {
-        responses: {
-            onMessage: (fn: (msg: TRes) => void) => void;
-            onError: (fn: (error: Error) => void) => void;
-            onComplete: (fn: () => void) => void;
-        };
-    },
-    methodName: string
-) =>
+const wrapStream =
+    <TReq, TRes>(
+        fn: (req: TReq) => {
+            responses: {
+                onMessage: (fn: (msg: TRes) => void) => void;
+                onError: (fn: (error: Error) => void) => void;
+                onComplete: (fn: () => void) => void;
+            };
+        },
+        methodName: string
+    ) =>
     (request: TReq): Stream.Stream<TRes, GrpcError> =>
         Stream.async<TRes, GrpcError>((emit) => {
+            console.log("logging in stream");
             const call = fn(request);
 
             call.responses.onMessage((message) => {
@@ -320,14 +321,17 @@ const wrapStream = <TReq, TRes>(
         }).pipe(
             Stream.mapEffect((value) =>
                 Effect.succeed(value).pipe(
-                    Effect.withSpan(`dojo.world.v1.WorldService/${methodName}`, {
-                        attributes: {
-                            "rpc.system": "grpc",
-                            "rpc.service": "dojo.world.v1.WorldService",
-                            "rpc.method": methodName,
-                            "network.protocol.name": "grpc",
-                        },
-                    })
+                    Effect.withSpan(
+                        `dojo.world.v1.WorldService/${methodName}`,
+                        {
+                            attributes: {
+                                "rpc.system": "grpc",
+                                "rpc.service": "dojo.world.v1.WorldService",
+                                "rpc.method": methodName,
+                                "network.protocol.name": "grpc",
+                            },
+                        }
+                    )
                 )
             )
         );
@@ -335,25 +339,58 @@ const wrapStream = <TReq, TRes>(
 export const makeWorldClientEffect = (
     client: WorldClient
 ): WorldClientEffect => ({
-    retrieveEntities: wrapUnary(client.retrieveEntities.bind(client), "RetrieveEntities"),
-    retrieveEventMessages: wrapUnary(client.retrieveEventMessages.bind(client), "RetrieveEventMessages"),
-    retrieveTokens: wrapUnary(client.retrieveTokens.bind(client), "RetrieveTokens"),
-    retrieveTokenBalances: wrapUnary(client.retrieveTokenBalances.bind(client), "RetrieveTokenBalances"),
+    retrieveEntities: wrapUnary(
+        client.retrieveEntities.bind(client),
+        "RetrieveEntities"
+    ),
+    retrieveEventMessages: wrapUnary(
+        client.retrieveEventMessages.bind(client),
+        "RetrieveEventMessages"
+    ),
+    retrieveTokens: wrapUnary(
+        client.retrieveTokens.bind(client),
+        "RetrieveTokens"
+    ),
+    retrieveTokenBalances: wrapUnary(
+        client.retrieveTokenBalances.bind(client),
+        "RetrieveTokenBalances"
+    ),
     retrieveTokenTransfers: wrapUnary(
         client.retrieveTokenTransfers.bind(client),
         "RetrieveTokenTransfers"
     ),
-    retrieveTransactions: wrapUnary(client.retrieveTransactions.bind(client), "RetrieveTransactions"),
-    retrieveControllers: wrapUnary(client.retrieveControllers.bind(client), "RetrieveControllers"),
-    retrieveEvents: wrapUnary(client.retrieveEvents.bind(client), "RetrieveEvents"),
-    retrieveContracts: wrapUnary(client.retrieveContracts.bind(client), "RetrieveContracts"),
+    retrieveTransactions: wrapUnary(
+        client.retrieveTransactions.bind(client),
+        "RetrieveTransactions"
+    ),
+    retrieveControllers: wrapUnary(
+        client.retrieveControllers.bind(client),
+        "RetrieveControllers"
+    ),
+    retrieveEvents: wrapUnary(
+        client.retrieveEvents.bind(client),
+        "RetrieveEvents"
+    ),
+    retrieveContracts: wrapUnary(
+        client.retrieveContracts.bind(client),
+        "RetrieveContracts"
+    ),
     retrieveTokenContracts: wrapUnary(
         client.retrieveTokenContracts.bind(client),
         "RetrieveTokenContracts"
     ),
-    retrieveAggregations: wrapUnary(client.retrieveAggregations.bind(client), "RetrieveAggregations"),
-    retrieveActivities: wrapUnary(client.retrieveActivities.bind(client), "RetrieveActivities"),
-    retrieveAchievements: wrapUnary(client.retrieveAchievements.bind(client), "RetrieveAchievements"),
+    retrieveAggregations: wrapUnary(
+        client.retrieveAggregations.bind(client),
+        "RetrieveAggregations"
+    ),
+    retrieveActivities: wrapUnary(
+        client.retrieveActivities.bind(client),
+        "RetrieveActivities"
+    ),
+    retrieveAchievements: wrapUnary(
+        client.retrieveAchievements.bind(client),
+        "RetrieveAchievements"
+    ),
     retrievePlayerAchievements: wrapUnary(
         client.retrievePlayerAchievements.bind(client),
         "RetrievePlayerAchievements"
@@ -361,14 +398,26 @@ export const makeWorldClientEffect = (
     worlds: wrapUnary(client.worlds.bind(client), "Worlds"),
     search: wrapUnary(client.search.bind(client), "Search"),
     executeSql: wrapUnary(client.executeSql.bind(client), "ExecuteSql"),
-    publishMessage: wrapUnary(client.publishMessage.bind(client), "PublishMessage"),
-    publishMessageBatch: wrapUnary(client.publishMessageBatch.bind(client), "PublishMessageBatch"),
-    subscribeEntities: wrapStream(client.subscribeEntities.bind(client), "SubscribeEntities"),
+    publishMessage: wrapUnary(
+        client.publishMessage.bind(client),
+        "PublishMessage"
+    ),
+    publishMessageBatch: wrapUnary(
+        client.publishMessageBatch.bind(client),
+        "PublishMessageBatch"
+    ),
+    subscribeEntities: wrapStream(
+        client.subscribeEntities.bind(client),
+        "SubscribeEntities"
+    ),
     subscribeEventMessages: wrapStream(
         client.subscribeEventMessages.bind(client),
         "SubscribeEventMessages"
     ),
-    subscribeTokens: wrapStream(client.subscribeTokens.bind(client), "SubscribeTokens"),
+    subscribeTokens: wrapStream(
+        client.subscribeTokens.bind(client),
+        "SubscribeTokens"
+    ),
     subscribeTokenBalances: wrapStream(
         client.subscribeTokenBalances.bind(client),
         "SubscribeTokenBalances"
@@ -377,17 +426,26 @@ export const makeWorldClientEffect = (
         client.subscribeTokenTransfers.bind(client),
         "SubscribeTokenTransfers"
     ),
-    subscribeEvents: wrapStream(client.subscribeEvents.bind(client), "SubscribeEvents"),
+    subscribeEvents: wrapStream(
+        client.subscribeEvents.bind(client),
+        "SubscribeEvents"
+    ),
     subscribeTransactions: wrapStream(
         client.subscribeTransactions.bind(client),
         "SubscribeTransactions"
     ),
-    subscribeContracts: wrapStream(client.subscribeContracts.bind(client), "SubscribeContracts"),
+    subscribeContracts: wrapStream(
+        client.subscribeContracts.bind(client),
+        "SubscribeContracts"
+    ),
     subscribeAggregations: wrapStream(
         client.subscribeAggregations.bind(client),
         "SubscribeAggregations"
     ),
-    subscribeActivities: wrapStream(client.subscribeActivities.bind(client), "SubscribeActivities"),
+    subscribeActivities: wrapStream(
+        client.subscribeActivities.bind(client),
+        "SubscribeActivities"
+    ),
     subscribeAchievementProgressions: wrapStream(
         client.subscribeAchievementProgressions.bind(client),
         "SubscribeAchievementProgressions"

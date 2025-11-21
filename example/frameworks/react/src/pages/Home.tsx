@@ -1,19 +1,24 @@
 import { KeysClause, ToriiQueryBuilder } from "@dojoengine/sdk";
 import { Result, useAtomValue } from "@effect-atom/atom-react";
-import { createEntityUpdatesAtom } from "../effect";
-import { createEntityQueryAtom } from "../effect/atoms/entities";
+import {
+    createEntityUpdatesAtom,
+    createEntityQueryAtom,
+} from "@dojoengine/react/effect";
+import { toriiRuntime } from "../effect";
 
 const clause = KeysClause([], [], "VariableLen").build();
 const entitiesAtom = createEntityQueryAtom(
+    toriiRuntime,
     new ToriiQueryBuilder()
         .withClause(clause)
         .includeHashedKeys()
         .withLimit(1000)
 );
-const subscriptionAtom = createEntityUpdatesAtom(clause, null);
+const subscriptionAtom = createEntityUpdatesAtom(toriiRuntime, clause, null);
 
 function EntityList() {
     const entities = useAtomValue(entitiesAtom);
+
     return Result.match(entities, {
         onSuccess: ({ value: entities }) => {
             return (
@@ -44,6 +49,7 @@ function EntityList() {
 
 function EntitySubscriber() {
     const sub = useAtomValue(subscriptionAtom);
+    // const s = client.onEntityUpdated(clause, [], console.log).then(console.log);
 
     return Result.match(sub, {
         onSuccess: ({ value: entities }) => {
