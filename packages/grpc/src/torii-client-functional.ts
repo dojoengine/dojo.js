@@ -1,4 +1,5 @@
-import { Effect, Stream, Fiber, pipe } from "effect";
+import { Effect, Stream, Fiber, pipe, Console } from "effect";
+import type { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
 import {
     trace,
     type Span as OtelSpan,
@@ -148,7 +149,9 @@ function bufferToHex(buffer: Uint8Array): string {
 
 interface ToriiSubscription {
     readonly id: bigint;
+    stream?: ServerStreamingCall<object, object>;
     readonly cancel: () => void;
+    lastMessage?: object;
 }
 
 export class Subscription {
@@ -251,7 +254,149 @@ export interface ToriiClient {
 
 export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
     const grpcClient = new DojoGrpcClient({ url: config.toriiUrl });
-    const worldClientEffect = makeWorldClientEffect(grpcClient.worldClient);
+    const baseWorldClientEffect = makeWorldClientEffect(grpcClient.worldClient);
+
+    // Wrap worldClientEffect to map all errors to ToriiError
+    const worldClientEffect = {
+        ...baseWorldClientEffect,
+        retrieveEntities: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveEntities(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveEntities", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveEventMessages: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveEventMessages(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveEventMessages", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveControllers: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveControllers(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveControllers", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveTransactions: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveTransactions(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveTransactions", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveTokens: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveTokens(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveTokens", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveTokenBalances: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveTokenBalances(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveTokenBalances", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveTokenContracts: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveTokenContracts(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveTokenContracts", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveTokenTransfers: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveTokenTransfers(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveTokenTransfers", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveEvents: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveEvents(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveEvents", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveContracts: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveContracts(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveContracts", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveAggregations: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveAggregations(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveAggregations", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveActivities: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveActivities(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveActivities", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrieveAchievements: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrieveAchievements(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("retrieveAchievements", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        retrievePlayerAchievements: (req: any) =>
+            pipe(
+                baseWorldClientEffect.retrievePlayerAchievements(req),
+                Effect.mapError((e) =>
+                    mapGrpcError(
+                        "retrievePlayerAchievements",
+                        config.toriiUrl
+                    )(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        worlds: (req: any) =>
+            pipe(
+                baseWorldClientEffect.worlds(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("worlds", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        search: (req: any) =>
+            pipe(
+                baseWorldClientEffect.search(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("search", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        executeSql: (req: any) =>
+            pipe(
+                baseWorldClientEffect.executeSql(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("executeSql", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        publishMessage: (req: any) =>
+            pipe(
+                baseWorldClientEffect.publishMessage(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("publishMessage", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+        publishMessageBatch: (req: any) =>
+            pipe(
+                baseWorldClientEffect.publishMessageBatch(req),
+                Effect.mapError((e) =>
+                    mapGrpcError("publishMessageBatch", config.toriiUrl)(e)
+                )
+            ) as Effect.Effect<any, Errors.ToriiError, never>,
+    };
+
     const otelTracer = trace.getTracer("torii-client");
 
     const worldAddress = addAddressPadding(config.worldAddress) ?? undefined;
@@ -261,7 +406,7 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
     const defaultWorldAddresses = worldAddressBytes ? [worldAddressBytes] : [];
 
     const state = {
-        subscriptions: new Map<bigint, Subscription>(),
+        subscriptions: new Map<bigint, ToriiSubscription>(),
         nextId: 1n,
     };
 
@@ -315,86 +460,137 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
         );
     };
 
-    const createStreamSubscription = <A, E>(options: {
-        createStream: () => Stream.Stream<A, E>;
-        onMessage: (data: A) => void;
+    const createStreamSubscription = <
+        TReq extends object,
+        TRes extends object,
+    >(options: {
+        createStream: () => ServerStreamingCall<TReq, TRes>;
+        onMessage: (data: TRes) => void;
         onError?: (error: Error) => void;
         onReconnect?: () => void;
         subscriptionId: bigint;
+        operation: string;
     }): Effect.Effect<Fiber.RuntimeFiber<void, never>, never, never> => {
         const autoReconnect = config.autoReconnect ?? true;
         const maxReconnectAttempts = config.maxReconnectAttempts ?? 5;
 
         let reconnectAttempts = 0;
-        let lastMessage: A | undefined = undefined;
+        let lastMessage: TRes | undefined = undefined;
+        let currentCall: ServerStreamingCall<TReq, TRes> | null = null;
 
-        const setupStream = (
-            isReconnect: boolean
-        ): Stream.Stream<A, never> => {
-            return pipe(
-                options.createStream(),
-                Stream.tap((data) =>
-                    Effect.sync(() => {
-                        reconnectAttempts = 0;
-                        lastMessage = data;
-                        options.onMessage(data);
-                    })
-                ),
-                Stream.catchAll((error): Stream.Stream<A, never> => {
-                    const err =
-                        error instanceof Error ? error : new Error(String(error));
-                    const isNetwork = isNetworkError(err);
+        const setupStream = (isReconnect: boolean) => {
+            const call = options.createStream();
+            currentCall = call;
 
-                    if (
-                        isNetwork &&
-                        autoReconnect &&
-                        reconnectAttempts < maxReconnectAttempts
-                    ) {
-                        reconnectAttempts++;
-                        const delay = Math.pow(2, reconnectAttempts) * 1000;
+            call.responses.onMessage((message: TRes) => {
+                reconnectAttempts = 0;
+                lastMessage = message;
+                options.onMessage(message);
+            });
 
-                        return pipe(
-                            Effect.sync(() => {
-                                console.log(
-                                    `[torii] Reconnecting subscription ${options.subscriptionId} (attempt ${reconnectAttempts}/${maxReconnectAttempts}) after ${delay}ms`
-                                );
-                            }),
-                            Effect.flatMap(() => Effect.sleep(delay)),
-                            Effect.flatMap(() =>
-                                options.onReconnect
-                                    ? Effect.sync(options.onReconnect)
-                                    : Effect.void
-                            ),
-                            Effect.flatMap(() =>
-                                lastMessage
-                                    ? Effect.sync(() =>
-                                          options.onMessage(lastMessage!)
-                                      )
-                                    : Effect.void
-                            ),
-                            Effect.as(setupStream(true)),
-                            Stream.unwrap
+            call.responses.onError((error: Error) => {
+                const isNetwork = isNetworkError(error);
+
+                const errorSpan = otelTracer.startSpan(
+                    `torii.${options.operation}.error`
+                );
+                errorSpan.setAttribute(
+                    "torii.subscription.id",
+                    Number(options.subscriptionId)
+                );
+                errorSpan.setAttribute("torii.url", config.toriiUrl);
+                errorSpan.setAttribute(
+                    "torii.world_address",
+                    worldAddress || ""
+                );
+                errorSpan.setAttribute("torii.operation", options.operation);
+                errorSpan.setAttribute("torii.error.message", error.message);
+                errorSpan.setAttribute("torii.error.is_network", isNetwork);
+                errorSpan.setAttribute(
+                    "torii.reconnect.attempt",
+                    reconnectAttempts
+                );
+                errorSpan.setAttribute(
+                    "torii.reconnect.max_attempts",
+                    maxReconnectAttempts
+                );
+
+                if (
+                    isNetwork &&
+                    autoReconnect &&
+                    reconnectAttempts < maxReconnectAttempts
+                ) {
+                    reconnectAttempts++;
+                    const delay = Math.pow(2, reconnectAttempts) * 1000;
+
+                    errorSpan.setAttribute("torii.reconnect.delay_ms", delay);
+                    errorSpan.setAttribute("torii.reconnect.will_retry", true);
+                    errorSpan.setStatus({
+                        code: SpanStatusCode.ERROR,
+                        message: "Network error, will retry",
+                    });
+                    errorSpan.end();
+
+                    setTimeout(() => {
+                        const reconnectSpan = otelTracer.startSpan(
+                            `torii.${options.operation}.reconnect`
                         );
-                    } else {
-                        if (options.onError) {
-                            options.onError(err);
-                        } else {
-                            console.error(
-                                `[torii] Stream error (subscription ${options.subscriptionId}):`,
-                                err
-                            );
+                        reconnectSpan.setAttribute(
+                            "torii.subscription.id",
+                            Number(options.subscriptionId)
+                        );
+                        reconnectSpan.setAttribute(
+                            "torii.operation",
+                            options.operation
+                        );
+                        reconnectSpan.setAttribute(
+                            "torii.reconnect.attempt",
+                            reconnectAttempts
+                        );
+                        reconnectSpan.setAttribute(
+                            "torii.reconnect.replaying_last_message",
+                            !!lastMessage
+                        );
+
+                        if (options.onReconnect) {
+                            options.onReconnect();
                         }
-                        return Stream.empty;
+                        if (lastMessage) {
+                            options.onMessage(lastMessage);
+                        }
+                        setupStream(true);
+
+                        reconnectSpan.setStatus({ code: SpanStatusCode.OK });
+                        reconnectSpan.end();
+                    }, delay);
+                } else {
+                    errorSpan.setAttribute("torii.reconnect.will_retry", false);
+                    errorSpan.setAttribute("torii.error.final", true);
+                    errorSpan.setStatus({
+                        code: SpanStatusCode.ERROR,
+                        message: error.message,
+                    });
+                    errorSpan.end();
+
+                    if (options.onError) {
+                        options.onError(error);
+                    } else {
+                        console.error(
+                            `[torii] Stream error (subscription ${options.subscriptionId}):`,
+                            error
+                        );
                     }
-                })
-            );
+                }
+            });
+
+            call.responses.onComplete(() => {});
         };
 
-        return pipe(
-            setupStream(false),
-            Stream.runDrain,
-            Effect.forkDaemon
-        );
+        return Effect.gen(function* () {
+            setupStream(false);
+            // Keep the fiber alive indefinitely
+            yield* Effect.never;
+        }).pipe(Effect.forkDaemon);
     };
 
     const runQuery = <A, E extends Errors.ToriiError>(
@@ -423,13 +619,47 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
                     span.setStatus({ code: SpanStatusCode.OK });
                     return result;
                 } catch (error) {
+                    const errorMessage =
+                        error instanceof Error ? error.message : String(error);
                     span.setStatus({
                         code: SpanStatusCode.ERROR,
-                        message:
-                            error instanceof Error
-                                ? error.message
-                                : String(error),
+                        message: errorMessage,
                     });
+
+                    span.setAttribute("torii.error.message", errorMessage);
+
+                    // Add detailed error attributes
+                    if (error && typeof error === "object" && "_tag" in error) {
+                        span.setAttribute(
+                            "torii.error.type",
+                            String(error._tag)
+                        );
+                    } else {
+                        span.setAttribute("torii.error.type", "Unknown");
+                    }
+
+                    if (
+                        error instanceof Errors.ToriiGrpcError &&
+                        error.code !== undefined
+                    ) {
+                        span.setAttribute("torii.error.grpc_code", error.code);
+                    }
+
+                    if (error instanceof Errors.ToriiNetworkError) {
+                        span.setAttribute(
+                            "torii.error.retryable",
+                            error.retryable
+                        );
+                        span.setAttribute("torii.error.url", error.url);
+                    }
+
+                    if (error instanceof Errors.ToriiTransformError) {
+                        span.setAttribute(
+                            "torii.error.transformer",
+                            error.transformer
+                        );
+                    }
+
                     throw error;
                 } finally {
                     span.end();
@@ -977,11 +1207,16 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
                         Effect.flatMap((req) =>
                             worldClientEffect.retrieveActivities(req)
                         ),
-                        Effect.map(
-                            (response) =>
-                                mapActivitiesResponse(
-                                    response
-                                ) as ActivitiesPage
+                        Effect.flatMap((response) =>
+                            Effect.try({
+                                try: () =>
+                                    mapActivitiesResponse(
+                                        response
+                                    ) as ActivitiesPage,
+                                catch: mapTransformError(
+                                    "mapActivitiesResponse"
+                                ),
+                            })
                         ),
                         Effect.tap((result) =>
                             Effect.sync(() => {
@@ -1011,7 +1246,12 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
                             );
                         }),
                         Effect.flatMap((req) => worldClientEffect.search(req)),
-                        Effect.map(mapSearchResponse),
+                        Effect.flatMap((response) =>
+                            Effect.try({
+                                try: () => mapSearchResponse(response),
+                                catch: mapTransformError("mapSearchResponse"),
+                            })
+                        ),
                         Effect.tap((result) =>
                             Effect.sync(() => {
                                 span.setAttribute(
@@ -1040,7 +1280,12 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
                         Effect.flatMap((req) =>
                             worldClientEffect.executeSql(req)
                         ),
-                        Effect.map(mapSqlQueryResponse),
+                        Effect.flatMap((response) =>
+                            Effect.try({
+                                try: () => mapSqlQueryResponse(response),
+                                catch: mapTransformError("mapSqlQueryResponse"),
+                            })
+                        ),
                         Effect.tap((result) =>
                             Effect.sync(() => {
                                 span.setAttribute(
@@ -1080,7 +1325,9 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
                         Effect.flatMap((req) =>
                             worldClientEffect.publishMessage(req)
                         ),
-                        Effect.map((response) => response.id),
+                        Effect.flatMap((response: any) =>
+                            Effect.succeed(response.id as string)
+                        ),
                         Effect.tap((id) =>
                             Effect.sync(() => {
                                 span.setAttribute(
@@ -1122,8 +1369,12 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
                         Effect.flatMap((req) =>
                             worldClientEffect.publishMessageBatch(req)
                         ),
-                        Effect.map((response) =>
-                            response.responses.map((r) => r.id)
+                        Effect.flatMap((response: any) =>
+                            Effect.succeed(
+                                response.responses.map(
+                                    (r: any) => r.id as string
+                                )
+                            )
                         ),
                         Effect.tap((ids) =>
                             Effect.sync(() => {
@@ -1144,53 +1395,63 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
 
             const program = createStreamSubscription({
                 createStream: () =>
-                    pipe(
-                        worldClientEffect.subscribeEntities({
-                            clause: clause ? mapClause(clause) : undefined,
-                            world_addresses: worldAddressesBytes,
-                        }),
-                        Stream.mapEffect((response) =>
-                            response.entity
-                                ? pipe(
-                                      Effect.try({
-                                          try: () => mapEntity(response.entity!),
-                                          catch: mapTransformError("mapEntity"),
-                                      }),
-                                      Effect.map((entity) => ({
-                                          entity,
-                                          subscriptionId: response.subscription_id,
-                                      })),
-                                      Effect.mapError((error) =>
-                                          mapSubscriptionError(
-                                              "update",
-                                              subscriptionId
-                                          )(error)
-                                      )
-                                  )
-                                : Effect.fail(
-                                      mapSubscriptionError(
-                                          "update",
-                                          subscriptionId
-                                      )(new Error("No entity in response"))
-                                  )
-                        ),
-                        traceStreamMessage<{
-                            entity: Entity;
-                            subscriptionId: bigint;
-                        }>(
-                            "subscribeEntities",
-                            Number(subscriptionId),
-                            (data) => serializeForTelemetry(data.entity)
-                        )
-                    ),
-                onMessage: (data: { entity: Entity; subscriptionId: bigint }) =>
-                    callback(data.entity, data.subscriptionId),
+                    grpcClient.worldClient.subscribeEntities({
+                        clause: clause ? mapClause(clause) : undefined,
+                        world_addresses: worldAddressesBytes,
+                    }),
+                onMessage: (response) => {
+                    if (response.entity) {
+                        try {
+                            const entity = mapEntity(response.entity);
+                            callback(entity);
+                        } catch (error) {
+                            const mappedError = mapSubscriptionError(
+                                "update",
+                                subscriptionId
+                            )(error);
+
+                            const span = otelTracer.startSpan(
+                                "torii.subscribeEntities.mapping_error"
+                            );
+                            span.setAttribute(
+                                "torii.subscription.id",
+                                Number(subscriptionId)
+                            );
+                            span.setAttribute(
+                                "torii.operation",
+                                "subscribeEntities"
+                            );
+                            span.setAttribute(
+                                "torii.error.type",
+                                mappedError._tag
+                            );
+                            span.setAttribute(
+                                "torii.error.message",
+                                mappedError.message
+                            );
+                            span.setAttribute(
+                                "torii.error.transformer",
+                                "mapEntity"
+                            );
+                            span.setStatus({
+                                code: SpanStatusCode.ERROR,
+                                message: mappedError.message,
+                            });
+                            span.end();
+
+                            if (onError) {
+                                onError(mappedError);
+                            }
+                        }
+                    }
+                },
                 onError,
                 subscriptionId,
+                operation: "subscribeEntities",
             });
 
             return pipe(
-                Effect.scoped(program),
+                program,
                 Effect.map((fiber) => {
                     const subscription = new Subscription({
                         id: subscriptionId,
@@ -1219,46 +1480,64 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
 
             const program = createStreamSubscription({
                 createStream: () =>
-                    pipe(
-                        worldClientEffect.subscribeTokens({
-                            contract_addresses:
-                                contract_addresses?.map(hexToBuffer) || [],
-                            token_ids: token_ids?.map(hexToBuffer) || [],
-                        }),
-                        Stream.mapEffect((response) =>
-                            response.token
-                                ? pipe(
-                                      Effect.try({
-                                          try: () => mapToken(response.token!),
-                                          catch: mapTransformError("mapToken"),
-                                      }),
-                                      Effect.mapError((error) =>
-                                          mapSubscriptionError(
-                                              "update",
-                                              subscriptionId
-                                          )(error)
-                                      )
-                                  )
-                                : Effect.fail(
-                                      mapSubscriptionError(
-                                          "update",
-                                          subscriptionId
-                                      )(new Error("No token in response"))
-                                  )
-                        ),
-                        traceStreamMessage<Token>(
-                            "subscribeTokens",
-                            Number(subscriptionId),
-                            (token) => serializeForTelemetry(token)
-                        )
-                    ),
-                onMessage: (token: Token) => callback(token),
+                    grpcClient.worldClient.subscribeTokens({
+                        contract_addresses:
+                            contract_addresses?.map(hexToBuffer) || [],
+                        token_ids: token_ids?.map(hexToBuffer) || [],
+                    }),
+                onMessage: (response) => {
+                    if (response.token) {
+                        try {
+                            const token = mapToken(response.token);
+                            callback(token);
+                        } catch (error) {
+                            const mappedError = mapSubscriptionError(
+                                "update",
+                                subscriptionId
+                            )(error);
+
+                            const span = otelTracer.startSpan(
+                                "torii.subscribeTokens.mapping_error"
+                            );
+                            span.setAttribute(
+                                "torii.subscription.id",
+                                Number(subscriptionId)
+                            );
+                            span.setAttribute(
+                                "torii.operation",
+                                "subscribeTokens"
+                            );
+                            span.setAttribute(
+                                "torii.error.type",
+                                mappedError._tag
+                            );
+                            span.setAttribute(
+                                "torii.error.message",
+                                mappedError.message
+                            );
+                            span.setAttribute(
+                                "torii.error.transformer",
+                                "mapToken"
+                            );
+                            span.setStatus({
+                                code: SpanStatusCode.ERROR,
+                                message: mappedError.message,
+                            });
+                            span.end();
+
+                            if (onError) {
+                                onError(mappedError);
+                            }
+                        }
+                    }
+                },
                 onError,
                 subscriptionId,
+                operation: "subscribeTokens",
             });
 
             return pipe(
-                Effect.scoped(program),
+                program,
                 Effect.map((fiber) => {
                     const subscription = new Subscription({
                         id: subscriptionId,
@@ -1287,46 +1566,61 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
 
             const program = createStreamSubscription({
                 createStream: () =>
-                    pipe(
-                        worldClientEffect.subscribeTransactions({
-                            filter: filter
-                                ? mapTransactionFilter(filter)
-                                : undefined,
-                        }),
-                        Stream.mapEffect((response) =>
-                            response.transaction
-                                ? pipe(
-                                      Effect.try({
-                                          try: () =>
-                                              mapTransaction(response.transaction!),
-                                          catch: mapTransformError("mapTransaction"),
-                                      }),
-                                      Effect.mapError((error) =>
-                                          mapSubscriptionError(
-                                              "update",
-                                              subscriptionId
-                                          )(error)
-                                      )
-                                  )
-                                : Effect.fail(
-                                      mapSubscriptionError(
-                                          "update",
-                                          subscriptionId
-                                      )(new Error("No transaction in response"))
-                                  )
-                        ),
-                        traceStreamMessage<Transaction>(
-                            "subscribeTransactions",
-                            Number(subscriptionId),
-                            (tx) => serializeForTelemetry(tx)
-                        )
-                    ),
-                onMessage: (transaction: Transaction) => callback(transaction),
+                    grpcClient.worldClient.subscribeTransactions({
+                        filter: filter
+                            ? mapTransactionFilter(filter)
+                            : undefined,
+                    }),
+                onMessage: (response) => {
+                    if (response.transaction) {
+                        try {
+                            const transaction = mapTransaction(
+                                response.transaction
+                            );
+                            callback(transaction);
+                        } catch (error) {
+                            const mappedError = mapSubscriptionError(
+                                "update",
+                                subscriptionId
+                            )(error);
+
+                            const span = otelTracer.startSpan(
+                                "torii.subscribeTransactions.mapping_error"
+                            );
+                            span.setAttribute(
+                                "torii.subscription.id",
+                                Number(subscriptionId)
+                            );
+                            span.setAttribute(
+                                "torii.operation",
+                                "subscribeTransactions"
+                            );
+                            span.setAttribute(
+                                "torii.error.type",
+                                mappedError._tag
+                            );
+                            span.setAttribute(
+                                "torii.error.message",
+                                mappedError.message
+                            );
+                            span.setAttribute(
+                                "torii.error.transformer",
+                                "mapTransaction"
+                            );
+                            span.setStatus({
+                                code: SpanStatusCode.ERROR,
+                                message: mappedError.message,
+                            });
+                            span.end();
+                        }
+                    }
+                },
                 subscriptionId,
+                operation: "subscribeTransactions",
             });
 
             return pipe(
-                Effect.scoped(program),
+                program,
                 Effect.map((fiber) => {
                     const subscription = new Subscription({
                         id: subscriptionId,
@@ -1366,41 +1660,68 @@ export const makeToriiClient = (config: ToriiClientConfig): ToriiClient => {
 
             const program = createStreamSubscription({
                 createStream: () =>
-                    pipe(
-                        worldClientEffect.subscribeEvents({
-                            keys: grpcClauses,
-                        }),
-                        Stream.mapEffect((response) =>
-                            response.event
-                                ? Effect.succeed({
-                                      keys: response.event.keys.map(bufferToHex),
-                                      data: response.event.data.map(bufferToHex),
-                                      transaction_hash: bufferToHex(
-                                          response.event.transaction_hash
-                                      ),
-                                  })
-                                : Effect.fail(
-                                      mapSubscriptionError(
-                                          "update",
-                                          subscriptionId
-                                      )(new Error("No event in response"))
-                                  )
-                        ),
-                        traceStreamMessage<{
-                            keys: string[];
-                            data: string[];
-                            transaction_hash: string;
-                        }>("subscribeEvents", Number(subscriptionId), (event) =>
-                            serializeForTelemetry(event)
-                        )
-                    ),
-                onMessage: (event) => callback(event),
+                    grpcClient.worldClient.subscribeEvents({
+                        keys: grpcClauses,
+                    }),
+                onMessage: (response) => {
+                    if (response.event) {
+                        try {
+                            const event = {
+                                keys: response.event.keys.map(bufferToHex),
+                                data: response.event.data.map(bufferToHex),
+                                transaction_hash: bufferToHex(
+                                    response.event.transaction_hash
+                                ),
+                            };
+                            callback(event);
+                        } catch (error) {
+                            const mappedError = mapSubscriptionError(
+                                "update",
+                                subscriptionId
+                            )(error);
+
+                            const span = otelTracer.startSpan(
+                                "torii.subscribeEvents.mapping_error"
+                            );
+                            span.setAttribute(
+                                "torii.subscription.id",
+                                Number(subscriptionId)
+                            );
+                            span.setAttribute(
+                                "torii.operation",
+                                "subscribeEvents"
+                            );
+                            span.setAttribute(
+                                "torii.error.type",
+                                mappedError._tag
+                            );
+                            span.setAttribute(
+                                "torii.error.message",
+                                mappedError.message
+                            );
+                            span.setAttribute(
+                                "torii.error.transformer",
+                                "bufferToHex"
+                            );
+                            span.setStatus({
+                                code: SpanStatusCode.ERROR,
+                                message: mappedError.message,
+                            });
+                            span.end();
+
+                            if (onError) {
+                                onError(mappedError);
+                            }
+                        }
+                    }
+                },
                 onError,
                 subscriptionId,
+                operation: "subscribeEvents",
             });
 
             return pipe(
-                Effect.scoped(program),
+                program,
                 Effect.map((fiber) => {
                     const subscription = new Subscription({
                         id: subscriptionId,

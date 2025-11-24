@@ -735,6 +735,7 @@ export class ToriiGrpcClient {
                     world_addresses: worldAddressesBytes,
                 }),
             onMessage: (response: SubscribeEntityResponse) => {
+                console.log(response);
                 if (response.entity) {
                     callback(
                         this.mappers.entity(response.entity),

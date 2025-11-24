@@ -106,53 +106,60 @@ export function createEntityUpdatesAtom(
                 Effect.gen(function* () {
                     const { client } = yield* ToriiGrpcClient;
 
-                    const queue = yield* Queue.unbounded<{
-                        entity: unknown;
-                        subscriptionId: bigint;
-                    }>();
-
-                    const subscription = yield* Effect.tryPromise({
-                        try: () =>
-                            client.onEntityUpdated(
-                                clause,
-                                worldAddresses,
-                                (entity: unknown, subscriptionId: bigint) => {
-                                    Effect.runSync(
-                                        Queue.offer(queue, {
-                                            entity,
-                                            subscriptionId,
-                                        })
-                                    );
-                                },
-                                (error) => {
-                                    Effect.runSync(Queue.shutdown(queue));
-                                }
-                            ),
-                        catch: (error) =>
-                            new ToriiGrpcClientError({
-                                cause: error,
-                                message: "Failed to subscribe to entities",
+                    const stream = Stream.asyncPush<
+                        {
+                            entity: unknown;
+                            subscriptionId: bigint;
+                        },
+                        ToriiGrpcClientError
+                    >((emit) =>
+                        Effect.acquireRelease(
+                            Effect.tryPromise({
+                                try: () =>
+                                    client.onEntityUpdated(
+                                        clause,
+                                        worldAddresses,
+                                        (
+                                            entity: unknown,
+                                            subscriptionId: bigint
+                                        ) => {
+                                            emit.single({
+                                                entity,
+                                                subscriptionId,
+                                            });
+                                        },
+                                        (error) => {
+                                            emit.fail(
+                                                new ToriiGrpcClientError({
+                                                    cause: error,
+                                                    message:
+                                                        "Subscription stream error",
+                                                })
+                                            );
+                                        }
+                                    ),
+                                catch: (error) =>
+                                    new ToriiGrpcClientError({
+                                        cause: error,
+                                        message:
+                                            "Failed to subscribe to entities",
+                                    }),
                             }),
-                    });
+                            (subscription) =>
+                                Effect.sync(() => subscription.cancel())
+                        )
+                    );
 
-                    // yield* Effect.addFinalizer(() =>
-                    //     Effect.gen(function* () {
-                    //         console.log(
-                    //             "[atoms] Stream finalizer called, canceling subscription"
-                    //         );
-                    //         subscription.cancel();
-                    //         yield* Queue.shutdown(queue);
-                    //     })
-                    // );
-
-                    return Stream.scan(
-                        new Map<string, EntityUpdate>(),
-                        (entities, data) => {
-                            const e = data.entity as EntityUpdate;
-                            const newMap = new Map(entities);
-                            newMap.set(e.hashed_keys, e);
-                            return newMap;
-                        }
+                    return stream.pipe(
+                        Stream.scan(
+                            new Map<string, EntityUpdate>(),
+                            (entities, data) => {
+                                const e = data.entity as EntityUpdate;
+                                const newMap = new Map(entities);
+                                newMap.set(e.hashed_keys, e);
+                                return newMap;
+                            }
+                        )
                     );
                 }).pipe(Effect.withSpan("atom.entityUpdates"))
             ).pipe(Stream.retry(Schedule.exponential("1 second", 2))),

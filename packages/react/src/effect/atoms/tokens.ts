@@ -1,5 +1,5 @@
 import { Atom } from "@effect-atom/atom-react";
-import { Effect, Stream, Schedule } from "effect";
+import { Effect, Stream, Schedule, Console } from "effect";
 import type { ToriiClient } from "@dojoengine/grpc";
 import type { TokenQuery } from "@dojoengine/torii-client";
 import { ToriiGrpcClient, ToriiGrpcClientError } from "../services/torii";
@@ -57,7 +57,8 @@ export function createTokenUpdatesAtom(
                                 catch: (error) =>
                                     new ToriiGrpcClientError({
                                         cause: error,
-                                        message: "Failed to subscribe to tokens",
+                                        message:
+                                            "Failed to subscribe to tokens",
                                     }),
                             });
                             yield* Effect.addFinalizer(() =>

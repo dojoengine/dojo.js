@@ -4,7 +4,8 @@ import {
     createEntityUpdatesAtom,
     createEntityQueryAtom,
 } from "@dojoengine/react/effect";
-import { toriiRuntime } from "../effect";
+import { toriiRuntime } from "../effect/atoms";
+import { makeToriiClient, ToriiGrpcClient } from "@dojoengine/grpc";
 
 const clause = KeysClause([], [], "VariableLen").build();
 const entitiesAtom = createEntityQueryAtom(
@@ -49,7 +50,6 @@ function EntityList() {
 
 function EntitySubscriber() {
     const sub = useAtomValue(subscriptionAtom);
-    // const s = client.onEntityUpdated(clause, [], console.log).then(console.log);
 
     return Result.match(sub, {
         onSuccess: ({ value: entities }) => {

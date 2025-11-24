@@ -1,5 +1,6 @@
 import { Effect, Stream, Context, Layer, Schedule } from "effect";
 import { Tracer } from "@effect/opentelemetry";
+import { trace, SpanStatusCode } from "@opentelemetry/api";
 import type { WorldClient } from "../generated/world.client";
 import type {
     RetrieveEntitiesRequest,
@@ -299,26 +300,49 @@ const wrapStream =
                 onError: (fn: (error: Error) => void) => void;
                 onComplete: (fn: () => void) => void;
             };
+            headers: Promise<any>;
         },
         methodName: string
     ) =>
-    (request: TReq): Stream.Stream<TRes, GrpcError> =>
-        Stream.async<TRes, GrpcError>((emit) => {
-            console.log("logging in stream");
-            const call = fn(request);
+    (request: TReq): Stream.Stream<TRes, GrpcError> => {
+        const otelTracer = trace.getTracer("world-client-effect");
 
-            call.responses.onMessage((message) => {
-                emit.single(message);
-            });
+        return Stream.asyncScoped<TRes, GrpcError>((emit) =>
+            Effect.gen(function* () {
+                const call = fn(request);
 
-            call.responses.onError((error) => {
-                emit.fail(mapError(error));
-            });
+                call.responses.onMessage((message) => {
+                    emit.single(message);
+                });
 
-            call.responses.onComplete(() => {
-                emit.end();
-            });
-        }).pipe(
+                call.responses.onError((error) => {
+                    const errorSpan = otelTracer.startSpan(
+                        `dojo.world.v1.WorldService/${methodName}.error`
+                    );
+                    errorSpan.setAttribute("rpc.system", "grpc");
+                    errorSpan.setAttribute(
+                        "rpc.service",
+                        "dojo.world.v1.WorldService"
+                    );
+                    errorSpan.setAttribute("rpc.method", methodName);
+                    errorSpan.setAttribute("error.message", error.message);
+                    errorSpan.setAttribute("error.type", error.name);
+                    errorSpan.setStatus({
+                        code: SpanStatusCode.ERROR,
+                        message: error.message,
+                    });
+                    errorSpan.end();
+
+                    emit.fail(mapError(error));
+                });
+
+                call.responses.onComplete(() => {
+                    emit.end();
+                });
+
+                return yield* Effect.addFinalizer(() => Effect.sync(() => {}));
+            })
+        ).pipe(
             Stream.mapEffect((value) =>
                 Effect.succeed(value).pipe(
                     Effect.withSpan(
@@ -335,6 +359,7 @@ const wrapStream =
                 )
             )
         );
+    };
 
 export const makeWorldClientEffect = (
     client: WorldClient

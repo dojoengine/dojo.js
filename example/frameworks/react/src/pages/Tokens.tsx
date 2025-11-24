@@ -10,7 +10,10 @@ const tokensAtom = createTokenQueryAtom(toriiRuntime, {
     contract_addresses: [],
     token_ids: [],
     attribute_filters: [],
-    pagination: defaultToriiPagination,
+    pagination: {
+        ...defaultToriiPagination,
+        limit: 100,
+    },
 });
 const tokenSubscriptionAtom = createTokenUpdatesAtom(toriiRuntime, null, null);
 

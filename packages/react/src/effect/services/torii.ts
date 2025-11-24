@@ -1,4 +1,8 @@
-import { makeToriiClient, type ToriiClient } from "@dojoengine/grpc";
+import {
+    makeToriiClient,
+    type ToriiClient,
+    ToriiGrpcClient as BaseToriiGrpcClient,
+} from "@dojoengine/grpc";
 import { createDojoConfig } from "@dojoengine/core";
 import type { DojoConfig } from "@dojoengine/core";
 import { Effect, Data, Layer, Context } from "effect";
@@ -48,8 +52,7 @@ export class ToriiGrpcClient extends Effect.Service<ToriiGrpcClient>()(
     "ToriiGrpcClient",
     {
         effect: Effect.gen(function* () {
-            const { dojoConfig, toriiClientConfig } =
-                yield* DojoConfigService;
+            const { dojoConfig, toriiClientConfig } = yield* DojoConfigService;
             const client = makeToriiClient({
                 toriiUrl:
                     toriiClientConfig.toriiUrl ?? dojoConfig.toriiUrl,
