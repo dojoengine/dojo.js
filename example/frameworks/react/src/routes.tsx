@@ -9,6 +9,7 @@ import { Home } from "./pages/Home";
 import { Tokens } from "./pages/Tokens";
 import { TokenBalances } from "./pages/TokenBalances";
 import { Events } from "./pages/Events";
+import { EntitiesUpdates } from "./pages/EntitiesUpdates";
 
 const rootRoute = createRootRoute({
     component: () => (
@@ -16,7 +17,8 @@ const rootRoute = createRootRoute({
             <nav>
                 <Link to="/">Home</Link> | <Link to="/tokens">Tokens</Link> |{" "}
                 <Link to="/token-balances">Token Balances</Link> |{" "}
-                <Link to="/events">Events</Link>
+                <Link to="/events">Events</Link> |{" "}
+                <Link to="/entities-updates">Entities Updates</Link>
             </nav>
             <hr />
             <Outlet />
@@ -48,11 +50,18 @@ const eventsRoute = createRoute({
     component: Events,
 });
 
+const entitiesUpdatesRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/entities-updates",
+    component: EntitiesUpdates,
+});
+
 const routeTree = rootRoute.addChildren([
     indexRoute,
     tokensRoute,
     tokenBalancesRoute,
     eventsRoute,
+    entitiesUpdatesRoute,
 ]);
 
 export const router = createRouter({ routeTree });

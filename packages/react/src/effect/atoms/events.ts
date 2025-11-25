@@ -1,4 +1,4 @@
-import { Atom } from "@effect-atom/atom-react";
+import { Atom, Result } from "@effect-atom/atom-react";
 import { Effect, Stream, Schedule } from "effect";
 import type { ToriiClient } from "@dojoengine/grpc";
 import type { KeysClause, Pagination } from "@dojoengine/torii-client";
@@ -193,4 +193,61 @@ export function createEventsInfiniteScrollAtom(
     );
 
     return { stateAtom, loadMoreAtom };
+}
+
+export function createEventQueryWithUpdatesAtom(
+    runtime: Atom.AtomRuntime<ToriiGrpcClient>,
+    query: {
+        keys?: KeysClause;
+        pagination?: Pagination;
+    },
+    clauses: KeysClause[]
+) {
+    const queryAtom = createEventQueryAtom(runtime, query);
+    const updatesAtom = createEventUpdatesAtom(runtime, clauses);
+
+    return Atom.make((get) => {
+        const queryResult = get(queryAtom);
+        const updatesResult = get(updatesAtom);
+
+        if (Result.isInitial(queryResult) || Result.isInitial(updatesResult)) {
+            return Result.initial();
+        }
+
+        if (Result.isFailure(queryResult)) {
+            return queryResult;
+        }
+
+        if (Result.isFailure(updatesResult)) {
+            return updatesResult;
+        }
+
+        const queryData = queryResult.value;
+        const updatesArray = updatesResult.value;
+
+        const seenHashes = new Set<string>();
+        const items = [...queryData.items];
+
+        for (const event of items) {
+            if (event.transaction_hash) {
+                seenHashes.add(event.transaction_hash);
+            }
+        }
+
+        for (const update of updatesArray) {
+            if (
+                update.transaction_hash &&
+                !seenHashes.has(update.transaction_hash)
+            ) {
+                items.push(update);
+                seenHashes.add(update.transaction_hash);
+            }
+        }
+
+        return Result.success({
+            items,
+            seenHashes,
+            next_cursor: queryData.next_cursor,
+        });
+    }).pipe(Atom.keepAlive);
 }

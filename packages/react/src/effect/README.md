@@ -227,6 +227,65 @@ function InfiniteList() {
 }
 ```
 
+#### `createEntityQueryWithUpdatesAtom(runtime, query, clause, worldAddresses?)`
+
+Combine one-time query with real-time updates, automatically reconciling changes.
+
+**Parameters:**
+
+- `runtime: Atom.AtomRuntime<ToriiGrpcClient>` - The atom runtime
+- `query: ToriiQueryBuilder<SchemaType>` - Initial query configuration
+- `clause: Clause | null` - Filter clause for updates
+- `worldAddresses?: string[] | null` - Optional world addresses to filter
+
+**Returns:** `Atom<Result<{ items: ParsedEntity[], entitiesMap: Map<string, ParsedEntity>, next_cursor?: string }>>`
+
+**Features:**
+
+- Fetches initial data via query
+- Subscribes to real-time updates
+- Automatically reconciles updates by entity ID
+- Deep merges models (updates overwrite existing)
+- Returns both array (for rendering) and Map (for lookups)
+
+**Example:**
+
+```typescript
+const clause = KeysClause([], [], "VariableLen").build();
+const query = new ToriiQueryBuilder()
+  .withClause(clause)
+  .includeHashedKeys()
+  .withLimit(1000);
+
+const entitiesWithUpdates = createEntityQueryWithUpdatesAtom(
+  toriiRuntime,
+  query,
+  clause,
+  null,
+);
+
+function LiveEntityList() {
+  const result = useAtomValue(entitiesWithUpdates);
+
+  return Result.match(result, {
+    onSuccess: ({ value }) => {
+      const games = value.items.filter((e) => e.models.NUMS?.Game);
+      return (
+        <div>
+          <h2>Live Games (Auto-Updated)</h2>
+          <p>Total: {games.length}</p>
+          {games.map((game) => (
+            <div key={game.entityId}>{/* render game */}</div>
+          ))}
+        </div>
+      );
+    },
+    onFailure: (error) => <div>Error: {error.message}</div>,
+    onInitial: () => <div>Loading...</div>,
+  });
+}
+```
+
 ### Events
 
 #### `createEventQueryAtom(runtime, query)`
@@ -281,6 +340,61 @@ Handle paginated event loading.
 **Returns:** `{ stateAtom, loadMoreAtom }`
 
 **State:** `EventsInfiniteState`
+
+#### `createEventQueryWithUpdatesAtom(runtime, query, clauses)`
+
+Combine one-time event query with real-time updates, automatically deduplicating by transaction hash.
+
+**Parameters:**
+
+- `runtime: Atom.AtomRuntime<ToriiGrpcClient>` - The atom runtime
+- `query: { keys?: KeysClause, pagination?: Pagination }` - Initial event query
+- `clauses: KeysClause[]` - Event filter clauses for subscription
+
+**Returns:** `Atom<Result<{ items: Event[], seenHashes: Set<string>, next_cursor?: string }>>`
+
+**Features:**
+
+- Fetches initial events via query
+- Subscribes to real-time event updates
+- Deduplicates by `transaction_hash`
+- Returns array of events + Set for fast lookup
+
+**Example:**
+
+```typescript
+const keysClause = KeysClause([], [], "VariableLen").build();
+
+const eventsWithUpdates = createEventQueryWithUpdatesAtom(
+  toriiRuntime,
+  {
+    keys: keysClause,
+    pagination: { limit: 100 },
+  },
+  [keysClause],
+);
+
+function LiveEventsFeed() {
+  const result = useAtomValue(eventsWithUpdates);
+
+  return Result.match(result, {
+    onSuccess: ({ value }) => (
+      <div>
+        <h2>Live Events Feed</h2>
+        <p>Total: {value.items.length} (deduplicated)</p>
+        {value.items.map((event, i) => (
+          <div key={i}>
+            <div>TX: {event.transaction_hash}</div>
+            <div>Keys: {event.keys.join(", ")}</div>
+          </div>
+        ))}
+      </div>
+    ),
+    onFailure: (error) => <div>Error: {error.message}</div>,
+    onInitial: () => <div>Loading events...</div>,
+  });
+}
+```
 
 ### Tokens
 
@@ -554,7 +668,7 @@ const combinedAtom = Atom.make((get) => {
 
   // Combine results
   if (Result.isSuccess(entities) && Result.isSuccess(events)) {
-    return Result.succeed({
+    return Result.success({
       entities: entities.value.items,
       events: events.value.items,
     });

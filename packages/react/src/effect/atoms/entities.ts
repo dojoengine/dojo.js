@@ -1,4 +1,4 @@
-import { Atom } from "@effect-atom/atom-react";
+import { Atom, Result } from "@effect-atom/atom-react";
 import { Effect, Stream, Schedule, Queue } from "effect";
 import type { ToriiClient } from "@dojoengine/grpc";
 import type { Clause, Entities } from "@dojoengine/torii-client";
@@ -336,6 +336,97 @@ export function createEntitiesInfiniteScrollAtom(
     );
 
     return { stateAtom, loadMoreAtom };
+}
+
+function parseEntitySync(entity: EntityUpdate): ParsedEntity {
+    const entityId = addAddressPadding(entity.hashed_keys);
+    const parsedEntity: ParsedEntity = {
+        entityId,
+        models: {},
+    };
+
+    for (const modelName in entity.models) {
+        const [schemaKey, modelKey] = modelName.split("-");
+        if (!schemaKey || !modelKey) continue;
+
+        if (!parsedEntity.models[schemaKey]) {
+            parsedEntity.models[schemaKey] = {};
+        }
+
+        (parsedEntity.models[schemaKey] as Record<string, unknown>)[
+            modelKey
+        ] = parseStruct(
+            entity.models[modelName] as unknown as Record<string, Ty>
+        );
+    }
+
+    return parsedEntity;
+}
+
+function mergeModels(
+    existing: Record<string, Record<string, unknown>>,
+    updates: Record<string, Record<string, unknown>>
+): Record<string, Record<string, unknown>> {
+    return {
+        ...existing,
+        ...updates,
+    };
+}
+
+export function createEntityQueryWithUpdatesAtom(
+    runtime: Atom.AtomRuntime<ToriiGrpcClient>,
+    query: ToriiQueryBuilder<SchemaType>,
+    clause: Clause | null | undefined,
+    worldAddresses: string[] | null | undefined = null
+) {
+    const queryAtom = createEntityQueryAtom(runtime, query);
+    const updatesAtom = createEntityUpdatesAtom(runtime, clause, worldAddresses);
+
+    return Atom.make((get) => {
+        const queryResult = get(queryAtom);
+        const updatesResult = get(updatesAtom);
+
+        if (Result.isInitial(queryResult) || Result.isInitial(updatesResult)) {
+            return Result.initial();
+        }
+
+        if (Result.isFailure(queryResult)) {
+            return queryResult;
+        }
+
+        if (Result.isFailure(updatesResult)) {
+            return updatesResult;
+        }
+
+        const queryData = queryResult.value;
+        const updatesMap = updatesResult.value;
+
+        const entitiesMap = new Map<string, ParsedEntity>();
+        for (const entity of queryData.items) {
+            entitiesMap.set(entity.entityId, entity);
+        }
+
+        for (const [hashedKeys, update] of updatesMap) {
+            const entityId = addAddressPadding(hashedKeys);
+            const parsedUpdate = parseEntitySync(update);
+
+            const existing = entitiesMap.get(entityId);
+            if (existing) {
+                entitiesMap.set(entityId, {
+                    entityId,
+                    models: mergeModels(existing.models, parsedUpdate.models),
+                });
+            } else {
+                entitiesMap.set(entityId, parsedUpdate);
+            }
+        }
+
+        return Result.success({
+            items: Array.from(entitiesMap.values()),
+            entitiesMap,
+            next_cursor: queryData.next_cursor,
+        });
+    }).pipe(Atom.keepAlive);
 }
 
 export { parseValue, parseStruct, parsePrimitive, parseEntity, parseEntities };
