@@ -1,4 +1,10 @@
-import { createRootRoute, createRoute, createRouter, Link, Outlet } from "@tanstack/react-router";
+import {
+    createRootRoute,
+    createRoute,
+    createRouter,
+    Link,
+    Outlet,
+} from "@tanstack/react-router";
 import { Home } from "./pages/Home";
 import { Tokens } from "./pages/Tokens";
 import { TokenBalances } from "./pages/TokenBalances";
@@ -8,8 +14,7 @@ const rootRoute = createRootRoute({
     component: () => (
         <div>
             <nav>
-                <Link to="/">Home</Link> |{" "}
-                <Link to="/tokens">Tokens</Link> |{" "}
+                <Link to="/">Home</Link> | <Link to="/tokens">Tokens</Link> |{" "}
                 <Link to="/token-balances">Token Balances</Link> |{" "}
                 <Link to="/events">Events</Link>
             </nav>

@@ -62,31 +62,34 @@ export const mapTransformError =
     (transformer: string) =>
     (error: unknown): Errors.ToriiTransformError => {
         return new Errors.ToriiTransformError({
-            message:
-                error instanceof Error ? error.message : String(error),
+            message: error instanceof Error ? error.message : String(error),
             transformer,
             cause: error,
         });
     };
 
 export const mapSubscriptionError =
-    (operation: Errors.ToriiSubscriptionError["operation"], subscriptionId?: bigint) =>
+    (
+        operation: Errors.ToriiSubscriptionError["operation"],
+        subscriptionId?: bigint
+    ) =>
     (error: unknown): Errors.ToriiSubscriptionError => {
         return new Errors.ToriiSubscriptionError({
-            message:
-                error instanceof Error ? error.message : String(error),
+            message: error instanceof Error ? error.message : String(error),
             subscriptionId,
             operation,
             cause: error,
         });
     };
 
-export const wrapInEffect =
-    <A>(fn: () => A, errorMapper: (error: unknown) => Errors.ToriiError): Effect.Effect<A, Errors.ToriiError> =>
-        Effect.try({
-            try: fn,
-            catch: errorMapper,
-        });
+export const wrapInEffect = <A>(
+    fn: () => A,
+    errorMapper: (error: unknown) => Errors.ToriiError
+): Effect.Effect<A, Errors.ToriiError> =>
+    Effect.try({
+        try: fn,
+        catch: errorMapper,
+    });
 
 export const mapErrorWithRetry = <E extends Errors.ToriiError>(
     effect: Effect.Effect<any, E>,
@@ -94,10 +97,7 @@ export const mapErrorWithRetry = <E extends Errors.ToriiError>(
 ): Effect.Effect<any, E> =>
     effect.pipe(
         Effect.mapError((error) => {
-            if (
-                error instanceof Errors.ToriiNetworkError &&
-                error.retryable
-            ) {
+            if (error instanceof Errors.ToriiNetworkError && error.retryable) {
                 return error;
             }
             return error;

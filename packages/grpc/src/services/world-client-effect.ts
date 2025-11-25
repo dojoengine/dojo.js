@@ -1,6 +1,4 @@
 import { Effect, Stream, Context, Layer, Schedule } from "effect";
-import { Tracer } from "@effect/opentelemetry";
-import { trace, SpanStatusCode } from "@opentelemetry/api";
 import type { WorldClient } from "../generated/world.client";
 import type {
     RetrieveEntitiesRequest,
@@ -304,10 +302,8 @@ const wrapStream =
         },
         methodName: string
     ) =>
-    (request: TReq): Stream.Stream<TRes, GrpcError> => {
-        const otelTracer = trace.getTracer("world-client-effect");
-
-        return Stream.asyncScoped<TRes, GrpcError>((emit) =>
+    (request: TReq): Stream.Stream<TRes, GrpcError> =>
+        Stream.asyncScoped<TRes, GrpcError>((emit) =>
             Effect.gen(function* () {
                 const call = fn(request);
 
@@ -316,23 +312,6 @@ const wrapStream =
                 });
 
                 call.responses.onError((error) => {
-                    const errorSpan = otelTracer.startSpan(
-                        `dojo.world.v1.WorldService/${methodName}.error`
-                    );
-                    errorSpan.setAttribute("rpc.system", "grpc");
-                    errorSpan.setAttribute(
-                        "rpc.service",
-                        "dojo.world.v1.WorldService"
-                    );
-                    errorSpan.setAttribute("rpc.method", methodName);
-                    errorSpan.setAttribute("error.message", error.message);
-                    errorSpan.setAttribute("error.type", error.name);
-                    errorSpan.setStatus({
-                        code: SpanStatusCode.ERROR,
-                        message: error.message,
-                    });
-                    errorSpan.end();
-
                     emit.fail(mapError(error));
                 });
 
@@ -357,9 +336,29 @@ const wrapStream =
                         }
                     )
                 )
+            ),
+            Stream.tapError((error) =>
+                Effect.withSpan(
+                    `dojo.world.v1.WorldService/${methodName}.error`,
+                    {
+                        kind: 1,
+                        attributes: {
+                            "rpc.system": "grpc",
+                            "rpc.service": "dojo.world.v1.WorldService",
+                            "rpc.method": methodName,
+                            "error.message":
+                                error.details instanceof Error
+                                    ? error.details.message
+                                    : String(error.details),
+                            "error.type":
+                                error.details instanceof Error
+                                    ? error.details.name
+                                    : "GrpcError",
+                        },
+                    }
+                )(Effect.void)
             )
         );
-    };
 
 export const makeWorldClientEffect = (
     client: WorldClient

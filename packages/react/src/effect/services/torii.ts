@@ -54,8 +54,7 @@ export class ToriiGrpcClient extends Effect.Service<ToriiGrpcClient>()(
         effect: Effect.gen(function* () {
             const { dojoConfig, toriiClientConfig } = yield* DojoConfigService;
             const client = makeToriiClient({
-                toriiUrl:
-                    toriiClientConfig.toriiUrl ?? dojoConfig.toriiUrl,
+                toriiUrl: toriiClientConfig.toriiUrl ?? dojoConfig.toriiUrl,
                 worldAddress:
                     toriiClientConfig.worldAddress ??
                     dojoConfig.manifest.world.address,

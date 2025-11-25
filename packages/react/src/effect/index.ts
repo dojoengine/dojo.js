@@ -22,16 +22,27 @@ export type { TracingOptions } from "./tracing";
 export {
     createEntityUpdatesAtom,
     createEntityQueryAtom,
+    createEntitiesInfiniteScrollAtom,
     createTokenQueryAtom,
     createTokenUpdatesAtom,
+    createTokensInfiniteScrollAtom,
     createEventQueryAtom,
     createEventUpdatesAtom,
+    createEventsInfiniteScrollAtom,
     createTokenBalanceQueryAtom,
     createTokenBalanceUpdatesAtom,
+    createTokenBalancesInfiniteScrollAtom,
     parseValue,
     parseStruct,
     parsePrimitive,
     parseEntity,
     parseEntities,
 } from "./atoms";
-export type { EntityUpdate, ParsedEntity } from "./atoms";
+export type {
+    EntityUpdate,
+    ParsedEntity,
+    EntitiesInfiniteState,
+    TokensInfiniteState,
+    EventsInfiniteState,
+    TokenBalancesInfiniteState,
+} from "./atoms";

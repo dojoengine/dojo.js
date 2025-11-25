@@ -1,12 +1,13 @@
-import { Result, useAtomValue } from "@effect-atom/atom-react";
+import { Result, useAtomSet, useAtomValue } from "@effect-atom/atom-react";
 import {
     createTokenQueryAtom,
+    createTokensInfiniteScrollAtom,
     createTokenUpdatesAtom,
 } from "@dojoengine/react/effect";
-import { defaultToriiPagination } from "@dojoengine/sdk";
+import { defaultToriiPagination, ToriiQueryBuilder } from "@dojoengine/sdk";
 import { toriiRuntime } from "../effect";
 
-const tokensAtom = createTokenQueryAtom(toriiRuntime, {
+const query = {
     contract_addresses: [],
     token_ids: [],
     attribute_filters: [],
@@ -14,8 +15,12 @@ const tokensAtom = createTokenQueryAtom(toriiRuntime, {
         ...defaultToriiPagination,
         limit: 100,
     },
-});
+};
+const tokensAtom = createTokenQueryAtom(toriiRuntime, query);
 const tokenSubscriptionAtom = createTokenUpdatesAtom(toriiRuntime, null, null);
+
+const { stateAtom: infiniteScrollState, loadMoreAtom: loadMoreEntities } =
+    createTokensInfiniteScrollAtom(toriiRuntime, query, 10);
 
 function TokenList() {
     const tokens = useAtomValue(tokensAtom);
@@ -74,12 +79,43 @@ function TokenSubscriber() {
     });
 }
 
+function TokensInfiniteScroll() {
+    const state = useAtomValue(infiniteScrollState);
+    const loadMore = useAtomSet(loadMoreEntities);
+    console.log(state);
+
+    return (
+        <div>
+            <h2>Infinite Scroll Entities</h2>
+            <p>
+                Loaded: {state.items.length} | Has More: {String(state.hasMore)}
+            </p>
+            <ul>
+                {state.items.map((token: any, idx: number) => (
+                    <li key={`${token.contract_address}-${idx}`}>
+                        {token.contract_address.slice(0, 16)}...
+                    </li>
+                ))}
+            </ul>
+            {state.hasMore && (
+                <button onClick={loadMore} disabled={state.isLoading}>
+                    {state.isLoading ? "Loading..." : "Load More"}
+                </button>
+            )}
+            {state.error && (
+                <div style={{ color: "red" }}>Error: {state.error.message}</div>
+            )}
+        </div>
+    );
+}
+
 export function Tokens() {
     return (
         <div>
             <h1>Tokens</h1>
             <TokenList />
             <TokenSubscriber />
+            <TokensInfiniteScroll />
         </div>
     );
 }

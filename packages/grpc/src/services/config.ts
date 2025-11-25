@@ -25,7 +25,8 @@ export const validateConfig = (
 ): Effect.Effect<ToriiClientConfig, ConfigError, never> =>
     Effect.gen(function* () {
         const decoded = yield* Effect.try({
-            try: () => Schema.decodeUnknownSync(ToriiClientConfigSchema)(config),
+            try: () =>
+                Schema.decodeUnknownSync(ToriiClientConfigSchema)(config),
             catch: (error) =>
                 new ConfigError({
                     message: `Configuration validation failed: ${error}`,

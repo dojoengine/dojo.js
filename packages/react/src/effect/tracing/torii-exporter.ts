@@ -1,7 +1,4 @@
-import type {
-    SpanExporter,
-    ReadableSpan,
-} from "@opentelemetry/sdk-trace-base";
+import type { SpanExporter, ReadableSpan } from "@opentelemetry/sdk-trace-base";
 import type { ExportResult } from "@opentelemetry/core";
 import { ExportResultCode } from "@opentelemetry/core";
 import { SpanStatusCode } from "@opentelemetry/api";

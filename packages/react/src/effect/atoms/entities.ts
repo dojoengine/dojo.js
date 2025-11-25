@@ -220,5 +220,123 @@ export function createEntityQueryAtom(
         .pipe(Atom.keepAlive);
 }
 
+export interface EntitiesInfiniteState {
+    items: ParsedEntity[];
+    cursor?: string;
+    hasMore: boolean;
+    isLoading: boolean;
+    error?: ToriiGrpcClientError;
+}
+
+/**
+ * Creates an infinite scroll atom for entities with cursor-based pagination.
+ *
+ * @example
+ * ```tsx
+ * const builder = new ToriiQueryBuilder()
+ *   .withClause(KeysClause([], [], "VariableLen").build())
+ *   .withLimit(20);
+ *
+ * const { stateAtom, loadMoreAtom } = createEntitiesInfiniteScrollAtom(
+ *   toriiRuntime,
+ *   builder
+ * );
+ *
+ * function EntitiesList() {
+ *   const state = useAtomValue(stateAtom);
+ *   const loadMore = useAtomSet(loadMoreAtom);
+ *
+ *   return (
+ *     <div>
+ *       {state.items.map(entity => <div key={entity.entityId}>{entity.entityId}</div>)}
+ *       {state.hasMore && (
+ *         <button onClick={loadMore} disabled={state.isLoading}>
+ *           {state.isLoading ? "Loading..." : "Load More"}
+ *         </button>
+ *       )}
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
+export function createEntitiesInfiniteScrollAtom(
+    runtime: Atom.AtomRuntime<ToriiGrpcClient>,
+    baseQuery: ToriiQueryBuilder<SchemaType>,
+    limit = 20
+) {
+    const initialState: EntitiesInfiniteState = {
+        items: [],
+        cursor: undefined,
+        hasMore: true,
+        isLoading: false,
+        error: undefined,
+    };
+
+    const stateAtom = Atom.make(initialState).pipe(Atom.keepAlive);
+
+    const loadMoreAtom = runtime.fn(
+        Effect.fnUntraced(function* () {
+            const currentState = yield* Atom.get(stateAtom);
+
+            if (!currentState.hasMore || currentState.isLoading) {
+                return;
+            }
+
+            yield* Atom.set(stateAtom, {
+                ...currentState,
+                isLoading: true,
+                error: undefined,
+            });
+
+            const result = yield* Effect.gen(function* () {
+                const { use } = yield* ToriiGrpcClient;
+
+                let queryBuilder = baseQuery.withLimit(limit);
+                if (currentState.cursor) {
+                    queryBuilder = queryBuilder.withCursor(currentState.cursor);
+                }
+                const query = queryBuilder.build();
+
+                const entities = yield* use((client: ToriiClient) =>
+                    client.getEntities(query)
+                );
+
+                return yield* parseEntities(entities);
+            }).pipe(
+                Effect.catchAll((error) =>
+                    Effect.gen(function* () {
+                        const clientError =
+                            error instanceof ToriiGrpcClientError
+                                ? error
+                                : new ToriiGrpcClientError({
+                                      cause: error,
+                                      message: "Failed to load more entities",
+                                  });
+
+                        yield* Atom.set(stateAtom, {
+                            ...currentState,
+                            isLoading: false,
+                            error: clientError,
+                        });
+
+                        return yield* Effect.fail(clientError);
+                    })
+                ),
+                Effect.withSpan("atom.entitiesInfiniteScroll.loadMore")
+            );
+
+            yield* Atom.set(stateAtom, {
+                items: [...currentState.items, ...result.items],
+                cursor: result.next_cursor,
+                hasMore: !!result.next_cursor,
+                isLoading: false,
+                error: undefined,
+            });
+        })
+    );
+
+    return { stateAtom, loadMoreAtom };
+}
+
 export { parseValue, parseStruct, parsePrimitive, parseEntity, parseEntities };
 export type { EntityUpdate, ParsedEntity };

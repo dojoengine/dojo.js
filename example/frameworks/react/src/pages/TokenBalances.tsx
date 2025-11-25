@@ -1,7 +1,13 @@
-import { Result, useAtomValue } from "@effect-atom/atom-react";
+import {
+    Result,
+    useAtomValue,
+    useAtomSet,
+    Atom,
+} from "@effect-atom/atom-react";
 import {
     createTokenBalanceQueryAtom,
     createTokenBalanceUpdatesAtom,
+    createTokenBalancesInfiniteScrollAtom,
 } from "@dojoengine/react/effect";
 import { defaultToriiPagination } from "@dojoengine/sdk";
 import { toriiRuntime } from "../effect";
@@ -21,6 +27,17 @@ const tokenBalanceSubscriptionAtom = createTokenBalanceUpdatesAtom(
         pagination: defaultToriiPagination,
     }
 );
+
+const { stateAtom: infiniteScrollState, loadMoreAtom: loadMoreBalances } =
+    createTokenBalancesInfiniteScrollAtom(
+        toriiRuntime,
+        {
+            account_addresses: [],
+            contract_addresses: [],
+            token_ids: [],
+        },
+        10
+    );
 
 function TokenBalanceList() {
     const balances = useAtomValue(tokenBalancesAtom);
@@ -83,12 +100,40 @@ function TokenBalanceSubscriber() {
     });
 }
 
+function TokenBalanceInfiniteScroll() {
+    const state = useAtomValue(infiniteScrollState);
+    const loadMore = useAtomSet(loadMoreBalances);
+
+    return (
+        <div>
+            <h2>Infinite Scroll Token Balances</h2>
+            <p>
+                Loaded: {state.items.length} | Has More: {String(state.hasMore)}
+            </p>
+            <ul>
+                {state.items.map((balance: any, idx: number) => (
+                    <li key={idx}>{JSON.stringify(balance).slice(0, 50)}...</li>
+                ))}
+            </ul>
+            {state.hasMore && (
+                <button onClick={loadMore} disabled={state.isLoading}>
+                    {state.isLoading ? "Loading..." : "Load More"}
+                </button>
+            )}
+            {state.error && (
+                <div style={{ color: "red" }}>Error: {state.error.message}</div>
+            )}
+        </div>
+    );
+}
+
 export function TokenBalances() {
     return (
         <div>
             <h1>Token Balances</h1>
             <TokenBalanceList />
             <TokenBalanceSubscriber />
+            <TokenBalanceInfiniteScroll />
         </div>
     );
 }
