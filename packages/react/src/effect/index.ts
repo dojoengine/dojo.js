@@ -39,6 +39,7 @@ export {
     parsePrimitive,
     parseEntity,
     parseEntities,
+    mergeFormatters,
 } from "./atoms";
 export type {
     EntityUpdate,
@@ -47,4 +48,11 @@ export type {
     TokensInfiniteState,
     EventsInfiniteState,
     TokenBalancesInfiniteState,
+    DataFormatters,
+    FieldFormatter,
+    ModelFormatter,
+    TokenFormatter,
+    TokenBalanceFormatter,
+    FieldFormatterContext,
+    ModelFormatterContext,
 } from "./atoms";

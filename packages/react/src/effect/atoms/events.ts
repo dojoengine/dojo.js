@@ -1,6 +1,6 @@
 import { Atom, Result } from "@effect-atom/atom-react";
 import { Effect, Stream, Schedule } from "effect";
-import type { ToriiClient } from "@dojoengine/grpc";
+import type { ToriiClient, Event } from "@dojoengine/grpc";
 import type { KeysClause, Pagination } from "@dojoengine/torii-client";
 import { ToriiGrpcClient, ToriiGrpcClientError } from "../services/torii";
 
@@ -34,7 +34,7 @@ export function createEventUpdatesAtom(
                     const { client } = yield* ToriiGrpcClient;
 
                     const stream = Stream.asyncScoped<
-                        unknown,
+                        Event,
                         ToriiGrpcClientError
                     >((emit) =>
                         Effect.gen(function* () {
@@ -42,7 +42,7 @@ export function createEventUpdatesAtom(
                                 try: () =>
                                     client.onStarknetEvent(
                                         clauses,
-                                        (event: unknown) => {
+                                        (event: Event) => {
                                             emit.single(event);
                                         },
                                         (error) => {
@@ -68,14 +68,18 @@ export function createEventUpdatesAtom(
                         })
                     );
 
+                    const MAX_EVENTS = 1000;
                     return stream.pipe(
-                        Stream.scan([] as unknown[], (events, event) => {
-                            return [...events, event];
+                        Stream.scan([] as Event[], (events, event) => {
+                            const newEvents = [...events, event];
+                            return newEvents.length > MAX_EVENTS
+                                ? newEvents.slice(-MAX_EVENTS)
+                                : newEvents;
                         })
                     );
                 }).pipe(Effect.withSpan("atom.eventUpdates"))
             ).pipe(Stream.retry(Schedule.exponential("1 second", 2))),
-            { initialValue: [] as unknown[] }
+            { initialValue: [] as Event[] }
         )
         .pipe(Atom.keepAlive);
 }
@@ -229,18 +233,22 @@ export function createEventQueryWithUpdatesAtom(
         const items = [...queryData.items];
 
         for (const event of items) {
-            if (event.transaction_hash) {
-                seenHashes.add(event.transaction_hash);
+            if (event.transaction_hash && event.transaction_hash.length > 0) {
+                seenHashes.add(
+                    Buffer.from(event.transaction_hash).toString("hex")
+                );
             }
         }
 
         for (const update of updatesArray) {
-            if (
-                update.transaction_hash &&
-                !seenHashes.has(update.transaction_hash)
-            ) {
-                items.push(update);
-                seenHashes.add(update.transaction_hash);
+            if (update.transaction_hash && update.transaction_hash.length > 0) {
+                const hashStr = Buffer.from(update.transaction_hash).toString(
+                    "hex"
+                );
+                if (!seenHashes.has(hashStr)) {
+                    items.push(update);
+                    seenHashes.add(hashStr);
+                }
             }
         }
 

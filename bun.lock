@@ -6,8 +6,6 @@
       "dependencies": {
         "@changesets/cli": "^2.29.6",
         "@dojoengine/recs": "2.0.13",
-        "@opentelemetry/sdk-logs": "^0.208.0",
-        "@opentelemetry/sdk-trace-node": "^2.2.0",
       },
       "devDependencies": {
         "@biomejs/biome": "^2.2.3",
@@ -40,16 +38,16 @@
         "@dojoengine/torii-client": "catalog:",
         "@dojoengine/torii-wasm": "catalog:",
         "@dojoengine/utils": "workspace:*",
-        "@effect-atom/atom-react": "^0.4.0",
-        "@effect/opentelemetry": "^0.59.1",
+        "@effect-atom/atom-react": "catalog:",
+        "@effect/opentelemetry": "catalog:",
         "@latticexyz/utils": "^2.2.8",
-        "@opentelemetry/api": "^1.9.0",
+        "@opentelemetry/api": "catalog:",
         "@opentelemetry/core": "^2.2.0",
         "@opentelemetry/resources": "^2.2.0",
-        "@opentelemetry/sdk-logs": "^0.208.0",
-        "@opentelemetry/sdk-metrics": "^2.2.0",
-        "@opentelemetry/sdk-trace-base": "^2.2.0",
-        "@opentelemetry/sdk-trace-node": "^2.2.0",
+        "@opentelemetry/sdk-logs": "catalog:",
+        "@opentelemetry/sdk-metrics": "catalog:",
+        "@opentelemetry/sdk-trace-base": "catalog:",
+        "@opentelemetry/sdk-trace-node": "catalog:",
         "@opentelemetry/sdk-trace-web": "^2.2.0",
         "@opentelemetry/semantic-conventions": "^1.38.0",
         "@tanstack/react-router": "^1.87.3",
@@ -239,6 +237,7 @@
       "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@dojoengine/grpc": "workspace:*",
+        "@dojoengine/internal": "workspace:*",
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/sdk": "workspace:*",
         "@dojoengine/state": "workspace:*",
@@ -267,12 +266,12 @@
         "vitest": "^3.1.2",
       },
       "peerDependencies": {
-        "@effect-atom/atom": "^0.4.0",
-        "@effect-atom/atom-react": "^0.4.0",
-        "@effect/opentelemetry": "^0.59.0",
-        "@opentelemetry/api": "^1.9.0",
+        "@effect-atom/atom": "catalog:",
+        "@effect-atom/atom-react": "catalog:",
+        "@effect/opentelemetry": "catalog:",
+        "@opentelemetry/api": "catalog:",
         "@opentelemetry/core": "^2.2.0",
-        "@opentelemetry/sdk-trace-base": "^2.0.0",
+        "@opentelemetry/sdk-trace-base": "catalog:",
         "effect": "^3.19.0",
         "react": "^18.0.0 || ^19.0.0",
         "starknet": "catalog:",
@@ -367,6 +366,14 @@
   "catalog": {
     "@dojoengine/torii-client": "1.8.2",
     "@dojoengine/torii-wasm": "1.8.2",
+    "@effect-atom/atom": "^0.1.22",
+    "@effect-atom/atom-react": "^0.1.17",
+    "@effect/opentelemetry": "^0.56.6",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-logs": "^0.208.0",
+    "@opentelemetry/sdk-metrics": "^2.2.0",
+    "@opentelemetry/sdk-trace-base": "^2.2.0",
+    "@opentelemetry/sdk-trace-node": "^2.2.0",
     "@starknet-io/get-starknet-core": "4.0.7",
     "@starknet-io/types-js": "^0.9.1",
     "@starknet-react/chains": "^5.0.1",
@@ -698,9 +705,9 @@
 
     "@dojoengine/utils": ["@dojoengine/utils@workspace:packages/utils"],
 
-    "@effect-atom/atom": ["@effect-atom/atom@0.4.2", "", { "peerDependencies": { "@effect/experimental": "^0.57.0", "@effect/platform": "^0.93.0", "@effect/rpc": "^0.72.1", "effect": "^3.19.0" } }, "sha512-E8XssuIus+0nnu0qf0fTHr98Qme47Ph75CAO++q5gYMdeWkpi5iEY1Ugb2NzUVZKTXRKap4te89yFtfl2f2TQA=="],
+    "@effect-atom/atom": ["@effect-atom/atom@0.1.22", "", { "peerDependencies": { "@effect/experimental": "^0.54.5", "@effect/platform": "^0.90.1", "@effect/rpc": "^0.69.0", "effect": "^3.17.7" } }, "sha512-RcSq0KhTbo7aorGX8IRf9XTgPMUEI/Eo/MxyaubPxWgeoMa/3hjV7DgjegYA9xSJ7QX+66Xl3AuMKEciN216tg=="],
 
-    "@effect-atom/atom-react": ["@effect-atom/atom-react@0.4.0", "", { "dependencies": { "@effect-atom/atom": "^0.4.0" }, "peerDependencies": { "effect": "^3.19", "react": ">=18 <20", "scheduler": "*" } }, "sha512-5HpKLgXEG8EWr4sBDl7BZjm6koO/5HSb94C9+OkRLDE4mhH2357vNl4uPNqid0ZNGwVvS6bAvKFmBzc0bZU6yg=="],
+    "@effect-atom/atom-react": ["@effect-atom/atom-react@0.1.17", "", { "dependencies": { "@effect-atom/atom": "^0.1.22" }, "peerDependencies": { "effect": "^3.17", "react": ">=18 <20", "scheduler": "*" } }, "sha512-LICSYbBb436QVbklotlobB3rkDhzOBZPbno2A/yq4hysP+xSLd5XyzGmfskZOIdBOYnSG1GPpJ/iTB4Md0Qy2A=="],
 
     "@effect/experimental": ["@effect/experimental@0.57.3", "", { "dependencies": { "uuid": "^11.0.3" }, "peerDependencies": { "@effect/platform": "^0.93.3", "effect": "^3.19.4", "ioredis": "^5", "lmdb": "^3" }, "optionalPeers": ["ioredis", "lmdb"] }, "sha512-/45T9dltr+zNCgPNFfSuRw4oCvwn0tz+vI4p/SfpUCuhHp0IElsXTpHInK6YOLFYyYXZNamQrlKiOBQZNoUT0Q=="],
 
@@ -2896,6 +2903,8 @@
 
     "@dojoengine/internal/@types/node": ["@types/node@22.19.0", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-xpr/lmLPQEj+TUnHmR+Ab91/glhJvsqcjB+yY0Ix9GO70H6Lb4FHH5GeqdOE5btAx7eIMwuHkp4H2MSkLcqWbA=="],
 
+    "@dojoengine/react/@effect/opentelemetry": ["@effect/opentelemetry@0.56.6", "", { "peerDependencies": { "@effect/platform": "^0.90.8", "@opentelemetry/api": "^1.9", "@opentelemetry/resources": "^2.0.0", "@opentelemetry/sdk-logs": "^0.203.0", "@opentelemetry/sdk-metrics": "^2.0.0", "@opentelemetry/sdk-trace-base": "^2.0.0", "@opentelemetry/sdk-trace-node": "^2.0.0", "@opentelemetry/sdk-trace-web": "^2.0.0", "@opentelemetry/semantic-conventions": "^1.33.0", "effect": "^3.17.13" }, "optionalPeers": ["@opentelemetry/api", "@opentelemetry/resources", "@opentelemetry/sdk-logs", "@opentelemetry/sdk-metrics", "@opentelemetry/sdk-trace-base", "@opentelemetry/sdk-trace-node", "@opentelemetry/sdk-trace-web"] }, "sha512-cBi9frXujTIEGXChkl4VdQfvDe7QvzC18SM8wK0CKYSgH9ZL7v/F5f5/3fTSTfEdO9ZyBk73s5Jbbogab0Q01g=="],
+
     "@dojoengine/react/vitest": ["vitest@3.2.4", "", { "dependencies": { "@types/chai": "^5.2.2", "@vitest/expect": "3.2.4", "@vitest/mocker": "3.2.4", "@vitest/pretty-format": "^3.2.4", "@vitest/runner": "3.2.4", "@vitest/snapshot": "3.2.4", "@vitest/spy": "3.2.4", "@vitest/utils": "3.2.4", "chai": "^5.2.0", "debug": "^4.4.1", "expect-type": "^1.2.1", "magic-string": "^0.30.17", "pathe": "^2.0.3", "picomatch": "^4.0.2", "std-env": "^3.9.0", "tinybench": "^2.9.0", "tinyexec": "^0.3.2", "tinyglobby": "^0.2.14", "tinypool": "^1.1.1", "tinyrainbow": "^2.0.0", "vite": "^5.0.0 || ^6.0.0 || ^7.0.0-0", "vite-node": "3.2.4", "why-is-node-running": "^2.3.0" }, "peerDependencies": { "@edge-runtime/vm": "*", "@types/debug": "^4.1.12", "@types/node": "^18.0.0 || ^20.0.0 || >=22.0.0", "@vitest/browser": "3.2.4", "@vitest/ui": "3.2.4", "happy-dom": "*", "jsdom": "*" }, "optionalPeers": ["@edge-runtime/vm", "@types/debug", "@types/node", "@vitest/browser", "@vitest/ui", "happy-dom", "jsdom"], "bin": { "vitest": "vitest.mjs" } }, "sha512-LUCP5ev3GURDysTWiP47wRRUpLKMOfPh+yKTx3kVIEiu5KOMeqzpnYNsKyOoVrULivR8tLcks4+lga33Whn90A=="],
 
     "@dojoengine/recs/@latticexyz/utils": ["@latticexyz/utils@2.0.12", "", { "dependencies": { "mobx": "^6.7.0", "proxy-deep": "^3.1.1", "rxjs": "7.5.5" } }, "sha512-AwniovUlWY7YL92Mjz/3R0V9g8c5wYg5t3agRmMZ9wgktUB6BYZC65n+sKp88wUuN3DrMLb51UFZOycGh0JD2w=="],
@@ -3059,6 +3068,8 @@
     "decamelize-keys/map-obj": ["map-obj@1.0.1", "", {}, "sha512-7N/q3lyZ+LVCp7PzuxrJr4KMbBE2hW7BT7YNia330OFxIf4d3r5zVpicP2650l7CPN6RM9zOJRl3NGpqSiw3Eg=="],
 
     "eslint/minimatch": ["minimatch@3.1.2", "", { "dependencies": { "brace-expansion": "^1.1.7" } }, "sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw=="],
+
+    "example-dojo-showcase/@effect/opentelemetry": ["@effect/opentelemetry@0.56.6", "", { "peerDependencies": { "@effect/platform": "^0.90.8", "@opentelemetry/api": "^1.9", "@opentelemetry/resources": "^2.0.0", "@opentelemetry/sdk-logs": "^0.203.0", "@opentelemetry/sdk-metrics": "^2.0.0", "@opentelemetry/sdk-trace-base": "^2.0.0", "@opentelemetry/sdk-trace-node": "^2.0.0", "@opentelemetry/sdk-trace-web": "^2.0.0", "@opentelemetry/semantic-conventions": "^1.33.0", "effect": "^3.17.13" }, "optionalPeers": ["@opentelemetry/api", "@opentelemetry/resources", "@opentelemetry/sdk-logs", "@opentelemetry/sdk-metrics", "@opentelemetry/sdk-trace-base", "@opentelemetry/sdk-trace-node", "@opentelemetry/sdk-trace-web"] }, "sha512-cBi9frXujTIEGXChkl4VdQfvDe7QvzC18SM8wK0CKYSgH9ZL7v/F5f5/3fTSTfEdO9ZyBk73s5Jbbogab0Q01g=="],
 
     "example-dojo-showcase/@types/node": ["@types/node@20.19.24", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-FE5u0ezmi6y9OZEzlJfg37mqqf6ZDSF2V/NLjUyGrR9uTZ7Sb9F7bLNZ03S4XVUNRWGA7Ck4c1kK+YnuWjl+DA=="],
 

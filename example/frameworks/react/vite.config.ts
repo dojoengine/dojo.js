@@ -17,10 +17,7 @@ export default defineConfig({
     optimizeDeps: {
         include: [
             "@opentelemetry/sdk-trace-base",
-            "@opentelemetry/sdk-trace-node",
             "@opentelemetry/api",
-            "@opentelemetry/sdk-logs",
-            "@opentelemetry/sdk-metrics",
             "@effect/opentelemetry",
         ],
     },

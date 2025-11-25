@@ -1,8 +1,10 @@
 import { Atom } from "@effect-atom/atom-react";
 import { Effect, Stream, Schedule } from "effect";
 import type { ToriiClient } from "@dojoengine/grpc";
-import type { TokenQuery, Token, Tokens } from "@dojoengine/torii-client";
+import type { TokenQuery, Token } from "@dojoengine/torii-client";
 import { ToriiGrpcClient, ToriiGrpcClientError } from "../services/torii";
+import type { DataFormatters } from "../formatters";
+import { mergeFormatters } from "../formatters";
 
 export interface TokensInfiniteState {
     items: Token[];
@@ -12,17 +14,53 @@ export interface TokensInfiniteState {
     error?: ToriiGrpcClientError;
 }
 
+function applyTokenFormatters(
+    tokens: Token[],
+    formatters: DataFormatters | undefined
+): Token[] {
+    if (!formatters || !formatters.tokens) {
+        return tokens;
+    }
+
+    return tokens.map((token) => {
+        const formatter = formatters.tokens![token.contract_address];
+        if (!formatter) {
+            return token;
+        }
+
+        try {
+            return formatter(token);
+        } catch (error) {
+            console.error(
+                `[DataFormatter] Token formatter error for ${token.contract_address}:`,
+                error
+            );
+            return token;
+        }
+    });
+}
+
 export function createTokenQueryAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
-    query: TokenQuery
-) {
+    query: TokenQuery,
+    formatters?: DataFormatters
+): ReturnType<Atom.AtomRuntime<ToriiGrpcClient>["atom"]> {
     return runtime
         .atom(
             Effect.gen(function* () {
-                const { use } = yield* ToriiGrpcClient;
-                return yield* use((client: ToriiClient) =>
+                const { use, formatters: runtimeFormatters } =
+                    yield* ToriiGrpcClient;
+                const mergedFormatters = mergeFormatters(
+                    runtimeFormatters,
+                    formatters
+                );
+                const tokens = yield* use((client: ToriiClient) =>
                     client.getTokens(query)
                 );
+                return {
+                    ...tokens,
+                    items: applyTokenFormatters(tokens.items, mergedFormatters),
+                };
             }).pipe(Effect.withSpan("atom.tokenQuery"))
         )
         .pipe(Atom.keepAlive);
@@ -32,7 +70,7 @@ export function createTokenUpdatesAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
     contractAddresses: string[] | null | undefined = null,
     tokenIds: string[] | null | undefined = null
-) {
+): ReturnType<Atom.AtomRuntime<ToriiGrpcClient>["atom"]> {
     return runtime
         .atom(
             Stream.unwrap(
@@ -119,7 +157,8 @@ export function createTokenUpdatesAtom(
 export function createTokensInfiniteScrollAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
     baseQuery: Omit<TokenQuery, "pagination">,
-    limit = 20
+    limit = 20,
+    formatters?: DataFormatters
 ) {
     const initialState: TokensInfiniteState = {
         items: [],
@@ -146,9 +185,14 @@ export function createTokensInfiniteScrollAtom(
             });
 
             const result = yield* Effect.gen(function* () {
-                const { use } = yield* ToriiGrpcClient;
+                const { use, formatters: runtimeFormatters } =
+                    yield* ToriiGrpcClient;
+                const mergedFormatters = mergeFormatters(
+                    runtimeFormatters,
+                    formatters
+                );
 
-                return yield* use((client: ToriiClient) =>
+                const tokens = yield* use((client: ToriiClient) =>
                     client.getTokens({
                         ...baseQuery,
                         pagination: {
@@ -159,6 +203,11 @@ export function createTokensInfiniteScrollAtom(
                         },
                     })
                 );
+
+                return {
+                    ...tokens,
+                    items: applyTokenFormatters(tokens.items, mergedFormatters),
+                };
             }).pipe(
                 Effect.catchAll((error) =>
                     Effect.gen(function* () {

@@ -1,11 +1,8 @@
-import {
-    makeToriiClient,
-    type ToriiClient,
-    ToriiGrpcClient as BaseToriiGrpcClient,
-} from "@dojoengine/grpc";
+import { makeToriiClient, type ToriiClient } from "@dojoengine/grpc";
 import { createDojoConfig } from "@dojoengine/core";
 import type { DojoConfig } from "@dojoengine/core";
 import { Effect, Data, Layer, Context } from "effect";
+import type { DataFormatters } from "../formatters";
 
 export class ToriiGrpcClientError extends Data.TaggedError(
     "ToriiGrpcClientError"
@@ -29,6 +26,7 @@ export interface ToriiClientConfig {
     worldAddress?: string;
     autoReconnect?: boolean;
     maxReconnectAttempts?: number;
+    formatters?: DataFormatters;
 }
 
 export interface DojoConfigServiceImpl {
@@ -46,6 +44,7 @@ export interface ToriiGrpcClientImpl {
         fn: (client: ToriiClient) => PromiseLike<T>
     ) => Effect.Effect<T, ToriiGrpcClientError>;
     client: ToriiClient;
+    formatters?: DataFormatters;
 }
 
 export class ToriiGrpcClient extends Effect.Service<ToriiGrpcClient>()(
@@ -75,6 +74,7 @@ export class ToriiGrpcClient extends Effect.Service<ToriiGrpcClient>()(
                             }),
                     }),
                 client,
+                formatters: toriiClientConfig.formatters,
             } satisfies ToriiGrpcClientImpl;
         }),
     }

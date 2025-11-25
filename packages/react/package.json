@@ -22,12 +22,12 @@
         "starknet": "catalog:",
         "type-fest": "^2.14.0",
         "effect": "^3.19.0",
-        "@effect-atom/atom": "^0.4.0",
-        "@effect-atom/atom-react": "^0.4.0",
-        "@effect/opentelemetry": "^0.59.0",
-        "@opentelemetry/api": "^1.9.0",
+        "@effect-atom/atom": "catalog:",
+        "@effect-atom/atom-react": "catalog:",
+        "@effect/opentelemetry": "catalog:",
+        "@opentelemetry/api": "catalog:",
         "@opentelemetry/core": "^2.2.0",
-        "@opentelemetry/sdk-trace-base": "^2.0.0"
+        "@opentelemetry/sdk-trace-base": "catalog:"
     },
     "exports": {
         ".": {
@@ -54,6 +54,7 @@
     },
     "dependencies": {
         "@dojoengine/core": "workspace:*",
+        "@dojoengine/internal": "workspace:*",
         "@dojoengine/grpc": "workspace:*",
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/sdk": "workspace:*",

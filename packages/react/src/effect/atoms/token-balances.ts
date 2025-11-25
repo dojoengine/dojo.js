@@ -7,18 +7,59 @@ import type {
     TokenBalance,
 } from "@dojoengine/torii-client";
 import { ToriiGrpcClient, ToriiGrpcClientError } from "../services/torii";
+import type { DataFormatters } from "../formatters";
+import { mergeFormatters } from "../formatters";
+
+function applyTokenBalanceFormatters(
+    balances: TokenBalance[],
+    formatters: DataFormatters | undefined
+): TokenBalance[] {
+    if (!formatters || !formatters.tokenBalances) {
+        return balances;
+    }
+
+    return balances.map((balance) => {
+        const formatter = formatters.tokenBalances![balance.contract_address];
+        if (!formatter) {
+            return balance;
+        }
+
+        try {
+            return formatter(balance);
+        } catch (error) {
+            console.error(
+                `[DataFormatter] Token balance formatter error for ${balance.contract_address}:`,
+                error
+            );
+            return balance;
+        }
+    });
+}
 
 export function createTokenBalanceQueryAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
-    query: TokenBalanceQuery
-) {
+    query: TokenBalanceQuery,
+    formatters?: DataFormatters
+): ReturnType<Atom.AtomRuntime<ToriiGrpcClient>["atom"]> {
     return runtime
         .atom(
             Effect.gen(function* () {
-                const { use } = yield* ToriiGrpcClient;
-                return yield* use((client: ToriiClient) =>
+                const { use, formatters: runtimeFormatters } =
+                    yield* ToriiGrpcClient;
+                const mergedFormatters = mergeFormatters(
+                    runtimeFormatters,
+                    formatters
+                );
+                const balances = yield* use((client: ToriiClient) =>
                     client.getTokenBalances(query)
                 );
+                return {
+                    ...balances,
+                    items: applyTokenBalanceFormatters(
+                        balances.items,
+                        mergedFormatters
+                    ),
+                };
             }).pipe(Effect.withSpan("atom.tokenBalanceQuery"))
         )
         .pipe(Atom.keepAlive);
@@ -27,26 +68,43 @@ export function createTokenBalanceQueryAtom(
 export function createTokenBalanceUpdatesAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
     query: TokenBalanceQuery,
-    pollingIntervalMs: number = 5000
-) {
+    pollingIntervalMs: number = 5000,
+    formatters?: DataFormatters
+): ReturnType<Atom.AtomRuntime<ToriiGrpcClient>["atom"]> {
     return runtime
         .atom(
             Stream.unwrap(
                 Effect.gen(function* () {
-                    const { use } = yield* ToriiGrpcClient;
+                    const { use, formatters: runtimeFormatters } =
+                        yield* ToriiGrpcClient;
+                    const mergedFormatters = mergeFormatters(
+                        runtimeFormatters,
+                        formatters
+                    );
 
-                    return Stream.asyncScoped<TokenBalances, never>((emit) =>
+                    return Stream.asyncScoped<
+                        TokenBalances,
+                        ToriiGrpcClientError
+                    >((emit) =>
                         Effect.gen(function* () {
-                            const fetchBalances = (): Promise<void> =>
+                            const fetchBalances = () =>
                                 use((client: ToriiClient) =>
                                     client.getTokenBalances(query)
-                                )
-                                    .pipe(Effect.runPromise)
-                                    .then((balances) => emit.single(balances));
+                                ).pipe(
+                                    Effect.map((balances) => {
+                                        emit.single({
+                                            ...balances,
+                                            items: applyTokenBalanceFormatters(
+                                                balances.items,
+                                                mergedFormatters
+                                            ),
+                                        });
+                                    })
+                                );
 
-                            yield* Effect.promise(fetchBalances);
+                            yield* fetchBalances();
                             const interval = setInterval(
-                                fetchBalances,
+                                () => Effect.runPromise(fetchBalances()),
                                 pollingIntervalMs
                             );
                             return yield* Effect.addFinalizer(() =>
@@ -107,7 +165,8 @@ export interface TokenBalancesInfiniteState {
 export function createTokenBalancesInfiniteScrollAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
     baseQuery: Omit<TokenBalanceQuery, "pagination">,
-    limit = 20
+    limit = 20,
+    formatters?: DataFormatters
 ) {
     const initialState: TokenBalancesInfiniteState = {
         items: [],
@@ -134,9 +193,14 @@ export function createTokenBalancesInfiniteScrollAtom(
             });
 
             const result = yield* Effect.gen(function* () {
-                const { use } = yield* ToriiGrpcClient;
+                const { use, formatters: runtimeFormatters } =
+                    yield* ToriiGrpcClient;
+                const mergedFormatters = mergeFormatters(
+                    runtimeFormatters,
+                    formatters
+                );
 
-                return yield* use((client: ToriiClient) =>
+                const balances = yield* use((client: ToriiClient) =>
                     client.getTokenBalances({
                         ...baseQuery,
                         pagination: {
@@ -147,6 +211,14 @@ export function createTokenBalancesInfiniteScrollAtom(
                         },
                     })
                 );
+
+                return {
+                    ...balances,
+                    items: applyTokenBalanceFormatters(
+                        balances.items,
+                        mergedFormatters
+                    ),
+                };
             }).pipe(
                 Effect.catchAll((error) =>
                     Effect.gen(function* () {

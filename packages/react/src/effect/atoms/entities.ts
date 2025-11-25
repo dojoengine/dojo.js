@@ -1,9 +1,9 @@
 import { Atom, Result } from "@effect-atom/atom-react";
-import { Effect, Stream, Schedule, Queue } from "effect";
+import { Effect, Stream, Schedule } from "effect";
 import type { ToriiClient } from "@dojoengine/grpc";
 import type { Clause, Entities } from "@dojoengine/torii-client";
 import { ToriiGrpcClient, ToriiGrpcClientError } from "../services/torii";
-import { SchemaType, ToriiQueryBuilder } from "@dojoengine/sdk";
+import { SchemaType, ToriiQueryBuilder } from "@dojoengine/internal";
 import {
     CairoCustomEnum,
     CairoOption,
@@ -11,6 +11,8 @@ import {
     addAddressPadding,
 } from "starknet";
 import type { Ty, EnumValue } from "@dojoengine/torii-wasm";
+import type { DataFormatters } from "../formatters";
+import { mergeFormatters } from "../formatters";
 
 type EntityUpdate = {
     hashed_keys: string;
@@ -168,7 +170,7 @@ export function createEntityUpdatesAtom(
         .pipe(Atom.keepAlive);
 }
 
-const parseEntity = (entity: EntityUpdate) =>
+const parseEntity = (formatters?: DataFormatters) => (entity: EntityUpdate) =>
     Effect.sync(() => {
         const entityId = addAddressPadding(entity.hashed_keys);
         const parsedEntity: ParsedEntity = {
@@ -191,31 +193,42 @@ const parseEntity = (entity: EntityUpdate) =>
             );
         }
 
-        return parsedEntity;
+        return applyFormatters(parsedEntity, formatters);
     });
 
-const parseEntities = (entities: Entities) =>
-    Effect.forEach(entities.items as unknown as EntityUpdate[], parseEntity, {
-        concurrency: "unbounded",
-    }).pipe(
-        Effect.map((items) => ({ items, next_cursor: entities.next_cursor }))
+const parseEntities = (formatters?: DataFormatters) => (entities: Entities) =>
+    Effect.forEach(
+        entities.items as unknown as EntityUpdate[],
+        parseEntity(formatters),
+        {
+            concurrency: "unbounded",
+        }
+    ).pipe(
+        Effect.map((items) => ({
+            items,
+            next_cursor: entities.next_cursor,
+        }))
     );
 
 export function createEntityQueryAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
-    query: ToriiQueryBuilder<SchemaType>
+    query: ToriiQueryBuilder<SchemaType>,
+    formatters?: DataFormatters
 ) {
     return runtime
         .atom(
             Effect.gen(function* () {
-                const { use } = yield* ToriiGrpcClient;
-                return yield* use((client: ToriiClient) =>
+                const { use, formatters: runtimeFormatters } =
+                    yield* ToriiGrpcClient;
+                const mergedFormatters = mergeFormatters(
+                    runtimeFormatters,
+                    formatters
+                );
+                const entities = yield* use((client: ToriiClient) =>
                     client.getEntities(query.build())
                 );
-            }).pipe(
-                Effect.flatMap(parseEntities),
-                Effect.withSpan("atom.entityQuery")
-            )
+                return yield* parseEntities(mergedFormatters)(entities);
+            }).pipe(Effect.withSpan("atom.entityQuery"))
         )
         .pipe(Atom.keepAlive);
 }
@@ -262,7 +275,8 @@ export interface EntitiesInfiniteState {
 export function createEntitiesInfiniteScrollAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
     baseQuery: ToriiQueryBuilder<SchemaType>,
-    limit = 20
+    limit = 20,
+    formatters?: DataFormatters
 ) {
     const initialState: EntitiesInfiniteState = {
         items: [],
@@ -289,7 +303,12 @@ export function createEntitiesInfiniteScrollAtom(
             });
 
             const result = yield* Effect.gen(function* () {
-                const { use } = yield* ToriiGrpcClient;
+                const { use, formatters: runtimeFormatters } =
+                    yield* ToriiGrpcClient;
+                const mergedFormatters = mergeFormatters(
+                    runtimeFormatters,
+                    formatters
+                );
 
                 let queryBuilder = baseQuery.withLimit(limit);
                 if (currentState.cursor) {
@@ -301,7 +320,7 @@ export function createEntitiesInfiniteScrollAtom(
                     client.getEntities(query)
                 );
 
-                return yield* parseEntities(entities);
+                return yield* parseEntities(mergedFormatters)(entities);
             }).pipe(
                 Effect.catchAll((error) =>
                     Effect.gen(function* () {
@@ -338,7 +357,10 @@ export function createEntitiesInfiniteScrollAtom(
     return { stateAtom, loadMoreAtom };
 }
 
-function parseEntitySync(entity: EntityUpdate): ParsedEntity {
+function parseEntitySync(
+    entity: EntityUpdate,
+    formatters?: DataFormatters
+): ParsedEntity {
     const entityId = addAddressPadding(entity.hashed_keys);
     const parsedEntity: ParsedEntity = {
         entityId,
@@ -353,14 +375,13 @@ function parseEntitySync(entity: EntityUpdate): ParsedEntity {
             parsedEntity.models[schemaKey] = {};
         }
 
-        (parsedEntity.models[schemaKey] as Record<string, unknown>)[
-            modelKey
-        ] = parseStruct(
-            entity.models[modelName] as unknown as Record<string, Ty>
-        );
+        (parsedEntity.models[schemaKey] as Record<string, unknown>)[modelKey] =
+            parseStruct(
+                entity.models[modelName] as unknown as Record<string, Ty>
+            );
     }
 
-    return parsedEntity;
+    return applyFormatters(parsedEntity, formatters);
 }
 
 function mergeModels(
@@ -373,14 +394,96 @@ function mergeModels(
     };
 }
 
+function applyFormatters(
+    entity: ParsedEntity,
+    formatters: DataFormatters | undefined
+): ParsedEntity {
+    if (!formatters || (!formatters.fields && !formatters.models)) {
+        return entity;
+    }
+
+    const formattedModels: Record<string, Record<string, unknown>> = {};
+
+    for (const schemaKey in entity.models) {
+        for (const modelKey in entity.models[schemaKey]) {
+            const modelFullKey = `${schemaKey}-${modelKey}`;
+            const model = entity.models[schemaKey]![modelKey] as Record<
+                string,
+                unknown
+            >;
+
+            let formattedModel = { ...model };
+
+            if (formatters.fields) {
+                for (const fieldName in formattedModel) {
+                    const fieldKey = `${modelFullKey}.${fieldName}`;
+                    const fieldFormatter = formatters.fields[fieldKey];
+
+                    if (fieldFormatter) {
+                        try {
+                            formattedModel[fieldName] = fieldFormatter(
+                                formattedModel[fieldName],
+                                {
+                                    fieldName,
+                                    modelKey,
+                                    schemaKey,
+                                    entityId: entity.entityId,
+                                }
+                            );
+                        } catch (error) {
+                            console.error(
+                                `[DataFormatter] Field formatter error for ${fieldKey}:`,
+                                error
+                            );
+                        }
+                    }
+                }
+            }
+
+            if (formatters.models) {
+                const modelFormatter = formatters.models[modelFullKey];
+                if (modelFormatter) {
+                    try {
+                        formattedModel = modelFormatter(formattedModel, {
+                            modelKey,
+                            schemaKey,
+                            entityId: entity.entityId,
+                        });
+                    } catch (error) {
+                        console.error(
+                            `[DataFormatter] Model formatter error for ${modelFullKey}:`,
+                            error
+                        );
+                    }
+                }
+            }
+
+            if (!formattedModels[schemaKey]) {
+                formattedModels[schemaKey] = {};
+            }
+            formattedModels[schemaKey]![modelKey] = formattedModel;
+        }
+    }
+
+    return {
+        ...entity,
+        models: formattedModels,
+    };
+}
+
 export function createEntityQueryWithUpdatesAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
     query: ToriiQueryBuilder<SchemaType>,
     clause: Clause | null | undefined,
-    worldAddresses: string[] | null | undefined = null
+    worldAddresses: string[] | null | undefined = null,
+    formatters?: DataFormatters
 ) {
-    const queryAtom = createEntityQueryAtom(runtime, query);
-    const updatesAtom = createEntityUpdatesAtom(runtime, clause, worldAddresses);
+    const queryAtom = createEntityQueryAtom(runtime, query, formatters);
+    const updatesAtom = createEntityUpdatesAtom(
+        runtime,
+        clause,
+        worldAddresses
+    );
 
     return Atom.make((get) => {
         const queryResult = get(queryAtom);
@@ -408,7 +511,7 @@ export function createEntityQueryWithUpdatesAtom(
 
         for (const [hashedKeys, update] of updatesMap) {
             const entityId = addAddressPadding(hashedKeys);
-            const parsedUpdate = parseEntitySync(update);
+            const parsedUpdate = parseEntitySync(update, formatters);
 
             const existing = entitiesMap.get(entityId);
             if (existing) {

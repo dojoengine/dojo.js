@@ -125,11 +125,162 @@ The runtime provides the Effect environment needed by atoms. It's created once a
 const runtime = Atom.runtime(toriiLayer);
 ```
 
+### Data Formatters
+
+Data formatters allow you to transform entity models, fields, tokens, and token balances before they're consumed by your application. Formatters can be configured at the runtime level (applied globally) or per-atom (applied to specific queries).
+
+#### Formatter Types
+
+**Model-level formatters** transform entire model objects:
+
+```typescript
+const modelFormatter: ModelFormatter = (model, context) => ({
+  ...model,
+  displayScore: `${model.score} pts`,
+  levelName: `Level ${model.level}`,
+});
+```
+
+**Field-level formatters** transform individual fields within models:
+
+```typescript
+const fieldFormatter: FieldFormatter = (value, context) => {
+  // Transform a single field value
+  return value * 100;
+};
+```
+
+**Token formatters** transform token objects based on contract address:
+
+```typescript
+const tokenFormatter: TokenFormatter = (token) => ({
+  ...token,
+  displayName: `${token.name} (${token.symbol})`,
+});
+```
+
+**Token balance formatters** transform token balance objects:
+
+```typescript
+const balanceFormatter: TokenBalanceFormatter = (balance) => ({
+  ...balance,
+  formattedBalance: formatBalance(balance.balance, balance.decimals),
+});
+```
+
+#### Configuring Formatters
+
+**Runtime-level (global) formatters:**
+
+```typescript
+import { makeToriiLayer, type DataFormatters } from "@dojoengine/react/effect";
+
+const formatters: DataFormatters = {
+  // Model formatters keyed by "SchemaKey-ModelKey"
+  models: {
+    "NUMS-Game": (game, context) => ({
+      ...game,
+      displayScore: `${game.score} points`,
+      levelName: `Level ${game.level}`,
+    }),
+  },
+  // Field formatters keyed by "SchemaKey-ModelKey.fieldName"
+  fields: {
+    "NUMS-Game.score": (score) => score * 100,
+    "NUMS-Player.health": (health) => Math.max(0, health),
+  },
+  // Token formatters keyed by contract address
+  tokens: {
+    "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7": (
+      token
+    ) => ({
+      ...token,
+      displayName: "ETH",
+    }),
+  },
+  // Token balance formatters keyed by contract address
+  tokenBalances: {
+    "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7": (
+      balance
+    ) => ({
+      ...balance,
+      formattedBalance: (
+        Number(balance.balance) / 10 ** 18
+      ).toFixed(4),
+    }),
+  },
+};
+
+const toriiLayer = makeToriiLayer(
+  { manifest, toriiUrl },
+  { formatters }
+);
+
+export const toriiRuntime = Atom.runtime(toriiLayer);
+```
+
+**Per-atom formatters (override runtime formatters):**
+
+```typescript
+// These formatters will merge with and override runtime formatters
+const atomFormatters: DataFormatters = {
+  models: {
+    "NUMS-Game": (game) => ({
+      ...game,
+      customField: "atom-specific value",
+    }),
+  },
+};
+
+const entitiesAtom = createEntityQueryAtom(
+  toriiRuntime,
+  query,
+  atomFormatters // Optional per-atom formatters
+);
+```
+
+#### Formatter Context
+
+Formatters receive context about the data being transformed:
+
+**Field formatters** receive:
+- `fieldName`: The name of the field being formatted
+- `modelKey`: The model name (e.g., "Game")
+- `schemaKey`: The schema namespace (e.g., "NUMS")
+- `entityId`: The entity's unique ID
+
+**Model formatters** receive:
+- `modelKey`: The model name
+- `schemaKey`: The schema namespace
+- `entityId`: The entity's unique ID
+
+```typescript
+const fieldFormatter: FieldFormatter = (value, context) => {
+  console.log(`Formatting ${context.schemaKey}-${context.modelKey}.${context.fieldName}`);
+  return transformedValue;
+};
+```
+
+#### Error Handling
+
+Formatters use a fallback strategy: if a formatter throws an error, the original unformatted value is returned and the error is logged to the console. This ensures your application continues to function even if formatters fail.
+
+```typescript
+const safeFormatter: ModelFormatter = (model) => {
+  try {
+    return expensiveTransformation(model);
+  } catch (error) {
+    // Error will be caught, logged, and original model returned
+    throw error;
+  }
+};
+```
+
 ## API Reference
 
 ### Entities
 
-#### `createEntityQueryAtom(runtime, query)`
+#### `createEntityQueryAtom(runtime, query, formatters?)`
 
 Fetch entities once based on a query.
 
@@ -137,6 +288,7 @@ Fetch entities once based on a query.
 
 - `runtime: Atom.AtomRuntime<ToriiGrpcClient>` - The atom runtime
 - `query: ToriiQueryBuilder<SchemaType>` - Query configuration
+- `formatters?: DataFormatters` - Optional formatters to apply (overrides runtime formatters)
 
 **Returns:** `Atom<Result<{ items: ParsedEntity[], next_cursor?: string }>>`
 
@@ -148,6 +300,7 @@ const entitiesAtom = createEntityQueryAtom(
   new ToriiQueryBuilder()
     .withClause(KeysClause([], [], "VariableLen").build())
     .withLimit(100),
+  { models: { "NUMS-Game": (game) => ({ ...game, formatted: true }) } }
 );
 ```
 
@@ -177,7 +330,7 @@ const subscriptionAtom = createEntityUpdatesAtom(
 );
 ```
 
-#### `createEntitiesInfiniteScrollAtom(runtime, baseQuery, limit?)`
+#### `createEntitiesInfiniteScrollAtom(runtime, baseQuery, limit?, formatters?)`
 
 Handle cursor-based pagination for entities.
 
@@ -186,6 +339,7 @@ Handle cursor-based pagination for entities.
 - `runtime: Atom.AtomRuntime<ToriiGrpcClient>` - The atom runtime
 - `baseQuery: ToriiQueryBuilder<SchemaType>` - Base query (without pagination)
 - `limit?: number` - Items per page (default: 20)
+- `formatters?: DataFormatters` - Optional formatters to apply (overrides runtime formatters)
 
 **Returns:** `{ stateAtom, loadMoreAtom }`
 
@@ -227,7 +381,7 @@ function InfiniteList() {
 }
 ```
 
-#### `createEntityQueryWithUpdatesAtom(runtime, query, clause, worldAddresses?)`
+#### `createEntityQueryWithUpdatesAtom(runtime, query, clause, worldAddresses?, formatters?)`
 
 Combine one-time query with real-time updates, automatically reconciling changes.
 
@@ -237,6 +391,7 @@ Combine one-time query with real-time updates, automatically reconciling changes
 - `query: ToriiQueryBuilder<SchemaType>` - Initial query configuration
 - `clause: Clause | null` - Filter clause for updates
 - `worldAddresses?: string[] | null` - Optional world addresses to filter
+- `formatters?: DataFormatters` - Optional formatters to apply (overrides runtime formatters)
 
 **Returns:** `Atom<Result<{ items: ParsedEntity[], entitiesMap: Map<string, ParsedEntity>, next_cursor?: string }>>`
 
@@ -398,7 +553,7 @@ function LiveEventsFeed() {
 
 ### Tokens
 
-#### `createTokenQueryAtom(runtime, query)`
+#### `createTokenQueryAtom(runtime, query, formatters?)`
 
 Fetch tokens once.
 
@@ -406,16 +561,25 @@ Fetch tokens once.
 
 - `runtime: Atom.AtomRuntime<ToriiGrpcClient>` - The atom runtime
 - `query: TokenQuery` - Token query with filters
+- `formatters?: DataFormatters` - Optional formatters to apply (overrides runtime formatters)
 
 **Returns:** `Atom<Result<Tokens>>`
 
 **Example:**
 
 ```typescript
-const tokensAtom = createTokenQueryAtom(toriiRuntime, {
-  contract_addresses: ["0x123"],
-  pagination: { limit: 100 },
-});
+const tokensAtom = createTokenQueryAtom(
+  toriiRuntime,
+  {
+    contract_addresses: ["0x123"],
+    pagination: { limit: 100 },
+  },
+  {
+    tokens: {
+      "0x123": (token) => ({ ...token, displayName: "My Token" }),
+    },
+  }
+);
 ```
 
 #### `createTokenUpdatesAtom(runtime, contractAddresses?, tokenIds?)`
@@ -440,7 +604,7 @@ const tokenUpdates = createTokenUpdatesAtom(
 );
 ```
 
-#### `createTokensInfiniteScrollAtom(runtime, baseQuery, limit?)`
+#### `createTokensInfiniteScrollAtom(runtime, baseQuery, limit?, formatters?)`
 
 Handle paginated token loading.
 
@@ -449,6 +613,7 @@ Handle paginated token loading.
 - `runtime: Atom.AtomRuntime<ToriiGrpcClient>` - The atom runtime
 - `baseQuery: Omit<TokenQuery, "pagination">` - Base query
 - `limit?: number` - Tokens per page (default: 20)
+- `formatters?: DataFormatters` - Optional formatters to apply (overrides runtime formatters)
 
 **Returns:** `{ stateAtom, loadMoreAtom }`
 
@@ -456,7 +621,7 @@ Handle paginated token loading.
 
 ### Token Balances
 
-#### `createTokenBalanceQueryAtom(runtime, query)`
+#### `createTokenBalanceQueryAtom(runtime, query, formatters?)`
 
 Fetch token balances once.
 
@@ -464,6 +629,7 @@ Fetch token balances once.
 
 - `runtime: Atom.AtomRuntime<ToriiGrpcClient>` - The atom runtime
 - `query: TokenBalanceQuery` - Balance query
+- `formatters?: DataFormatters` - Optional formatters to apply (overrides runtime formatters)
 
 **Returns:** `Atom<Result<TokenBalances>>`
 
@@ -477,7 +643,7 @@ const balancesAtom = createTokenBalanceQueryAtom(toriiRuntime, {
 });
 ```
 
-#### `createTokenBalanceUpdatesAtom(runtime, query, pollingIntervalMs?)`
+#### `createTokenBalanceUpdatesAtom(runtime, query, pollingIntervalMs?, formatters?)`
 
 Poll for balance updates (no native subscription available).
 
@@ -486,6 +652,7 @@ Poll for balance updates (no native subscription available).
 - `runtime: Atom.AtomRuntime<ToriiGrpcClient>` - The atom runtime
 - `query: TokenBalanceQuery` - Balance query
 - `pollingIntervalMs?: number` - Polling interval (default: 5000ms)
+- `formatters?: DataFormatters` - Optional formatters to apply (overrides runtime formatters)
 
 **Returns:** `Atom<Result<TokenBalances>>`
 
@@ -496,10 +663,18 @@ const balanceUpdates = createTokenBalanceUpdatesAtom(
   toriiRuntime,
   { account_addresses: ["0xabc"] },
   3000, // poll every 3 seconds
+  {
+    tokenBalances: {
+      "0x123": (balance) => ({
+        ...balance,
+        formatted: (Number(balance.balance) / 1e18).toFixed(4),
+      }),
+    },
+  }
 );
 ```
 
-#### `createTokenBalancesInfiniteScrollAtom(runtime, baseQuery, limit?)`
+#### `createTokenBalancesInfiniteScrollAtom(runtime, baseQuery, limit?, formatters?)`
 
 Handle paginated balance loading.
 
@@ -508,6 +683,7 @@ Handle paginated balance loading.
 - `runtime: Atom.AtomRuntime<ToriiGrpcClient>` - The atom runtime
 - `baseQuery: Omit<TokenBalanceQuery, "pagination">` - Base query
 - `limit?: number` - Balances per page (default: 20)
+- `formatters?: DataFormatters` - Optional formatters to apply (overrides runtime formatters)
 
 **Returns:** `{ stateAtom, loadMoreAtom }`
 
