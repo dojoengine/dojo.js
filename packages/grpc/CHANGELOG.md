@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 1.8.6
+
+### Patch Changes
+
+- ca406c6: feat: add effect.ts bindings for torii-client and effect-atom
+
 ## 1.8.5
 
 ### Patch Changes

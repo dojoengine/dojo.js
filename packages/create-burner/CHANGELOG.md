@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.7
+
+### Patch Changes
+
+- 763aec9: chore: add react 19 compat
+
 ## 1.8.6
 
 ### Patch Changes

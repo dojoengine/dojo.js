@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.8.10
+
+### Patch Changes
+
+- 763aec9: chore: add react 19 compat
+- ca406c6: feat: add effect.ts bindings for torii-client and effect-atom
+- Updated dependencies [ca406c6]
+  - @dojoengine/grpc@1.8.6
+
 ## 1.8.9
 
 ### Patch Changes
