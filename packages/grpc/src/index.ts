@@ -1,5 +1,10 @@
 export * from "./client";
 export * from "./torii-client";
+export {
+    makeToriiClient,
+    type ToriiClient,
+    type ToriiClientConfig as FunctionalToriiClientConfig,
+} from "./torii-client-functional";
 
 // Re-export generated protobuf types
 export * from "./generated/schema";

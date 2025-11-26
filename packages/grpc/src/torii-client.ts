@@ -215,6 +215,8 @@ interface StreamHandlerOptions<TReq extends object, TRes extends object> {
 
 export interface ToriiGrpcClientConfig extends ClientConfig {
     useEffectSchema?: boolean;
+    autoReconnect?: boolean;
+    maxReconnectAttempts?: number;
 }
 
 export class ToriiGrpcClient {
@@ -222,6 +224,8 @@ export class ToriiGrpcClient {
     private nextSubscriptionId = 1n;
     private subscriptions = new Map<bigint, ToriiSubscription>();
     private useEffectSchema: boolean;
+    private autoReconnect: boolean;
+    private maxReconnectAttempts: number;
     private worldAddress: string | undefined;
     private worldAddressBytes: Uint8Array | undefined;
     private defaultWorldAddresses: Uint8Array[];
@@ -269,6 +273,8 @@ export class ToriiGrpcClient {
             ? [this.worldAddressBytes]
             : [];
         this.useEffectSchema = config.useEffectSchema ?? false;
+        this.autoReconnect = config.autoReconnect ?? true;
+        this.maxReconnectAttempts = config.maxReconnectAttempts ?? 5;
 
         // Initialize mappers based on schema preference
         this.mappers = this.useEffectSchema
@@ -337,6 +343,7 @@ export class ToriiGrpcClient {
     ): Subscription {
         const subscriptionId = this.nextSubscriptionId++;
         let isCancelled = false;
+        let reconnectAttempts = 0;
 
         const subscription: ToriiSubscription = {
             id: subscriptionId,
@@ -356,10 +363,6 @@ export class ToriiGrpcClient {
             subscription.stream = stream as ServerStreamingCall<object, object>;
 
             if (isReconnect) {
-                // TODO: Add proper debug log configuration
-                // console.log(
-                //     `Stream reconnected (subscription ${subscriptionId})`
-                // );
                 if (options.onReconnect) {
                     options.onReconnect();
                 }
@@ -369,6 +372,7 @@ export class ToriiGrpcClient {
             }
 
             stream.responses.onMessage((response: TRes) => {
+                reconnectAttempts = 0;
                 subscription.lastMessage = response;
                 options.onMessage(response);
             });
@@ -382,12 +386,14 @@ export class ToriiGrpcClient {
                     error.message.includes("body stream") ||
                     error.message.includes("connection");
 
-                if (isNetworkError) {
-                    // TODO: Add proper debug log configuration
-                    // console.log(
-                    //     `Network error detected (subscription ${subscriptionId}), reconnecting...`
-                    // );
-                    setupStream(true);
+                if (
+                    isNetworkError &&
+                    this.autoReconnect &&
+                    reconnectAttempts < this.maxReconnectAttempts
+                ) {
+                    reconnectAttempts++;
+                    const delay = Math.pow(2, reconnectAttempts) * 1000;
+                    setTimeout(() => setupStream(true), delay);
                 } else {
                     if (options.onError) {
                         options.onError(error);
@@ -695,7 +701,8 @@ export class ToriiGrpcClient {
     async onTokenUpdated(
         contract_addresses: string[] | null | undefined,
         token_ids: WasmU256[] | null | undefined,
-        callback: Function
+        callback: Function,
+        onError?: (error: Error) => void
     ): Promise<Subscription> {
         return this.createStreamSubscription({
             createStream: () =>
@@ -709,13 +716,15 @@ export class ToriiGrpcClient {
                     callback(this.mappers.token(response.token));
                 }
             },
+            onError,
         });
     }
 
     async onEntityUpdated(
         clause: Clause | null | undefined,
         world_addresses: string[] | null | undefined,
-        callback: Function
+        callback: Function,
+        onError?: (error: Error) => void
     ): Promise<Subscription> {
         const worldAddressesBytes =
             this.normalizeWorldAddresses(world_addresses);
@@ -726,6 +735,7 @@ export class ToriiGrpcClient {
                     world_addresses: worldAddressesBytes,
                 }),
             onMessage: (response: SubscribeEntityResponse) => {
+                console.log(response);
                 if (response.entity) {
                     callback(
                         this.mappers.entity(response.entity),
@@ -733,6 +743,7 @@ export class ToriiGrpcClient {
                     );
                 }
             },
+            onError,
         });
     }
 
@@ -796,7 +807,8 @@ export class ToriiGrpcClient {
 
     async onStarknetEvent(
         clauses: KeysClause[],
-        callback: Function
+        callback: Function,
+        onError?: (error: Error) => void
     ): Promise<Subscription> {
         // Map KeysClause[] to a single clause
         const grpcClauses: GrpcKeysClause[] = clauses.map((clause) => ({
@@ -831,6 +843,7 @@ export class ToriiGrpcClient {
                     });
                 }
             },
+            onError,
         });
     }
 
