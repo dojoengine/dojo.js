@@ -1,6 +1,5 @@
 {
   "lockfileVersion": 1,
-  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "dojo.js",
@@ -100,7 +99,7 @@
     },
     "packages/create-burner": {
       "name": "@dojoengine/create-burner",
-      "version": "1.8.6",
+      "version": "1.8.7",
       "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@scure/bip32": "^1.5.0",
@@ -159,7 +158,7 @@
     },
     "packages/grpc": {
       "name": "@dojoengine/grpc",
-      "version": "1.8.5",
+      "version": "1.8.6",
       "dependencies": {
         "@effect/opentelemetry": "^0.59.1",
         "@grpc/grpc-js": "^1.13.4",
@@ -234,11 +233,10 @@
     },
     "packages/react": {
       "name": "@dojoengine/react",
-      "version": "1.8.4",
+      "version": "1.8.5",
       "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@dojoengine/grpc": "workspace:*",
-        "@dojoengine/internal": "workspace:*",
         "@dojoengine/recs": "2.0.13",
         "@dojoengine/sdk": "workspace:*",
         "@dojoengine/state": "workspace:*",
@@ -257,6 +255,7 @@
         "@babel/core": "^7.25.2",
         "@babel/preset-env": "^7.25.4",
         "@biomejs/biome": "^2.1.3",
+        "@dojoengine/internal": "workspace:*",
         "@types/js-cookie": "^3.0.6",
         "@types/node": "^18.19.50",
         "@types/react": "^18.3.9",
@@ -281,7 +280,7 @@
     },
     "packages/sdk": {
       "name": "@dojoengine/sdk",
-      "version": "1.8.9",
+      "version": "1.8.10",
       "dependencies": {
         "@dojoengine/core": "workspace:*",
         "@dojoengine/grpc": "workspace:*",
