@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.6
+
+### Patch Changes
+
+- 820227d: fix: remove internal dependency
+
 ## 1.8.5
 
 ### Patch Changes
