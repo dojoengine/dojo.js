@@ -274,8 +274,7 @@ export interface EntitiesInfiniteState {
  */
 export function createEntitiesInfiniteScrollAtom(
     runtime: Atom.AtomRuntime<ToriiGrpcClient>,
-    baseQuery: ToriiQueryBuilder<SchemaType>,
-    limit = 20,
+    queryBuilder: ToriiQueryBuilder<SchemaType>,
     formatters?: DataFormatters
 ) {
     const initialState: EntitiesInfiniteState = {
@@ -310,7 +309,6 @@ export function createEntitiesInfiniteScrollAtom(
                     formatters
                 );
 
-                let queryBuilder = baseQuery.withLimit(limit);
                 if (currentState.cursor) {
                     queryBuilder = queryBuilder.withCursor(currentState.cursor);
                 }
@@ -448,7 +446,7 @@ function applyFormatters(
                             modelKey,
                             schemaKey,
                             entityId: entity.entityId,
-                        });
+                        }) as { [x: string]: unknown };
                     } catch (error) {
                         console.error(
                             `[DataFormatter] Model formatter error for ${modelFullKey}:`,
@@ -530,6 +528,68 @@ export function createEntityQueryWithUpdatesAtom(
             next_cursor: queryData.next_cursor,
         });
     }).pipe(Atom.keepAlive);
+}
+
+export function createEntitiesInfiniteScrollWithUpdatesAtom(
+    runtime: Atom.AtomRuntime<ToriiGrpcClient>,
+    queryBuilder: ToriiQueryBuilder<SchemaType>,
+    clause: Clause | null | undefined,
+    worldAddresses: string[] | null | undefined = null,
+    formatters?: DataFormatters
+) {
+    const { stateAtom: baseStateAtom, loadMoreAtom } =
+        createEntitiesInfiniteScrollAtom(runtime, queryBuilder, formatters);
+
+    const updatesAtom = createEntityUpdatesAtom(
+        runtime,
+        clause,
+        worldAddresses
+    );
+
+    const stateAtom = Atom.make((get) => {
+        const baseState = get(baseStateAtom);
+        const updatesResult = get(updatesAtom);
+
+        if (Result.isInitial(updatesResult)) {
+            return baseState;
+        }
+
+        if (Result.isFailure(updatesResult)) {
+            return {
+                ...baseState,
+                error: updatesResult.cause,
+            };
+        }
+
+        const updatesMap = updatesResult.value;
+
+        const entitiesMap = new Map<string, ParsedEntity>();
+        for (const entity of baseState.items) {
+            entitiesMap.set(entity.entityId, entity);
+        }
+
+        for (const [hashedKeys, update] of updatesMap) {
+            const entityId = addAddressPadding(hashedKeys);
+            const parsedUpdate = parseEntitySync(update, formatters);
+
+            const existing = entitiesMap.get(entityId);
+            if (existing) {
+                entitiesMap.set(entityId, {
+                    entityId,
+                    models: mergeModels(existing.models, parsedUpdate.models),
+                });
+            } else {
+                entitiesMap.set(entityId, parsedUpdate);
+            }
+        }
+
+        return {
+            ...baseState,
+            items: Array.from(entitiesMap.values()),
+        };
+    }).pipe(Atom.keepAlive);
+
+    return { stateAtom, loadMoreAtom };
 }
 
 export { parseValue, parseStruct, parsePrimitive, parseEntity, parseEntities };

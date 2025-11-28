@@ -34,20 +34,20 @@ export type FieldFormatter<T = unknown, R = unknown> = (
  */
 export type ModelFormatter<
     T extends Record<string, unknown> = Record<string, unknown>,
-    R extends Record<string, unknown> = Record<string, unknown>,
+    R = unknown,
 > = (model: T, context: ModelFormatterContext) => R;
 
 /**
  * Token formatter function type
  * Transforms a token object based on contract address
  */
-export type TokenFormatter = (token: Token) => Token;
+export type TokenFormatter<R = unknown> = (token: Token) => R;
 
 /**
  * Token balance formatter function type
  * Transforms a token balance object based on contract address
  */
-export type TokenBalanceFormatter = (balance: TokenBalance) => TokenBalance;
+export type TokenBalanceFormatter<R = unknown> = (balance: TokenBalance) => R;
 
 /**
  * Registry of data formatters
