@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.7
+
+### Patch Changes
+
+- c74094d: feat(react): change effect formatter types + add initewithupdates atoms
+
 ## 1.8.6
 
 ### Patch Changes
