@@ -17,7 +17,7 @@ export interface TokensInfiniteState {
 function applyTokenFormatters(
     tokens: Token[],
     formatters: DataFormatters | undefined
-): Token[] {
+) {
     if (!formatters || !formatters.tokens) {
         return tokens;
     }
@@ -232,7 +232,7 @@ export function createTokensInfiniteScrollAtom(
             );
 
             yield* Atom.set(stateAtom, {
-                items: [...currentState.items, ...result.items],
+                items: [...currentState.items, ...result.items] as Token[],
                 cursor: result.next_cursor,
                 hasMore: !!result.next_cursor,
                 isLoading: false,

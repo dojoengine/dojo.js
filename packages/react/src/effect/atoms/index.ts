@@ -5,6 +5,7 @@ export {
     createEntityQueryAtom,
     createEntitiesInfiniteScrollAtom,
     createEntityQueryWithUpdatesAtom,
+    createEntitiesInfiniteScrollWithUpdatesAtom,
     parseValue,
     parseStruct,
     parsePrimitive,
@@ -29,6 +30,7 @@ export {
     createEventUpdatesAtom,
     createEventsInfiniteScrollAtom,
     createEventQueryWithUpdatesAtom,
+    createEventsInfiniteScrollWithUpdatesAtom,
 } from "./events";
 export type { EventsInfiniteState } from "./events";
 

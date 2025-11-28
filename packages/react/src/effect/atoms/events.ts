@@ -259,3 +259,63 @@ export function createEventQueryWithUpdatesAtom(
         });
     }).pipe(Atom.keepAlive);
 }
+
+export function createEventsInfiniteScrollWithUpdatesAtom(
+    runtime: Atom.AtomRuntime<ToriiGrpcClient>,
+    baseQuery: { keys?: KeysClause },
+    clauses: KeysClause[],
+    limit = 20
+) {
+    const { stateAtom: baseStateAtom, loadMoreAtom } =
+        createEventsInfiniteScrollAtom(runtime, baseQuery, limit);
+
+    const updatesAtom = createEventUpdatesAtom(runtime, clauses);
+
+    const stateAtom = Atom.make((get) => {
+        const baseState = get(baseStateAtom);
+        const updatesResult = get(updatesAtom);
+
+        if (Result.isInitial(updatesResult)) {
+            return baseState;
+        }
+
+        if (Result.isFailure(updatesResult)) {
+            return {
+                ...baseState,
+                error: updatesResult.cause,
+            };
+        }
+
+        const updatesArray = updatesResult.value;
+
+        const seenHashes = new Set<string>();
+        const items = [...baseState.items];
+
+        for (const event of items) {
+            if (event.transaction_hash && event.transaction_hash.length > 0) {
+                seenHashes.add(
+                    Buffer.from(event.transaction_hash).toString("hex")
+                );
+            }
+        }
+
+        for (const update of updatesArray) {
+            if (update.transaction_hash && update.transaction_hash.length > 0) {
+                const hashStr = Buffer.from(update.transaction_hash).toString(
+                    "hex"
+                );
+                if (!seenHashes.has(hashStr)) {
+                    items.push(update);
+                    seenHashes.add(hashStr);
+                }
+            }
+        }
+
+        return {
+            ...baseState,
+            items,
+        };
+    }).pipe(Atom.keepAlive);
+
+    return { stateAtom, loadMoreAtom };
+}

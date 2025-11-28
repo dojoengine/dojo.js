@@ -13,7 +13,7 @@ import { mergeFormatters } from "../formatters";
 function applyTokenBalanceFormatters(
     balances: TokenBalance[],
     formatters: DataFormatters | undefined
-): TokenBalance[] {
+) {
     if (!formatters || !formatters.tokenBalances) {
         return balances;
     }
@@ -97,7 +97,7 @@ export function createTokenBalanceUpdatesAtom(
                                             items: applyTokenBalanceFormatters(
                                                 balances.items,
                                                 mergedFormatters
-                                            ),
+                                            ) as TokenBalance[],
                                         });
                                     })
                                 );
@@ -244,7 +244,10 @@ export function createTokenBalancesInfiniteScrollAtom(
             );
 
             yield* Atom.set(stateAtom, {
-                items: [...currentState.items, ...result.items],
+                items: [
+                    ...currentState.items,
+                    ...result.items,
+                ] as TokenBalance[],
                 cursor: result.next_cursor,
                 hasMore: !!result.next_cursor,
                 isLoading: false,
