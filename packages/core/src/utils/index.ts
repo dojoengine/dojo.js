@@ -1,6 +1,7 @@
-import { Call, CallData, TypedData } from "starknet";
+import { Call, TypedData } from "starknet";
 
 import { DojoCall } from "../types";
+import { compileDojoCalldata } from "./compile";
 
 /**
  * Gets a contract from a manifest by name.
@@ -40,9 +41,18 @@ export const parseDojoCall = (
             call.contractName
         );
 
+        if (!contract) {
+            throw new Error(
+                `Contract "${call.contractName}" not found in namespace "${nameSpace}"`
+            );
+        }
+
         return {
             contractAddress: contract.address,
-            calldata: new CallData(contract.abi).compile(
+            calldata: compileDojoCalldata(
+                contract.abi,
+                nameSpace,
+                call.contractName,
                 call.entrypoint,
                 call.calldata
             ),

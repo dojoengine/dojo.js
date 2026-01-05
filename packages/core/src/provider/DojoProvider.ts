@@ -16,6 +16,7 @@ import {
 import { LOCAL_KATANA } from "../constants";
 import { ConsoleLogger, type LogLevel } from "../logger/logger";
 import { type DojoCall, WorldEntryPoints } from "../types";
+import { compileDojoCalldata } from "../utils/compile";
 import { getContractByName, parseDojoCall } from "../utils";
 import { Provider } from "./provider";
 
@@ -296,10 +297,14 @@ class DojoProviderBase extends Provider {
                     address: contractInfos.address,
                     providerOrAccount: this.provider,
                 });
-                return await contract.call(
+                const compiledCalldata = compileDojoCalldata(
+                    contractInfos.abi,
+                    nameSpace,
+                    call.contractName,
                     call.entrypoint,
-                    call.calldata as ArgsOrCalldata
+                    call.calldata
                 );
+                return await contract.call(call.entrypoint, compiledCalldata);
             } catch (error) {
                 this.logger.error(
                     `Failed to callContract ${call.contractName}: ${error}`
@@ -350,6 +355,18 @@ class DojoProviderBase extends Provider {
             string,
             ActionMethodImplementation
         >;
+
+        const functionCounts = new Map<string, number>();
+        for (const contract of this.manifest.contracts as Array<any>) {
+            if (!contract?.systems?.length) continue;
+            for (const systemName of contract.systems as Array<string>) {
+                functionCounts.set(
+                    systemName,
+                    (functionCounts.get(systemName) || 0) + 1
+                );
+            }
+        }
+
         const isAccountLike = (
             value: unknown
         ): value is Account | AccountInterface =>
@@ -373,7 +390,12 @@ class DojoProviderBase extends Provider {
             const abiItems = Array.isArray(contract.abi) ? contract.abi : [];
 
             for (const systemName of contract.systems as Array<string>) {
-                if (systemName in host) {
+                const isDuplicate = (functionCounts.get(systemName) || 0) > 1;
+                const methodName = isDuplicate
+                    ? `${names.namespace}_${names.contractName}_${systemName}`
+                    : systemName;
+
+                if (methodName in host) {
                     continue;
                 }
 
@@ -405,7 +427,7 @@ class DojoProviderBase extends Provider {
                         : "external";
 
                 if (stateMutability === "view") {
-                    host[systemName] = async (
+                    host[methodName] = async (
                         ...parameters: Array<unknown>
                     ) => {
                         const [maybeAccountOrArgs, maybeArgs] = parameters;
@@ -417,7 +439,7 @@ class DojoProviderBase extends Provider {
 
                         if (expectsArgs && args === undefined) {
                             throw new Error(
-                                `Missing arguments for action "${systemName}"`
+                                `Missing arguments for action "${methodName}"`
                             );
                         }
 
@@ -431,12 +453,12 @@ class DojoProviderBase extends Provider {
                     continue;
                 }
 
-                host[systemName] = async (...parameters: Array<unknown>) => {
+                host[methodName] = async (...parameters: Array<unknown>) => {
                     const [maybeAccount, maybeArgs] = parameters;
 
                     if (!isAccountLike(maybeAccount)) {
                         throw new Error(
-                            `Account is required for action "${systemName}"`
+                            `Account is required for action "${methodName}"`
                         );
                     }
 
@@ -446,7 +468,7 @@ class DojoProviderBase extends Provider {
 
                     if (expectsArgs && args === undefined) {
                         throw new Error(
-                            `Missing arguments for action "${systemName}"`
+                            `Missing arguments for action "${methodName}"`
                         );
                     }
 
