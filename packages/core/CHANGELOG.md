@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.6
+
+### Patch Changes
+
+- d056b71: feat(core): improve provider and internalize calldata compiler
+
 ## 1.8.5
 
 ### Patch Changes

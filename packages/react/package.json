@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/react",
-    "version": "1.8.7",
+    "version": "1.8.8",
     "description": "dojo: React hooks for working with the dojo engine stack.",
     "author": "dojo",
     "source": "src/index.ts",
