@@ -17,3 +17,4 @@ lerna-debug.log
 # Local JJ workspaces
 /ws/
 example/dist/
+.claude-modified-files
