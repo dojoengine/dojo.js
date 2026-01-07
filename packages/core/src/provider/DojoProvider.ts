@@ -17,7 +17,7 @@ import { LOCAL_KATANA } from "../constants";
 import { ConsoleLogger, type LogLevel } from "../logger/logger";
 import { type DojoCall, WorldEntryPoints } from "../types";
 import { compileDojoCalldata } from "../utils/compile";
-import { getContractByName, parseDojoCall } from "../utils";
+import { getContractAbi, getContractByName, parseDojoCall } from "../utils";
 import { Provider } from "./provider";
 
 type DojoActionInputs<Fn> = Fn extends { inputs: infer Inputs }
@@ -121,7 +121,7 @@ class DojoProviderBase extends Provider {
         });
 
         this.contract = new Contract({
-            abi: manifest.world.abi,
+            abi: manifest.world.abi ?? manifest.abis ?? [],
             address: this.getWorldAddress(),
             providerOrAccount: this.provider,
         });
@@ -387,7 +387,7 @@ class DojoProviderBase extends Provider {
                 continue;
             }
 
-            const abiItems = Array.isArray(contract.abi) ? contract.abi : [];
+            const abiItems = getContractAbi(this.manifest, contract);
 
             for (const systemName of contract.systems as Array<string>) {
                 const isDuplicate = (functionCounts.get(systemName) || 0) > 1;
