@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.8.12
+
+### Patch Changes
+
+- 1910f98: feat(agent): add dojo.js skills
+- Updated dependencies [1910f98]
+  - @dojoengine/core@1.8.7
+  - @dojoengine/grpc@1.8.7
+  - @dojoengine/state@1.8.5
+  - @dojoengine/utils@1.8.4
+
 ## 1.8.11
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @dojoengine/internal
 
+## 1.7.8
+
+### Patch Changes
+
+- 1910f98: feat(agent): add dojo.js skills
+- Updated dependencies [1910f98]
+  - @dojoengine/core@1.8.7
+  - @dojoengine/utils@1.8.4
+
 ## 1.7.7
 
 ### Patch Changes

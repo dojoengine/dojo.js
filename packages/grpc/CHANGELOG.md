@@ -1,5 +1,11 @@
 # @dojoengine/grpc
 
+## 1.8.7
+
+### Patch Changes
+
+- 1910f98: feat(agent): add dojo.js skills
+
 ## 1.8.6
 
 ### Patch Changes

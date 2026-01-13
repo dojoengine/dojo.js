@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.4
+
+### Patch Changes
+
+- 1910f98: feat(agent): add dojo.js skills
+
 ## 1.8.3
 
 ### Patch Changes
