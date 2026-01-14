@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.8.10
+
+### Patch Changes
+
+- Updated dependencies [636578a]
+  - @dojoengine/core@1.8.8
+
 ## 1.8.9
 
 ### Patch Changes
