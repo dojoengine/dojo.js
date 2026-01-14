@@ -1,7 +1,24 @@
-import { Call, TypedData } from "starknet";
+import { Abi, Call, TypedData } from "starknet";
 
 import { DojoCall } from "../types";
 import { compileDojoCalldata } from "./compile";
+
+/**
+ * Gets the ABI for a contract, supporting both old (inline) and new (root-level) manifest formats.
+ *
+ * @param {any} manifest - The manifest object.
+ * @param {any} contract - The contract object.
+ * @returns {Abi} The ABI array.
+ */
+export const getContractAbi = (manifest: any, contract: any): Abi => {
+    if (Array.isArray(contract?.abi) && contract.abi.length > 0) {
+        return contract.abi;
+    }
+    if (Array.isArray(manifest?.abis)) {
+        return manifest.abis;
+    }
+    return [];
+};
 
 /**
  * Gets a contract from a manifest by name.
@@ -50,7 +67,7 @@ export const parseDojoCall = (
         return {
             contractAddress: contract.address,
             calldata: compileDojoCalldata(
-                contract.abi,
+                getContractAbi(manifest, contract),
                 nameSpace,
                 call.contractName,
                 call.entrypoint,
