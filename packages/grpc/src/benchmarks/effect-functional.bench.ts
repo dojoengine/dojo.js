@@ -1,4 +1,7 @@
 import { describe, test, expect } from "bun:test";
+
+declare const Bun: { nanoseconds: () => number };
+
 import { ToriiGrpcClient } from "../torii-client";
 import { makeToriiClient } from "../torii-client-functional";
 import type { Query } from "@dojoengine/torii-wasm";

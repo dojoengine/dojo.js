@@ -1,0 +1,65 @@
+name: Integration Test with Claude
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to test"
+        required: false
+        default: ""
+      contract_path:
+        description: "Path to Dojo contracts directory"
+        required: false
+        default: "./worlds/dojo-starter"
+      prompt:
+        description: "Custom prompt for Claude"
+        required: false
+        default: ""
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          ref: ${{ github.event.inputs.pr_number && format('refs/pull/{0}/head', github.event.inputs.pr_number) || github.ref }}
+
+      - uses: ./.github/actions/setup-dojo
+        with:
+          dojo-version: v1.7.2
+          scarb-version: 2.12.2
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build packages
+        run: bun run build:packages
+
+      - name: Run integration tests with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            ${{ github.event.inputs.prompt || 'You will have to run integration tests to make sure that the whole stack works great and that we get expected response from services. You can subscribe to entities update using `grpcurl` and then make some actions on different entities so we can make sure that we get what we expect. Once you have made all the tests required to be sure that all of the features are working, you should create a report with data formatted in json, the tools you used and responses you get.' }}
+            ${{ github.event.inputs.pr_number && format('Testing PR #{0}', github.event.inputs.pr_number) || '' }}
+
+            Use the skill at .claude/skills/dojo-integration-test/SKILL.md
+
+            Contract path: ${{ github.event.inputs.contract_path || './worlds/dojo-starter' }}
+
+            Clean up all background processes when done.
+          claude_args: |
+            --max-turns 30
+            --allowedTools Bash,Read,Glob,Grep,Write
