@@ -1,21 +1,24 @@
 import { Abi, Call, TypedData } from "starknet";
 
-import { DojoCall } from "../types";
+import { DojoCall, DojoManifest } from "../types";
 import { compileDojoCalldata } from "./compile";
 
 /**
  * Gets the ABI for a contract, supporting both old (inline) and new (root-level) manifest formats.
  *
- * @param {any} manifest - The manifest object.
- * @param {any} contract - The contract object.
+ * @param {DojoManifest} manifest - The manifest object.
+ * @param {object} contract - The contract object.
  * @returns {Abi} The ABI array.
  */
-export const getContractAbi = (manifest: any, contract: any): Abi => {
+export const getContractAbi = (
+    manifest: DojoManifest,
+    contract: { abi?: readonly Record<string, unknown>[] }
+): Abi => {
     if (Array.isArray(contract?.abi) && contract.abi.length > 0) {
         return contract.abi;
     }
     if (Array.isArray(manifest?.abis)) {
-        return manifest.abis;
+        return manifest.abis as Abi;
     }
     return [];
 };
@@ -23,17 +26,17 @@ export const getContractAbi = (manifest: any, contract: any): Abi => {
 /**
  * Gets a contract from a manifest by name.
  *
- * @param {any} manifest - The manifest object.
+ * @param {DojoManifest} manifest - The manifest object.
+ * @param {string} nameSpace - The namespace of the contract.
  * @param {string} name - The name of the contract.
- * @returns {any} The contract object.
- *
+ * @returns The contract object, or undefined if not found.
  */
 export const getContractByName = (
-    manifest: any,
+    manifest: DojoManifest,
     nameSpace: string,
     name: string
 ) => {
-    return manifest.contracts.find((contract: any) => {
+    return (manifest.contracts ?? []).find((contract) => {
         return contract.tag === nameSpace + "-" + name;
     });
 };
@@ -47,7 +50,7 @@ export const getContractByName = (
  *
  */
 export const parseDojoCall = (
-    manifest: any,
+    manifest: DojoManifest,
     nameSpace: string,
     call: DojoCall | Call
 ): Call => {

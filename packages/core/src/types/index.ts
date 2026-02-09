@@ -134,6 +134,26 @@ export type DojoCall = {
 };
 
 /**
+ * Minimal manifest shape consumed by DojoProvider and utility functions.
+ * Supports both legacy (inline ABI) and modern (root-level abis) formats.
+ */
+export interface DojoManifest {
+    world: {
+        address: string;
+        abi?: readonly Record<string, unknown>[];
+    };
+    /** Root-level ABI array (modern format). */
+    abis?: readonly Record<string, unknown>[];
+    contracts?: ReadonlyArray<{
+        tag: string;
+        address: string;
+        systems?: readonly string[];
+        abi?: readonly Record<string, unknown>[];
+    }>;
+    [key: string]: unknown;
+}
+
+/**
  * Cairo to TypeScript type mappings
  */
 type CairoToTsTypeMap = {
