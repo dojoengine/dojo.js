@@ -1,10 +1,10 @@
 import { Result, useAtomSet, useAtomValue } from "@effect-atom/atom-react";
+import type { Token } from "@dojoengine/torii-client";
 import {
     createTokenQueryAtom,
     createTokensInfiniteScrollAtom,
     createTokenUpdatesAtom,
 } from "@dojoengine/react/effect";
-import { defaultToriiPagination, ToriiQueryBuilder } from "@dojoengine/sdk";
 import { toriiRuntime } from "../effect";
 
 const query = {
@@ -12,8 +12,10 @@ const query = {
     token_ids: [],
     attribute_filters: [],
     pagination: {
-        ...defaultToriiPagination,
         limit: 100,
+        cursor: undefined,
+        direction: "Forward" as const,
+        order_by: [],
     },
 };
 const tokensAtom = createTokenQueryAtom(toriiRuntime, query);
@@ -22,7 +24,7 @@ const tokenSubscriptionAtom = createTokenUpdatesAtom(toriiRuntime, null, null);
 const { stateAtom: infiniteScrollState, loadMoreAtom: loadMoreEntities } =
     createTokensInfiniteScrollAtom(toriiRuntime, query, 10);
 
-function TokenList() {
+function TokenList(): JSX.Element {
     const tokens = useAtomValue(tokensAtom);
     return Result.match(tokens, {
         onSuccess: ({ value: tokens }) => {
@@ -50,7 +52,7 @@ function TokenList() {
     });
 }
 
-function TokenSubscriber() {
+function TokenSubscriber(): JSX.Element {
     const sub = useAtomValue(tokenSubscriptionAtom);
 
     return Result.match(sub, {
@@ -79,19 +81,18 @@ function TokenSubscriber() {
     });
 }
 
-function TokensInfiniteScroll() {
+function TokensInfiniteScroll(): JSX.Element {
     const state = useAtomValue(infiniteScrollState);
     const loadMore = useAtomSet(loadMoreEntities);
-    console.log(state);
 
     return (
         <div>
-            <h2>Infinite Scroll Entities</h2>
+            <h2>Infinite Scroll Tokens</h2>
             <p>
                 Loaded: {state.items.length} | Has More: {String(state.hasMore)}
             </p>
             <ul>
-                {state.items.map((token: any, idx: number) => (
+                {state.items.map((token: Token, idx: number) => (
                     <li key={`${token.contract_address}-${idx}`}>
                         {token.contract_address.slice(0, 16)}...
                     </li>
@@ -109,7 +110,7 @@ function TokensInfiniteScroll() {
     );
 }
 
-export function Tokens() {
+export function Tokens(): JSX.Element {
     return (
         <div>
             <h1>Tokens</h1>

@@ -1,9 +1,5 @@
-import {
-    Result,
-    useAtomValue,
-    useAtomSet,
-    Atom,
-} from "@effect-atom/atom-react";
+import { Result, useAtomValue, useAtomSet } from "@effect-atom/atom-react";
+import type { Event } from "@dojoengine/grpc";
 import {
     createEventQueryAtom,
     createEventUpdatesAtom,
@@ -19,20 +15,25 @@ const eventSubscriptionAtom = createEventUpdatesAtom(toriiRuntime, []);
 const { stateAtom: infiniteScrollState, loadMoreAtom: loadMoreEvents } =
     createEventsInfiniteScrollAtom(toriiRuntime, { keys: undefined }, 10);
 
-function EventList() {
+/** Truncate a JSON-serialised value for display. */
+function summarize(value: unknown): string {
+    return JSON.stringify(value).slice(0, 50);
+}
+
+function EventList(): JSX.Element {
     const events = useAtomValue(eventsAtom);
     return Result.match(events, {
         onSuccess: ({ value: events }) => {
-            const items = Array.isArray(events) ? events : (events.items ?? []);
+            const items = Array.isArray(events)
+                ? (events as unknown[])
+                : ((events as { items?: unknown[] }).items ?? []);
             return (
                 <div>
                     <h2>Registered Events</h2>
                     <p>Events: {items.length}</p>
                     <ul>
-                        {items.slice(0, 10).map((event: any, idx: number) => (
-                            <li key={idx}>
-                                {JSON.stringify(event).slice(0, 50)}...
-                            </li>
+                        {items.slice(0, 10).map((event, idx) => (
+                            <li key={idx}>{summarize(event)}...</li>
                         ))}
                     </ul>
                 </div>
@@ -48,7 +49,7 @@ function EventList() {
     });
 }
 
-function EventSubscriber() {
+function EventSubscriber(): JSX.Element {
     const sub = useAtomValue(eventSubscriptionAtom);
 
     return Result.match(sub, {
@@ -58,10 +59,8 @@ function EventSubscriber() {
                     <h2>Event Updates</h2>
                     <p>Events: {events.length}</p>
                     <ul>
-                        {events.slice(0, 10).map((event, idx) => (
-                            <li key={idx}>
-                                {JSON.stringify(event).slice(0, 50)}...
-                            </li>
+                        {events.slice(0, 10).map((event: Event, idx) => (
+                            <li key={idx}>{summarize(event)}...</li>
                         ))}
                     </ul>
                 </div>
@@ -77,7 +76,7 @@ function EventSubscriber() {
     });
 }
 
-function EventInfiniteScroll() {
+function EventInfiniteScroll(): JSX.Element {
     const state = useAtomValue(infiniteScrollState);
     const loadMore = useAtomSet(loadMoreEvents);
 
@@ -88,8 +87,8 @@ function EventInfiniteScroll() {
                 Loaded: {state.items.length} | Has More: {String(state.hasMore)}
             </p>
             <ul>
-                {state.items.map((event: any, idx: number) => (
-                    <li key={idx}>{JSON.stringify(event).slice(0, 50)}...</li>
+                {state.items.map((event: unknown, idx: number) => (
+                    <li key={idx}>{summarize(event)}...</li>
                 ))}
             </ul>
             {state.hasMore && (
@@ -104,7 +103,7 @@ function EventInfiniteScroll() {
     );
 }
 
-export function Events() {
+export function Events(): JSX.Element {
     return (
         <div>
             <h1>Events</h1>

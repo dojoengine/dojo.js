@@ -58,14 +58,20 @@
 
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, reactive, ref, watchEffect } from "vue";
-import type { ComponentValue, Entity } from "@dojoengine/recs";
+import type { Entity } from "@dojoengine/recs";
 import { getComponentValue } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import type { Burner } from "@dojoengine/create-burner";
 import type { Account } from "starknet";
 
 import { DirectionValue, dojoConfig, setup, type SetupResult } from "@showcase/dojo";
-import type { Direction } from "@showcase/dojo";
+import type { Direction, Position as PositionModel, Moves as MovesModel } from "@showcase/dojo";
+
+// ---------------------------------------------------------------------------
+// ABI-derived types from @showcase/dojo (see core/types.ts):
+//   Position → { player: string; vec: { x: number; y: number } }
+//   Moves    → { player: string; remaining: number; ... }
+// ---------------------------------------------------------------------------
 
 const loading = ref(true);
 const deploying = ref(false);
@@ -74,8 +80,8 @@ const burners = ref<Burner[]>([]);
 const activeAccount = ref<Account | null>(null);
 const clipboardMessage = ref("");
 const clipboardError = ref(false);
-const position = ref<ComponentValue<any> | null>(null);
-const moves = ref<ComponentValue<any> | null>(null);
+const position = ref<Partial<PositionModel> | null>(null);
+const moves = ref<Partial<MovesModel> | null>(null);
 
 let positionSubscription: { unsubscribe: () => void } | null = null;
 let movesSubscription: { unsubscribe: () => void } | null = null;

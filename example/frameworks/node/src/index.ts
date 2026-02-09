@@ -1,9 +1,15 @@
 import { getComponentValue } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 
-import { DirectionValue, dojoConfig, setup } from "@showcase/dojo";
+import {
+    DirectionValue,
+    dojoConfig,
+    setup,
+    type Position,
+    type Moves,
+} from "@showcase/dojo";
 
-async function main() {
+async function main(): Promise<void> {
     const result = await setup(dojoConfig);
 
     if (result.burnerManager.list().length === 0) {
@@ -25,17 +31,20 @@ async function main() {
 
     const entityId = getEntityIdFromKeys([BigInt(account.address)]);
 
+    // ABI-derived types: Position has { player, vec: { x, y } }
     const position = getComponentValue(
         result.clientComponents.Position,
         entityId
-    );
-    const moves = getComponentValue(result.clientComponents.Moves, entityId);
+    ) as Position | undefined;
+    const moves = getComponentValue(result.clientComponents.Moves, entityId) as
+        | Moves
+        | undefined;
 
     console.log("Position", position?.vec);
     console.log("Moves remaining", moves?.remaining);
 }
 
-main().catch((error) => {
+main().catch((error: unknown) => {
     console.error(error);
     process.exitCode = 1;
 });

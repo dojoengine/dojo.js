@@ -3,6 +3,18 @@ import { Result, useAtomValue } from "@effect-atom/atom-react";
 import { createEntityQueryWithUpdatesAtom } from "@dojoengine/react/effect";
 import { toriiRuntime } from "../effect/atoms";
 
+// ---------------------------------------------------------------------------
+// Typed model access — see Home.tsx and core/types.ts for the full pattern.
+// ---------------------------------------------------------------------------
+
+/** Shape of a NUMS.Game model as returned by Torii. */
+interface NUMSGame {
+    id: number;
+    level: number;
+    score: number;
+    over: boolean;
+}
+
 const clause = KeysClause([], [], "VariableLen").build();
 const query = new ToriiQueryBuilder()
     .withClause(clause)
@@ -16,7 +28,7 @@ const entitiesWithUpdatesAtom = createEntityQueryWithUpdatesAtom(
     null
 );
 
-function EntitiesWithUpdates() {
+function EntitiesWithUpdates(): JSX.Element {
     const result = useAtomValue(entitiesWithUpdatesAtom);
 
     return Result.match(result, {
@@ -59,10 +71,8 @@ function EntitiesWithUpdates() {
                             .filter((entity) => entity.models.NUMS?.Game)
                             .slice(0, 10)
                             .map((entity) => {
-                                const game = entity.models.NUMS?.Game as Record<
-                                    string,
-                                    unknown
-                                >;
+                                const game = entity.models.NUMS
+                                    ?.Game as NUMSGame;
                                 return (
                                     <li key={entity.entityId}>
                                         Game #{game.id} - Level: {game.level},
@@ -85,7 +95,7 @@ function EntitiesWithUpdates() {
     });
 }
 
-export function EntitiesUpdates() {
+export function EntitiesUpdates(): JSX.Element {
     return (
         <div>
             <h1>Entities with Automatic Updates</h1>

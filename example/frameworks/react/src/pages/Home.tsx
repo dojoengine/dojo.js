@@ -5,6 +5,7 @@ import {
     useAtomSet,
     Atom,
 } from "@effect-atom/atom-react";
+import type { ParsedEntity } from "@dojoengine/react/effect";
 import {
     createEntityUpdatesAtom,
     createEntityQueryAtom,
@@ -12,8 +13,22 @@ import {
 } from "@dojoengine/react/effect";
 import { toriiRuntime } from "../effect/atoms";
 
-interface GameViewModel {
-    entityId: string;
+// ---------------------------------------------------------------------------
+// Type-safe model access for NUMS.Game entities
+//
+// The live Sepolia Torii instance serves NUMS.Game models. Since we don't
+// have the NUMS ABI compiled locally, we define the shape manually here.
+//
+// In your own project you would derive this from your ABI instead:
+//
+//   import type { DojoStarterSchema } from "@showcase/dojo";
+//   type Game = DojoStarterSchema["dojo_starter"]["Moves"];
+//
+// See `example/core/types.ts` for the full ABI-derived type showcase.
+// ---------------------------------------------------------------------------
+
+/** Shape of a NUMS.Game model as returned by Torii. */
+interface NUMSGame {
     id: number;
     over: boolean;
     claimed: boolean;
@@ -29,6 +44,11 @@ interface GameViewModel {
     reward: number;
     score: number;
     slots: string;
+}
+
+/** View model combining entity identity with typed game data. */
+interface GameViewModel extends NUMSGame {
+    entityId: string;
 }
 
 const clause = KeysClause([], [], "VariableLen").build();
@@ -53,36 +73,23 @@ const gamesAtom = Atom.make((get) => {
     return Result.map(entities, (value) => {
         return value.items
             .filter((entity) => entity.models.NUMS?.Game)
-            .map((entity) => {
-                const game = entity.models.NUMS.Game as Record<string, unknown>;
+            .map((entity): GameViewModel => {
+                // Cast once at the boundary — the Torii response is untyped
+                // but we know the shape from the on-chain model definition.
+                const game = entity.models.NUMS.Game as NUMSGame;
                 return {
                     entityId: entity.entityId,
-                    id: game.id,
-                    over: game.over,
-                    claimed: game.claimed,
-                    level: game.level,
-                    slot_count: game.slot_count,
-                    slot_min: game.slot_min,
-                    slot_max: game.slot_max,
-                    number: game.number,
-                    next_number: game.next_number,
-                    tournament_id: game.tournament_id,
-                    selected_powers: game.selected_powers,
-                    available_powers: game.available_powers,
-                    reward: game.reward,
-                    score: game.score,
-                    slots: game.slots,
-                } as GameViewModel;
+                    ...game,
+                };
             });
     });
 });
 
-function EntityList() {
+function EntityList(): JSX.Element {
     const entities = useAtomValue(entitiesAtom);
 
     return Result.match(entities, {
         onSuccess: ({ value: entities }) => {
-            console.log(entities);
             return (
                 <div>
                     <h2>Registered Entities</h2>
@@ -109,7 +116,7 @@ function EntityList() {
     });
 }
 
-function EntitySubscriber() {
+function EntitySubscriber(): JSX.Element {
     const sub = useAtomValue(subscriptionAtom);
 
     return Result.match(sub, {
@@ -140,7 +147,7 @@ function EntitySubscriber() {
     });
 }
 
-function EntityInfiniteScroll() {
+function EntityInfiniteScroll(): JSX.Element {
     const state = useAtomValue(infiniteScrollState);
     const loadMore = useAtomSet(loadMoreEntities);
 
@@ -151,7 +158,7 @@ function EntityInfiniteScroll() {
                 Loaded: {state.items.length} | Has More: {String(state.hasMore)}
             </p>
             <ul>
-                {state.items.map((entity: any) => (
+                {state.items.map((entity: ParsedEntity) => (
                     <li key={entity.entityId}>
                         {entity.entityId.slice(0, 16)}...
                     </li>
@@ -169,7 +176,7 @@ function EntityInfiniteScroll() {
     );
 }
 
-function GameList() {
+function GameList(): JSX.Element {
     const games = useAtomValue(gamesAtom);
 
     return Result.match(games, {
@@ -194,7 +201,7 @@ function GameList() {
     });
 }
 
-export function Home() {
+export function Home(): JSX.Element {
     return (
         <div>
             <h1>Entities</h1>
