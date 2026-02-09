@@ -80,8 +80,8 @@ const burners = ref<Burner[]>([]);
 const activeAccount = ref<Account | null>(null);
 const clipboardMessage = ref("");
 const clipboardError = ref(false);
-const position = ref<Partial<PositionModel> | null>(null);
-const moves = ref<Partial<MovesModel> | null>(null);
+const position = ref<PositionModel | null>(null);
+const moves = ref<MovesModel | null>(null);
 
 let positionSubscription: { unsubscribe: () => void } | null = null;
 let movesSubscription: { unsubscribe: () => void } | null = null;
@@ -170,7 +170,7 @@ function move(direction: Direction) {
 }
 
 function moveUp() {
-    if (position.value && position.value.vec.y > 0) {
+    if (position.value?.vec && position.value.vec.y > 0) {
         move(DirectionValue.Up());
     }
 }
@@ -180,7 +180,7 @@ function moveDown() {
 }
 
 function moveLeft() {
-    if (position.value && position.value.vec.x > 0) {
+    if (position.value?.vec && position.value.vec.x > 0) {
         move(DirectionValue.Left());
     }
 }
@@ -203,8 +203,8 @@ watchEffect(() => {
 
     const { clientComponents } = setupResult.value;
 
-    position.value = getComponentValue(clientComponents.Position, id);
-    moves.value = getComponentValue(clientComponents.Moves, id);
+    position.value = getComponentValue(clientComponents.Position, id) as PositionModel | undefined ?? null;
+    moves.value = getComponentValue(clientComponents.Moves, id) as MovesModel | undefined ?? null;
 
     positionSubscription = clientComponents.Position.update$.subscribe(
         (update) => {

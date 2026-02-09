@@ -5,6 +5,7 @@ import {
     createEventUpdatesAtom,
     createEventsInfiniteScrollAtom,
 } from "@dojoengine/react/effect";
+
 import { toriiRuntime } from "../effect";
 
 const eventsAtom = createEventQueryAtom(toriiRuntime, {
@@ -20,13 +21,13 @@ function summarize(value: unknown): string {
     return JSON.stringify(value).slice(0, 50);
 }
 
-function EventList(): JSX.Element {
+function EventList(): React.JSX.Element {
     const events = useAtomValue(eventsAtom);
     return Result.match(events, {
         onSuccess: ({ value: events }) => {
-            const items = Array.isArray(events)
-                ? (events as unknown[])
-                : ((events as { items?: unknown[] }).items ?? []);
+            const items: Event[] = Array.isArray(events)
+                ? events
+                : ((events as { items?: Event[] }).items ?? []);
             return (
                 <div>
                     <h2>Registered Events</h2>
@@ -49,7 +50,7 @@ function EventList(): JSX.Element {
     });
 }
 
-function EventSubscriber(): JSX.Element {
+function EventSubscriber(): React.JSX.Element {
     const sub = useAtomValue(eventSubscriptionAtom);
 
     return Result.match(sub, {
@@ -76,7 +77,7 @@ function EventSubscriber(): JSX.Element {
     });
 }
 
-function EventInfiniteScroll(): JSX.Element {
+function EventInfiniteScroll(): React.JSX.Element {
     const state = useAtomValue(infiniteScrollState);
     const loadMore = useAtomSet(loadMoreEvents);
 
@@ -87,7 +88,7 @@ function EventInfiniteScroll(): JSX.Element {
                 Loaded: {state.items.length} | Has More: {String(state.hasMore)}
             </p>
             <ul>
-                {state.items.map((event: unknown, idx: number) => (
+                {state.items.map((event: Event, idx: number) => (
                     <li key={idx}>{summarize(event)}...</li>
                 ))}
             </ul>
@@ -103,7 +104,7 @@ function EventInfiniteScroll(): JSX.Element {
     );
 }
 
-export function Events(): JSX.Element {
+export function Events(): React.JSX.Element {
     return (
         <div>
             <h1>Events</h1>

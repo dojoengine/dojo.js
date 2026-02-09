@@ -5,51 +5,15 @@ import {
     useAtomSet,
     Atom,
 } from "@effect-atom/atom-react";
-import type { ParsedEntity } from "@dojoengine/react/effect";
 import {
+    type ParsedEntity,
     createEntityUpdatesAtom,
     createEntityQueryAtom,
     createEntitiesInfiniteScrollAtom,
 } from "@dojoengine/react/effect";
+
 import { toriiRuntime } from "../effect/atoms";
-
-// ---------------------------------------------------------------------------
-// Type-safe model access for NUMS.Game entities
-//
-// The live Sepolia Torii instance serves NUMS.Game models. Since we don't
-// have the NUMS ABI compiled locally, we define the shape manually here.
-//
-// In your own project you would derive this from your ABI instead:
-//
-//   import type { DojoStarterSchema } from "@showcase/dojo";
-//   type Game = DojoStarterSchema["dojo_starter"]["Moves"];
-//
-// See `example/core/types.ts` for the full ABI-derived type showcase.
-// ---------------------------------------------------------------------------
-
-/** Shape of a NUMS.Game model as returned by Torii. */
-interface NUMSGame {
-    id: number;
-    over: boolean;
-    claimed: boolean;
-    level: number;
-    slot_count: number;
-    slot_min: number;
-    slot_max: number;
-    number: number;
-    next_number: number;
-    tournament_id: number;
-    selected_powers: number;
-    available_powers: number;
-    reward: number;
-    score: number;
-    slots: string;
-}
-
-/** View model combining entity identity with typed game data. */
-interface GameViewModel extends NUMSGame {
-    entityId: string;
-}
+import type { NUMSGame, GameViewModel } from "../../../../core/nums-types";
 
 const clause = KeysClause([], [], "VariableLen").build();
 const entitiesAtom = createEntityQueryAtom(
@@ -76,7 +40,7 @@ const gamesAtom = Atom.make((get) => {
             .map((entity): GameViewModel => {
                 // Cast once at the boundary — the Torii response is untyped
                 // but we know the shape from the on-chain model definition.
-                const game = entity.models.NUMS.Game as NUMSGame;
+                const game = entity.models.NUMS!.Game as NUMSGame;
                 return {
                     entityId: entity.entityId,
                     ...game,
@@ -85,7 +49,7 @@ const gamesAtom = Atom.make((get) => {
     });
 });
 
-function EntityList(): JSX.Element {
+function EntityList(): React.JSX.Element {
     const entities = useAtomValue(entitiesAtom);
 
     return Result.match(entities, {
@@ -116,7 +80,7 @@ function EntityList(): JSX.Element {
     });
 }
 
-function EntitySubscriber(): JSX.Element {
+function EntitySubscriber(): React.JSX.Element {
     const sub = useAtomValue(subscriptionAtom);
 
     return Result.match(sub, {
@@ -147,7 +111,7 @@ function EntitySubscriber(): JSX.Element {
     });
 }
 
-function EntityInfiniteScroll(): JSX.Element {
+function EntityInfiniteScroll(): React.JSX.Element {
     const state = useAtomValue(infiniteScrollState);
     const loadMore = useAtomSet(loadMoreEntities);
 
@@ -176,7 +140,7 @@ function EntityInfiniteScroll(): JSX.Element {
     );
 }
 
-function GameList(): JSX.Element {
+function GameList(): React.JSX.Element {
     const games = useAtomValue(gamesAtom);
 
     return Result.match(games, {
@@ -201,7 +165,7 @@ function GameList(): JSX.Element {
     });
 }
 
-export function Home(): JSX.Element {
+export function Home(): React.JSX.Element {
     return (
         <div>
             <h1>Entities</h1>

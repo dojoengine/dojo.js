@@ -24,7 +24,7 @@ const tokenSubscriptionAtom = createTokenUpdatesAtom(toriiRuntime, null, null);
 const { stateAtom: infiniteScrollState, loadMoreAtom: loadMoreEntities } =
     createTokensInfiniteScrollAtom(toriiRuntime, query, 10);
 
-function TokenList(): JSX.Element {
+function TokenList(): React.JSX.Element {
     const tokens = useAtomValue(tokensAtom);
     return Result.match(tokens, {
         onSuccess: ({ value: tokens }) => {
@@ -52,7 +52,7 @@ function TokenList(): JSX.Element {
     });
 }
 
-function TokenSubscriber(): JSX.Element {
+function TokenSubscriber(): React.JSX.Element {
     const sub = useAtomValue(tokenSubscriptionAtom);
 
     return Result.match(sub, {
@@ -81,7 +81,7 @@ function TokenSubscriber(): JSX.Element {
     });
 }
 
-function TokensInfiniteScroll(): JSX.Element {
+function TokensInfiniteScroll(): React.JSX.Element {
     const state = useAtomValue(infiniteScrollState);
     const loadMore = useAtomSet(loadMoreEntities);
 
@@ -110,7 +110,7 @@ function TokensInfiniteScroll(): JSX.Element {
     );
 }
 
-export function Tokens(): JSX.Element {
+export function Tokens(): React.JSX.Element {
     return (
         <div>
             <h1>Tokens</h1>

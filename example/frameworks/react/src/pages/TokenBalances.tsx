@@ -35,7 +35,7 @@ const { stateAtom: infiniteScrollState, loadMoreAtom: loadMoreBalances } =
         10
     );
 
-function TokenBalanceList(): JSX.Element {
+function TokenBalanceList(): React.JSX.Element {
     const balances = useAtomValue(tokenBalancesAtom);
     return Result.match(balances, {
         onSuccess: ({ value: balances }) => {
@@ -65,7 +65,7 @@ function TokenBalanceList(): JSX.Element {
     });
 }
 
-function TokenBalanceSubscriber(): JSX.Element {
+function TokenBalanceSubscriber(): React.JSX.Element {
     const sub = useAtomValue(tokenBalanceSubscriptionAtom);
 
     return Result.match(sub, {
@@ -96,7 +96,7 @@ function TokenBalanceSubscriber(): JSX.Element {
     });
 }
 
-function TokenBalanceInfiniteScroll(): JSX.Element {
+function TokenBalanceInfiniteScroll(): React.JSX.Element {
     const state = useAtomValue(infiniteScrollState);
     const loadMore = useAtomSet(loadMoreBalances);
 
@@ -123,7 +123,7 @@ function TokenBalanceInfiniteScroll(): JSX.Element {
     );
 }
 
-export function TokenBalances(): JSX.Element {
+export function TokenBalances(): React.JSX.Element {
     return (
         <div>
             <h1>Token Balances</h1>
