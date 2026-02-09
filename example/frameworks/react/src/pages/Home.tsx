@@ -13,9 +13,14 @@ import {
 } from "@dojoengine/react/effect";
 
 import { toriiRuntime } from "../effect/atoms";
-import type { NUMSGame, GameViewModel } from "../../../../core/nums-types";
+import type { Position, Moves } from "@showcase/dojo";
 
-const clause = KeysClause([], [], "VariableLen").build();
+const clause = KeysClause(
+    ["dojo_starter-Position", "dojo_starter-Moves"],
+    [],
+    "VariableLen"
+).build();
+
 const entitiesAtom = createEntityQueryAtom(
     toriiRuntime,
     new ToriiQueryBuilder()
@@ -23,6 +28,7 @@ const entitiesAtom = createEntityQueryAtom(
         .includeHashedKeys()
         .withLimit(1000)
 );
+
 const subscriptionAtom = createEntityUpdatesAtom(toriiRuntime, clause, null);
 
 const { stateAtom: infiniteScrollState, loadMoreAtom: loadMoreEntities } =
@@ -32,18 +38,32 @@ const { stateAtom: infiniteScrollState, loadMoreAtom: loadMoreEntities } =
         10
     );
 
-const gamesAtom = Atom.make((get) => {
+interface PositionMoves {
+    entityId: string;
+    position: Position | undefined;
+    moves: Moves | undefined;
+}
+
+const positionMovesAtom = Atom.make((get) => {
     const entities = get(entitiesAtom);
     return Result.map(entities, (value) => {
         return value.items
-            .filter((entity) => entity.models.NUMS?.Game)
-            .map((entity): GameViewModel => {
-                // Cast once at the boundary — the Torii response is untyped
-                // but we know the shape from the on-chain model definition.
-                const game = entity.models.NUMS!.Game as NUMSGame;
+            .filter(
+                (entity) =>
+                    entity.models.dojo_starter?.Position ||
+                    entity.models.dojo_starter?.Moves
+            )
+            .map((entity): PositionMoves => {
+                const position = entity.models.dojo_starter?.Position as
+                    | Position
+                    | undefined;
+                const moves = entity.models.dojo_starter?.Moves as
+                    | Moves
+                    | undefined;
                 return {
                     entityId: entity.entityId,
-                    ...game,
+                    position,
+                    moves,
                 };
             });
     });
@@ -140,28 +160,40 @@ function EntityInfiniteScroll(): React.JSX.Element {
     );
 }
 
-function GameList(): React.JSX.Element {
-    const games = useAtomValue(gamesAtom);
+function PositionMovesList(): React.JSX.Element {
+    const data = useAtomValue(positionMovesAtom);
 
-    return Result.match(games, {
-        onSuccess: ({ value: games }) => (
+    return Result.match(data, {
+        onSuccess: ({ value: items }) => (
             <div>
-                <h2>Games (NUMS.Game)</h2>
-                <p>Count: {games.length}</p>
+                <h2>Position & Moves</h2>
+                <p>Count: {items.length}</p>
                 <ul>
-                    {games.map((game) => (
-                        <li key={game.entityId}>
-                            Game #{game.id} - Level: {game.level}, Score:{" "}
-                            {game.score}, Over: {String(game.over)}
+                    {items.map((item) => (
+                        <li key={item.entityId}>
+                            {item.entityId.slice(0, 16)}...
+                            {item.position && (
+                                <span>
+                                    {" "}
+                                    | Pos: ({item.position.vec.x},{" "}
+                                    {item.position.vec.y})
+                                </span>
+                            )}
+                            {item.moves && (
+                                <span>
+                                    {" "}
+                                    | Remaining: {item.moves.remaining}
+                                </span>
+                            )}
                         </li>
                     ))}
                 </ul>
             </div>
         ),
         onFailure: (error) => (
-            <div>Failed to load games: {error.cause.toString()}</div>
+            <div>Failed to load position/moves: {error.cause.toString()}</div>
         ),
-        onInitial: () => <div>Loading games...</div>,
+        onInitial: () => <div>Loading position/moves...</div>,
     });
 }
 
@@ -172,7 +204,7 @@ export function Home(): React.JSX.Element {
             <EntityList />
             <EntitySubscriber />
             <EntityInfiniteScroll />
-            <GameList />
+            <PositionMovesList />
         </div>
     );
 }

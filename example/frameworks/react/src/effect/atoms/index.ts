@@ -2,10 +2,12 @@ import { Atom } from "@effect-atom/atom-react";
 import { Layer } from "effect";
 import { makeToriiLayer } from "@dojoengine/react/effect";
 import { TracingLive } from "../tracing";
-import manifest from "../../manifest_sepolia.json" with { type: "json" };
+import manifest from "../../../../../core/manifest_dev.json" with {
+    type: "json",
+};
 
 const toriiLayer = makeToriiLayer(
-    { manifest, toriiUrl: "https://api.cartridge.gg/x/nums-bal/torii" },
+    { manifest, toriiUrl: "http://localhost:8080" },
     { autoReconnect: false, maxReconnectAttempts: 5 }
 );
 
