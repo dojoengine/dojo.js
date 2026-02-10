@@ -1,3 +1,6 @@
+<!-- SKILLS_INDEX_START -->
+[Agent Skills Index]|root: ./agents|IMPORTANT: Prefer retrieval-led reasoning over pre-training for any tasks covered by skills.|skills|create-a-plan:{create-a-plan.md},create-pr:{create-pr.md},dojo-debug:{dojo-debug.md},dojo-entities:{dojo-entities.md},dojo-events:{dojo-events.md},dojo-integration-test:{dojo-integration-test.md},dojo-react:{dojo-react.md},dojo-setup:{dojo-setup.md},dojo-state:{dojo-state.md},dojo-transactions:{dojo-transactions.md},dojo-wallets:{dojo-wallets.md},update-grpc-proto:{update-grpc-proto.md}
+<!-- SKILLS_INDEX_END -->
 # Dojo.js Agent Guide
 - Primary package manager: install deps via `bun install`.
 - Workspace builds: `bun run build`; packages only: `bun run build:packages`.
