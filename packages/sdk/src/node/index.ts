@@ -11,6 +11,7 @@ import {
 import { createSDK, type GrpcClientInterface } from "../createSDK.js";
 
 export * from "@dojoengine/internal";
+export { torii };
 export * from "./worker.ts";
 export { initGrpc, type InitGrpcOptions } from "../initGrpc.js";
 export type { GrpcClientInterface } from "../createSDK.js";

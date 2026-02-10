@@ -1,4 +1,5 @@
 import {
+    type Abi,
     type Account,
     type AccountInterface,
     type AllowArray,
@@ -15,7 +16,7 @@ import {
 
 import { LOCAL_KATANA } from "../constants";
 import { ConsoleLogger, type LogLevel } from "../logger/logger";
-import { type DojoCall, WorldEntryPoints } from "../types";
+import { type DojoCall, type DojoManifest, WorldEntryPoints } from "../types";
 import { compileDojoCalldata } from "../utils/compile";
 import { getContractAbi, getContractByName, parseDojoCall } from "../utils";
 import { Provider } from "./provider";
@@ -101,17 +102,17 @@ type ActionMethodImplementation = (
 class DojoProviderBase extends Provider {
     public provider: RpcProvider;
     public contract: Contract;
-    public manifest: any;
+    public manifest: DojoManifest;
     public logger: ConsoleLogger;
 
     /**
      * Constructor: Initializes the DojoProvider with the given world address, manifest and URL.
      *
-     * @param {string} world_address - Address of the world.
+     * @param {DojoManifest} manifest - The Dojo manifest object.
      * @param {string} [url=LOCAL_KATANA] - RPC URL (defaults to LOCAL_KATANA).
      */
     constructor(
-        manifest?: any,
+        manifest: DojoManifest,
         url: string = LOCAL_KATANA,
         logLevel: LogLevel = "none"
     ) {
@@ -121,7 +122,7 @@ class DojoProviderBase extends Provider {
         });
 
         this.contract = new Contract({
-            abi: manifest.world.abi ?? manifest.abis ?? [],
+            abi: (manifest.world.abi ?? manifest.abis ?? []) as Abi,
             address: this.getWorldAddress(),
             providerOrAccount: this.provider,
         });
@@ -292,13 +293,24 @@ class DojoProviderBase extends Provider {
                     nameSpace,
                     call.contractName
                 );
+
+                if (!contractInfos) {
+                    throw new Error(
+                        `Contract "${call.contractName}" not found in namespace "${nameSpace}"`
+                    );
+                }
+
+                const contractAbi = getContractAbi(
+                    this.manifest,
+                    contractInfos
+                );
                 const contract = new Contract({
-                    abi: contractInfos.abi,
+                    abi: contractAbi,
                     address: contractInfos.address,
                     providerOrAccount: this.provider,
                 });
                 const compiledCalldata = compileDojoCalldata(
-                    contractInfos.abi,
+                    contractAbi,
                     nameSpace,
                     call.contractName,
                     call.entrypoint,
@@ -357,9 +369,9 @@ class DojoProviderBase extends Provider {
         >;
 
         const functionCounts = new Map<string, number>();
-        for (const contract of this.manifest.contracts as Array<any>) {
+        for (const contract of this.manifest.contracts ?? []) {
             if (!contract?.systems?.length) continue;
-            for (const systemName of contract.systems as Array<string>) {
+            for (const systemName of contract.systems) {
                 functionCounts.set(
                     systemName,
                     (functionCounts.get(systemName) || 0) + 1
@@ -374,7 +386,7 @@ class DojoProviderBase extends Provider {
             value !== null &&
             "execute" in (value as Record<string, unknown>);
 
-        for (const contract of this.manifest.contracts as Array<any>) {
+        for (const contract of this.manifest.contracts ?? []) {
             if (
                 !contract?.systems?.length ||
                 typeof contract.tag !== "string"
@@ -507,7 +519,7 @@ export type DojoProviderInstance<Actions = never> = DojoProviderBase &
 export type DojoProvider<Actions = never> = DojoProviderInstance<Actions>;
 
 type DojoProviderConstructor = new <Actions = never>(
-    manifest?: any,
+    manifest: DojoManifest,
     url?: string,
     logLevel?: LogLevel
 ) => DojoProvider<Actions>;
