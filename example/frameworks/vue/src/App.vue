@@ -57,14 +57,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, reactive, ref, watchEffect } from "vue";
-import type { Entity } from "@dojoengine/recs";
-import { getComponentValue } from "@dojoengine/recs";
+import { onMounted, onBeforeUnmount, ref, watchEffect } from "vue";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { init, ToriiQueryBuilder, KeysClause } from "@dojoengine/sdk";
 import type { Burner } from "@dojoengine/create-burner";
 import type { Account } from "starknet";
 
-import { DirectionValue, dojoConfig, setup, type SetupResult } from "@showcase/dojo";
+import { DirectionValue, dojoConfig, setup, type SetupResult, type DojoStarterSchema } from "@showcase/dojo";
 import type { Direction, Position as PositionModel, Moves as MovesModel } from "@showcase/dojo";
 
 // ---------------------------------------------------------------------------
@@ -83,14 +82,12 @@ const clipboardError = ref(false);
 const position = ref<PositionModel | null>(null);
 const moves = ref<MovesModel | null>(null);
 
-let positionSubscription: { unsubscribe: () => void } | null = null;
-let movesSubscription: { unsubscribe: () => void } | null = null;
+let sdk: Awaited<ReturnType<typeof init<DojoStarterSchema>>> | null = null;
+let entitySubscription: { cancel: () => void } | null = null;
 
-function resetSubscriptions() {
-    positionSubscription?.unsubscribe();
-    positionSubscription = null;
-    movesSubscription?.unsubscribe();
-    movesSubscription = null;
+function resetSubscription() {
+    entitySubscription?.cancel();
+    entitySubscription = null;
 }
 
 function showMessage(message: string, isError = false) {
@@ -108,12 +105,22 @@ async function initialise() {
     burners.value = result.burnerManager.list();
     activeAccount.value =
         result.burnerManager.getActiveAccount() ?? result.masterAccount;
-    loading.value = false;
-}
 
-function entityId(): Entity | null {
-    if (!activeAccount.value) return null;
-    return getEntityIdFromKeys([BigInt(activeAccount.value.address)]) as Entity;
+    // Initialize SDK for entity queries (replaces recs)
+    sdk = await init<DojoStarterSchema>({
+        client: {
+            toriiUrl: dojoConfig.toriiUrl,
+            worldAddress: dojoConfig.manifest.world.address || "",
+        },
+        domain: {
+            name: "dojo_starter",
+            version: "1.0.0",
+            chainId: "SN_MAIN",
+            revision: "1",
+        },
+    });
+
+    loading.value = false;
 }
 
 function selectBurner(event: Event) {
@@ -189,42 +196,52 @@ function moveRight() {
     move(DirectionValue.Right());
 }
 
-watchEffect(() => {
-    resetSubscriptions();
+watchEffect(async () => {
+    resetSubscription();
 
-    if (!setupResult.value || !activeAccount.value) {
+    if (!sdk || !activeAccount.value) {
         position.value = null;
         moves.value = null;
         return;
     }
 
-    const id = entityId();
-    if (!id) return;
+    const clause = KeysClause(
+        ["dojo_starter-Position", "dojo_starter-Moves"],
+        [activeAccount.value.address],
+        "VariableLen"
+    ).build();
 
-    const { clientComponents } = setupResult.value;
-
-    position.value = getComponentValue(clientComponents.Position, id) as PositionModel | undefined ?? null;
-    moves.value = getComponentValue(clientComponents.Moves, id) as MovesModel | undefined ?? null;
-
-    positionSubscription = clientComponents.Position.update$.subscribe(
-        (update) => {
-            if (update.entity === id) {
-                const [next] = update.value;
-                position.value = next as typeof position.value;
+    // Subscribe to entity updates via SDK
+    const [initial, subscription] = await sdk.subscribeEntityQuery({
+        query: new ToriiQueryBuilder().withClause(clause).includeHashedKeys(),
+        callback: (resp) => {
+            if (resp.error) {
+                console.error("Entity update error:", resp.error);
+                return;
             }
-        }
-    );
-
-    movesSubscription = clientComponents.Moves.update$.subscribe((update) => {
-        if (update.entity === id) {
-            const [next] = update.value;
-            moves.value = next as typeof moves.value;
-        }
+            if (resp.data) {
+                for (const entity of resp.data) {
+                    const pos = entity.models?.dojo_starter?.Position as PositionModel | undefined;
+                    const mov = entity.models?.dojo_starter?.Moves as MovesModel | undefined;
+                    if (pos) position.value = pos;
+                    if (mov) moves.value = mov;
+                }
+            }
+        },
     });
+
+    entitySubscription = subscription;
+
+    // Set initial values from the query
+    const entity = initial.items[0];
+    if (entity) {
+        position.value = (entity.models?.dojo_starter?.Position as PositionModel | undefined) ?? null;
+        moves.value = (entity.models?.dojo_starter?.Moves as MovesModel | undefined) ?? null;
+    }
 });
 
 onMounted(initialise);
 onBeforeUnmount(() => {
-    resetSubscriptions();
+    resetSubscription();
 });
 </script>
