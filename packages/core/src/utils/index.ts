@@ -15,7 +15,7 @@ export const getContractAbi = (
     contract: { abi?: readonly Record<string, unknown>[] }
 ): Abi => {
     if (Array.isArray(contract?.abi) && contract.abi.length > 0) {
-        return contract.abi;
+        return contract.abi as Abi;
     }
     if (Array.isArray(manifest?.abis)) {
         return manifest.abis as Abi;
@@ -44,7 +44,7 @@ export const getContractByName = (
 /**
  * Convert a DojoCall to a Call replacing contractName with contractAddress
  *
- * @param {any} manifest - The manifest object.
+ * @param {DojoManifest} manifest - The manifest object.
  * @param {DojoCall | Call} call - A DojoCall or Call
  * @returns {Call} The contract object.
  *
