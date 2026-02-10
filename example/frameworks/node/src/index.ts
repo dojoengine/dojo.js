@@ -56,7 +56,7 @@ async function main(): Promise<void> {
             .includeHashedKeys(),
     });
 
-    const entity = entities.items[0];
+    const entity = entities.getItems()[0];
     const position = entity?.models?.dojo_starter?.Position as
         | Position
         | undefined;

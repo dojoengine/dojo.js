@@ -233,7 +233,7 @@ watchEffect(async () => {
     entitySubscription = subscription;
 
     // Set initial values from the query
-    const entity = initial.items[0];
+    const entity = initial.getItems()[0];
     if (entity) {
         position.value = (entity.models?.dojo_starter?.Position as PositionModel | undefined) ?? null;
         moves.value = (entity.models?.dojo_starter?.Moves as MovesModel | undefined) ?? null;
