@@ -5,6 +5,30 @@ import { createBatchTestData, testData } from "./test-utils";
 // These tests are disabled until we can properly mock modules
 // or rewrite them as integration tests
 
+// Declare mock stubs so the skipped test suite compiles without
+// "noUndeclaredVariables" lint errors.  These would normally be
+// created by a module-mocking system (e.g. vi.mock / jest.mock).
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const noop = () => {};
+const mockSetComponent: any = {
+    mockClear: noop,
+    mock: { calls: [] as any[] },
+    not: { toHaveBeenCalled: noop },
+};
+const mockGetComponentValue: any = { mockClear: noop, mockReturnValue: noop };
+const mockHasComponent: any = { mockClear: noop, mockReturnValue: noop };
+const mockRemoveComponent: any = {
+    mockClear: noop,
+    not: { toHaveBeenCalled: noop },
+};
+const mockUpdateComponent: any = { mockClear: noop };
+const mockConvertValues: any = {
+    mockClear: noop,
+    mockReturnValue: noop,
+    mockImplementation: noop,
+};
+const setEntities: any = async () => {};
+
 describe.skip("RECS State Implementation (mock-based tests)", () => {
     let mockComponents;
 
