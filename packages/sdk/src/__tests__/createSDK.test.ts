@@ -364,6 +364,53 @@ describe("createSDK", () => {
         expect(subscription).toBeDefined();
     });
 
+    it("should skip initial fetch when fetchInitialData is false", async () => {
+        const mockQuery = {
+            build: vi.fn().mockReturnValue({
+                clause: undefined,
+                pagination: {
+                    limit: 10,
+                    cursor: undefined,
+                    direction: "Forward",
+                    order_by: [],
+                },
+                no_hashed_keys: true,
+                models: [],
+                historical: false,
+                world_addresses: [],
+            }),
+            getPagination: vi.fn().mockReturnValue({
+                limit: 10,
+                offset: 0,
+            }),
+        } as unknown as ToriiQueryBuilder<typeof mockSchema>;
+
+        const mockCallback = vi.fn();
+
+        const mockGrpcClient = {
+            ...mockClient,
+        } as unknown as torii.ToriiClient;
+
+        const sdk = createSDK<typeof mockSchema>({
+            client: mockClient,
+            config: mockConfig,
+            sendMessage: mockSignMessage,
+            sendMessageBatch: mockSignMessageBatch,
+            grpcClient: mockGrpcClient as any,
+        });
+
+        const [initial, subscription] = await sdk.subscribeEntityQuery({
+            query: mockQuery,
+            callback: mockCallback,
+            fetchInitialData: false,
+        });
+
+        expect(mockGrpcClient.getEntities).not.toHaveBeenCalled();
+        expect(mockGrpcClient.onEntityUpdated).toHaveBeenCalled();
+        expect(initial.getItems()).toEqual([]);
+        expect(subscription).toBeDefined();
+    });
+
     it("should handle subscription updates", async () => {
         const sdk = createSDK<typeof mockSchema>({
             client: mockClient,

@@ -951,6 +951,13 @@ export interface SubscribeParams<T extends SchemaType> {
     callback: SubscriptionCallback<StandardizedQueryResult<T>>;
 
     /**
+     * Whether to fetch initial data when subscribing.
+     * Defaults to `true` for backward compatibility.
+     * Set to `false` to skip the initial fetch and only open the subscription.
+     */
+    fetchInitialData?: boolean;
+
+    /**
      * @deprecated - Use `query.historical()` instead
      */
     historical?: boolean;

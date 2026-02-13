@@ -251,16 +251,30 @@ export function createSDK<T extends SchemaType>({
          * @param {SubscribeParams<T>} params - Parameters object
          * @returns {Promise<SubscribeResponse<T>>} - A promise that resolves when the subscription is set up.
          */
-        subscribeEntityQuery: async ({ query, callback }) => {
+        subscribeEntityQuery: async ({
+            query,
+            callback,
+            fetchInitialData = true,
+        }) => {
             const q = query.build();
 
-            const entities = await sdkClient.getEntities(q);
+            if (fetchInitialData) {
+                const entities = await sdkClient.getEntities(q);
+                const parsedEntities = parseEntities<T>(entities.items);
+                return [
+                    Pagination.fromQuery(query, entities.next_cursor).withItems(
+                        parsedEntities
+                    ),
+                    await grpcClientInstance.onEntityUpdated(
+                        q.clause,
+                        q.world_addresses,
+                        subscribeQueryModelCallback(callback)
+                    ),
+                ];
+            }
 
-            const parsedEntities = parseEntities<T>(entities.items);
             return [
-                Pagination.fromQuery(query, entities.next_cursor).withItems(
-                    parsedEntities
-                ),
+                Pagination.fromQuery(query, undefined).withItems([]),
                 await grpcClientInstance.onEntityUpdated(
                     q.clause,
                     q.world_addresses,
@@ -278,15 +292,27 @@ export function createSDK<T extends SchemaType>({
         subscribeEventQuery: async ({
             query,
             callback,
+            fetchInitialData = true,
         }: SubscribeParams<T>): Promise<SubscribeResponse<T>> => {
             const q = query.build();
 
-            const entities = await grpcClientInstance.getEventMessages(q);
-            const parsedEntities = parseEntities<T>(entities.items);
+            if (fetchInitialData) {
+                const entities = await grpcClientInstance.getEventMessages(q);
+                const parsedEntities = parseEntities<T>(entities.items);
+                return [
+                    Pagination.fromQuery(query, entities.next_cursor).withItems(
+                        parsedEntities
+                    ),
+                    await grpcClientInstance.onEventMessageUpdated(
+                        q.clause,
+                        q.world_addresses,
+                        subscribeQueryModelCallback(callback)
+                    ),
+                ];
+            }
+
             return [
-                Pagination.fromQuery(query, entities.next_cursor).withItems(
-                    parsedEntities
-                ),
+                Pagination.fromQuery(query, undefined).withItems([]),
                 await grpcClientInstance.onEventMessageUpdated(
                     q.clause,
                     q.world_addresses,
