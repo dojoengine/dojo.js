@@ -1,5 +1,11 @@
 # @dojoengine/internal
 
+## 1.8.0
+
+### Minor Changes
+
+- 83caf17: Add `fetchInitialData` option to `subscribeEntityQuery` and `subscribeEventQuery`. When set to `false`, the initial fetch is skipped and only the subscription is opened. Defaults to `true` for backward compatibility.
+
 ## 1.7.9
 
 ### Patch Changes

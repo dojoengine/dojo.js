@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.8.11
+
+### Patch Changes
+
+- 80a54a2: Fix shallow merge in entity subscription updates that caused sibling models within a namespace to be lost when a single model was updated via subscription.
+- Updated dependencies [83caf17]
+  - @dojoengine/sdk@1.9.0
+  - @dojoengine/grpc@1.8.7
+  - @dojoengine/state@1.8.5
+
 ## 1.8.10
 
 ### Patch Changes
