@@ -262,10 +262,9 @@ export function createSDK<T extends SchemaType>({
                 const entities = await sdkClient.getEntities(q);
                 const parsedEntities = parseEntities<T>(entities.items);
                 return [
-                    Pagination.fromQuery(
-                        query,
-                        entities.next_cursor
-                    ).withItems(parsedEntities),
+                    Pagination.fromQuery(query, entities.next_cursor).withItems(
+                        parsedEntities
+                    ),
                     await grpcClientInstance.onEntityUpdated(
                         q.clause,
                         q.world_addresses,
@@ -298,14 +297,12 @@ export function createSDK<T extends SchemaType>({
             const q = query.build();
 
             if (fetchInitialData) {
-                const entities =
-                    await grpcClientInstance.getEventMessages(q);
+                const entities = await grpcClientInstance.getEventMessages(q);
                 const parsedEntities = parseEntities<T>(entities.items);
                 return [
-                    Pagination.fromQuery(
-                        query,
-                        entities.next_cursor
-                    ).withItems(parsedEntities),
+                    Pagination.fromQuery(query, entities.next_cursor).withItems(
+                        parsedEntities
+                    ),
                     await grpcClientInstance.onEventMessageUpdated(
                         q.clause,
                         q.world_addresses,
