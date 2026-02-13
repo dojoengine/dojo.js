@@ -386,10 +386,14 @@ function mergeModels(
     existing: Record<string, Record<string, unknown>>,
     updates: Record<string, Record<string, unknown>>
 ): Record<string, Record<string, unknown>> {
-    return {
-        ...existing,
-        ...updates,
-    };
+    const result = { ...existing };
+    for (const namespace in updates) {
+        result[namespace] = {
+            ...existing[namespace],
+            ...updates[namespace],
+        };
+    }
+    return result;
 }
 
 function applyFormatters(
