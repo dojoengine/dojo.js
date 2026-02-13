@@ -1,10 +1,30 @@
-import { getComponentValue } from "@dojoengine/recs";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { init, ToriiQueryBuilder, KeysClause } from "@dojoengine/sdk/node";
 
-import { DirectionValue, dojoConfig, setup } from "@showcase/dojo";
+import {
+    DirectionValue,
+    dojoConfig,
+    setup,
+    type Position,
+    type Moves,
+    type DojoStarterSchema,
+} from "@showcase/dojo";
 
-async function main() {
+async function main(): Promise<void> {
     const result = await setup(dojoConfig);
+
+    // Initialize SDK for querying entities (no recs)
+    const sdk = await init<DojoStarterSchema>({
+        client: {
+            toriiUrl: dojoConfig.toriiUrl,
+            worldAddress: dojoConfig.manifest.world.address || "",
+        },
+        domain: {
+            name: "dojo_starter",
+            version: "1.0.0",
+            chainId: "SN_MAIN",
+            revision: "1",
+        },
+    });
 
     if (result.burnerManager.list().length === 0) {
         await result.burnerManager.create();
@@ -23,19 +43,30 @@ async function main() {
     await result.systemCalls.move(account, DirectionValue.Right());
     await result.systemCalls.move(account, DirectionValue.Up());
 
-    const entityId = getEntityIdFromKeys([BigInt(account.address)]);
+    // Query entities via SDK instead of recs getComponentValue
+    const entities = await sdk.getEntities({
+        query: new ToriiQueryBuilder()
+            .withClause(
+                KeysClause(
+                    ["dojo_starter-Position", "dojo_starter-Moves"],
+                    [account.address],
+                    "VariableLen"
+                ).build()
+            )
+            .includeHashedKeys(),
+    });
 
-    const position = getComponentValue(
-        result.clientComponents.Position,
-        entityId
-    );
-    const moves = getComponentValue(result.clientComponents.Moves, entityId);
+    const entity = entities.getItems()[0];
+    const position = entity?.models?.dojo_starter?.Position as
+        | Position
+        | undefined;
+    const moves = entity?.models?.dojo_starter?.Moves as Moves | undefined;
 
     console.log("Position", position?.vec);
     console.log("Moves remaining", moves?.remaining);
 }
 
-main().catch((error) => {
+main().catch((error: unknown) => {
     console.error(error);
     process.exitCode = 1;
 });

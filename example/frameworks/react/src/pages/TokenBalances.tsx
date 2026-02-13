@@ -1,9 +1,5 @@
-import {
-    Result,
-    useAtomValue,
-    useAtomSet,
-    Atom,
-} from "@effect-atom/atom-react";
+import { Result, useAtomValue, useAtomSet } from "@effect-atom/atom-react";
+import type { TokenBalance } from "@dojoengine/torii-client";
 import {
     createTokenBalanceQueryAtom,
     createTokenBalanceUpdatesAtom,
@@ -39,7 +35,7 @@ const { stateAtom: infiniteScrollState, loadMoreAtom: loadMoreBalances } =
         10
     );
 
-function TokenBalanceList() {
+function TokenBalanceList(): React.JSX.Element {
     const balances = useAtomValue(tokenBalancesAtom);
     return Result.match(balances, {
         onSuccess: ({ value: balances }) => {
@@ -69,7 +65,7 @@ function TokenBalanceList() {
     });
 }
 
-function TokenBalanceSubscriber() {
+function TokenBalanceSubscriber(): React.JSX.Element {
     const sub = useAtomValue(tokenBalanceSubscriptionAtom);
 
     return Result.match(sub, {
@@ -100,7 +96,7 @@ function TokenBalanceSubscriber() {
     });
 }
 
-function TokenBalanceInfiniteScroll() {
+function TokenBalanceInfiniteScroll(): React.JSX.Element {
     const state = useAtomValue(infiniteScrollState);
     const loadMore = useAtomSet(loadMoreBalances);
 
@@ -111,7 +107,7 @@ function TokenBalanceInfiniteScroll() {
                 Loaded: {state.items.length} | Has More: {String(state.hasMore)}
             </p>
             <ul>
-                {state.items.map((balance: any, idx: number) => (
+                {state.items.map((balance: TokenBalance, idx: number) => (
                     <li key={idx}>{JSON.stringify(balance).slice(0, 50)}...</li>
                 ))}
             </ul>
@@ -127,7 +123,7 @@ function TokenBalanceInfiniteScroll() {
     );
 }
 
-export function TokenBalances() {
+export function TokenBalances(): React.JSX.Element {
     return (
         <div>
             <h1>Token Balances</h1>

@@ -1,9 +1,16 @@
 import { KeysClause, ToriiQueryBuilder } from "@dojoengine/sdk";
 import { Result, useAtomValue } from "@effect-atom/atom-react";
 import { createEntityQueryWithUpdatesAtom } from "@dojoengine/react/effect";
-import { toriiRuntime } from "../effect/atoms";
 
-const clause = KeysClause([], [], "VariableLen").build();
+import { toriiRuntime } from "../effect/atoms";
+import type { Position, Moves } from "@showcase/dojo";
+
+const clause = KeysClause(
+    ["dojo_starter-Position", "dojo_starter-Moves"],
+    [],
+    "VariableLen"
+).build();
+
 const query = new ToriiQueryBuilder()
     .withClause(clause)
     .includeHashedKeys()
@@ -16,7 +23,7 @@ const entitiesWithUpdatesAtom = createEntityQueryWithUpdatesAtom(
     null
 );
 
-function EntitiesWithUpdates() {
+function EntitiesWithUpdates(): React.JSX.Element {
     const result = useAtomValue(entitiesWithUpdatesAtom);
 
     return Result.match(result, {
@@ -53,21 +60,37 @@ function EntitiesWithUpdates() {
                         ))}
                     </ul>
 
-                    <h3>Filtered: Games Only (NUMS.Game)</h3>
+                    <h3>Position & Moves</h3>
                     <ul>
                         {value.items
-                            .filter((entity) => entity.models.NUMS?.Game)
+                            .filter(
+                                (entity) =>
+                                    entity.models.dojo_starter?.Position ||
+                                    entity.models.dojo_starter?.Moves
+                            )
                             .slice(0, 10)
                             .map((entity) => {
-                                const game = entity.models.NUMS?.Game as Record<
-                                    string,
-                                    unknown
-                                >;
+                                const position = entity.models.dojo_starter
+                                    ?.Position as Position | undefined;
+                                const moves = entity.models.dojo_starter
+                                    ?.Moves as Moves | undefined;
                                 return (
                                     <li key={entity.entityId}>
-                                        Game #{game.id} - Level: {game.level},
-                                        Score: {game.score}, Over:{" "}
-                                        {String(game.over)}
+                                        {entity.entityId.slice(0, 16)}
+                                        ...
+                                        {position && (
+                                            <span>
+                                                {" "}
+                                                | Pos: ({position.vec.x},{" "}
+                                                {position.vec.y})
+                                            </span>
+                                        )}
+                                        {moves && (
+                                            <span>
+                                                {" "}
+                                                | Remaining: {moves.remaining}
+                                            </span>
+                                        )}
                                     </li>
                                 );
                             })}
@@ -85,7 +108,7 @@ function EntitiesWithUpdates() {
     });
 }
 
-export function EntitiesUpdates() {
+export function EntitiesUpdates(): React.JSX.Element {
     return (
         <div>
             <h1>Entities with Automatic Updates</h1>

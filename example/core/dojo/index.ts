@@ -18,6 +18,7 @@ export type {
     DirectionVariant,
     SpawnAction,
     MoveAction,
+    DojoStarterSchema,
 } from "../types";
 export { dojoConfig } from "./config";
 export type { ContractComponents } from "./generated/contractComponents";
