@@ -1,1 +1,4 @@
-bun run format:check --ui stream
+#!/usr/bin/env sh
+set -e
+
+bash .githooks/pre-commit
