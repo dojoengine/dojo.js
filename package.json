@@ -8,13 +8,13 @@
             "example"
         ],
         "catalog": {
-            "starknet": "^8.1.2",
+            "starknet": "^9.4.2",
             "@dojoengine/torii-wasm": "1.8.2",
             "@dojoengine/torii-client": "1.8.2",
-            "@starknet-io/get-starknet-core": "4.0.7",
-            "@starknet-react/core": "^5.0.1",
-            "@starknet-react/chains": "^5.0.1",
-            "@starknet-io/types-js": "^0.9.1",
+            "@starknet-io/get-starknet-core": "4.0.8",
+            "@starknet-react/core": "^5.0.3",
+            "@starknet-react/chains": "^5.0.3",
+            "@starknet-io/types-js": "^0.10.2",
             "@types/react": "^18.0.0 || ^19.0.0",
             "@types/react-dom": "^18.0.0 || ^19.0.0",
             "react": "^18.0.0 || ^19.0.0",
@@ -28,6 +28,9 @@
             "@opentelemetry/sdk-logs": "^0.208.0",
             "@opentelemetry/sdk-metrics": "^2.2.0"
         }
+    },
+    "overrides": {
+        "starknet": "^9.4.2"
     },
     "scripts": {
         "postinstall": "bun run warmup:wasm",
