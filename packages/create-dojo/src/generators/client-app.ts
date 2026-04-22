@@ -41,11 +41,20 @@ async function createPackageJson(config: ProjectConfig) {
         private: true,
         type: "module",
         scripts: {},
+        overrides: {
+            starknet: "^9.4.2",
+        },
+        pnpm: {
+            overrides: {
+                starknet: "^9.4.2",
+            },
+        },
         dependencies: {
             "@dojoengine/core": versions.core,
             "@dojoengine/sdk": versions.sdk,
             "@dojoengine/torii-wasm": versions.toriiWasm,
             "@dojoengine/predeployed-connector": versions.predeployedConnector,
+            starknet: "^9.4.2",
         },
         devDependencies: {
             typescript: "^5.6.2",
@@ -61,8 +70,9 @@ async function createPackageJson(config: ProjectConfig) {
                 "react-dom": "^18.3.1",
                 "@tanstack/react-query": "^5.0.0",
                 viem: "^2.21.54",
-                "@starknet-react/chains": "^3.0.0",
-                "@starknet-react/core": "^3.0.0",
+                "@starknet-react/chains": "^5.0.3",
+                "@starknet-react/core": "^5.0.3",
+                "get-starknet-core": "^4.0.0",
             };
             packageJson.devDependencies = {
                 ...packageJson.devDependencies,

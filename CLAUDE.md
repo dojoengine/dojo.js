@@ -44,7 +44,7 @@ Bun workspace monorepo with Turbo orchestration. Packages in `/packages/`:
 - **@dojoengine/create-burner** - Burner wallet hooks for local testing
 - **@dojoengine/create-dojo** - CLI scaffolding for new Dojo projects
 
-Key external deps: `starknet` (^8.1.2), `@dojoengine/torii-wasm`/`torii-client` (1.8.2), `zustand`, `effect`.
+Key external deps: `starknet` (^9.4.2), `@dojoengine/torii-wasm`/`torii-client` (1.8.2), `zustand`, `effect`.
 
 ## Code Style
 
