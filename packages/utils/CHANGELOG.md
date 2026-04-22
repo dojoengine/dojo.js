@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.9.0
+
+### Minor Changes
+
+- b40f13f: Bump Starknet.js support to v9.4.2.
+
+  Starknet.js peer and dependency ranges now target v9. Stable `@starknet-react/core` currently still declares a `starknet` v8 peer range, so installs pin Starknet.js through package-manager overrides until upstream widens that peer range. Generated React apps also include the Starknet React peer dependency needed for clean package installs.
+
 ## 1.8.4
 
 ### Patch Changes
