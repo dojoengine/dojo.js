@@ -1,0 +1,31 @@
+name: docs-sync
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: "Commit SHA to analyze for documentation updates"
+        required: true
+        type: string
+
+jobs:
+  docs-sync:
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    uses: dojoengine/book/.github/workflows/docs-sync.yml@main
+    with:
+      target-docs-repo: dojoengine/book
+      source-repo-slug: dojoengine/dojo.js
+      diff-globs: |
+        *.ts
+        *.tsx
+        *.md
+      docs-patterns: |
+        ^packages/.*/src/.*\.(ts|tsx)$
+      canonical-desc: |
+        The JavaScript/TypeScript SDK is documented on a SINGLE PAGE: docs-repo/docs/pages/client/sdk/javascript.md. Do NOT create new pages or subdirectories under client/sdk/.
+      docs-structure-desc: |
+        The site uses Vocs. Content lives in `docs-repo/docs/pages/`. Navigation is in `docs-repo/routes.ts`. SDK docs at `docs-repo/docs/pages/client/sdk/` are single `.md` files (bevy.md, javascript.md, unity.md, unrealengine.md, godot.md, rust.md, telegram.md), not subdirectories — the sole exception is `c/` which is a subdir.
+    secrets: inherit
