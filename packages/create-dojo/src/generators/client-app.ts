@@ -10,6 +10,19 @@ import {
     getLatestDojoVersions,
 } from "../utils/dojo-versions";
 
+type ClientPackageJson = {
+    name: string;
+    version: string;
+    private: boolean;
+    type: string;
+    engines: { node: string };
+    scripts: Record<string, string>;
+    overrides: Record<string, string>;
+    pnpm: { overrides: Record<string, string> };
+    dependencies: Record<string, string>;
+    devDependencies: Record<string, string>;
+};
+
 export async function generateClientApp(config: ProjectConfig) {
     // Create project structure
     await createProjectStructure(config);
@@ -47,10 +60,10 @@ async function createPackageJson(config: ProjectConfig) {
 export function buildClientPackageJson(
     config: ProjectConfig,
     versions: DojoVersions
-) {
+): ClientPackageJson {
     const { projectName, framework, additionalDeps } = config;
 
-    const packageJson: any = {
+    const packageJson: ClientPackageJson = {
         name: projectName,
         version: "0.1.0",
         private: true,

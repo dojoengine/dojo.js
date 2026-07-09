@@ -175,7 +175,7 @@ export function buildWorkerPackageJson(
         devDependencies: {
             typescript: "^5.6.2",
             tsx: "^4.22.4",
-            "@types/node": "^20.0.0",
+            "@types/node": "^22.0.0",
         },
     };
 
