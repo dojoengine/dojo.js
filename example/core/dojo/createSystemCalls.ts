@@ -48,9 +48,12 @@ export function createSystemCalls(
             setComponentsFromEvents(
                 contractComponents,
                 getEvents(
-                    await account.waitForTransaction(transaction_hash, {
-                        retryInterval: 100,
-                    })
+                    await account.provider.waitForTransaction(
+                        transaction_hash,
+                        {
+                            retryInterval: 100,
+                        }
+                    )
                 )
             );
         } catch (error) {
@@ -99,9 +102,12 @@ export function createSystemCalls(
             setComponentsFromEvents(
                 contractComponents,
                 getEvents(
-                    await account.waitForTransaction(transaction_hash, {
-                        retryInterval: 100,
-                    })
+                    await account.provider.waitForTransaction(
+                        transaction_hash,
+                        {
+                            retryInterval: 100,
+                        }
+                    )
                 )
             );
         } catch (error) {

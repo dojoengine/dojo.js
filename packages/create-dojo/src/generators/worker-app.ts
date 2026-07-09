@@ -4,7 +4,10 @@ import spawn from "cross-spawn";
 import { ProjectConfig } from "../interactive-flow";
 import { createProjectStructure } from "./project-structure";
 import { generateDojoConfig } from "./dojo-config";
-import { getLatestDojoVersions } from "../utils/dojo-versions";
+import {
+    type DojoVersions,
+    getLatestDojoVersions,
+} from "../utils/dojo-versions";
 
 export async function generateWorkerApp(config: ProjectConfig) {
     // Create project structure
@@ -123,8 +126,20 @@ export class ExampleTask {
 }
 
 async function createWorkerPackageJson(config: ProjectConfig) {
-    const { projectName, projectPath } = config;
     const versions = await getLatestDojoVersions();
+    const packageJson = buildWorkerPackageJson(config, versions);
+
+    await fs.writeFile(
+        path.join(config.projectPath, "package.json"),
+        JSON.stringify(packageJson, null, 2)
+    );
+}
+
+export function buildWorkerPackageJson(
+    config: ProjectConfig,
+    versions: DojoVersions
+) {
+    const { projectName } = config;
 
     const packageJson = {
         name: projectName,
@@ -132,6 +147,17 @@ async function createWorkerPackageJson(config: ProjectConfig) {
         private: true,
         type: "module",
         main: "dist/main.js",
+        engines: {
+            node: ">=22",
+        },
+        overrides: {
+            starknet: "10.0.2",
+        },
+        pnpm: {
+            overrides: {
+                starknet: "10.0.2",
+            },
+        },
         scripts: {
             dev: "tsx watch src/main.ts",
             build: "tsc",
@@ -143,6 +169,7 @@ async function createWorkerPackageJson(config: ProjectConfig) {
             "@dojoengine/sdk": versions.sdk,
             "@dojoengine/torii-wasm": versions.toriiWasm,
             "@dojoengine/state": "latest",
+            starknet: "10.0.2",
             viem: "^2.21.54",
         },
         devDependencies: {
@@ -152,10 +179,7 @@ async function createWorkerPackageJson(config: ProjectConfig) {
         },
     };
 
-    await fs.writeFile(
-        path.join(projectPath, "package.json"),
-        JSON.stringify(packageJson, null, 2)
-    );
+    return packageJson;
 }
 
 async function createWorkerConfigFiles(config: ProjectConfig) {
