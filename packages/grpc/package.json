@@ -53,5 +53,8 @@
         "vite-plugin-wasm": "^3.5.0",
         "vitest": "^1.6.1",
         "websocket": "^1.0.35"
+    },
+    "engines": {
+        "node": ">=22"
     }
 }

@@ -33,7 +33,9 @@ export const prefundAccount = async (
         };
 
         // Retrieve the nonce for the account to avoid transaction collisions
-        const nonce = await account.getNonce();
+        const nonce = await account.provider.getNonceForAddress(
+            account.address
+        );
         // Initiate the transaction
         const { transaction_hash } = await account.execute([transferOptions], {
             nonce,
@@ -41,10 +43,13 @@ export const prefundAccount = async (
         });
 
         // Wait for the transaction to complete and check its status
-        const result = await account.waitForTransaction(transaction_hash, {
-            retryInterval: 1000,
-            successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
-        });
+        const result = await account.provider.waitForTransaction(
+            transaction_hash,
+            {
+                retryInterval: 1000,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            }
+        );
 
         if (!result) {
             throw new Error("Transaction did not complete successfully.");

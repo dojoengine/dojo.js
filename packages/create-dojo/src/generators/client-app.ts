@@ -5,7 +5,23 @@ import { ProjectConfig } from "../interactive-flow";
 import { createProjectStructure } from "./project-structure";
 import { generateDojoConfig } from "./dojo-config";
 import { generateTemplate } from "./template-generator";
-import { getLatestDojoVersions } from "../utils/dojo-versions";
+import {
+    type DojoVersions,
+    getLatestDojoVersions,
+} from "../utils/dojo-versions";
+
+type ClientPackageJson = {
+    name: string;
+    version: string;
+    private: boolean;
+    type: string;
+    engines: { node: string };
+    scripts: Record<string, string>;
+    overrides: Record<string, string>;
+    pnpm: { overrides: Record<string, string> };
+    dependencies: Record<string, string>;
+    devDependencies: Record<string, string>;
+};
 
 export async function generateClientApp(config: ProjectConfig) {
     // Create project structure
@@ -32,21 +48,36 @@ export async function generateClientApp(config: ProjectConfig) {
 }
 
 async function createPackageJson(config: ProjectConfig) {
-    const { projectName, projectPath, framework, additionalDeps } = config;
     const versions = await getLatestDojoVersions();
+    const packageJson = buildClientPackageJson(config, versions);
 
-    const packageJson: any = {
+    await fs.writeFile(
+        path.join(config.projectPath, "package.json"),
+        JSON.stringify(packageJson, null, 2)
+    );
+}
+
+export function buildClientPackageJson(
+    config: ProjectConfig,
+    versions: DojoVersions
+): ClientPackageJson {
+    const { projectName, framework, additionalDeps } = config;
+
+    const packageJson: ClientPackageJson = {
         name: projectName,
         version: "0.1.0",
         private: true,
         type: "module",
+        engines: {
+            node: ">=22",
+        },
         scripts: {},
         overrides: {
-            starknet: "^9.4.2",
+            starknet: "10.0.2",
         },
         pnpm: {
             overrides: {
-                starknet: "^9.4.2",
+                starknet: "10.0.2",
             },
         },
         dependencies: {
@@ -54,7 +85,7 @@ async function createPackageJson(config: ProjectConfig) {
             "@dojoengine/sdk": versions.sdk,
             "@dojoengine/torii-wasm": versions.toriiWasm,
             "@dojoengine/predeployed-connector": versions.predeployedConnector,
-            starknet: "^9.4.2",
+            starknet: "10.0.2",
         },
         devDependencies: {
             typescript: "^5.6.2",
@@ -163,10 +194,7 @@ async function createPackageJson(config: ProjectConfig) {
         packageJson.scripts.test = "vitest";
     }
 
-    await fs.writeFile(
-        path.join(projectPath, "package.json"),
-        JSON.stringify(packageJson, null, 2)
-    );
+    return packageJson;
 }
 
 async function createConfigFiles(config: ProjectConfig) {

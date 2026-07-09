@@ -39,5 +39,8 @@
         "@latticexyz/utils": "^2.2.8",
         "mathjs": "^12.4.3",
         "micro-starknet": "^0.2.3"
+    },
+    "engines": {
+        "node": ">=22"
     }
 }

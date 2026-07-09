@@ -156,13 +156,16 @@ export class BurnerManager {
         if (deployTx) {
             try {
                 const receipt =
-                    await this.masterAccount.getTransactionReceipt(deployTx);
+                    await this.masterAccount.provider.getTransactionReceipt(
+                        deployTx
+                    );
                 return receipt !== null;
             } catch {}
         }
         try {
             // if account has a nonce, it was already deployed
-            const nonce = await this.masterAccount.getNonceForAddress(address);
+            const nonce =
+                await this.masterAccount.provider.getNonceForAddress(address);
             return BigInt(nonce) > 0n;
         } catch {}
         return false;
@@ -385,12 +388,10 @@ export class BurnerManager {
             }
 
             // wait to deploy
-            const receipt = await this.masterAccount.waitForTransaction(
-                deployTx,
-                {
+            const receipt =
+                await this.masterAccount.provider.waitForTransaction(deployTx, {
                     retryInterval: 100,
-                }
-            );
+                });
             if (!receipt) {
                 throw new Error("Transaction did not complete successfully.");
             }

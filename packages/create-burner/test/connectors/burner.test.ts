@@ -43,4 +43,14 @@ describe("BurnerConnector", () => {
 
         await expect(burnerObj.account()).resolves.toBeNull();
     });
+
+    it("gets the chain id through the account provider", async () => {
+        const account = await burnerObj.account();
+        const getChainId = vi
+            .spyOn(account.provider, "getChainId")
+            .mockResolvedValue("KATANA");
+
+        await expect(burnerObj.chainId()).resolves.toBeTypeOf("bigint");
+        expect(getChainId).toHaveBeenCalledOnce();
+    });
 });

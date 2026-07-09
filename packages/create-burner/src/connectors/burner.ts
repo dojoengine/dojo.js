@@ -80,7 +80,7 @@ export class BurnerConnector extends Connector {
     }
 
     async chainId(): Promise<bigint> {
-        const chainId = await this._account.getChainId();
+        const chainId = await this._account.provider.getChainId();
 
         return Promise.resolve(BigInt(shortString.encodeShortString(chainId)));
     }

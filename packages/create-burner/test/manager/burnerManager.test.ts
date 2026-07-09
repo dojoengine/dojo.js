@@ -79,6 +79,31 @@ describe("BurnerManager", () => {
         expect(Storage.get).toHaveBeenCalledWith("burners_1");
     });
 
+    it("checks a deployment receipt through the master account provider", async () => {
+        const getTransactionReceipt = vi
+            .spyOn(
+                burnerManager.masterAccount.provider,
+                "getTransactionReceipt"
+            )
+            .mockResolvedValue({} as never);
+
+        await expect(
+            burnerManager.isBurnerDeployed("0x123", "0xabc")
+        ).resolves.toBe(true);
+        expect(getTransactionReceipt).toHaveBeenCalledWith("0xabc");
+    });
+
+    it("checks an account nonce through the master account provider", async () => {
+        const getNonceForAddress = vi
+            .spyOn(burnerManager.masterAccount.provider, "getNonceForAddress")
+            .mockResolvedValue("0x1");
+
+        await expect(burnerManager.isBurnerDeployed("0x123")).resolves.toBe(
+            true
+        );
+        expect(getNonceForAddress).toHaveBeenCalledWith("0x123");
+    });
+
     it("generateKeysAndAddress", async () => {
         // Mock the provider.getChainId() method
         burnerManager.provider.getChainId = vi.fn().mockResolvedValue("0x1");

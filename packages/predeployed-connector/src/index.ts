@@ -143,7 +143,7 @@ class PredeployedWallet implements StarknetWindowObject {
                     } as UNKNOWN_ERROR;
                 }
 
-                return await this.account.getChainId();
+                return await this.account.provider.getChainId();
 
             case "wallet_deploymentData":
                 throw {
