@@ -1,14 +1,14 @@
 ---
-"@dojoengine/core": minor
-"@dojoengine/create-burner": minor
-"@dojoengine/create-dojo": minor
-"@dojoengine/grpc": minor
-"@dojoengine/internal": minor
-"@dojoengine/predeployed-connector": minor
-"@dojoengine/react": minor
-"@dojoengine/sdk": minor
-"@dojoengine/state": minor
-"@dojoengine/utils": minor
+"@dojoengine/core": major
+"@dojoengine/create-burner": major
+"@dojoengine/create-dojo": major
+"@dojoengine/grpc": major
+"@dojoengine/internal": major
+"@dojoengine/predeployed-connector": major
+"@dojoengine/react": major
+"@dojoengine/sdk": major
+"@dojoengine/state": major
+"@dojoengine/utils": major
 ---
 
 Bump Starknet.js support to v10.0.2 and migrate React integrations to
