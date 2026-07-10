@@ -1,6 +1,20 @@
-import { Connector } from "@starknet-react/core";
-import { StarknetWindowObject } from "@starknet-io/get-starknet-core";
-import { Account, AccountInterface, shortString } from "starknet";
+import { StarknetInjectedWallet } from "@starknet-io/get-starknet-core";
+import {
+    type AddInvokeTransactionParameters,
+    type UNKNOWN_ERROR,
+    Permission,
+    type RequestFn,
+    type StarknetWindowObject,
+    type WalletEventHandlers,
+    type WalletEventListener,
+    type WalletEvents,
+} from "@starknet-io/types-js";
+import {
+    Account,
+    type AccountInterface,
+    shortString,
+    type TypedData,
+} from "starknet";
 
 import { katanaIcon } from "./icons";
 
@@ -14,40 +28,120 @@ interface BurnerConnectorOptions {
     icon?: ConnectorIcons;
 }
 
-/** Non exported types from @starknet-react/core*/
-
 /** Connector icons, as base64 encoded svg. */
 type ConnectorIcons = StarknetWindowObject["icon"];
 
-/** Connector data. */
+/** Connector data retained for callers of the legacy direct API. */
 type ConnectorData = {
-    /** Connector account. */
     account?: string;
-    /** Connector network. */
     chainId?: bigint;
 };
 
-/**
- *
- * @class BurnerConnector
- *
- * @description Extends the Connector class and implements the AccountInterface.
- *             This class is used to connect to the Burner Wallet.
- *
- *
- */
-export class BurnerConnector extends Connector {
-    private _options: BurnerConnectorOptions;
-    private _account: AccountInterface | Account;
+class BurnerWallet implements StarknetWindowObject {
+    readonly version = "v0.0.1";
+    readonly id: string;
+    readonly name: string;
+    readonly icon: ConnectorIcons;
+    private readonly subscriptions: WalletEvents[] = [];
 
     constructor(
         options: BurnerConnectorOptions,
-        account: AccountInterface | Account
+        private readonly account: AccountInterface | Account
     ) {
-        super();
+        this.id = options.id;
+        this.name = options.name ?? "Dojo Burner";
+        this.icon = options.icon ?? {
+            light: katanaIcon,
+            dark: katanaIcon,
+        };
+    }
 
-        this._options = options;
-        this._account = account;
+    request: RequestFn = async (call) => {
+        return (await this.handleRequest(call)) as never;
+    };
+
+    private async handleRequest(
+        call: Parameters<RequestFn>[0]
+    ): Promise<unknown> {
+        switch (call.type) {
+            case "wallet_getPermissions":
+                return [Permission.ACCOUNTS];
+            case "wallet_requestAccounts":
+                return [this.account.address];
+            case "wallet_requestChainId": {
+                const chainId = await this.account.provider.getChainId();
+                return shortString.encodeShortString(chainId);
+            }
+            case "wallet_addInvokeTransaction": {
+                const params = call.params as AddInvokeTransactionParameters;
+                return await this.account.execute(
+                    params.calls.map((item) => ({
+                        contractAddress: item.contract_address,
+                        entrypoint: item.entry_point,
+                        calldata: item.calldata,
+                    }))
+                );
+            }
+            case "wallet_signTypedData":
+                return await this.account.signMessage(call.params as TypedData);
+            case "wallet_switchStarknetChain":
+                return true;
+            case "wallet_supportedSpecs":
+            case "wallet_supportedWalletApi":
+                return [];
+            default:
+                throw {
+                    code: 163,
+                    message: "An error occurred (UNKNOWN_ERROR)",
+                    data: `BurnerConnector request not implemented: ${call.type}`,
+                } as UNKNOWN_ERROR;
+        }
+    }
+
+    on: WalletEventListener = <E extends keyof WalletEventHandlers>(
+        event: E,
+        handler: WalletEventHandlers[E]
+    ): void => {
+        if (event !== "accountsChanged" && event !== "networkChanged") {
+            throw new Error(`Unknown event: ${event}`);
+        }
+        this.subscriptions.push({ type: event, handler } as WalletEvents);
+    };
+
+    off: WalletEventListener = <E extends keyof WalletEventHandlers>(
+        event: E,
+        handler: WalletEventHandlers[E]
+    ): void => {
+        if (event !== "accountsChanged" && event !== "networkChanged") {
+            throw new Error(`Unknown event: ${event}`);
+        }
+        const index = this.subscriptions.findIndex(
+            (subscription) =>
+                subscription.type === event && subscription.handler === handler
+        );
+        if (index >= 0) {
+            this.subscriptions.splice(index, 1);
+        }
+    };
+}
+
+/**
+ * A wallet-standard burner connector for Starknet Start.
+ *
+ * The direct connector methods are retained for existing Dojo consumers,
+ * while Starknet Start connects through the inherited wallet-standard
+ * feature set.
+ */
+export class BurnerConnector extends StarknetInjectedWallet {
+    private readonly wallet: BurnerWallet;
+
+    constructor(
+        private readonly options: BurnerConnectorOptions,
+        private readonly innerAccount: AccountInterface | Account
+    ) {
+        const wallet = new BurnerWallet(options, innerAccount);
+        super(wallet);
+        this.wallet = wallet;
     }
 
     available(): boolean {
@@ -55,62 +149,36 @@ export class BurnerConnector extends Connector {
     }
 
     async ready(): Promise<boolean> {
-        return Promise.resolve(true);
+        return true;
     }
 
     async connect(): Promise<ConnectorData> {
-        if (!this._account) {
+        if (!this.innerAccount) {
             throw new Error("account not found");
         }
 
-        const chainId = await this.chainId();
-
-        return Promise.resolve({
-            account: this._account.address,
-            chainId,
-        });
+        return {
+            account: this.innerAccount.address,
+            chainId: await this.chainId(),
+        };
     }
 
     async disconnect(): Promise<void> {
-        Promise.resolve(this._account == null);
+        return Promise.resolve();
     }
 
     async account(): Promise<AccountInterface> {
-        return Promise.resolve(this._account);
+        return this.innerAccount;
     }
 
     async chainId(): Promise<bigint> {
-        const chainId = await this._account.provider.getChainId();
-
-        return Promise.resolve(BigInt(shortString.encodeShortString(chainId)));
+        const chainId = await this.innerAccount.provider.getChainId();
+        return BigInt(shortString.encodeShortString(chainId));
     }
 
     get id(): string {
-        return this._options.id;
+        return this.options.id;
     }
 
-    get name(): string {
-        return this._options.name || "Dojo Burner";
-    }
-
-    get icon(): ConnectorIcons {
-        return (
-            this._options.icon || {
-                light: katanaIcon,
-                dark: katanaIcon,
-            }
-        );
-    }
-
-    async request(call: any) {
-        switch (call.type) {
-            case "wallet_requestAccounts": {
-                return [this._account.address];
-            }
-            default:
-                throw new Error(
-                    `BurnerConnector: request not implemented [${call.type}]`
-                );
-        }
-    }
+    request: RequestFn = async (call) => this.wallet.request(call);
 }

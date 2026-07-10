@@ -1,4 +1,4 @@
-import { StarknetWindowObject } from "@starknet-io/get-starknet-core";
+import type { StarknetWindowObject } from "@starknet-io/types-js";
 import { AccountInterface, RpcProvider } from "starknet";
 
 import { BurnerManager } from "..";

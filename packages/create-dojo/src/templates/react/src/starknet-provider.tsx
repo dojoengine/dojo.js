@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from "react";
-import { mainnet } from "@starknet-react/chains";
-import { jsonRpcProvider, StarknetConfig, voyager } from "@starknet-react/core";
+import { devnet } from "@starknet-start/chains";
+import { jsonRpcProvider } from "@starknet-start/providers";
+import { StarknetConfig } from "@starknet-start/react";
 import { dojoConfig } from "../dojoConfig";
 import { usePredeployedAccounts } from "@dojoengine/predeployed-connector/react";
 
@@ -14,16 +15,23 @@ export default function StarknetProvider({ children }: PropsWithChildren) {
     const provider = jsonRpcProvider({
         rpc: () => ({ nodeUrl: dojoConfig.rpcUrl as string }),
     });
+    const katana = {
+        ...devnet,
+        id: BigInt("0x4b4154414e41"),
+        name: "Katana",
+        network: "katana",
+        rpcUrls: {
+            default: { http: [dojoConfig.rpcUrl as string] },
+            public: { http: [dojoConfig.rpcUrl as string] },
+        },
+    };
 
     return (
         <StarknetConfig
-            chains={[mainnet]}
+            chains={[katana]}
             provider={provider}
-            connectors={connectors}
-            explorer={voyager}
-            autoConnect
+            extraWallets={connectors}
         >
-            {/* @ts-ignore react version mismatch */}
             {children}
         </StarknetConfig>
     );

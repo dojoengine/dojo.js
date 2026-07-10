@@ -1,21 +1,18 @@
 import { KeysClause, ToriiQueryBuilder } from "@dojoengine/sdk";
 
-import { useAccount } from "@starknet-react/core";
-import { useDojoSDK, useEntityId, useEntityQuery } from "@dojoengine/sdk/react";
+import { useAccount } from "@starknet-start/react";
+import { useDojoSDK, useEntityQuery } from "@dojoengine/sdk/react";
 import "./App.css";
 
 function App() {
-    const { useDojoStore, client } = useDojoSDK();
-    const { account } = useAccount();
-    const entities = useDojoStore((state) => state.entities);
-
-    const entityId = useEntityId(account?.address ?? "0");
+    const { client } = useDojoSDK();
+    const { address } = useAccount();
 
     useEntityQuery(
         new ToriiQueryBuilder()
             .withClause(
-                // Querying Moves and Position models that has at least [account.address] as key
-                KeysClause([], [undefined], "VariableLen").build()
+                // Querying models that have at least [address] as a key
+                KeysClause([], [address], "VariableLen").build()
             )
             .includeHashedKeys()
     );

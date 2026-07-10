@@ -1,4 +1,9 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
+import {
+    StandardConnect,
+    StandardDisconnect,
+    StarknetWalletApi,
+} from "@starknet-io/get-starknet-core";
 import { BurnerConnector } from "../../src/connectors/burner";
 import { getBurnerConnector } from "../mocks/mocks";
 
@@ -52,5 +57,24 @@ describe("BurnerConnector", () => {
 
         await expect(burnerObj.chainId()).resolves.toBeTypeOf("bigint");
         expect(getChainId).toHaveBeenCalledOnce();
+    });
+
+    it("exposes a Starknet wallet-standard feature set", async () => {
+        const account = await burnerObj.account();
+        vi.spyOn(account.provider, "getChainId").mockResolvedValue("KATANA");
+
+        const connected = await burnerObj.features[StandardConnect].connect({
+            silent: false,
+        });
+
+        expect(burnerObj.features[StarknetWalletApi].id).toBe("Burner Account");
+        expect(connected.accounts).toHaveLength(1);
+        expect(connected.accounts[0]).toMatchObject({
+            address: account.address,
+            chains: ["starknet:0x4b4154414e41"],
+        });
+
+        await burnerObj.features[StandardDisconnect].disconnect();
+        expect(burnerObj.accounts).toEqual([]);
     });
 });
