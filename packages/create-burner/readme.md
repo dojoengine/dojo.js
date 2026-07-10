@@ -97,7 +97,7 @@ const activeAccount = manager.getActiveAccount();
     - `create()`: Create a new burner.
     - `account`: The active burner account.
     - `isDeploying`: A boolean that indicates whether a burner is being deployed.
-    - `listConnectors()`: List all available connectors that can be used with Starknet React.
+    - `listConnectors()`: List all available wallets that can be passed to Starknet Start as `extraWallets`.
 
 - **BurnerManager**: A class for vanilla JS that offers methods to manage burner accounts.
     - `init()`: Initializes the manager.

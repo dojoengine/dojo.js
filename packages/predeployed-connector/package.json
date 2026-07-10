@@ -42,7 +42,7 @@
         "vitest": "^1.6.0"
     },
     "peerDependencies": {
-        "@starknet-react/core": "catalog:",
+        "@starknet-io/get-starknet-core": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
         "starknet": "catalog:"

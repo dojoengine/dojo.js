@@ -71,7 +71,6 @@ export function buildClientPackageJson(
         engines: {
             node: ">=22",
         },
-        scripts: {},
         overrides: {
             starknet: "10.0.2",
         },
@@ -80,6 +79,7 @@ export function buildClientPackageJson(
                 starknet: "10.0.2",
             },
         },
+        scripts: {},
         dependencies: {
             "@dojoengine/core": versions.core,
             "@dojoengine/sdk": versions.sdk,
@@ -97,19 +97,22 @@ export function buildClientPackageJson(
         case "react-vite":
             packageJson.dependencies = {
                 ...packageJson.dependencies,
-                react: "^18.3.1",
-                "react-dom": "^18.3.1",
+                react: "^19.0.0",
+                "react-dom": "^19.0.0",
                 "@tanstack/react-query": "^5.0.0",
                 viem: "^2.21.54",
-                "@starknet-react/chains": "^5.0.3",
-                "@starknet-react/core": "^5.0.3",
-                "get-starknet-core": "^4.0.0",
+                "@starknet-io/get-starknet-core": "5.0.0",
+                "@starknet-io/get-starknet-modal": "5.0.0",
+                "@starknet-io/get-starknet-wallet-standard": "5.0.0",
+                "@starknet-start/chains": "1.0.7",
+                "@starknet-start/providers": "1.0.7",
+                "@starknet-start/react": "1.0.8",
             };
             packageJson.devDependencies = {
                 ...packageJson.devDependencies,
                 "@vitejs/plugin-react": "^4.3.4",
-                "@types/react": "^18.3.16",
-                "@types/react-dom": "^18.3.5",
+                "@types/react": "^19.0.0",
+                "@types/react-dom": "^19.0.0",
                 vite: "^6.0.3",
             };
             packageJson.scripts = {

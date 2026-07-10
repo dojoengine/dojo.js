@@ -33,6 +33,19 @@ describe("generated package manifests", () => {
         expect(manifest.overrides.starknet).toBe("10.0.2");
         expect(manifest.pnpm.overrides.starknet).toBe("10.0.2");
         expect(manifest.engines.node).toBe(">=22");
+        expect(manifest.dependencies).toMatchObject({
+            "@starknet-start/chains": "1.0.7",
+            "@starknet-start/providers": "1.0.7",
+            "@starknet-start/react": "1.0.8",
+            react: "^19.0.0",
+            "react-dom": "^19.0.0",
+        });
+        expect(manifest.dependencies).not.toHaveProperty(
+            "@starknet-react/chains"
+        );
+        expect(manifest.dependencies).not.toHaveProperty(
+            "@starknet-react/core"
+        );
     });
 
     it("pins Starknet.js and Node.js in worker apps", () => {

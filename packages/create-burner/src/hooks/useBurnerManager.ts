@@ -142,7 +142,7 @@ export const useBurnerManager = ({
     );
 
     /**
-     * Generates a list of BurnerConnector instances for each burner account. These can be added to Starknet React.
+     * Generates wallet-standard connectors for Starknet Start's extraWallets.
      *
      * @returns An array of BurnerConnector instances.
      */
