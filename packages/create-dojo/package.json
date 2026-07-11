@@ -7,6 +7,11 @@
     "main": "./dist/index.cjs",
     "type": "module",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dojoengine/dojo.js.git",
+        "directory": "packages/create-dojo"
+    },
     "publishConfig": {
         "access": "public"
     },
@@ -14,7 +19,9 @@
         "dist"
     ],
     "exports": "./dist/index.cjs",
-    "bin": "./dist/index.cjs",
+    "bin": {
+        "create-dojo": "dist/index.cjs"
+    },
     "scripts": {
         "lint:check": "biome lint .",
         "lint": "biome lint . --write",

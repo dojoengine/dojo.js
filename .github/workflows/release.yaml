@@ -48,6 +48,9 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org
 
+      - name: Pin npm for Changesets publishing
+        run: npm install --global npm@11.6.0
+
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
