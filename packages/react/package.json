@@ -17,6 +17,11 @@
         "docs": "typedoc"
     },
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dojoengine/dojo.js.git",
+        "directory": "packages/react"
+    },
     "peerDependencies": {
         "react": "^19.0.0",
         "starknet": "catalog:",

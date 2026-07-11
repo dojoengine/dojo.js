@@ -3,6 +3,11 @@
     "version": "1.8.7",
     "author": "Dojo Team",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dojoengine/dojo.js.git",
+        "directory": "packages/grpc"
+    },
     "description": "Dojo SDK: Build onchain and provable apps faster",
     "main": "dist/index.js",
     "type": "module",

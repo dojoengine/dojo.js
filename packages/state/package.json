@@ -4,6 +4,11 @@
     "description": "dojo: State syncing for dojo games",
     "author": "dojo",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dojoengine/dojo.js.git",
+        "directory": "packages/state"
+    },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "type": "module",
