@@ -1,6 +1,6 @@
 {
     "name": "@dojoengine/grpc",
-    "version": "1.8.7",
+    "version": "2.0.0",
     "author": "Dojo Team",
     "license": "MIT",
     "repository": {
